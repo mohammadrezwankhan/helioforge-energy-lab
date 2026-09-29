@@ -1,5 +1,7 @@
 # HelioForge Energy Lab
 
+[![CI](https://github.com/mohammadrezwankhan/helioforge-energy-lab/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mohammadrezwankhan/helioforge-energy-lab/actions/workflows/ci.yml) · [MIT license](LICENSE) · [Verification and limits](QUALITY_REPORT.md)
+
 Interactive hybrid-energy research and learning workbench with auditable numerical screens and a local Python API.
 
 If HelioForge Energy Lab helps you study this workflow, a star helps other energy researchers and engineering educators find it.
@@ -7,6 +9,8 @@ If HelioForge Energy Lab helps you study this workflow, a star helps other energ
 ![Actual desktop demo](docs/repository/demo-desktop.png)
 
 ## Try the demo
+
+[Open the hosted synthetic demo](https://mohammadrezwankhan.github.io/helioforge-energy-lab/) or run the identical standalone artifact locally:
 
 Prerequisite: Node.js 22 or later; tested here with Node.js 24. This runs locally with synthetic examples. It does not connect to a live provider or publish user input.
 
@@ -20,7 +24,9 @@ Open **http://127.0.0.1:4173**. Stop the server with Ctrl+C. The first screen is
 
 ## Why inspect this project?
 
-It gives energy researchers and engineering educators a working example of a domain workflow with visible evidence and limitations. Start with the rendered demo, then follow the implementation map in [PROJECT_ANALYSIS.md](PROJECT_ANALYSIS.md). The supplied engineering guide below explains the actual product rules and tradeoffs.
+HelioForge connects a browsable energy-learning interface to an optional local Python calculation API. The standalone preview preserves a reproducible starting point; new numerical runs use the backend and its explicit scenario assumptions.
+
+Read the [engineering walkthrough](docs/engineering/CASE_STUDY.md) and [adjacent-tool comparison](docs/ALTERNATIVES.md), or follow the [source map](PROJECT_ANALYSIS.md).
 
 - [Current verification and limits](QUALITY_REPORT.md)
 - [Architecture and source map](docs/architecture/system-overview.md)

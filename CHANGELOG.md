@@ -1,3 +1,12 @@
+# Source preview: 2026-09-30
+
+## preview-2026.09.30
+
+- Preserve the supplied baseline and add scoped build, server and dependency repairs.
+- Add a tested local demo launcher, actual desktop/mobile screenshots, domain architecture, source guide and contribution resources.
+- Record executed CI and clean-clone evidence in [QUALITY_REPORT.md](QUALITY_REPORT.md).
+- Keep synthetic-data, operational, accessibility and research limitations explicit. This snapshot is a prerelease, not a stable-service claim.
+
 # Champion update — 0.3.0 (2026-09-28)
 
 Local evaluation candidate; not a production deployment.

@@ -1,34 +1,21 @@
-# Tracing a HelioForge Energy Lab demo result back to source
+# Three boundaries in HelioForge Energy Lab
 
-Interactive hybrid-energy research and learning workbench with auditable numerical screens and a local Python API.
+HelioForge connects a browsable energy-learning interface to an optional local Python calculation API. The standalone preview preserves a reproducible starting point; new numerical runs use the backend and its explicit scenario assumptions.
 
-## The engineering problem
+## 1. The input boundary
 
-For energy researchers and engineering educators, a screen is useful only when its displayed result can be traced to a rule and a source. In this project the supplied records and examples are synthetic. That choice makes exploration possible without pretending a provider is connected or a current fact is verified.
+Scenario assumptions enter through the supplied catalogue or local controls. Preserve their scope and source labels when adding examples.
 
-## Follow the implementation
+## 2. The rule boundary
 
-- `apps/api/helioforge/`
-- `apps/web/src/`
+Local Python calculations determine what the interface may display. The [engineering case study](../engineering/CASE_STUDY.md) names actual regression tests and files to inspect before changing that behavior.
 
-Begin at the first source entry, identify one visible output, then follow the calculation or state transition to its fixture. Change one synthetic input and rerun the smallest relevant check. The architecture document shows the delivered demo path rather than an imagined production stack.
+## 3. The output boundary
 
-## A deliberate boundary
+Research and learning views are the user-facing result. A saved local action should remain distinguishable from external delivery or verification. Check error, reload and export behavior with fictional data before proposing a broader integration.
 
-Local state is useful for trying a workflow; it is not proof of remote receipt, clinical safety, official guidance or multi-user synchronization. The interface's demo language is part of the contract. Preserve unknown/stale states rather than filling them with a plausible answer.
+## Reproduce and review
 
-## Reproduce it
+Follow [the quick start](../../README.md), then [the current check report](../../QUALITY_REPORT.md). The next useful contribution is a small, reproducible improvement to this specific workflow. [Adjacent tools](../ALTERNATIVES.md) explain the scope tradeoffs.
 
-```sh
-git clone https://github.com/mohammadrezwankhan/helioforge-energy-lab.git
-cd helioforge-energy-lab
-node scripts/preview-demo.mjs
-```
-
-The current quality report separates executed checks from historical reports and unavailable environments. It also identifies remaining release blockers; no performance improvement is inferred from a new screenshot.
-
-## What would improve it
-
-Review one native-origin persistence journey, one keyboard interaction, or one bilingual explanation using the contribution guide. Bring a small reproduction and a specific invariant. Repository: https://github.com/mohammadrezwankhan/helioforge-energy-lab.
-
-Draft article, not published. Technical evidence must be refreshed at the release commit before external publication.
+Draft article; not published. Repository: https://github.com/mohammadrezwankhan/helioforge-energy-lab.

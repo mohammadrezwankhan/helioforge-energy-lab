@@ -1,9 +1,11 @@
 {
   "repository": "helioforge",
   "command": "node scripts/preview-demo.mjs",
-  "executedCommand": "C:\\Program Files\\nodejs\\node.exe scripts/preview-demo.mjs",
-  "cleanCheckout": false,
-  "executedAt": "2026-09-29T22:58:50.485Z",
+  "executedCommand": "node scripts/preview-demo.mjs",
+  "cleanCheckout": true,
+  "commit": "ed0436e7ec19eecb8075ea493271ee18730d2fa5",
+  "artifactSha256": "71056aaebc85818c095608488e445e2dcb2e6c2d48d8097c646d68327bfc5343",
+  "executedAt": "2026-09-29T23:24:03.496Z",
   "checks": [
     {
       "viewport": "desktop",
@@ -11,7 +13,9 @@
       "title": "Hybrid systems lab · HelioForge",
       "bodyCharacters": 9059,
       "horizontalOverflow": false,
-      "controls": 111
+      "controls": 111,
+      "localLoadMilliseconds": 149,
+      "domReadyMilliseconds": 129.10000002384186
     },
     {
       "viewport": "mobile",
@@ -19,7 +23,9 @@
       "title": "Hybrid systems lab · HelioForge",
       "bodyCharacters": 8914,
       "horizontalOverflow": false,
-      "controls": 111
+      "controls": 111,
+      "localLoadMilliseconds": 149,
+      "domReadyMilliseconds": 129.10000002384186
     }
   ],
   "httpChecks": [
@@ -55,11 +61,18 @@
       "passed": true
     }
   ],
+  "interaction": {
+    "status": "exercised",
+    "control": "Learning studio",
+    "clickToTwoFramesMilliseconds": 202.81,
+    "visibleTextChanged": true,
+    "scope": "One visible navigation action; includes automation overhead, not a performance benchmark"
+  },
   "errors": [],
   "externalRequests": [
-    "http://local.adguard.org/?ts=1790720762079&type=content-script&dmn=127.0.0.1:53683&url=http%3A%2F%2F127.0.0.1%3A53683%2F&app=msedge.exe&css=2&js=1&rel=1&rji=1&sbe=1&stealth=1&st-dnt",
-    "http://local.adguard.org/?ts=1790720762079&name=AdGuard%20Extra&name=AdGuard%20Popup%20Blocker&type=user-script"
+    "http://local.adguard.org/"
   ],
   "status": "passed",
-  "scope": "Actual documented launcher with an isolated loopback port; desktop/mobile initial render and source-file exposure checks. No complete workflow, offline/PWA, accessibility or production certification."
+  "scope": "Actual documented launcher with an isolated loopback port; desktop/mobile initial render, one navigation action when available, and source-file exposure checks. Timing is one local observation including automation overhead, not a benchmark. No complete workflow, offline/PWA, accessibility or production certification.",
+  "environmentNote": "Windows host with Edge/Chromium; host-injected AdGuard requests were blocked by the test harness. Full URLs and host paths are retained only in the private verification ledger."
 }

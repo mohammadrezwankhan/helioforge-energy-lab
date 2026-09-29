@@ -1,19 +1,18 @@
-# HelioForge Energy Lab: architecture
+# HelioForge Energy Lab: data and rule boundaries
 
-Interactive hybrid-energy research and learning workbench with auditable numerical screens and a local Python API.
-
-The diagram covers the delivered demonstration path. It does not imply a production backend or source verification service. The source map below identifies the actual modules; consult their tests before changing a domain rule.
+HelioForge connects a browsable energy-learning interface to an optional local Python calculation API. The standalone preview preserves a reproducible starting point; new numerical runs use the backend and its explicit scenario assumptions.
 
 ```mermaid
 flowchart LR
-    A["Editable source"] --> B["Build / packaged artifact"]
-    B --> C["HelioForge Energy Lab: browser UI"]
-    D["Synthetic fixtures / documented assumptions"] --> C
-    C --> E["Local interaction and explicit exports"]
-    T["Documented checks"] -. verifies .-> A
+    I["Scenario assumptions"] --> R["Local Python calculations"]
+    R --> V["Research and learning views"]
+    V --> L["Device-local state / explicit export"]
+    T["Regression and build checks"] -. verifies .-> R
 ```
 
 - `apps/api/helioforge/`
 - `apps/web/src/`
 
-The portable interface is a snapshot view. The optional Python API performs new numerical calculations; its loopback and opt-in-provider boundaries remain as documented in SECURITY.md.
+This depicts the delivered local workflow. See the engineering case study for the test boundary; it does not assert a hosted production service or external delivery.
+
+The optional loopback Python API computes new numerical results. The standalone preview embeds a snapshot and does not call that API. Provider access stays opt-in as documented in SECURITY.md.

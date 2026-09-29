@@ -1,0 +1,20 @@
+{
+  "title": "HelioForge Energy Lab",
+  "description": "Interactive hybrid-energy research and learning workbench with auditable numerical screens and a local Python API.",
+  "repository": "https://github.com/mohammadrezwankhan/helioforge-energy-lab",
+  "topics": [
+    "demo",
+    "local-first",
+    "open-source",
+    "energy-modeling",
+    "renewable-energy",
+    "research",
+    "simulation",
+    "hybrid-energy",
+    "fastapi",
+    "python"
+  ],
+  "tagline": "Research and learning views",
+  "social_preview": "docs/repository/social-preview.png",
+  "social_preview_setting": "Current upload state is visible in repository settings; this file identifies the prepared asset."
+}
