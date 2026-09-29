@@ -1,0 +1,16 @@
+{
+  "checks_passed": 8,
+  "checks": [
+    "Packaged runtime preflight passes without installing or starting anything",
+    "Local launcher starts the packaged app on a custom loopback port with external AI disabled",
+    "Served HTML, compiled JavaScript and CSS are available with the declared CSP header",
+    "Custom-port origin works; unexpected hostname is rejected; real synthetic calculation is saved",
+    "Occupied-port launch is rejected without stopping the already-running app",
+    "A saved calculation survives a real process stop and restart with identical inputs/results",
+    "Synthetic SQLite backup/restore rehearsal passes integrity check and restores the exact saved run",
+    "Ctrl+C stops the local launcher and child server cleanly on the tested Linux environment"
+  ],
+  "platform": "linux",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "limitations": "Small synthetic database only. Windows/macOS scripts and automatic browser opening not executed."
+}

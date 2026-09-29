@@ -1,0 +1,24 @@
+{
+  "checks_passed": 14,
+  "checks": [
+    "Hybrid lab is the default; all 36 architecture presets are available",
+    "3D camera buttons and keyboard work; reduced motion freezes decorative canvas animation; asset inspector updates",
+    "Smart search synonyms, no-results state, family filter and reset",
+    "Real baseline and outage calculations, current-input provenance, stale-result hiding, time scrubber and CSV/setup exports",
+    "Two-run comparison preserves inputs and stored-energy boundaries; comparison export is parseable",
+    "Eight local specialists review the exact selected saved hybrid run, not an invented or default substitute",
+    "Advanced hydrogen architecture and dynamic black-start scenario are visibly study-only and cannot manufacture results",
+    "Configuration JSON import round-trip and malicious/unknown-field rejection",
+    "Lesson self-check rejects wrong answers, grades correct answers, avoids duplicate progress and exports lesson/progress records",
+    "Learning reset requires an explicit confirmation",
+    "All twelve workspaces fit 390px without page-level horizontal overflow",
+    "All twelve workspaces fit 320px without page-level horizontal overflow",
+    "Offline preview allows exploration and learning but never claims a new numerical calculation",
+    "No uncaught JavaScript errors in the exercised hybrid flows"
+  ],
+  "transport": "host HTTP bridge",
+  "limits": [
+    "Not a formal accessibility certification or WebGL performance benchmark.",
+    "Cross-reload localStorage persistence and file:// navigation were not verified in bridge mode."
+  ]
+}

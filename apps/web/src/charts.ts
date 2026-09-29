@@ -1,0 +1,33 @@
+namespace HF {
+  let chartId = 0;
+  export function lineChart(labels: string[], series: Series[], options: {height?: number; unit?: string; band?: [number[], number[]]; table?: boolean} = {}): string {
+    if(!labels.length)return '<div class="empty">No applicable observations for this scenario.</div>';
+    const width = 800, height = options.height ?? 250, left = 54, right = 18, top = 22, bottom = 38;
+    const all = series.flatMap(s => s.values).concat(options.band?.flat() ?? []).filter(Number.isFinite);
+    const low = Math.min(0, ...all), high = Math.max(1, ...all)*1.08;
+    const y = (v: number): number => top+(high-v)/(high-low)*(height-top-bottom);
+    const x = (i: number): number => left+i/Math.max(1, labels.length-1)*(width-left-right);
+    const path = (values: number[]): string => values.map((v,i) => `${i ? 'L':'M'}${x(i).toFixed(2)},${y(v).toFixed(2)}`).join(' ');
+    const uid = `chart${++chartId}`;
+    const grid = Array.from({length:5},(_,i) => {const v=low+(high-low)*i/4; return `<line x1="${left}" x2="${width-right}" y1="${y(v)}" y2="${y(v)}" class="chart-grid"/><text x="${left-12}" y="${y(v)+4}" text-anchor="end">${fmt(v, Math.abs(high)<20?1:0)}</text>`;}).join('');
+    const marks = labels.map((label,i) => i % Math.max(1,Math.ceil(labels.length/7))===0 || i===labels.length-1 ? `<text x="${x(i)}" y="${height-9}" text-anchor="middle">${escapeHTML(label)}</text>` : '').join('');
+    const area = options.band ? `<path d="${path(options.band[1])} ${[...options.band[0]].reverse().map((v,j)=>`L${x(options.band![0].length-1-j)},${y(v)}`).join(' ')} Z" fill="#a8d8c6" opacity=".10"/>` : '';
+    const plotted = series.map((s,i) => `${s.area ? `<defs><linearGradient id="${uid}g${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${s.color}" stop-opacity=".18"/><stop offset="100%" stop-color="${s.color}" stop-opacity="0"/></linearGradient></defs><path d="${path(s.values)} L${x(s.values.length-1)},${y(low)} L${x(0)},${y(low)}Z" fill="url(#${uid}g${i})"/>` : ''}<path class="chart-line" d="${path(s.values)}" fill="none" stroke="${s.color}" stroke-width="2.5" ${s.dashed?'stroke-dasharray="5 6"':''} stroke-linejoin="round" stroke-linecap="round"/><circle cx="${x(s.values.length-1)}" cy="${y(s.values[s.values.length-1] ?? 0)}" r="3" fill="${s.color}"/>`).join('');
+    const points = labels.map((label,i)=>`<g class="chart-hit"><rect x="${x(i)-10}" y="${top}" width="20" height="${height-top-bottom}" fill="transparent"><title>${escapeHTML(label)}: ${series.map(s=>`${escapeHTML(s.name)} ${fmt(s.values[i],2)} ${escapeHTML(options.unit??'')}`).join(' · ')}</title></rect></g>`).join('');
+    const table = options.table === false ? '' : `<details class="data-details"><summary>View chart data ${icon('down',12)}</summary><div class="table-scroll"><table><thead><tr><th>Interval</th>${series.map(s=>`<th>${escapeHTML(s.name)} (${escapeHTML(options.unit??'')})</th>`).join('')}</tr></thead><tbody>${labels.map((l,i)=>`<tr><td>${escapeHTML(l)}</td>${series.map(s=>`<td>${fmt(s.values[i],2)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`;
+    return `<div class="chart-wrap"><div class="chart-unit">${escapeHTML(options.unit??'')}</div><svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="${uid}title"><title id="${uid}title">${series.map(s=>escapeHTML(s.name)).join(', ')}. A data table follows.</title>${grid}${marks}${area}${plotted}${points}</svg></div>${table}`;
+  }
+  export function sparkline(values: number[], color: string): string {
+    const high=Math.max(...values), low=Math.min(...values), denom=high-low||1;
+    const points=values.map((v,i)=>`${i/(values.length-1)*105},${30-(v-low)/denom*26}`).join(' ');
+    return `<svg class="sparkline" width="106" height="34" viewBox="0 0 106 34" aria-hidden="true"><polyline points="${points}" fill="none" stroke="${color}" stroke-width="1.7" stroke-linejoin="round"/></svg>`;
+  }
+  export function energyOrb(): string {
+    const longitude=Array.from({length:7},(_,i)=>`<ellipse cx="235" cy="148" rx="${15+i*17}" ry="116" transform="rotate(-23 235 148)"/>`).join('');
+    const latitude=Array.from({length:7},(_,i)=>`<ellipse cx="235" cy="${74+i*25}" rx="${Math.sqrt(Math.max(0,1-((74+i*25-148)/116)**2))*116}" ry="${9+i%3*3}" transform="rotate(-23 235 148)"/>`).join('');
+    return `<div class="orb-art" aria-hidden="true"><svg viewBox="0 0 500 300"><defs><radialGradient id="orbGlow"><stop stop-color="#d7ff84" stop-opacity=".22"/><stop offset="1" stop-color="#d7ff84" stop-opacity="0"/></radialGradient><radialGradient id="orbFill"><stop stop-color="#293b29"/><stop offset="1" stop-color="#14231b"/></radialGradient><linearGradient id="ringColor"><stop stop-color="#d7ff84" stop-opacity=".05"/><stop offset=".55" stop-color="#d7ff84"/><stop offset="1" stop-color="#d7ff84" stop-opacity=".1"/></linearGradient></defs><circle cx="235" cy="148" r="147" fill="url(#orbGlow)"/><circle cx="235" cy="148" r="116" fill="url(#orbFill)"/><g stroke="#bbdf88" stroke-width=".65" opacity=".24">${longitude}${latitude}</g><circle cx="235" cy="148" r="117" stroke="#b2cf8c" stroke-opacity=".3" fill="none"/><g class="orb-ring"><ellipse cx="235" cy="148" rx="182" ry="52" transform="rotate(-23 235 148)" fill="none" stroke="url(#ringColor)" stroke-width="1.2"/><circle cx="389" cy="81" r="4.5" fill="#d7ff84"/><circle cx="81" cy="215" r="3" fill="#82dacc"/></g><g class="orb-satellite"><circle cx="307" cy="74" r="5" fill="#d7ff84"/><circle cx="307" cy="74" r="12" fill="none" stroke="#d7ff84" opacity=".25"/></g><path d="M142 129l46 9 31-48 52 36 43 30-20 49-55 19-49-19-22-43-26-33Z" fill="#b8ef81" fill-opacity=".06" stroke="#c1eb98" stroke-opacity=".35"/><path d="M142 129l129-3-32 98-20-134-29 115 124-49-126-18 106 67" fill="none" stroke="#c1eb98" stroke-opacity=".25"/><g fill="#dcffa9"><circle cx="188" cy="138" r="3"/><circle cx="219" cy="90" r="3"/><circle cx="271" cy="126" r="3"/><circle cx="239" cy="224" r="3"/><circle cx="314" cy="156" r="3"/></g></svg><span class="orb-label orb-label-top"><i></i> SYSTEMS THINKING</span><span class="orb-label orb-label-bottom">RESEARCH → REAL-WORLD VALUE</span></div>`;
+  }
+  export function energyFlow(): string {
+    return `<div class="flow-diagram" aria-label="Illustrative PV, grid, battery and site energy flows"><div class="flow-node">${icon('sun',24)}<span>Solar PV</span><small>On-site generation</small></div><div class="flow-track"><span></span></div><div class="flow-node flow-center">${icon('battery',26)}<span>5 MW / 10 MWh</span><small>Reference architecture</small></div><div class="flow-track"><span></span></div><div class="flow-node">${icon('layers',24)}<span>Site demand</span><small>Flexible consumption</small></div></div>`;
+  }
+}

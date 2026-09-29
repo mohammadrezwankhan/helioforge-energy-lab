@@ -1,0 +1,32 @@
+{
+  "checks_passed": 21,
+  "checks": [
+    "Unchanged blur preserves toolbar button identity instead of consuming the next click",
+    "HF-001: invalid in-progress hybrid input hides results immediately; raw input survives navigation and recovers",
+    "HF-002: unsubmitted model inputs survive workspace navigation and are labelled as uncalculated",
+    "HF-003: reconnect preserves a completed 12 MWh calculation instead of resetting it to 10 MWh",
+    "Named setup saves validated inputs, escapes its name and exports an import-compatible file",
+    "Opening a saved setup restores exact inputs without pretending to calculate",
+    "History filtering and run reopening preserve stored inputs/results without rewriting the API record",
+    "Keyboard command palette finds study-only systems, navigates by Enter, and opens actions",
+    "Workspace reconstruction restores named setups and verifies last result plus comparison IDs against the real API",
+    "Pending-request navigation keeps inputs locked; repeated submit creates only one run",
+    "Injected response loss after a real API save is reported as ambiguous, with recovery through history",
+    "Deleting a setup requires confirmation and does not delete historical calculations",
+    "All 12 workspaces fit 320px without document overflow",
+    "All 12 workspaces fit 390px without document overflow",
+    "All 12 workspaces fit 768px without document overflow",
+    "All 12 workspaces fit 1440px without document overflow",
+    "Mobile navigation uses inert background/hidden menu and restores focus on Escape",
+    "Damaged workspace is retained, downloadable, and reset only after explicit confirmation",
+    "Storage write failure retains setup in memory and never claims it was durably saved",
+    "Offline preview keeps new calculations disabled and states the local API prerequisite",
+    "No uncaught JavaScript exceptions in the checked journeys"
+  ],
+  "transport": "host HTTP bridge",
+  "storage": "test adapter on about:blank",
+  "limitations": [
+    "No physical-device, assistive-technology or human UAT sessions.",
+    "No direct browser networking, CSP, file launch, or native storage durability verified."
+  ]
+}

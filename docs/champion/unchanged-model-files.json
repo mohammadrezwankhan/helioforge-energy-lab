@@ -1,0 +1,38 @@
+[
+  {
+    "path": "apps/api/helioforge/engines/__init__.py",
+    "sha256": "45280d06fbb9454171e1466d8be34e2c96bff0392e1574983f6e124b9e45d2fe"
+  },
+  {
+    "path": "apps/api/helioforge/engines/finance.py",
+    "sha256": "393528feb42fbec36fa51e642d16e63ba9e9b968c91d9466214ceb01f6c4f136"
+  },
+  {
+    "path": "apps/api/helioforge/engines/forecast.py",
+    "sha256": "f4dddba708533f9d49246f91c7f6e1c269f23c46a7d2ec4ee4d5dbffe7930e77"
+  },
+  {
+    "path": "apps/api/helioforge/engines/hybrid.py",
+    "sha256": "23812abccc7d3975fdd4c153c708c0c63672abd443b0f310b8d89a437677a877"
+  },
+  {
+    "path": "apps/api/helioforge/engines/research.py",
+    "sha256": "bce5c56abb73c3a9b7c88c537dd4379de75032338212ab6602303d978b7401bb"
+  },
+  {
+    "path": "apps/api/helioforge/engines/storage.py",
+    "sha256": "41d6cc76c6c8712d8882122c8afe8a315a17c24946b28749702185c04d79eec9"
+  },
+  {
+    "path": "apps/api/helioforge/hybrid.py",
+    "sha256": "7baf41b42e3c5e8d00be064f60a134c447ff0a6f25f0b4d2581dc55d88f2c03f"
+  },
+  {
+    "path": "apps/api/helioforge/store.py",
+    "sha256": "29176291dc178fe0f63b46ec22691ce7ec5f3f4b576128fdf61fdaecdfdf4fc7"
+  },
+  {
+    "path": "apps/api/helioforge/data/hybrid_catalog.json",
+    "sha256": "6fcaf78a6500ba573c5862b783006e37e359ff5061f1c5d187eee103e3b420fc"
+  }
+]

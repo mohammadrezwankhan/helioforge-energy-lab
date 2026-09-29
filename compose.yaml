@@ -1,0 +1,14 @@
+services:
+  helioforge:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      HELIOFORGE_DB: /data/helioforge.sqlite3
+      ENABLE_OPENAI: "false"
+    volumes:
+      - helioforge-data:/data
+    init: true
+    restart: unless-stopped
+volumes:
+  helioforge-data:

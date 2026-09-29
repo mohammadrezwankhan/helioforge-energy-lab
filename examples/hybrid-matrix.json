@@ -1,0 +1,4325 @@
+{
+  "catalogue_version": "0.2.0",
+  "matrix": [
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "cloud-cover",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "wind-lull",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "renewable-drought",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "outage-4h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "outage-24h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "outage-72h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "black-start",
+      "capability": "study"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "reconnection",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "weak-grid",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "zero-export",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "export-cap",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "import-cap",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "negative-prices",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "price-spike",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "remote-triad",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "cloud-cover",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "renewable-drought",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "outage-4h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "outage-24h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "outage-72h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "zero-export",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "export-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "import-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "negative-prices",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "price-spike",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "utility-pv-ac",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "cloud-cover",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "renewable-drought",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "outage-4h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "outage-24h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "outage-72h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "zero-export",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "export-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "import-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "negative-prices",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "price-spike",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "utility-pv-dc",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "cloud-cover",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "renewable-drought",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "outage-4h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "outage-24h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "outage-72h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "zero-export",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "export-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "import-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "negative-prices",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "price-spike",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "industrial-btm",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "cloud-cover",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "wind-lull",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "renewable-drought",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "outage-4h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "outage-24h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "outage-72h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "zero-export",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "export-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "import-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "negative-prices",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "price-spike",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-firming",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "cloud-cover",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "renewable-drought",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "outage-4h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "outage-24h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "outage-72h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "black-start",
+      "capability": "study"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "zero-export",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "export-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "import-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "negative-prices",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "price-spike",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "generator-outage",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "hospital-island",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "cloud-cover",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "renewable-drought",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "outage-4h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "outage-24h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "outage-72h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "black-start",
+      "capability": "study"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "zero-export",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "export-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "import-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "negative-prices",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "price-spike",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "home-resilience",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "cloud-cover",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "renewable-drought",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "outage-4h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "outage-24h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "outage-72h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "zero-export",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "export-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "import-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "negative-prices",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "price-spike",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "community-energy",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "cloud-cover",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "renewable-drought",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "outage-4h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "outage-24h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "outage-72h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "black-start",
+      "capability": "study"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "reconnection",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "weak-grid",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "zero-export",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "export-cap",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "import-cap",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "negative-prices",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "price-spike",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "telecom-dc",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "cloud-cover",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "renewable-drought",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "outage-4h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "outage-24h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "outage-72h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "black-start",
+      "capability": "study"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "reconnection",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "weak-grid",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "zero-export",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "export-cap",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "import-cap",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "negative-prices",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "price-spike",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "generator-outage",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-diesel",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "cloud-cover",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "wind-lull",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "renewable-drought",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "outage-4h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "outage-24h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "outage-72h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "black-start",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "reconnection",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "weak-grid",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "zero-export",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "export-cap",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "import-cap",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "negative-prices",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "price-spike",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "generator-outage",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-diesel",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "cloud-cover",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "wind-lull",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "renewable-drought",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "outage-4h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "outage-24h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "outage-72h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "black-start",
+      "capability": "study"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "reconnection",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "weak-grid",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "zero-export",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "export-cap",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "import-cap",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "negative-prices",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "price-spike",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "low-river",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-triad",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "cloud-cover",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "renewable-drought",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "outage-4h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "outage-24h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "outage-72h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "zero-export",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "export-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "import-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "negative-prices",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "price-spike",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "low-river",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "hydro-battery",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "cloud-cover",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "renewable-drought",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "outage-4h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "outage-24h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "outage-72h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "zero-export",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "export-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "import-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "negative-prices",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "price-spike",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "low-river",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "floating-solar",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "baseline",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "cloud-cover",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "renewable-drought",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "heatwave",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "winter-peak",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "load-step",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "outage-4h",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "outage-24h",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "outage-72h",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "zero-export",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "export-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "import-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "negative-prices",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "price-spike",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "aged-battery",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "battery-trip",
+      "capability": "study"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "biomass-chp",
+      "scenario_id": "reserve-floor",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "baseline",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "cloud-cover",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "renewable-drought",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "heatwave",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "winter-peak",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "load-step",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "outage-4h",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "outage-24h",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "outage-72h",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "zero-export",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "export-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "import-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "negative-prices",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "price-spike",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "aged-battery",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "battery-trip",
+      "capability": "study"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "geothermal-hub",
+      "scenario_id": "reserve-floor",
+      "capability": "study"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "baseline",
+      "capability": "study"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "cloud-cover",
+      "capability": "study"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "renewable-drought",
+      "capability": "study"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "heatwave",
+      "capability": "study"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "winter-peak",
+      "capability": "study"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "load-step",
+      "capability": "study"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "outage-4h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "outage-24h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "outage-72h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "black-start",
+      "capability": "study"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "reconnection",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "weak-grid",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "zero-export",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "export-cap",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "import-cap",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "negative-prices",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "price-spike",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "aged-battery",
+      "capability": "study"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "battery-trip",
+      "capability": "study"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "solar-hydrogen",
+      "scenario_id": "reserve-floor",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "baseline",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "cloud-cover",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "wind-lull",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "renewable-drought",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "heatwave",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "winter-peak",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "load-step",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "outage-4h",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "outage-24h",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "outage-72h",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "zero-export",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "export-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "import-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "negative-prices",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "price-spike",
+      "capability": "study"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "aged-battery",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "battery-trip",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "wind-hydrogen",
+      "scenario_id": "reserve-floor",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "baseline",
+      "capability": "study"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "cloud-cover",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "renewable-drought",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "heatwave",
+      "capability": "study"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "winter-peak",
+      "capability": "study"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "load-step",
+      "capability": "study"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "outage-4h",
+      "capability": "study"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "outage-24h",
+      "capability": "study"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "outage-72h",
+      "capability": "study"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "zero-export",
+      "capability": "study"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "export-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "import-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "negative-prices",
+      "capability": "study"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "price-spike",
+      "capability": "study"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "aged-battery",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "battery-trip",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "csp-storage",
+      "scenario_id": "reserve-floor",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "baseline",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "cloud-cover",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "renewable-drought",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "heatwave",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "winter-peak",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "load-step",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "outage-4h",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "outage-24h",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "outage-72h",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "zero-export",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "export-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "import-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "negative-prices",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "price-spike",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "aged-battery",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "battery-trip",
+      "capability": "study"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "heatpump-hub",
+      "scenario_id": "reserve-floor",
+      "capability": "study"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "baseline",
+      "capability": "study"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "cloud-cover",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "renewable-drought",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "heatwave",
+      "capability": "study"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "winter-peak",
+      "capability": "study"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "load-step",
+      "capability": "study"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "outage-4h",
+      "capability": "study"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "outage-24h",
+      "capability": "study"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "outage-72h",
+      "capability": "study"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "zero-export",
+      "capability": "study"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "export-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "import-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "negative-prices",
+      "capability": "study"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "price-spike",
+      "capability": "study"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "aged-battery",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "battery-trip",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "generator-outage",
+      "capability": "study"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "district-chp",
+      "scenario_id": "reserve-floor",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "cloud-cover",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "renewable-drought",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "outage-4h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "outage-24h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "outage-72h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "zero-export",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "export-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "import-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "negative-prices",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "price-spike",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "ev-depot",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "baseline",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "cloud-cover",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "renewable-drought",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "heatwave",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "winter-peak",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "load-step",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "outage-4h",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "outage-24h",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "outage-72h",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "zero-export",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "export-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "import-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "negative-prices",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "price-spike",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "aged-battery",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "battery-trip",
+      "capability": "study"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "v2g-fleet",
+      "scenario_id": "reserve-floor",
+      "capability": "study"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "cloud-cover",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "wind-lull",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "renewable-drought",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "outage-4h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "outage-24h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "outage-72h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "black-start",
+      "capability": "study"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "zero-export",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "export-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "import-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "negative-prices",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "price-spike",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "generator-outage",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "port-microgrid",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "cloud-cover",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "renewable-drought",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "outage-4h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "outage-24h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "outage-72h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "black-start",
+      "capability": "study"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "zero-export",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "export-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "import-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "negative-prices",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "price-spike",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "generator-outage",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "data-centre",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "cloud-cover",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "renewable-drought",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "outage-4h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "outage-24h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "outage-72h",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "zero-export",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "export-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "import-cap",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "negative-prices",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "price-spike",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "agrivoltaics",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "baseline",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "cloud-cover",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "wind-lull",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "renewable-drought",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "heatwave",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "winter-peak",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "load-step",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "outage-4h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "outage-24h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "outage-72h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "black-start",
+      "capability": "study"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "reconnection",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "weak-grid",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "zero-export",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "export-cap",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "import-cap",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "negative-prices",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "price-spike",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "aged-battery",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "battery-trip",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "desalination",
+      "scenario_id": "reserve-floor",
+      "capability": "runnable"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "baseline",
+      "capability": "study"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "cloud-cover",
+      "capability": "study"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "wind-lull",
+      "capability": "study"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "renewable-drought",
+      "capability": "study"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "heatwave",
+      "capability": "study"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "winter-peak",
+      "capability": "study"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "load-step",
+      "capability": "study"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "outage-4h",
+      "capability": "study"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "outage-24h",
+      "capability": "study"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "outage-72h",
+      "capability": "study"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "zero-export",
+      "capability": "study"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "export-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "import-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "negative-prices",
+      "capability": "study"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "price-spike",
+      "capability": "study"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "aged-battery",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "battery-trip",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "pumped-hydro",
+      "scenario_id": "reserve-floor",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "baseline",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "cloud-cover",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "renewable-drought",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "heatwave",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "winter-peak",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "load-step",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "outage-4h",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "outage-24h",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "outage-72h",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "black-start",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "zero-export",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "export-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "import-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "negative-prices",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "price-spike",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "aged-battery",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "battery-trip",
+      "capability": "study"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "flywheel-hybrid",
+      "scenario_id": "reserve-floor",
+      "capability": "study"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "baseline",
+      "capability": "study"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "cloud-cover",
+      "capability": "study"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "renewable-drought",
+      "capability": "study"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "heatwave",
+      "capability": "study"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "winter-peak",
+      "capability": "study"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "load-step",
+      "capability": "study"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "outage-4h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "outage-24h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "outage-72h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "black-start",
+      "capability": "study"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "reconnection",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "weak-grid",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "zero-export",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "export-cap",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "import-cap",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "negative-prices",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "price-spike",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "aged-battery",
+      "capability": "study"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "battery-trip",
+      "capability": "study"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "supercapacitor",
+      "scenario_id": "reserve-floor",
+      "capability": "study"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "baseline",
+      "capability": "study"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "cloud-cover",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "renewable-drought",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "heatwave",
+      "capability": "study"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "winter-peak",
+      "capability": "study"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "load-step",
+      "capability": "study"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "outage-4h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "outage-24h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "outage-72h",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "black-start",
+      "capability": "study"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "reconnection",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "weak-grid",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "zero-export",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "export-cap",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "import-cap",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "negative-prices",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "price-spike",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "aged-battery",
+      "capability": "study"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "battery-trip",
+      "capability": "study"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "marine-hybrid",
+      "scenario_id": "reserve-floor",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "baseline",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "cloud-cover",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "wind-lull",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "renewable-drought",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "heatwave",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "winter-peak",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "load-step",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "outage-4h",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "outage-24h",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "outage-72h",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "zero-export",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "export-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "import-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "negative-prices",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "price-spike",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "aged-battery",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "battery-trip",
+      "capability": "study"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "offshore-island",
+      "scenario_id": "reserve-floor",
+      "capability": "study"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "baseline",
+      "capability": "study"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "cloud-cover",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "renewable-drought",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "heatwave",
+      "capability": "study"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "winter-peak",
+      "capability": "study"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "load-step",
+      "capability": "study"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "outage-4h",
+      "capability": "study"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "outage-24h",
+      "capability": "study"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "outage-72h",
+      "capability": "study"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "zero-export",
+      "capability": "study"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "export-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "import-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "negative-prices",
+      "capability": "study"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "price-spike",
+      "capability": "study"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "aged-battery",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "battery-trip",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "nuclear-hydrogen",
+      "scenario_id": "reserve-floor",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "baseline",
+      "capability": "study"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "cloud-cover",
+      "capability": "study"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "wind-lull",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "renewable-drought",
+      "capability": "study"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "heatwave",
+      "capability": "study"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "winter-peak",
+      "capability": "study"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "load-step",
+      "capability": "study"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "outage-4h",
+      "capability": "study"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "outage-24h",
+      "capability": "study"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "outage-72h",
+      "capability": "study"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "zero-export",
+      "capability": "study"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "export-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "import-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "negative-prices",
+      "capability": "study"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "price-spike",
+      "capability": "study"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "aged-battery",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "battery-trip",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "waste-energy",
+      "scenario_id": "reserve-floor",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "baseline",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "cloud-cover",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "wind-lull",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "renewable-drought",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "heatwave",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "winter-peak",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "load-step",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "outage-4h",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "outage-24h",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "outage-72h",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "black-start",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "zero-export",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "export-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "import-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "negative-prices",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "price-spike",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "aged-battery",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "battery-trip",
+      "capability": "study"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "generator-outage",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "virtual-plant",
+      "scenario_id": "reserve-floor",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "baseline",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "cloud-cover",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "wind-lull",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "renewable-drought",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "heatwave",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "winter-peak",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "load-step",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "outage-4h",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "outage-24h",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "outage-72h",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "black-start",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "reconnection",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "weak-grid",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "ramp-limit",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "zero-export",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "export-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "import-cap",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "negative-prices",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "price-spike",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "aged-battery",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "battery-trip",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "generator-outage",
+      "capability": "study"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "low-river",
+      "capability": "inapplicable"
+    },
+    {
+      "system_id": "networked-microgrids",
+      "scenario_id": "reserve-floor",
+      "capability": "study"
+    }
+  ]
+}

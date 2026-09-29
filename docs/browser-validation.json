@@ -1,0 +1,25 @@
+{
+  "checks_passed": 18,
+  "checks": [
+    "API-connected overview",
+    "Portfolio search and country filter",
+    "Evidence JSON download",
+    "Storage calculation, input commit and solver completion",
+    "Dispatch CSV download",
+    "PV economics recalculation",
+    "Reliability and carbon recalculation",
+    "Market registry and primary-source links",
+    "Seeded price simulation",
+    "Debt-free finance case has no fabricated DSCR",
+    "Leveraged finance and acquisition screen",
+    "Pilot evidence update and persisted audit event",
+    "Local council review and external-processing consent UI",
+    "Saved model runs visible in history",
+    "Reduced-motion user control",
+    "All nine workspaces fit 390px mobile viewport",
+    "Standalone snapshot renders with calculations explicitly disabled",
+    "No uncaught JavaScript errors"
+  ],
+  "transport": "host HTTP bridge",
+  "notes": "Bridge mode does not validate direct browser network, CSP enforcement, or file:// navigation."
+}

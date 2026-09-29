@@ -1,0 +1,67 @@
+name: Verify research release
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install -e "apps/api[dev]"
+      - run: python -m pytest apps/api/tests
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: python -m pip install -e "apps/api[dev]" playwright
+      - run: python scripts/generate-hybrid-assets.py && git diff --exit-code -- apps/web/src/hybrid-data.ts examples/hybrid-default.json examples/hybrid-catalog.json examples/hybrid-matrix.json
+      - run: cd apps/web && npm ci && npm run typecheck && npm run build && npm test
+      - run: python -m playwright install --with-deps chromium
+      - name: Browser checks against local API
+        run: |
+          python -m uvicorn helioforge.main:app --host 127.0.0.1 --port 8000 > /tmp/helioforge-api.log 2>&1 &
+          API_PID=$!
+          trap 'kill "$API_PID"' EXIT
+          python - <<'PY'
+          import time, urllib.request
+          for _ in range(60):
+              try:
+                  urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=1)
+                  break
+              except Exception:
+                  time.sleep(1)
+          else:
+              raise SystemExit('API did not become ready')
+          PY
+          python scripts/browser-smoke.py --screenshots
+          python scripts/browser-hybrid.py --screenshots
+          python scripts/browser-champion.py --screenshots
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-evidence
+          path: |
+            docs/*desktop.png
+            docs/*mobile.png
+            docs/hybrid-compare.png
+            docs/learning-studio.png
+            docs/hybrid-browser-validation.json
+            docs/browser-validation.json
+            docs/champion/*.png
+            docs/champion/browser-champion.json

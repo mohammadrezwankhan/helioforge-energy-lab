@@ -1,0 +1,16 @@
+PASS Hybrid lab is the default; all 36 architecture presets are available
+PASS 3D camera buttons and keyboard work; reduced motion freezes decorative canvas animation; asset inspector updates
+PASS Smart search synonyms, no-results state, family filter and reset
+PASS Real baseline and outage calculations, current-input provenance, stale-result hiding, time scrubber and CSV/setup exports
+PASS Two-run comparison preserves inputs and stored-energy boundaries; comparison export is parseable
+PASS Eight local specialists review the exact selected saved hybrid run, not an invented or default substitute
+PASS Advanced hydrogen architecture and dynamic black-start scenario are visibly study-only and cannot manufacture results
+PASS Configuration JSON import round-trip and malicious/unknown-field rejection
+PASS Lesson self-check rejects wrong answers, grades correct answers, avoids duplicate progress and exports lesson/progress records
+PASS Learning reset requires an explicit confirmation
+PASS All twelve workspaces fit 390px without page-level horizontal overflow
+PASS All twelve workspaces fit 320px without page-level horizontal overflow
+PASS Offline preview allows exploration and learning but never claims a new numerical calculation
+PASS No uncaught JavaScript errors in the exercised hybrid flows
+
+14 hybrid browser checks passed.

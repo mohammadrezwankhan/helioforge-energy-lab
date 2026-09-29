@@ -1,0 +1,30 @@
+{
+  "market": "FR",
+  "capacity_kwh": 2.0,
+  "power_kw": 1.0,
+  "round_trip_efficiency": 1.0,
+  "min_soc_fraction": 0.0,
+  "max_soc_fraction": 1.0,
+  "initial_soc_fraction": 0.0,
+  "interval_hours": 1.0,
+  "wear_eur_per_kwh": 0.0,
+  "peak_charge_eur_per_kw_period": 0.0,
+  "grid_import_limit_kw": 10.0,
+  "grid_export_limit_kw": 0.0,
+  "import_eur_per_kwh": [
+    0.1,
+    0.3
+  ],
+  "export_eur_per_kwh": [
+    0.0,
+    0.0
+  ],
+  "load_kw": [
+    0.0,
+    1.0
+  ],
+  "pv_kw": [
+    0.0,
+    0.0
+  ]
+}

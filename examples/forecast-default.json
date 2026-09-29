@@ -1,0 +1,12 @@
+{
+  "market": "FR",
+  "base_price_eur_mwh": 80.0,
+  "long_run_price_eur_mwh": 70.0,
+  "mean_reversion": 0.25,
+  "annual_shock_eur_mwh": 15.0,
+  "trend_eur_mwh_year": 0.5,
+  "years": 20,
+  "paths": 1500,
+  "seed": 42,
+  "start_year": 2027
+}

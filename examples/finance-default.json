@@ -1,0 +1,19 @@
+{
+  "capex_eur": 3200000.0,
+  "annual_gross_margin_eur": 820000.0,
+  "annual_opex_eur": 70000.0,
+  "years": 20,
+  "discount_rate": 0.08,
+  "annual_margin_degradation": 0.018,
+  "escalation_rate": 0.02,
+  "debt_fraction": 0.55,
+  "debt_interest_rate": 0.055,
+  "debt_tenor_years": 10,
+  "augmentation_year": 10,
+  "augmentation_cost_eur": 450000.0,
+  "augmentation_retention_restore": 0.1,
+  "contracted_fraction": 0.4,
+  "contract_years": 10,
+  "merchant_margin_factor": 0.75,
+  "minimum_dscr": 1.3
+}

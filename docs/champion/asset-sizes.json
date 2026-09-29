@@ -1,0 +1,14 @@
+{
+  "apps/web/dist/app.js": {
+    "baseline_bytes": 304118,
+    "candidate_bytes": 345501
+  },
+  "apps/web/dist/styles.css": {
+    "baseline_bytes": 64509,
+    "candidate_bytes": 77210
+  },
+  "HelioForge-Preview.html": {
+    "baseline_bytes": 369757,
+    "candidate_bytes": 423849
+  }
+}

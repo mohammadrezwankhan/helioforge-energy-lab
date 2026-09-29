@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "Please cite the version and commit you actually used, and identify synthetic inputs."
+title: "HelioForge: Hybrid Energy Learning and Research"
+authors:
+  - name: "HelioForge contributors"
+version: 0.3.0
+date-released: 2026-09-28
+license: MIT
+abstract: "Local-first Python and TypeScript research software for transparent energy screening."

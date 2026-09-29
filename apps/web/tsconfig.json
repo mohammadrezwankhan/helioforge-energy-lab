@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "none",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "forceConsistentCasingInFileNames": true,
+    "outFile": "dist/app.js",
+    "sourceMap": false,
+    "removeComments": false
+  },
+  "files": [
+    "src/types.ts",
+    "src/hybrid-types.ts",
+    "src/core.ts",
+    "src/icons.ts",
+    "src/charts.ts",
+    "src/snapshot.ts",
+    "src/hybrid-data.ts",
+    "src/hybrid-core.ts",
+    "src/champion-core.ts",
+    "src/scene.ts",
+    "src/hybrid-views.ts",
+    "src/hybrid-controller.ts",
+    "src/views.ts",
+    "src/champion-views.ts",
+    "src/champion-controller.ts",
+    "src/app.ts"
+  ]
+}

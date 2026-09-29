@@ -1,0 +1,20 @@
+PASS API-connected overview
+PASS Portfolio search and country filter
+PASS Evidence JSON download
+PASS Storage calculation, input commit and solver completion
+PASS Dispatch CSV download
+PASS PV economics recalculation
+PASS Reliability and carbon recalculation
+PASS Market registry and primary-source links
+PASS Seeded price simulation
+PASS Debt-free finance case has no fabricated DSCR
+PASS Leveraged finance and acquisition screen
+PASS Pilot evidence update and persisted audit event
+PASS Local council review and external-processing consent UI
+PASS Saved model runs visible in history
+PASS Reduced-motion user control
+PASS All nine workspaces fit 390px mobile viewport
+PASS Standalone snapshot renders with calculations explicitly disabled
+PASS No uncaught JavaScript errors
+
+18 browser checks passed.

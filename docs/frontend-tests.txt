@@ -1,0 +1,404 @@
+
+> @helioforge/dashboard@0.2.0 test
+> node --test tests/*.test.mjs
+
+TAP version 13
+# Subtest: escapes HTML attributes and text
+ok 1 - escapes HTML attributes and text
+  ---
+  duration_ms: 1.814633
+  type: 'test'
+  ...
+# Subtest: null is displayed as a dash, not a fictitious zero
+ok 2 - null is displayed as a dash, not a fictitious zero
+  ---
+  duration_ms: 0.144464
+  type: 'test'
+  ...
+# Subtest: zero is a valid number
+ok 3 - zero is a valid number
+  ---
+  duration_ms: 14.066995
+  type: 'test'
+  ...
+# Subtest: money preserves negative sign
+ok 4 - money preserves negative sign
+  ---
+  duration_ms: 0.23519
+  type: 'test'
+  ...
+# Subtest: blocks javascript source URLs
+ok 5 - blocks javascript source URLs
+  ---
+  duration_ms: 0.408613
+  type: 'test'
+  ...
+# Subtest: allows HTTPS source URLs
+ok 6 - allows HTTPS source URLs
+  ---
+  duration_ms: 0.108482
+  type: 'test'
+  ...
+# Subtest: CSV defuses spreadsheet formulas in text
+ok 7 - CSV defuses spreadsheet formulas in text
+  ---
+  duration_ms: 0.208358
+  type: 'test'
+  ...
+# Subtest: CSV numeric negative remains numeric
+ok 8 - CSV numeric negative remains numeric
+  ---
+  duration_ms: 0.109306
+  type: 'test'
+  ...
+# Subtest: CSV escapes quotes
+ok 9 - CSV escapes quotes
+  ---
+  duration_ms: 1.69373
+  type: 'test'
+  ...
+# Subtest: rejects blank numeric input
+ok 10 - rejects blank numeric input
+  ---
+  duration_ms: 0.550129
+  type: 'test'
+  ...
+# Subtest: rejects infinite numeric input
+ok 11 - rejects infinite numeric input
+  ---
+  duration_ms: 0.155638
+  type: 'test'
+  ...
+# Subtest: accepts finite numeric input
+ok 12 - accepts finite numeric input
+  ---
+  duration_ms: 0.059763
+  type: 'test'
+  ...
+# Subtest: portfolio filter composes geography and search
+ok 13 - portfolio filter composes geography and search
+  ---
+  duration_ms: 0.098213
+  type: 'test'
+  ...
+# Subtest: portfolio zero results is supported
+ok 14 - portfolio zero results is supported
+  ---
+  duration_ms: 0.045488
+  type: 'test'
+  ...
+# Subtest: snapshot states synthetic provenance
+ok 15 - snapshot states synthetic provenance
+  ---
+  duration_ms: 0.035338
+  type: 'test'
+  ...
+# Subtest: all twelve views render without a DOM dependency
+ok 16 - all twelve views render without a DOM dependency
+  ---
+  duration_ms: 35.557636
+  type: 'test'
+  ...
+# Subtest: charts have accessible titles and data tables
+ok 17 - charts have accessible titles and data tables
+  ---
+  duration_ms: 0.543192
+  type: 'test'
+  ...
+# Subtest: clamp is bounded
+ok 18 - clamp is bounded
+  ---
+  duration_ms: 0.198401
+  type: 'test'
+  ...
+# Subtest: empty charts show no-data rather than fabricated zero observations
+ok 19 - empty charts show no-data rather than fabricated zero observations
+  ---
+  duration_ms: 0.061284
+  type: 'test'
+  ...
+# Subtest: debt-free finance captions and overview do not claim a covenant breach
+ok 20 - debt-free finance captions and overview do not claim a covenant breach
+  ---
+  duration_ms: 5.488756
+  type: 'test'
+  ...
+# Subtest: catalogue has 36 explicit capability declarations
+ok 21 - catalogue has 36 explicit capability declarations
+  ---
+  duration_ms: 2.633793
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: remote-triad
+ok 22 - configuration roundtrip: remote-triad
+  ---
+  duration_ms: 1.117139
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: utility-pv-ac
+ok 23 - configuration roundtrip: utility-pv-ac
+  ---
+  duration_ms: 0.271771
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: utility-pv-dc
+ok 24 - configuration roundtrip: utility-pv-dc
+  ---
+  duration_ms: 0.124268
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: industrial-btm
+ok 25 - configuration roundtrip: industrial-btm
+  ---
+  duration_ms: 0.146839
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: wind-firming
+ok 26 - configuration roundtrip: wind-firming
+  ---
+  duration_ms: 0.09118
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: hospital-island
+ok 27 - configuration roundtrip: hospital-island
+  ---
+  duration_ms: 0.196096
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: home-resilience
+ok 28 - configuration roundtrip: home-resilience
+  ---
+  duration_ms: 0.122149
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: community-energy
+ok 29 - configuration roundtrip: community-energy
+  ---
+  duration_ms: 0.438986
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: telecom-dc
+ok 30 - configuration roundtrip: telecom-dc
+  ---
+  duration_ms: 0.303812
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: solar-diesel
+ok 31 - configuration roundtrip: solar-diesel
+  ---
+  duration_ms: 0.12473
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: wind-diesel
+ok 32 - configuration roundtrip: wind-diesel
+  ---
+  duration_ms: 0.108583
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: hydro-triad
+ok 33 - configuration roundtrip: hydro-triad
+  ---
+  duration_ms: 0.057596
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: hydro-battery
+ok 34 - configuration roundtrip: hydro-battery
+  ---
+  duration_ms: 0.046251
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: floating-solar
+ok 35 - configuration roundtrip: floating-solar
+  ---
+  duration_ms: 0.046788
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: biomass-chp
+ok 36 - configuration roundtrip: biomass-chp
+  ---
+  duration_ms: 0.080538
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: geothermal-hub
+ok 37 - configuration roundtrip: geothermal-hub
+  ---
+  duration_ms: 0.049055
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: solar-hydrogen
+ok 38 - configuration roundtrip: solar-hydrogen
+  ---
+  duration_ms: 0.043555
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: wind-hydrogen
+ok 39 - configuration roundtrip: wind-hydrogen
+  ---
+  duration_ms: 0.053104
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: csp-storage
+ok 40 - configuration roundtrip: csp-storage
+  ---
+  duration_ms: 0.042511
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: heatpump-hub
+ok 41 - configuration roundtrip: heatpump-hub
+  ---
+  duration_ms: 0.042424
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: district-chp
+ok 42 - configuration roundtrip: district-chp
+  ---
+  duration_ms: 0.045419
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: ev-depot
+ok 43 - configuration roundtrip: ev-depot
+  ---
+  duration_ms: 0.06033
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: v2g-fleet
+ok 44 - configuration roundtrip: v2g-fleet
+  ---
+  duration_ms: 0.052397
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: port-microgrid
+ok 45 - configuration roundtrip: port-microgrid
+  ---
+  duration_ms: 0.05279
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: data-centre
+ok 46 - configuration roundtrip: data-centre
+  ---
+  duration_ms: 0.052595
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: agrivoltaics
+ok 47 - configuration roundtrip: agrivoltaics
+  ---
+  duration_ms: 0.052892
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: desalination
+ok 48 - configuration roundtrip: desalination
+  ---
+  duration_ms: 0.130946
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: pumped-hydro
+ok 49 - configuration roundtrip: pumped-hydro
+  ---
+  duration_ms: 0.063741
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: flywheel-hybrid
+ok 50 - configuration roundtrip: flywheel-hybrid
+  ---
+  duration_ms: 0.096257
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: supercapacitor
+ok 51 - configuration roundtrip: supercapacitor
+  ---
+  duration_ms: 0.062118
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: marine-hybrid
+ok 52 - configuration roundtrip: marine-hybrid
+  ---
+  duration_ms: 0.054586
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: offshore-island
+ok 53 - configuration roundtrip: offshore-island
+  ---
+  duration_ms: 0.053228
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: nuclear-hydrogen
+ok 54 - configuration roundtrip: nuclear-hydrogen
+  ---
+  duration_ms: 0.052198
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: waste-energy
+ok 55 - configuration roundtrip: waste-energy
+  ---
+  duration_ms: 0.052831
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: virtual-plant
+ok 56 - configuration roundtrip: virtual-plant
+  ---
+  duration_ms: 0.054235
+  type: 'test'
+  ...
+# Subtest: configuration roundtrip: networked-microgrids
+ok 57 - configuration roundtrip: networked-microgrids
+  ---
+  duration_ms: 0.05238
+  type: 'test'
+  ...
+# Subtest: rejects unknown, absent, incompatible, nonfinite and unsafe fields
+ok 58 - rejects unknown, absent, incompatible, nonfinite and unsafe fields
+  ---
+  duration_ms: 1.025388
+  type: 'test'
+  ...
+# Subtest: search combines synonyms and topology without duplicating cards
+ok 59 - search combines synonyms and topology without duplicating cards
+  ---
+  duration_ms: 3.376266
+  type: 'test'
+  ...
+# Subtest: scenario applicability and long-horizon preset agree
+ok 60 - scenario applicability and long-horizon preset agree
+  ---
+  duration_ms: 0.197075
+  type: 'test'
+  ...
+# Subtest: all 36 lessons grade exactly and do not reward incorrect answers
+ok 61 - all 36 lessons grade exactly and do not reward incorrect answers
+  ---
+  duration_ms: 0.29343
+  type: 'test'
+  ...
+# Subtest: smart tags expose reasons and storage units
+ok 62 - smart tags expose reasons and storage units
+  ---
+  duration_ms: 32.139576
+  type: 'test'
+  ...
+# Subtest: stale results hidden and not relabelled with new inputs
+ok 63 - stale results hidden and not relabelled with new inputs
+  ---
+  duration_ms: 0.811333
+  type: 'test'
+  ...
+# Subtest: study architecture and scenario render no invented numeric result
+ok 64 - study architecture and scenario render no invented numeric result
+  ---
+  duration_ms: 5.800952
+  type: 'test'
+  ...
+# Subtest: no inapplicable market selector on hybrid, lesson and compare screens
+ok 65 - no inapplicable market selector on hybrid, lesson and compare screens
+  ---
+  duration_ms: 18.381452
+  type: 'test'
+  ...
+1..65
+# tests 65
+# suites 0
+# pass 65
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 183.583974

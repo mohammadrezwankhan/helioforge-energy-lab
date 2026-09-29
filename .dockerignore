@@ -1,0 +1,15 @@
+.git
+.venv
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+**/*.egg-info
+data
+**/*.sqlite*
+.env
+.env.*
+docs/*.png
+
+!apps/api/helioforge/data/
+!apps/api/helioforge/data/*.json
+**/build

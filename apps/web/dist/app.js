@@ -1,0 +1,1921 @@
+"use strict";
+var HF;
+(function (HF) {
+    HF.escapeHTML = (value) => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] ?? c));
+    HF.fmt = (value, digits = 0) => value == null || !Number.isFinite(value) ? '—' : new Intl.NumberFormat('en-GB', { maximumFractionDigits: digits, minimumFractionDigits: digits }).format(value);
+    HF.money = (value, digits = 0) => `${value < 0 ? '−' : ''}€${HF.fmt(Math.abs(value), digits)}`;
+    HF.millions = (value) => `${value < 0 ? '−' : ''}€${HF.fmt(Math.abs(value) / 1e6, 2)}m`;
+    HF.safeURL = (value) => { try {
+        const u = new URL(value);
+        return u.protocol === 'https:' ? HF.escapeHTML(u.href) : '#';
+    }
+    catch {
+        return '#';
+    } };
+    HF.clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+    function filterProjects(projects, market, search) {
+        const q = search.toLowerCase().trim();
+        return projects.filter(p => (market === 'ALL' || p.market === market) && `${p.name} ${p.market} ${p.technology} ${p.stage}`.toLowerCase().includes(q));
+    }
+    HF.filterProjects = filterProjects;
+    function finiteInput(value, label) {
+        if (typeof value !== 'string' || !value.trim())
+            throw new Error(`${label} is required.`);
+        const n = Number(value);
+        if (!Number.isFinite(n))
+            throw new Error(`${label} must be a finite number.`);
+        return n;
+    }
+    HF.finiteInput = finiteInput;
+    function csvCell(value) {
+        let text = String(value ?? '');
+        // Formula-injection defence for text values. Numeric values remain numeric.
+        if (typeof value !== 'number' && /^[=+\-@\t\r]/.test(text))
+            text = `'${text}`;
+        return `"${text.replace(/"/g, '""')}"`;
+    }
+    HF.csvCell = csvCell;
+    function toCSV(rows) {
+        const keys = Object.keys(rows[0] ?? {});
+        return [keys.map(csvCell).join(','), ...rows.map(r => keys.map(k => csvCell(r[k])).join(','))].join('\r\n');
+    }
+    HF.toCSV = toCSV;
+    function download(name, content, mime = 'application/json') {
+        const url = URL.createObjectURL(new Blob([content], { type: mime }));
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = name;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+    HF.download = download;
+    HF.PAGES = [
+        { id: 'hybrid', title: 'Hybrid systems lab', icon: 'layers', group: 'EXPLORE & LEARN', subtitle: 'Explore architectures. Stress scenarios. Follow the energy.' },
+        { id: 'lessons', title: 'Learning studio', icon: 'document', group: '', subtitle: 'Thirty-six architecture lessons. One evidence-led learning path.' },
+        { id: 'compare', title: 'Scenario compare', icon: 'activity', group: '', subtitle: 'Compare outcomes without hiding differences in the assumptions.' },
+        { id: 'overview', title: 'Command centre', icon: 'grid', group: 'WORKSPACE', subtitle: 'From research to better energy decisions.' },
+        { id: 'storage', title: 'Storage & flexibility', icon: 'battery', group: '', subtitle: 'Make every kilowatt-hour work harder.' },
+        { id: 'pv', title: 'PV economics', icon: 'sun', group: '', subtitle: 'From generation assumptions to discounted value.' },
+        { id: 'research', title: 'Research pillars', icon: 'atom', group: 'INTELLIGENCE', subtitle: 'Four disciplines. One evidence-led programme.' },
+        { id: 'markets', title: 'Market intelligence', icon: 'globe', group: '', subtitle: 'European opportunities, with evidence before conviction.' },
+        { id: 'forecast', title: 'Forecast studio', icon: 'chart', group: '', subtitle: 'Explore futures. Never confuse scenarios with certainty.' },
+        { id: 'investment', title: 'Investment desk', icon: 'briefcase', group: '', subtitle: 'Challenge the return. Understand the downside.' },
+        { id: 'pilots', title: 'Construction & pilots', icon: 'layers', group: 'EXECUTION', subtitle: 'Take hypotheses into the field.' },
+        { id: 'council', title: 'Agent council', icon: 'sparkles', group: '', subtitle: 'Specialist perspectives. Independent challenge. Human decisions.' }
+    ];
+})(HF || (HF = {}));
+var HF;
+(function (HF) {
+    // Original simple line glyphs: no external image, font or icon runtime required.
+    const glyphs = {
+        grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+        battery: '<rect x="2" y="6" width="18" height="12" rx="3"/><path d="M23 10v4M11 8l-3 5h5l-2 4"/>',
+        sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/>',
+        atom: '<ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/><circle cx="12" cy="12" r="1"/>',
+        globe: '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M5 7h14M5 17h14"/>',
+        chart: '<path d="M3 3v18h18M6 16l4-6 4 3 6-8"/><path d="M16 5h4v4"/>',
+        briefcase: '<rect x="3" y="7" width="18" height="14" rx="3"/><path d="M8 7V4h8v3M3 12c6 3 12 3 18 0M10 13v3h4v-3"/>',
+        layers: '<path d="M12 3L2 8l10 5 10-5-10-5ZM2 12l10 5 10-5M2 16l10 5 10-5"/>',
+        sparkles: '<path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3ZM20 2v5M17.5 4.5h5"/>',
+        arrow: '<path d="M4 12h16m-6-6 6 6-6 6"/>',
+        diagonal: '<path d="M5 19L19 5M5 5h14v14"/>',
+        down: '<path d="m6 9 6 6 6-6"/>',
+        download: '<path d="M12 3v12m-5-5 5 5 5-5M3 16v5h18v-5"/>',
+        search: '<circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/>',
+        leaf: '<path d="M20 3C8 2 2 7 4 15c6 8 16 4 16-12ZM4 20L15 9M10 14v-4M10 14h5"/>',
+        shield: '<path d="M12 2L3 6v6c0 6 9 10 9 10s9-4 9-10V6l-9-4Z"/><path d="m7 12 3 3 7-7"/>',
+        activity: '<path d="M2 12h5l3-8 4 16 3-8h5"/>',
+        bolt: '<path d="M13 2L4 14h7l-1 8 10-13h-8l1-7Z"/>',
+        clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/>',
+        check: '<path d="m4 12 5 5L20 6"/>',
+        alert: '<path d="M12 3L2 21h20L12 3ZM12 9v5M12 17v1"/>',
+        info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7v1"/>',
+        close: '<path d="m5 5 14 14M5 19 19 5"/>',
+        menu: '<path d="M3 6h18M3 12h18M3 18h18"/>',
+        play: '<path d="m8 4 12 8-12 8V4Z"/>',
+        pause: '<path d="M8 4v16M16 4v16"/>',
+        code: '<path d="m8 6-6 6 6 6M16 6l6 6-6 6M14 3l-4 18"/>',
+        document: '<path d="M5 2h10l4 4v16H5V2ZM14 2v5h5M8 11h8M8 15h8M8 19h5"/>',
+        flask: '<path d="M9 2h6M10 2v7L3 20c0 2 18 2 18 0L14 9V2M7 14h10"/>',
+        target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+        trophy: '<path d="M7 3h10v6c0 7-10 7-10 0V3ZM7 5H3v3c0 3 2 4 5 4M17 5h4v3c0 3-2 4-5 4M12 14v6M7 21h10"/>',
+        database: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 4 18 4 18 0V5M3 12c0 4 18 4 18 0"/>',
+        wind: '<path d="M2 8h13c6 0 5-7 1-5M2 12h18c4 0 3 6-1 5M2 16h8c5 0 4 6 0 5"/>',
+    };
+    function icon(name, size = 20) {
+        return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${glyphs[name] ?? glyphs['grid']}</svg>`;
+    }
+    HF.icon = icon;
+    function brandMark() {
+        return '<svg class="brand-mark" width="38" height="38" viewBox="0 0 38 38" fill="none" aria-hidden="true"><rect x="1" y="1" width="36" height="36" rx="12" fill="#d7ff84"/><path d="M11 10v18m16-18v18M11 19h16" stroke="#111916" stroke-width="4"/><path d="m23 7-9 14h6l-5 10 12-15h-7l3-9Z" fill="#d7ff84" stroke="#111916" stroke-width="1.5"/></svg>';
+    }
+    HF.brandMark = brandMark;
+})(HF || (HF = {}));
+var HF;
+(function (HF) {
+    let chartId = 0;
+    function lineChart(labels, series, options = {}) {
+        if (!labels.length)
+            return '<div class="empty">No applicable observations for this scenario.</div>';
+        const width = 800, height = options.height ?? 250, left = 54, right = 18, top = 22, bottom = 38;
+        const all = series.flatMap(s => s.values).concat(options.band?.flat() ?? []).filter(Number.isFinite);
+        const low = Math.min(0, ...all), high = Math.max(1, ...all) * 1.08;
+        const y = (v) => top + (high - v) / (high - low) * (height - top - bottom);
+        const x = (i) => left + i / Math.max(1, labels.length - 1) * (width - left - right);
+        const path = (values) => values.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(2)},${y(v).toFixed(2)}`).join(' ');
+        const uid = `chart${++chartId}`;
+        const grid = Array.from({ length: 5 }, (_, i) => { const v = low + (high - low) * i / 4; return `<line x1="${left}" x2="${width - right}" y1="${y(v)}" y2="${y(v)}" class="chart-grid"/><text x="${left - 12}" y="${y(v) + 4}" text-anchor="end">${HF.fmt(v, Math.abs(high) < 20 ? 1 : 0)}</text>`; }).join('');
+        const marks = labels.map((label, i) => i % Math.max(1, Math.ceil(labels.length / 7)) === 0 || i === labels.length - 1 ? `<text x="${x(i)}" y="${height - 9}" text-anchor="middle">${HF.escapeHTML(label)}</text>` : '').join('');
+        const area = options.band ? `<path d="${path(options.band[1])} ${[...options.band[0]].reverse().map((v, j) => `L${x(options.band[0].length - 1 - j)},${y(v)}`).join(' ')} Z" fill="#a8d8c6" opacity=".10"/>` : '';
+        const plotted = series.map((s, i) => `${s.area ? `<defs><linearGradient id="${uid}g${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${s.color}" stop-opacity=".18"/><stop offset="100%" stop-color="${s.color}" stop-opacity="0"/></linearGradient></defs><path d="${path(s.values)} L${x(s.values.length - 1)},${y(low)} L${x(0)},${y(low)}Z" fill="url(#${uid}g${i})"/>` : ''}<path class="chart-line" d="${path(s.values)}" fill="none" stroke="${s.color}" stroke-width="2.5" ${s.dashed ? 'stroke-dasharray="5 6"' : ''} stroke-linejoin="round" stroke-linecap="round"/><circle cx="${x(s.values.length - 1)}" cy="${y(s.values[s.values.length - 1] ?? 0)}" r="3" fill="${s.color}"/>`).join('');
+        const points = labels.map((label, i) => `<g class="chart-hit"><rect x="${x(i) - 10}" y="${top}" width="20" height="${height - top - bottom}" fill="transparent"><title>${HF.escapeHTML(label)}: ${series.map(s => `${HF.escapeHTML(s.name)} ${HF.fmt(s.values[i], 2)} ${HF.escapeHTML(options.unit ?? '')}`).join(' · ')}</title></rect></g>`).join('');
+        const table = options.table === false ? '' : `<details class="data-details"><summary>View chart data ${HF.icon('down', 12)}</summary><div class="table-scroll"><table><thead><tr><th>Interval</th>${series.map(s => `<th>${HF.escapeHTML(s.name)} (${HF.escapeHTML(options.unit ?? '')})</th>`).join('')}</tr></thead><tbody>${labels.map((l, i) => `<tr><td>${HF.escapeHTML(l)}</td>${series.map(s => `<td>${HF.fmt(s.values[i], 2)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`;
+        return `<div class="chart-wrap"><div class="chart-unit">${HF.escapeHTML(options.unit ?? '')}</div><svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="${uid}title"><title id="${uid}title">${series.map(s => HF.escapeHTML(s.name)).join(', ')}. A data table follows.</title>${grid}${marks}${area}${plotted}${points}</svg></div>${table}`;
+    }
+    HF.lineChart = lineChart;
+    function sparkline(values, color) {
+        const high = Math.max(...values), low = Math.min(...values), denom = high - low || 1;
+        const points = values.map((v, i) => `${i / (values.length - 1) * 105},${30 - (v - low) / denom * 26}`).join(' ');
+        return `<svg class="sparkline" width="106" height="34" viewBox="0 0 106 34" aria-hidden="true"><polyline points="${points}" fill="none" stroke="${color}" stroke-width="1.7" stroke-linejoin="round"/></svg>`;
+    }
+    HF.sparkline = sparkline;
+    function energyOrb() {
+        const longitude = Array.from({ length: 7 }, (_, i) => `<ellipse cx="235" cy="148" rx="${15 + i * 17}" ry="116" transform="rotate(-23 235 148)"/>`).join('');
+        const latitude = Array.from({ length: 7 }, (_, i) => `<ellipse cx="235" cy="${74 + i * 25}" rx="${Math.sqrt(Math.max(0, 1 - ((74 + i * 25 - 148) / 116) ** 2)) * 116}" ry="${9 + i % 3 * 3}" transform="rotate(-23 235 148)"/>`).join('');
+        return `<div class="orb-art" aria-hidden="true"><svg viewBox="0 0 500 300"><defs><radialGradient id="orbGlow"><stop stop-color="#d7ff84" stop-opacity=".22"/><stop offset="1" stop-color="#d7ff84" stop-opacity="0"/></radialGradient><radialGradient id="orbFill"><stop stop-color="#293b29"/><stop offset="1" stop-color="#14231b"/></radialGradient><linearGradient id="ringColor"><stop stop-color="#d7ff84" stop-opacity=".05"/><stop offset=".55" stop-color="#d7ff84"/><stop offset="1" stop-color="#d7ff84" stop-opacity=".1"/></linearGradient></defs><circle cx="235" cy="148" r="147" fill="url(#orbGlow)"/><circle cx="235" cy="148" r="116" fill="url(#orbFill)"/><g stroke="#bbdf88" stroke-width=".65" opacity=".24">${longitude}${latitude}</g><circle cx="235" cy="148" r="117" stroke="#b2cf8c" stroke-opacity=".3" fill="none"/><g class="orb-ring"><ellipse cx="235" cy="148" rx="182" ry="52" transform="rotate(-23 235 148)" fill="none" stroke="url(#ringColor)" stroke-width="1.2"/><circle cx="389" cy="81" r="4.5" fill="#d7ff84"/><circle cx="81" cy="215" r="3" fill="#82dacc"/></g><g class="orb-satellite"><circle cx="307" cy="74" r="5" fill="#d7ff84"/><circle cx="307" cy="74" r="12" fill="none" stroke="#d7ff84" opacity=".25"/></g><path d="M142 129l46 9 31-48 52 36 43 30-20 49-55 19-49-19-22-43-26-33Z" fill="#b8ef81" fill-opacity=".06" stroke="#c1eb98" stroke-opacity=".35"/><path d="M142 129l129-3-32 98-20-134-29 115 124-49-126-18 106 67" fill="none" stroke="#c1eb98" stroke-opacity=".25"/><g fill="#dcffa9"><circle cx="188" cy="138" r="3"/><circle cx="219" cy="90" r="3"/><circle cx="271" cy="126" r="3"/><circle cx="239" cy="224" r="3"/><circle cx="314" cy="156" r="3"/></g></svg><span class="orb-label orb-label-top"><i></i> SYSTEMS THINKING</span><span class="orb-label orb-label-bottom">RESEARCH → REAL-WORLD VALUE</span></div>`;
+    }
+    HF.energyOrb = energyOrb;
+    function energyFlow() {
+        return `<div class="flow-diagram" aria-label="Illustrative PV, grid, battery and site energy flows"><div class="flow-node">${HF.icon('sun', 24)}<span>Solar PV</span><small>On-site generation</small></div><div class="flow-track"><span></span></div><div class="flow-node flow-center">${HF.icon('battery', 26)}<span>5 MW / 10 MWh</span><small>Reference architecture</small></div><div class="flow-track"><span></span></div><div class="flow-node">${HF.icon('layers', 24)}<span>Site demand</span><small>Flexible consumption</small></div></div>`;
+    }
+    HF.energyFlow = energyFlow;
+})(HF || (HF = {}));
+var HF;
+(function (HF) {
+    HF.SNAPSHOT = { "version": "0.3.0", "data_kind": "synthetic", "as_of": "Illustrative scenario · not live", "market": "FR", "portfolio": [{ "id": "HF-101", "name": "Solstice industrial", "market": "FR", "technology": "PV + BESS", "stage": "Due diligence", "pv_mwp": 68, "bess_mwh": 24, "capex_meur": 54.1, "progress": 74 }, { "id": "HF-102", "name": "Nordlicht campus", "market": "DE", "technology": "BESS", "stage": "Feasibility", "pv_mwp": 0, "bess_mwh": 40, "capex_meur": 15.6, "progress": 48 }, { "id": "HF-103", "name": "Aurora solar", "market": "ES", "technology": "PV", "stage": "Design review", "pv_mwp": 125, "bess_mwh": 0, "capex_meur": 73.8, "progress": 86 }, { "id": "HF-104", "name": "Vento repower", "market": "IT", "technology": "Wind", "stage": "M&A screening", "pv_mwp": 0, "wind_mw": 54, "bess_mwh": 0, "capex_meur": 67.4, "progress": 32 }, { "id": "HF-105", "name": "Delta logistics", "market": "NL", "technology": "PV + BESS", "stage": "Pilot", "pv_mwp": 12, "bess_mwh": 10, "capex_meur": 10.3, "progress": 63 }, { "id": "HF-106", "name": "Meridian works", "market": "GB", "technology": "PV + BESS", "stage": "Feasibility", "pv_mwp": 32, "bess_mwh": 16, "capex_meur": 28.7, "progress": 41 }], "markets": [{ "code": "FR", "name": "France", "regulator": "CRE", "url": "https://www.cre.fr/", "segment": "Industrial campuses", "hypothesis": "Increase solar self-use and test time-of-use exposure.", "status": "needs_review", "effective_date": null, "reviewed_on": null, "currency": "EUR", "tariff_basis": "illustrative", "connector_status": "source_link_only" }, { "code": "DE", "name": "Germany", "regulator": "Bundesnetzagentur", "url": "https://www.bundesnetzagentur.de/EN/Home/home_node.html", "segment": "Energy-intensive industry", "hypothesis": "Compare load management with the actual site network tariff.", "status": "needs_review", "effective_date": null, "reviewed_on": null, "currency": "EUR", "tariff_basis": "illustrative", "connector_status": "source_link_only" }, { "code": "ES", "name": "Spain", "regulator": "CNMC", "url": "https://www.cnmc.es/", "segment": "Solar-rich commercial sites", "hypothesis": "Shift on-site PV generation into evening consumption.", "status": "needs_review", "effective_date": null, "reviewed_on": null, "currency": "EUR", "tariff_basis": "illustrative", "connector_status": "source_link_only" }, { "code": "IT", "name": "Italy", "regulator": "ARERA", "url": "https://www.arera.it/en/", "segment": "Manufacturing clusters", "hypothesis": "Evaluate procurement savings alongside resilience requirements.", "status": "needs_review", "effective_date": null, "reviewed_on": null, "currency": "EUR", "tariff_basis": "illustrative", "connector_status": "source_link_only" }, { "code": "NL", "name": "Netherlands", "regulator": "ACM", "url": "https://www.acm.nl/en", "segment": "Logistics and distribution", "hypothesis": "Test storage against site connection constraints and loading patterns.", "status": "needs_review", "effective_date": null, "reviewed_on": null, "currency": "EUR", "tariff_basis": "illustrative", "connector_status": "source_link_only" }, { "code": "GB", "name": "Great Britain", "regulator": "Ofgem", "url": "https://www.ofgem.gov.uk/", "segment": "Commercial portfolios", "hypothesis": "Compare flexible tariffs and aggregator proposals using actual contracts.", "status": "needs_review", "effective_date": null, "reviewed_on": null, "currency": "EUR", "tariff_basis": "illustrative", "connector_status": "source_link_only" }], "sources": [{ "id": "entsoe", "name": "ENTSO-E Transparency Platform", "url": "https://www.entsoe.eu/data/transparency-platform/", "scope": "Electricity fundamentals and transparency data", "status": "not_connected" }, { "id": "pvgis", "name": "European Commission · PVGIS", "url": "https://re.jrc.ec.europa.eu/pvg_tools/en/", "scope": "Site-specific PV yield inputs", "status": "not_connected" }, { "id": "acer", "name": "ACER Monitoring Reports", "url": "https://www.acer.europa.eu/monitoring/MMR", "scope": "European market monitoring publications", "status": "source_link_only" }], "pilots": [{ "id": "P-01", "title": "Thermal signature study", "pillar": "Reliability", "status": "running", "site": "Solstice industrial", "instrument": "Cell temperature · Modbus gateway", "owner": "Reliability team", "evidence_note": "Synthetic record: baseline logging configured; no real asset connection.", "target": "Reduce false fault alerts" }, { "id": "P-02", "title": "Low-impact foundations", "pillar": "Construction", "status": "instrumenting", "site": "Aurora solar", "instrument": "Load cell · displacement probe", "owner": "Civil engineering", "evidence_note": "Synthetic record: instrument installation checklist pending.", "target": "Compare ground disturbance" }, { "id": "P-03", "title": "Habitat baseline survey", "pillar": "Sustainability", "status": "planned", "site": "Delta logistics", "instrument": "Transect protocol · field observations", "owner": "Ecology team", "evidence_note": "Synthetic record: ecological baseline survey has not been completed.", "target": "Establish an ecological baseline" }, { "id": "P-04", "title": "Adaptive load envelope", "pillar": "Efficiency", "status": "validated", "site": "Meridian works", "instrument": "Revenue meter · synthetic load profile", "owner": "Energy systems", "evidence_note": "Synthetic record: validation describes a simulated test only.", "target": "Validate a peak-demand hypothesis" }], "dispatch": { "model": "btm-milp-v1", "data_kind": "synthetic", "market": "FR", "duration_hours": 24.0, "capacity_kwh": 10000.0, "power_kw": 5000.0, "baseline_cost_eur": 7536.48, "optimized_cost_eur": 5402.25, "savings_eur": 2134.22, "savings_pct": 28.32, "energy_savings_eur": 2311.85, "peak_savings_eur": -0.0, "wear_cost_eur": 177.63, "baseline_peak_kw": 3897.506, "optimized_peak_kw": 6769.828, "discharged_kwh": 11841.915, "equivalent_discharge_cycles": 1.1842, "terminal_soc_kwh": 5000.0, "solver": "SciPy / HiGHS MILP", "solver_status": "optimal", "schedule": [{ "hour": 0.0, "label": "00:00", "load_kw": 2452.145, "pv_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 0.0, "grid_import_kw": 2452.145, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 5000.0, "soc_end_kwh": 5000.0, "soc_pct": 50.0, "import_eur_mwh": 105.0 }, { "hour": 1.0, "label": "01:00", "load_kw": 2455.83, "pv_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 0.0, "grid_import_kw": 2455.83, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 5000.0, "soc_end_kwh": 5000.0, "soc_pct": 50.0, "import_eur_mwh": 92.0 }, { "hour": 2.0, "label": "02:00", "load_kw": 2464.628, "pv_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 0.0, "grid_import_kw": 2464.628, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 5000.0, "soc_end_kwh": 5000.0, "soc_pct": 50.0, "import_eur_mwh": 88.0 }, { "hour": 3.0, "label": "03:00", "load_kw": 2483.884, "pv_kw": 0.0, "charge_kw": 508.573, "discharge_kw": 0.0, "grid_import_kw": 2992.457, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 5000.0, "soc_end_kwh": 5482.475, "soc_pct": 54.825, "import_eur_mwh": 85.0 }, { "hour": 4.0, "label": "04:00", "load_kw": 2522.453, "pv_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 0.0, "grid_import_kw": 2522.453, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 5482.475, "soc_end_kwh": 5482.475, "soc_pct": 54.825, "import_eur_mwh": 90.0 }, { "hour": 5.0, "label": "05:00", "load_kw": 2593.014, "pv_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 0.0, "grid_import_kw": 2593.014, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 5482.475, "soc_end_kwh": 5482.475, "soc_pct": 54.825, "import_eur_mwh": 105.0 }, { "hour": 6.0, "label": "06:00", "load_kw": 2710.588, "pv_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 2710.588, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 5482.475, "soc_end_kwh": 2625.264, "soc_pct": 26.253, "import_eur_mwh": 140.0 }, { "hour": 7.0, "label": "07:00", "load_kw": 2888.316, "pv_kw": 1527.032, "charge_kw": 0.0, "discharge_kw": 1361.284, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 2625.264, "soc_end_kwh": 1190.345, "soc_pct": 11.903, "import_eur_mwh": 200.0 }, { "hour": 8.0, "label": "08:00", "load_kw": 3130.577, "pv_kw": 2950.0, "charge_kw": 0.0, "discharge_kw": 180.577, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 1190.345, "soc_end_kwh": 1000.0, "soc_pct": 10.0, "import_eur_mwh": 230.0 }, { "hour": 9.0, "label": "09:00", "load_kw": 3425.491, "pv_kw": 4171.93, "charge_kw": 0.0, "discharge_kw": 0.0, "grid_import_kw": 0.0, "grid_export_kw": 746.439, "curtailed_kw": 0.0, "soc_start_kwh": 1000.0, "soc_end_kwh": 1000.0, "soc_pct": 10.0, "import_eur_mwh": 180.0 }, { "hour": 10.0, "label": "10:00", "load_kw": 3740.703, "pv_kw": 5109.55, "charge_kw": 1368.847, "discharge_kw": 0.0, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 1000.0, "soc_end_kwh": 2298.602, "soc_pct": 22.986, "import_eur_mwh": 130.0 }, { "hour": 11.0, "label": "11:00", "load_kw": 4026.498, "pv_kw": 5698.962, "charge_kw": 1672.464, "discharge_kw": 0.0, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 2298.602, "soc_end_kwh": 3885.241, "soc_pct": 38.852, "import_eur_mwh": 100.0 }, { "hour": 12.0, "label": "12:00", "load_kw": 4227.815, "pv_kw": 5900.0, "charge_kw": 1672.185, "discharge_kw": 0.0, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 3885.241, "soc_end_kwh": 5471.615, "soc_pct": 54.716, "import_eur_mwh": 80.0 }, { "hour": 13.0, "label": "13:00", "load_kw": 4302.836, "pv_kw": 5698.962, "charge_kw": 2777.749, "discharge_kw": 0.0, "grid_import_kw": 1381.623, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 5471.615, "soc_end_kwh": 8106.819, "soc_pct": 81.068, "import_eur_mwh": 70.0 }, { "hour": 14.0, "label": "14:00", "load_kw": 4243.945, "pv_kw": 5109.55, "charge_kw": 865.605, "discharge_kw": 0.0, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 8106.819, "soc_end_kwh": 8928.005, "soc_pct": 89.28, "import_eur_mwh": 75.0 }, { "hour": 15.0, "label": "15:00", "load_kw": 4096.04, "pv_kw": 4171.93, "charge_kw": 75.89, "discharge_kw": 0.0, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 8928.005, "soc_end_kwh": 9000.0, "soc_pct": 90.0, "import_eur_mwh": 110.0 }, { "hour": 16.0, "label": "16:00", "load_kw": 3953.936, "pv_kw": 2950.0, "charge_kw": 0.0, "discharge_kw": 0.0, "grid_import_kw": 1003.936, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 9000.0, "soc_end_kwh": 9000.0, "soc_pct": 90.0, "import_eur_mwh": 180.0 }, { "hour": 17.0, "label": "17:00", "load_kw": 3900.054, "pv_kw": 1527.032, "charge_kw": 0.0, "discharge_kw": 0.0, "grid_import_kw": 2373.022, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 9000.0, "soc_end_kwh": 9000.0, "soc_pct": 90.0, "import_eur_mwh": 280.0 }, { "hour": 18.0, "label": "18:00", "load_kw": 3897.506, "pv_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 3897.506, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 9000.0, "soc_end_kwh": 4891.668, "soc_pct": 48.917, "import_eur_mwh": 350.0 }, { "hour": 19.0, "label": "19:00", "load_kw": 3788.316, "pv_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 3691.96, "grid_import_kw": 96.356, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 4891.668, "soc_end_kwh": 1000.0, "soc_pct": 10.0, "import_eur_mwh": 320.0 }, { "hour": 20.0, "label": "20:00", "load_kw": 3477.517, "pv_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 0.0, "grid_import_kw": 3477.517, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 1000.0, "soc_end_kwh": 1000.0, "soc_pct": 10.0, "import_eur_mwh": 270.0 }, { "hour": 21.0, "label": "21:00", "load_kw": 3067.577, "pv_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 0.0, "grid_import_kw": 3067.577, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 1000.0, "soc_end_kwh": 1000.0, "soc_pct": 10.0, "import_eur_mwh": 205.0 }, { "hour": 22.0, "label": "22:00", "load_kw": 2735.688, "pv_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 0.0, "grid_import_kw": 2735.688, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 1000.0, "soc_end_kwh": 1000.0, "soc_pct": 10.0, "import_eur_mwh": 160.0 }, { "hour": 23.0, "label": "23:00", "load_kw": 2553.458, "pv_kw": 0.0, "charge_kw": 4216.37, "discharge_kw": 0.0, "grid_import_kw": 6769.828, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "soc_start_kwh": 1000.0, "soc_end_kwh": 5000.0, "soc_pct": 50.0, "import_eur_mwh": 125.0 }], "warnings": ["Synthetic daily profile is not an annual revenue forecast.", "Peak tariff applies once to this modeled period, not automatically to a month.", "Perfect foresight; no ancillary services, taxes, fixed fees or availability reserve."] }, "finance": { "model": "project-finance-v1", "npv_eur": 1857086.59, "irr_pct": 16.128, "payback_years": 5.36, "minimum_dscr": 0.547878, "dscr_covenant": 1.3, "covenant_pass": false, "level_payment_debt_capacity_eur": 741742.56, "capex_eur": 3200000.0, "rows": [{ "year": 1, "gross_margin_eur": 697000.0, "opex_eur": 70000.0, "augmentation_eur": 0, "cfads_eur": 627000.0, "debt_service_eur": 233495.27, "interest_eur": 96800.0, "debt_balance_eur": 1623304.73, "equity_cashflow_eur": 393504.73, "dscr": 2.685279, "cumulative_eur": -2573000.0, "contracted_fraction": 0.4 }, { "year": 2, "gross_margin_eur": 684454.0, "opex_eur": 71400.0, "augmentation_eur": 0, "cfads_eur": 613054.0, "debt_service_eur": 233495.27, "interest_eur": 89281.76, "debt_balance_eur": 1479091.21, "equity_cashflow_eur": 379558.73, "dscr": 2.625552, "cumulative_eur": -1959946.0, "contracted_fraction": 0.4 }, { "year": 3, "gross_margin_eur": 672133.83, "opex_eur": 72828.0, "augmentation_eur": 0, "cfads_eur": 599305.83, "debt_service_eur": 233495.27, "interest_eur": 81350.02, "debt_balance_eur": 1326945.96, "equity_cashflow_eur": 365810.56, "dscr": 2.566672, "cumulative_eur": -1360640.17, "contracted_fraction": 0.4 }, { "year": 4, "gross_margin_eur": 660035.42, "opex_eur": 74284.56, "augmentation_eur": 0, "cfads_eur": 585750.86, "debt_service_eur": 233495.27, "interest_eur": 72982.03, "debt_balance_eur": 1166432.71, "equity_cashflow_eur": 352255.59, "dscr": 2.50862, "cumulative_eur": -774889.31, "contracted_fraction": 0.4 }, { "year": 5, "gross_margin_eur": 648154.78, "opex_eur": 75770.25, "augmentation_eur": 0, "cfads_eur": 572384.53, "debt_service_eur": 233495.27, "interest_eur": 64153.8, "debt_balance_eur": 997091.24, "equity_cashflow_eur": 338889.26, "dscr": 2.451375, "cumulative_eur": -202504.78, "contracted_fraction": 0.4 }, { "year": 6, "gross_margin_eur": 636488.0, "opex_eur": 77285.66, "augmentation_eur": 0, "cfads_eur": 559202.34, "debt_service_eur": 233495.27, "interest_eur": 54840.02, "debt_balance_eur": 818435.98, "equity_cashflow_eur": 325707.07, "dscr": 2.394919, "cumulative_eur": 356697.56, "contracted_fraction": 0.4 }, { "year": 7, "gross_margin_eur": 625031.21, "opex_eur": 78831.37, "augmentation_eur": 0, "cfads_eur": 546199.84, "debt_service_eur": 233495.27, "interest_eur": 45013.98, "debt_balance_eur": 629954.69, "equity_cashflow_eur": 312704.57, "dscr": 2.339233, "cumulative_eur": 902897.4, "contracted_fraction": 0.4 }, { "year": 8, "gross_margin_eur": 613780.65, "opex_eur": 80408.0, "augmentation_eur": 0, "cfads_eur": 533372.65, "debt_service_eur": 233495.27, "interest_eur": 34647.51, "debt_balance_eur": 431106.93, "equity_cashflow_eur": 299877.38, "dscr": 2.284297, "cumulative_eur": 1436270.05, "contracted_fraction": 0.4 }, { "year": 9, "gross_margin_eur": 602732.6, "opex_eur": 82016.16, "augmentation_eur": 0, "cfads_eur": 520716.44, "debt_service_eur": 233495.27, "interest_eur": 23710.88, "debt_balance_eur": 221322.53, "equity_cashflow_eur": 287221.17, "dscr": 2.230094, "cumulative_eur": 1956986.49, "contracted_fraction": 0.4 }, { "year": 10, "gross_margin_eur": 661583.41, "opex_eur": 83656.48, "augmentation_eur": 450000.0, "cfads_eur": 127926.93, "debt_service_eur": 233495.27, "interest_eur": 12172.74, "debt_balance_eur": 0, "equity_cashflow_eur": -105568.34, "dscr": 0.547878, "cumulative_eur": 2084913.42, "contracted_fraction": 0.4 }, { "year": 11, "gross_margin_eur": 573242.57, "opex_eur": 85329.61, "augmentation_eur": 0, "cfads_eur": 487912.96, "debt_service_eur": 0, "interest_eur": 0, "debt_balance_eur": 0, "equity_cashflow_eur": 487912.96, "dscr": null, "cumulative_eur": 2572826.38, "contracted_fraction": 0 }, { "year": 12, "gross_margin_eur": 562924.2, "opex_eur": 87036.2, "augmentation_eur": 0, "cfads_eur": 475888.0, "debt_service_eur": 0, "interest_eur": 0, "debt_balance_eur": 0, "equity_cashflow_eur": 475888.0, "dscr": null, "cumulative_eur": 3048714.38, "contracted_fraction": 0 }, { "year": 13, "gross_margin_eur": 552791.57, "opex_eur": 88776.93, "augmentation_eur": 0, "cfads_eur": 464014.64, "debt_service_eur": 0, "interest_eur": 0, "debt_balance_eur": 0, "equity_cashflow_eur": 464014.64, "dscr": null, "cumulative_eur": 3512729.02, "contracted_fraction": 0 }, { "year": 14, "gross_margin_eur": 542841.32, "opex_eur": 90552.46, "augmentation_eur": 0, "cfads_eur": 452288.85, "debt_service_eur": 0, "interest_eur": 0, "debt_balance_eur": 0, "equity_cashflow_eur": 452288.85, "dscr": null, "cumulative_eur": 3965017.88, "contracted_fraction": 0 }, { "year": 15, "gross_margin_eur": 533070.17, "opex_eur": 92363.51, "augmentation_eur": 0, "cfads_eur": 440706.66, "debt_service_eur": 0, "interest_eur": 0, "debt_balance_eur": 0, "equity_cashflow_eur": 440706.66, "dscr": null, "cumulative_eur": 4405724.54, "contracted_fraction": 0 }, { "year": 16, "gross_margin_eur": 523474.91, "opex_eur": 94210.78, "augmentation_eur": 0, "cfads_eur": 429264.13, "debt_service_eur": 0, "interest_eur": 0, "debt_balance_eur": 0, "equity_cashflow_eur": 429264.13, "dscr": null, "cumulative_eur": 4834988.66, "contracted_fraction": 0 }, { "year": 17, "gross_margin_eur": 514052.36, "opex_eur": 96095.0, "augmentation_eur": 0, "cfads_eur": 417957.36, "debt_service_eur": 0, "interest_eur": 0, "debt_balance_eur": 0, "equity_cashflow_eur": 417957.36, "dscr": null, "cumulative_eur": 5252946.03, "contracted_fraction": 0 }, { "year": 18, "gross_margin_eur": 504799.42, "opex_eur": 98016.9, "augmentation_eur": 0, "cfads_eur": 406782.52, "debt_service_eur": 0, "interest_eur": 0, "debt_balance_eur": 0, "equity_cashflow_eur": 406782.52, "dscr": null, "cumulative_eur": 5659728.55, "contracted_fraction": 0 }, { "year": 19, "gross_margin_eur": 495713.03, "opex_eur": 99977.24, "augmentation_eur": 0, "cfads_eur": 395735.79, "debt_service_eur": 0, "interest_eur": 0, "debt_balance_eur": 0, "equity_cashflow_eur": 395735.79, "dscr": null, "cumulative_eur": 6055464.34, "contracted_fraction": 0 }, { "year": 20, "gross_margin_eur": 486790.2, "opex_eur": 101976.78, "augmentation_eur": 0, "cfads_eur": 384813.41, "debt_service_eur": 0, "interest_eur": 0, "debt_balance_eur": 0, "equity_cashflow_eur": 384813.41, "dscr": null, "cumulative_eur": 6440277.75, "contracted_fraction": 0 }], "warnings": ["Pre-tax nominal screening; no VAT, working capital, DSRA, inflation-linked revenue or terminal value.", "Gross margin is an independent user assumption, not the daily dispatch result annualized.", "Augmentation is deducted before debt service; debt is level-payment, not sculpted."] }, "pv": { "model": "discounted-pv-v1", "capex_eur": 32500000.0, "lcoe_eur_mwh": 51.38, "npv_eur": 13126119.24, "first_year_generation_mwh": 66150.0, "panel_count": 83334, "indicative_land_ha": 66.67, "capture_price_eur_mwh": 68.0, "rows": [{ "year": 1, "generation_mwh": 66150.0, "cashflow_eur": 3898200.0, "replacement_eur": 0 }, { "year": 2, "generation_mwh": 65885.4, "cashflow_eur": 3880207.2, "replacement_eur": 0 }, { "year": 3, "generation_mwh": 65621.86, "cashflow_eur": 3862286.37, "replacement_eur": 0 }, { "year": 4, "generation_mwh": 65359.37, "cashflow_eur": 3844437.23, "replacement_eur": 0 }, { "year": 5, "generation_mwh": 65097.93, "cashflow_eur": 3826659.48, "replacement_eur": 0 }, { "year": 6, "generation_mwh": 64837.54, "cashflow_eur": 3808952.84, "replacement_eur": 0 }, { "year": 7, "generation_mwh": 64578.19, "cashflow_eur": 3791317.03, "replacement_eur": 0 }, { "year": 8, "generation_mwh": 64319.88, "cashflow_eur": 3773751.76, "replacement_eur": 0 }, { "year": 9, "generation_mwh": 64062.6, "cashflow_eur": 3756256.75, "replacement_eur": 0 }, { "year": 10, "generation_mwh": 63806.35, "cashflow_eur": 3738831.73, "replacement_eur": 0 }, { "year": 11, "generation_mwh": 63551.12, "cashflow_eur": 3721476.4, "replacement_eur": 0 }, { "year": 12, "generation_mwh": 63296.92, "cashflow_eur": 3704190.49, "replacement_eur": 0 }, { "year": 13, "generation_mwh": 63043.73, "cashflow_eur": 3686973.73, "replacement_eur": 0 }, { "year": 14, "generation_mwh": 62791.56, "cashflow_eur": 3669825.84, "replacement_eur": 0 }, { "year": 15, "generation_mwh": 62540.39, "cashflow_eur": 1902746.53, "replacement_eur": 1750000.0 }, { "year": 16, "generation_mwh": 62290.23, "cashflow_eur": 3635735.55, "replacement_eur": 0 }, { "year": 17, "generation_mwh": 62041.07, "cashflow_eur": 3618792.6, "replacement_eur": 0 }, { "year": 18, "generation_mwh": 61792.9, "cashflow_eur": 3601917.43, "replacement_eur": 0 }, { "year": 19, "generation_mwh": 61545.73, "cashflow_eur": 3585109.76, "replacement_eur": 0 }, { "year": 20, "generation_mwh": 61299.55, "cashflow_eur": 3568369.33, "replacement_eur": 0 }, { "year": 21, "generation_mwh": 61054.35, "cashflow_eur": 3551695.85, "replacement_eur": 0 }, { "year": 22, "generation_mwh": 60810.13, "cashflow_eur": 3535089.06, "replacement_eur": 0 }, { "year": 23, "generation_mwh": 60566.89, "cashflow_eur": 3518548.71, "replacement_eur": 0 }, { "year": 24, "generation_mwh": 60324.63, "cashflow_eur": 3502074.51, "replacement_eur": 0 }, { "year": 25, "generation_mwh": 60083.33, "cashflow_eur": 3485666.22, "replacement_eur": 0 }, { "year": 26, "generation_mwh": 59842.99, "cashflow_eur": 3469323.55, "replacement_eur": 0 }, { "year": 27, "generation_mwh": 59603.62, "cashflow_eur": 3453046.26, "replacement_eur": 0 }, { "year": 28, "generation_mwh": 59365.21, "cashflow_eur": 3436834.07, "replacement_eur": 0 }, { "year": 29, "generation_mwh": 59127.75, "cashflow_eur": 3420686.73, "replacement_eur": 0 }, { "year": 30, "generation_mwh": 58891.24, "cashflow_eur": 3404603.99, "replacement_eur": 0 }], "warnings": ["Yield and capture price are user assumptions, not site-specific PVGIS results.", "Constant money basis; no escalation. Discount rate must be consistent with that basis.", "Land-area estimate excludes setbacks, terrain, roads and interconnection; not a technical layout."] }, "acquisition": { "model": "ma-screen-v1", "ev_ebitda": 9.27, "implied_equity_value_eur": 29000000.0, "screening_dcf_eur": 35928220.68, "valuation_gap_eur": -2071779.32, "unlevered_irr_pct": 7.244, "warnings": ["Pre-tax enterprise screening only: EBITDA less maintenance capex is a proxy, not full FCFF.", "No tax, working capital, terminal value or technology-specific production model.", "Negative implied equity is reported, not silently floored at zero."] }, "forecast": { "model": "mean-reverting-scenario-v1", "market": "FR", "seed": 42, "paths": 1500, "data_kind": "synthetic", "rows": [{ "year": 2027, "p10_eur_mwh": 57.94, "p50_eur_mwh": 77.55, "p90_eur_mwh": 96.87, "negative_price_probability": 0.0 }, { "year": 2028, "p10_eur_mwh": 50.89, "p50_eur_mwh": 74.21, "p90_eur_mwh": 99.86, "negative_price_probability": 0.0 }, { "year": 2029, "p10_eur_mwh": 47.9, "p50_eur_mwh": 74.03, "p90_eur_mwh": 99.85, "negative_price_probability": 0.0 }, { "year": 2030, "p10_eur_mwh": 45.79, "p50_eur_mwh": 74.12, "p90_eur_mwh": 101.51, "negative_price_probability": 0.0 }, { "year": 2031, "p10_eur_mwh": 45.06, "p50_eur_mwh": 73.34, "p90_eur_mwh": 101.76, "negative_price_probability": 0.0007 }, { "year": 2032, "p10_eur_mwh": 42.87, "p50_eur_mwh": 73.66, "p90_eur_mwh": 101.35, "negative_price_probability": 0.0 }, { "year": 2033, "p10_eur_mwh": 43.08, "p50_eur_mwh": 72.75, "p90_eur_mwh": 100.32, "negative_price_probability": 0.0007 }, { "year": 2034, "p10_eur_mwh": 43.47, "p50_eur_mwh": 71.63, "p90_eur_mwh": 103.05, "negative_price_probability": 0.0007 }, { "year": 2035, "p10_eur_mwh": 43.29, "p50_eur_mwh": 71.76, "p90_eur_mwh": 102.83, "negative_price_probability": 0.0 }, { "year": 2036, "p10_eur_mwh": 45.84, "p50_eur_mwh": 73.0, "p90_eur_mwh": 102.8, "negative_price_probability": 0.0007 }, { "year": 2037, "p10_eur_mwh": 45.47, "p50_eur_mwh": 74.35, "p90_eur_mwh": 102.73, "negative_price_probability": 0.0 }, { "year": 2038, "p10_eur_mwh": 46.32, "p50_eur_mwh": 76.36, "p90_eur_mwh": 104.06, "negative_price_probability": 0.0 }, { "year": 2039, "p10_eur_mwh": 47.51, "p50_eur_mwh": 75.37, "p90_eur_mwh": 106.02, "negative_price_probability": 0.0007 }, { "year": 2040, "p10_eur_mwh": 48.18, "p50_eur_mwh": 76.94, "p90_eur_mwh": 106.21, "negative_price_probability": 0.0007 }, { "year": 2041, "p10_eur_mwh": 49.24, "p50_eur_mwh": 76.85, "p90_eur_mwh": 104.59, "negative_price_probability": 0.0013 }, { "year": 2042, "p10_eur_mwh": 49.01, "p50_eur_mwh": 77.56, "p90_eur_mwh": 105.3, "negative_price_probability": 0.0 }, { "year": 2043, "p10_eur_mwh": 48.09, "p50_eur_mwh": 78.68, "p90_eur_mwh": 106.96, "negative_price_probability": 0.0007 }, { "year": 2044, "p10_eur_mwh": 49.37, "p50_eur_mwh": 79.63, "p90_eur_mwh": 108.06, "negative_price_probability": 0.0 }, { "year": 2045, "p10_eur_mwh": 49.36, "p50_eur_mwh": 79.42, "p90_eur_mwh": 108.74, "negative_price_probability": 0.0007 }, { "year": 2046, "p10_eur_mwh": 50.01, "p50_eur_mwh": 78.46, "p90_eur_mwh": 108.43, "negative_price_probability": 0.0 }], "warnings": ["Uncalibrated annual-price scenarios, not market forecasts or backtested confidence intervals.", "P10/P50/P90 are numerical quantiles, not exceedance-probability energy-yield labels.", "Negative annual outcomes are allowed, not clipped. Currency is constant EUR, including GB demo.", "Market code is metadata; geography changes require user-specified scenario parameters."] }, "drift": { "model": "robust-residual-v1", "baseline_fraction": 0.3333333333333333, "sigma_fraction": 0.00732, "drift_pct": -6.03, "alert_count": 10, "alert_indices": [26, 27, 28, 29, 30, 31, 32, 33, 34, 35], "series": [{ "index": 0, "residual_pct": 0.031, "z_score": 0.055 }, { "index": 1, "residual_pct": 1.224, "z_score": 1.685 }, { "index": 2, "residual_pct": 1.102, "z_score": 1.519 }, { "index": 3, "residual_pct": -0.459, "z_score": -0.614 }, { "index": 4, "residual_pct": -0.268, "z_score": -0.353 }, { "index": 5, "residual_pct": -0.475, "z_score": -0.635 }, { "index": 6, "residual_pct": 0.513, "z_score": 0.714 }, { "index": 7, "residual_pct": -0.05, "z_score": -0.055 }, { "index": 8, "residual_pct": 0.672, "z_score": 0.932 }, { "index": 9, "residual_pct": -1.663, "z_score": -2.258 }, { "index": 10, "residual_pct": 1.41, "z_score": 1.94 }, { "index": 11, "residual_pct": -0.087, "z_score": -0.105 }, { "index": 12, "residual_pct": 0.612, "z_score": 0.85 }, { "index": 13, "residual_pct": -0.123, "z_score": -0.154 }, { "index": 14, "residual_pct": -0.341, "z_score": -0.453 }, { "index": 15, "residual_pct": 0.417, "z_score": 0.583 }, { "index": 16, "residual_pct": 0.742, "z_score": 1.027 }, { "index": 17, "residual_pct": -0.182, "z_score": -0.236 }, { "index": 18, "residual_pct": -0.138, "z_score": -0.174 }, { "index": 19, "residual_pct": 0.617, "z_score": 0.857 }, { "index": 20, "residual_pct": -0.783, "z_score": -1.057 }, { "index": 21, "residual_pct": -1.363, "z_score": -1.849 }, { "index": 22, "residual_pct": 0.355, "z_score": 0.499 }, { "index": 23, "residual_pct": -0.604, "z_score": -0.811 }, { "index": 24, "residual_pct": -1.728, "z_score": -2.348 }, { "index": 25, "residual_pct": -0.733, "z_score": -0.987 }, { "index": 26, "residual_pct": -6.396, "z_score": -8.724 }, { "index": 27, "residual_pct": -7.009, "z_score": -9.563 }, { "index": 28, "residual_pct": -7.263, "z_score": -9.909 }, { "index": 29, "residual_pct": -5.969, "z_score": -8.141 }, { "index": 30, "residual_pct": -5.241, "z_score": -7.147 }, { "index": 31, "residual_pct": -6.197, "z_score": -8.453 }, { "index": 32, "residual_pct": -6.629, "z_score": -9.043 }, { "index": 33, "residual_pct": -5.674, "z_score": -7.739 }, { "index": 34, "residual_pct": -5.393, "z_score": -7.355 }, { "index": 35, "residual_pct": -6.254, "z_score": -8.53 }], "warnings": ["The first third must represent healthy operation; thresholds are not validated field alarms.", "Pointwise robust residual screening, not causal diagnosis or an RUL model."] }, "reliability": { "model": "conditional-weibull-v1", "survival_pct": 91.98, "conditional_failure_pct": 14.341, "conditional_median_remaining_hours": 24503.68, "warnings": ["User-specified Weibull parameters; no fit to censored field data or calibrated prognostics."] }, "sustainability": { "model": "carbon-screen-v1", "lifetime_generation_mwh": 1841010.73, "intensity_gco2e_kwh": 23.139, "net_counterfactual_avoided_tco2e": 417652.68, "project_lifecycle_tco2e": 42600.0, "warnings": ["Screening inventory, not an ISO-conformant or independently verified life-cycle assessment.", "Avoided emissions depend on the assumed counterfactual; they are not carbon credits.", "Biodiversity requires a separate ecological baseline and field survey; no automatic biodiversity score."] }, "defaults": { "storage": { "market": "FR", "capacity_kwh": 10000.0, "power_kw": 5000.0, "round_trip_efficiency": 0.9, "min_soc_fraction": 0.1, "max_soc_fraction": 0.9, "initial_soc_fraction": 0.5, "interval_hours": 1.0, "wear_eur_per_kwh": 0.015, "peak_charge_eur_per_kw_period": 0.0, "grid_import_limit_kw": 20000.0, "grid_export_limit_kw": 10000.0, "import_eur_per_kwh": [], "export_eur_per_kwh": [], "load_kw": [], "pv_kw": [] }, "finance": { "capex_eur": 3200000.0, "annual_gross_margin_eur": 820000.0, "annual_opex_eur": 70000.0, "years": 20, "discount_rate": 0.08, "annual_margin_degradation": 0.018, "escalation_rate": 0.02, "debt_fraction": 0.55, "debt_interest_rate": 0.055, "debt_tenor_years": 10, "augmentation_year": 10, "augmentation_cost_eur": 450000.0, "augmentation_retention_restore": 0.1, "contracted_fraction": 0.4, "contract_years": 10, "merchant_margin_factor": 0.75, "minimum_dscr": 1.3 }, "pv": { "capacity_kwp": 50000.0, "specific_yield_kwh_kwp": 1350.0, "capex_eur_kwp": 650.0, "opex_eur_kwp_year": 12.0, "degradation_fraction": 0.004, "discount_rate": 0.07, "years": 30, "capture_price_eur_mwh": 68.0, "curtailment_fraction": 0.02, "inverter_replacement_year": 15, "inverter_replacement_eur_kwp": 35.0, "panel_kwp": 0.6, "panel_area_m2": 2.8, "ground_coverage_ratio": 0.35 }, "forecast": { "market": "FR", "base_price_eur_mwh": 80.0, "long_run_price_eur_mwh": 70.0, "mean_reversion": 0.25, "annual_shock_eur_mwh": 15.0, "trend_eur_mwh_year": 0.5, "years": 20, "paths": 1500, "seed": 42, "start_year": 2027 }, "acquisition": { "enterprise_value_eur": 38000000.0, "annual_ebitda_eur": 4100000.0, "net_debt_eur": 9000000.0, "years": 20, "discount_rate": 0.08, "annual_maintenance_capex_eur": 300000.0, "annual_degradation": 0.005 }, "reliability": { "shape": 2.4, "scale_hours": 45000.0, "age_hours": 16000.0, "horizon_hours": 8760.0 }, "sustainability": { "annual_generation_kwh": 65000000.0, "years": 30, "degradation_fraction": 0.004, "embodied_kgco2e": 38000000.0, "annual_operational_kgco2e": 120000.0, "counterfactual_kgco2e_kwh": 0.25, "end_of_life_kgco2e": 1000000.0 } }, "professional_context": { "user_reported_pv_pipeline_gwp": "not included", "as_of": "not applicable", "note": "Private professional context is excluded from the public synthetic demonstration." }, "council": { "mode": "local", "hybrid_run_id": null, "execution": "deterministic_rule_based", "reviewed_brief": "Review a 5 MW / 10 MWh BTM storage investment for an industrial customer.", "market": "FR", "reviews": [{ "agent": "Storage engineer", "summary": "The synthetic 24-hour optimization is optimal; terminal SOC is preserved.", "risks": ["Perfect foresight and one illustrative day do not establish annual value."], "required_evidence": ["Interval meter data, import/export limits and battery warranty throughput."] }, { "agent": "Investment analyst", "summary": "The independent finance assumptions produce NPV EUR 1,857,087; minimum DSCR is 0.547878.", "risks": ["Revenue is an assumed gross margin; validate contract duration, augmentation and downside."], "required_evidence": ["Contract terms, cost quotations and a reconciled annual dispatch-to-finance bridge."] }, { "agent": "Market reviewer", "summary": "France has a CRE source link, but no approved tariff or regulatory determination.", "risks": ["Market access, network fees, metering and stacking eligibility are unresolved."], "required_evidence": ["Dated primary rules, customer tariff and an accountable local reviewer."] }, { "agent": "Sustainability reviewer", "summary": "Carbon screening and biodiversity field work are separate evidence streams.", "risks": ["Illustrative emissions factors are not certified LCA data or biodiversity outcomes."], "required_evidence": ["Supplier inventory, system boundary, counterfactual and ecological baseline."] }, { "agent": "Hybrid architect", "summary": "No saved hybrid run was supplied; architecture-specific adequacy has not been reviewed.", "risks": ["A greedy hourly energy balance does not establish GFM stability, transfer performance or protection."], "required_evidence": ["Reviewed topology, dynamic models, equipment limits and site-specific measurements."] }, { "agent": "Learning designer", "summary": "The catalogue contains 36 architecture lessons with local self-checks; none is an accredited qualification.", "risks": ["Self-check completion is not independently verified mastery."], "required_evidence": ["Instructor review, learner feedback and independently checked assessment outcomes."] }, { "agent": "Accessibility reviewer", "summary": "Documented keyboard, text-alternative and motion controls require real assistive-technology testing.", "risks": ["This rule-based reviewer has not inspected a browser or conducted a WCAG audit."], "required_evidence": ["Keyboard, screen-reader, contrast, reduced-motion and mobile test evidence."] }, { "agent": "Reproducibility reviewer", "summary": "Synthetic cases and input hashes support reproducibility; no stars, award or public deployment is assumed.", "risks": ["Different initial/terminal SOC, demand and horizons can bias run comparisons."], "required_evidence": ["Pinned input files, regression outputs, boundary checks and an independent solver benchmark."] }], "decision": { "recommendation": "Proceed to evidence collection, not investment approval.", "unresolved_risks": ["Unvalidated annual economics", "Unreviewed local framework", "No field calibration"], "next_actions": ["Obtain site and tariff data.", "Validate annual cash flows and debt covenant downside.", "Assign legal, engineering and ecological reviewers."] }, "warnings": ["No LLM was used in local mode. The brief is recorded; this is a fixed-scope checklist, not free-form analysis."] } };
+})(HF || (HF = {}));
+var HF;
+(function (HF) {
+    HF.HYBRID_CATALOG = { "version": "0.2.0", "data_kind": "synthetic_educational", "coverage_statement": "36 curated architectures, not every physically possible hybrid. Screening and study-only capabilities are explicitly separated.", "sources": [{ "id": "reopt", "name": "NLR REopt: hybrid DER and resilience", "url": "https://reopt.nlr.gov/tool", "reviewed_on": "2026-09-23", "scope": "Primary context for energy-system screening; no validation or affiliation claimed." }, { "id": "gfm", "name": "NLR grid-forming inverter controls", "url": "https://www.nlr.gov/grid/grid-forming-inverter-controls", "reviewed_on": "2026-09-23", "scope": "Primary context for GFL/GFM and dynamic-study limitations." }], "technologies": [{ "id": "solar", "name": "Solar PV", "icon": "sun", "color": "#f8c76d", "boundary": "AC-equivalent available PV output; not a site yield model." }, { "id": "wind", "name": "Wind", "icon": "wind", "color": "#73d9ff", "boundary": "Synthetic wind availability, not a turbine aerodynamic model." }, { "id": "battery", "name": "Battery storage", "icon": "battery", "color": "#b4ee83", "boundary": "Energy and power ratings with bounded SOC and conversion losses." }, { "id": "hydro", "name": "Hydroelectric", "icon": "activity", "color": "#71b8ff", "boundary": "Fixed availability proxy; no reservoir or river balance." }, { "id": "generator", "name": "Dispatchable generator", "icon": "bolt", "color": "#e5a279", "boundary": "Simple electrical output proxy; no starts, fuel inventory or minimum loading." }, { "id": "biomass", "name": "Biomass CHP", "icon": "leaf", "color": "#e5a279", "boundary": "Electricity/heat coupling needs a dedicated model." }, { "id": "geothermal", "name": "Geothermal", "icon": "globe", "color": "#f5b589", "boundary": "Reservoir and thermal extraction are not modeled." }, { "id": "heat", "name": "Useful heat", "icon": "activity", "color": "#ff9988", "boundary": "Thermal demand and temperature bounds are study-only." }, { "id": "electrolyzer", "name": "Electrolyzer", "icon": "flask", "color": "#c8a4ff", "boundary": "Electric-to-hydrogen conversion is study-only." }, { "id": "hydrogen", "name": "Hydrogen storage", "icon": "database", "color": "#c8a4ff", "boundary": "Mass balance and pressure constraints are study-only." }, { "id": "fuelcell", "name": "Fuel cell", "icon": "bolt", "color": "#c8a4ff", "boundary": "Hydrogen-to-electric conversion is study-only." }, { "id": "csp", "name": "Concentrated solar", "icon": "sun", "color": "#f8c76d", "boundary": "Solar heat collection and turbine conversion are study-only." }, { "id": "thermal", "name": "Thermal storage", "icon": "layers", "color": "#ff9988", "boundary": "Thermal state of charge is not battery SOC." }, { "id": "heatpump", "name": "Heat pump", "icon": "activity", "color": "#ff9988", "boundary": "Temperature-dependent COP and thermal load are study-only." }, { "id": "ev", "name": "Bidirectional EV fleet", "icon": "bolt", "color": "#89e2cd", "boundary": "Per-vehicle SOC and departure obligations are study-only." }, { "id": "pumpedhydro", "name": "Pumped storage", "icon": "layers", "color": "#71b8ff", "boundary": "Pumping, head and reservoir dynamics are study-only." }, { "id": "flywheel", "name": "Flywheel", "icon": "activity", "color": "#ddbdff", "boundary": "Sub-second support and self-discharge need dedicated modeling." }, { "id": "supercapacitor", "name": "Supercapacitor", "icon": "bolt", "color": "#ddbdff", "boundary": "Transient and voltage dynamics are not modeled." }, { "id": "tidal", "name": "Tidal generation", "icon": "activity", "color": "#71b8ff", "boundary": "Site-specific tidal power conversion is study-only." }, { "id": "wave", "name": "Wave generation", "icon": "activity", "color": "#73d9ff", "boundary": "Device power matrix and sea-state resource are study-only." }, { "id": "nuclear", "name": "Nuclear generation", "icon": "atom", "color": "#ddbdff", "boundary": "Conceptual energy integration only; no plant operating guidance." }, { "id": "waste", "name": "Waste-to-energy", "icon": "layers", "color": "#e5a279", "boundary": "Feedstock, emissions and heat/electric conversion are study-only." }, { "id": "network", "name": "Network / aggregation", "icon": "grid", "color": "#b8c5d7", "boundary": "Multiple nodes, power flow and protection are not simulated." }], "systems": [{ "id": "remote-triad", "name": "Remote renewable microgrid", "family": "Microgrids", "topology": "Off-grid", "coupling": "AC", "control": "GFM", "technologies": ["solar", "wind", "battery"], "description": "Keep an isolated community supplied across a renewable drought.", "learning_focus": "Size energy reserve independently from inverter power.", "evidence": "Critical-load measurements and a multi-year joint wind/solar weather record.", "mode": "screening", "level": "Foundation", "preset": { "system_id": "remote-triad", "scenario_id": "baseline", "hours": 24, "control": "GFM", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 800, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 0, "grid_export_kw": 0 }, "source_ids": ["reopt", "gfm"] }, { "id": "utility-pv-ac", "name": "Utility solar + storage · AC", "family": "Solar", "topology": "FTM", "coupling": "AC", "control": "GFL", "technologies": ["solar", "battery"], "description": "Shift a utility solar plant output through independently rated converters.", "learning_focus": "Separate the shared grid connection limit from individual asset ratings.", "evidence": "Point-of-interconnection agreement and AC conversion loss measurements.", "mode": "screening", "level": "Foundation", "preset": { "system_id": "utility-pv-ac", "scenario_id": "baseline", "hours": 24, "control": "GFL", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 150, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "utility-pv-dc", "name": "Utility solar + storage · DC", "family": "Solar", "topology": "FTM", "coupling": "DC", "control": "GFL", "technologies": ["solar", "battery"], "description": "Study shared conversion and storage on the DC side of a solar plant.", "learning_focus": "An AC-equivalent screen cannot establish clipping recovery or DC protection.", "evidence": "DC bus voltage envelope, inverter curve and DC-coupling design.", "mode": "screening", "level": "Foundation", "preset": { "system_id": "utility-pv-dc", "scenario_id": "baseline", "hours": 24, "control": "GFL", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 150, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "industrial-btm", "name": "Industrial solar + storage", "family": "Solar", "topology": "BTM", "coupling": "AC", "control": "GFL", "technologies": ["solar", "battery"], "description": "Manage site demand and self-consumption behind an industrial meter.", "learning_focus": "Compare import peaks without calling one day an annual saving.", "evidence": "Interval load data and actual demand-charge billing rules.", "mode": "screening", "level": "Foundation", "preset": { "system_id": "industrial-btm", "scenario_id": "baseline", "hours": 24, "control": "GFL", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "wind-firming", "name": "Wind + battery firming", "family": "Wind", "topology": "FTM", "coupling": "AC", "control": "GFL", "technologies": ["wind", "battery"], "description": "Explore wind variability and limited battery headroom.", "learning_focus": "Power adequacy and stored energy limit different services.", "evidence": "Turbine power curves, measured wind and ramp-rate obligations.", "mode": "screening", "level": "Foundation", "preset": { "system_id": "wind-firming", "scenario_id": "baseline", "hours": 24, "control": "GFL", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 0, "wind_kw": 800, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 150, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "hospital-island", "name": "Hospital islanding microgrid", "family": "Microgrids", "topology": "Islandable", "coupling": "AC", "control": "Dual", "technologies": ["solar", "battery", "generator"], "description": "Protect hospital critical loads through a planned grid interruption.", "learning_focus": "Distinguish island energy adequacy from certified transfer performance.", "evidence": "Critical circuits, transfer-switch study and tested grid-forming inverter response.", "mode": "screening", "level": "Foundation", "preset": { "system_id": "hospital-island", "scenario_id": "baseline", "hours": 24, "control": "Dual", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 700, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "home-resilience", "name": "Home solar + battery", "family": "Solar", "topology": "Islandable", "coupling": "AC", "control": "Dual", "technologies": ["solar", "battery"], "description": "Explore evening consumption and backup energy in a small home.", "learning_focus": "A backup-capable installation needs more than a battery label.", "evidence": "Essential-circuit survey, installer design and outage measurements.", "mode": "screening", "level": "Foundation", "preset": { "system_id": "home-resilience", "scenario_id": "baseline", "hours": 24, "control": "Dual", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 8, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 20, "battery_kw": 5, "load_kw": 3, "grid_import_kw": 12, "grid_export_kw": 5 }, "source_ids": ["reopt", "gfm"] }, { "id": "community-energy", "name": "Community energy hub", "family": "Solar", "topology": "BTM", "coupling": "AC", "control": "GFL", "technologies": ["solar", "battery"], "description": "Test a shared local demand profile and constrained export.", "learning_focus": "Physical self-consumption is distinct from allocation and billing.", "evidence": "Metering arrangement, shared-ownership terms and community load records.", "mode": "screening", "level": "Foundation", "preset": { "system_id": "community-energy", "scenario_id": "baseline", "hours": 24, "control": "GFL", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "telecom-dc", "name": "Off-grid DC telecom station", "family": "Microgrids", "topology": "Off-grid", "coupling": "DC", "control": "GFM", "technologies": ["solar", "battery"], "description": "Maintain continuous station demand through poor solar availability.", "learning_focus": "DC bus regulation is analogous here; AC GFM terminology is not a DC control specification.", "evidence": "Telecom DC voltage limits, converter efficiency and backup autonomy requirements.", "mode": "screening", "level": "Foundation", "preset": { "system_id": "telecom-dc", "scenario_id": "baseline", "hours": 24, "control": "GFM", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 20, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 80, "battery_kw": 10, "load_kw": 6, "grid_import_kw": 0, "grid_export_kw": 0 }, "source_ids": ["reopt", "gfm"] }, { "id": "solar-diesel", "name": "Solar + diesel + battery", "family": "Microgrids", "topology": "Off-grid", "coupling": "AC", "control": "Synchronous", "technologies": ["solar", "battery", "generator"], "description": "Reduce dispatchable generation in a remote diesel microgrid.", "learning_focus": "A constant marginal generator model omits minimum loading and start costs.", "evidence": "Fuel curve, fuel inventory and generator minimum-load specification.", "mode": "screening", "level": "Applied", "preset": { "system_id": "solar-diesel", "scenario_id": "baseline", "hours": 24, "control": "Synchronous", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 700, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 0, "grid_export_kw": 0 }, "source_ids": ["reopt", "gfm"] }, { "id": "wind-diesel", "name": "Wind + diesel + battery", "family": "Microgrids", "topology": "Off-grid", "coupling": "AC", "control": "Synchronous", "technologies": ["wind", "battery", "generator"], "description": "Support a wind-rich isolated site with a dispatchable backup.", "learning_focus": "Weather diversity does not remove the need to budget backup energy.", "evidence": "Measured wind, generator maintenance windows and fuel delivery constraints.", "mode": "screening", "level": "Applied", "preset": { "system_id": "wind-diesel", "scenario_id": "baseline", "hours": 24, "control": "Synchronous", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 0, "wind_kw": 800, "hydro_kw": 0, "generator_kw": 700, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 0, "grid_export_kw": 0 }, "source_ids": ["reopt", "gfm"] }, { "id": "hydro-triad", "name": "Solar + wind + small hydro", "family": "Hydro", "topology": "Off-grid", "coupling": "AC", "control": "Synchronous", "technologies": ["solar", "wind", "hydro", "battery"], "description": "Combine complementary resources around a small hydro scheme.", "learning_focus": "A fixed hydro availability factor is not a reservoir water balance.", "evidence": "Seasonal river flow, environmental release and head measurements.", "mode": "screening", "level": "Applied", "preset": { "system_id": "hydro-triad", "scenario_id": "baseline", "hours": 24, "control": "Synchronous", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 800, "hydro_kw": 500, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 0, "grid_export_kw": 0 }, "source_ids": ["reopt", "gfm"] }, { "id": "hydro-battery", "name": "Run-of-river + battery", "family": "Hydro", "topology": "FTM", "coupling": "AC", "control": "Synchronous", "technologies": ["hydro", "battery"], "description": "Inspect storage around a flow-constrained hydro plant.", "learning_focus": "Reduce hydro availability without inventing stored-water flexibility.", "evidence": "River flow-duration curve, turbine limits and ecological constraints.", "mode": "screening", "level": "Applied", "preset": { "system_id": "hydro-battery", "scenario_id": "baseline", "hours": 24, "control": "Synchronous", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 0, "wind_kw": 0, "hydro_kw": 500, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 150, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "floating-solar", "name": "Floating solar + hydro + battery", "family": "Hydro", "topology": "FTM", "coupling": "AC", "control": "Synchronous", "technologies": ["solar", "hydro", "battery"], "description": "Study co-located floating PV and hydroelectric generation.", "learning_focus": "Electrical aggregation does not quantify reservoir or water-quality effects.", "evidence": "Mooring design, reservoir operations, environmental and grid studies.", "mode": "screening", "level": "Applied", "preset": { "system_id": "floating-solar", "scenario_id": "baseline", "hours": 24, "control": "Synchronous", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 0, "hydro_kw": 500, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 150, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "biomass-chp", "name": "Biomass CHP + solar + battery", "family": "Thermal", "topology": "BTM", "coupling": "Multi-carrier", "control": "Synchronous", "technologies": ["solar", "battery", "biomass", "heat"], "description": "Couple dispatchable biomass electricity to a useful heat demand.", "learning_focus": "Credit heat only against a defined and useful thermal load.", "evidence": "Fuel sustainability, heat demand, CHP efficiency and emissions evidence.", "mode": "study", "level": "Advanced", "preset": { "system_id": "biomass-chp", "scenario_id": "baseline", "hours": 24, "control": "Synchronous", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "geothermal-hub", "name": "Geothermal + solar energy hub", "family": "Thermal", "topology": "FTM", "coupling": "Multi-carrier", "control": "Synchronous", "technologies": ["solar", "battery", "geothermal", "heat"], "description": "Explore firm geothermal output alongside daytime solar.", "learning_focus": "Reservoir sustainability and thermal delivery require separate models.", "evidence": "Reservoir data, reinjection design, plant availability and heat contracts.", "mode": "study", "level": "Advanced", "preset": { "system_id": "geothermal-hub", "scenario_id": "baseline", "hours": 24, "control": "Synchronous", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 150, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "solar-hydrogen", "name": "Solar + hydrogen + battery", "family": "Hydrogen", "topology": "Off-grid", "coupling": "Multi-carrier", "control": "GFM", "technologies": ["solar", "battery", "electrolyzer", "hydrogen", "fuelcell"], "description": "Contrast short-duration batteries with stored hydrogen pathways.", "learning_focus": "Track electrolyzer, storage and fuel-cell conversion losses separately.", "evidence": "Electrolyzer map, hydrogen inventory, storage losses and fuel-cell response.", "mode": "study", "level": "Advanced", "preset": { "system_id": "solar-hydrogen", "scenario_id": "baseline", "hours": 24, "control": "GFM", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 0, "grid_export_kw": 0 }, "source_ids": ["reopt", "gfm"] }, { "id": "wind-hydrogen", "name": "Wind + hydrogen export hub", "family": "Hydrogen", "topology": "FTM", "coupling": "Multi-carrier", "control": "GFL", "technologies": ["wind", "electrolyzer", "hydrogen"], "description": "Match variable wind with electrolyzer operation and hydrogen offtake.", "learning_focus": "Electrical production and hydrogen sales cannot use the same energy twice.", "evidence": "Water, compression, electrolyzer load range and offtake specifications.", "mode": "study", "level": "Advanced", "preset": { "system_id": "wind-hydrogen", "scenario_id": "baseline", "hours": 24, "control": "GFL", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 0, "wind_kw": 800, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 0, "battery_kw": 0, "load_kw": 150, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "csp-storage", "name": "Concentrated solar + thermal storage", "family": "Thermal", "topology": "FTM", "coupling": "Multi-carrier", "control": "Synchronous", "technologies": ["csp", "thermal"], "description": "Explore a solar heat store and dispatchable turbine cycle.", "learning_focus": "Thermal megawatt-hours are not electrical megawatt-hours.", "evidence": "DNI weather series, thermal losses, heat-engine efficiency and startup heat.", "mode": "study", "level": "Advanced", "preset": { "system_id": "csp-storage", "scenario_id": "baseline", "hours": 24, "control": "Synchronous", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 0, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 0, "battery_kw": 0, "load_kw": 150, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "heatpump-hub", "name": "PV + heat pump + thermal store", "family": "Thermal", "topology": "BTM", "coupling": "Multi-carrier", "control": "GFL", "technologies": ["solar", "battery", "heatpump", "thermal"], "description": "Coordinate electric demand with a building thermal store.", "learning_focus": "Heat-pump COP varies with operating temperatures.", "evidence": "Building heat loss, comfort bounds, COP curves and storage losses.", "mode": "study", "level": "Advanced", "preset": { "system_id": "heatpump-hub", "scenario_id": "baseline", "hours": 24, "control": "GFL", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "district-chp", "name": "District CHP + thermal storage", "family": "Thermal", "topology": "BTM", "coupling": "Multi-carrier", "control": "Synchronous", "technologies": ["generator", "heat", "thermal"], "description": "Study coupled heat/electricity supply to a district network.", "learning_focus": "A heat-led operating schedule differs from electricity-only dispatch.", "evidence": "Hourly heat demand, network losses and CHP feasible operating region.", "mode": "study", "level": "Advanced", "preset": { "system_id": "district-chp", "scenario_id": "baseline", "hours": 24, "control": "Synchronous", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 0, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 700, "battery_kwh": 0, "battery_kw": 0, "load_kw": 650, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "ev-depot", "name": "Solar + battery EV depot", "family": "Mobility", "topology": "BTM", "coupling": "AC", "control": "GFL", "technologies": ["solar", "battery"], "description": "Represent aggregate charging demand at an electric vehicle depot.", "learning_focus": "Aggregate demand is not proof that every vehicle departs charged.", "evidence": "Charging intervals, arrival/departure schedules and connection capacity.", "mode": "screening", "level": "Applied", "preset": { "system_id": "ev-depot", "scenario_id": "baseline", "hours": 24, "control": "GFL", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "v2g-fleet", "name": "Bidirectional fleet + solar", "family": "Mobility", "topology": "BTM", "coupling": "AC", "control": "Dual", "technologies": ["solar", "battery", "ev"], "description": "Study vehicle-to-grid flexibility and mobility obligations.", "learning_focus": "Do not spend vehicle energy required for the next trip.", "evidence": "Vehicle availability, charger interoperability, driver consent and warranty terms.", "mode": "study", "level": "Advanced", "preset": { "system_id": "v2g-fleet", "scenario_id": "baseline", "hours": 24, "control": "Dual", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "port-microgrid", "name": "Port shore-power microgrid", "family": "Mobility", "topology": "Islandable", "coupling": "AC", "control": "Dual", "technologies": ["solar", "wind", "battery", "generator"], "description": "Inspect large shore-power demand and outage support.", "learning_focus": "Critical-load classification must be agreed with port operators.", "evidence": "Vessel connection schedules, shore-power standards and emergency demand.", "mode": "screening", "level": "Applied", "preset": { "system_id": "port-microgrid", "scenario_id": "baseline", "hours": 24, "control": "Dual", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 800, "hydro_kw": 0, "generator_kw": 700, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "data-centre", "name": "Data-centre hybrid backup", "family": "Microgrids", "topology": "Islandable", "coupling": "AC", "control": "Dual", "technologies": ["solar", "battery", "generator"], "description": "Test energy adequacy for critical computing loads.", "learning_focus": "Hourly adequacy cannot establish UPS ride-through or tier certification.", "evidence": "UPS design, transfer sequences, redundancy and measured IT/cooling demand.", "mode": "screening", "level": "Applied", "preset": { "system_id": "data-centre", "scenario_id": "baseline", "hours": 24, "control": "Dual", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 700, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "agrivoltaics", "name": "Agrivoltaics + irrigation storage", "family": "Solar", "topology": "BTM", "coupling": "AC", "control": "GFL", "technologies": ["solar", "battery"], "description": "Explore daytime generation and farm pumping demand.", "learning_focus": "Energy dispatch alone does not establish crop or biodiversity outcomes.", "evidence": "Crop-shading study, irrigation needs, pumping curve and ecological baseline.", "mode": "screening", "level": "Applied", "preset": { "system_id": "agrivoltaics", "scenario_id": "baseline", "hours": 24, "control": "GFL", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "desalination", "name": "Renewable desalination microgrid", "family": "Microgrids", "topology": "Off-grid", "coupling": "AC", "control": "GFM", "technologies": ["solar", "wind", "battery"], "description": "Study the electrical supply of a remote water plant.", "learning_focus": "Water storage and product quality are outside the electrical screen.", "evidence": "Desalination power curve, water demand, intake and brine permits.", "mode": "screening", "level": "Applied", "preset": { "system_id": "desalination", "scenario_id": "baseline", "hours": 24, "control": "GFM", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 800, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 0, "grid_export_kw": 0 }, "source_ids": ["reopt", "gfm"] }, { "id": "pumped-hydro", "name": "Wind + PV + pumped storage", "family": "Hydro", "topology": "FTM", "coupling": "AC", "control": "Synchronous", "technologies": ["solar", "wind", "pumpedhydro"], "description": "Investigate a renewable plant with pumped hydro storage.", "learning_focus": "Water head, pumping and generation paths require a dedicated storage model.", "evidence": "Reservoir geometry, head curves, water permits and pump-turbine efficiency.", "mode": "study", "level": "Advanced", "preset": { "system_id": "pumped-hydro", "scenario_id": "baseline", "hours": 24, "control": "Synchronous", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 800, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 0, "battery_kw": 0, "load_kw": 150, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "flywheel-hybrid", "name": "Battery + flywheel microgrid", "family": "Advanced", "topology": "Islandable", "coupling": "AC", "control": "Dual", "technologies": ["solar", "battery", "flywheel"], "description": "Allocate rapid power support and longer energy delivery.", "learning_focus": "An hourly model cannot resolve sub-second flywheel services.", "evidence": "Power response, bearing losses, cycle limits and validated dynamic models.", "mode": "study", "level": "Advanced", "preset": { "system_id": "flywheel-hybrid", "scenario_id": "baseline", "hours": 24, "control": "Dual", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "supercapacitor", "name": "PV + battery + supercapacitor", "family": "Advanced", "topology": "Off-grid", "coupling": "DC", "control": "GFM", "technologies": ["solar", "battery", "supercapacitor"], "description": "Separate fast transient support from sustained energy.", "learning_focus": "DC-link transients need much finer time resolution than hourly dispatch.", "evidence": "Voltage-dependent capacitance, ESR, converter limits and control data.", "mode": "study", "level": "Advanced", "preset": { "system_id": "supercapacitor", "scenario_id": "baseline", "hours": 24, "control": "GFM", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 0, "grid_export_kw": 0 }, "source_ids": ["reopt", "gfm"] }, { "id": "marine-hybrid", "name": "Tidal + wave + battery", "family": "Advanced", "topology": "Off-grid", "coupling": "AC", "control": "GFM", "technologies": ["tidal", "wave", "battery"], "description": "Investigate complementary marine renewable resources.", "learning_focus": "Site-specific tidal and wave conversion are not generic wind profiles.", "evidence": "Marine resource record, device power matrices and environmental constraints.", "mode": "study", "level": "Advanced", "preset": { "system_id": "marine-hybrid", "scenario_id": "baseline", "hours": 24, "control": "GFM", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 0, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 0, "grid_export_kw": 0 }, "source_ids": ["reopt", "gfm"] }, { "id": "offshore-island", "name": "Offshore wind + hydrogen island", "family": "Hydrogen", "topology": "FTM", "coupling": "Multi-carrier", "control": "GFM", "technologies": ["wind", "electrolyzer", "hydrogen", "battery"], "description": "Explore offshore electric and hydrogen export pathways.", "learning_focus": "Do not omit transmission, compression or marine operating constraints.", "evidence": "Cable ratings, electrolyzer auxiliaries, hydrogen export and marine safety studies.", "mode": "study", "level": "Advanced", "preset": { "system_id": "offshore-island", "scenario_id": "baseline", "hours": 24, "control": "GFM", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 0, "wind_kw": 800, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 150, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "nuclear-hydrogen", "name": "Nuclear + hydrogen + heat", "family": "Hydrogen", "topology": "FTM", "coupling": "Multi-carrier", "control": "Synchronous", "technologies": ["nuclear", "electrolyzer", "hydrogen", "heat"], "description": "Study an integrated firm-energy and hydrogen concept.", "learning_focus": "An educational diagram is not a nuclear plant safety or licensing assessment.", "evidence": "Authorized plant operating limits, heat integration and independent safety review.", "mode": "study", "level": "Advanced", "preset": { "system_id": "nuclear-hydrogen", "scenario_id": "baseline", "hours": 24, "control": "Synchronous", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 0, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 0, "battery_kw": 0, "load_kw": 150, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "waste-energy", "name": "Waste-to-energy district hub", "family": "Thermal", "topology": "BTM", "coupling": "Multi-carrier", "control": "Synchronous", "technologies": ["waste", "heat", "thermal", "solar"], "description": "Study electricity and useful heat from a mixed-resource hub.", "learning_focus": "Feedstock accounting and lifecycle boundaries need independent review.", "evidence": "Feedstock composition, emissions controls, heat contracts and waste hierarchy review.", "mode": "study", "level": "Advanced", "preset": { "system_id": "waste-energy", "scenario_id": "baseline", "hours": 24, "control": "Synchronous", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 0, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 0, "battery_kw": 0, "load_kw": 650, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "virtual-plant", "name": "Virtual power plant portfolio", "family": "Networks", "topology": "Virtual", "coupling": "AC", "control": "GFL", "technologies": ["solar", "wind", "battery", "network"], "description": "Aggregate distributed assets without pretending they share one bus.", "learning_focus": "Virtual aggregation must preserve each site and network constraint.", "evidence": "Site-level meter data, communications, customer permissions and settlement rules.", "mode": "study", "level": "Advanced", "preset": { "system_id": "virtual-plant", "scenario_id": "baseline", "hours": 24, "control": "GFL", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 800, "hydro_kw": 0, "generator_kw": 0, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }, { "id": "networked-microgrids", "name": "Networked community microgrids", "family": "Networks", "topology": "Networked", "coupling": "AC", "control": "Dual", "technologies": ["solar", "wind", "battery", "generator", "network"], "description": "Study coordinated islanding across multiple local networks.", "learning_focus": "A one-bus energy model cannot validate network power flows or protection.", "evidence": "Feeder impedances, switching plan, protection settings and coordinated control study.", "mode": "study", "level": "Advanced", "preset": { "system_id": "networked-microgrids", "scenario_id": "baseline", "hours": 24, "control": "Dual", "critical_fraction": 0.65, "initial_soc": 0.6, "min_soc": 0.15, "max_soc": 0.9, "round_trip_efficiency": 0.9, "import_eur_kwh": 0.2, "export_eur_kwh": 0.06, "generator_eur_kwh": 0.28, "solar_kw": 1200, "wind_kw": 800, "hydro_kw": 0, "generator_kw": 700, "battery_kwh": 3000, "battery_kw": 750, "load_kw": 650, "grid_import_kw": 1200, "grid_export_kw": 800 }, "source_ids": ["reopt", "gfm"] }], "scenarios": [{ "id": "baseline", "name": "Reference day", "category": "Operations", "modifiers": {}, "description": "Establish a repeatable 24-hour reference before applying stress.", "mode": "screening" }, { "id": "cloud-cover", "name": "Cloud cover", "category": "Weather", "modifiers": { "solar_factor": 0.25 }, "description": "Reduce solar availability to 25% of the synthetic profile.", "mode": "screening" }, { "id": "wind-lull", "name": "Wind lull", "category": "Weather", "modifiers": { "wind_factor": 0.15 }, "description": "Reduce wind availability to 15% of the synthetic profile.", "mode": "screening" }, { "id": "renewable-drought", "name": "Renewable drought", "category": "Weather", "modifiers": { "solar_factor": 0.15, "wind_factor": 0.12 }, "description": "Stress both resources together; diversity is not a guarantee.", "mode": "screening" }, { "id": "heatwave", "name": "Heatwave demand", "category": "Weather", "modifiers": { "load_factor": 1.4, "solar_factor": 0.9 }, "description": "Increase load by 40% and reduce solar by 10%; no thermal model.", "mode": "screening" }, { "id": "winter-peak", "name": "Winter peak", "category": "Weather", "modifiers": { "load_factor": 1.3, "solar_factor": 0.35 }, "description": "Increase load and reduce solar; synthetic, not measured winter data.", "mode": "screening" }, { "id": "load-step", "name": "Evening load step", "category": "Demand", "modifiers": { "step_factor": 1.6 }, "description": "Increase demand 60% from hour 17 through hour 20 each day.", "mode": "screening" }, { "id": "outage-4h", "name": "Four-hour outage", "category": "Resilience", "modifiers": { "outage_start": 17, "outage_hours": 4 }, "description": "Disconnect the grid during the evening peak.", "mode": "screening" }, { "id": "outage-24h", "name": "24-hour outage", "category": "Resilience", "modifiers": { "outage_start": 0, "outage_hours": 24 }, "description": "Test one complete day without grid support.", "mode": "screening" }, { "id": "outage-72h", "name": "72-hour outage", "category": "Resilience", "modifiers": { "outage_start": 0, "outage_hours": 72, "hours": 72 }, "description": "Repeat a synthetic daily profile for three days; not a weather forecast.", "mode": "screening" }, { "id": "black-start", "name": "Black-start sequence", "category": "Control", "modifiers": {}, "description": "Study energization, auxiliary supply and protection before claiming a black start.", "mode": "study" }, { "id": "reconnection", "name": "Grid reconnection", "category": "Control", "modifiers": {}, "description": "Study synchronization, protection and transfer logic; no dynamic simulation.", "mode": "study" }, { "id": "weak-grid", "name": "Weak-grid stability", "category": "Control", "modifiers": {}, "description": "Study inverter interaction and voltage/frequency stability using dedicated models.", "mode": "study" }, { "id": "ramp-limit", "name": "Ramp-rate compliance", "category": "Control", "modifiers": {}, "description": "Study a delivery ramp requirement; hourly greedy dispatch does not enforce it.", "mode": "study" }, { "id": "zero-export", "name": "Zero-export constraint", "category": "Grid", "modifiers": { "export_factor": 0 }, "description": "Enforce zero export at the point of connection.", "mode": "screening" }, { "id": "export-cap", "name": "Export bottleneck", "category": "Grid", "modifiers": { "export_factor": 0.15 }, "description": "Reduce the configured export limit to 15%.", "mode": "screening" }, { "id": "import-cap", "name": "Import bottleneck", "category": "Grid", "modifiers": { "import_factor": 0.2 }, "description": "Reduce the configured import limit to 20%.", "mode": "screening" }, { "id": "negative-prices", "name": "Negative midday prices", "category": "Market", "modifiers": { "negative_prices": true }, "description": "Apply a negative midday import tariff; the policy does not optimize arbitrage.", "mode": "screening" }, { "id": "price-spike", "name": "Evening tariff spike", "category": "Market", "modifiers": { "price_factor": 3 }, "description": "Triple the evening import tariff; do not infer annual revenue.", "mode": "screening" }, { "id": "aged-battery", "name": "Aged battery", "category": "Asset", "modifiers": { "capacity_factor": 0.7 }, "description": "Reduce effective battery capacity to 70%, preserving SOC fractions.", "mode": "screening" }, { "id": "battery-trip", "name": "Battery converter outage", "category": "Asset", "modifiers": { "battery_factor": 0 }, "description": "Disable charge and discharge power for the whole run.", "mode": "screening" }, { "id": "generator-outage", "name": "Generator unavailable", "category": "Asset", "modifiers": { "generator_factor": 0 }, "description": "Remove dispatchable backup for the whole run.", "mode": "screening" }, { "id": "low-river", "name": "Low river flow", "category": "Weather", "modifiers": { "hydro_factor": 0.2 }, "description": "Reduce hydro availability to 20% of its baseline proxy.", "mode": "screening" }, { "id": "reserve-floor", "name": "Higher reserve floor", "category": "Resilience", "modifiers": { "reserve_floor": 0.5 }, "description": "Hold 50% of effective battery energy as an unavailable reserve.", "mode": "screening" }], "lessons": [{ "id": "lesson-remote-triad", "system_id": "remote-triad", "title": "Remote renewable microgrid", "level": "Foundation", "minutes": 20, "objectives": ["Size energy reserve independently from inverter power.", "Explain the Off-grid connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Keep an isolated community supplied across a renewable drought. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Renewable drought. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "Critical-load measurements and a multi-year joint wind/solar weather record. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "renewable-drought", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Size energy reserve independently from inverter power.", "Assume nameplate ratings establish annual performance.", "Treat the 3D diagram as a certified engineering design.", "Transfer results from a different site without checking assumptions."], "answer": 0, "explanation": "Size energy reserve independently from inverter power." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["A high GitHub star count.", "A screenshot of the dashboard without input data.", "Critical-load measurements and a multi-year joint wind/solar weather record.", "The same default profile reused without provenance."], "answer": 2, "explanation": "Critical-load measurements and a multi-year joint wind/solar weather record." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-utility-pv-ac", "system_id": "utility-pv-ac", "title": "Utility solar + storage · AC", "level": "Foundation", "minutes": 20, "objectives": ["Separate the shared grid connection limit from individual asset ratings.", "Explain the FTM connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Shift a utility solar plant output through independently rated converters. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Export bottleneck. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "Point-of-interconnection agreement and AC conversion loss measurements. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "export-cap", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Assume nameplate ratings establish annual performance.", "Separate the shared grid connection limit from individual asset ratings.", "Treat the 3D diagram as a certified engineering design.", "Transfer results from a different site without checking assumptions."], "answer": 1, "explanation": "Separate the shared grid connection limit from individual asset ratings." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["The same default profile reused without provenance.", "A screenshot of the dashboard without input data.", "A high GitHub star count.", "Point-of-interconnection agreement and AC conversion loss measurements."], "answer": 3, "explanation": "Point-of-interconnection agreement and AC conversion loss measurements." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-utility-pv-dc", "system_id": "utility-pv-dc", "title": "Utility solar + storage · DC", "level": "Foundation", "minutes": 20, "objectives": ["An AC-equivalent screen cannot establish clipping recovery or DC protection.", "Explain the FTM connection and DC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Study shared conversion and storage on the DC side of a solar plant. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Export bottleneck. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "DC bus voltage envelope, inverter curve and DC-coupling design. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "export-cap", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Treat the 3D diagram as a certified engineering design.", "Assume nameplate ratings establish annual performance.", "An AC-equivalent screen cannot establish clipping recovery or DC protection.", "Transfer results from a different site without checking assumptions."], "answer": 2, "explanation": "An AC-equivalent screen cannot establish clipping recovery or DC protection." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["DC bus voltage envelope, inverter curve and DC-coupling design.", "A screenshot of the dashboard without input data.", "A high GitHub star count.", "The same default profile reused without provenance."], "answer": 0, "explanation": "DC bus voltage envelope, inverter curve and DC-coupling design." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-industrial-btm", "system_id": "industrial-btm", "title": "Industrial solar + storage", "level": "Foundation", "minutes": 20, "objectives": ["Compare import peaks without calling one day an annual saving.", "Explain the BTM connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Manage site demand and self-consumption behind an industrial meter. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Zero-export constraint. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "Interval load data and actual demand-charge billing rules. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "zero-export", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Transfer results from a different site without checking assumptions.", "Assume nameplate ratings establish annual performance.", "Treat the 3D diagram as a certified engineering design.", "Compare import peaks without calling one day an annual saving."], "answer": 3, "explanation": "Compare import peaks without calling one day an annual saving." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["A screenshot of the dashboard without input data.", "Interval load data and actual demand-charge billing rules.", "A high GitHub star count.", "The same default profile reused without provenance."], "answer": 1, "explanation": "Interval load data and actual demand-charge billing rules." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-wind-firming", "system_id": "wind-firming", "title": "Wind + battery firming", "level": "Foundation", "minutes": 20, "objectives": ["Power adequacy and stored energy limit different services.", "Explain the FTM connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Explore wind variability and limited battery headroom. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Export bottleneck. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "Turbine power curves, measured wind and ramp-rate obligations. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "export-cap", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Power adequacy and stored energy limit different services.", "Assume nameplate ratings establish annual performance.", "Treat the 3D diagram as a certified engineering design.", "Transfer results from a different site without checking assumptions."], "answer": 0, "explanation": "Power adequacy and stored energy limit different services." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["A high GitHub star count.", "A screenshot of the dashboard without input data.", "Turbine power curves, measured wind and ramp-rate obligations.", "The same default profile reused without provenance."], "answer": 2, "explanation": "Turbine power curves, measured wind and ramp-rate obligations." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-hospital-island", "system_id": "hospital-island", "title": "Hospital islanding microgrid", "level": "Foundation", "minutes": 20, "objectives": ["Distinguish island energy adequacy from certified transfer performance.", "Explain the Islandable connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Protect hospital critical loads through a planned grid interruption. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Four-hour outage. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "Critical circuits, transfer-switch study and tested grid-forming inverter response. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "outage-4h", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Assume nameplate ratings establish annual performance.", "Distinguish island energy adequacy from certified transfer performance.", "Treat the 3D diagram as a certified engineering design.", "Transfer results from a different site without checking assumptions."], "answer": 1, "explanation": "Distinguish island energy adequacy from certified transfer performance." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["The same default profile reused without provenance.", "A screenshot of the dashboard without input data.", "A high GitHub star count.", "Critical circuits, transfer-switch study and tested grid-forming inverter response."], "answer": 3, "explanation": "Critical circuits, transfer-switch study and tested grid-forming inverter response." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-home-resilience", "system_id": "home-resilience", "title": "Home solar + battery", "level": "Foundation", "minutes": 20, "objectives": ["A backup-capable installation needs more than a battery label.", "Explain the Islandable connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Explore evening consumption and backup energy in a small home. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Four-hour outage. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "Essential-circuit survey, installer design and outage measurements. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "outage-4h", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Treat the 3D diagram as a certified engineering design.", "Assume nameplate ratings establish annual performance.", "A backup-capable installation needs more than a battery label.", "Transfer results from a different site without checking assumptions."], "answer": 2, "explanation": "A backup-capable installation needs more than a battery label." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["Essential-circuit survey, installer design and outage measurements.", "A screenshot of the dashboard without input data.", "A high GitHub star count.", "The same default profile reused without provenance."], "answer": 0, "explanation": "Essential-circuit survey, installer design and outage measurements." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-community-energy", "system_id": "community-energy", "title": "Community energy hub", "level": "Foundation", "minutes": 20, "objectives": ["Physical self-consumption is distinct from allocation and billing.", "Explain the BTM connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Test a shared local demand profile and constrained export. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Zero-export constraint. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "Metering arrangement, shared-ownership terms and community load records. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "zero-export", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Transfer results from a different site without checking assumptions.", "Assume nameplate ratings establish annual performance.", "Treat the 3D diagram as a certified engineering design.", "Physical self-consumption is distinct from allocation and billing."], "answer": 3, "explanation": "Physical self-consumption is distinct from allocation and billing." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["A screenshot of the dashboard without input data.", "Metering arrangement, shared-ownership terms and community load records.", "A high GitHub star count.", "The same default profile reused without provenance."], "answer": 1, "explanation": "Metering arrangement, shared-ownership terms and community load records." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-telecom-dc", "system_id": "telecom-dc", "title": "Off-grid DC telecom station", "level": "Foundation", "minutes": 20, "objectives": ["DC bus regulation is analogous here; AC GFM terminology is not a DC control specification.", "Explain the Off-grid connection and DC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Maintain continuous station demand through poor solar availability. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Renewable drought. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "Telecom DC voltage limits, converter efficiency and backup autonomy requirements. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "renewable-drought", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["DC bus regulation is analogous here; AC GFM terminology is not a DC control specification.", "Assume nameplate ratings establish annual performance.", "Treat the 3D diagram as a certified engineering design.", "Transfer results from a different site without checking assumptions."], "answer": 0, "explanation": "DC bus regulation is analogous here; AC GFM terminology is not a DC control specification." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["A high GitHub star count.", "A screenshot of the dashboard without input data.", "Telecom DC voltage limits, converter efficiency and backup autonomy requirements.", "The same default profile reused without provenance."], "answer": 2, "explanation": "Telecom DC voltage limits, converter efficiency and backup autonomy requirements." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-solar-diesel", "system_id": "solar-diesel", "title": "Solar + diesel + battery", "level": "Applied", "minutes": 20, "objectives": ["A constant marginal generator model omits minimum loading and start costs.", "Explain the Off-grid connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Reduce dispatchable generation in a remote diesel microgrid. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Renewable drought. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "Fuel curve, fuel inventory and generator minimum-load specification. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "renewable-drought", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Assume nameplate ratings establish annual performance.", "A constant marginal generator model omits minimum loading and start costs.", "Treat the 3D diagram as a certified engineering design.", "Transfer results from a different site without checking assumptions."], "answer": 1, "explanation": "A constant marginal generator model omits minimum loading and start costs." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["The same default profile reused without provenance.", "A screenshot of the dashboard without input data.", "A high GitHub star count.", "Fuel curve, fuel inventory and generator minimum-load specification."], "answer": 3, "explanation": "Fuel curve, fuel inventory and generator minimum-load specification." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-wind-diesel", "system_id": "wind-diesel", "title": "Wind + diesel + battery", "level": "Applied", "minutes": 20, "objectives": ["Weather diversity does not remove the need to budget backup energy.", "Explain the Off-grid connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Support a wind-rich isolated site with a dispatchable backup. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Renewable drought. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "Measured wind, generator maintenance windows and fuel delivery constraints. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "renewable-drought", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Treat the 3D diagram as a certified engineering design.", "Assume nameplate ratings establish annual performance.", "Weather diversity does not remove the need to budget backup energy.", "Transfer results from a different site without checking assumptions."], "answer": 2, "explanation": "Weather diversity does not remove the need to budget backup energy." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["Measured wind, generator maintenance windows and fuel delivery constraints.", "A screenshot of the dashboard without input data.", "A high GitHub star count.", "The same default profile reused without provenance."], "answer": 0, "explanation": "Measured wind, generator maintenance windows and fuel delivery constraints." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-hydro-triad", "system_id": "hydro-triad", "title": "Solar + wind + small hydro", "level": "Applied", "minutes": 20, "objectives": ["A fixed hydro availability factor is not a reservoir water balance.", "Explain the Off-grid connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Combine complementary resources around a small hydro scheme. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Renewable drought. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "Seasonal river flow, environmental release and head measurements. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "renewable-drought", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Transfer results from a different site without checking assumptions.", "Assume nameplate ratings establish annual performance.", "Treat the 3D diagram as a certified engineering design.", "A fixed hydro availability factor is not a reservoir water balance."], "answer": 3, "explanation": "A fixed hydro availability factor is not a reservoir water balance." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["A screenshot of the dashboard without input data.", "Seasonal river flow, environmental release and head measurements.", "A high GitHub star count.", "The same default profile reused without provenance."], "answer": 1, "explanation": "Seasonal river flow, environmental release and head measurements." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-hydro-battery", "system_id": "hydro-battery", "title": "Run-of-river + battery", "level": "Applied", "minutes": 20, "objectives": ["Reduce hydro availability without inventing stored-water flexibility.", "Explain the FTM connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Inspect storage around a flow-constrained hydro plant. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Export bottleneck. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "River flow-duration curve, turbine limits and ecological constraints. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "export-cap", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Reduce hydro availability without inventing stored-water flexibility.", "Assume nameplate ratings establish annual performance.", "Treat the 3D diagram as a certified engineering design.", "Transfer results from a different site without checking assumptions."], "answer": 0, "explanation": "Reduce hydro availability without inventing stored-water flexibility." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["A high GitHub star count.", "A screenshot of the dashboard without input data.", "River flow-duration curve, turbine limits and ecological constraints.", "The same default profile reused without provenance."], "answer": 2, "explanation": "River flow-duration curve, turbine limits and ecological constraints." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-floating-solar", "system_id": "floating-solar", "title": "Floating solar + hydro + battery", "level": "Applied", "minutes": 20, "objectives": ["Electrical aggregation does not quantify reservoir or water-quality effects.", "Explain the FTM connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Study co-located floating PV and hydroelectric generation. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Export bottleneck. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "Mooring design, reservoir operations, environmental and grid studies. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "export-cap", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Assume nameplate ratings establish annual performance.", "Electrical aggregation does not quantify reservoir or water-quality effects.", "Treat the 3D diagram as a certified engineering design.", "Transfer results from a different site without checking assumptions."], "answer": 1, "explanation": "Electrical aggregation does not quantify reservoir or water-quality effects." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["The same default profile reused without provenance.", "A screenshot of the dashboard without input data.", "A high GitHub star count.", "Mooring design, reservoir operations, environmental and grid studies."], "answer": 3, "explanation": "Mooring design, reservoir operations, environmental and grid studies." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-biomass-chp", "system_id": "biomass-chp", "title": "Biomass CHP + solar + battery", "level": "Advanced", "minutes": 30, "objectives": ["Credit heat only against a defined and useful thermal load.", "Explain the BTM connection and Multi-carrier energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Couple dispatchable biomass electricity to a useful heat demand. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "This architecture is study-only. Describe the extra state variables, constraints and conversion losses required before enabling numerical results." }, { "title": "Challenge the evidence", "body": "Fuel sustainability, heat demand, CHP efficiency and emissions evidence. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "baseline", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Treat the 3D diagram as a certified engineering design.", "Assume nameplate ratings establish annual performance.", "Credit heat only against a defined and useful thermal load.", "Transfer results from a different site without checking assumptions."], "answer": 2, "explanation": "Credit heat only against a defined and useful thermal load." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["Fuel sustainability, heat demand, CHP efficiency and emissions evidence.", "A screenshot of the dashboard without input data.", "A high GitHub star count.", "The same default profile reused without provenance."], "answer": 0, "explanation": "Fuel sustainability, heat demand, CHP efficiency and emissions evidence." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-geothermal-hub", "system_id": "geothermal-hub", "title": "Geothermal + solar energy hub", "level": "Advanced", "minutes": 30, "objectives": ["Reservoir sustainability and thermal delivery require separate models.", "Explain the FTM connection and Multi-carrier energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Explore firm geothermal output alongside daytime solar. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "This architecture is study-only. Describe the extra state variables, constraints and conversion losses required before enabling numerical results." }, { "title": "Challenge the evidence", "body": "Reservoir data, reinjection design, plant availability and heat contracts. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "baseline", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Transfer results from a different site without checking assumptions.", "Assume nameplate ratings establish annual performance.", "Treat the 3D diagram as a certified engineering design.", "Reservoir sustainability and thermal delivery require separate models."], "answer": 3, "explanation": "Reservoir sustainability and thermal delivery require separate models." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["A screenshot of the dashboard without input data.", "Reservoir data, reinjection design, plant availability and heat contracts.", "A high GitHub star count.", "The same default profile reused without provenance."], "answer": 1, "explanation": "Reservoir data, reinjection design, plant availability and heat contracts." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-solar-hydrogen", "system_id": "solar-hydrogen", "title": "Solar + hydrogen + battery", "level": "Advanced", "minutes": 30, "objectives": ["Track electrolyzer, storage and fuel-cell conversion losses separately.", "Explain the Off-grid connection and Multi-carrier energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Contrast short-duration batteries with stored hydrogen pathways. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "This architecture is study-only. Describe the extra state variables, constraints and conversion losses required before enabling numerical results." }, { "title": "Challenge the evidence", "body": "Electrolyzer map, hydrogen inventory, storage losses and fuel-cell response. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "baseline", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Track electrolyzer, storage and fuel-cell conversion losses separately.", "Assume nameplate ratings establish annual performance.", "Treat the 3D diagram as a certified engineering design.", "Transfer results from a different site without checking assumptions."], "answer": 0, "explanation": "Track electrolyzer, storage and fuel-cell conversion losses separately." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["A high GitHub star count.", "A screenshot of the dashboard without input data.", "Electrolyzer map, hydrogen inventory, storage losses and fuel-cell response.", "The same default profile reused without provenance."], "answer": 2, "explanation": "Electrolyzer map, hydrogen inventory, storage losses and fuel-cell response." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-wind-hydrogen", "system_id": "wind-hydrogen", "title": "Wind + hydrogen export hub", "level": "Advanced", "minutes": 30, "objectives": ["Electrical production and hydrogen sales cannot use the same energy twice.", "Explain the FTM connection and Multi-carrier energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Match variable wind with electrolyzer operation and hydrogen offtake. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "This architecture is study-only. Describe the extra state variables, constraints and conversion losses required before enabling numerical results." }, { "title": "Challenge the evidence", "body": "Water, compression, electrolyzer load range and offtake specifications. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "baseline", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Assume nameplate ratings establish annual performance.", "Electrical production and hydrogen sales cannot use the same energy twice.", "Treat the 3D diagram as a certified engineering design.", "Transfer results from a different site without checking assumptions."], "answer": 1, "explanation": "Electrical production and hydrogen sales cannot use the same energy twice." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["The same default profile reused without provenance.", "A screenshot of the dashboard without input data.", "A high GitHub star count.", "Water, compression, electrolyzer load range and offtake specifications."], "answer": 3, "explanation": "Water, compression, electrolyzer load range and offtake specifications." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-csp-storage", "system_id": "csp-storage", "title": "Concentrated solar + thermal storage", "level": "Advanced", "minutes": 30, "objectives": ["Thermal megawatt-hours are not electrical megawatt-hours.", "Explain the FTM connection and Multi-carrier energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Explore a solar heat store and dispatchable turbine cycle. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "This architecture is study-only. Describe the extra state variables, constraints and conversion losses required before enabling numerical results." }, { "title": "Challenge the evidence", "body": "DNI weather series, thermal losses, heat-engine efficiency and startup heat. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "baseline", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Treat the 3D diagram as a certified engineering design.", "Assume nameplate ratings establish annual performance.", "Thermal megawatt-hours are not electrical megawatt-hours.", "Transfer results from a different site without checking assumptions."], "answer": 2, "explanation": "Thermal megawatt-hours are not electrical megawatt-hours." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["DNI weather series, thermal losses, heat-engine efficiency and startup heat.", "A screenshot of the dashboard without input data.", "A high GitHub star count.", "The same default profile reused without provenance."], "answer": 0, "explanation": "DNI weather series, thermal losses, heat-engine efficiency and startup heat." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-heatpump-hub", "system_id": "heatpump-hub", "title": "PV + heat pump + thermal store", "level": "Advanced", "minutes": 30, "objectives": ["Heat-pump COP varies with operating temperatures.", "Explain the BTM connection and Multi-carrier energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Coordinate electric demand with a building thermal store. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "This architecture is study-only. Describe the extra state variables, constraints and conversion losses required before enabling numerical results." }, { "title": "Challenge the evidence", "body": "Building heat loss, comfort bounds, COP curves and storage losses. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "baseline", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Transfer results from a different site without checking assumptions.", "Assume nameplate ratings establish annual performance.", "Treat the 3D diagram as a certified engineering design.", "Heat-pump COP varies with operating temperatures."], "answer": 3, "explanation": "Heat-pump COP varies with operating temperatures." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["A screenshot of the dashboard without input data.", "Building heat loss, comfort bounds, COP curves and storage losses.", "A high GitHub star count.", "The same default profile reused without provenance."], "answer": 1, "explanation": "Building heat loss, comfort bounds, COP curves and storage losses." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-district-chp", "system_id": "district-chp", "title": "District CHP + thermal storage", "level": "Advanced", "minutes": 30, "objectives": ["A heat-led operating schedule differs from electricity-only dispatch.", "Explain the BTM connection and Multi-carrier energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Study coupled heat/electricity supply to a district network. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "This architecture is study-only. Describe the extra state variables, constraints and conversion losses required before enabling numerical results." }, { "title": "Challenge the evidence", "body": "Hourly heat demand, network losses and CHP feasible operating region. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "baseline", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["A heat-led operating schedule differs from electricity-only dispatch.", "Assume nameplate ratings establish annual performance.", "Treat the 3D diagram as a certified engineering design.", "Transfer results from a different site without checking assumptions."], "answer": 0, "explanation": "A heat-led operating schedule differs from electricity-only dispatch." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["A high GitHub star count.", "A screenshot of the dashboard without input data.", "Hourly heat demand, network losses and CHP feasible operating region.", "The same default profile reused without provenance."], "answer": 2, "explanation": "Hourly heat demand, network losses and CHP feasible operating region." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-ev-depot", "system_id": "ev-depot", "title": "Solar + battery EV depot", "level": "Applied", "minutes": 20, "objectives": ["Aggregate demand is not proof that every vehicle departs charged.", "Explain the BTM connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Represent aggregate charging demand at an electric vehicle depot. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Zero-export constraint. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "Charging intervals, arrival/departure schedules and connection capacity. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "zero-export", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Assume nameplate ratings establish annual performance.", "Aggregate demand is not proof that every vehicle departs charged.", "Treat the 3D diagram as a certified engineering design.", "Transfer results from a different site without checking assumptions."], "answer": 1, "explanation": "Aggregate demand is not proof that every vehicle departs charged." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["The same default profile reused without provenance.", "A screenshot of the dashboard without input data.", "A high GitHub star count.", "Charging intervals, arrival/departure schedules and connection capacity."], "answer": 3, "explanation": "Charging intervals, arrival/departure schedules and connection capacity." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-v2g-fleet", "system_id": "v2g-fleet", "title": "Bidirectional fleet + solar", "level": "Advanced", "minutes": 30, "objectives": ["Do not spend vehicle energy required for the next trip.", "Explain the BTM connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Study vehicle-to-grid flexibility and mobility obligations. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "This architecture is study-only. Describe the extra state variables, constraints and conversion losses required before enabling numerical results." }, { "title": "Challenge the evidence", "body": "Vehicle availability, charger interoperability, driver consent and warranty terms. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "baseline", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Treat the 3D diagram as a certified engineering design.", "Assume nameplate ratings establish annual performance.", "Do not spend vehicle energy required for the next trip.", "Transfer results from a different site without checking assumptions."], "answer": 2, "explanation": "Do not spend vehicle energy required for the next trip." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["Vehicle availability, charger interoperability, driver consent and warranty terms.", "A screenshot of the dashboard without input data.", "A high GitHub star count.", "The same default profile reused without provenance."], "answer": 0, "explanation": "Vehicle availability, charger interoperability, driver consent and warranty terms." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-port-microgrid", "system_id": "port-microgrid", "title": "Port shore-power microgrid", "level": "Applied", "minutes": 20, "objectives": ["Critical-load classification must be agreed with port operators.", "Explain the Islandable connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Inspect large shore-power demand and outage support. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Four-hour outage. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "Vessel connection schedules, shore-power standards and emergency demand. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "outage-4h", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Transfer results from a different site without checking assumptions.", "Assume nameplate ratings establish annual performance.", "Treat the 3D diagram as a certified engineering design.", "Critical-load classification must be agreed with port operators."], "answer": 3, "explanation": "Critical-load classification must be agreed with port operators." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["A screenshot of the dashboard without input data.", "Vessel connection schedules, shore-power standards and emergency demand.", "A high GitHub star count.", "The same default profile reused without provenance."], "answer": 1, "explanation": "Vessel connection schedules, shore-power standards and emergency demand." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-data-centre", "system_id": "data-centre", "title": "Data-centre hybrid backup", "level": "Applied", "minutes": 20, "objectives": ["Hourly adequacy cannot establish UPS ride-through or tier certification.", "Explain the Islandable connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Test energy adequacy for critical computing loads. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Four-hour outage. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "UPS design, transfer sequences, redundancy and measured IT/cooling demand. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "outage-4h", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Hourly adequacy cannot establish UPS ride-through or tier certification.", "Assume nameplate ratings establish annual performance.", "Treat the 3D diagram as a certified engineering design.", "Transfer results from a different site without checking assumptions."], "answer": 0, "explanation": "Hourly adequacy cannot establish UPS ride-through or tier certification." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["A high GitHub star count.", "A screenshot of the dashboard without input data.", "UPS design, transfer sequences, redundancy and measured IT/cooling demand.", "The same default profile reused without provenance."], "answer": 2, "explanation": "UPS design, transfer sequences, redundancy and measured IT/cooling demand." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-agrivoltaics", "system_id": "agrivoltaics", "title": "Agrivoltaics + irrigation storage", "level": "Applied", "minutes": 20, "objectives": ["Energy dispatch alone does not establish crop or biodiversity outcomes.", "Explain the BTM connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Explore daytime generation and farm pumping demand. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Zero-export constraint. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "Crop-shading study, irrigation needs, pumping curve and ecological baseline. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "zero-export", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Assume nameplate ratings establish annual performance.", "Energy dispatch alone does not establish crop or biodiversity outcomes.", "Treat the 3D diagram as a certified engineering design.", "Transfer results from a different site without checking assumptions."], "answer": 1, "explanation": "Energy dispatch alone does not establish crop or biodiversity outcomes." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["The same default profile reused without provenance.", "A screenshot of the dashboard without input data.", "A high GitHub star count.", "Crop-shading study, irrigation needs, pumping curve and ecological baseline."], "answer": 3, "explanation": "Crop-shading study, irrigation needs, pumping curve and ecological baseline." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-desalination", "system_id": "desalination", "title": "Renewable desalination microgrid", "level": "Applied", "minutes": 20, "objectives": ["Water storage and product quality are outside the electrical screen.", "Explain the Off-grid connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Study the electrical supply of a remote water plant. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "Run the reference case, pin it, then run Renewable drought. Compare served load, grid import and terminal stored energy." }, { "title": "Challenge the evidence", "body": "Desalination power curve, water demand, intake and brine permits. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "renewable-drought", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Treat the 3D diagram as a certified engineering design.", "Assume nameplate ratings establish annual performance.", "Water storage and product quality are outside the electrical screen.", "Transfer results from a different site without checking assumptions."], "answer": 2, "explanation": "Water storage and product quality are outside the electrical screen." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["Desalination power curve, water demand, intake and brine permits.", "A screenshot of the dashboard without input data.", "A high GitHub star count.", "The same default profile reused without provenance."], "answer": 0, "explanation": "Desalination power curve, water demand, intake and brine permits." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-pumped-hydro", "system_id": "pumped-hydro", "title": "Wind + PV + pumped storage", "level": "Advanced", "minutes": 30, "objectives": ["Water head, pumping and generation paths require a dedicated storage model.", "Explain the FTM connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Investigate a renewable plant with pumped hydro storage. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "This architecture is study-only. Describe the extra state variables, constraints and conversion losses required before enabling numerical results." }, { "title": "Challenge the evidence", "body": "Reservoir geometry, head curves, water permits and pump-turbine efficiency. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "baseline", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Transfer results from a different site without checking assumptions.", "Assume nameplate ratings establish annual performance.", "Treat the 3D diagram as a certified engineering design.", "Water head, pumping and generation paths require a dedicated storage model."], "answer": 3, "explanation": "Water head, pumping and generation paths require a dedicated storage model." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["A screenshot of the dashboard without input data.", "Reservoir geometry, head curves, water permits and pump-turbine efficiency.", "A high GitHub star count.", "The same default profile reused without provenance."], "answer": 1, "explanation": "Reservoir geometry, head curves, water permits and pump-turbine efficiency." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-flywheel-hybrid", "system_id": "flywheel-hybrid", "title": "Battery + flywheel microgrid", "level": "Advanced", "minutes": 30, "objectives": ["An hourly model cannot resolve sub-second flywheel services.", "Explain the Islandable connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Allocate rapid power support and longer energy delivery. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "This architecture is study-only. Describe the extra state variables, constraints and conversion losses required before enabling numerical results." }, { "title": "Challenge the evidence", "body": "Power response, bearing losses, cycle limits and validated dynamic models. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "baseline", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["An hourly model cannot resolve sub-second flywheel services.", "Assume nameplate ratings establish annual performance.", "Treat the 3D diagram as a certified engineering design.", "Transfer results from a different site without checking assumptions."], "answer": 0, "explanation": "An hourly model cannot resolve sub-second flywheel services." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["A high GitHub star count.", "A screenshot of the dashboard without input data.", "Power response, bearing losses, cycle limits and validated dynamic models.", "The same default profile reused without provenance."], "answer": 2, "explanation": "Power response, bearing losses, cycle limits and validated dynamic models." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-supercapacitor", "system_id": "supercapacitor", "title": "PV + battery + supercapacitor", "level": "Advanced", "minutes": 30, "objectives": ["DC-link transients need much finer time resolution than hourly dispatch.", "Explain the Off-grid connection and DC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Separate fast transient support from sustained energy. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "This architecture is study-only. Describe the extra state variables, constraints and conversion losses required before enabling numerical results." }, { "title": "Challenge the evidence", "body": "Voltage-dependent capacitance, ESR, converter limits and control data. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "baseline", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Assume nameplate ratings establish annual performance.", "DC-link transients need much finer time resolution than hourly dispatch.", "Treat the 3D diagram as a certified engineering design.", "Transfer results from a different site without checking assumptions."], "answer": 1, "explanation": "DC-link transients need much finer time resolution than hourly dispatch." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["The same default profile reused without provenance.", "A screenshot of the dashboard without input data.", "A high GitHub star count.", "Voltage-dependent capacitance, ESR, converter limits and control data."], "answer": 3, "explanation": "Voltage-dependent capacitance, ESR, converter limits and control data." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-marine-hybrid", "system_id": "marine-hybrid", "title": "Tidal + wave + battery", "level": "Advanced", "minutes": 30, "objectives": ["Site-specific tidal and wave conversion are not generic wind profiles.", "Explain the Off-grid connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Investigate complementary marine renewable resources. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "This architecture is study-only. Describe the extra state variables, constraints and conversion losses required before enabling numerical results." }, { "title": "Challenge the evidence", "body": "Marine resource record, device power matrices and environmental constraints. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "baseline", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Treat the 3D diagram as a certified engineering design.", "Assume nameplate ratings establish annual performance.", "Site-specific tidal and wave conversion are not generic wind profiles.", "Transfer results from a different site without checking assumptions."], "answer": 2, "explanation": "Site-specific tidal and wave conversion are not generic wind profiles." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["Marine resource record, device power matrices and environmental constraints.", "A screenshot of the dashboard without input data.", "A high GitHub star count.", "The same default profile reused without provenance."], "answer": 0, "explanation": "Marine resource record, device power matrices and environmental constraints." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-offshore-island", "system_id": "offshore-island", "title": "Offshore wind + hydrogen island", "level": "Advanced", "minutes": 30, "objectives": ["Do not omit transmission, compression or marine operating constraints.", "Explain the FTM connection and Multi-carrier energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Explore offshore electric and hydrogen export pathways. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "This architecture is study-only. Describe the extra state variables, constraints and conversion losses required before enabling numerical results." }, { "title": "Challenge the evidence", "body": "Cable ratings, electrolyzer auxiliaries, hydrogen export and marine safety studies. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "baseline", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Transfer results from a different site without checking assumptions.", "Assume nameplate ratings establish annual performance.", "Treat the 3D diagram as a certified engineering design.", "Do not omit transmission, compression or marine operating constraints."], "answer": 3, "explanation": "Do not omit transmission, compression or marine operating constraints." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["A screenshot of the dashboard without input data.", "Cable ratings, electrolyzer auxiliaries, hydrogen export and marine safety studies.", "A high GitHub star count.", "The same default profile reused without provenance."], "answer": 1, "explanation": "Cable ratings, electrolyzer auxiliaries, hydrogen export and marine safety studies." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-nuclear-hydrogen", "system_id": "nuclear-hydrogen", "title": "Nuclear + hydrogen + heat", "level": "Advanced", "minutes": 30, "objectives": ["An educational diagram is not a nuclear plant safety or licensing assessment.", "Explain the FTM connection and Multi-carrier energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Study an integrated firm-energy and hydrogen concept. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "This architecture is study-only. Describe the extra state variables, constraints and conversion losses required before enabling numerical results." }, { "title": "Challenge the evidence", "body": "Authorized plant operating limits, heat integration and independent safety review. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "baseline", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["An educational diagram is not a nuclear plant safety or licensing assessment.", "Assume nameplate ratings establish annual performance.", "Treat the 3D diagram as a certified engineering design.", "Transfer results from a different site without checking assumptions."], "answer": 0, "explanation": "An educational diagram is not a nuclear plant safety or licensing assessment." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["A high GitHub star count.", "A screenshot of the dashboard without input data.", "Authorized plant operating limits, heat integration and independent safety review.", "The same default profile reused without provenance."], "answer": 2, "explanation": "Authorized plant operating limits, heat integration and independent safety review." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-waste-energy", "system_id": "waste-energy", "title": "Waste-to-energy district hub", "level": "Advanced", "minutes": 30, "objectives": ["Feedstock accounting and lifecycle boundaries need independent review.", "Explain the BTM connection and Multi-carrier energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Study electricity and useful heat from a mixed-resource hub. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "This architecture is study-only. Describe the extra state variables, constraints and conversion losses required before enabling numerical results." }, { "title": "Challenge the evidence", "body": "Feedstock composition, emissions controls, heat contracts and waste hierarchy review. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "baseline", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Assume nameplate ratings establish annual performance.", "Feedstock accounting and lifecycle boundaries need independent review.", "Treat the 3D diagram as a certified engineering design.", "Transfer results from a different site without checking assumptions."], "answer": 1, "explanation": "Feedstock accounting and lifecycle boundaries need independent review." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["The same default profile reused without provenance.", "A screenshot of the dashboard without input data.", "A high GitHub star count.", "Feedstock composition, emissions controls, heat contracts and waste hierarchy review."], "answer": 3, "explanation": "Feedstock composition, emissions controls, heat contracts and waste hierarchy review." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-virtual-plant", "system_id": "virtual-plant", "title": "Virtual power plant portfolio", "level": "Advanced", "minutes": 30, "objectives": ["Virtual aggregation must preserve each site and network constraint.", "Explain the Virtual connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Aggregate distributed assets without pretending they share one bus. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "This architecture is study-only. Describe the extra state variables, constraints and conversion losses required before enabling numerical results." }, { "title": "Challenge the evidence", "body": "Site-level meter data, communications, customer permissions and settlement rules. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "baseline", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Treat the 3D diagram as a certified engineering design.", "Assume nameplate ratings establish annual performance.", "Virtual aggregation must preserve each site and network constraint.", "Transfer results from a different site without checking assumptions."], "answer": 2, "explanation": "Virtual aggregation must preserve each site and network constraint." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["Site-level meter data, communications, customer permissions and settlement rules.", "A screenshot of the dashboard without input data.", "A high GitHub star count.", "The same default profile reused without provenance."], "answer": 0, "explanation": "Site-level meter data, communications, customer permissions and settlement rules." }], "source_ids": ["reopt", "gfm"] }, { "id": "lesson-networked-microgrids", "system_id": "networked-microgrids", "title": "Networked community microgrids", "level": "Advanced", "minutes": 30, "objectives": ["A one-bus energy model cannot validate network power flows or protection.", "Explain the Networked connection and AC energy boundary.", "Identify the evidence needed to challenge the result."], "steps": [{ "title": "Map the energy path", "body": "Study coordinated islanding across multiple local networks. Select each asset in the 3D scene and read its model boundary." }, { "title": "Change one assumption", "body": "This architecture is study-only. Describe the extra state variables, constraints and conversion losses required before enabling numerical results." }, { "title": "Challenge the evidence", "body": "Feeder impedances, switching plan, protection settings and coordinated control study. Explain why a short synthetic profile cannot establish annual value or dynamic stability." }], "scenario_id": "baseline", "quiz": [{ "question": "What is the key modeling distinction in this lesson?", "options": ["Transfer results from a different site without checking assumptions.", "Assume nameplate ratings establish annual performance.", "Treat the 3D diagram as a certified engineering design.", "A one-bus energy model cannot validate network power flows or protection."], "answer": 3, "explanation": "A one-bus energy model cannot validate network power flows or protection." }, { "question": "Which evidence is most relevant before extending this lesson to a real project?", "options": ["A screenshot of the dashboard without input data.", "Feeder impedances, switching plan, protection settings and coordinated control study.", "A high GitHub star count.", "The same default profile reused without provenance."], "answer": 1, "explanation": "Feeder impedances, switching plan, protection settings and coordinated control study." }], "source_ids": ["reopt", "gfm"] }] };
+    HF.HYBRID_EXAMPLE = { "model": "hybrid-greedy-hourly-v1", "data_kind": "synthetic_educational", "system_id": "remote-triad", "scenario_id": "baseline", "duration_hours": 24, "policy": "renewables_then_battery_then_grid_then_backup", "total_load_kwh": 14222.0, "served_kwh": 13933.539333877663, "unserved_kwh": 288.46066612233653, "critical_unserved_kwh": 98.89824009389861, "critical_served_pct": 98.93017059059206, "load_served_pct": 97.97172924959685, "renewable_available_kwh": 16590.347320391476, "grid_import_kwh": 0.0, "grid_export_kwh": 0.0, "generator_kwh": 0.0, "curtailed_kwh": 3623.280137972502, "charged_kwh": 2371.708245126285, "discharged_kwh": 3338.180396584973, "initial_energy_kwh": 1800.0, "terminal_energy_kwh": 531.2489020891062, "battery_energy_delta_kwh": -1268.7510979108938, "effective_capacity_kwh": 3000.0, "effective_power_kw": 750.0, "variable_cost_eur": 0.0, "max_balance_residual_kw": 2.842170943040401e-14, "tags": [{ "label": "Off-grid", "reason": "Derived from the selected point of interconnection." }, { "label": "AC", "reason": "Architecture coupling; the electrical screen remains AC-equivalent." }, { "label": "GFM", "reason": "Declared control assumption; not a validated control design." }, { "label": "screening", "reason": "Capability of the numerical engine, not a maturity or safety certificate." }, { "label": "4.0 h storage", "reason": "Nameplate battery energy / rated AC power; excludes SOC window and losses." }, { "label": "No grid support", "reason": "Import and export ratings are both zero." }], "warnings": ["Synthetic hourly energy screen using a fixed greedy policy, not cost optimization, a forecast or a dispatch instruction.", "No voltage, frequency, reactive power, fault current, protection, black-start or transfer-transient simulation.", "Initial battery energy is supplied explicitly. Terminal SOC is unconstrained; compare runs using both stored-energy endpoints.", "Variable energy cost excludes CAPEX, OPEX, demand charges, wear, fuel inventory, taxes and value of lost load. Do not annualize this run.", "A synthetic 24-hour resource shape repeats for longer horizons. No measured weather or probabilistic reliability claim.", "Battery energy provenance is not tracked; no renewable share or emissions credit is inferred from discharge.", "A declared GFM/reference mode is a structural teaching assumption, not proof of real island stability."], "schedule": [{ "hour": 0, "label": "D1 00:00", "load_kw": 594.75, "target_load_kw": 594.75, "served_kw": 594.75, "critical_load_kw": 386.58750000000003, "pv_kw": 0.0, "wind_kw": 411.7082860554108, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 183.04171394458922, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 1800.0, "soc_end_kwh": 1607.057092371365, "soc_pct": 53.56856974571217, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 1, "label": "D1 01:00", "load_kw": 616.1624861213896, "target_load_kw": 616.1624861213896, "served_kw": 616.1624861213896, "critical_load_kw": 400.5056159789033, "pv_kw": 0.0, "wind_kw": 430.7333837231588, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 185.42910239823084, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 1607.057092371365, "soc_end_kwh": 1411.597656351698, "soc_pct": 47.05325521172327, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 2, "label": "D1 02:00", "load_kw": 624.0, "target_load_kw": 624.0, "served_kw": 624.0, "critical_load_kw": 405.6, "pv_kw": 0.0, "wind_kw": 426.684324234101, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 197.31567576589902, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 1411.597656351698, "soc_end_kwh": 1203.608671859855, "soc_pct": 40.120289061995166, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 3, "label": "D1 03:00", "load_kw": 616.1624861213896, "target_load_kw": 616.1624861213896, "served_kw": 616.1624861213896, "critical_load_kw": 400.5056159789033, "pv_kw": 0.0, "wind_kw": 400.29831377845386, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 215.86417234293577, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 1203.608671859855, "soc_end_kwh": 976.0678552495873, "soc_pct": 32.53559517498624, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 4, "label": "D1 04:00", "load_kw": 594.75, "target_load_kw": 594.75, "served_kw": 594.75, "critical_load_kw": 386.58750000000003, "pv_kw": 0.0, "wind_kw": 356.37941371801827, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 238.37058628198173, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 976.0678552495873, "soc_end_kwh": 724.8031953026707, "soc_pct": 24.160106510089022, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 5, "label": "D1 05:00", "load_kw": 565.5, "target_load_kw": 565.5, "served_kw": 563.6250739715621, "critical_load_kw": 367.575, "pv_kw": 0.0, "wind_kw": 302.923872337005, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 260.7012016345571, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "unserved_kw": 1.874926028437926, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 724.8031953026707, "soc_end_kwh": 450.0, "soc_pct": 15.0, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 6, "label": "D1 06:00", "load_kw": 536.25, "target_load_kw": 536.25, "served_kw": 249.6642599061014, "critical_load_kw": 348.5625, "pv_kw": 0.0, "wind_kw": 249.66425990610142, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 0.0, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "unserved_kw": 286.5857400938986, "critical_unserved_kw": 98.89824009389861, "scheduled_shed_kw": 0.0, "soc_start_kwh": 450.0, "soc_end_kwh": 450.0, "soc_pct": 15.0, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 2.842170943040401e-14 }, { "hour": 7, "label": "D1 07:00", "load_kw": 514.8375138786104, "target_load_kw": 514.8375138786104, "served_kw": 514.8375138786104, "critical_load_kw": 334.64438402109676, "pv_kw": 310.5828541230249, "wind_kw": 206.2974742058146, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 2.042814450229116, "discharge_kw": 0.0, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 450.0, "soc_end_kwh": 451.9379839499486, "soc_pct": 15.064599464998286, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 8, "label": "D1 08:00", "load_kw": 507.0, "target_load_kw": 507.0, "served_kw": 507.0, "critical_load_kw": 329.55, "pv_kw": 599.9999999999999, "wind_kw": 180.7192408866155, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 273.71924088661535, "discharge_kw": 0.0, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 451.9379839499486, "soc_end_kwh": 711.6108561341459, "soc_pct": 23.720361871138195, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 9, "label": "D1 09:00", "load_kw": 514.8375138786104, "target_load_kw": 514.8375138786104, "served_kw": 514.8375138786104, "critical_load_kw": 334.64438402109676, "pv_kw": 848.528137423857, "wind_kw": 177.58655053821244, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 511.27717408345904, "discharge_kw": 0.0, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 711.6108561341459, "soc_end_kwh": 1196.6509718615885, "soc_pct": 39.88836572871961, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 10, "label": "D1 10:00", "load_kw": 536.25, "target_load_kw": 536.25, "served_kw": 536.25, "critical_load_kw": 348.5625, "pv_kw": 1039.2304845413264, "wind_kw": 197.46976739534063, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 700.450251936667, "discharge_kw": 0.0, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 1196.6509718615885, "soc_end_kwh": 1861.156426989179, "soc_pct": 62.038547566305965, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 11, "label": "D1 11:00", "load_kw": 565.5, "target_load_kw": 565.5, "served_kw": 565.5, "critical_load_kw": 367.575, "pv_kw": 1159.110991546882, "wind_kw": 236.74878397671938, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 750.0, "discharge_kw": 0.0, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 80.35977552360123, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 1861.156426989179, "soc_end_kwh": 2572.668900527064, "soc_pct": 85.7556300175688, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 12, "label": "D1 12:00", "load_kw": 594.75, "target_load_kw": 594.75, "served_kw": 594.75, "critical_load_kw": 386.58750000000003, "pv_kw": 1200.0, "wind_kw": 288.2721286263616, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 134.21876376931428, "discharge_kw": 0.0, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 759.3033648570473, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 2572.668900527064, "soc_end_kwh": 2700.0, "soc_pct": 90.0, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 13, "label": "D1 13:00", "load_kw": 616.1624861213896, "target_load_kw": 616.1624861213896, "served_kw": 616.1624861213896, "critical_load_kw": 400.5056159789033, "pv_kw": 1159.110991546882, "wind_kw": 342.6590232354218, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 0.0, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 885.607528660914, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 2700.0, "soc_end_kwh": 2700.0, "soc_pct": 90.0, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 14, "label": "D1 14:00", "load_kw": 624.0, "target_load_kw": 624.0, "served_kw": 624.0, "critical_load_kw": 405.6, "pv_kw": 1039.2304845413264, "wind_kw": 390.0073274474063, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 0.0, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 805.2378119887326, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 2700.0, "soc_end_kwh": 2700.0, "soc_pct": 90.0, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 15, "label": "D1 15:00", "load_kw": 616.1624861213896, "target_load_kw": 616.1624861213896, "served_kw": 616.1624861213896, "critical_load_kw": 400.5056159789033, "pv_kw": 848.5281374238571, "wind_kw": 421.69640650610825, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 0.0, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 654.0620578085758, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 2700.0, "soc_end_kwh": 2700.0, "soc_pct": 90.0, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 16, "label": "D1 16:00", "load_kw": 594.75, "target_load_kw": 594.75, "served_kw": 594.75, "critical_load_kw": 386.58750000000003, "pv_kw": 599.9999999999999, "wind_kw": 431.9566773003231, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 0.0, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 437.206677300323, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 2700.0, "soc_end_kwh": 2700.0, "soc_pct": 90.0, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 17, "label": "D1 17:00", "load_kw": 728.0000000000001, "target_load_kw": 728.0000000000001, "served_kw": 728.0000000000001, "critical_load_kw": 473.2000000000001, "pv_kw": 310.58285412302524, "wind_kw": 418.9200677102829, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 0.0, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 1.5029218333080507, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 2700.0, "soc_end_kwh": 2700.0, "soc_pct": 90.0, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 18, "label": "D1 18:00", "load_kw": 698.7500000000001, "target_load_kw": 698.7500000000001, "served_kw": 698.7500000000001, "critical_load_kw": 454.1875000000001, "pv_kw": 1.4695761589768238e-13, "wind_kw": 384.9601336976085, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 313.78986630239143, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 2700.0, "soc_end_kwh": 2369.236438601575, "soc_pct": 78.97454795338584, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 19, "label": "D1 19:00", "load_kw": 677.3375138786105, "target_load_kw": 677.3375138786105, "served_kw": 677.3375138786105, "critical_load_kw": 440.2693840210968, "pv_kw": 0.0, "wind_kw": 336.25990953016844, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 341.07760434844204, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 2369.236438601575, "soc_end_kwh": 2009.7090757299661, "soc_pct": 66.9903025243322, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 20, "label": "D1 20:00", "load_kw": 669.5, "target_load_kw": 669.5, "served_kw": 669.5, "critical_load_kw": 435.175, "pv_kw": 0.0, "wind_kw": 281.6861720034586, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 387.8138279965414, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 2009.7090757299661, "soc_end_kwh": 1600.917407537351, "soc_pct": 53.36391358457836, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 21, "label": "D1 21:00", "load_kw": 514.8375138786104, "target_load_kw": 514.8375138786104, "served_kw": 514.8375138786104, "critical_load_kw": 334.64438402109676, "pv_kw": 0.0, "wind_kw": 231.17507968384618, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 283.66243419476416, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 1600.917407537351, "soc_end_kwh": 1301.9109479763224, "soc_pct": 43.39703159921074, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 22, "label": "D1 22:00", "load_kw": 536.25, "target_load_kw": 536.25, "served_kw": 536.25, "critical_load_kw": 348.5625, "pv_kw": 0.0, "wind_kw": 193.9231114161683, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 342.3268885838317, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 1301.9109479763224, "soc_end_kwh": 941.0667238951221, "soc_pct": 31.368890796504072, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }, { "hour": 23, "label": "D1 23:00", "load_kw": 565.4999999999999, "target_load_kw": 565.4999999999999, "served_kw": 565.4999999999999, "critical_load_kw": 367.57499999999993, "pv_kw": 0.0, "wind_kw": 176.71267720919099, "hydro_kw": 0.0, "generator_kw": 0.0, "charge_kw": 0.0, "discharge_kw": 388.7873227908089, "grid_import_kw": 0.0, "grid_export_kw": 0.0, "curtailed_kw": 0.0, "unserved_kw": 0.0, "critical_unserved_kw": 0.0, "scheduled_shed_kw": 0.0, "soc_start_kwh": 941.0667238951221, "soc_end_kwh": 531.2489020891062, "soc_pct": 17.70829673630354, "grid_connected": false, "state": "Island energized", "import_eur_kwh": 0.2, "variable_cost_eur": 0.0, "balance_residual_kw": 0.0 }] };
+})(HF || (HF = {}));
+var HF;
+(function (HF) {
+    HF.systemById = (id) => { const s = HF.HYBRID_CATALOG.systems.find(s => s.id === id); if (!s)
+        throw new Error('Unknown architecture.'); return s; };
+    HF.scenarioById = (id) => { const s = HF.HYBRID_CATALOG.scenarios.find(s => s.id === id); if (!s)
+        throw new Error('Unknown scenario.'); return s; };
+    HF.techById = (id) => HF.HYBRID_CATALOG.technologies.find(t => t.id === id) ?? { id, name: id === 'load' ? 'Site demand' : 'Grid connection', icon: 'grid', color: '#bcc9d9', boundary: id === 'load' ? 'Synthetic site demand; not a measured load profile.' : 'Utility connection; no power flow, fault or protection model.' };
+    function applicable(s, c) {
+        const required = { 'cloud-cover': 'solar', 'wind-lull': 'wind', 'low-river': 'hydro', 'generator-outage': 'generator', 'battery-trip': 'battery', 'aged-battery': 'battery', 'reserve-floor': 'battery' };
+        const asset = required[c.id];
+        if (asset && !s.technologies.includes(asset))
+            return false;
+        if (['outage-4h', 'outage-24h', 'outage-72h', 'zero-export', 'export-cap', 'import-cap', 'negative-prices', 'price-spike', 'reconnection', 'weak-grid'].includes(c.id))
+            return s.topology !== 'Off-grid';
+        if (c.id === 'renewable-drought')
+            return s.technologies.some(t => t === 'solar' || t === 'wind');
+        if (c.id === 'black-start')
+            return ['Off-grid', 'Islandable', 'Networked'].includes(s.topology);
+        return true;
+    }
+    HF.applicable = applicable;
+    function hybridTags(p) {
+        const s = HF.systemById(p.system_id);
+        const tags = [{ label: s.topology, reason: 'Derived from the architecture interconnection.' }, { label: s.coupling, reason: 'Coupling shown conceptually. Electrical calculations are AC-equivalent.' }, { label: p.control, reason: 'Declared reference/control assumption, not a validated dynamic model.' }, { label: s.mode === 'study' ? 'Study only' : 'Energy screen', reason: 'The numerical capability, not a safety or engineering approval.' }];
+        if (p.battery_kw > 0)
+            tags.push({ label: `${HF.fmt(p.battery_kwh / p.battery_kw, 1)} h storage`, reason: 'Nameplate kWh / AC kW; excludes usable SOC window and losses.' });
+        if (s.topology === 'Off-grid')
+            tags.push({ label: 'No grid support', reason: 'The off-grid connection has zero import and export capacity.' });
+        return tags;
+    }
+    HF.hybridTags = hybridTags;
+    function filterSystems(search, family, topology) {
+        const synonyms = { pv: 'solar', bess: 'battery', h2: 'hydrogen', standalone: 'off-grid', backup: 'island', gfm: 'gfm', gfl: 'gfl' };
+        const terms = search.toLowerCase().trim().split(/\s+/).filter(Boolean).map(t => synonyms[t] ?? t);
+        return HF.HYBRID_CATALOG.systems.filter(s => (family === 'All' || s.family === family) && (topology === 'All' || s.topology === topology) && terms.every(t => `${s.name} ${s.topology} ${s.family} ${s.control} ${s.coupling} ${s.technologies.join(' ')} ${s.description}`.toLowerCase().includes(t)));
+    }
+    HF.filterSystems = filterSystems;
+    function presetInputs(systemId, scenarioId = 'baseline') {
+        const s = HF.systemById(systemId), c = HF.scenarioById(scenarioId);
+        if (!applicable(s, c))
+            throw new Error('This scenario does not apply to the selected architecture.');
+        return { ...s.preset, scenario_id: scenarioId, hours: Math.max(s.preset.hours, Number(c.modifiers.hours ?? 0)) };
+    }
+    HF.presetInputs = presetInputs;
+    function parseConfiguration(raw) {
+        if (!raw || typeof raw !== 'object' || Array.isArray(raw))
+            throw new Error('Configuration must be a JSON object.');
+        const envelope = raw;
+        const value = (envelope.schema === 'helioforge.hybrid.v1' ? envelope.inputs : raw);
+        if (!value || typeof value !== 'object' || Array.isArray(value))
+            throw new Error('Missing configuration inputs.');
+        if (typeof value.system_id !== 'string' || typeof value.scenario_id !== 'string')
+            throw new Error('System and scenario IDs are required.');
+        const base = presetInputs(value.system_id, value.scenario_id);
+        const keys = Object.keys(base);
+        if (Object.keys(value).some(k => !keys.includes(k)))
+            throw new Error('Unknown configuration field.');
+        if (keys.some(k => !(k in value)))
+            throw new Error('Configuration has missing fields.');
+        const limits = { hours: [2, 168], solar_kw: [0, 1e6], wind_kw: [0, 1e6], hydro_kw: [0, 1e6], generator_kw: [0, 1e6], battery_kwh: [0, 1e7], battery_kw: [0, 1e6], load_kw: [.000001, 1e6], grid_import_kw: [0, 1e6], grid_export_kw: [0, 1e6], critical_fraction: [.000001, 1], initial_soc: [0, 1], min_soc: [0, .999999], max_soc: [.000001, 1], round_trip_efficiency: [.000001, 1], import_eur_kwh: [-2, 5], export_eur_kwh: [-2, 5], generator_eur_kwh: [0, 5] };
+        for (const [key, [lo, hi]] of Object.entries(limits)) {
+            const n = value[key];
+            if (typeof n !== 'number' || !Number.isFinite(n) || n < lo || n > hi)
+                throw new Error(`${key} must be a finite number between ${lo} and ${hi}.`);
+        }
+        if (!Number.isInteger(value.hours))
+            throw new Error('Hours must be an integer.');
+        if (!['GFL', 'GFM', 'Dual', 'Synchronous'].includes(String(value.control)))
+            throw new Error('Invalid control assumption.');
+        const p = value;
+        if (p.min_soc >= p.max_soc || p.initial_soc < p.min_soc || p.initial_soc > p.max_soc)
+            throw new Error('SOC must satisfy minimum <= initial <= maximum.');
+        if ((p.battery_kw === 0) !== (p.battery_kwh === 0))
+            throw new Error('Battery power and energy must both be zero or both positive.');
+        const s = HF.systemById(p.system_id), c = HF.scenarioById(p.scenario_id);
+        const assetFields = [{ key: 'solar_kw', tech: 'solar' }, { key: 'wind_kw', tech: 'wind' }, { key: 'hydro_kw', tech: 'hydro' }, { key: 'generator_kw', tech: 'generator' }, { key: 'battery_kwh', tech: 'battery' }];
+        if (assetFields.some(({ key, tech }) => Number(p[key]) > 0 && !s.technologies.includes(tech)))
+            throw new Error('A configured asset is absent from this architecture.');
+        if (s.topology === 'Off-grid' && (p.grid_import_kw || p.grid_export_kw))
+            throw new Error('Off-grid systems cannot import or export.');
+        if (p.hours < Number(c.modifiers.hours ?? 0))
+            throw new Error('This scenario needs a longer horizon.');
+        const floor = Number(c.modifiers.reserve_floor ?? p.min_soc);
+        if (floor > p.initial_soc || floor >= p.max_soc)
+            throw new Error('Reserve floor exceeds the initial SOC or usable window.');
+        return { ...p };
+    }
+    HF.parseConfiguration = parseConfiguration;
+    function gradeLesson(lesson, answers) {
+        const correct = lesson.quiz.filter((q, i) => answers[i] === q.answer).length;
+        return { passed: correct === lesson.quiz.length, correct, total: lesson.quiz.length };
+    }
+    HF.gradeLesson = gradeLesson;
+    function initialHybridState() {
+        let progress = [];
+        try {
+            const raw = JSON.parse(localStorage.getItem('hf-lessons-v2') ?? '[]');
+            if (Array.isArray(raw))
+                progress = [...new Set(raw.filter((x) => typeof x === 'string' && HF.HYBRID_CATALOG.lessons.some(l => l.id === x)))];
+        }
+        catch { /* Local persistence is optional. */ }
+        return { inputs: presetInputs('remote-triad'), result: structuredClone(HF.HYBRID_EXAMPLE), resultInputs: presetInputs('remote-triad'), search: '', family: 'All', topology: 'All', lessonId: 'lesson-remote-triad', progress, quizResult: null, objectId: 'battery', hour: 12, compare: [], busy: false, inputError: null, draft: null };
+    }
+    HF.initialHybridState = initialHybridState;
+    /** Canonical input equality is independent of JSON property order. Invalid drafts are never current. */
+    function configurationKey(inputs) {
+        if (!inputs)
+            return '';
+        return JSON.stringify(Object.keys(inputs).sort().map(k => [k, inputs[k]]));
+    }
+    HF.configurationKey = configurationKey;
+    HF.hybridDirty = (h) => Boolean(h.inputError) || configurationKey(h.inputs) !== configurationKey(h.resultInputs);
+})(HF || (HF = {}));
+var HF;
+(function (HF) {
+    HF.WORKSPACE_KEY = 'hf-workspace-v3';
+    const isRecord = (x) => Boolean(x) && typeof x === 'object' && !Array.isArray(x);
+    const isRunId = (x) => typeof x === 'string' && /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(x);
+    function timestamp(x) {
+        if (typeof x !== 'string' || x.length > 40 || !Number.isFinite(Date.parse(x)))
+            throw new Error('Invalid saved timestamp.');
+        return x;
+    }
+    /** Read only the documented schema, bound resource use, and validate every configuration. */
+    function parseWorkspace(raw) {
+        if (!isRecord(raw) || raw.schema !== 'helioforge.workspace.v1')
+            throw new Error('Unsupported workspace record.');
+        const allowed = ['schema', 'saved_at', 'inputs', 'lesson_id', 'last_run_id', 'pinned_run_ids', 'saved_setups'];
+        if (Object.keys(raw).some(k => !allowed.includes(k)))
+            throw new Error('Unknown workspace field.');
+        const inputs = HF.parseConfiguration(raw.inputs);
+        if (typeof raw.lesson_id !== 'string' || !HF.HYBRID_CATALOG.lessons.some(l => l.id === raw.lesson_id))
+            throw new Error('Unknown saved lesson.');
+        if (raw.last_run_id !== null && !isRunId(raw.last_run_id))
+            throw new Error('Invalid saved run reference.');
+        if (!Array.isArray(raw.pinned_run_ids) || raw.pinned_run_ids.length > 3 || !raw.pinned_run_ids.every(isRunId))
+            throw new Error('Invalid comparison references.');
+        if (new Set(raw.pinned_run_ids).size !== raw.pinned_run_ids.length)
+            throw new Error('Duplicate comparison references.');
+        if (!Array.isArray(raw.saved_setups) || raw.saved_setups.length > 20)
+            throw new Error('A workspace supports up to 20 saved setups.');
+        const saved = raw.saved_setups.map((s) => {
+            if (!isRecord(s) || typeof s.id !== 'string' || !/^setup-[a-f0-9-]{36}$/i.test(s.id))
+                throw new Error('Invalid setup identifier.');
+            if (typeof s.name !== 'string' || !s.name.trim() || s.name.length > 80)
+                throw new Error('A setup name must contain 1–80 characters.');
+            return { id: s.id, name: s.name.trim(), created_at: timestamp(s.created_at), inputs: HF.parseConfiguration(s.inputs) };
+        });
+        if (new Set(saved.map(s => s.id)).size !== saved.length)
+            throw new Error('Duplicate setup identifiers.');
+        return { schema: 'helioforge.workspace.v1', saved_at: timestamp(raw.saved_at), inputs, lesson_id: raw.lesson_id,
+            last_run_id: raw.last_run_id, pinned_run_ids: [...raw.pinned_run_ids], saved_setups: saved };
+    }
+    HF.parseWorkspace = parseWorkspace;
+    function initialChampionState(h) {
+        const c = { saved: [], storage: 'available', notice: '', lastRunId: null, pendingPins: [], restored: false, lastSavedAt: null, recoveryRaw: null };
+        let raw = null;
+        try {
+            raw = localStorage.getItem(HF.WORKSPACE_KEY);
+        }
+        catch {
+            c.storage = 'unavailable';
+            c.notice = 'Browser storage is unavailable. Keep this tab open and export your work.';
+            return c;
+        }
+        if (!raw)
+            return c;
+        try {
+            if (raw.length > 100_000)
+                throw new Error('Workspace record is too large.');
+            const saved = parseWorkspace(JSON.parse(raw));
+            h.inputs = saved.inputs;
+            h.result = null;
+            h.resultInputs = null;
+            h.lessonId = saved.lesson_id;
+            h.objectId = HF.systemById(h.inputs.system_id).technologies[0];
+            c.saved = saved.saved_setups;
+            c.lastRunId = saved.last_run_id;
+            c.pendingPins = saved.pinned_run_ids;
+            c.lastSavedAt = saved.saved_at;
+            c.notice = 'Your last valid setup is restored. Saved results are verified against the local API before display.';
+        }
+        catch {
+            c.recoveryRaw = raw;
+            c.notice = 'The saved workspace could not be read. It has not been overwritten. Open Saved setups to download or reset it.';
+        }
+        return c;
+    }
+    HF.initialChampionState = initialChampionState;
+    function workspaceCache(state) {
+        const h = state.hybrid, c = state.champion;
+        return { schema: 'helioforge.workspace.v1', saved_at: new Date().toISOString(), inputs: HF.parseConfiguration(h.inputs),
+            lesson_id: h.lessonId, last_run_id: !HF.hybridDirty(h) ? h.result?.run_id ?? c?.lastRunId ?? null : null,
+            pinned_run_ids: [...new Set([...h.compare.flatMap(r => r.result.run_id ? [r.result.run_id] : []), ...(c?.pendingPins ?? [])])].slice(0, 3),
+            saved_setups: c?.saved ?? [] };
+    }
+    HF.workspaceCache = workspaceCache;
+    /** A browser cache stores configurations and server IDs, never manufactured result objects or keys. */
+    function persistWorkspace(state) {
+        const c = state.champion;
+        if (!c || c.recoveryRaw || state.hybrid.inputError)
+            return false;
+        try {
+            const record = workspaceCache(state), serialized = JSON.stringify(record);
+            if (serialized.length > 100_000)
+                throw new Error('Workspace is too large. Export a setup and remove it from the shelf.');
+            localStorage.setItem(HF.WORKSPACE_KEY, serialized);
+            c.storage = 'available';
+            c.lastSavedAt = record.saved_at;
+            return true;
+        }
+        catch {
+            c.storage = 'unavailable';
+            c.notice = 'Work is available in this tab but could not be stored. Export before closing.';
+            return false;
+        }
+    }
+    HF.persistWorkspace = persistWorkspace;
+    /** This validates an API response, not an arbitrary user-uploaded result. */
+    function parseSavedHybrid(raw) {
+        if (!isRecord(raw) || raw.kind !== 'hybrid' || !isRunId(raw.run_id) || typeof raw.input_sha256 !== 'string' || !/^[a-f0-9]{64}$/i.test(raw.input_sha256))
+            throw new Error('This is not a saved hybrid run.');
+        const inputs = HF.parseConfiguration(raw.inputs), r = raw.result;
+        if (!isRecord(r) || r.model !== 'hybrid-greedy-hourly-v1' || r.system_id !== inputs.system_id || r.scenario_id !== inputs.scenario_id || r.duration_hours !== inputs.hours || !Array.isArray(r.schedule) || r.schedule.length !== inputs.hours)
+            throw new Error('The saved model result does not match its inputs.');
+        if (!Array.isArray(r.warnings) || !r.warnings.every(v => typeof v === 'string') || !Array.isArray(r.tags) || !r.tags.every(t => isRecord(t) && typeof t.label === 'string' && typeof t.reason === 'string'))
+            throw new Error('Saved result metadata is incomplete.');
+        const summaries = ['total_load_kwh', 'served_kwh', 'unserved_kwh', 'critical_unserved_kwh', 'critical_served_pct', 'load_served_pct', 'renewable_available_kwh', 'grid_import_kwh', 'grid_export_kwh', 'generator_kwh', 'curtailed_kwh', 'charged_kwh', 'discharged_kwh', 'initial_energy_kwh', 'terminal_energy_kwh', 'battery_energy_delta_kwh', 'effective_capacity_kwh', 'effective_power_kw', 'variable_cost_eur', 'max_balance_residual_kw'];
+        if (summaries.some(k => typeof r[k] !== 'number' || !Number.isFinite(r[k])))
+            throw new Error('Saved summary contains invalid numbers.');
+        const numeric = ['hour', 'load_kw', 'target_load_kw', 'served_kw', 'critical_load_kw', 'pv_kw', 'wind_kw', 'hydro_kw', 'generator_kw', 'charge_kw', 'discharge_kw', 'grid_import_kw', 'grid_export_kw', 'curtailed_kw', 'unserved_kw', 'critical_unserved_kw', 'scheduled_shed_kw', 'soc_start_kwh', 'soc_end_kwh', 'soc_pct', 'import_eur_kwh', 'variable_cost_eur', 'balance_residual_kw'];
+        if (r.schedule.some((p, i) => !isRecord(p) || p.hour !== i || numeric.some(k => typeof p[k] !== 'number' || !Number.isFinite(p[k])) || typeof p.label !== 'string' || typeof p.state !== 'string' || typeof p.grid_connected !== 'boolean'))
+            throw new Error('Saved schedule is incomplete.');
+        if (HF.systemById(inputs.system_id).mode === 'study' || HF.scenarioById(inputs.scenario_id).mode === 'study')
+            throw new Error('Study-only configurations cannot have solved results.');
+        const created = timestamp(raw.created_at);
+        return { kind: 'hybrid', run_id: raw.run_id, created_at: created, input_sha256: raw.input_sha256, inputs,
+            result: { ...r, run_id: raw.run_id, created_at: created, input_sha256: raw.input_sha256 } };
+    }
+    HF.parseSavedHybrid = parseSavedHybrid;
+    function commandEntries(query) {
+        const actions = [
+            { id: 'a-workspace', label: 'Saved setups', detail: 'Save, reopen and export your configurations', icon: 'layers', kind: 'action', target: 'workspace' },
+            { id: 'a-guide', label: 'Start a guided experiment', detail: 'A baseline-to-outage walkthrough', icon: 'play', kind: 'action', target: 'guide' },
+            { id: 'a-history', label: 'Analysis history', detail: 'Reopen or export a saved calculation', icon: 'clock', kind: 'action', target: 'history' },
+        ];
+        const entries = [...actions, ...HF.PAGES.map(p => ({ id: `p-${p.id}`, label: p.title, detail: 'Workspace', icon: p.icon, kind: 'page', target: p.id })),
+            ...HF.HYBRID_CATALOG.systems.map(s => ({ id: `s-${s.id}`, label: s.name, detail: `${s.topology} · ${s.mode === 'study' ? 'Study only' : 'Runnable screen'} · ${s.technologies.join(' ')}`, icon: 'layers', kind: 'system', target: s.id })),
+            ...HF.HYBRID_CATALOG.lessons.map(l => ({ id: `l-${l.id}`, label: l.title, detail: `Guided lesson · ${l.level}`, icon: 'document', kind: 'lesson', target: l.id }))];
+        const aliases = { pv: 'solar', bess: 'battery', h2: 'hydrogen' };
+        const terms = query.toLowerCase().trim().split(/\s+/).filter(Boolean);
+        const matches = entries.filter(e => terms.every(t => { const hay = `${e.label} ${e.detail}`.toLowerCase(); return hay.includes(t) || hay.includes(aliases[t] ?? t); }));
+        return matches.slice(0, 10);
+    }
+    HF.commandEntries = commandEntries;
+})(HF || (HF = {}));
+var HF;
+(function (HF) {
+    /** Small original orthographic software-3D renderer. Real 3D vertices and
+     * camera transforms, rendered to Canvas2D; no WebGL/CDN/runtime package.
+     * Energy links are conceptual, not solved branch power flows. */
+    function mountEnergyScene(canvas, system, reduced, onSelect) {
+        const ctx = canvas.getContext('2d');
+        if (!ctx)
+            return () => { };
+        let yaw = -.57, pitch = .55, zoom = 1, frame = 0, disposed = false, visible = true, drag = false, moved = false, lastX = 0, lastY = 0, lastTime = 0;
+        let width = 0, height = 0, phase = 0, dirty = true;
+        const pos = [[-1.7, 0, 1.0], [-1.9, 0, -1.15], [.45, 0, 1.25], [.5, 0, -1.15], [2.3, 0, .8], [2.2, 0, -1.35], [-.45, 0, .1]];
+        const ids = [...system.technologies, 'load', ...(system.topology === 'Off-grid' ? [] : ['grid'])];
+        const assets = ids.map((id, i) => ({ id, x: pos[i % pos.length][0], z: pos[i % pos.length][2], label: HF.techById(id).name }));
+        let hit = [];
+        const projection = (v) => {
+            const rx = v[0] * Math.cos(yaw) + v[2] * Math.sin(yaw), rz = -v[0] * Math.sin(yaw) + v[2] * Math.cos(yaw);
+            const scale = Math.min(width / 7.8, height / 6.0) * zoom;
+            return [width * .5 + rx * scale, height * .62 + (-v[1] * Math.cos(pitch) + rz * Math.sin(pitch)) * scale, v[1] * Math.sin(pitch) + rz * Math.cos(pitch)];
+        };
+        function draw() {
+            if (!ctx || width === 0)
+                return;
+            ctx.clearRect(0, 0, width, height);
+            const background = ctx.createRadialGradient(width * .48, height * .6, 15, width * .48, height * .6, width * .6);
+            background.addColorStop(0, '#172a2b');
+            background.addColorStop(1, '#0d171d');
+            ctx.fillStyle = background;
+            ctx.fillRect(0, 0, width, height);
+            const faces = [];
+            const face = (points, fill, stroke) => { faces.push({ points, fill, stroke }); };
+            function cube(x, y, z, w, h, d, colors) {
+                const a = [x - w / 2, y, z - d / 2], b = [x + w / 2, y, z - d / 2], c = [x + w / 2, y, z + d / 2], e = [x - w / 2, y, z + d / 2];
+                const up = (v) => [v[0], v[1] + h, v[2]];
+                face([a, b, up(b), up(a)], colors[2]);
+                face([b, c, up(c), up(b)], colors[1]);
+                face([c, e, up(e), up(c)], colors[2]);
+                face([e, a, up(a), up(e)], colors[1]);
+                face([up(a), up(b), up(c), up(e)], colors[0]);
+            }
+            function cylinder(x, z, h, color) {
+                const ring = [];
+                for (let i = 0; i < 12; i++) {
+                    const a = i * Math.PI / 6, b = (i + 1) * Math.PI / 6;
+                    const p = [x + .26 * Math.cos(a), .2, z + .26 * Math.sin(a)], q = [x + .26 * Math.cos(b), .2, z + .26 * Math.sin(b)];
+                    face([p, q, [q[0], h, q[2]], [p[0], h, p[2]]], i % 3 === 0 ? '#8e76b0' : color);
+                    ring.push([p[0], h, p[2]]);
+                }
+                face(ring, '#e0caff');
+            }
+            // Raised base and ground-plane grid.
+            cube(0, -.15, 0, 6.25, .15, 4.45, ['#1a3033', '#132226', '#101e24']);
+            for (let x = -3; x <= 3; x += .5)
+                face([[x, .005, -2.1], [x + .008, .005, -2.1], [x + .008, .005, 2.1], [x, .005, 2.1]], '#284345');
+            for (let z = -2; z <= 2; z += .5)
+                face([[-3, .005, z], [3, .005, z], [3, .005, z + .008], [-3, .005, z + .008]], '#284345');
+            for (const a of assets) {
+                const { id, x, z } = a, tech = HF.techById(id);
+                cube(x, .02, z, 1.26, .09, 1.02, ['#304449', '#24353d', '#1b2b31']);
+                if (id === 'solar' || id === 'csp') {
+                    for (let row = 0; row < 2; row++)
+                        for (let col = 0; col < 3; col++) {
+                            const px = x - .49 + col * .34, pz = z - .38 + row * .43;
+                            cube(px + .14, .12, pz + .17, .025, .22, .025, ['#d5e7ef', '#607b8e', '#435d70']);
+                            face([[px, .40, pz], [px + .30, .40, pz], [px + .30, .23, pz + .35], [px, .23, pz + .35]], '#36658b', '#85bdda');
+                            face([[px + .145, .40, pz], [px + .151, .40, pz], [px + .151, .23, pz + .35], [px + .145, .23, pz + .35]], '#9ecdd7');
+                        }
+                }
+                else if (id === 'wind') {
+                    cube(x, .1, z, .075, 1.9, .075, ['#e4edf2', '#a6c2cc', '#779ba8']);
+                    cube(x, 1.96, z, .24, .18, .19, ['#f1f7f8', '#b4cad0', '#88a9b5']);
+                    for (let j = 0; j < 3; j++) {
+                        const ang = phase + j * Math.PI * 2 / 3;
+                        const vx = Math.cos(ang), vy = Math.sin(ang);
+                        face([[x - vy * .05, 2 + vx * .05, z + .15], [x + vx * .94 - vy * .028, 2 + vy * .94 + vx * .028, z + .15], [x + vx * .55 + vy * .07, 2 + vy * .55 - vx * .07, z + .15]], '#e1f1f3', '#94cad9');
+                    }
+                }
+                else if (id === 'battery') {
+                    cube(x, .12, z, 1.06, .58, .65, ['#c5ed9e', '#66864b', '#8cab65']);
+                    for (let k = 0; k < 8; k++)
+                        cube(x - .45 + k * .125, .16, z + .332, .025, .49, .016, ['#90b272', '#4b6639', '#597e43']);
+                    cube(x - .52, .18, z, .013, .36, .38, ['#102329', '#162b2d', '#1a3535']);
+                    cube(x - .529, .36, z - .08, .02, .09, .12, ['#b9fa8b', '#b9fa8b', '#b9fa8b']);
+                }
+                else if (['hydrogen', 'electrolyzer', 'fuelcell'].includes(id)) {
+                    cylinder(x - .3, z, .92, '#b49ad3');
+                    cylinder(x + .3, z, .92, '#bca5d7');
+                    cube(x, .11, z + .32, .92, .15, .17, ['#d5b8ff', '#746281', '#806c93']);
+                }
+                else if (id === 'load') {
+                    cube(x, .12, z, .82, 1.05, .68, ['#708998', '#314651', '#3f5663']);
+                    cube(x, .12, z + .32, 1.0, .22, .2, ['#8a9ea7', '#425967', '#506d7b']);
+                    for (let k = 0; k < 3; k++)
+                        for (let j = 0; j < 3; j++)
+                            cube(x - .28 + k * .25, .38 + j * .24, z + .35, .12, .12, .018, ['#91d8de', '#91d8de', '#a9e2de']);
+                    cube(x, 1.18, z, .38, .09, .30, ['#c9d9d9', '#879e9f', '#718d91']);
+                }
+                else if (id === 'grid' || id === 'network') {
+                    cube(x - .15, .1, z, .035, 1.25, .035, ['#d5dfda', '#9baca8', '#738b8b']);
+                    cube(x + .15, .1, z, .035, 1.25, .035, ['#d5dfda', '#9baca8', '#738b8b']);
+                    cube(x, 1.10, z, .70, .055, .055, ['#cadad7', '#91aaa7', '#718b89']);
+                    cube(x, .77, z, .53, .04, .04, ['#cadad7', '#91aaa7', '#718b89']);
+                    cube(x, .12, z, .6, .4, .48, ['#b9ccc4', '#637f7e', '#789592']);
+                }
+                else if (['hydro', 'pumpedhydro', 'tidal', 'wave'].includes(id)) {
+                    cube(x, .12, z, .99, .16, .75, ['#599dc1', '#376582', '#437c96']);
+                    for (let j = 0; j < 3; j++)
+                        cube(x - .33 + j * .33, .29, z, .09, .42, .56, ['#bbcfd7', '#698998', '#819da8']);
+                }
+                else {
+                    cube(x, .12, z, .92, .6, .68, [tech.color, '#536074', '#727b90']);
+                    for (let j = 0; j < 3; j++)
+                        cube(x - .29 + j * .3, .74, z, .11, .25, .12, ['#d5dae1', '#8994a2', '#647180']);
+                }
+            }
+            faces.forEach(f => f.depth = f.points.reduce((s, v) => s + projection(v)[2], 0) / f.points.length);
+            faces.sort((a, b) => (a.depth ?? 0) - (b.depth ?? 0));
+            for (const f of faces) {
+                ctx.beginPath();
+                f.points.forEach((v, i) => { const [x, y] = projection(v); if (i === 0)
+                    ctx.moveTo(x, y);
+                else
+                    ctx.lineTo(x, y); });
+                ctx.closePath();
+                ctx.fillStyle = f.fill;
+                ctx.fill();
+                if (f.stroke) {
+                    ctx.strokeStyle = f.stroke;
+                    ctx.lineWidth = .7;
+                    ctx.stroke();
+                }
+            }
+            // Schematic connector route overlays; these are NOT numerical branch flows.
+            for (const a of assets) {
+                const b = projection([a.x, .11, a.z]), hub = projection([.05, .11, .05]);
+                ctx.strokeStyle = HF.techById(a.id).color + '66';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([3, 5]);
+                ctx.beginPath();
+                ctx.moveTo(b[0], b[1]);
+                ctx.lineTo(hub[0], hub[1]);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                if (!reduced) {
+                    const k = (phase * .20) % 1;
+                    ctx.fillStyle = HF.techById(a.id).color;
+                    ctx.beginPath();
+                    ctx.arc(b[0] + (hub[0] - b[0]) * k, b[1] + (hub[1] - b[1]) * k, 2.2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            hit = [];
+            ctx.font = '500 10px "Segoe UI",sans-serif';
+            ctx.textAlign = 'center';
+            for (const a of assets) {
+                const p = projection([a.x, .08, a.z + .75]), w = ctx.measureText(a.label).width + 19;
+                ctx.fillStyle = '#101e28e8';
+                ctx.beginPath();
+                ctx.roundRect(p[0] - w / 2, p[1] - 9, w, 20, 5);
+                ctx.fill();
+                ctx.fillStyle = HF.techById(a.id).color;
+                ctx.fillText(a.label, p[0], p[1] + 5);
+                hit.push({ id: a.id, x: p[0], y: p[1] - 20 });
+            }
+        }
+        const resize = () => { const rect = canvas.getBoundingClientRect(); width = rect.width; height = rect.height; const dpr = Math.min(devicePixelRatio || 1, 2); canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); dirty = true; draw(); };
+        const observer = new ResizeObserver(resize);
+        observer.observe(canvas);
+        const intersection = new IntersectionObserver(e => { visible = e[0]?.isIntersecting ?? true; dirty = true; });
+        intersection.observe(canvas);
+        const down = (e) => { drag = true; moved = false; lastX = e.clientX; lastY = e.clientY; canvas.setPointerCapture(e.pointerId); };
+        const move = (e) => { if (!drag)
+            return; const dx = e.clientX - lastX, dy = e.clientY - lastY; if (Math.abs(dx) + Math.abs(dy) > 2)
+            moved = true; yaw += dx * .006; pitch = HF.clamp(pitch + dy * .002, .25, 1.05); lastX = e.clientX; lastY = e.clientY; dirty = true; draw(); };
+        const up = (e) => { drag = false; if (!moved) {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left, y = e.clientY - rect.top;
+            const nearest = [...hit].sort((a, b) => Math.hypot(a.x - x, a.y - y) - Math.hypot(b.x - x, b.y - y))[0];
+            if (nearest && Math.hypot(nearest.x - x, nearest.y - y) < 70)
+                onSelect(nearest.id);
+        } };
+        const key = (e) => { if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', '+', '-', 'Home'].includes(e.key)) {
+            e.preventDefault();
+            if (e.key === 'ArrowLeft')
+                yaw -= .15;
+            if (e.key === 'ArrowRight')
+                yaw += .15;
+            if (e.key === 'ArrowUp')
+                pitch = HF.clamp(pitch + .1, .25, 1.05);
+            if (e.key === 'ArrowDown')
+                pitch = HF.clamp(pitch - .1, .25, 1.05);
+            if (e.key === '+')
+                zoom = HF.clamp(zoom + .1, .7, 1.4);
+            if (e.key === '-')
+                zoom = HF.clamp(zoom - .1, .7, 1.4);
+            if (e.key === 'Home') {
+                yaw = -.57;
+                pitch = .55;
+                zoom = 1;
+            }
+            dirty = true;
+            draw();
+        } };
+        const command = (e) => { const cmd = e.detail; key(new KeyboardEvent('keydown', { key: cmd })); };
+        canvas.addEventListener('pointerdown', down);
+        canvas.addEventListener('pointermove', move);
+        canvas.addEventListener('pointerup', up);
+        canvas.addEventListener('pointercancel', up);
+        canvas.addEventListener('keydown', key);
+        canvas.addEventListener('scene-command', command);
+        function tick(time) { if (disposed)
+            return; if (visible && !document.hidden && (dirty || !reduced) && time - lastTime > 40) {
+            phase += reduced ? 0 : .025;
+            draw();
+            lastTime = time;
+            dirty = false;
+        } frame = requestAnimationFrame(tick); }
+        resize();
+        frame = requestAnimationFrame(tick);
+        return () => { disposed = true; cancelAnimationFrame(frame); observer.disconnect(); intersection.disconnect(); canvas.removeEventListener('pointerdown', down); canvas.removeEventListener('pointermove', move); canvas.removeEventListener('pointerup', up); canvas.removeEventListener('pointercancel', up); canvas.removeEventListener('keydown', key); canvas.removeEventListener('scene-command', command); };
+    }
+    HF.mountEnergyScene = mountEnergyScene;
+})(HF || (HF = {}));
+var HF;
+(function (HF) {
+    const hx = HF.escapeHTML;
+    const familyIcons = { Solar: 'sun', Wind: 'wind', Microgrids: 'grid', Hydro: 'activity', Thermal: 'activity', Hydrogen: 'flask', Mobility: 'bolt', Advanced: 'atom', Networks: 'layers' };
+    function chip(label, reason = '', color = '') { return `<span class="smart-tag" ${reason ? `title="${hx(reason)}"` : ''} ${color ? `style="--tag-color:${color}"` : ''}>${hx(label)}</span>`; }
+    function hTitle(title, copy, extra = '') { return `<div class="section-heading"><div><h2>${hx(title)}</h2><p>${hx(copy)}</p></div>${extra}</div>`; }
+    function numberField(p, key, label, unit, min = 0, max = 1e6, step = 'any') { return `<label class="field"><span>${hx(label)}</span><div class="input-unit"><input type="number" name="${key}" value="${hx(p[key])}" min="${min}" max="${max}" step="${step}" required><span>${unit}</span></div></label>`; }
+    function hybridLibrary(h) {
+        const rows = HF.filterSystems(h.search, h.family, h.topology);
+        return `<div class="library-summary" role="status"><span>${rows.length} matching architectures</span><span>19 runnable screens · 17 study-only</span></div><div class="system-grid">${rows.length ? rows.map(s => `<button class="system-card ${h.inputs.system_id === s.id ? 'chosen' : ''}" data-system="${s.id}" style="--card-color:${HF.techById(s.technologies[0]).color}" aria-pressed="${h.inputs.system_id === s.id}"><div class="system-card-top"><span class="system-symbol">${HF.icon(familyIcons[s.family] ?? 'layers', 20)}</span><small>${hx(s.family)}</small><span class="mode-dot ${s.mode}" title="${s.mode === 'screening' ? 'Runnable hourly screen' : 'Study-only architecture'}"></span></div><strong>${hx(s.name)}</strong><p>${hx(s.description)}</p><div>${chip(s.topology)}${chip(s.coupling)}${chip(s.mode === 'screening' ? 'Runnable' : 'Study only')}</div></button>`).join('') : '<div class="empty">No architectures match. Try “PV”, “BESS”, “H2” or clear the filters.</div>'}</div>`;
+    }
+    HF.hybridLibrary = hybridLibrary;
+    function assetInspector(h) {
+        const t = HF.techById(h.objectId), p = h.inputs;
+        const key = { solar: 'solar_kw', wind: 'wind_kw', battery: 'battery_kwh', hydro: 'hydro_kw', generator: 'generator_kw', load: 'load_kw', grid: 'grid_import_kw' };
+        const field = key[t.id];
+        return `<div class="asset-inspect" style="--asset-color:${t.color}"><span class="asset-symbol">${HF.icon(t.icon, 22)}</span><div><small>SELECTED OBJECT</small><strong>${hx(t.name)}</strong></div>${field ? `<b>${HF.fmt(Number(p[field]))}<small>${t.id === 'battery' ? 'kWh' : 'kW'}</small></b>` : ''}</div><p class="asset-boundary">${hx(t.boundary)}</p>`;
+    }
+    HF.assetInspector = assetInspector;
+    function hybridResults(state) {
+        const h = state.hybrid, r = h.result, s = HF.systemById(h.inputs.system_id), c = HF.scenarioById(h.inputs.scenario_id);
+        if (h.inputError)
+            return `<section class="panel empty-result input-error-result"><span>${HF.icon('alert', 30)}</span><div><h2>Check your configuration.</h2><p>${hx(h.inputError)}</p><p>Earlier results are hidden until these inputs are valid and a matching run is available.</p></div></section>`;
+        if (s.mode === 'study' || c.mode === 'study')
+            return `<section class="panel study-boundary"><span class="study-icon">${HF.icon('flask', 32)}</span><div><span class="eyebrow">STUDY-ONLY / NO FABRICATED OUTPUT</span><h2>A richer system needs a richer model.</h2><p>${hx(s.learning_focus)} ${hx(c.mode === 'study' ? c.description : '')}</p><p><strong>Evidence to collect:</strong> ${hx(s.evidence)}</p><button class="btn secondary" data-lesson="lesson-${s.id}">Open this architecture’s lesson ${HF.icon('arrow', 16)}</button></div></section>`;
+        if (!r || HF.hybridDirty(h))
+            return `<section class="panel empty-result"><span>${HF.icon('activity', 30)}</span><div><h2>${r ? 'Configuration changed. Results need a new run.' : 'Your next result starts here.'}</h2><p>Run the hourly energy screen to calculate this configuration. No old result is presented as a new calculation.</p>${!state.connected ? '<p>Start the Python application for new runs. Architecture exploration and lessons work in the standalone preview.</p>' : ''}</div></section>`;
+        const point = r.schedule[HF.clamp(h.hour, 0, r.schedule.length - 1)];
+        return `<div class="hybrid-metrics">
+      ${[{ title: 'Critical load served', value: `${HF.fmt(r.critical_served_pct, 1)}%`, sub: `${HF.fmt(r.critical_unserved_kwh, 1)} kWh critical shortfall`, tone: '#b4ee83', ico: 'shield' },
+            { title: 'Total load served', value: `${HF.fmt(r.load_served_pct, 1)}%`, sub: `${HF.fmt(r.unserved_kwh, 1)} kWh incl. planned shedding`, tone: '#73d9ff', ico: 'activity' },
+            { title: 'Grid energy imported', value: `${HF.fmt(r.grid_import_kwh / 1000, 2)} MWh`, sub: `${r.duration_hours} modeled hours · not annual`, tone: '#d0aeff', ico: 'grid' },
+            { title: 'Terminal battery energy', value: `${HF.fmt(r.terminal_energy_kwh / 1000, 2)} MWh`, sub: `${HF.fmt(r.initial_energy_kwh / 1000, 2)} MWh initial · non-cyclic`, tone: '#f8c76d', ico: 'battery' }].map(m => `<article class="panel hybrid-metric" style="--metric-tone:${m.tone}"><div><span>${m.title}</span>${HF.icon(m.ico, 17)}</div><strong>${m.value}</strong><small>${m.sub}</small></article>`).join('')}
+    </div><section class="panel hybrid-dispatch">${hTitle('The energy story, hour by hour', `${HF.systemById(r.system_id).name} · ${HF.scenarioById(r.scenario_id).name} · synthetic greedy policy`, `<div class="h-actions"><button class="btn secondary small" data-hybrid-action="pin">${HF.icon('layers', 15)} Pin to compare</button><button class="btn secondary small" data-hybrid-action="csv">${HF.icon('download', 15)} CSV</button></div>`)}
+    <div class="legend"><span><i style="background:#73d9ff"></i>Demand</span><span><i style="background:#f8c76d"></i>Solar</span><span><i style="background:#89e2cd"></i>Wind</span><span><i style="background:#b4ee83"></i>Battery discharge</span><span><i style="background:#d0aeff"></i>Grid import</span></div>
+    ${HF.lineChart(r.schedule.map(x => x.label), [{ name: 'Demand', values: r.schedule.map(x => x.load_kw), color: '#73d9ff', dashed: true }, { name: 'Solar', values: r.schedule.map(x => x.pv_kw), color: '#f8c76d', area: true }, { name: 'Wind', values: r.schedule.map(x => x.wind_kw), color: '#89e2cd' }, { name: 'Battery discharge', values: r.schedule.map(x => x.discharge_kw), color: '#b4ee83' }, { name: 'Grid import', values: r.schedule.map(x => x.grid_import_kw), color: '#d0aeff' }], { height: 228, unit: 'kW' })}
+    <label class="hour-scrubber"><span>Inspect interval</span><input id="hybrid-hour" type="range" min="0" max="${r.schedule.length - 1}" value="${h.hour}" aria-label="Inspect simulation interval"><output id="hour-label">${hx(point.label)}</output></label><div id="interval-readout">${intervalReadout(point)}</div>
+    <div class="run-bottom"><span>${r.run_id ? 'Saved API run' : 'Bundled example'} · max. balance residual ${r.max_balance_residual_kw.toExponential(1)} kW</span><span>Variable energy cost ${HF.money(r.variable_cost_eur)} <b>≠</b> project economics</span></div>
+    <details class="method-details"><summary>${HF.icon('shield', 15)} Read assumptions, provenance & model limits</summary><div>${r.warnings.map(w => `<p>${hx(w)}</p>`).join('')}<p>Run ID: ${hx(r.run_id ?? 'bundled-example')}. Modeled cost excludes unserved-load penalties; compare service outcomes before cost.</p></div></details>
+    <details class="method-details"><summary>Accessible interval data table</summary><div class="table-scroll"><table class="h-data-table"><thead><tr>${['Interval', 'Demand kW', 'Served kW', 'Import kW', 'SOC kWh', 'Critical shortfall kW', 'State'].map(t => `<th>${t}</th>`).join('')}</tr></thead><tbody>${r.schedule.map(x => `<tr><td>${hx(x.label)}</td><td>${HF.fmt(x.load_kw, 1)}</td><td>${HF.fmt(x.served_kw, 1)}</td><td>${HF.fmt(x.grid_import_kw, 1)}</td><td>${HF.fmt(x.soc_end_kwh, 1)}</td><td>${HF.fmt(x.critical_unserved_kw, 1)}</td><td>${hx(x.state)}</td></tr>`).join('')}</tbody></table></div></details></section>`;
+    }
+    HF.hybridResults = hybridResults;
+    function intervalReadout(p) { return `<div class="interval-readout"><span><small>OPERATING STATE</small><b>${hx(p.state)}</b></span><span><small>LOAD SERVED</small><b>${HF.fmt(p.served_kw, 1)} kW</b></span><span><small>BATTERY SOC</small><b>${HF.fmt(p.soc_pct, 1)}%</b></span><span><small>CRITICAL SHORTFALL</small><b>${HF.fmt(p.critical_unserved_kw, 1)} kW</b></span></div>`; }
+    HF.intervalReadout = intervalReadout;
+    function hybridView(state) {
+        const h = state.hybrid, p = h.inputs, s = HF.systemById(p.system_id), c = HF.scenarioById(p.scenario_id);
+        const scenarios = HF.HYBRID_CATALOG.scenarios.filter(x => HF.applicable(s, x));
+        const advanced = numberField(p, 'initial_soc', 'Initial SOC', 'fraction', 0, 1) + numberField(p, 'min_soc', 'Minimum SOC', 'fraction', 0, 1) + numberField(p, 'max_soc', 'Maximum SOC', 'fraction', 0, 1) + numberField(p, 'round_trip_efficiency', 'Round-trip efficiency', 'fraction', .01, 1) + numberField(p, 'import_eur_kwh', 'Import tariff', '€/kWh', -2, 5) + numberField(p, 'export_eur_kwh', 'Export tariff', '€/kWh', -2, 5) + numberField(p, 'generator_eur_kwh', 'Generator variable cost', '€/kWh', 0, 5);
+        return `<section class="forge-heading"><div><span class="eyebrow">HYBRID SYSTEMS / INTERACTIVE ENERGY LAB</span><h2>Many technologies.<br><em>One connected perspective.</em></h2><p>Build intuition. Stress the assumptions. Make every energy path visible.</p></div><div class="forge-counts"><div><strong>36</strong><span>architectures</span></div><div><strong>24</strong><span>scenarios</span></div><div><strong>36</strong><span>guided lessons</span></div></div></section>
+    <div class="hybrid-workbench"><section class="panel scene-panel"><div class="scene-heading"><div><span class="eyebrow">CONFIGURATION ${String(HF.HYBRID_CATALOG.systems.indexOf(s) + 1).padStart(2, '0')}</span><h3>${hx(s.name)}</h3></div><span class="scene-live">${HF.icon('layers', 13)} SOFTWARE 3D</span></div><div class="scene-tags" id="smart-tags">${HF.hybridTags(p).map(t => chip(t.label, t.reason)).join('')}</div><canvas id="energy-scene" tabindex="0" role="img" aria-label="Interactive conceptual 3D ${hx(s.name)}. Drag to orbit; arrow keys change camera, plus/minus zoom, Home resets. Use asset buttons below for a text alternative.">Conceptual energy architecture. Use the accessible asset selector below.</canvas><div class="scene-controls"><span>Drag to orbit · select an asset</span><div>${[['ArrowLeft', 'Rotate left', '↶'], ['ArrowRight', 'Rotate right', '↷'], ['+', 'Zoom in', '+'], ['-', 'Zoom out', '−'], ['Home', 'Reset camera', '⌂']].map(([cmd, label, txt]) => `<button data-scene-command="${cmd}" aria-label="${label}">${txt}</button>`).join('')}</div></div><div class="asset-selectors" aria-label="Select an energy asset">${[...s.technologies, 'load', ...(s.topology === 'Off-grid' ? [] : ['grid'])].map(id => `<button data-asset="${id}" class="${h.objectId === id ? 'selected' : ''}" style="--asset-color:${HF.techById(id).color}" aria-pressed="${h.objectId === id}">${HF.icon(HF.techById(id).icon, 15)}${hx(HF.techById(id).name)}</button>`).join('')}</div><div id="asset-inspector">${assetInspector(h)}</div><p class="scene-disclaimer">Conceptual layout and connections. Objects are not to scale; animated links are not calculated branch flows.</p></section>
+    <form class="panel configuration-panel" id="hybrid-config"><div class="section-heading"><div><h2>Make it your scenario</h2><p>Explicit assumptions. Reproducible inputs.</p></div>${HF.icon('sliders', 20)}</div>
+    <label class="field"><span>Architecture preset</span><select id="hybrid-system">${HF.HYBRID_CATALOG.systems.map(x => `<option value="${x.id}" ${s.id === x.id ? 'selected' : ''}>${hx(x.name)}${x.mode === 'study' ? ' · study' : ''}</option>`).join('')}</select></label>
+    <div class="form-grid">${s.technologies.includes('solar') ? numberField(p, 'solar_kw', 'Solar PV', 'kW') : ''}${s.technologies.includes('wind') ? numberField(p, 'wind_kw', 'Wind rating', 'kW') : ''}${s.technologies.includes('hydro') ? numberField(p, 'hydro_kw', 'Hydro rating', 'kW') : ''}${s.technologies.includes('generator') ? numberField(p, 'generator_kw', 'Backup generator', 'kW') : ''}${s.technologies.includes('battery') ? numberField(p, 'battery_kwh', 'Battery energy', 'kWh', 0, 1e7) + numberField(p, 'battery_kw', 'Battery power', 'kW') : ''}${numberField(p, 'load_kw', 'Base site demand', 'kW', .01)}${numberField(p, 'hours', 'Model horizon', 'hours', 2, 168, '1')}</div>
+    <details class="config-advanced"><summary>Control, grid & operating assumptions ${HF.icon('down', 13)}</summary><label class="field"><span>Reference/control assumption</span><select name="control">${['GFL', 'GFM', 'Dual', 'Synchronous'].map(x => `<option ${p.control === x ? 'selected' : ''}>${x}</option>`).join('')}</select></label><div class="form-grid">${s.topology !== 'Off-grid' ? numberField(p, 'grid_import_kw', 'Import limit', 'kW') + numberField(p, 'grid_export_kw', 'Export limit', 'kW') : ''}${numberField(p, 'critical_fraction', 'Critical demand share', 'fraction', .01, 1)}${advanced}</div></details>
+    <div class="configuration-actions"><button type="submit" id="run-hybrid" class="btn primary full" ${!state.connected || h.busy || s.mode === 'study' || c.mode === 'study' ? 'disabled' : ''}>${HF.icon(h.busy ? 'clock' : 'play', 17)}${h.busy ? 'Running energy screen…' : s.mode === 'study' || c.mode === 'study' ? 'Study-only configuration' : 'Run energy screen'}</button><p>${state.connected ? 'Hourly, synthetic, non-optimized. Not operational control.' : 'Preview mode · start the Python API for new calculations.'}</p><div><button type="button" class="text-link" data-hybrid-action="export">${HF.icon('download', 14)} Export setup</button><button type="button" class="text-link" data-hybrid-action="import">${HF.icon('document', 14)} Import</button><button type="button" class="text-link" data-hybrid-action="reset">Reset</button></div></div></form></div>
+    <section class="panel scenario-panel">${hTitle('Change the conditions. See the consequence.', `${scenarios.length} applicable presets · numerical and study-only scopes remain distinct.`, `<button class="text-link" data-lesson="lesson-${s.id}">Guided lesson ${HF.icon('arrow', 14)}</button>`)}<div class="scenario-chips">${scenarios.map(x => `<button data-scenario="${x.id}" class="scenario-chip ${x.id === c.id ? 'active' : ''}" aria-pressed="${x.id === c.id}" title="${hx(x.description)}">${HF.icon(x.mode === 'study' ? 'flask' : x.category === 'Weather' ? 'sun' : x.category === 'Resilience' ? 'shield' : 'activity', 14)}${hx(x.name)}${x.mode === 'study' ? '<small>STUDY</small>' : ''}</button>`).join('')}</div><div class="scenario-explainer"><strong>${hx(c.name)}</strong><span>${hx(c.description)}</span></div></section>
+    <div id="hybrid-output">${hybridResults(state)}</div>
+    <section class="panel library-panel" id="architecture-library">${hTitle('The hybrid architecture atlas', 'Search technologies, interconnection, use case or control. No claim of exhaustive coverage.')}<div class="library-tools"><label class="search-field">${HF.icon('search', 17)}<input id="hybrid-search" type="search" value="${hx(h.search)}" placeholder="Try solar, off-grid, BESS or H2…" aria-label="Search hybrid architectures"></label><label class="select-wrap"><span class="sr-only">Architecture family</span><select id="hybrid-family">${['All', ...new Set(HF.HYBRID_CATALOG.systems.map(x => x.family))].map(x => `<option ${h.family === x ? 'selected' : ''}>${x}</option>`).join('')}</select></label><label class="select-wrap"><span class="sr-only">Interconnection topology</span><select id="hybrid-topology">${['All', ...new Set(HF.HYBRID_CATALOG.systems.map(x => x.topology))].map(x => `<option ${h.topology === x ? 'selected' : ''}>${x}</option>`).join('')}</select></label><button class="btn secondary small" data-hybrid-action="clear-filters">Clear</button></div><div id="hybrid-library-results">${hybridLibrary(h)}</div></section>`;
+    }
+    HF.hybridView = hybridView;
+    function lessonsView(state) {
+        const h = state.hybrid, l = HF.HYBRID_CATALOG.lessons.find(x => x.id === h.lessonId) ?? HF.HYBRID_CATALOG.lessons[0], s = HF.systemById(l.system_id);
+        return `<section class="lesson-hero panel"><div><span class="eyebrow">LEARNING STUDIO / UNDERSTAND BEFORE YOU OPTIMIZE</span><h2>Small experiments.<br><em>Stronger energy intuition.</em></h2><p>Each architecture has a guided lesson, a scenario experiment and an explained self-check.</p></div><div class="achievement-orb">${HF.icon('trophy', 48)}<strong>${h.progress.length}<small> / 36</small></strong><span>self-checks passed</span></div></section><div class="lesson-layout"><aside class="panel lesson-list"><div><h2>Your learning path</h2><p>Foundation → Applied → Advanced</p></div>${HF.HYBRID_CATALOG.lessons.map((x, i) => `<button data-lesson="${x.id}" class="${l.id === x.id ? 'selected' : ''}"><span class="lesson-number ${h.progress.includes(x.id) ? 'done' : ''}">${h.progress.includes(x.id) ? HF.icon('check', 14) : String(i + 1).padStart(2, '0')}</span><span><strong>${hx(x.title)}</strong><small>${x.level} · ${x.minutes} min activity</small></span></button>`).join('')}</aside><section class="panel lesson-content"><div class="lesson-meta">${chip(l.level)}${chip(s.topology)}${chip(s.mode === 'screening' ? 'Hands-on energy screen' : 'Advanced model-design study')}</div><h2>${hx(l.title)}</h2><p class="lesson-description">${hx(s.description)}</p><div class="lesson-objectives"><h3>By the end, you should be able to…</h3>${l.objectives.map(x => `<p>${HF.icon('target', 15)} ${hx(x)}</p>`).join('')}</div><div class="lesson-steps">${l.steps.map((x, i) => `<article><span>0${i + 1}</span><div><h3>${hx(x.title)}</h3><p>${hx(x.body)}</p></div></article>`).join('')}</div><div class="h-actions"><button class="btn primary" data-hybrid-action="launch-lesson">${HF.icon('play', 16)} Load lesson configuration</button><button class="btn secondary" data-hybrid-action="export-lesson">${HF.icon('download', 16)} Export lesson plan</button></div><form id="lesson-quiz"><div class="section-heading"><div><h2>Check your understanding</h2><p>Local practice only. Not a qualification or verified assessment.</p></div>${HF.icon('trophy', 22)}</div>${l.quiz.map((q, i) => `<fieldset><legend>${i + 1}. ${hx(q.question)}</legend>${q.options.map((o, j) => `<label class="quiz-option"><input type="radio" name="q${i}" value="${j}" required><span>${String.fromCharCode(65 + j)}</span>${hx(o)}</label>`).join('')}</fieldset>`).join('')}<button type="submit" class="btn primary">Check answers ${HF.icon('arrow', 15)}</button><div id="quiz-feedback" role="status"></div></form><div class="lesson-source"><h3>Evidence and reading</h3>${HF.HYBRID_CATALOG.sources.map(src => `<a href="${HF.safeURL(src.url)}" target="_blank" rel="noopener noreferrer">${hx(src.name)} ${HF.icon('diagonal', 13)}</a>`).join('')}<small>General primary context, not validation of the synthetic configuration.</small></div></section></div><div class="learning-footer"><p>Progress is stored in this browser only. Export a progress record before clearing browser data.</p><button class="text-link" data-hybrid-action="export-progress">Export progress</button><button class="text-link" data-hybrid-action="reset-progress">Reset progress</button></div>`;
+    }
+    HF.lessonsView = lessonsView;
+    function compareView(state) {
+        const runs = state.hybrid.compare;
+        const metrics = [{ label: 'Model horizon', key: 'duration_hours', unit: 'h', digits: 0 }, { label: 'Total load served', key: 'load_served_pct', unit: '%', digits: 1 }, { label: 'Critical shortfall', key: 'critical_unserved_kwh', unit: 'kWh', digits: 1 }, { label: 'Grid imports', key: 'grid_import_kwh', unit: 'kWh', digits: 1 }, { label: 'Renewable curtailment', key: 'curtailed_kwh', unit: 'kWh', digits: 1 }, { label: 'Backup generation', key: 'generator_kwh', unit: 'kWh', digits: 1 }, { label: 'Initial battery energy', key: 'initial_energy_kwh', unit: 'kWh', digits: 1 }, { label: 'Terminal battery energy', key: 'terminal_energy_kwh', unit: 'kWh', digits: 1 }, { label: 'Variable energy cost', key: 'variable_cost_eur', unit: 'EUR', digits: 2 }];
+        return `<div class="page-intro"><span class="eyebrow">SCENARIO COMPARISON / CONTEXT BEFORE RANKING</span><h2>Better is a question.<br>Not a single score.</h2><p>Pin up to three completed runs in the hybrid lab. Compare service adequacy, energy flows and stored-energy endpoints.</p></div>${runs.length ? `<div class="notice warn">${HF.icon('alert', 18)}<span>No automatic winner: different sites, horizons, demand and terminal SOC can make cost rankings misleading. Costs exclude lost-load penalties.</span></div><section class="panel compare-panel"><div class="compare-controls"><h2>${runs.length} pinned runs</h2><div class="h-actions"><button class="btn secondary" data-hybrid-action="export-compare">${HF.icon('download', 15)} Export comparison</button><button class="btn quiet" data-hybrid-action="clear-compare">Clear all</button></div></div><div class="table-scroll"><table class="comparison-table"><thead><tr><th>Assumption / outcome</th>${runs.map((r, i) => `<th><span class="compare-letter">${String.fromCharCode(65 + i)}</span><strong>${hx(r.name)}</strong><small>${r.result.run_id ? 'Calculated API run' : 'Bundled example'}</small><button data-remove-compare="${r.id}" aria-label="Remove ${hx(r.name)}">${HF.icon('close', 14)}</button></th>`).join('')}</tr></thead><tbody>${metrics.map(m => `<tr><th>${m.label}</th>${runs.map(r => `<td>${HF.fmt(Number(r.result[m.key]), m.digits)} <small>${m.unit}</small></td>`).join('')}</tr>`).join('')}<tr><th>Input provenance</th>${runs.map(r => `<td class="mono">${hx(r.result.input_sha256?.slice(0, 12) ?? 'bundled-example')}</td>`).join('')}</tr></tbody></table></div></section>` : `<section class="panel comparison-empty"><div class="empty-stack">${HF.icon('layers', 52)}</div><h2>Give your next decision a reference point.</h2><p>Run a baseline, pin it, change one assumption and pin the next run.</p><button class="btn primary" data-nav="hybrid">Open the hybrid lab ${HF.icon('arrow', 16)}</button></section>`}`;
+    }
+    HF.compareView = compareView;
+})(HF || (HF = {}));
+var HF;
+(function (HF) {
+    function installHybridController(state, cb) {
+        const h = state.hybrid;
+        function selectSystem(id) {
+            const s = HF.systemById(id);
+            h.inputs = HF.presetInputs(id);
+            h.objectId = s.technologies.includes('battery') ? 'battery' : s.technologies[0];
+            h.result = null;
+            h.resultInputs = null;
+            h.inputError = null;
+            h.draft = null;
+            h.hour = 12;
+            if (state.champion)
+                state.champion.lastRunId = null;
+            cb.persist?.();
+            cb.navigate('hybrid');
+        }
+        function collect(form) {
+            const value = { ...h.inputs };
+            for (const [name, v] of new FormData(form)) {
+                if (name === 'control')
+                    value[name] = String(v);
+                else
+                    value[name] = HF.finiteInput(v, name);
+            }
+            return HF.parseConfiguration(value);
+        }
+        function downloadJSON(name, value) { HF.download(name, JSON.stringify(value, null, 2)); }
+        async function act(name) {
+            if (h.busy && ['reset', 'import', 'launch-lesson'].includes(name))
+                throw new Error('Complete the current run before changing its configuration.');
+            if (name === 'export') {
+                const form = document.getElementById('hybrid-config');
+                if (form && !h.busy)
+                    h.inputs = collect(form);
+                downloadJSON('helioforge-configuration.json', { schema: 'helioforge.hybrid.v1', data_kind: 'synthetic_educational', inputs: h.inputs });
+            }
+            else if (name === 'reset')
+                selectSystem(h.inputs.system_id);
+            else if (name === 'clear-filters') {
+                h.search = '';
+                h.family = 'All';
+                h.topology = 'All';
+                cb.render();
+                document.getElementById('architecture-library')?.scrollIntoView({ behavior: 'instant' });
+            }
+            else if (name === 'import') {
+                const file = document.createElement('input');
+                file.type = 'file';
+                file.accept = '.json,application/json';
+                file.onchange = async () => { try {
+                    if (h.busy)
+                        throw new Error('Complete the current run before importing a configuration.');
+                    const f = file.files?.[0];
+                    if (!f)
+                        return;
+                    if (f.size > 100_000)
+                        throw new Error('Configuration file must be under 100 KB.');
+                    const p = HF.parseConfiguration(JSON.parse(await f.text()));
+                    h.inputs = p;
+                    h.result = null;
+                    h.resultInputs = null;
+                    h.inputError = null;
+                    h.draft = null;
+                    if (state.champion)
+                        state.champion.lastRunId = null;
+                    cb.persist?.();
+                    h.objectId = HF.systemById(p.system_id).technologies[0];
+                    cb.render();
+                    cb.toast('Configuration imported. Run the API to calculate this setup.');
+                }
+                catch (e) {
+                    cb.toast(e instanceof Error ? e.message : 'Invalid configuration file.', true);
+                } };
+                file.click();
+            }
+            else if (name === 'csv') {
+                if (!h.result || HF.hybridDirty(h))
+                    throw new Error('Run this configuration first.');
+                HF.download('helioforge-hybrid-dispatch.csv', HF.toCSV(h.result.schedule.map(x => ({ ...x }))), 'text/csv');
+            }
+            else if (name === 'pin') {
+                if (!h.result || HF.hybridDirty(h) || !h.resultInputs)
+                    throw new Error('Only a completed, current result can be compared.');
+                if (h.compare.length >= 3)
+                    throw new Error('The comparison holds three runs. Remove a pinned run first.');
+                const id = h.result.run_id ?? 'bundled-example';
+                if (h.compare.some(x => x.id === id))
+                    throw new Error('This exact run is already pinned.');
+                h.compare.push({ id, name: `${HF.systemById(h.result.system_id).name} / ${HF.scenarioById(h.result.scenario_id).name}`, inputs: structuredClone(h.resultInputs), result: structuredClone(h.result) });
+                cb.persist?.();
+                cb.toast(`Pinned ${h.compare.length} of 3 runs. Open Scenario compare to inspect them.`);
+            }
+            else if (name === 'export-compare')
+                downloadJSON('helioforge-comparison.json', { schema: 'helioforge.comparison.v1', note: 'Synthetic, different service and SOC endpoints must be reconciled before ranking.', runs: h.compare });
+            else if (name === 'clear-compare') {
+                h.compare = [];
+                if (state.champion)
+                    state.champion.pendingPins = [];
+                cb.persist?.();
+                cb.render();
+            }
+            else if (name === 'launch-lesson') {
+                const l = HF.HYBRID_CATALOG.lessons.find(x => x.id === h.lessonId);
+                selectSystem(l.system_id);
+                h.inputs = HF.presetInputs(l.system_id, l.scenario_id);
+                h.draft = null;
+                h.inputError = null;
+                cb.persist?.();
+                cb.render();
+                cb.toast('Lesson configuration loaded. Begin with a reference run, then apply the lesson stress.');
+            }
+            else if (name === 'export-lesson') {
+                const l = HF.HYBRID_CATALOG.lessons.find(x => x.id === h.lessonId);
+                downloadJSON(`helioforge-${l.id}.json`, { schema: 'helioforge.lesson.v1', lesson: l, configuration: HF.presetInputs(l.system_id, l.scenario_id), notice: 'Original local self-study material; not accredited or field-validated.' });
+            }
+            else if (name === 'export-progress')
+                downloadJSON('helioforge-learning-progress.json', { schema: 'helioforge.progress.v1', exported_at: new Date().toISOString(), passed_self_checks: h.progress, notice: 'Self-reported browser-local practice. Not verified credentials.' });
+            else if (name === 'reset-progress')
+                cb.openModal('Reset learning progress?', `<div class="modal-copy"><p>This removes the ${h.progress.length} passed self-checks stored in this browser. It does not delete exported records or API runs.</p><button class="btn secondary" data-hybrid-action="confirm-reset-progress">Reset browser progress</button></div>`);
+            else if (name === 'confirm-reset-progress') {
+                h.progress = [];
+                try {
+                    localStorage.removeItem('hf-lessons-v2');
+                }
+                catch { /* optional */ }
+                cb.render();
+                cb.toast('Browser learning progress reset.');
+            }
+            else if (name === 'review-hybrid') {
+                if (!h.result?.run_id || HF.hybridDirty(h))
+                    throw new Error('Calculate and save a current hybrid run first.');
+                cb.navigate('council');
+            }
+        }
+        document.addEventListener('click', event => {
+            const el = event.target.closest('button');
+            if (!el)
+                return;
+            try {
+                if (el.dataset.system) {
+                    if (h.busy)
+                        return;
+                    selectSystem(el.dataset.system);
+                    window.scrollTo({ top: 0, behavior: 'instant' });
+                }
+                if (el.dataset.scenario) {
+                    if (h.busy)
+                        return;
+                    if (h.inputError)
+                        throw new Error('Correct the input error before changing the scenario.');
+                    h.draft = null;
+                    const c = HF.scenarioById(el.dataset.scenario);
+                    h.inputs = { ...h.inputs, scenario_id: c.id, hours: Math.max(h.inputs.hours, Number(c.modifiers.hours ?? 0)) };
+                    h.hour = Math.min(h.hour, h.inputs.hours - 1);
+                    cb.persist?.();
+                    cb.render();
+                }
+                if (el.dataset.lesson) {
+                    h.lessonId = el.dataset.lesson;
+                    h.quizResult = null;
+                    cb.persist?.();
+                    cb.navigate('lessons');
+                }
+                if (el.dataset.asset) {
+                    h.objectId = el.dataset.asset;
+                    const inspector = document.getElementById('asset-inspector');
+                    if (inspector)
+                        inspector.innerHTML = HF.assetInspector(h);
+                    document.querySelectorAll('[data-asset]').forEach(b => { b.classList.toggle('selected', b.dataset.asset === h.objectId); b.setAttribute('aria-pressed', String(b.dataset.asset === h.objectId)); });
+                }
+                if (el.dataset.sceneCommand)
+                    document.getElementById('energy-scene')?.dispatchEvent(new CustomEvent('scene-command', { detail: el.dataset.sceneCommand }));
+                if (el.dataset.hybridAction)
+                    void act(el.dataset.hybridAction).catch(e => cb.toast(e instanceof Error ? e.message : 'Action failed.', true));
+                if (el.dataset.removeCompare) {
+                    h.compare = h.compare.filter(x => x.id !== el.dataset.removeCompare);
+                    if (state.champion)
+                        state.champion.pendingPins = state.champion.pendingPins.filter(x => x !== el.dataset.removeCompare);
+                    cb.persist?.();
+                    cb.render();
+                }
+            }
+            catch (e) {
+                cb.toast(e instanceof Error ? e.message : 'Invalid selection.', true);
+            }
+        });
+        function updateLibrary() { const el = document.getElementById('hybrid-library-results'); if (el)
+            el.innerHTML = HF.hybridLibrary(h); }
+        function syncHybridInput(el) {
+            const form = el.closest('#hybrid-config');
+            if (!form || h.busy)
+                return;
+            const draft = {};
+            for (const field of form.querySelectorAll('input[name],select[name]'))
+                draft[field.name] = field.value;
+            // A native change event follows input on blur. Replacing the toolbar here
+            // would remove a pointer's target between mousedown and click.
+            if (h.draft && JSON.stringify(draft) === JSON.stringify(h.draft))
+                return;
+            h.draft = draft;
+            try {
+                h.inputs = collect(form);
+                h.inputError = null;
+                const tags = document.getElementById('smart-tags');
+                if (tags)
+                    tags.innerHTML = HF.hybridTags(h.inputs).map(t => `<span class="smart-tag" title="${HF.escapeHTML(t.reason)}">${HF.escapeHTML(t.label)}</span>`).join('');
+                const inspector = document.getElementById('asset-inspector');
+                if (inspector)
+                    inspector.innerHTML = HF.assetInspector(h);
+                form.querySelectorAll('[aria-invalid]').forEach(e => e.removeAttribute('aria-invalid'));
+                cb.persist?.();
+            }
+            catch (e) {
+                h.inputError = e instanceof Error ? e.message : 'Invalid input.';
+                el.setAttribute('aria-invalid', 'true');
+            }
+            const output = document.getElementById('hybrid-output');
+            if (output)
+                output.innerHTML = HF.hybridResults(state);
+            const toolbar = document.getElementById('champion-toolbar');
+            if (toolbar)
+                toolbar.innerHTML = HF.championToolbar(state);
+        }
+        document.addEventListener('input', event => {
+            const el = event.target;
+            if (el.closest('#hybrid-config') && el.name)
+                syncHybridInput(el);
+            if (el.id === 'hybrid-search') {
+                h.search = el.value;
+                updateLibrary();
+            }
+            if (el.id === 'hybrid-hour' && h.result) {
+                h.hour = Number(el.value);
+                const point = h.result.schedule[h.hour];
+                const read = document.getElementById('interval-readout'), label = document.getElementById('hour-label');
+                if (read)
+                    read.innerHTML = HF.intervalReadout(point);
+                if (label)
+                    label.textContent = point.label;
+            }
+        });
+        document.addEventListener('change', event => {
+            const el = event.target;
+            if (el.id === 'hybrid-family') {
+                h.family = el.value;
+                updateLibrary();
+            }
+            if (el.id === 'hybrid-topology') {
+                h.topology = el.value;
+                updateLibrary();
+            }
+            if (el.id === 'hybrid-system') {
+                if (!h.busy)
+                    selectSystem(el.value);
+                return;
+            }
+            if (el.closest('#hybrid-config') && el.name)
+                syncHybridInput(el);
+        });
+        document.addEventListener('submit', event => {
+            const form = event.target;
+            if (form.id === 'hybrid-config') {
+                event.preventDefault();
+                if (h.busy || !state.connected)
+                    return;
+                void (async () => {
+                    try {
+                        const inputs = collect(form);
+                        h.inputs = inputs;
+                        h.inputError = null;
+                        h.busy = true;
+                        const button = form.querySelector('[type=submit]');
+                        button.disabled = true;
+                        button.textContent = 'Running energy screen…';
+                        // Snapshot inputs to avoid labeling a pending response with later edits.
+                        form.querySelectorAll('input,select').forEach(e => e.disabled = true);
+                        document.querySelectorAll('[data-system],[data-scenario]').forEach(e => e.disabled = true);
+                        const result = await cb.api('hybrid/simulate', inputs);
+                        h.result = result;
+                        h.resultInputs = { ...inputs };
+                        h.inputs = { ...inputs };
+                        h.inputError = null;
+                        h.draft = null;
+                        h.busy = false;
+                        if (state.champion)
+                            state.champion.lastRunId = result.run_id ?? null;
+                        cb.persist?.();
+                        h.hour = Math.min(h.hour, result.schedule.length - 1);
+                        cb.render();
+                        cb.toast('Hybrid energy screen complete. Inputs and result saved in the local audit store.');
+                    }
+                    catch (e) {
+                        h.busy = false;
+                        cb.render();
+                        cb.toast(e instanceof Error ? e.message : 'Simulation failed. Your inputs were retained.', true);
+                    }
+                })();
+            }
+            if (form.id === 'lesson-quiz') {
+                event.preventDefault();
+                const lesson = HF.HYBRID_CATALOG.lessons.find(x => x.id === h.lessonId);
+                const fd = new FormData(form), answers = lesson.quiz.map((_, i) => { const v = fd.get(`q${i}`); return v === null ? -1 : Number(v); });
+                const result = HF.gradeLesson(lesson, answers);
+                h.quizResult = result;
+                const feedback = document.getElementById('quiz-feedback');
+                if (feedback)
+                    feedback.innerHTML = `<div class="quiz-result ${result.passed ? 'passed' : 'retry'}"><strong>${result.correct} / ${result.total} correct · ${result.passed ? 'Self-check passed' : 'Review and try again'}</strong>${lesson.quiz.map((q, i) => `<p><b>${i + 1} · ${answers[i] === q.answer ? 'Correct' : 'Review'}:</b> ${HF.escapeHTML(q.explanation)}</p>`).join('')}</div>`;
+                if (result.passed) {
+                    const first = !h.progress.includes(lesson.id);
+                    if (first) {
+                        h.progress.push(lesson.id);
+                        try {
+                            localStorage.setItem('hf-lessons-v2', JSON.stringify(h.progress));
+                        }
+                        catch {
+                            cb.toast('Self-check passed. Browser storage is unavailable; export your progress.');
+                        }
+                    }
+                    if (first)
+                        cb.celebrate();
+                    const progress = document.querySelector('.achievement-orb strong');
+                    if (progress)
+                        progress.innerHTML = `${h.progress.length}<small> / 36</small>`;
+                    const number = document.querySelector(`.lesson-list [data-lesson="${lesson.id}"] .lesson-number`);
+                    if (number) {
+                        number.classList.add('done');
+                        number.innerHTML = HF.icon('check', 14);
+                    }
+                }
+            }
+        });
+    }
+    HF.installHybridController = installHybridController;
+})(HF || (HF = {}));
+var HF;
+(function (HF) {
+    const E = HF.escapeHTML;
+    const green = '#d7ff84', teal = '#82cbbb', blue = '#9bacdf', gold = '#dfbd80';
+    function tag(text, tone = '') { return `<span class="tag ${tone}">${E(text)}</span>`; }
+    function heading(title, subtitle, extra = '') { return `<div class="section-heading"><div><h2>${E(title)}</h2><p>${E(subtitle)}</p></div>${extra}</div>`; }
+    function metric(label, value, unit, caption, name, values, tone = green) {
+        return `<article class="metric panel"><div class="metric-top"><span>${E(label)}</span>${HF.icon(name, 18)}</div><div class="metric-value">${E(value)} <small>${E(unit)}</small></div><div class="metric-foot"><span>${E(caption)}</span>${values.length > 1 ? HF.sparkline(values, tone) : ''}</div></article>`;
+    }
+    function stats(items) { return `<div class="result-stats">${items.map(i => `<div><span>${E(i.label)}</span><strong>${E(i.value)}</strong>${i.hint ? `<small>${E(i.hint)}</small>` : ''}</div>`).join('')}</div>`; }
+    function notice(message, tone = '') { return `<div class="notice ${tone}">${HF.icon(tone === 'warn' ? 'alert' : 'info', 17)}<span>${E(message)}</span></div>`; }
+    function warnings(result) {
+        return `<details class="method-details"><summary>${HF.icon('shield', 15)} Model boundaries & provenance ${HF.icon('down', 13)}</summary><div>${result.warnings.map(w => `<p>${E(w)}</p>`).join('')}${result.run_id ? `<p class="mono">Audit run · ${E(result.run_id)}</p>` : ''}</div></details>`;
+    }
+    function field(name, label, value, opts = {}) {
+        return `<label class="field"><span>${E(label)}</span><div class="input-unit"><input name="${E(name)}" type="number" value="${E(value)}" required ${opts.min !== undefined ? `min="${opts.min}"` : ''} ${opts.max !== undefined ? `max="${opts.max}"` : ''} step="${opts.step ?? 'any'}">${opts.unit ? `<span>${E(opts.unit)}</span>` : ''}</div></label>`;
+    }
+    function submit(state, text) { return `<button class="btn primary full" type="submit" ${!state.connected || state.busy ? 'disabled' : ''}>${HF.icon(state.busy ? 'clock' : 'play', 16)}${state.busy ? 'Calculating…' : E(text)}</button>${!state.connected ? '<p class="form-note">Snapshot preview. Start the Python API to run new calculations.</p>' : ''}`; }
+    function legend(series) { return `<div class="legend">${series.map(s => `<span><i style="background:${s.color}" class="${s.dashed ? 'dashed' : ''}"></i>${E(s.name)}</span>`).join('')}</div>`; }
+    function modelBadge() { return tag('ILLUSTRATIVE MODEL', 'muted'); }
+    function dispatchPlot(d, prices = false) {
+        const labels = d.schedule.map(r => r.label), values = prices ? [{ name: 'Import tariff', values: d.schedule.map(r => r.import_eur_mwh), color: gold, area: true }] : [
+            { name: 'Site demand', values: d.schedule.map(r => r.load_kw / 1000), color: blue, dashed: true },
+            { name: 'Solar PV', values: d.schedule.map(r => r.pv_kw / 1000), color: green, area: true },
+            { name: 'Grid import', values: d.schedule.map(r => r.grid_import_kw / 1000), color: teal }
+        ];
+        return legend(values) + HF.lineChart(labels, values, { unit: prices ? 'EUR / MWh' : 'MW', height: 244 });
+    }
+    function projectTable(state) {
+        const rows = HF.filterProjects(state.data.portfolio, state.marketFilter, state.search);
+        return `<div class="table-scroll"><table class="project-table"><thead><tr><th>Project</th><th>Market</th><th>Technology</th><th>Screening CAPEX</th><th>Stage</th><th>Review progress</th></tr></thead><tbody>${rows.length ? rows.map((p, i) => `<tr><td><button class="project-link" data-project="${E(p.id)}"><span class="project-icon tone-${i % 3}">${HF.icon(p.technology === 'Wind' ? 'wind' : p.technology === 'BESS' ? 'battery' : 'sun', 19)}</span><span><strong>${E(p.name)}</strong><small>${E(p.id)}</small></span></button></td><td><span class="country-code">${E(p.market)}</span></td><td>${E(p.technology)}</td><td>€${HF.fmt(p.capex_meur, 1)}m</td><td>${tag(p.stage, 'muted')}</td><td><div class="progress-cell"><div class="progress"><i style="width:${p.progress}%"></i></div><span>${p.progress}%</span></div></td></tr>`).join('') : '<tr><td colspan="6" class="empty">No projects match this filter.</td></tr>'}</tbody></table></div>`;
+    }
+    function overview(state) {
+        const d = state.data, f = d.finance, s = d.dispatch, pv = d.pv;
+        return `<section class="hero panel"><div class="hero-copy"><span class="eyebrow"><i></i> THE ENERGY INTELLIGENCE WORKSPACE</span><h2>Research with purpose.<br><em>Energy with an edge.</em></h2><p>Connect asset performance, storage economics and investment decisions in one evidence-led workspace.</p><div class="hero-actions"><button class="btn primary" data-nav="storage">Explore storage lab ${HF.icon('arrow', 17)}</button><button class="btn quiet" data-nav="council">Meet the council ${HF.icon('diagonal', 16)}</button></div><div class="hero-foot"><span>4 research pillars</span><b>·</b><span>6 market scenarios</span><b>·</b><span>Open by design</span></div></div>${HF.energyOrb()}</section>
+    <section class="metrics-grid">
+    ${metric('Storage dispatch savings', HF.money(s.savings_eur), ' / day', `${HF.fmt(s.savings_pct, 1)}% · synthetic 24h case`, 'battery', [], green)}
+    ${metric('Project screening NPV', HF.millions(f.npv_eur), '', `${HF.fmt(f.irr_pct, 1)}% IRR · assumed cash flows`, 'briefcase', [], teal)}
+    ${metric('Discounted solar LCOE', `€${HF.fmt(pv.lcoe_eur_mwh, 2)}`, '/ MWh', `${HF.fmt(Number(d.defaults.pv.capacity_kwp) / 1000, 0)} MWp · independent PV scenario`, 'sun', [], gold)}
+    ${metric('Life-cycle carbon intensity', HF.fmt(d.sustainability.intensity_gco2e_kwh, 1), 'gCO₂e/kWh', 'Screening inventory · not certified', 'leaf', [], blue)}
+    </section>
+    <div class="overview-grid"><section class="panel plot-panel">${heading('Every interval tells a story', `${d.markets.find(m => m.code === d.market)?.name ?? d.market} · synthetic dispatch · ${HF.fmt(s.power_kw / 1000, 1)} MW / ${HF.fmt(s.capacity_kwh / 1000, 1)} MWh`, `<div class="segmented" aria-label="Chart view"><button data-chart="dispatch" class="${state.chartMode === 'dispatch' ? 'active' : ''}" aria-pressed="${state.chartMode === 'dispatch'}">Dispatch</button><button data-chart="prices" class="${state.chartMode === 'prices' ? 'active' : ''}" aria-pressed="${state.chartMode === 'prices'}">Tariff</button></div>`)}${dispatchPlot(s, state.chartMode === 'prices')}</section>
+    <section class="panel focus-panel">${heading('The decision signal', 'A return is not a credit decision.', HF.icon('target', 21))}<div class="decision-numbers"><div><span>PROJECT IRR</span><strong>${HF.fmt(f.irr_pct, 1)}<small>%</small></strong></div><span class="versus">≠</span><div><span>MINIMUM DSCR</span><strong class="amber">${HF.fmt(f.minimum_dscr, 2)}<small>×</small></strong></div></div><div class="risk-callout">${HF.icon('alert', 18)}<div><strong>${f.minimum_dscr === null ? 'Unlevered screening case' : f.covenant_pass ? 'Modeled covenant clears the threshold' : 'Modeled debt-service covenant breach'}</strong><p>${f.minimum_dscr === null ? 'No debt service is modeled. Validate the operating case and all investment assumptions.' : `NPV is ${f.npv_eur >= 0 ? 'positive' : 'negative'}; minimum DSCR ${f.covenant_pass ? 'meets' : 'falls below'} the ${HF.fmt(f.dscr_covenant, 2)}× covenant. Review every year, including augmentation.`}</p></div></div><div class="focus-bottom"><span>Level-payment debt capacity</span><strong>${HF.millions(f.level_payment_debt_capacity_eur)}</strong></div><button class="text-link" data-nav="investment">Challenge the investment case ${HF.icon('arrow', 16)}</button></section></div>
+    <section class="panel portfolio-panel">${heading('Opportunity workspace', 'Fictional projects for exploration. Not a live company pipeline.', `<button class="btn secondary small" data-action="export-portfolio">${HF.icon('download', 15)} Export</button>`)}<div class="table-tools"><label class="search-field">${HF.icon('search', 16)}<input id="project-search" type="search" placeholder="Search projects, technology or stage…" aria-label="Search projects" value="${E(state.search)}"></label><label class="select-wrap"><span class="sr-only">Filter portfolio by market</span><select id="portfolio-market"><option value="ALL">All markets</option>${d.markets.map(m => `<option value="${m.code}" ${state.marketFilter === m.code ? 'selected' : ''}>${m.name}</option>`).join('')}</select></label></div><div id="project-table">${projectTable(state)}</div></section>
+    <div class="pillar-strip">${[{ name: 'Operational efficiency', icon: 'activity', desc: 'See the signal.' }, { name: 'Predictive reliability', icon: 'shield', desc: 'Understand the risk.' }, { name: 'Sustainability', icon: 'leaf', desc: 'Measure the impact.' }, { name: 'Construction & pilots', icon: 'flask', desc: 'Test in the field.' }].map((p, i) => `<button data-nav="${i === 3 ? 'pilots' : 'research'}"><span class="pillar-number">0${i + 1}</span>${HF.icon(p.icon, 22)}<div><strong>${p.name}</strong><span>${p.desc}</span></div>${HF.icon('diagonal', 15)}</button>`).join('')}</div>`;
+    }
+    function storageView(state) {
+        const d = state.data.dispatch, p = state.data.defaults.storage;
+        return `<div class="page-intro"><span class="eyebrow">STORAGE LAB / BTM OPTIMIZATION</span><h2>Flexibility, made tangible.</h2><p>A mixed-integer dispatch model with physical constraints, transparent tariffs and a fair no-battery baseline.</p></div>${HF.energyFlow()}
+    <div class="lab-grid"><form class="panel form-panel" data-model="storage">${heading('Design your scenario', '5 MW / 10 MWh liquid-cooled LFP reference.')}
+    <div class="form-grid">${field('capacity_mwh', 'Energy capacity', Number(p.capacity_kwh) / 1000, { min: .1, max: 1000, step: .1, unit: 'MWh' })}${field('power_mw', 'Power rating', Number(p.power_kw) / 1000, { min: .1, max: 500, step: .1, unit: 'MW' })}${field('efficiency_pct', 'Round-trip efficiency', Number(p.round_trip_efficiency) * 100, { min: 1, max: 100, step: .1, unit: '%' })}${field('wear', 'Discharge wear', p.wear_eur_per_kwh, { min: 0, step: .001, unit: '€/kWh' })}${field('soc_min', 'Minimum SOC', Number(p.min_soc_fraction) * 100, { min: 0, max: 99, unit: '%' })}${field('soc_max', 'Maximum SOC', Number(p.max_soc_fraction) * 100, { min: 1, max: 100, unit: '%' })}${field('peak_charge', 'Peak charge per period', p.peak_charge_eur_per_kw_period, { min: 0, unit: '€/kW' })}${field('grid_limit', 'Import limit', Number(p.grid_import_limit_kw) / 1000, { min: .1, max: 500, unit: 'MW' })}</div>${notice('Hourly synthetic profile. Initial and terminal SOC are fixed at 50%; peak charges apply to this period only.')}${submit(state, 'Optimize dispatch')}</form>
+    <section class="panel plot-panel">${heading('The optimized day', `${d.solver} · ${d.solver_status}`, modelBadge())}${stats([{ label: 'Net savings', value: HF.money(d.savings_eur), hint: `${d.duration_hours}h modeled period` }, { label: 'Discharge cycles', value: HF.fmt(d.equivalent_discharge_cycles, 2), hint: 'AC discharge / nameplate kWh' }, { label: 'Terminal SOC', value: `${HF.fmt(d.terminal_soc_kwh / 1000, 1)} MWh`, hint: 'No free end-of-period energy' }])}${dispatchPlot(d)}<div class="cost-bridge"><div><span>No-battery cost</span><strong>${HF.money(d.baseline_cost_eur)}</strong></div><span>→</span><div><span>Optimized cost + wear</span><strong>${HF.money(d.optimized_cost_eur)}</strong></div><button class="btn secondary small" data-action="export-dispatch">${HF.icon('download', 15)} CSV</button></div>${warnings(d)}</section></div>
+    <section class="panel plot-panel">${heading('Battery state of charge', 'Energy conservation, with bounded operating limits.')}${legend([{ name: 'State of charge', color: green }])}${HF.lineChart(d.schedule.map(r => r.label), [{ name: 'SOC', values: d.schedule.map(r => r.soc_pct), color: green, area: true }], { height: 200, unit: '%' })}</section>`;
+    }
+    function pvView(state) {
+        const r = state.data.pv, p = state.data.defaults.pv;
+        return `<div class="page-intro"><span class="eyebrow">PV ECONOMICS / DESIGN SCREENING</span><h2>Good projects start with sound assumptions.</h2><p>Discounted lifecycle costs, degraded generation and indicative land use. Yield and capture price remain explicit inputs.</p></div>
+    <div class="metrics-grid">${metric('Discounted LCOE', `€${HF.fmt(r.lcoe_eur_mwh, 2)}`, '/ MWh', 'Consistent constant-money basis', 'sun', [], gold)}${metric('Total project CAPEX', HF.millions(r.capex_eur), '', 'Nameplate capacity × unit cost', 'layers', [], teal)}${metric('Year-one generation', HF.fmt(r.first_year_generation_mwh / 1000, 2), 'GWh', 'After assumed curtailment', 'bolt', [], green)}${metric('Indicative land area', HF.fmt(r.indicative_land_ha, 1), 'ha', 'Panel area / ground coverage', 'globe', [], blue)}</div>
+    <div class="lab-grid"><form class="panel form-panel" data-model="pv">${heading('Project assumptions', 'A screening model, not an engineering design.')}<div class="form-grid">${field('capacity_mwp', 'PV capacity', Number(p.capacity_kwp) / 1000, { min: .1, unit: 'MWp' })}${field('yield', 'Specific yield', p.specific_yield_kwh_kwp, { min: 1, max: 2600, unit: 'kWh/kWp' })}${field('capex', 'Unit CAPEX', p.capex_eur_kwp, { min: 1, unit: '€/kWp' })}${field('opex', 'Annual OPEX', p.opex_eur_kwp_year, { min: 0, unit: '€/kWp' })}${field('discount', 'Discount rate', Number(p.discount_rate) * 100, { min: 0, max: 40, unit: '%' })}${field('capture', 'Capture price', p.capture_price_eur_mwh, { min: 0, unit: '€/MWh' })}${field('curtailment', 'Curtailment', Number(p.curtailment_fraction) * 100, { min: 0, max: 99, unit: '%' })}${field('gcr', 'Ground coverage', Number(p.ground_coverage_ratio) * 100, { min: 1, max: 100, unit: '%' })}</div>${notice('30 years, 0.4% annual degradation and year-15 inverter replacement. Full inputs are included in exported evidence.')}${submit(state, 'Evaluate PV economics')}</form>
+    <section class="panel plot-panel">${heading('Yield across the project life', 'Annual generation after degradation.', modelBadge())}${stats([{ label: 'Project screening NPV', value: HF.millions(r.npv_eur) }, { label: 'Panel count', value: HF.fmt(r.panel_count) }, { label: 'Capture price', value: `€${HF.fmt(r.capture_price_eur_mwh)}/MWh` }])}${legend([{ name: 'Net generation', color: gold }])}${HF.lineChart(r.rows.map(x => `Y${x.year}`), [{ name: 'Generation', values: r.rows.map(x => x.generation_mwh / 1000), color: gold, area: true }], { unit: 'GWh', height: 270 })}${warnings(r)}</section></div>
+    <section class="panel evidence-banner">${HF.icon('document', 30)}<div><h3>From screening to technical diligence</h3><p>Validate the layout, terrain, shading, DC/AC ratio, grid connection, EPC scope, warranties and site-specific yield before making a decision.</p></div><a class="btn secondary" href="https://re.jrc.ec.europa.eu/pvg_tools/en/" target="_blank" rel="noopener noreferrer">Open PVGIS ${HF.icon('diagonal', 15)}</a></section>`;
+    }
+    function researchView(state) {
+        const d = state.data, p = d.defaults.reliability, c = d.defaults.sustainability;
+        const pillars = [{ name: 'Operational efficiency', icon: 'activity', copy: 'Valorize asset data, normalize performance and surface drift before it becomes a persistent loss.', items: 'Advanced KPIs / robust residuals / data provenance' },
+            { name: 'Predictive reliability', icon: 'shield', copy: 'Study failure risk with transparent reliability assumptions and a clear boundary between screening and diagnosis.', items: 'Fault hypotheses / conditional risk / prognostics roadmap' },
+            { name: 'Sustainability', icon: 'leaf', copy: 'Track lifecycle emissions and keep ecological evidence distinct from carbon accounting.', items: 'LCA inventory / counterfactual carbon / habitat baseline' },
+            { name: 'Construction & pilots', icon: 'flask', copy: 'Connect field instrumentation, experimental protocols and innovative construction methods.', items: 'Field trials / instrumentation / evidence gates' }];
+        return `<section class="research-cards">${pillars.map((p, i) => `<article class="panel research-card"><div class="research-top"><span>0${i + 1}</span>${HF.icon(p.icon, 27)}</div><h3>${p.name}</h3><p>${p.copy}</p><small>${p.items}</small></article>`).join('')}</section>
+    <section class="panel plot-panel">${heading('A signal worth investigating', 'Synthetic performance residuals; first third used as a healthy baseline.', tag(`${d.drift.alert_count} flagged intervals`, 'warn'))}${stats([{ label: 'Recent residual mean', value: `${HF.fmt(d.drift.drift_pct, 2)}%` }, { label: 'Robust baseline sigma', value: `${HF.fmt(d.drift.sigma_fraction * 100, 2)}%` }, { label: 'Diagnostic status', value: 'Review required' }])}${HF.lineChart(d.drift.series.map(r => String(r.index + 1)), [{ name: 'Performance residual', values: d.drift.series.map(r => r.residual_pct), color: teal, area: true }], { unit: '%', height: 220 })}${warnings(d.drift)}</section>
+    <div class="two-columns"><form class="panel form-panel" data-model="reliability">${heading('Reliability lens', 'Conditional Weibull survival, not a field-trained RUL model.', HF.icon('shield', 22))}${stats([{ label: `Failure probability over ${HF.fmt(Number(d.defaults.reliability.horizon_hours))} h`, value: `${HF.fmt(d.reliability.conditional_failure_pct, 1)}%` }, { label: 'Median remaining life', value: `${HF.fmt(d.reliability.conditional_median_remaining_hours)} h` }])}<div class="form-grid">${field('shape', 'Weibull shape', p.shape, { min: .01, step: .01 })}${field('scale', 'Scale parameter', p.scale_hours, { min: 1, unit: 'h' })}${field('age', 'Current age', p.age_hours, { min: 0, unit: 'h' })}${field('horizon', 'Risk horizon', p.horizon_hours, { min: 1, unit: 'h' })}</div>${submit(state, 'Evaluate reliability')}${warnings(d.reliability)}</form>
+    <form class="panel form-panel" data-model="sustainability">${heading('Life-cycle carbon lens', 'Screening inventory with an explicit counterfactual.', HF.icon('leaf', 22))}${stats([{ label: 'Lifecycle intensity', value: `${HF.fmt(d.sustainability.intensity_gco2e_kwh, 1)} g/kWh` }, { label: 'Net counterfactual avoidance', value: `${HF.fmt(d.sustainability.net_counterfactual_avoided_tco2e / 1000, 1)} ktCO₂e` }])}<div class="form-grid">${field('generation', 'Annual generation', Number(c.annual_generation_kwh) / 1e6, { min: .01, unit: 'GWh' })}${field('embodied', 'Embodied carbon', Number(c.embodied_kgco2e) / 1000, { min: 0, unit: 'tCO₂e' })}${field('counterfactual', 'Counterfactual factor', Number(c.counterfactual_kgco2e_kwh) * 1000, { min: 0, unit: 'gCO₂e/kWh' })}${field('operational', 'Annual operational carbon', Number(c.annual_operational_kgco2e) / 1000, { min: 0, unit: 'tCO₂e' })}</div>${submit(state, 'Evaluate carbon inventory')}${warnings(d.sustainability)}</form></div>`;
+    }
+    function marketsView(state) {
+        const d = state.data;
+        return `<div class="page-intro"><span class="eyebrow">MARKET INTELLIGENCE / EVIDENCE FIRST</span><h2>Six markets. No one-size-fits-all story.</h2><p>Customer value propositions are hypotheses to validate against actual site data, contracts and local rules.</p></div>${notice('This is a source registry and review workflow, not a live regulatory feed. No tariffs, exemptions or market-access permissions have been approved.', 'warn')}
+    <section class="market-cards">${d.markets.map(m => `<article class="panel market-card"><div class="market-top"><span class="country-emblem">${m.code}</span>${tag('Needs local review', 'warn')}</div><h3>${m.name}</h3><span class="market-segment">${m.segment}</span><p>${m.hypothesis}</p><div class="market-meta"><div><span>Tariff basis</span><strong>Illustrative EUR</strong></div><div><span>Effective / review date</span><strong>Not established</strong></div></div><a href="${HF.safeURL(m.url)}" target="_blank" rel="noopener noreferrer" class="text-link">${E(m.regulator)} · primary source ${HF.icon('diagonal', 15)}</a></article>`).join('')}</section>
+    <section class="panel plot-panel">${heading('The evidence stack', 'Official starting points. Data connectors are not enabled.', `<button class="btn secondary small" data-action="export-checklist">${HF.icon('download', 15)} Review checklist</button>`)}<div class="source-list">${d.sources.map(s => `<a href="${HF.safeURL(s.url)}" target="_blank" rel="noopener noreferrer"><span class="source-icon">${HF.icon('database', 22)}</span><div><strong>${E(s.name)}</strong><p>${E(s.scope)}</p></div>${tag(s.status.replaceAll('_', ' '), 'muted')}${HF.icon('diagonal', 17)}</a>`).join('')}</div>${notice('Great Britain is normalized to EUR only for the demo. Real analysis requires explicit GBP values, FX assumptions, taxes, network fees and settlement conventions.')}</section>`;
+    }
+    function forecastView(state) {
+        const p = state.data.defaults.forecast, r = state.data.forecast, rows = r.rows.slice(0, state.forecastYears), last = rows[rows.length - 1];
+        return `<div class="page-intro"><span class="eyebrow">FORECAST STUDIO / SCENARIO EXPLORATION</span><h2>Price the uncertainty.</h2><p>A reproducible, mean-reverting scenario generator. Parameters are illustrative, not fitted to current forward curves.</p></div>
+    <div class="lab-grid"><form class="panel form-panel" data-model="forecast">${heading('Shape a possible future', 'Annual prices · constant EUR / MWh')}<div class="form-grid">${field('base', 'Starting price', p.base_price_eur_mwh, { unit: '€/MWh' })}${field('target', 'Long-run price', p.long_run_price_eur_mwh, { unit: '€/MWh' })}${field('shock', 'Annual shock sigma', p.annual_shock_eur_mwh, { min: 0, max: 250, unit: '€/MWh' })}${field('reversion', 'Mean reversion', p.mean_reversion, { min: .01, max: 1, step: .01 })}${field('trend', 'Annual target trend', p.trend_eur_mwh_year, { unit: '€/MWh/y' })}${field('seed', 'Random seed', p.seed, { min: 0, max: 4294967295, step: 1 })}</div>${notice('1,500 paths over 20 years. Negative outcomes are allowed. Country selection is metadata, not an automatic calibration.')}${submit(state, 'Generate price scenarios')}</form>
+    <section class="panel plot-panel">${heading('A range, not a promise', `${HF.fmt(r.paths)} simulated paths · seed ${r.seed}`, `<div class="segmented"><button data-horizon="10" class="${state.forecastYears === 10 ? 'active' : ''}" aria-pressed="${state.forecastYears === 10}">10Y</button><button data-horizon="20" class="${state.forecastYears === 20 ? 'active' : ''}" aria-pressed="${state.forecastYears === 20}">20Y</button></div>`)}${stats([{ label: `${last.year} P10`, value: `€${HF.fmt(last.p10_eur_mwh, 1)}/MWh` }, { label: `${last.year} P50`, value: `€${HF.fmt(last.p50_eur_mwh, 1)}/MWh` }, { label: `${last.year} P90`, value: `€${HF.fmt(last.p90_eur_mwh, 1)}/MWh` }])}${legend([{ name: 'P10–P90 envelope', color: teal }, { name: 'P50 median', color: green }])}${HF.lineChart(rows.map(x => String(x.year)), [{ name: 'P10', values: rows.map(x => x.p10_eur_mwh), color: teal, dashed: true }, { name: 'P50', values: rows.map(x => x.p50_eur_mwh), color: green }, { name: 'P90', values: rows.map(x => x.p90_eur_mwh), color: teal, dashed: true }], { unit: 'EUR / MWh', height: 290, band: [rows.map(x => x.p10_eur_mwh), rows.map(x => x.p90_eur_mwh)] })}${warnings(r)}</section></div>`;
+    }
+    function investmentView(state) {
+        const r = state.data.finance, p = state.data.defaults.finance, m = state.data.acquisition, q = state.data.defaults.acquisition;
+        const debtRows = r.rows.filter(x => x.dscr !== null);
+        return `<div class="page-intro"><span class="eyebrow">INVESTMENT DESK / UNDERWRITE THE DOWNSIDE</span><h2>The return is only the beginning.</h2><p>Screen project value, challenge debt service and separate enterprise value from equity value.</p></div>
+    <div class="metrics-grid">${metric('Unlevered project IRR', HF.fmt(r.irr_pct, 1), '%', 'Pre-tax · nominal assumptions', 'chart', [], green)}${metric('Project NPV', HF.millions(r.npv_eur), '', 'At the selected discount rate', 'briefcase', [], teal)}${metric('Minimum DSCR', HF.fmt(r.minimum_dscr, 2), '×', r.minimum_dscr === null ? 'No debt service' : `${r.covenant_pass ? 'Meets' : 'Below'} ${HF.fmt(r.dscr_covenant, 2)}× covenant`, 'shield', debtRows.map(x => x.dscr ?? 0), gold)}${metric('Simple payback', HF.fmt(r.payback_years, 1), 'years', 'First undiscounted cash-flow crossing', 'clock', [], blue)}</div>
+    ${r.covenant_pass === false ? notice('Covenant breach under the selected debt structure. Review augmentation funding, leverage, contract terms and downside revenue before investment approval.', 'warn') : notice('This screen is not an investment approval. Verify source data, taxes, covenants and market eligibility.')}
+    <div class="lab-grid"><form class="panel form-panel" data-model="finance">${heading('Project-finance assumptions', 'Independent from the daily storage example.')}<div class="form-grid">${field('capex', 'Upfront CAPEX', Number(p.capex_eur) / 1e6, { min: .01, unit: '€m' })}${field('margin', 'Annual gross margin', Number(p.annual_gross_margin_eur) / 1000, { min: 0, unit: '€k' })}${field('opex', 'Annual OPEX', Number(p.annual_opex_eur) / 1000, { min: 0, unit: '€k' })}${field('discount', 'Discount rate', Number(p.discount_rate) * 100, { min: 0, max: 40, unit: '%' })}${field('debt', 'Debt fraction', Number(p.debt_fraction) * 100, { min: 0, max: 95, unit: '%' })}${field('interest', 'Debt interest', Number(p.debt_interest_rate) * 100, { min: 0, max: 30, unit: '%' })}${field('merchant', 'Merchant margin factor', Number(p.merchant_margin_factor) * 100, { min: 0, max: 200, unit: '%' })}${field('contracted', 'Contracted share', Number(p.contracted_fraction) * 100, { min: 0, max: 100, unit: '%' })}${field('augmentation', 'Augmentation cost', Number(p.augmentation_cost_eur) / 1000, { min: 0, unit: '€k' })}${field('aug_year', 'Augmentation year', p.augmentation_year, { min: 1, max: 20, step: 1 })}</div>${submit(state, 'Evaluate investment case')}</form>
+    <section class="panel plot-panel">${heading('Debt-service resilience', 'CFADS includes augmentation before debt service.', modelBadge())}${legend([{ name: 'DSCR', color: teal }, { name: 'Covenant', color: gold, dashed: true }])}${HF.lineChart(debtRows.map(x => `Y${x.year}`), [{ name: 'DSCR', values: debtRows.map(x => x.dscr ?? 0), color: teal, area: true }, { name: 'Covenant', values: debtRows.map(() => r.dscr_covenant), color: gold, dashed: true }], { unit: '×', height: 260 })}${stats([{ label: 'Level-payment debt capacity', value: HF.millions(r.level_payment_debt_capacity_eur), hint: 'Worst debt-year CFADS / covenant' }, { label: 'Financing approach', value: 'Level annuity', hint: 'No debt sculpting or reserve model' }])}${warnings(r)}</section></div>
+    <div class="two-columns"><form class="panel form-panel" data-model="acquisition">${heading('M&A screening', 'Technology-neutral enterprise-value screen.')}<div class="form-grid">${field('ev', 'Enterprise value', Number(q.enterprise_value_eur) / 1e6, { min: .01, unit: '€m' })}${field('ebitda', 'Annual EBITDA', Number(q.annual_ebitda_eur) / 1e6, { min: .01, unit: '€m' })}${field('net_debt', 'Net debt', Number(q.net_debt_eur) / 1e6, { min: 0, unit: '€m' })}${field('maintenance', 'Maintenance CAPEX', Number(q.annual_maintenance_capex_eur) / 1000, { min: 0, unit: '€k/y' })}</div>${submit(state, 'Screen acquisition')}</form>
+    <section class="panel plot-panel">${heading('Valuation, with context', 'PV, wind and BESS require additional technical diligence.')}${stats([{ label: 'EV / EBITDA', value: `${HF.fmt(m.ev_ebitda, 2)}×` }, { label: 'Implied equity value', value: HF.millions(m.implied_equity_value_eur) }])}${stats([{ label: 'Screening enterprise DCF', value: HF.millions(m.screening_dcf_eur) }, { label: 'DCF minus asking EV', value: HF.millions(m.valuation_gap_eur) }])}${warnings(m)}</section></div>`;
+    }
+    function pilotsView(state) {
+        const stages = ['planned', 'instrumenting', 'running', 'validated'];
+        return `<div class="page-intro intro-with-action"><div><span class="eyebrow">CONSTRUCTION & PILOTS / FIELD EVIDENCE</span><h2>Make the next experiment count.</h2><p>Track instruments, hypotheses and evidence through explicit delivery gates.</p></div><button class="btn secondary" data-action="export-pilots">${HF.icon('download', 16)} Export register</button></div>${notice('All pilot records are fictional. “Validated” describes a simulated workflow state, not a real field result.')}
+    <section class="pilot-board">${stages.map((stage, i) => `<div class="board-column"><div class="board-heading"><span><i class="stage-dot stage-${i}"></i>${E(stage[0].toUpperCase() + stage.slice(1))}</span><b>${state.data.pilots.filter(x => x.status === stage).length}</b></div>${state.data.pilots.filter(x => x.status === stage).map(p => `<article class="panel pilot-card"><div class="pilot-card-top"><span class="mono">${p.id}</span>${tag(p.pillar, 'muted')}</div><h3>${E(p.title)}</h3><p>${E(p.target)}</p><div class="pilot-instrument">${HF.icon('activity', 17)}<span>${E(p.instrument)}</span></div><div class="pilot-owner"><span class="avatar small-avatar">${E(p.owner.slice(0, 1))}</span><div><strong>${E(p.owner)}</strong><small>${E(p.site)}</small></div></div><button class="btn secondary small full" data-pilot="${p.id}">Review evidence ${HF.icon('arrow', 15)}</button></article>`).join('')}<div class="board-hint">${['Define the hypothesis and acceptance criteria.', 'Confirm calibration, safe installation and logging.', 'Collect observations against the agreed protocol.', 'Review evidence and record the limitations.'][i]}</div></div>`).join('')}</section>
+    <section class="panel evidence-banner">${HF.icon('shield', 28)}<div><h3>Evidence before a status change</h3><p>Every update requires a note and is recorded in SQLite with the old state, new state and timestamp. No dashboard action operates equipment.</p></div></section>`;
+    }
+    function councilView(state) {
+        const c = state.data.council;
+        return `<div class="page-intro"><span class="eyebrow">AGENT COUNCIL / MULTIDISCIPLINARY REVIEW</span><h2>Better questions. Stronger decisions.</h2><p>Eight specialists challenge the evidence. An independent critic reconciles the findings. You remain the decision-maker.</p></div>
+    <section class="council-topology ${state.busy ? 'working' : ''}">${[{ name: 'Storage engineer', icon: 'battery' }, { name: 'Investment analyst', icon: 'briefcase' }, { name: 'Market reviewer', icon: 'globe' }, { name: 'Sustainability reviewer', icon: 'leaf' }, { name: 'Hybrid architect', icon: 'layers' }, { name: 'Learning designer', icon: 'document' }, { name: 'Accessibility reviewer', icon: 'shield' }, { name: 'Reproducibility reviewer', icon: 'code' }].map((r, i) => `<div class="council-node"><span class="agent-symbol agent-${i}">${HF.icon(r.icon, 25)}</span><strong>${r.name}</strong><small>Specialist review</small></div>`).join('')}<span class="council-arrow">→</span><div class="council-node critic"><span class="agent-symbol">${HF.icon('sparkles', 27)}</span><strong>Committee critic</strong><small>Challenge & synthesis</small></div></section>
+    <div class="lab-grid"><form class="panel form-panel" data-model="council">${heading('Commission a review', 'Default market cases plus an explicitly selected saved hybrid run.')}<label class="field"><span>Attach saved hybrid evidence</span><select name="hybrid_run_id"><option value="">No hybrid run · default cases only</option>${state.hybrid.result?.run_id ? `<option value="${E(state.hybrid.result.run_id)}">Current saved run · ${E(HF.systemById(state.hybrid.result.system_id).name)}</option>` : ''}${state.hybrid.compare.filter(x => x.result.run_id && x.id !== state.hybrid.result?.run_id).map(x => `<option value="${E(x.id)}">${E(x.name)}</option>`).join('')}</select></label><label class="field"><span>Research brief</span><textarea name="brief" rows="6" required minlength="8" maxlength="6000">${E(c.reviewed_brief)}</textarea></label><label class="field"><span>Execution mode</span><select name="mode" id="council-mode"><option value="local">Local · deterministic checklist</option><option value="openai">OpenAI · actual multi-agent review</option></select></label><div id="external-consent" hidden><label class="field"><span>Server admin key (not stored in browser)</span><input name="admin_key" type="password" autocomplete="off"></label><label class="check-field"><input name="consent" type="checkbox">I consent to sending this brief and synthetic evidence to OpenAI. API usage may be billed.</label></div>${notice('Local mode is a fixed-scope, rule-based review—not an LLM. OpenAI mode requires server configuration and explicit consent.')}${submit(state, 'Run council review')}</form>
+    <section class="panel council-decision">${heading('The committee perspective', c.mode === 'local' ? 'Deterministic checklist · no LLM used' : 'AI-generated review · human verification required', tag(c.mode === 'local' ? 'LOCAL MODE' : 'OPENAI MODE', c.mode === 'local' ? 'muted' : 'positive'))}<div class="decision-symbol">${HF.icon('sparkles', 30)}</div><h3>${E(c.decision.recommendation)}</h3><div class="council-actions"><span class="eyebrow">EVIDENCE TO CLOSE</span>${c.decision.next_actions.map((a, i) => `<div><span>0${i + 1}</span><p>${E(a)}</p></div>`).join('')}</div><button class="btn secondary small" data-action="export-council">${HF.icon('download', 16)} Export review</button></section></div>
+    <section class="two-columns review-grid">${c.reviews.map((r, i) => `<article class="panel review-card"><div class="review-heading"><span class="agent-symbol agent-${i}">${HF.icon(['battery', 'briefcase', 'globe', 'leaf', 'layers', 'document', 'shield', 'code'][i] ?? 'sparkles', 21)}</span><h3>${E(r.agent)}</h3></div><p>${E(r.summary)}</p><div class="review-risk"><strong>Challenge</strong>${r.risks.map(x => `<p>${E(x)}</p>`).join('')}</div><small>Required evidence</small>${r.required_evidence.map(x => `<p>${E(x)}</p>`).join('')}</article>`).join('')}</section>${warnings(c)}`;
+    }
+    function content(state) {
+        const views = { hybrid: HF.hybridView, lessons: HF.lessonsView, compare: HF.compareView, overview, storage: storageView, pv: pvView, research: researchView, markets: marketsView, forecast: forecastView, investment: investmentView, pilots: pilotsView, council: councilView };
+        return views[state.page](state);
+    }
+    HF.content = content;
+    function shell(state) {
+        const page = HF.PAGES.find(p => p.id === state.page);
+        return `<a class="skip-link" href="#main-content">Skip to content</a><aside class="sidebar" id="sidebar"><a class="brand" href="#overview" aria-label="HelioForge command centre">${HF.brandMark()}<div>helioforge<span>ENERGY INTELLIGENCE</span></div></a><button type="button" class="workspace-picker" data-champion-action="workspace" aria-label="Open saved setups"><span class="workspace-logo">${HF.icon('layers', 18)}</span><div>Research workspace<small>Saved setups & local recovery</small></div>${HF.icon('down', 13)}</button><nav aria-label="Main navigation">${HF.PAGES.map(p => `${p.group ? `<p class="nav-group">${p.group}</p>` : ''}<button data-nav="${p.id}" class="nav-item ${state.page === p.id ? 'selected' : ''}" ${state.page === p.id ? 'aria-current="page"' : ''}>${HF.icon(p.icon, 18)}<span>${p.title}</span>${p.id === 'council' ? '<span class="nav-badge">8+1</span>' : ''}</button>`).join('')}</nav><div class="sidebar-bottom"><div class="open-source-card">${HF.icon('code', 20)}<strong>Built to be questioned.</strong><p>Open models. Visible assumptions.<br>Evidence you can inspect.</p><button data-action="methodology" class="text-link">Explore methodology ${HF.icon('diagonal', 13)}</button></div><div class="profile"><span class="avatar">HF</span><div>Energy R&D team<small>Champion · local edition</small></div><span class="presence"></span></div></div></aside>
+    <div class="app-main"><header class="topbar"><div class="breadcrumb"><button class="icon-button mobile-menu" data-action="menu" aria-label="Toggle navigation" aria-controls="sidebar" aria-expanded="false">${HF.icon('menu', 21)}</button><span>Workspace</span>${HF.icon('arrow', 12)}<strong>${page.title}</strong></div><div class="topbar-right"><button class="command-trigger" data-champion-action="commands" aria-label="Search commands and architectures">${HF.icon('search', 16)}<span>Find anything</span><kbd>Ctrl K</kbd></button><button class="connection-chip ${state.connected ? 'online' : ''}" data-action="reconnect" title="Reconnect to the local API"><i></i>${state.connected ? 'API connected' : 'Snapshot preview'}</button><span class="topbar-divider"></span><button class="icon-button" data-action="motion" aria-label="${state.motionOff ? 'Enable' : 'Reduce'} animations" aria-pressed="${state.motionOff}">${HF.icon(state.motionOff ? 'play' : 'pause', 16)}</button><button class="icon-button" data-action="history" aria-label="Open analysis history">${HF.icon('clock', 19)}</button><span class="avatar top-avatar">HF</span></div></header>
+    <main id="main-content" tabindex="-1"><div class="page-heading"><div><div class="page-kicker">HELIOFORGE / HYBRID ENERGY WORKBENCH</div><h1>${page.title}<span class="beta-label">CHAMPION · 0.3</span></h1><p>${page.subtitle}</p></div><div class="page-tools">${['hybrid', 'lessons', 'compare'].includes(state.page) ? '' : `<label class="select-wrap context-select">${HF.icon('globe', 16)}<span class="sr-only">Analysis market</span><select id="context-market" ${state.busy ? 'disabled' : ''}>${state.data.markets.map(m => `<option value="${m.code}" ${m.code === state.data.market ? 'selected' : ''}>${m.name}</option>`).join('')}</select></label>`}<button class="btn secondary" data-action="export-evidence">${HF.icon('download', 16)}<span>Export evidence</span></button></div></div><div class="data-ribbon"><span><i></i> SYNTHETIC DATA</span><p>Illustrative scenarios, not live market data or investment advice.</p><button data-action="methodology">Model boundaries ${HF.icon('diagonal', 13)}</button></div><div id="champion-toolbar">${HF.championToolbar(state)}</div><div id="page-content">${content(state)}</div><footer><span>${HF.brandMark()} helioforge <b>·</b> Open energy intelligence</span><span>Transparent by design. Human decisions, always.</span></footer></main></div><div id="toast" class="toast" role="status" aria-live="polite"></div><div id="celebration" class="celebration" aria-hidden="true"></div><dialog id="modal" aria-labelledby="modal-title"></dialog>`;
+    }
+    HF.shell = shell;
+    function updateProjectTable(state) { const t = document.getElementById('project-table'); if (t)
+        t.innerHTML = projectTable(state); }
+    HF.updateProjectTable = updateProjectTable;
+})(HF || (HF = {}));
+var HF;
+(function (HF) {
+    function championToolbar(state) {
+        const h = state.hybrid, c = state.champion, current = Boolean(h.result) && !HF.hybridDirty(h);
+        const runState = h.busy ? 'Calculating' : h.inputError ? 'Check inputs' : current ? (h.result?.run_id ? 'Saved result' : 'Bundled example') : 'Setup ready';
+        const local = c?.storage === 'unavailable' ? 'Memory only' : c?.lastSavedAt ? 'Locally saved' : 'Local-first';
+        return `<div class="workbench-bar"><div class="workbench-status"><span class="status-beacon ${h.busy ? 'busy' : ''}"></span><span><strong>${HF.escapeHTML(runState)}</strong><small>${HF.escapeHTML(local)} · no cloud sync</small></span></div><div class="workbench-actions"><button class="btn quiet small" data-champion-action="guide">${HF.icon('play', 14)}<span>Quick start</span></button><button class="btn secondary small" data-champion-action="workspace">${HF.icon('layers', 14)}<span>Saved setups</span><b>${c?.saved.length ?? 0}</b></button><button class="btn quiet small" data-nav="compare">${HF.icon('activity', 14)}<span>Compare</span><b>${h.compare.length}</b></button></div></div>${c?.notice ? `<div class="workspace-notice" role="status">${HF.icon('info', 15)}<span>${HF.escapeHTML(c.notice)}</span><button class="icon-button" data-champion-action="dismiss-notice" aria-label="Dismiss workspace notice">${HF.icon('close', 14)}</button></div>` : ''}`;
+    }
+    HF.championToolbar = championToolbar;
+    function workspaceDialog(state) {
+        const c = state.champion, h = state.hybrid;
+        return `<div class="modal-copy workspace-dialog"><div class="workspace-summary"><span>${HF.icon('layers', 25)}</span><div><h3>Your experiments, within reach.</h3><p>Configurations stay in this browser. Calculated runs stay in your local Python database. Export files to move between devices.</p></div></div>${c.recoveryRaw ? `<div class="notice warn"><span>The stored workspace is damaged or incompatible. It has been left untouched.</span></div><div class="h-actions"><button class="btn secondary" data-champion-action="recovery-export">Download recovery record</button><button class="btn quiet" data-champion-action="recovery-reset">Reset damaged cache</button></div>` : ''}<form id="save-setup-form"><label class="field"><span>Name this setup</span><input name="setup_name" type="text" required maxlength="80" value="${HF.escapeHTML((HF.systemById(h.inputs.system_id).name + ' / ' + HF.scenarioById(h.inputs.scenario_id).name).slice(0, 80))}" autocomplete="off"></label><button class="btn primary" type="submit" ${h.busy || h.inputError || c.saved.length >= 20 || Boolean(c.recoveryRaw) ? 'disabled' : ''}>${HF.icon('check', 16)} Save current setup</button><p class="form-note">Up to 20 named setups. This saves inputs, not a new calculation.${h.inputError ? ' Correct the current input error first.' : ''}</p></form><div class="shelf-heading"><h3>${c.saved.length} saved ${c.saved.length === 1 ? 'setup' : 'setups'}</h3><button class="text-link" data-champion-action="export-workspace">Export workspace</button></div><div class="setup-list">${c.saved.length ? c.saved.map(s => `<article class="setup-row"><div class="setup-row-icon">${HF.icon('layers', 19)}</div><div class="setup-copy"><strong>${HF.escapeHTML(s.name)}</strong><small>${HF.escapeHTML(HF.systemById(s.inputs.system_id).name)} · ${s.inputs.hours} h</small></div><div class="setup-actions"><button class="btn secondary small" data-load-setup="${s.id}" ${h.busy ? 'disabled' : ''}>Open</button><button class="icon-button" data-export-setup="${s.id}" aria-label="Export ${HF.escapeHTML(s.name)}">${HF.icon('download', 16)}</button><button class="icon-button" data-delete-setup="${s.id}" aria-label="Delete ${HF.escapeHTML(s.name)}">${HF.icon('close', 16)}</button></div></article>`).join('') : '<div class="shelf-empty"><strong>Begin with a reference case.</strong><p>Give your current inputs a name. You can return to them after changing a scenario.</p></div>'}</div><div class="notice"><span>${c.storage === 'unavailable' ? 'Browser storage is unavailable. Your setups are in memory only: export before closing.' : 'Clearing browser data removes these shortcuts. It does not delete API runs or exported files.'}</span></div></div>`;
+    }
+    HF.workspaceDialog = workspaceDialog;
+    function historyDialog(runs) {
+        return `<div class="modal-copy"><p>Latest 100 local runs. Each record contains exact inputs, results, timestamp and input hash. This is not a tamper-evident ledger.</p><label class="search-field run-search">${HF.icon('search', 16)}<input id="run-search" type="search" placeholder="Filter by model or run ID…" aria-label="Filter saved runs"></label><div id="run-results">${historyRows(runs, '')}</div></div>`;
+    }
+    HF.historyDialog = historyDialog;
+    function historyRows(runs, query) {
+        const q = query.toLowerCase().trim(), visible = runs.filter(r => `${r.kind} ${r.id} ${r.created_at}`.toLowerCase().includes(q));
+        return `<div class="history-count" role="status">${visible.length} saved ${visible.length === 1 ? 'run' : 'runs'}</div><div class="run-list">${visible.length ? visible.map(r => `<article class="run-row"><div class="setup-row-icon">${HF.icon(r.kind === 'hybrid' ? 'layers' : 'document', 18)}</div><div class="setup-copy"><strong>${HF.escapeHTML(r.kind === 'hybrid' ? 'Hybrid energy screen' : r.kind)}</strong><small>${HF.escapeHTML(new Date(r.created_at).toLocaleString())}</small><code>${HF.escapeHTML(r.id.slice(0, 8))} · ${HF.escapeHTML(r.input_hash.slice(0, 12))}</code></div><div class="setup-actions">${r.kind === 'hybrid' ? `<button class="btn secondary small" data-restore-run="${HF.escapeHTML(r.id)}">Open run</button>` : ''}<button class="icon-button" data-run="${HF.escapeHTML(r.id)}" aria-label="Download ${HF.escapeHTML(r.kind)} run ${HF.escapeHTML(r.id.slice(0, 8))}">${HF.icon('download', 16)}</button></div></article>`).join('') : '<div class="shelf-empty"><h3>No matching runs yet.</h3><p>Calculate a scenario to create a record, or clear this filter.</p></div>'}</div>`;
+    }
+    HF.historyRows = historyRows;
+    function commandDialog() {
+        return `<div class="command-dialog"><label class="command-input">${HF.icon('search', 22)}<input id="command-search" type="search" autocomplete="off" placeholder="Find a workspace, architecture or lesson…" aria-label="Search commands" role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="command-results"></label><div id="command-results" role="listbox" aria-label="Commands">${commandResults('')}</div><div class="command-footer"><span><kbd>↑</kbd><kbd>↓</kbd> Navigate <kbd>Enter</kbd> Open</span><span><kbd>Esc</kbd> Close</span></div></div>`;
+    }
+    HF.commandDialog = commandDialog;
+    function commandResults(query) {
+        const rows = HF.commandEntries(query);
+        return rows.length ? rows.map((r, i) => `<button class="command-option ${i === 0 ? 'active' : ''}" id="command-option-${i}" role="option" aria-selected="${i === 0}" data-command-kind="${r.kind}" data-command-target="${r.target}"><span class="command-icon">${HF.icon(r.icon, 18)}</span><span><strong>${HF.escapeHTML(r.label)}</strong><small>${HF.escapeHTML(r.detail)}</small></span>${HF.icon('arrow', 16)}</button>`).join('') : '<div class="shelf-empty" role="status">No matches. Try “hospital”, “BESS”, “hydrogen” or “finance”.</div>';
+    }
+    HF.commandResults = commandResults;
+    function quickStartDialog() {
+        return `<div class="modal-copy quick-start"><span class="eyebrow">YOUR FIRST REPRODUCIBLE EXPERIMENT</span><h3>What changes when the grid goes away?</h3><p>A hospital microgrid makes a useful first comparison. This is synthetic hourly energy adequacy, not a hospital safety assessment.</p><div class="guide-steps">${[
+            ['Set the reference', 'Open Hospital islanding microgrid with the Reference day scenario. Save the setup with a meaningful name.'],
+            ['Calculate and pin', 'Run the energy screen, inspect its assumptions, then use Pin to compare.'],
+            ['Change one condition', 'Select Four-hour outage, run again, and pin the second result.'],
+            ['Follow the evidence', 'Open Scenario compare. Check critical shortfall and both battery energy endpoints before interpreting cost.']
+        ].map((s, i) => `<article><span>${i + 1}</span><div><strong>${s[0]}</strong><p>${s[1]}</p></div></article>`).join('')}</div><div class="h-actions"><button class="btn primary" data-champion-action="start-hospital">Open the reference case ${HF.icon('arrow', 16)}</button><button class="btn secondary" data-nav="lessons">Explore guided lessons</button></div><p class="form-note">A running local API is needed for new calculations. Preview mode still supports architecture exploration and self-checks.</p></div>`;
+    }
+    HF.quickStartDialog = quickStartDialog;
+})(HF || (HF = {}));
+var HF;
+(function (HF) {
+    function installChampionController(state, cb) {
+        const h = state.hybrid, c = state.champion;
+        let selectionEpoch = 0;
+        const refreshToolbar = () => { const el = document.getElementById('champion-toolbar'); if (el)
+            el.innerHTML = HF.championToolbar(state); };
+        const persist = () => { const ok = HF.persistWorkspace(state); refreshToolbar(); return ok; };
+        function setInputs(inputs) {
+            h.inputs = HF.parseConfiguration(inputs);
+            h.result = null;
+            h.resultInputs = null;
+            h.inputError = null;
+            h.draft = null;
+            h.objectId = HF.systemById(h.inputs.system_id).technologies[0];
+            h.hour = Math.min(12, h.inputs.hours - 1);
+            c.lastRunId = null;
+        }
+        function showWorkspace() { cb.openModal('Saved setups', HF.workspaceDialog(state)); }
+        async function history() {
+            if (!state.connected) {
+                cb.toast('Run the local Python application to access saved calculations.');
+                return;
+            }
+            state.runs = await cb.api('runs');
+            cb.openModal('Analysis history', HF.historyDialog(state.runs));
+        }
+        function setResult(saved) {
+            setInputs(saved.inputs);
+            h.result = saved.result;
+            h.resultInputs = { ...saved.inputs };
+            c.lastRunId = saved.run_id;
+        }
+        async function restore() {
+            if (c.restored || !state.connected)
+                return;
+            c.restored = true;
+            const expected = HF.configurationKey(h.inputs), runId = c.lastRunId, ids = [...c.pendingPins];
+            const failures = [];
+            if (runId) {
+                try {
+                    const saved = HF.parseSavedHybrid(await cb.api(`runs/${encodeURIComponent(runId)}`));
+                    if (HF.configurationKey(saved.inputs) === expected && HF.configurationKey(h.inputs) === expected && !h.busy && !h.inputError)
+                        setResult(saved);
+                    else if (HF.configurationKey(saved.inputs) !== expected)
+                        failures.push('The saved result does not match the restored setup.');
+                }
+                catch {
+                    failures.push('The previous result is unavailable in this API database. Your configuration is still retained.');
+                    c.restored = false;
+                }
+            }
+            for (const id of ids) {
+                try {
+                    const saved = HF.parseSavedHybrid(await cb.api(`runs/${encodeURIComponent(id)}`));
+                    if (c.pendingPins.includes(id) && h.compare.length < 3 && !h.compare.some(r => r.id === id))
+                        h.compare.push({ id, name: `${HF.systemById(saved.inputs.system_id).name} / ${HF.scenarioById(saved.inputs.scenario_id).name}`, inputs: saved.inputs, result: saved.result });
+                    c.pendingPins = c.pendingPins.filter(x => x !== id);
+                }
+                catch {
+                    failures.push('A pinned run is unavailable. Its reference is retained for reconnection.');
+                    c.restored = false;
+                }
+            }
+            if (failures.length)
+                c.notice = [...new Set(failures)].join(' ');
+            else if (runId || ids.length)
+                c.notice = 'Workspace recovered. Displayed results were loaded from actual saved API records.';
+            if (!failures.length && !c.recoveryRaw)
+                persist();
+            cb.render();
+        }
+        async function openRun(id) {
+            if (h.busy)
+                throw new Error('Wait for the current energy screen before reopening another run.');
+            const epoch = ++selectionEpoch, expected = HF.configurationKey(h.inputs), page = state.page;
+            const saved = HF.parseSavedHybrid(await cb.api(`runs/${encodeURIComponent(id)}`));
+            if (epoch !== selectionEpoch || h.busy || h.inputError || HF.configurationKey(h.inputs) !== expected) {
+                cb.toast('The setup changed while the run was loading. Your newer inputs were retained.');
+                return;
+            }
+            setResult(saved);
+            persist();
+            if (state.page === page)
+                cb.navigate('hybrid');
+            else
+                cb.render();
+            cb.toast('Saved calculation reopened with its exact inputs. No new simulation was performed.');
+        }
+        async function action(name) {
+            if (name === 'workspace')
+                showWorkspace();
+            else if (name === 'guide')
+                cb.openModal('A baseline. A stress. A better question.', HF.quickStartDialog());
+            else if (name === 'commands') {
+                cb.openModal('Find anything', HF.commandDialog());
+                const el = document.getElementById('command-search');
+                el?.focus();
+                el?.setAttribute('aria-activedescendant', 'command-option-0');
+            }
+            else if (name === 'history')
+                await history();
+            else if (name === 'dismiss-notice') {
+                c.notice = '';
+                refreshToolbar();
+            }
+            else if (name === 'start-hospital') {
+                if (h.busy)
+                    throw new Error('Wait for the current energy screen.');
+                setInputs(HF.presetInputs('hospital-island'));
+                persist();
+                cb.navigate('hybrid');
+                cb.toast('Hospital reference case loaded. Run it, pin it, then apply Four-hour outage.');
+            }
+            else if (name === 'export-workspace')
+                HF.download('helioforge-workspace.json', JSON.stringify(HF.workspaceCache(state), null, 2));
+            else if (name === 'recovery-export')
+                HF.download('helioforge-workspace-recovery.txt', c.recoveryRaw ?? 'No damaged cache is present.', 'text/plain');
+            else if (name === 'recovery-reset')
+                cb.openModal('Reset the damaged workspace cache?', `<div class="modal-copy"><p>This removes the unreadable browser cache. It does not delete your API runs, lesson progress or exported files. Download the recovery record first to keep a copy.</p><div class="h-actions"><button class="btn secondary" data-champion-action="workspace">Keep it</button><button class="btn primary" data-champion-action="confirm-recovery-reset">Reset browser cache</button></div></div>`);
+            else if (name === 'confirm-recovery-reset') {
+                localStorage.removeItem(HF.WORKSPACE_KEY);
+                c.recoveryRaw = null;
+                c.notice = 'Browser workspace cache reset. Existing API runs were not changed.';
+                persist();
+                showWorkspace();
+            }
+        }
+        function fail(error) { cb.toast(error instanceof Error ? error.message : 'The workspace action could not complete.', true); }
+        document.addEventListener('click', event => {
+            const el = event.target.closest('button');
+            if (!el)
+                return;
+            try {
+                if (el.dataset.championAction)
+                    void action(el.dataset.championAction).catch(fail);
+                if (el.dataset.restoreRun)
+                    void openRun(el.dataset.restoreRun).catch(fail);
+                const setupId = el.dataset.loadSetup ?? el.dataset.exportSetup ?? el.dataset.deleteSetup ?? el.dataset.confirmDelete;
+                if (setupId) {
+                    const s = c.saved.find(x => x.id === setupId);
+                    if (!s)
+                        throw new Error('The saved setup is no longer available.');
+                    if (el.dataset.loadSetup) {
+                        if (h.busy)
+                            throw new Error('Wait for the current energy screen.');
+                        setInputs(s.inputs);
+                        persist();
+                        cb.navigate('hybrid');
+                        cb.toast('Saved setup loaded. Run it to calculate fresh results.');
+                    }
+                    if (el.dataset.exportSetup)
+                        HF.download('helioforge-saved-setup.json', JSON.stringify({ schema: 'helioforge.hybrid.v1', inputs: s.inputs }, null, 2));
+                    if (el.dataset.deleteSetup)
+                        cb.openModal('Delete this saved setup?', `<div class="modal-copy"><p>Remove <strong>${HF.escapeHTML(s.name)}</strong> from this browser? The current configuration and API runs will not be deleted.</p><div class="h-actions"><button class="btn secondary" data-champion-action="workspace">Keep setup</button><button class="btn primary" data-confirm-delete="${s.id}">Delete saved setup</button></div></div>`);
+                    if (el.dataset.confirmDelete) {
+                        c.saved = c.saved.filter(x => x.id !== setupId);
+                        const ok = persist();
+                        showWorkspace();
+                        cb.toast(ok ? 'Saved setup removed from this browser.' : 'Removed in this tab only; browser storage could not be updated.', !ok);
+                    }
+                }
+                if (el.dataset.commandKind) {
+                    const target = el.dataset.commandTarget;
+                    if (el.dataset.commandKind === 'action')
+                        void action(target).catch(fail);
+                    else if (el.dataset.commandKind === 'page')
+                        cb.navigate(target);
+                    else if (el.dataset.commandKind === 'system') {
+                        if (h.busy)
+                            throw new Error('Wait for the current energy screen.');
+                        setInputs(HF.presetInputs(target));
+                        persist();
+                        cb.navigate('hybrid');
+                    }
+                    else if (el.dataset.commandKind === 'lesson') {
+                        h.lessonId = target;
+                        h.quizResult = null;
+                        persist();
+                        cb.navigate('lessons');
+                    }
+                }
+            }
+            catch (e) {
+                fail(e);
+            }
+        });
+        document.addEventListener('input', event => {
+            const el = event.target;
+            if (el.id === 'run-search') {
+                const target = document.getElementById('run-results');
+                if (target)
+                    target.innerHTML = HF.historyRows(state.runs, el.value);
+            }
+            if (el.id === 'command-search') {
+                const list = document.getElementById('command-results');
+                if (list)
+                    list.innerHTML = HF.commandResults(el.value);
+                if (list?.querySelector('button'))
+                    el.setAttribute('aria-activedescendant', 'command-option-0');
+                else
+                    el.removeAttribute('aria-activedescendant');
+            }
+        });
+        document.addEventListener('keydown', event => {
+            if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+                event.preventDefault();
+                void action('commands').catch(fail);
+                return;
+            }
+            const el = event.target;
+            if (el.id !== 'command-search')
+                return;
+            const buttons = [...document.querySelectorAll('#command-results button')];
+            if (!buttons.length)
+                return;
+            let selected = Math.max(0, buttons.findIndex(b => b.classList.contains('active')));
+            if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                event.preventDefault();
+                selected = (selected + (event.key === 'ArrowDown' ? 1 : buttons.length - 1)) % buttons.length;
+                buttons.forEach((b, i) => { b.classList.toggle('active', i === selected); b.setAttribute('aria-selected', String(i === selected)); });
+                el.setAttribute('aria-activedescendant', buttons[selected].id);
+                buttons[selected].scrollIntoView({ block: 'nearest' });
+            }
+            else if (event.key === 'Enter') {
+                event.preventDefault();
+                buttons[selected].click();
+            }
+        });
+        document.addEventListener('submit', event => {
+            const form = event.target;
+            if (form.id !== 'save-setup-form')
+                return;
+            event.preventDefault();
+            try {
+                if (h.busy || h.inputError || c.recoveryRaw)
+                    throw new Error('Resolve the current operation or workspace recovery before saving.');
+                const name = String(new FormData(form).get('setup_name') ?? '').trim();
+                if (!name || name.length > 80)
+                    throw new Error('Use a setup name of 1–80 characters.');
+                if (c.saved.length >= 20)
+                    throw new Error('The shelf holds 20 setups. Export and remove one before adding another.');
+                c.saved.push({ id: `setup-${crypto.randomUUID()}`, name, created_at: new Date().toISOString(), inputs: HF.parseConfiguration(h.inputs) });
+                const ok = persist();
+                showWorkspace();
+                cb.toast(ok ? 'Setup saved in this browser.' : 'Setup added to memory only. Export it before closing this tab.', !ok);
+            }
+            catch (e) {
+                fail(e);
+            }
+        });
+        return { persist, restore, history };
+    }
+    HF.installChampionController = installChampionController;
+})(HF || (HF = {}));
+var HF;
+(function (HF) {
+    /** Single application controller. Numerical work remains on the typed Python API. */
+    function boot() {
+        const root = document.getElementById('app');
+        if (!root)
+            throw new Error('Missing application root.');
+        const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let savedMotion = false;
+        try {
+            savedMotion = localStorage.getItem('hf-motion-off') === 'true';
+        }
+        catch { /* Storage can be blocked. */ }
+        const initial = location.hash.slice(1);
+        const state = { hybrid: HF.initialHybridState(), page: HF.PAGES.some(p => p.id === initial) ? initial : 'hybrid', connected: false, busy: false, data: structuredClone(HF.SNAPSHOT), marketFilter: 'ALL', search: '', chartMode: 'dispatch', forecastYears: 20, runs: [], motionOff: media.matches || savedMotion };
+        state.champion = HF.initialChampionState(state.hybrid);
+        const modelDrafts = new Map();
+        let champion;
+        let hasConnected = false;
+        let connectionEpoch = 0, toastTimer = 0, modalReturn = null;
+        let sceneCleanup;
+        function render() {
+            sceneCleanup?.();
+            root.innerHTML = HF.shell(state);
+            document.documentElement.dataset.motion = state.motionOff ? 'off' : 'on';
+            for (const form of document.querySelectorAll('form[data-model]')) {
+                const draft = modelDrafts.get(form.dataset.model);
+                if (draft) {
+                    for (const field of form.querySelectorAll('input[name],select[name],textarea[name]')) {
+                        if (draft[field.name] !== undefined)
+                            field.value = draft[field.name];
+                    }
+                    const note = document.createElement('p');
+                    note.className = 'draft-note';
+                    note.setAttribute('role', 'status');
+                    note.textContent = 'Unsaved input edits. Displayed results still belong to the last completed calculation.';
+                    form.append(note);
+                }
+            }
+            if (state.hybrid.draft)
+                for (const field of document.querySelectorAll('#hybrid-config input[name],#hybrid-config select[name]')) {
+                    if (state.hybrid.draft[field.name] !== undefined)
+                        field.value = state.hybrid.draft[field.name];
+                }
+            applyBusyState();
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar)
+                sidebar.inert = window.matchMedia('(max-width:800px)').matches;
+            const canvas = document.getElementById('energy-scene');
+            if (canvas)
+                sceneCleanup = HF.mountEnergyScene(canvas, HF.systemById(state.hybrid.inputs.system_id), state.motionOff, id => { state.hybrid.objectId = id; const el = document.getElementById('asset-inspector'); if (el)
+                    el.innerHTML = HF.assetInspector(state.hybrid); document.querySelectorAll('[data-asset]').forEach(b => { b.classList.toggle('selected', b.dataset.asset === id); b.setAttribute('aria-pressed', String(b.dataset.asset === id)); }); });
+            document.title = `${HF.PAGES.find(p => p.id === state.page).title} · HelioForge`;
+        }
+        function applyBusyState() {
+            document.querySelectorAll('form[data-model] input,form[data-model] select,form[data-model] textarea').forEach(e => e.disabled = state.busy);
+            document.querySelectorAll('#hybrid-config input,#hybrid-config select').forEach(e => e.disabled = state.hybrid.busy);
+            document.querySelectorAll('[data-system],[data-scenario],[data-hybrid-action="reset"],[data-hybrid-action="import"],[data-hybrid-action="launch-lesson"]').forEach(e => e.disabled = state.hybrid.busy);
+        }
+        function setMobileMenu(open) {
+            const sidebar = document.getElementById('sidebar'), main = document.querySelector('.app-main'), toggle = document.querySelector('[data-action="menu"]');
+            const mobile = window.matchMedia('(max-width:800px)').matches;
+            if (!sidebar || !main)
+                return;
+            sidebar.classList.toggle('mobile-open', open && mobile);
+            sidebar.inert = mobile && !open;
+            main.inert = mobile && open;
+            toggle?.setAttribute('aria-expanded', String(mobile && open));
+            document.getElementById('nav-backdrop')?.remove();
+            if (open && mobile) {
+                const shade = document.createElement('button');
+                shade.id = 'nav-backdrop';
+                shade.className = 'nav-backdrop';
+                shade.setAttribute('aria-label', 'Close navigation');
+                shade.onclick = () => setMobileMenu(false);
+                root.append(shade);
+                sidebar.querySelector('[aria-current="page"]')?.focus();
+            }
+            else if (mobile)
+                toggle?.focus();
+        }
+        function rememberDraft(event) {
+            const el = event.target;
+            const form = el.closest('form[data-model]');
+            // Passwords, external execution mode and consent are deliberately never retained.
+            if (!form || !el.name || el.type === 'password' || ['admin_key', 'consent', 'mode'].includes(el.name) || state.busy)
+                return;
+            const model = form.dataset.model, draft = modelDrafts.get(model) ?? {};
+            draft[el.name] = el.value;
+            modelDrafts.set(model, draft);
+            if (!form.querySelector('.draft-note')) {
+                const note = document.createElement('p');
+                note.className = 'draft-note';
+                note.setAttribute('role', 'status');
+                note.textContent = 'Unsaved input edits. Displayed results still belong to the last completed calculation.';
+                form.append(note);
+            }
+        }
+        document.addEventListener('input', rememberDraft);
+        document.addEventListener('change', rememberDraft);
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && !document.getElementById('modal')?.open)
+            setMobileMenu(false); });
+        window.matchMedia('(max-width:800px)').addEventListener('change', () => setMobileMenu(false));
+        function toast(message, error = false) {
+            const el = document.getElementById('toast');
+            if (!el)
+                return;
+            clearTimeout(toastTimer);
+            el.textContent = message;
+            el.className = `toast show ${error ? 'toast-error' : ''}`;
+            toastTimer = window.setTimeout(() => el.classList.remove('show'), 6000);
+        }
+        async function api(path, body, method = 'POST', adminKey) {
+            if (location.protocol === 'file:')
+                throw new Error('Open the local Python application to run calculations. This file is a read-only snapshot.');
+            const headers = {};
+            if (body !== undefined)
+                headers['Content-Type'] = 'application/json';
+            if (adminKey)
+                headers['X-API-Key'] = adminKey;
+            let response;
+            try {
+                response = await fetch(`/api/${path}`, { method: body === undefined ? 'GET' : method, headers, body: body === undefined ? undefined : JSON.stringify(body), signal: AbortSignal.timeout(path.startsWith('council') ? 125000 : 30000) });
+            }
+            catch {
+                throw new Error(body === undefined ? 'The local API could not be reached. Start the Python app, then reconnect.' : 'The response was interrupted. The operation may have completed. Your inputs are retained. Check Analysis history before trying again.');
+            }
+            let data;
+            try {
+                data = await response.json();
+            }
+            catch {
+                throw new Error(body === undefined ? 'The local API returned an unreadable response. Reconnect and try again.' : 'The API response could not be read. Check Analysis history before retrying; the operation may already be saved.');
+            }
+            if (!response.ok) {
+                const detail = data.detail;
+                const message = typeof detail === 'string' ? detail : Array.isArray(detail) ? detail.map((x) => `${x.loc?.slice(1).join('.') ?? 'Input'}: ${x.msg ?? 'Invalid input'}`).join('; ') : `Request failed (${response.status}).`;
+                throw new Error(message);
+            }
+            return data;
+        }
+        async function connect(market = state.data.market, announce = false) {
+            const epoch = ++connectionEpoch;
+            if (location.protocol === 'file:') {
+                if (announce)
+                    toast('Snapshot preview: run the Python server for new calculations.');
+                return;
+            }
+            try {
+                const d = await api(`overview?market=${encodeURIComponent(market)}`);
+                if (epoch !== connectionEpoch)
+                    return;
+                if (d.version !== '0.3.0' || d.data_kind !== 'synthetic' || !Array.isArray(d.dispatch?.schedule))
+                    throw new Error('Unexpected dashboard response.');
+                if (!hasConnected)
+                    state.data = d;
+                else if (state.data.market !== market) {
+                    state.data = d;
+                    modelDrafts.clear();
+                }
+                else
+                    state.data.pilots = d.pilots;
+                hasConnected = true;
+                state.connected = true;
+                render();
+                await champion.restore();
+                if (announce)
+                    toast(`Connected. ${market} illustrative scenario loaded. Completed calculations retained when the market is unchanged.`);
+            }
+            catch (error) {
+                if (epoch !== connectionEpoch)
+                    return;
+                state.connected = false;
+                render();
+                if (announce)
+                    toast(error instanceof Error ? error.message : 'API unavailable.', true);
+            }
+        }
+        function navigate(page) {
+            state.page = page;
+            if (location.hash !== `#${page}`)
+                history.pushState(null, '', `#${page}`);
+            render();
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            document.getElementById('main-content')?.focus({ preventScroll: true });
+        }
+        function openModal(title, body) {
+            const m = document.getElementById('modal');
+            modalReturn = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+            m.innerHTML = `<div class="modal-heading"><h2 id="modal-title">${HF.escapeHTML(title)}</h2><button class="icon-button" data-action="close-modal" aria-label="Close dialog">${HF.icon('close', 22)}</button></div>${body}`;
+            m.addEventListener('close', () => modalReturn?.focus(), { once: true });
+            m.showModal();
+        }
+        function celebrate() {
+            if (state.motionOff)
+                return;
+            const c = document.getElementById('celebration');
+            if (!c)
+                return;
+            c.innerHTML = `<div class="success-medal">${HF.icon('trophy', 36)}<span>Milestone complete</span></div>${Array.from({ length: 14 }, (_, i) => `<i style="--angle:${i * 360 / 14}deg;--distance:${90 + i % 3 * 25}px;--delay:${i % 4 * 20}ms"></i>`).join('')}`;
+            c.classList.add('active');
+            setTimeout(() => { c.classList.remove('active'); c.innerHTML = ''; }, 1800);
+        }
+        const stringify = (data) => JSON.stringify(data, null, 2);
+        const evidence = () => ({ exported_at: new Date().toISOString(), data_kind: 'synthetic', view: state.page, hybrid: { inputs: state.hybrid.inputs, result: HF.hybridDirty(state.hybrid) ? null : state.hybrid.result, result_is_current: !HF.hybridDirty(state.hybrid), comparisons: state.hybrid.compare }, learning: { passed_self_checks: state.hybrid.progress, notice: 'Browser-local practice, not verified credentials' }, assumptions: state.data.defaults, results: { drift: state.data.drift, dispatch: state.data.dispatch, finance: state.data.finance, pv: state.data.pv, forecast: state.data.forecast, acquisition: state.data.acquisition, reliability: state.data.reliability, sustainability: state.data.sustainability }, council: state.data.council, pilots: state.data.pilots, sources: state.data.sources, market_registry: state.data.markets, notice: 'Screening scenarios only. No live market feeds. No investment, legal, safety or plant-control approval.' });
+        function councilMarkdown() {
+            const c = state.data.council;
+            return `# HelioForge council review\n\nMode: ${c.mode} (${c.execution})\nMarket: ${c.market}\n\n## Brief\n${c.reviewed_brief}\n\n## Recommendation\n${c.decision.recommendation}\n\n${c.reviews.map(r => `## ${r.agent}\n${r.summary}\n\nRisks:\n${r.risks.map(x => `- ${x}`).join('\n')}\n\nRequired evidence:\n${r.required_evidence.map(x => `- ${x}`).join('\n')}\n`).join('\n')}\n## Boundaries\n${c.warnings.join('\n')}\n`;
+        }
+        async function action(name) {
+            if (name === 'export-evidence')
+                HF.download('helioforge-evidence.json', stringify(evidence()));
+            else if (name === 'export-portfolio')
+                HF.download('helioforge-fictional-portfolio.csv', HF.toCSV(HF.filterProjects(state.data.portfolio, state.marketFilter, state.search).map(p => ({ ...p }))), 'text/csv');
+            else if (name === 'export-dispatch')
+                HF.download('helioforge-dispatch.csv', HF.toCSV(state.data.dispatch.schedule.map(p => ({ ...p }))), 'text/csv');
+            else if (name === 'export-pilots')
+                HF.download('helioforge-pilot-register.json', stringify(state.data.pilots));
+            else if (name === 'export-council')
+                HF.download('helioforge-council-review.md', councilMarkdown(), 'text/markdown');
+            else if (name === 'export-checklist')
+                HF.download('helioforge-regulatory-review-checklist.md', `# Regulatory evidence checklist\n\nNo current rules have been approved in this demo.\n\n${state.data.markets.map(m => `## ${m.name}\nSource: ${m.url}\nCustomer segment: ${m.segment}\nValue hypothesis: ${m.hypothesis}\n\n- [ ] Site meter and tariff evidence\n- [ ] Exact legal instrument and provision\n- [ ] Publication and effective dates\n- [ ] Geography, voltage and customer eligibility\n- [ ] Import/export charges, taxes and exemptions\n- [ ] Metering, aggregator and settlement rules\n- [ ] Stacking compatibility and availability obligations\n- [ ] Local currency and explicit FX basis\n- [ ] Independent reviewer, review date and expiry date\n`).join('\n')}`, 'text/markdown');
+            else if (name === 'reconnect')
+                await connect(state.data.market, true);
+            else if (name === 'menu')
+                setMobileMenu(!document.getElementById('sidebar')?.classList.contains('mobile-open'));
+            else if (name === 'motion') {
+                state.motionOff = !state.motionOff;
+                try {
+                    localStorage.setItem('hf-motion-off', String(state.motionOff));
+                }
+                catch { /* Optional preference only. */ }
+                render();
+                toast(state.motionOff ? 'Animations reduced.' : 'Animations enabled.');
+            }
+            else if (name === 'close-modal')
+                document.getElementById('modal').close();
+            else if (name === 'methodology')
+                openModal('Visible assumptions. Verifiable work.', `<div class="modal-copy"><p>HelioForge is a local-first research and investment-screening application. All included sites, prices, portfolios and pilot records are synthetic.</p><h3>What the models do</h3><p>Storage: mixed-integer cost optimization with energy balance, state-of-charge limits and no simultaneous charging/discharging or importing/exporting. The no-storage comparator is optimized under the same constraints.</p><p>Finance: pre-tax nominal cash flows, a conservative augmentation-year debt-service screen and a level-payment debt-capacity estimate. PV: discounted lifecycle costs divided by discounted generation.</p><p>Forecasting: seeded, uncalibrated annual-price scenarios. Reliability: user-specified Weibull assumptions. Carbon: a screening inventory, not a certified life-cycle assessment.</p><h3>What this release does not claim</h3><p>No live regulatory monitoring, bankable price forecast, calibrated fault diagnosis, certified biodiversity result, production authentication or operational equipment control. The country registry provides official starting points, not approved rules.</p><p>The full repository includes methodology, limitations, tests, a multi-agent build prompt and a production-hardening roadmap.</p><button class="btn primary" data-action="export-evidence">${HF.icon('download', 16)} Download current evidence</button></div>`);
+            else if (name === 'history')
+                await champion.history();
+        }
+        document.addEventListener('click', event => {
+            const el = event.target.closest('button,a');
+            if (!el)
+                return;
+            if (el.dataset.nav) {
+                navigate(el.dataset.nav);
+                return;
+            }
+            if (el.dataset.action) {
+                void action(el.dataset.action).catch(e => toast(e instanceof Error ? e.message : 'Action failed.', true));
+                return;
+            }
+            if (el.dataset.chart) {
+                state.chartMode = el.dataset.chart;
+                render();
+                return;
+            }
+            if (el.dataset.horizon) {
+                state.forecastYears = Number(el.dataset.horizon);
+                render();
+                return;
+            }
+            if (el.dataset.run) {
+                void api(`runs/${encodeURIComponent(el.dataset.run)}`).then(r => HF.download(`helioforge-run-${el.dataset.run}.json`, stringify(r))).catch(e => toast(String(e), true));
+                return;
+            }
+            if (el.dataset.project) {
+                const p = state.data.portfolio.find(x => x.id === el.dataset.project);
+                if (p)
+                    openModal(p.name, `<div class="modal-copy"><span class="tag muted">FICTIONAL PROJECT</span><p>${HF.escapeHTML(p.id)} · ${HF.escapeHTML(p.market)} · ${HF.escapeHTML(p.technology)}</p><div class="result-stats"><div><span>PV capacity</span><strong>${HF.fmt(p.pv_mwp)} MWp</strong></div><div><span>Storage energy</span><strong>${HF.fmt(p.bess_mwh)} MWh</strong></div></div><p>Stage: ${HF.escapeHTML(p.stage)}. Review progress: ${p.progress}%. Screening CAPEX: €${HF.fmt(p.capex_meur, 1)}m.</p><p>This is a demonstration record, not a real company asset. Open a modeling workspace to explore an independent scenario.</p><button class="btn primary" data-nav="${p.technology === 'PV' ? 'pv' : 'storage'}">Open modeling workspace ${HF.icon('arrow', 16)}</button></div>`);
+                return;
+            }
+            if (el.dataset.pilot) {
+                const p = state.data.pilots.find(x => x.id === el.dataset.pilot);
+                if (p)
+                    openModal(p.title, `<form id="pilot-form" data-pilot-id="${HF.escapeHTML(p.id)}" class="modal-copy"><p>${HF.escapeHTML(p.instrument)}</p><p><strong>Hypothesis:</strong> ${HF.escapeHTML(p.target)}</p><label class="field"><span>Evidence gate</span><select name="status">${['planned', 'instrumenting', 'running', 'validated'].map(x => `<option ${x === p.status ? 'selected' : ''}>${x}</option>`).join('')}</select></label><label class="field"><span>Evidence note (required)</span><textarea name="evidence_note" rows="5" minlength="8" maxlength="1200" required>${HF.escapeHTML(p.evidence_note)}</textarea></label><button class="btn primary" type="submit" ${!state.connected ? 'disabled' : ''}>${HF.icon('check', 16)} Save evidence update</button>${!state.connected ? '<p>Snapshot mode is read-only. Start the API to persist changes.</p>' : ''}</form>`);
+            }
+        });
+        document.addEventListener('input', event => {
+            const el = event.target;
+            if (el.id === 'project-search') {
+                state.search = el.value;
+                HF.updateProjectTable(state);
+            }
+        });
+        document.addEventListener('change', event => {
+            const el = event.target;
+            if (el.id === 'portfolio-market') {
+                state.marketFilter = el.value;
+                HF.updateProjectTable(state);
+            }
+            if (el.id === 'context-market') {
+                if (!state.connected) {
+                    el.value = state.data.market;
+                    toast('Connect the API to load another market scenario. Snapshot remains France.');
+                    return;
+                }
+                if (state.busy) {
+                    el.value = state.data.market;
+                    return;
+                }
+                void connect(el.value, true);
+            }
+            if (el.id === 'council-mode') {
+                const box = document.getElementById('external-consent');
+                if (box)
+                    box.hidden = el.value !== 'openai';
+            }
+        });
+        document.addEventListener('submit', event => {
+            const form = event.target;
+            event.preventDefault();
+            if (form.id === 'pilot-form') {
+                const fd = new FormData(form), id = form.dataset.pilotId;
+                const button = form.querySelector('button[type=submit]');
+                button.disabled = true;
+                void api(`pilots/${encodeURIComponent(id)}`, { status: fd.get('status'), evidence_note: fd.get('evidence_note') }, 'PATCH').then(p => {
+                    state.data.pilots = state.data.pilots.map(x => x.id === p.id ? p : x);
+                    render();
+                    toast('Pilot evidence updated and recorded.');
+                }).catch(e => { button.disabled = false; toast(e instanceof Error ? e.message : 'Update failed.', true); });
+                return;
+            }
+            if (!form.dataset.model || !state.connected || state.busy)
+                return;
+            void runModel(form);
+        });
+        async function runModel(form) {
+            const model = form.dataset.model, fd = new FormData(form), n = (name) => HF.finiteInput(fd.get(name), name);
+            let inputs = {}, path = '', adminKey;
+            try {
+                if (model === 'storage') {
+                    inputs = { ...state.data.defaults.storage, market: state.data.market, capacity_kwh: n('capacity_mwh') * 1000, power_kw: n('power_mw') * 1000, round_trip_efficiency: n('efficiency_pct') / 100, wear_eur_per_kwh: n('wear'), min_soc_fraction: n('soc_min') / 100, max_soc_fraction: n('soc_max') / 100, peak_charge_eur_per_kw_period: n('peak_charge'), grid_import_limit_kw: n('grid_limit') * 1000 };
+                    path = 'storage/optimize';
+                }
+                else if (model === 'pv') {
+                    inputs = { ...state.data.defaults.pv, capacity_kwp: n('capacity_mwp') * 1000, specific_yield_kwh_kwp: n('yield'), capex_eur_kwp: n('capex'), opex_eur_kwp_year: n('opex'), discount_rate: n('discount') / 100, capture_price_eur_mwh: n('capture'), curtailment_fraction: n('curtailment') / 100, ground_coverage_ratio: n('gcr') / 100 };
+                    path = 'pv/evaluate';
+                }
+                else if (model === 'forecast') {
+                    inputs = { ...state.data.defaults.forecast, market: state.data.market, base_price_eur_mwh: n('base'), long_run_price_eur_mwh: n('target'), annual_shock_eur_mwh: n('shock'), mean_reversion: n('reversion'), trend_eur_mwh_year: n('trend'), seed: n('seed') };
+                    path = 'forecast/simulate';
+                }
+                else if (model === 'finance') {
+                    inputs = { ...state.data.defaults.finance, capex_eur: n('capex') * 1e6, annual_gross_margin_eur: n('margin') * 1000, annual_opex_eur: n('opex') * 1000, discount_rate: n('discount') / 100, debt_fraction: n('debt') / 100, debt_interest_rate: n('interest') / 100, merchant_margin_factor: n('merchant') / 100, contracted_fraction: n('contracted') / 100, augmentation_cost_eur: n('augmentation') * 1000, augmentation_year: n('aug_year') };
+                    path = 'finance/evaluate';
+                }
+                else if (model === 'acquisition') {
+                    inputs = { ...state.data.defaults.acquisition, enterprise_value_eur: n('ev') * 1e6, annual_ebitda_eur: n('ebitda') * 1e6, net_debt_eur: n('net_debt') * 1e6, annual_maintenance_capex_eur: n('maintenance') * 1000 };
+                    path = 'acquisitions/screen';
+                }
+                else if (model === 'reliability') {
+                    inputs = { ...state.data.defaults.reliability, shape: n('shape'), scale_hours: n('scale'), age_hours: n('age'), horizon_hours: n('horizon') };
+                    path = 'research/reliability';
+                }
+                else if (model === 'sustainability') {
+                    inputs = { ...state.data.defaults.sustainability, annual_generation_kwh: n('generation') * 1e6, embodied_kgco2e: n('embodied') * 1000, counterfactual_kgco2e_kwh: n('counterfactual') / 1000, annual_operational_kgco2e: n('operational') * 1000 };
+                    path = 'research/carbon';
+                }
+                else if (model === 'council') {
+                    inputs = { hybrid_run_id: String(fd.get('hybrid_run_id') ?? '') || null, market: state.data.market, brief: String(fd.get('brief') ?? ''), mode: String(fd.get('mode') ?? 'local'), consent_to_external_processing: fd.get('consent') === 'on' };
+                    path = 'council/review';
+                    adminKey = String(fd.get('admin_key') ?? '') || undefined;
+                }
+                else
+                    throw new Error('Unknown model.');
+                state.busy = true;
+                applyBusyState();
+                // Keep entered values and focus while pending; no whole-form rerender.
+                document.querySelectorAll('form[data-model] button[type=submit]').forEach(b => b.disabled = true);
+                const submitButton = form.querySelector('button[type=submit]');
+                if (submitButton)
+                    submitButton.innerHTML = `${HF.icon('clock', 16)} ${model === 'council' ? 'Reviewing…' : 'Calculating…'}`;
+                const result = await api(path, inputs, 'POST', adminKey);
+                // Inputs and results are committed together only after a successful server response.
+                if (model === 'storage') {
+                    state.data.dispatch = result;
+                    state.data.defaults.storage = inputs;
+                }
+                else if (model === 'pv') {
+                    state.data.pv = result;
+                    state.data.defaults.pv = inputs;
+                }
+                else if (model === 'forecast') {
+                    state.data.forecast = result;
+                    state.data.defaults.forecast = inputs;
+                }
+                else if (model === 'finance') {
+                    state.data.finance = result;
+                    state.data.defaults.finance = inputs;
+                }
+                else if (model === 'acquisition') {
+                    state.data.acquisition = result;
+                    state.data.defaults.acquisition = inputs;
+                }
+                else if (model === 'reliability') {
+                    state.data.reliability = result;
+                    state.data.defaults.reliability = inputs;
+                }
+                else if (model === 'sustainability') {
+                    state.data.sustainability = result;
+                    state.data.defaults.sustainability = inputs;
+                }
+                else
+                    state.data.council = result;
+                state.busy = false;
+                modelDrafts.delete(model);
+                render();
+                toast(`${model === 'council' ? 'Review' : 'Calculation'} complete. Inputs and result saved to the local audit store.`);
+                if (model === 'storage')
+                    celebrate();
+            }
+            catch (error) {
+                state.busy = false;
+                applyBusyState();
+                // Preserve the user's invalid inputs so they can correct them.
+                document.querySelectorAll('form[data-model] button[type=submit]').forEach(b => b.disabled = !state.connected);
+                const currentForm = document.querySelector(`form[data-model="${model}"]`);
+                const b = currentForm?.querySelector('button[type=submit]');
+                if (b)
+                    b.innerHTML = `${HF.icon('play', 16)} Try again`;
+                toast(error instanceof Error ? error.message : 'The model could not be evaluated.', true);
+            }
+        }
+        function syncNavigation() { const p = location.hash.slice(1); if (HF.PAGES.some(x => x.id === p) && state.page !== p) {
+            state.page = p;
+            render();
+            document.getElementById('main-content')?.focus({ preventScroll: true });
+        } }
+        window.addEventListener('hashchange', syncNavigation);
+        window.addEventListener('popstate', syncNavigation);
+        media.addEventListener('change', () => { if (media.matches) {
+            state.motionOff = true;
+            render();
+        } });
+        champion = HF.installChampionController(state, { render, toast, navigate, api, celebrate, openModal });
+        HF.installHybridController(state, { render, toast, navigate, api, celebrate, openModal, persist: champion.persist });
+        render();
+        void connect();
+    }
+    HF.boot = boot;
+    if (typeof document !== 'undefined') {
+        if (document.readyState === 'loading')
+            document.addEventListener('DOMContentLoaded', boot, { once: true });
+        else
+            boot();
+    }
+})(HF || (HF = {}));

@@ -1,0 +1,4 @@
+Built API wheel with --no-deps --no-build-isolation using installed tools.
+Wheel includes helioforge/data/hybrid_catalog.json.
+Packaged wheel imported and actual hybrid simulation passed.
+Fresh dependency download/resolution and clean OS installation were not tested.

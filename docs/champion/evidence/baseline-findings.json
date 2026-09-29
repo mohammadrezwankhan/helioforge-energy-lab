@@ -1,0 +1,26 @@
+[
+  {
+    "id": "HF-001",
+    "title": "Invalid in-progress input leaves current result visible",
+    "observed": true,
+    "evidence": "Critical load served\n98.9%\n98.9 kWh critical shortfall\nTotal load served\n98.0%\n288.5 kWh incl. planned shedding\nGrid energy imported\n0.00 MWh\n24 modeled hours \u00b7 not annual\nTerminal battery energy\n0.53 MWh\n1.80 MWh initial \u00b7 non-cyclic\nThe energy story, hour by hour\n\nRemote renewable microgrid \u00b7 Reference day \u00b7 synthetic greedy policy\n\nPin to compare\nCSV\nDemand\nSolar\nWind\nBattery discharge\nGrid imp"
+  },
+  {
+    "id": "HF-002",
+    "title": "Navigation discards unsubmitted model inputs",
+    "expected": "23",
+    "actual": "10"
+  },
+  {
+    "id": "HF-003",
+    "title": "Reconnect resets a completed model and assumptions",
+    "expected": "12",
+    "actual": "10"
+  },
+  {
+    "id": "HF-004",
+    "title": "API accepts arbitrary Host header",
+    "expected": "reject unknown host",
+    "actual": 200
+  }
+]

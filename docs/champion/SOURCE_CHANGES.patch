@@ -1,0 +1,1593 @@
+diff --git a/.env.example b/.env.example
+index 922ee00..0b6f3ea 100644
+--- a/.env.example
++++ b/.env.example
+@@ -4,3 +4,8 @@ ENABLE_OPENAI=false
+ OPENAI_API_KEY=
+ OPENAI_MODEL=
+ ADMIN_API_KEY=
++
++# Developer server only: explicit local host/origin allow-lists.
++ALLOWED_HOSTS=localhost,127.0.0.1
++ALLOWED_ORIGINS=http://localhost:8000,http://127.0.0.1:8000
++# launch.py enforces loopback and disables external AI even if it is enabled above.
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 3b26c56..9063894 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -51,6 +51,7 @@ jobs:
+           PY
+           python scripts/browser-smoke.py --screenshots
+           python scripts/browser-hybrid.py --screenshots
++          python scripts/browser-champion.py --screenshots
+       - uses: actions/upload-artifact@v4
+         if: always()
+         with:
+@@ -62,3 +63,5 @@ jobs:
+             docs/learning-studio.png
+             docs/hybrid-browser-validation.json
+             docs/browser-validation.json
++            docs/champion/*.png
++            docs/champion/browser-champion.json
+diff --git a/apps/api/helioforge/__init__.py b/apps/api/helioforge/__init__.py
+index dbcd4a0..3cfa011 100644
+--- a/apps/api/helioforge/__init__.py
++++ b/apps/api/helioforge/__init__.py
+@@ -1,2 +1,2 @@
+ """HelioForge: transparent energy intelligence."""
+-__version__ = "0.2.0"
++__version__ = "0.3.0"
+diff --git a/apps/api/helioforge/dashboard.py b/apps/api/helioforge/dashboard.py
+index 2d58f72..303bb6f 100644
+--- a/apps/api/helioforge/dashboard.py
++++ b/apps/api/helioforge/dashboard.py
+@@ -23,7 +23,7 @@ def dashboard(market: str = "FR") -> dict:
+     observed[26:] *= .94
+     dispatch = optimize_storage(StorageRequest(market=market))
+     finance = calculate_finance(FinanceRequest())
+-    result = {"version": "0.2.0", "data_kind": "synthetic", "as_of": "Illustrative scenario · not live",
++    result = {"version": "0.3.0", "data_kind": "synthetic", "as_of": "Illustrative scenario · not live",
+               "market": market, "portfolio": PROJECTS, "markets": MARKETS, "sources": SOURCES,
+               "pilots": PILOTS, "dispatch": dispatch, "finance": finance, "pv": calculate_pv(PVRequest()),
+               "acquisition": screen_acquisition(MARequest()), "forecast": forecast_prices(ForecastRequest(market=market)),
+diff --git a/apps/api/helioforge/main.py b/apps/api/helioforge/main.py
+index d5e3a4e..9672c18 100644
+--- a/apps/api/helioforge/main.py
++++ b/apps/api/helioforge/main.py
+@@ -11,6 +11,7 @@ from uuid import uuid4
+ 
+ from fastapi import FastAPI, Header, HTTPException, Request
+ from fastapi.middleware.cors import CORSMiddleware
++from starlette.middleware.trustedhost import TrustedHostMiddleware
+ from fastapi.responses import JSONResponse
+ from fastapi.staticfiles import StaticFiles
+ from starlette.concurrency import run_in_threadpool
+@@ -38,9 +39,12 @@ async def lifespan(app: FastAPI):
+     yield
+ 
+ 
+-app = FastAPI(title="HelioForge API", version="0.2.0", lifespan=lifespan,
++app = FastAPI(title="HelioForge API", version="0.3.0", lifespan=lifespan,
+               description="Synthetic-first energy screening. Not investment advice or real-time plant control.")
+ origins = [x.strip() for x in os.getenv("ALLOWED_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000").split(",") if x.strip()]
++# Loopback is the default trust boundary. An explicit allow-list is not authentication.
++hosts = [x.strip() for x in os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,[::1]").split(",") if x.strip()]
++app.add_middleware(TrustedHostMiddleware, allowed_hosts=hosts, www_redirect=False)
+ app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=False,
+                    allow_methods=["GET", "POST", "PATCH"], allow_headers=["Content-Type", "X-API-Key"])
+ 
+@@ -62,6 +66,9 @@ async def request_guard(request: Request, call_next):
+     response.headers["X-Request-ID"] = str(uuid4())
+     response.headers["X-Content-Type-Options"] = "nosniff"
+     response.headers["Referrer-Policy"] = "no-referrer"
++    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
++    # Scientific records are private local data; updated assets must revalidate after an upgrade.
++    response.headers["Cache-Control"] = "no-store" if request.url.path.startswith("/api/") else "no-cache"
+     # Inline script/style are used only in the downloadable standalone preview, not the served app.
+     if request.url.path == "/" or request.url.path.endswith(".html"):
+         response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"
+@@ -75,7 +82,7 @@ async def bad_model_input(request: Request, exc: ValueError):
+ 
+ @app.get("/api/health")
+ def health():
+-    return {"status": "ok", "version": "0.2.0", "data_kind": "synthetic", "live_market_feeds": False,
++    return {"status": "ok", "version": "0.3.0", "data_kind": "synthetic", "live_market_feeds": False,
+             "openai_enabled": os.getenv("ENABLE_OPENAI", "false").lower() == "true"}
+ 
+ 
+diff --git a/apps/api/pyproject.toml b/apps/api/pyproject.toml
+index d8f7959..24004f6 100644
+--- a/apps/api/pyproject.toml
++++ b/apps/api/pyproject.toml
+@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
+ 
+ [project]
+ name = "helioforge-api"
+-version = "0.2.0"
++version = "0.3.0"
+ description = "Auditable energy research, storage dispatch and investment screening."
+ readme = "README.md"
+ requires-python = ">=3.11"
+diff --git a/apps/api/tests/test_api.py b/apps/api/tests/test_api.py
+index 38c7ef6..eb2915d 100644
+--- a/apps/api/tests/test_api.py
++++ b/apps/api/tests/test_api.py
+@@ -11,7 +11,7 @@ from helioforge.main import app
+ def client(tmp_path,monkeypatch):
+     monkeypatch.setenv('HELIOFORGE_DB',str(tmp_path/'test.sqlite3'))
+     monkeypatch.setenv('ENABLE_OPENAI','false')
+-    with TestClient(app) as c:
++    with TestClient(app, base_url="http://127.0.0.1") as c:
+         yield c
+ 
+ 
+diff --git a/apps/api/tests/test_champion.py b/apps/api/tests/test_champion.py
+new file mode 100644
+index 0000000..30ec7a8
+--- /dev/null
++++ b/apps/api/tests/test_champion.py
+@@ -0,0 +1,41 @@
++"""Regression coverage for the explicit local-only host and cache boundary."""
++import pytest
++from fastapi.testclient import TestClient
++from helioforge.main import app
++
++@pytest.fixture
++def client(tmp_path, monkeypatch):
++    monkeypatch.setenv("HELIOFORGE_DB", str(tmp_path / "champion.sqlite3"))
++    monkeypatch.setenv("ENABLE_OPENAI", "false")
++    with TestClient(app, base_url="http://127.0.0.1") as c:
++        yield c
++
++@pytest.mark.parametrize("host", ["evil.example", "localhost.evil.example", "127.0.0.1.evil.example", "untrusted.test:8000"])
++def test_unexpected_host_is_rejected(client, host):
++    r=client.get("/api/health",headers={"host":host})
++    assert r.status_code==400
++    assert "Invalid host" in r.text
++
++@pytest.mark.parametrize("host", ["localhost", "localhost:8000", "127.0.0.1", "127.0.0.1:8765"])
++def test_local_hosts_are_accepted(client, host):
++    r=client.get("/api/health", headers={"host":host})
++    assert r.status_code==200
++    assert r.json()["version"]=="0.3.0"
++
++@pytest.mark.parametrize("path", ["/api/health", "/api/runs", "/api/hybrid/catalog"])
++def test_local_api_results_are_not_cached(client,path):
++    r=client.get(path)
++    assert r.status_code==200
++    assert r.headers["cache-control"]=="no-store"
++    assert "camera=()" in r.headers["permissions-policy"]
++    assert r.headers["x-content-type-options"]=="nosniff"
++
++def test_host_restriction_does_not_weaken_origin_checks(client):
++    r=client.post("/api/hybrid/simulate", json={}, headers={"host":"localhost:8000","origin":"https://evil.example"})
++    assert r.status_code==403
++    assert client.get("/api/runs").json()==[]
++
++def test_rejected_host_does_not_write_a_run(client):
++    r=client.post("/api/storage/optimize", json={}, headers={"host":"rebinding.example"})
++    assert r.status_code==400
++    assert client.get("/api/runs").json()==[]
+diff --git a/apps/api/tests/test_hybrid.py b/apps/api/tests/test_hybrid.py
+index a1c92a8..5bf5d09 100644
+--- a/apps/api/tests/test_hybrid.py
++++ b/apps/api/tests/test_hybrid.py
+@@ -163,7 +163,7 @@ def test_seeded_input_fuzz_preserves_invariants():
+ def client(tmp_path,monkeypatch):
+     monkeypatch.setenv('HELIOFORGE_DB',str(tmp_path/'hybrid.sqlite3'))
+     monkeypatch.setenv('ENABLE_OPENAI','false')
+-    with TestClient(app) as c: yield c
++    with TestClient(app, base_url="http://127.0.0.1") as c: yield c
+ 
+ 
+ def test_api_catalogue_validation_run_hash_and_exact_review_attachment(client):
+diff --git a/apps/web/package-lock.json b/apps/web/package-lock.json
+index a1dfa80..2529dc1 100644
+--- a/apps/web/package-lock.json
++++ b/apps/web/package-lock.json
+@@ -1,12 +1,12 @@
+ {
+   "name": "@helioforge/dashboard",
+-  "version": "0.2.0",
++  "version": "0.3.0",
+   "lockfileVersion": 3,
+   "requires": true,
+   "packages": {
+     "": {
+       "name": "@helioforge/dashboard",
+-      "version": "0.2.0",
++      "version": "0.3.0",
+       "devDependencies": {"typescript": "5.8.3"},
+       "engines": {"node": ">=22"}
+     },
+diff --git a/apps/web/package.json b/apps/web/package.json
+index 55393c0..1eacf4d 100644
+--- a/apps/web/package.json
++++ b/apps/web/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "@helioforge/dashboard",
+-  "version": "0.2.0",
++  "version": "0.3.0",
+   "private": true,
+   "description": "Zero-runtime-dependency TypeScript energy intelligence dashboard",
+   "scripts": {
+diff --git a/apps/web/src/app.ts b/apps/web/src/app.ts
+index df01e5a..44893b9 100644
+--- a/apps/web/src/app.ts
++++ b/apps/web/src/app.ts
+@@ -8,16 +8,62 @@ namespace HF {
+     try { savedMotion=localStorage.getItem('hf-motion-off')==='true'; } catch { /* Storage can be blocked. */ }
+     const initial=location.hash.slice(1);
+     const state: ViewState={hybrid:initialHybridState(),page:PAGES.some(p=>p.id===initial)?initial as Page:'hybrid',connected:false,busy:false,data:structuredClone(SNAPSHOT),marketFilter:'ALL',search:'',chartMode:'dispatch',forecastYears:20,runs:[],motionOff:media.matches||savedMotion};
++    state.champion=initialChampionState(state.hybrid);
++    const modelDrafts=new Map<string,Record<string,string>>();
++    let champion:ChampionController;
++    let hasConnected=false;
+     let connectionEpoch=0, toastTimer=0, modalReturn:HTMLElement|null=null;
+     let sceneCleanup:(()=>void)|undefined;
+     function render(): void {
+       sceneCleanup?.();
+       root!.innerHTML=shell(state);
+       document.documentElement.dataset.motion=state.motionOff?'off':'on';
++      for(const form of document.querySelectorAll<HTMLFormElement>('form[data-model]')){
++        const draft=modelDrafts.get(form.dataset.model!);
++        if(draft){
++          for(const field of form.querySelectorAll<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>('input[name],select[name],textarea[name]')){
++            if(draft[field.name]!==undefined)field.value=draft[field.name]!;
++          }
++          const note=document.createElement('p');note.className='draft-note';note.setAttribute('role','status');
++          note.textContent='Unsaved input edits. Displayed results still belong to the last completed calculation.';form.append(note);
++        }
++      }
++      if(state.hybrid.draft)for(const field of document.querySelectorAll<HTMLInputElement|HTMLSelectElement>('#hybrid-config input[name],#hybrid-config select[name]')){
++        if(state.hybrid.draft[field.name]!==undefined)field.value=state.hybrid.draft[field.name]!;
++      }
++      applyBusyState();
++      const sidebar=document.getElementById('sidebar');if(sidebar)sidebar.inert=window.matchMedia('(max-width:800px)').matches;
+       const canvas=document.getElementById('energy-scene') as HTMLCanvasElement|null;
+       if(canvas)sceneCleanup=mountEnergyScene(canvas,systemById(state.hybrid.inputs.system_id),state.motionOff,id=>{state.hybrid.objectId=id;const el=document.getElementById('asset-inspector');if(el)el.innerHTML=assetInspector(state.hybrid);document.querySelectorAll<HTMLButtonElement>('[data-asset]').forEach(b=>{b.classList.toggle('selected',b.dataset.asset===id);b.setAttribute('aria-pressed',String(b.dataset.asset===id));});});
+       document.title=`${PAGES.find(p=>p.id===state.page)!.title} · HelioForge`;
+     }
++    function applyBusyState():void {
++      document.querySelectorAll<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>('form[data-model] input,form[data-model] select,form[data-model] textarea').forEach(e=>e.disabled=state.busy);
++      document.querySelectorAll<HTMLInputElement|HTMLSelectElement>('#hybrid-config input,#hybrid-config select').forEach(e=>e.disabled=state.hybrid.busy);
++      document.querySelectorAll<HTMLButtonElement>('[data-system],[data-scenario],[data-hybrid-action="reset"],[data-hybrid-action="import"],[data-hybrid-action="launch-lesson"]').forEach(e=>e.disabled=state.hybrid.busy);
++    }
++    function setMobileMenu(open:boolean):void {
++      const sidebar=document.getElementById('sidebar'),main=document.querySelector<HTMLElement>('.app-main'),toggle=document.querySelector<HTMLElement>('[data-action="menu"]');
++      const mobile=window.matchMedia('(max-width:800px)').matches;
++      if(!sidebar||!main)return;
++      sidebar.classList.toggle('mobile-open',open&&mobile);sidebar.inert=mobile&&!open;main.inert=mobile&&open;
++      toggle?.setAttribute('aria-expanded',String(mobile&&open));document.getElementById('nav-backdrop')?.remove();
++      if(open&&mobile){
++        const shade=document.createElement('button');shade.id='nav-backdrop';shade.className='nav-backdrop';shade.setAttribute('aria-label','Close navigation');shade.onclick=()=>setMobileMenu(false);root!.append(shade);
++        sidebar.querySelector<HTMLElement>('[aria-current="page"]')?.focus();
++      }else if(mobile)toggle?.focus();
++    }
++    function rememberDraft(event:Event):void {
++      const el=event.target as HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement;
++      const form=el.closest<HTMLFormElement>('form[data-model]');
++      // Passwords, external execution mode and consent are deliberately never retained.
++      if(!form||!el.name||el.type==='password'||['admin_key','consent','mode'].includes(el.name)||state.busy)return;
++      const model=form.dataset.model!,draft=modelDrafts.get(model)??{};draft[el.name]=el.value;modelDrafts.set(model,draft);
++      if(!form.querySelector('.draft-note')){const note=document.createElement('p');note.className='draft-note';note.setAttribute('role','status');note.textContent='Unsaved input edits. Displayed results still belong to the last completed calculation.';form.append(note);}
++    }
++    document.addEventListener('input',rememberDraft);document.addEventListener('change',rememberDraft);
++    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!(document.getElementById('modal') as HTMLDialogElement|null)?.open)setMobileMenu(false);});
++    window.matchMedia('(max-width:800px)').addEventListener('change',()=>setMobileMenu(false));
+     function toast(message:string,error=false):void {
+       const el=document.getElementById('toast'); if(!el)return;
+       clearTimeout(toastTimer); el.textContent=message; el.className=`toast show ${error?'toast-error':''}`;
+@@ -27,8 +73,12 @@ namespace HF {
+       if(location.protocol==='file:')throw new Error('Open the local Python application to run calculations. This file is a read-only snapshot.');
+       const headers:Record<string,string>={}; if(body!==undefined)headers['Content-Type']='application/json';
+       if(adminKey)headers['X-API-Key']=adminKey;
+-      const response=await fetch(`/api/${path}`,{method:body===undefined?'GET':method,headers,body:body===undefined?undefined:JSON.stringify(body),signal:AbortSignal.timeout(path.startsWith('council')?125000:30000)});
+-      const data:unknown=await response.json();
++      let response:Response;
++      try { response=await fetch(`/api/${path}`,{method:body===undefined?'GET':method,headers,body:body===undefined?undefined:JSON.stringify(body),signal:AbortSignal.timeout(path.startsWith('council')?125000:30000)}); }
++      catch { throw new Error(body===undefined?'The local API could not be reached. Start the Python app, then reconnect.':'The response was interrupted. The operation may have completed. Your inputs are retained. Check Analysis history before trying again.'); }
++      let data:unknown;
++      try { data=await response.json(); }
++      catch { throw new Error(body===undefined?'The local API returned an unreadable response. Reconnect and try again.':'The API response could not be read. Check Analysis history before retrying; the operation may already be saved.'); }
+       if(!response.ok){
+         const detail=(data as {detail?:unknown}).detail;
+         const message=typeof detail==='string'?detail:Array.isArray(detail)?detail.map((x:{msg?:string;loc?:unknown[]})=>`${x.loc?.slice(1).join('.')??'Input'}: ${x.msg??'Invalid input'}`).join('; '):`Request failed (${response.status}).`;
+@@ -42,15 +92,20 @@ namespace HF {
+       try {
+         const d=await api<Dashboard>(`overview?market=${encodeURIComponent(market)}`);
+         if(epoch!==connectionEpoch)return;
+-        if(d.version!=='0.2.0'||d.data_kind!=='synthetic'||!Array.isArray(d.dispatch?.schedule))throw new Error('Unexpected dashboard response.');
+-        state.data=d;state.connected=true;render(); if(announce)toast(`Connected. ${market} illustrative scenario loaded.`);
++        if(d.version!=='0.3.0'||d.data_kind!=='synthetic'||!Array.isArray(d.dispatch?.schedule))throw new Error('Unexpected dashboard response.');
++        if(!hasConnected)state.data=d;
++        else if(state.data.market!==market){state.data=d;modelDrafts.clear();}
++        else state.data.pilots=d.pilots;
++        hasConnected=true;state.connected=true;render();
++        await champion.restore();
++        if(announce)toast(`Connected. ${market} illustrative scenario loaded. Completed calculations retained when the market is unchanged.`);
+       }catch(error){
+         if(epoch!==connectionEpoch)return;
+         state.connected=false;render(); if(announce)toast(error instanceof Error?error.message:'API unavailable.',true);
+       }
+     }
+     function navigate(page:Page):void {
+-      state.page=page;history.replaceState(null,'',`#${page}`);render();window.scrollTo({top:0,behavior:'instant'});
++      state.page=page;if(location.hash!==`#${page}`)history.pushState(null,'',`#${page}`);render();window.scrollTo({top:0,behavior:'instant'});
+       document.getElementById('main-content')?.focus({preventScroll:true});
+     }
+     function openModal(title:string,body:string):void {
+@@ -79,16 +134,12 @@ namespace HF {
+       else if(name==='export-council')download('helioforge-council-review.md',councilMarkdown(),'text/markdown');
+       else if(name==='export-checklist')download('helioforge-regulatory-review-checklist.md',`# Regulatory evidence checklist\n\nNo current rules have been approved in this demo.\n\n${state.data.markets.map(m=>`## ${m.name}\nSource: ${m.url}\nCustomer segment: ${m.segment}\nValue hypothesis: ${m.hypothesis}\n\n- [ ] Site meter and tariff evidence\n- [ ] Exact legal instrument and provision\n- [ ] Publication and effective dates\n- [ ] Geography, voltage and customer eligibility\n- [ ] Import/export charges, taxes and exemptions\n- [ ] Metering, aggregator and settlement rules\n- [ ] Stacking compatibility and availability obligations\n- [ ] Local currency and explicit FX basis\n- [ ] Independent reviewer, review date and expiry date\n`).join('\n')}`,'text/markdown');
+       else if(name==='reconnect')await connect(state.data.market,true);
+-      else if(name==='menu')document.getElementById('sidebar')?.classList.toggle('mobile-open');
++      else if(name==='menu')setMobileMenu(!document.getElementById('sidebar')?.classList.contains('mobile-open'));
+       else if(name==='motion'){
+         state.motionOff=!state.motionOff;try{localStorage.setItem('hf-motion-off',String(state.motionOff));}catch{/* Optional preference only. */}render();toast(state.motionOff?'Animations reduced.':'Animations enabled.');
+       }else if(name==='close-modal')(document.getElementById('modal') as HTMLDialogElement).close();
+       else if(name==='methodology')openModal('Visible assumptions. Verifiable work.',`<div class="modal-copy"><p>HelioForge is a local-first research and investment-screening application. All included sites, prices, portfolios and pilot records are synthetic.</p><h3>What the models do</h3><p>Storage: mixed-integer cost optimization with energy balance, state-of-charge limits and no simultaneous charging/discharging or importing/exporting. The no-storage comparator is optimized under the same constraints.</p><p>Finance: pre-tax nominal cash flows, a conservative augmentation-year debt-service screen and a level-payment debt-capacity estimate. PV: discounted lifecycle costs divided by discounted generation.</p><p>Forecasting: seeded, uncalibrated annual-price scenarios. Reliability: user-specified Weibull assumptions. Carbon: a screening inventory, not a certified life-cycle assessment.</p><h3>What this release does not claim</h3><p>No live regulatory monitoring, bankable price forecast, calibrated fault diagnosis, certified biodiversity result, production authentication or operational equipment control. The country registry provides official starting points, not approved rules.</p><p>The full repository includes methodology, limitations, tests, a multi-agent build prompt and a production-hardening roadmap.</p><button class="btn primary" data-action="export-evidence">${icon('download',16)} Download current evidence</button></div>`);
+-      else if(name==='history'){
+-        if(!state.connected){toast('Analysis history is available when the Python API is connected.');return;}
+-        state.runs=await api<RunRecord[]>('runs');
+-        openModal('Analysis history',`<div class="modal-copy"><p>Saved runs include inputs, a SHA-256 input hash, output and UTC timestamp. This local ledger is not tamper-evident.</p>${state.runs.length?`<div class="history-list">${state.runs.map(r=>`<button data-run="${escapeHTML(r.id)}"><span>${icon('document',18)}<strong>${escapeHTML(r.kind)}</strong></span><small>${escapeHTML(new Date(r.created_at).toLocaleString())}</small>${icon('download',15)}</button>`).join('')}</div>`:'<div class="empty">No analyses saved yet. Run a calculation to create an auditable record.</div>'}</div>`);
+-      }
++      else if(name==='history')await champion.history();
+     }
+     document.addEventListener('click',event=>{
+       const el=(event.target as Element).closest<HTMLElement>('button,a');if(!el)return;
+@@ -147,9 +198,9 @@ namespace HF {
+         }else if(model==='council'){
+           inputs={hybrid_run_id:String(fd.get('hybrid_run_id')??'')||null,market:state.data.market,brief:String(fd.get('brief')??''),mode:String(fd.get('mode')??'local'),consent_to_external_processing:fd.get('consent')==='on'};path='council/review';adminKey=String(fd.get('admin_key')??'')||undefined;
+         }else throw new Error('Unknown model.');
+-        state.busy=true;
++        state.busy=true;applyBusyState();
+         // Keep entered values and focus while pending; no whole-form rerender.
+-        document.querySelectorAll<HTMLButtonElement>('button[type=submit]').forEach(b=>b.disabled=true);
++        document.querySelectorAll<HTMLButtonElement>('form[data-model] button[type=submit]').forEach(b=>b.disabled=true);
+         const submitButton=form.querySelector<HTMLButtonElement>('button[type=submit]');
+         if(submitButton)submitButton.innerHTML=`${icon('clock',16)} ${model==='council'?'Reviewing…':'Calculating…'}`;
+         const result=await api<Dispatch|Finance|PV|Forecast|Acquisition|Reliability|Sustainability|Council>(path,inputs,'POST',adminKey);
+@@ -162,18 +213,21 @@ namespace HF {
+         else if(model==='reliability'){state.data.reliability=result as Reliability;state.data.defaults.reliability=inputs;}
+         else if(model==='sustainability'){state.data.sustainability=result as Sustainability;state.data.defaults.sustainability=inputs;}
+         else state.data.council=result as Council;
+-        state.busy=false;render();toast(`${model==='council'?'Review':'Calculation'} complete. Inputs and result saved to the local audit store.`);if(model==='storage')celebrate();
++        state.busy=false;modelDrafts.delete(model);render();toast(`${model==='council'?'Review':'Calculation'} complete. Inputs and result saved to the local audit store.`);if(model==='storage')celebrate();
+       }catch(error){
+-        state.busy=false;
++        state.busy=false;applyBusyState();
+         // Preserve the user's invalid inputs so they can correct them.
+-        document.querySelectorAll<HTMLButtonElement>('button[type=submit]').forEach(b=>b.disabled=!state.connected);
+-        const b=form.querySelector<HTMLButtonElement>('button[type=submit]');if(b)b.innerHTML=`${icon('play',16)} Try again`;
++        document.querySelectorAll<HTMLButtonElement>('form[data-model] button[type=submit]').forEach(b=>b.disabled=!state.connected);
++        const currentForm=document.querySelector<HTMLFormElement>(`form[data-model="${model}"]`);
++        const b=currentForm?.querySelector<HTMLButtonElement>('button[type=submit]');if(b)b.innerHTML=`${icon('play',16)} Try again`;
+         toast(error instanceof Error?error.message:'The model could not be evaluated.',true);
+       }
+     }
+-    window.addEventListener('hashchange',()=>{const p=location.hash.slice(1);if(PAGES.some(x=>x.id===p)){state.page=p as Page;render();}});
++    function syncNavigation():void {const p=location.hash.slice(1);if(PAGES.some(x=>x.id===p)&&state.page!==p){state.page=p as Page;render();document.getElementById('main-content')?.focus({preventScroll:true});}}
++    window.addEventListener('hashchange',syncNavigation);window.addEventListener('popstate',syncNavigation);
+     media.addEventListener('change',()=>{if(media.matches){state.motionOff=true;render();}});
+-    installHybridController(state,{render,toast,navigate,api,celebrate,openModal});
++    champion=installChampionController(state,{render,toast,navigate,api,celebrate,openModal});
++    installHybridController(state,{render,toast,navigate,api,celebrate,openModal,persist:champion.persist});
+     render();void connect();
+   }
+   if(typeof document!=='undefined'){
+diff --git a/apps/web/src/champion-controller.ts b/apps/web/src/champion-controller.ts
+new file mode 100644
+index 0000000..666dbed
+--- /dev/null
++++ b/apps/web/src/champion-controller.ts
+@@ -0,0 +1,127 @@
++namespace HF {
++  export interface ChampionController { persist:()=>boolean; restore:()=>Promise<void>; history:()=>Promise<void> }
++  export function installChampionController(state:ViewState,cb:HybridCallbacks):ChampionController {
++    const h=state.hybrid,c=state.champion!;
++    let selectionEpoch=0;
++    const refreshToolbar=():void=>{const el=document.getElementById('champion-toolbar');if(el)el.innerHTML=championToolbar(state);};
++    const persist=():boolean=>{const ok=persistWorkspace(state);refreshToolbar();return ok;};
++    function setInputs(inputs:HybridInputs):void {
++      h.inputs=parseConfiguration(inputs);h.result=null;h.resultInputs=null;h.inputError=null;h.draft=null;
++      h.objectId=systemById(h.inputs.system_id).technologies[0]!;h.hour=Math.min(12,h.inputs.hours-1);c.lastRunId=null;
++    }
++    function showWorkspace():void {cb.openModal('Saved setups',workspaceDialog(state));}
++    async function history():Promise<void> {
++      if(!state.connected){cb.toast('Run the local Python application to access saved calculations.');return;}
++      state.runs=await cb.api<RunRecord[]>('runs');cb.openModal('Analysis history',historyDialog(state.runs));
++    }
++    function setResult(saved:SavedHybrid):void {
++      setInputs(saved.inputs);h.result=saved.result;h.resultInputs={...saved.inputs};c.lastRunId=saved.run_id;
++    }
++    async function restore():Promise<void> {
++      if(c.restored||!state.connected)return;
++      c.restored=true;
++      const expected=configurationKey(h.inputs),runId=c.lastRunId,ids=[...c.pendingPins];
++      const failures:string[]=[];
++      if(runId){
++        try {
++          const saved=parseSavedHybrid(await cb.api<unknown>(`runs/${encodeURIComponent(runId)}`));
++          if(configurationKey(saved.inputs)===expected&&configurationKey(h.inputs)===expected&&!h.busy&&!h.inputError)setResult(saved);
++          else if(configurationKey(saved.inputs)!==expected)failures.push('The saved result does not match the restored setup.');
++        } catch { failures.push('The previous result is unavailable in this API database. Your configuration is still retained.');c.restored=false; }
++      }
++      for(const id of ids){
++        try {
++          const saved=parseSavedHybrid(await cb.api<unknown>(`runs/${encodeURIComponent(id)}`));
++          if(c.pendingPins.includes(id)&&h.compare.length<3&&!h.compare.some(r=>r.id===id))h.compare.push({id,name:`${systemById(saved.inputs.system_id).name} / ${scenarioById(saved.inputs.scenario_id).name}`,inputs:saved.inputs,result:saved.result});
++          c.pendingPins=c.pendingPins.filter(x=>x!==id);
++        } catch { failures.push('A pinned run is unavailable. Its reference is retained for reconnection.');c.restored=false; }
++      }
++      if(failures.length)c.notice=[...new Set(failures)].join(' ');
++      else if(runId||ids.length)c.notice='Workspace recovered. Displayed results were loaded from actual saved API records.';
++      if(!failures.length&&!c.recoveryRaw)persist();
++      cb.render();
++    }
++    async function openRun(id:string):Promise<void> {
++      if(h.busy)throw new Error('Wait for the current energy screen before reopening another run.');
++      const epoch=++selectionEpoch,expected=configurationKey(h.inputs),page=state.page;
++      const saved=parseSavedHybrid(await cb.api<unknown>(`runs/${encodeURIComponent(id)}`));
++      if(epoch!==selectionEpoch||h.busy||h.inputError||configurationKey(h.inputs)!==expected){cb.toast('The setup changed while the run was loading. Your newer inputs were retained.');return;}
++      setResult(saved);persist();
++      if(state.page===page)cb.navigate('hybrid');else cb.render();
++      cb.toast('Saved calculation reopened with its exact inputs. No new simulation was performed.');
++    }
++    async function action(name:string):Promise<void> {
++      if(name==='workspace')showWorkspace();
++      else if(name==='guide')cb.openModal('A baseline. A stress. A better question.',quickStartDialog());
++      else if(name==='commands'){
++        cb.openModal('Find anything',commandDialog());
++        const el=document.getElementById('command-search') as HTMLInputElement|null;el?.focus();el?.setAttribute('aria-activedescendant','command-option-0');
++      }else if(name==='history')await history();
++      else if(name==='dismiss-notice'){c.notice='';refreshToolbar();}
++      else if(name==='start-hospital'){
++        if(h.busy)throw new Error('Wait for the current energy screen.');
++        setInputs(presetInputs('hospital-island'));persist();cb.navigate('hybrid');cb.toast('Hospital reference case loaded. Run it, pin it, then apply Four-hour outage.');
++      }else if(name==='export-workspace')download('helioforge-workspace.json',JSON.stringify(workspaceCache(state),null,2));
++      else if(name==='recovery-export')download('helioforge-workspace-recovery.txt',c.recoveryRaw??'No damaged cache is present.','text/plain');
++      else if(name==='recovery-reset')cb.openModal('Reset the damaged workspace cache?',`<div class="modal-copy"><p>This removes the unreadable browser cache. It does not delete your API runs, lesson progress or exported files. Download the recovery record first to keep a copy.</p><div class="h-actions"><button class="btn secondary" data-champion-action="workspace">Keep it</button><button class="btn primary" data-champion-action="confirm-recovery-reset">Reset browser cache</button></div></div>`);
++      else if(name==='confirm-recovery-reset'){
++        localStorage.removeItem(WORKSPACE_KEY);c.recoveryRaw=null;c.notice='Browser workspace cache reset. Existing API runs were not changed.';persist();showWorkspace();
++      }
++    }
++    function fail(error:unknown):void {cb.toast(error instanceof Error?error.message:'The workspace action could not complete.',true);}
++    document.addEventListener('click',event=>{
++      const el=(event.target as Element).closest<HTMLElement>('button');if(!el)return;
++      try {
++        if(el.dataset.championAction)void action(el.dataset.championAction).catch(fail);
++        if(el.dataset.restoreRun)void openRun(el.dataset.restoreRun).catch(fail);
++        const setupId=el.dataset.loadSetup??el.dataset.exportSetup??el.dataset.deleteSetup??el.dataset.confirmDelete;
++        if(setupId){
++          const s=c.saved.find(x=>x.id===setupId);if(!s)throw new Error('The saved setup is no longer available.');
++          if(el.dataset.loadSetup){if(h.busy)throw new Error('Wait for the current energy screen.');setInputs(s.inputs);persist();cb.navigate('hybrid');cb.toast('Saved setup loaded. Run it to calculate fresh results.');}
++          if(el.dataset.exportSetup)download('helioforge-saved-setup.json',JSON.stringify({schema:'helioforge.hybrid.v1',inputs:s.inputs},null,2));
++          if(el.dataset.deleteSetup)cb.openModal('Delete this saved setup?',`<div class="modal-copy"><p>Remove <strong>${escapeHTML(s.name)}</strong> from this browser? The current configuration and API runs will not be deleted.</p><div class="h-actions"><button class="btn secondary" data-champion-action="workspace">Keep setup</button><button class="btn primary" data-confirm-delete="${s.id}">Delete saved setup</button></div></div>`);
++          if(el.dataset.confirmDelete){c.saved=c.saved.filter(x=>x.id!==setupId);const ok=persist();showWorkspace();cb.toast(ok?'Saved setup removed from this browser.':'Removed in this tab only; browser storage could not be updated.',!ok);}
++        }
++        if(el.dataset.commandKind){
++          const target=el.dataset.commandTarget!;
++          if(el.dataset.commandKind==='action')void action(target).catch(fail);
++          else if(el.dataset.commandKind==='page')cb.navigate(target as Page);
++          else if(el.dataset.commandKind==='system'){if(h.busy)throw new Error('Wait for the current energy screen.');setInputs(presetInputs(target));persist();cb.navigate('hybrid');}
++          else if(el.dataset.commandKind==='lesson'){h.lessonId=target;h.quizResult=null;persist();cb.navigate('lessons');}
++        }
++      } catch(e){fail(e);}
++    });
++    document.addEventListener('input',event=>{
++      const el=event.target as HTMLInputElement;
++      if(el.id==='run-search'){const target=document.getElementById('run-results');if(target)target.innerHTML=historyRows(state.runs,el.value);}
++      if(el.id==='command-search'){
++        const list=document.getElementById('command-results');if(list)list.innerHTML=commandResults(el.value);
++        if(list?.querySelector('button'))el.setAttribute('aria-activedescendant','command-option-0');else el.removeAttribute('aria-activedescendant');
++      }
++    });
++    document.addEventListener('keydown',event=>{
++      if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='k'){event.preventDefault();void action('commands').catch(fail);return;}
++      const el=event.target as HTMLInputElement;if(el.id!=='command-search')return;
++      const buttons=[...document.querySelectorAll<HTMLButtonElement>('#command-results button')];if(!buttons.length)return;
++      let selected=Math.max(0,buttons.findIndex(b=>b.classList.contains('active')));
++      if(event.key==='ArrowDown'||event.key==='ArrowUp'){
++        event.preventDefault();selected=(selected+(event.key==='ArrowDown'?1:buttons.length-1))%buttons.length;
++        buttons.forEach((b,i)=>{b.classList.toggle('active',i===selected);b.setAttribute('aria-selected',String(i===selected));});
++        el.setAttribute('aria-activedescendant',buttons[selected]!.id);buttons[selected]!.scrollIntoView({block:'nearest'});
++      } else if(event.key==='Enter'){event.preventDefault();buttons[selected]!.click();}
++    });
++    document.addEventListener('submit',event=>{
++      const form=event.target as HTMLFormElement;if(form.id!=='save-setup-form')return;
++      event.preventDefault();
++      try {
++        if(h.busy||h.inputError||c.recoveryRaw)throw new Error('Resolve the current operation or workspace recovery before saving.');
++        const name=String(new FormData(form).get('setup_name')??'').trim();
++        if(!name||name.length>80)throw new Error('Use a setup name of 1–80 characters.');
++        if(c.saved.length>=20)throw new Error('The shelf holds 20 setups. Export and remove one before adding another.');
++        c.saved.push({id:`setup-${crypto.randomUUID()}`,name,created_at:new Date().toISOString(),inputs:parseConfiguration(h.inputs)});
++        const ok=persist();showWorkspace();cb.toast(ok?'Setup saved in this browser.':'Setup added to memory only. Export it before closing this tab.',!ok);
++      }catch(e){fail(e);}
++    });
++    return {persist,restore,history};
++  }
++}
+diff --git a/apps/web/src/champion-core.ts b/apps/web/src/champion-core.ts
+new file mode 100644
+index 0000000..7dbe5d6
+--- /dev/null
++++ b/apps/web/src/champion-core.ts
+@@ -0,0 +1,105 @@
++namespace HF {
++  export const WORKSPACE_KEY = 'hf-workspace-v3';
++  export interface SavedSetup { id:string; name:string; created_at:string; inputs:HybridInputs }
++  export interface WorkspaceCache {
++    schema:'helioforge.workspace.v1'; saved_at:string; inputs:HybridInputs; lesson_id:string;
++    last_run_id:string|null; pinned_run_ids:string[]; saved_setups:SavedSetup[];
++  }
++  export interface ChampionState {
++    saved:SavedSetup[]; storage:'available'|'unavailable'; notice:string;
++    lastRunId:string|null; pendingPins:string[]; restored:boolean; lastSavedAt:string|null;
++    recoveryRaw:string|null;
++  }
++  export interface SavedHybrid { run_id:string; kind:'hybrid'; created_at:string; input_sha256:string; inputs:HybridInputs; result:HybridResult }
++  export interface CommandEntry { id:string; label:string; detail:string; icon:string; kind:'page'|'system'|'lesson'|'action'; target:string }
++  const isRecord=(x:unknown):x is Record<string,unknown>=>Boolean(x)&&typeof x==='object'&&!Array.isArray(x);
++  const isRunId=(x:unknown):x is string=>typeof x==='string'&&/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(x);
++  function timestamp(x:unknown):string {
++    if(typeof x!=='string'||x.length>40||!Number.isFinite(Date.parse(x)))throw new Error('Invalid saved timestamp.');
++    return x;
++  }
++  /** Read only the documented schema, bound resource use, and validate every configuration. */
++  export function parseWorkspace(raw:unknown):WorkspaceCache {
++    if(!isRecord(raw)||raw.schema!=='helioforge.workspace.v1')throw new Error('Unsupported workspace record.');
++    const allowed=['schema','saved_at','inputs','lesson_id','last_run_id','pinned_run_ids','saved_setups'];
++    if(Object.keys(raw).some(k=>!allowed.includes(k)))throw new Error('Unknown workspace field.');
++    const inputs=parseConfiguration(raw.inputs);
++    if(typeof raw.lesson_id!=='string'||!HYBRID_CATALOG.lessons.some(l=>l.id===raw.lesson_id))throw new Error('Unknown saved lesson.');
++    if(raw.last_run_id!==null&&!isRunId(raw.last_run_id))throw new Error('Invalid saved run reference.');
++    if(!Array.isArray(raw.pinned_run_ids)||raw.pinned_run_ids.length>3||!raw.pinned_run_ids.every(isRunId))throw new Error('Invalid comparison references.');
++    if(new Set(raw.pinned_run_ids).size!==raw.pinned_run_ids.length)throw new Error('Duplicate comparison references.');
++    if(!Array.isArray(raw.saved_setups)||raw.saved_setups.length>20)throw new Error('A workspace supports up to 20 saved setups.');
++    const saved=raw.saved_setups.map((s:unknown):SavedSetup=>{
++      if(!isRecord(s)||typeof s.id!=='string'||!/^setup-[a-f0-9-]{36}$/i.test(s.id))throw new Error('Invalid setup identifier.');
++      if(typeof s.name!=='string'||!s.name.trim()||s.name.length>80)throw new Error('A setup name must contain 1–80 characters.');
++      return {id:s.id,name:s.name.trim(),created_at:timestamp(s.created_at),inputs:parseConfiguration(s.inputs)};
++    });
++    if(new Set(saved.map(s=>s.id)).size!==saved.length)throw new Error('Duplicate setup identifiers.');
++    return {schema:'helioforge.workspace.v1',saved_at:timestamp(raw.saved_at),inputs,lesson_id:raw.lesson_id,
++      last_run_id:raw.last_run_id,pinned_run_ids:[...raw.pinned_run_ids],saved_setups:saved};
++  }
++  export function initialChampionState(h:HybridState):ChampionState {
++    const c:ChampionState={saved:[],storage:'available',notice:'',lastRunId:null,pendingPins:[],restored:false,lastSavedAt:null,recoveryRaw:null};
++    let raw:string|null=null;
++    try { raw=localStorage.getItem(WORKSPACE_KEY); }
++    catch { c.storage='unavailable';c.notice='Browser storage is unavailable. Keep this tab open and export your work.';return c; }
++    if(!raw)return c;
++    try {
++      if(raw.length>100_000)throw new Error('Workspace record is too large.');
++      const saved=parseWorkspace(JSON.parse(raw));
++      h.inputs=saved.inputs;h.result=null;h.resultInputs=null;h.lessonId=saved.lesson_id;
++      h.objectId=systemById(h.inputs.system_id).technologies[0]!;
++      c.saved=saved.saved_setups;c.lastRunId=saved.last_run_id;c.pendingPins=saved.pinned_run_ids;c.lastSavedAt=saved.saved_at;
++      c.notice='Your last valid setup is restored. Saved results are verified against the local API before display.';
++    } catch {
++      c.recoveryRaw=raw;c.notice='The saved workspace could not be read. It has not been overwritten. Open Saved setups to download or reset it.';
++    }
++    return c;
++  }
++  export function workspaceCache(state:ViewState):WorkspaceCache {
++    const h=state.hybrid,c=state.champion;
++    return {schema:'helioforge.workspace.v1',saved_at:new Date().toISOString(),inputs:parseConfiguration(h.inputs),
++      lesson_id:h.lessonId,last_run_id:!hybridDirty(h)?h.result?.run_id??c?.lastRunId??null:null,
++      pinned_run_ids:[...new Set([...h.compare.flatMap(r=>r.result.run_id?[r.result.run_id]:[]),...(c?.pendingPins??[])])].slice(0,3),
++      saved_setups:c?.saved??[]};
++  }
++  /** A browser cache stores configurations and server IDs, never manufactured result objects or keys. */
++  export function persistWorkspace(state:ViewState):boolean {
++    const c=state.champion;if(!c||c.recoveryRaw||state.hybrid.inputError)return false;
++    try {
++      const record=workspaceCache(state),serialized=JSON.stringify(record);
++      if(serialized.length>100_000)throw new Error('Workspace is too large. Export a setup and remove it from the shelf.');
++      localStorage.setItem(WORKSPACE_KEY,serialized);c.storage='available';c.lastSavedAt=record.saved_at;
++      return true;
++    } catch { c.storage='unavailable';c.notice='Work is available in this tab but could not be stored. Export before closing.';return false; }
++  }
++  /** This validates an API response, not an arbitrary user-uploaded result. */
++  export function parseSavedHybrid(raw:unknown):SavedHybrid {
++    if(!isRecord(raw)||raw.kind!=='hybrid'||!isRunId(raw.run_id)||typeof raw.input_sha256!=='string'||!/^[a-f0-9]{64}$/i.test(raw.input_sha256))throw new Error('This is not a saved hybrid run.');
++    const inputs=parseConfiguration(raw.inputs),r=raw.result;
++    if(!isRecord(r)||r.model!=='hybrid-greedy-hourly-v1'||r.system_id!==inputs.system_id||r.scenario_id!==inputs.scenario_id||r.duration_hours!==inputs.hours||!Array.isArray(r.schedule)||r.schedule.length!==inputs.hours)throw new Error('The saved model result does not match its inputs.');
++    if(!Array.isArray(r.warnings)||!r.warnings.every(v=>typeof v==='string')||!Array.isArray(r.tags)||!r.tags.every(t=>isRecord(t)&&typeof t.label==='string'&&typeof t.reason==='string'))throw new Error('Saved result metadata is incomplete.');
++    const summaries=['total_load_kwh','served_kwh','unserved_kwh','critical_unserved_kwh','critical_served_pct','load_served_pct','renewable_available_kwh','grid_import_kwh','grid_export_kwh','generator_kwh','curtailed_kwh','charged_kwh','discharged_kwh','initial_energy_kwh','terminal_energy_kwh','battery_energy_delta_kwh','effective_capacity_kwh','effective_power_kw','variable_cost_eur','max_balance_residual_kw'];
++    if(summaries.some(k=>typeof r[k]!=='number'||!Number.isFinite(r[k])))throw new Error('Saved summary contains invalid numbers.');
++    const numeric=['hour','load_kw','target_load_kw','served_kw','critical_load_kw','pv_kw','wind_kw','hydro_kw','generator_kw','charge_kw','discharge_kw','grid_import_kw','grid_export_kw','curtailed_kw','unserved_kw','critical_unserved_kw','scheduled_shed_kw','soc_start_kwh','soc_end_kwh','soc_pct','import_eur_kwh','variable_cost_eur','balance_residual_kw'];
++    if(r.schedule.some((p:unknown,i:number)=>!isRecord(p)||p.hour!==i||numeric.some(k=>typeof p[k]!=='number'||!Number.isFinite(p[k]))||typeof p.label!=='string'||typeof p.state!=='string'||typeof p.grid_connected!=='boolean'))throw new Error('Saved schedule is incomplete.');
++    if(systemById(inputs.system_id).mode==='study'||scenarioById(inputs.scenario_id).mode==='study')throw new Error('Study-only configurations cannot have solved results.');
++    const created=timestamp(raw.created_at);
++    return {kind:'hybrid',run_id:raw.run_id,created_at:created,input_sha256:raw.input_sha256,inputs,
++      result:{...r,run_id:raw.run_id,created_at:created,input_sha256:raw.input_sha256} as unknown as HybridResult};
++  }
++  export function commandEntries(query:string):CommandEntry[] {
++    const actions:CommandEntry[]=[
++      {id:'a-workspace',label:'Saved setups',detail:'Save, reopen and export your configurations',icon:'layers',kind:'action',target:'workspace'},
++      {id:'a-guide',label:'Start a guided experiment',detail:'A baseline-to-outage walkthrough',icon:'play',kind:'action',target:'guide'},
++      {id:'a-history',label:'Analysis history',detail:'Reopen or export a saved calculation',icon:'clock',kind:'action',target:'history'},
++    ];
++    const entries:CommandEntry[]=[...actions,...PAGES.map(p=>({id:`p-${p.id}`,label:p.title,detail:'Workspace',icon:p.icon,kind:'page' as const,target:p.id})),
++      ...HYBRID_CATALOG.systems.map(s=>({id:`s-${s.id}`,label:s.name,detail:`${s.topology} · ${s.mode==='study'?'Study only':'Runnable screen'} · ${s.technologies.join(' ')}`,icon:'layers',kind:'system' as const,target:s.id})),
++      ...HYBRID_CATALOG.lessons.map(l=>({id:`l-${l.id}`,label:l.title,detail:`Guided lesson · ${l.level}`,icon:'document',kind:'lesson' as const,target:l.id}))];
++    const aliases:Record<string,string>={pv:'solar',bess:'battery',h2:'hydrogen'};
++    const terms=query.toLowerCase().trim().split(/\s+/).filter(Boolean);
++    const matches=entries.filter(e=>terms.every(t=>{const hay=`${e.label} ${e.detail}`.toLowerCase();return hay.includes(t)||hay.includes(aliases[t]??t);}));
++    return matches.slice(0,10);
++  }
++}
+diff --git a/apps/web/src/champion-views.ts b/apps/web/src/champion-views.ts
+new file mode 100644
+index 0000000..c0f63e0
+--- /dev/null
++++ b/apps/web/src/champion-views.ts
+@@ -0,0 +1,34 @@
++namespace HF {
++  export function championToolbar(state:ViewState):string {
++    const h=state.hybrid,c=state.champion,current=Boolean(h.result)&&!hybridDirty(h);
++    const runState=h.busy?'Calculating':h.inputError?'Check inputs':current?(h.result?.run_id?'Saved result':'Bundled example'):'Setup ready';
++    const local=c?.storage==='unavailable'?'Memory only':c?.lastSavedAt?'Locally saved':'Local-first';
++    return `<div class="workbench-bar"><div class="workbench-status"><span class="status-beacon ${h.busy?'busy':''}"></span><span><strong>${escapeHTML(runState)}</strong><small>${escapeHTML(local)} · no cloud sync</small></span></div><div class="workbench-actions"><button class="btn quiet small" data-champion-action="guide">${icon('play',14)}<span>Quick start</span></button><button class="btn secondary small" data-champion-action="workspace">${icon('layers',14)}<span>Saved setups</span><b>${c?.saved.length??0}</b></button><button class="btn quiet small" data-nav="compare">${icon('activity',14)}<span>Compare</span><b>${h.compare.length}</b></button></div></div>${c?.notice?`<div class="workspace-notice" role="status">${icon('info',15)}<span>${escapeHTML(c.notice)}</span><button class="icon-button" data-champion-action="dismiss-notice" aria-label="Dismiss workspace notice">${icon('close',14)}</button></div>`:''}`;
++  }
++  export function workspaceDialog(state:ViewState):string {
++    const c=state.champion!,h=state.hybrid;
++    return `<div class="modal-copy workspace-dialog"><div class="workspace-summary"><span>${icon('layers',25)}</span><div><h3>Your experiments, within reach.</h3><p>Configurations stay in this browser. Calculated runs stay in your local Python database. Export files to move between devices.</p></div></div>${c.recoveryRaw?`<div class="notice warn"><span>The stored workspace is damaged or incompatible. It has been left untouched.</span></div><div class="h-actions"><button class="btn secondary" data-champion-action="recovery-export">Download recovery record</button><button class="btn quiet" data-champion-action="recovery-reset">Reset damaged cache</button></div>`:''}<form id="save-setup-form"><label class="field"><span>Name this setup</span><input name="setup_name" type="text" required maxlength="80" value="${escapeHTML((systemById(h.inputs.system_id).name+' / '+scenarioById(h.inputs.scenario_id).name).slice(0,80))}" autocomplete="off"></label><button class="btn primary" type="submit" ${h.busy||h.inputError||c.saved.length>=20||Boolean(c.recoveryRaw)?'disabled':''}>${icon('check',16)} Save current setup</button><p class="form-note">Up to 20 named setups. This saves inputs, not a new calculation.${h.inputError?' Correct the current input error first.':''}</p></form><div class="shelf-heading"><h3>${c.saved.length} saved ${c.saved.length===1?'setup':'setups'}</h3><button class="text-link" data-champion-action="export-workspace">Export workspace</button></div><div class="setup-list">${c.saved.length?c.saved.map(s=>`<article class="setup-row"><div class="setup-row-icon">${icon('layers',19)}</div><div class="setup-copy"><strong>${escapeHTML(s.name)}</strong><small>${escapeHTML(systemById(s.inputs.system_id).name)} · ${s.inputs.hours} h</small></div><div class="setup-actions"><button class="btn secondary small" data-load-setup="${s.id}" ${h.busy?'disabled':''}>Open</button><button class="icon-button" data-export-setup="${s.id}" aria-label="Export ${escapeHTML(s.name)}">${icon('download',16)}</button><button class="icon-button" data-delete-setup="${s.id}" aria-label="Delete ${escapeHTML(s.name)}">${icon('close',16)}</button></div></article>`).join(''):'<div class="shelf-empty"><strong>Begin with a reference case.</strong><p>Give your current inputs a name. You can return to them after changing a scenario.</p></div>'}</div><div class="notice"><span>${c.storage==='unavailable'?'Browser storage is unavailable. Your setups are in memory only: export before closing.':'Clearing browser data removes these shortcuts. It does not delete API runs or exported files.'}</span></div></div>`;
++  }
++  export function historyDialog(runs:RunRecord[]):string {
++    return `<div class="modal-copy"><p>Latest 100 local runs. Each record contains exact inputs, results, timestamp and input hash. This is not a tamper-evident ledger.</p><label class="search-field run-search">${icon('search',16)}<input id="run-search" type="search" placeholder="Filter by model or run ID…" aria-label="Filter saved runs"></label><div id="run-results">${historyRows(runs,'')}</div></div>`;
++  }
++  export function historyRows(runs:RunRecord[],query:string):string {
++    const q=query.toLowerCase().trim(),visible=runs.filter(r=>`${r.kind} ${r.id} ${r.created_at}`.toLowerCase().includes(q));
++    return `<div class="history-count" role="status">${visible.length} saved ${visible.length===1?'run':'runs'}</div><div class="run-list">${visible.length?visible.map(r=>`<article class="run-row"><div class="setup-row-icon">${icon(r.kind==='hybrid'?'layers':'document',18)}</div><div class="setup-copy"><strong>${escapeHTML(r.kind==='hybrid'?'Hybrid energy screen':r.kind)}</strong><small>${escapeHTML(new Date(r.created_at).toLocaleString())}</small><code>${escapeHTML(r.id.slice(0,8))} · ${escapeHTML(r.input_hash.slice(0,12))}</code></div><div class="setup-actions">${r.kind==='hybrid'?`<button class="btn secondary small" data-restore-run="${escapeHTML(r.id)}">Open run</button>`:''}<button class="icon-button" data-run="${escapeHTML(r.id)}" aria-label="Download ${escapeHTML(r.kind)} run ${escapeHTML(r.id.slice(0,8))}">${icon('download',16)}</button></div></article>`).join(''):'<div class="shelf-empty"><h3>No matching runs yet.</h3><p>Calculate a scenario to create a record, or clear this filter.</p></div>'}</div>`;
++  }
++  export function commandDialog():string {
++    return `<div class="command-dialog"><label class="command-input">${icon('search',22)}<input id="command-search" type="search" autocomplete="off" placeholder="Find a workspace, architecture or lesson…" aria-label="Search commands" role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="command-results"></label><div id="command-results" role="listbox" aria-label="Commands">${commandResults('')}</div><div class="command-footer"><span><kbd>↑</kbd><kbd>↓</kbd> Navigate <kbd>Enter</kbd> Open</span><span><kbd>Esc</kbd> Close</span></div></div>`;
++  }
++  export function commandResults(query:string):string {
++    const rows=commandEntries(query);
++    return rows.length?rows.map((r,i)=>`<button class="command-option ${i===0?'active':''}" id="command-option-${i}" role="option" aria-selected="${i===0}" data-command-kind="${r.kind}" data-command-target="${r.target}"><span class="command-icon">${icon(r.icon,18)}</span><span><strong>${escapeHTML(r.label)}</strong><small>${escapeHTML(r.detail)}</small></span>${icon('arrow',16)}</button>`).join(''):'<div class="shelf-empty" role="status">No matches. Try “hospital”, “BESS”, “hydrogen” or “finance”.</div>';
++  }
++  export function quickStartDialog():string {
++    return `<div class="modal-copy quick-start"><span class="eyebrow">YOUR FIRST REPRODUCIBLE EXPERIMENT</span><h3>What changes when the grid goes away?</h3><p>A hospital microgrid makes a useful first comparison. This is synthetic hourly energy adequacy, not a hospital safety assessment.</p><div class="guide-steps">${[
++      ['Set the reference','Open Hospital islanding microgrid with the Reference day scenario. Save the setup with a meaningful name.'],
++      ['Calculate and pin','Run the energy screen, inspect its assumptions, then use Pin to compare.'],
++      ['Change one condition','Select Four-hour outage, run again, and pin the second result.'],
++      ['Follow the evidence','Open Scenario compare. Check critical shortfall and both battery energy endpoints before interpreting cost.']
++    ].map((s,i)=>`<article><span>${i+1}</span><div><strong>${s[0]}</strong><p>${s[1]}</p></div></article>`).join('')}</div><div class="h-actions"><button class="btn primary" data-champion-action="start-hospital">Open the reference case ${icon('arrow',16)}</button><button class="btn secondary" data-nav="lessons">Explore guided lessons</button></div><p class="form-note">A running local API is needed for new calculations. Preview mode still supports architecture exploration and self-checks.</p></div>`;
++  }
++}
+diff --git a/apps/web/src/champion.css b/apps/web/src/champion.css
+new file mode 100644
+index 0000000..ce17bc6
+--- /dev/null
++++ b/apps/web/src/champion.css
+@@ -0,0 +1,145 @@
++/* Champion edition: an original extension of the existing workbench.
++   No web fonts, remote assets or new runtime styling dependency. */
++:root {
++  --bg:#0a1117; --sidebar:#0a1015; --panel:#111e27; --panel-hover:#182a34;
++  --line:#30454e; --text:#eef5f7; --muted:#b0c0c9; --subtle:#96adb9;
++  --accent:#c7f397; --teal:#8be1ca; --amber:#ffd38a; --danger:#ffb4a1;
++  --radius:14px; --motion-fast:160ms; --motion-medium:240ms;
++}
++body { background:radial-gradient(ellipse at 85% 0,#17323870,transparent 40%),var(--bg); }
++.topbar { background:#0b151ceF; border-color:var(--line); gap:12px; }
++.topbar-right { gap:10px; min-width:0; }
++.page-heading { margin-bottom:17px; }
++h1 { font-weight:600; font-size:27px; }
++.beta-label { color:var(--accent); background:#213127; border-color:#40593d; font-size:9px; letter-spacing:.6px; }
++.workspace-picker { text-align:left; width:100%; white-space:normal; }
++.workspace-picker:hover { border-color:#65876c; }
++.page-kicker { color:var(--subtle); letter-spacing:1.6px; }
++.data-ribbon { margin-bottom:15px; border-color:#344b49; }
++.command-trigger { display:flex; align-items:center; gap:10px; border:1px solid var(--line); border-radius:8px; padding:8px 10px; color:var(--muted); font-size:11px; background:#12212b; min-height:36px; }
++.command-trigger:hover { border-color:#72948c; color:var(--text); }
++kbd { display:inline-grid; place-items:center; padding:2px 5px; min-width:20px; border:1px solid #58707a; border-radius:4px; color:var(--muted); font:10px 'Segoe UI',Arial,sans-serif; box-shadow:0 1px 0 #000; }
++.command-trigger kbd { margin-left:16px; }
++.workbench-bar { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:20px; padding:12px 15px; border:1px solid #324950; border-radius:11px; background:linear-gradient(110deg,#172a2a,#101d26); }
++.workbench-status { display:flex; align-items:center; gap:11px; min-width:0; }
++.workbench-status strong { font-size:12px; font-weight:600; }
++.workbench-status small { display:block; font-size:10px; color:var(--muted); margin-top:4px; }
++.status-beacon { width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 5px #c7f39712; flex-shrink:0; }
++.status-beacon.busy { background:var(--amber); animation:beacon-breathe 1.5s ease-in-out infinite; }
++@keyframes beacon-breathe { 50% { box-shadow:0 0 0 7px #ffd38a14; } }
++.workbench-actions { display:flex; align-items:center; gap:8px; }
++.workbench-actions b { font-size:10px; font-weight:600; background:#ffffff10; border:1px solid #ffffff13; padding:1px 6px; border-radius:5px; }
++.workspace-notice { display:flex; align-items:flex-start; gap:9px; padding:10px 13px; margin:-9px 0 18px; border-left:2px solid var(--teal); background:#182b3040; color:var(--muted); font-size:11px; line-height:1.6; }
++.workspace-notice>svg { flex-shrink:0; margin-top:2px; color:var(--teal); }
++.workspace-notice .icon-button { flex-shrink:0; margin-left:auto; width:25px; height:25px; }
++.forge-heading { padding-top:1px; padding-bottom:23px; }
++.forge-heading h2 { font-size:38px; letter-spacing:-1.5px; }
++.forge-heading h2 em { background:linear-gradient(95deg,#d3f7aa,#8ae1d8); color:transparent; background-clip:text; }
++.forge-heading p { max-width:600px; font-size:12px; line-height:1.7; }
++.scene-panel { background:radial-gradient(ellipse at 30% 20%,#244a4333,transparent 58%),linear-gradient(155deg,#12232d,#0d1922); border-color:#34545b; }
++.configuration-panel { background:linear-gradient(155deg,#182b32,#101d26); }
++.configuration-panel .field>span { font-size:11px; color:#c8d7dc; }
++.configuration-panel input,.configuration-panel select { background:#0c181f; border-color:#3f5861; }
++.configuration-panel input:hover,.configuration-panel select:hover { border-color:#647f81; }
++[aria-invalid=true] { border-color:var(--danger)!important; outline-color:var(--danger)!important; }
++.input-error-result { border-color:#b47c60; background:#30221f; }
++.input-error-result h2 { color:#ffd7c8; }
++.draft-note { padding:10px 12px; margin-top:15px; border-left:2px solid var(--amber); color:#f1d6ab; font-size:11px; line-height:1.7; background:#382e1d70; }
++.btn,.icon-button,.command-trigger,.scenario-chip,.nav-item { transition:background var(--motion-fast),border-color var(--motion-fast),color var(--motion-fast),transform var(--motion-fast); }
++button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible { outline:2px solid #e0ffaf; outline-offset:3px; }
++.scenario-chip { min-height:35px; }
++.scenario-chip.active { background:#274233; border-color:#92bf79; color:#e0ffc9; box-shadow:inset 0 0 0 1px #bfe99810; }
++.system-card { border-color:#334a55; }
++.system-card:hover { border-color:var(--card-color,var(--accent)); background:#1a2c36; }
++.hybrid-metric { background:linear-gradient(125deg,#172830,#111d26); }
++.hybrid-metric strong { font-variant-numeric:tabular-nums; }
++#modal { width:min(740px,calc(100vw - 32px)); max-height:calc(100dvh - 48px); border:1px solid #52716f; border-radius:16px; padding:0; color:var(--text); background:#122029; box-shadow:0 30px 120px #000a; }
++#modal::backdrop { background:#02080dbb; backdrop-filter:blur(5px); }
++.modal-heading { background:#172a32; border-bottom:1px solid #38525a; padding:19px 23px; position:sticky; top:0; z-index:2; }
++.modal-heading h2 { font-size:18px; font-weight:600; }
++.modal-copy { padding:24px; font-size:13px; line-height:1.75; }
++.modal-copy h3 { font-size:17px; line-height:1.4; }
++.modal-copy .notice { line-height:1.65; margin-top:17px; }
++.workspace-summary { display:flex; align-items:flex-start; gap:16px; margin-bottom:24px; }
++.workspace-summary>span { display:grid; place-items:center; width:48px; height:48px; flex-shrink:0; border-radius:12px; color:var(--accent); background:#314734; border:1px solid #5a7952; }
++.workspace-summary h3 { margin:0 0 6px; }
++.workspace-summary p { margin:0!important; color:var(--muted); font-size:12px; }
++#save-setup-form { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:end; gap:10px; padding:17px; background:#0c181f; border:1px solid #344d54; border-radius:11px; }
++#save-setup-form .field { margin:0; }
++#save-setup-form .field>span { font-size:11px; margin-bottom:6px; }
++#save-setup-form input { width:100%; }
++#save-setup-form .btn { min-height:41px; }
++#save-setup-form .form-note { grid-column:1/-1; margin:0; font-size:10px; }
++.shelf-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:24px 0 12px; }
++.shelf-heading h3 { font-size:14px; }
++.shelf-heading .text-link { font-size:11px; }
++.setup-list,.run-list { display:flex; flex-direction:column; gap:9px; }
++.setup-row,.run-row { display:flex; align-items:center; gap:12px; border:1px solid #344c56; background:#172a33; padding:14px; border-radius:10px; min-width:0; }
++.setup-row-icon { display:grid; place-items:center; color:var(--teal); background:#24443f; width:35px; height:35px; border-radius:9px; flex-shrink:0; }
++.setup-copy { min-width:0; flex:1; line-height:1.5; }
++.setup-copy strong { display:block; font-size:12px; overflow-wrap:anywhere; }
++.setup-copy small { display:block; font-size:10px; color:var(--muted); margin-top:4px; overflow-wrap:anywhere; }
++.setup-copy code { font-size:10px; color:var(--subtle); }
++.setup-actions { display:flex; align-items:center; flex-shrink:0; gap:4px; }
++.shelf-empty { padding:25px 17px; text-align:center; color:var(--muted); border:1px dashed #4c636c; border-radius:10px; font-size:12px; }
++.shelf-empty strong { color:var(--text); }
++.shelf-empty p { margin:8px 0 0!important; font-size:12px; }
++.run-search { margin:16px 0 8px; width:100%; }
++.run-search input { width:100%; }
++.history-count { color:var(--subtle); font-size:11px; margin:10px 0; }
++.command-input { display:flex; align-items:center; gap:13px; padding:17px 23px; border-bottom:1px solid #3a545b; color:var(--accent); }
++.command-input input { border:0; padding:8px 0; border-radius:0; width:100%; background:none; outline:none; font-size:15px; }
++.command-input:focus-within { box-shadow:inset 3px 0 var(--accent); }
++#command-results { padding:9px; max-height:440px; overflow-y:auto; }
++.command-option { width:100%; display:flex; align-items:center; gap:14px; padding:12px 14px; border-radius:8px; text-align:left; }
++.command-option.active,.command-option:hover { background:#293f3c; }
++.command-option>span:nth-child(2) { flex:1; min-width:0; }
++.command-option strong { display:block; font-size:13px; font-weight:550; }
++.command-option small { display:block; font-size:11px; color:var(--muted); margin-top:4px; white-space:normal; }
++.command-option>svg { color:var(--accent); }
++.command-icon { display:grid; place-items:center; width:33px; height:33px; border:1px solid #45605d; border-radius:8px; color:var(--teal); flex-shrink:0; }
++.command-footer { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:13px 20px; border-top:1px solid #344d54; color:var(--subtle); font-size:10px; }
++.command-footer kbd { margin-right:4px; }
++.quick-start .eyebrow { color:var(--accent); font-size:9px; margin-bottom:13px; }
++.quick-start>h3 { font-size:26px; letter-spacing:-.7px; }
++.guide-steps { display:grid; gap:19px; margin:24px 0; }
++.guide-steps article { display:flex; gap:16px; }
++.guide-steps article>span { width:29px; height:29px; border-radius:50%; display:grid; place-items:center; flex-shrink:0; font-size:12px; background:#334c35; color:var(--accent); border:1px solid #658457; }
++.guide-steps strong { font-size:14px; }
++.guide-steps p { margin:4px 0 0!important; color:var(--muted); font-size:12px; }
++.nav-backdrop { position:fixed; inset:0; background:#02080da8; z-index:25; width:100%; height:100%; }
++@media(min-width:1500px) { .command-trigger { min-width:212px; } .command-trigger kbd { margin-left:auto; } }
++@media(max-width:1250px) { .command-trigger span,.command-trigger kbd { display:none; } .command-trigger { width:35px; justify-content:center; padding:0; } }
++@media(max-width:800px) {
++  .workbench-bar { flex-wrap:wrap; gap:13px; padding:12px; } .workbench-actions { margin-left:auto; }
++  .forge-heading h2 { font-size:33px; } h1 { font-size:24px; }
++  .topbar { min-height:65px; height:auto; padding:12px; } .topbar-right { gap:4px; }
++  .topbar-divider { display:none; } .connection-chip { font-size:9px; padding:7px; }
++  .breadcrumb { min-width:0; gap:7px; } .breadcrumb strong { font-size:11px; }
++  .skip-link { left:12px; }
++}
++@media(max-width:550px) {
++  .page-heading { align-items:flex-start; gap:10px; } .page-heading .page-tools { margin-top:10px; }
++  .beta-label { margin:7px 0 0; display:table; font-size:8px; }
++  .workbench-bar { margin-bottom:20px; } .workbench-status { flex:1; } .workbench-actions { width:100%; justify-content:space-between; gap:3px; }
++  .workbench-actions .btn { padding:7px 8px; gap:5px; font-size:10px; }
++  .forge-heading h2 { font-size:30px; } .forge-heading .eyebrow { font-size:8px; letter-spacing:1.3px; }
++  .breadcrumb strong { display:none; } .topbar-right { flex:1; justify-content:flex-end; }
++  .modal-copy { padding:19px 16px; } .modal-heading { padding:15px 17px; } .modal-heading h2 { font-size:16px; }
++  #save-setup-form { grid-template-columns:minmax(0,1fr); padding:13px; } #save-setup-form .form-note { grid-column:auto; }
++  .setup-row,.run-row { flex-wrap:wrap; padding:12px; gap:9px; } .setup-row .setup-copy,.run-row .setup-copy { flex-basis:calc(100% - 50px); }
++  .setup-actions { margin-left:auto; } .workspace-summary { gap:10px; } .workspace-summary>span { width:36px; height:36px; }
++  .workspace-summary h3 { font-size:15px; } .command-input { padding:12px 16px; } .command-input input { font-size:13px; }
++  .command-option { gap:10px; padding:10px; } .command-option strong { font-size:12px; } .command-option small { font-size:10px; }
++  .command-footer { padding:11px; font-size:9px; } .command-footer kbd { min-width:15px; padding:1px 3px; font-size:9px; }
++  .quick-start>h3 { font-size:23px; } .h-actions { flex-wrap:wrap; }
++}
++@media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
++html[data-motion=off] *,html[data-motion=off] *::before,html[data-motion=off] *::after { animation:none!important; transition:none!important; }
++@media print { #champion-toolbar,.command-trigger,.nav-backdrop { display:none!important; } }
++@media(max-width:420px) {
++  .workbench-actions { flex-wrap:wrap; min-width:0; width:100%; margin-left:0; gap:6px; }
++  .workbench-actions .btn { flex:1 1 auto; justify-content:center; }
++  .setup-row,.run-row { flex-wrap:wrap; }
++  .setup-row .setup-actions,.run-row .setup-actions { width:100%; justify-content:flex-end; }
++}
+diff --git a/apps/web/src/hybrid-controller.ts b/apps/web/src/hybrid-controller.ts
+index bd2645a..f9a4217 100644
+--- a/apps/web/src/hybrid-controller.ts
++++ b/apps/web/src/hybrid-controller.ts
+@@ -2,13 +2,13 @@ namespace HF {
+   export interface HybridCallbacks {
+     render:()=>void; toast:(message:string,error?:boolean)=>void; navigate:(page:Page)=>void;
+     api:<T>(path:string,body?:unknown,method?:string,adminKey?:string)=>Promise<T>;
+-    celebrate:()=>void; openModal:(title:string,body:string)=>void;
++    celebrate:()=>void; openModal:(title:string,body:string)=>void; persist?:()=>boolean;
+   }
+   export function installHybridController(state:ViewState,cb:HybridCallbacks):void {
+     const h=state.hybrid;
+     function selectSystem(id:string):void {
+       const s=systemById(id);h.inputs=presetInputs(id);h.objectId=s.technologies.includes('battery')?'battery':s.technologies[0]!;
+-      h.result=null;h.resultInputs=null;h.hour=12;cb.navigate('hybrid');
++      h.result=null;h.resultInputs=null;h.inputError=null;h.draft=null;h.hour=12;if(state.champion)state.champion.lastRunId=null;cb.persist?.();cb.navigate('hybrid');
+     }
+     function collect(form:HTMLFormElement):HybridInputs {
+       const value:Record<string,unknown>={...h.inputs};
+@@ -23,19 +23,19 @@ namespace HF {
+       else if(name==='clear-filters'){h.search='';h.family='All';h.topology='All';cb.render();document.getElementById('architecture-library')?.scrollIntoView({behavior:'instant'});}
+       else if(name==='import'){
+         const file=document.createElement('input');file.type='file';file.accept='.json,application/json';
+-        file.onchange=async()=>{try{if(h.busy)throw new Error('Complete the current run before importing a configuration.');const f=file.files?.[0];if(!f)return;if(f.size>100_000)throw new Error('Configuration file must be under 100 KB.');const p=parseConfiguration(JSON.parse(await f.text()));h.inputs=p;h.result=null;h.resultInputs=null;h.objectId=systemById(p.system_id).technologies[0]!;cb.render();cb.toast('Configuration imported. Run the API to calculate this setup.');}catch(e){cb.toast(e instanceof Error?e.message:'Invalid configuration file.',true);}};file.click();
++        file.onchange=async()=>{try{if(h.busy)throw new Error('Complete the current run before importing a configuration.');const f=file.files?.[0];if(!f)return;if(f.size>100_000)throw new Error('Configuration file must be under 100 KB.');const p=parseConfiguration(JSON.parse(await f.text()));h.inputs=p;h.result=null;h.resultInputs=null;h.inputError=null;h.draft=null;if(state.champion)state.champion.lastRunId=null;cb.persist?.();h.objectId=systemById(p.system_id).technologies[0]!;cb.render();cb.toast('Configuration imported. Run the API to calculate this setup.');}catch(e){cb.toast(e instanceof Error?e.message:'Invalid configuration file.',true);}};file.click();
+       }else if(name==='csv'){if(!h.result||hybridDirty(h))throw new Error('Run this configuration first.');download('helioforge-hybrid-dispatch.csv',toCSV(h.result.schedule.map(x=>({...x}))),'text/csv');}
+       else if(name==='pin'){
+         if(!h.result||hybridDirty(h)||!h.resultInputs)throw new Error('Only a completed, current result can be compared.');
+         if(h.compare.length>=3)throw new Error('The comparison holds three runs. Remove a pinned run first.');
+         const id=h.result.run_id??'bundled-example';if(h.compare.some(x=>x.id===id))throw new Error('This exact run is already pinned.');
+         h.compare.push({id,name:`${systemById(h.result.system_id).name} / ${scenarioById(h.result.scenario_id).name}`,inputs:structuredClone(h.resultInputs),result:structuredClone(h.result)});
+-        cb.toast(`Pinned ${h.compare.length} of 3 runs. Open Scenario compare to inspect them.`);
++        cb.persist?.();cb.toast(`Pinned ${h.compare.length} of 3 runs. Open Scenario compare to inspect them.`);
+       }else if(name==='export-compare')downloadJSON('helioforge-comparison.json',{schema:'helioforge.comparison.v1',note:'Synthetic, different service and SOC endpoints must be reconciled before ranking.',runs:h.compare});
+-      else if(name==='clear-compare'){h.compare=[];cb.render();}
++      else if(name==='clear-compare'){h.compare=[];if(state.champion)state.champion.pendingPins=[];cb.persist?.();cb.render();}
+       else if(name==='launch-lesson'){
+         const l=HYBRID_CATALOG.lessons.find(x=>x.id===h.lessonId)!;
+-        selectSystem(l.system_id);h.inputs=presetInputs(l.system_id,l.scenario_id);cb.render();cb.toast('Lesson configuration loaded. Begin with a reference run, then apply the lesson stress.');
++        selectSystem(l.system_id);h.inputs=presetInputs(l.system_id,l.scenario_id);h.draft=null;h.inputError=null;cb.persist?.();cb.render();cb.toast('Lesson configuration loaded. Begin with a reference run, then apply the lesson stress.');
+       }else if(name==='export-lesson'){
+         const l=HYBRID_CATALOG.lessons.find(x=>x.id===h.lessonId)!;
+         downloadJSON(`helioforge-${l.id}.json`,{schema:'helioforge.lesson.v1',lesson:l,configuration:presetInputs(l.system_id,l.scenario_id),notice:'Original local self-study material; not accredited or field-validated.'});
+@@ -51,17 +51,35 @@ namespace HF {
+       const el=(event.target as Element).closest<HTMLElement>('button');if(!el)return;
+       try{
+         if(el.dataset.system){if(h.busy)return;selectSystem(el.dataset.system);window.scrollTo({top:0,behavior:'instant'});}
+-        if(el.dataset.scenario){if(h.busy)return;const c=scenarioById(el.dataset.scenario);h.inputs={...h.inputs,scenario_id:c.id,hours:Math.max(h.inputs.hours,Number(c.modifiers.hours??0))};h.hour=Math.min(h.hour,h.inputs.hours-1);cb.render();}
+-        if(el.dataset.lesson){h.lessonId=el.dataset.lesson;h.quizResult=null;cb.navigate('lessons');}
++        if(el.dataset.scenario){if(h.busy)return;if(h.inputError)throw new Error('Correct the input error before changing the scenario.');h.draft=null;const c=scenarioById(el.dataset.scenario);h.inputs={...h.inputs,scenario_id:c.id,hours:Math.max(h.inputs.hours,Number(c.modifiers.hours??0))};h.hour=Math.min(h.hour,h.inputs.hours-1);cb.persist?.();cb.render();}
++        if(el.dataset.lesson){h.lessonId=el.dataset.lesson;h.quizResult=null;cb.persist?.();cb.navigate('lessons');}
+         if(el.dataset.asset){h.objectId=el.dataset.asset;const inspector=document.getElementById('asset-inspector');if(inspector)inspector.innerHTML=assetInspector(h);document.querySelectorAll<HTMLButtonElement>('[data-asset]').forEach(b=>{b.classList.toggle('selected',b.dataset.asset===h.objectId);b.setAttribute('aria-pressed',String(b.dataset.asset===h.objectId));});}
+         if(el.dataset.sceneCommand)document.getElementById('energy-scene')?.dispatchEvent(new CustomEvent('scene-command',{detail:el.dataset.sceneCommand}));
+         if(el.dataset.hybridAction)void act(el.dataset.hybridAction).catch(e=>cb.toast(e instanceof Error?e.message:'Action failed.',true));
+-        if(el.dataset.removeCompare){h.compare=h.compare.filter(x=>x.id!==el.dataset.removeCompare);cb.render();}
++        if(el.dataset.removeCompare){h.compare=h.compare.filter(x=>x.id!==el.dataset.removeCompare);if(state.champion)state.champion.pendingPins=state.champion.pendingPins.filter(x=>x!==el.dataset.removeCompare);cb.persist?.();cb.render();}
+       }catch(e){cb.toast(e instanceof Error?e.message:'Invalid selection.',true);}
+     });
+     function updateLibrary():void{const el=document.getElementById('hybrid-library-results');if(el)el.innerHTML=hybridLibrary(h);}
++    function syncHybridInput(el:HTMLInputElement):void {
++      const form=el.closest<HTMLFormElement>('#hybrid-config');if(!form||h.busy)return;
++      const draft:Record<string,string>={};
++      for(const field of form.querySelectorAll<HTMLInputElement|HTMLSelectElement>('input[name],select[name]'))draft[field.name]=field.value;
++      // A native change event follows input on blur. Replacing the toolbar here
++      // would remove a pointer's target between mousedown and click.
++      if(h.draft&&JSON.stringify(draft)===JSON.stringify(h.draft))return;
++      h.draft=draft;
++      try{
++        h.inputs=collect(form);h.inputError=null;
++        const tags=document.getElementById('smart-tags');if(tags)tags.innerHTML=hybridTags(h.inputs).map(t=>`<span class="smart-tag" title="${escapeHTML(t.reason)}">${escapeHTML(t.label)}</span>`).join('');
++        const inspector=document.getElementById('asset-inspector');if(inspector)inspector.innerHTML=assetInspector(h);
++        form.querySelectorAll('[aria-invalid]').forEach(e=>e.removeAttribute('aria-invalid'));cb.persist?.();
++      }catch(e){h.inputError=e instanceof Error?e.message:'Invalid input.';el.setAttribute('aria-invalid','true');}
++      const output=document.getElementById('hybrid-output');if(output)output.innerHTML=hybridResults(state);
++      const toolbar=document.getElementById('champion-toolbar');if(toolbar)toolbar.innerHTML=championToolbar(state);
++    }
+     document.addEventListener('input',event=>{
+       const el=event.target as HTMLInputElement;
++      if(el.closest('#hybrid-config')&&el.name)syncHybridInput(el);
+       if(el.id==='hybrid-search'){h.search=el.value;updateLibrary();}
+       if(el.id==='hybrid-hour'&&h.result){h.hour=Number(el.value);const point=h.result.schedule[h.hour]!;const read=document.getElementById('interval-readout'),label=document.getElementById('hour-label');if(read)read.innerHTML=intervalReadout(point);if(label)label.textContent=point.label;}
+     });
+@@ -70,10 +88,7 @@ namespace HF {
+       if(el.id==='hybrid-family'){h.family=el.value;updateLibrary();}
+       if(el.id==='hybrid-topology'){h.topology=el.value;updateLibrary();}
+       if(el.id==='hybrid-system'){if(!h.busy)selectSystem(el.value);return;}
+-      if(el.closest('#hybrid-config')&&el.name){
+-        try{h.inputs=collect(el.closest('form')!);const tags=document.getElementById('smart-tags');if(tags)tags.innerHTML=hybridTags(h.inputs).map(t=>`<span class="smart-tag" title="${escapeHTML(t.reason)}">${escapeHTML(t.label)}</span>`).join('');const out=document.getElementById('hybrid-output');if(out)out.innerHTML=hybridResults(state);const inspector=document.getElementById('asset-inspector');if(inspector)inspector.innerHTML=assetInspector(h);}
+-        catch(e){cb.toast(e instanceof Error?e.message:'Invalid input.',true);const out=document.getElementById('hybrid-output');if(out)out.innerHTML='<div class="panel empty-result"><h2>Correct the input error before evaluating this configuration.</h2></div>';}
+-      }
++      if(el.closest('#hybrid-config')&&el.name)syncHybridInput(el);
+     });
+     document.addEventListener('submit',event=>{
+       const form=event.target as HTMLFormElement;
+@@ -81,13 +96,13 @@ namespace HF {
+         event.preventDefault();if(h.busy||!state.connected)return;
+         void (async()=>{
+           try{
+-            const inputs=collect(form);h.inputs=inputs;h.busy=true;
++            const inputs=collect(form);h.inputs=inputs;h.inputError=null;h.busy=true;
+             const button=form.querySelector<HTMLButtonElement>('[type=submit]')!;button.disabled=true;button.textContent='Running energy screen…';
+             // Snapshot inputs to avoid labeling a pending response with later edits.
+-            form.querySelectorAll<HTMLInputElement|HTMLSelectElement>('input,select').forEach(e=>e.disabled=true);
++            form.querySelectorAll<HTMLInputElement|HTMLSelectElement>('input,select').forEach(e=>e.disabled=true);document.querySelectorAll<HTMLButtonElement>('[data-system],[data-scenario]').forEach(e=>e.disabled=true);
+             const result=await cb.api<HybridResult>('hybrid/simulate',inputs);
+-            h.result=result;h.resultInputs={...inputs};h.inputs={...inputs};h.busy=false;h.hour=Math.min(h.hour,result.schedule.length-1);cb.render();cb.toast('Hybrid energy screen complete. Inputs and result saved in the local audit store.');
+-          }catch(e){h.busy=false;form.querySelectorAll<HTMLInputElement|HTMLSelectElement>('input,select').forEach(x=>x.disabled=false);const b=form.querySelector<HTMLButtonElement>('[type=submit]');if(b){b.disabled=false;b.textContent='Try energy screen again';}cb.toast(e instanceof Error?e.message:'Simulation failed.',true);}
++            h.result=result;h.resultInputs={...inputs};h.inputs={...inputs};h.inputError=null;h.draft=null;h.busy=false;if(state.champion)state.champion.lastRunId=result.run_id??null;cb.persist?.();h.hour=Math.min(h.hour,result.schedule.length-1);cb.render();cb.toast('Hybrid energy screen complete. Inputs and result saved in the local audit store.');
++          }catch(e){h.busy=false;cb.render();cb.toast(e instanceof Error?e.message:'Simulation failed. Your inputs were retained.',true);}
+         })();
+       }
+       if(form.id==='lesson-quiz'){
+diff --git a/apps/web/src/hybrid-core.ts b/apps/web/src/hybrid-core.ts
+index c670de0..557aec5 100644
+--- a/apps/web/src/hybrid-core.ts
++++ b/apps/web/src/hybrid-core.ts
+@@ -59,7 +59,12 @@ namespace HF {
+   export function initialHybridState():HybridState {
+     let progress:string[]=[];
+     try{const raw:unknown=JSON.parse(localStorage.getItem('hf-lessons-v2')??'[]');if(Array.isArray(raw))progress=[...new Set(raw.filter((x):x is string=>typeof x==='string'&&HYBRID_CATALOG.lessons.some(l=>l.id===x)))];}catch{/* Local persistence is optional. */}
+-    return {inputs:presetInputs('remote-triad'),result:structuredClone(HYBRID_EXAMPLE),resultInputs:presetInputs('remote-triad'),search:'',family:'All',topology:'All',lessonId:'lesson-remote-triad',progress,quizResult:null,objectId:'battery',hour:12,compare:[],busy:false};
++    return {inputs:presetInputs('remote-triad'),result:structuredClone(HYBRID_EXAMPLE),resultInputs:presetInputs('remote-triad'),search:'',family:'All',topology:'All',lessonId:'lesson-remote-triad',progress,quizResult:null,objectId:'battery',hour:12,compare:[],busy:false,inputError:null,draft:null};
+   }
+-  export const hybridDirty=(h:HybridState):boolean=>JSON.stringify(h.inputs)!==JSON.stringify(h.resultInputs);
++  /** Canonical input equality is independent of JSON property order. Invalid drafts are never current. */
++  export function configurationKey(inputs:HybridInputs|null):string {
++    if(!inputs)return '';
++    return JSON.stringify(Object.keys(inputs).sort().map(k=>[k,inputs[k as keyof HybridInputs]]));
++  }
++  export const hybridDirty=(h:HybridState):boolean=>Boolean(h.inputError)||configurationKey(h.inputs)!==configurationKey(h.resultInputs);
+ }
+diff --git a/apps/web/src/hybrid-types.ts b/apps/web/src/hybrid-types.ts
+index 2b49673..210bbd0 100644
+--- a/apps/web/src/hybrid-types.ts
++++ b/apps/web/src/hybrid-types.ts
+@@ -37,5 +37,6 @@ namespace HF {
+     inputs:HybridInputs; result:HybridResult|null; resultInputs:HybridInputs|null; search:string;family:string;topology:string;
+     lessonId:string;progress:string[];quizResult:{passed:boolean;correct:number;total:number}|null;
+     objectId:string;hour:number;compare:ComparedRun[];busy:boolean;
++    inputError:string|null; draft:Record<string,string>|null;
+   }
+ }
+diff --git a/apps/web/src/hybrid-views.ts b/apps/web/src/hybrid-views.ts
+index 2498cb6..29380bd 100644
+--- a/apps/web/src/hybrid-views.ts
++++ b/apps/web/src/hybrid-views.ts
+@@ -16,6 +16,7 @@ namespace HF {
+   }
+   export function hybridResults(state:ViewState):string {
+     const h=state.hybrid,r=h.result,s=systemById(h.inputs.system_id),c=scenarioById(h.inputs.scenario_id);
++    if(h.inputError)return `<section class="panel empty-result input-error-result"><span>${icon('alert',30)}</span><div><h2>Check your configuration.</h2><p>${hx(h.inputError)}</p><p>Earlier results are hidden until these inputs are valid and a matching run is available.</p></div></section>`;
+     if(s.mode==='study'||c.mode==='study')return `<section class="panel study-boundary"><span class="study-icon">${icon('flask',32)}</span><div><span class="eyebrow">STUDY-ONLY / NO FABRICATED OUTPUT</span><h2>A richer system needs a richer model.</h2><p>${hx(s.learning_focus)} ${hx(c.mode==='study'?c.description:'')}</p><p><strong>Evidence to collect:</strong> ${hx(s.evidence)}</p><button class="btn secondary" data-lesson="lesson-${s.id}">Open this architecture’s lesson ${icon('arrow',16)}</button></div></section>`;
+     if(!r||hybridDirty(h))return `<section class="panel empty-result"><span>${icon('activity',30)}</span><div><h2>${r?'Configuration changed. Results need a new run.':'Your next result starts here.'}</h2><p>Run the hourly energy screen to calculate this configuration. No old result is presented as a new calculation.</p>${!state.connected?'<p>Start the Python application for new runs. Architecture exploration and lessons work in the standalone preview.</p>':''}</div></section>`;
+     const point=r.schedule[clamp(h.hour,0,r.schedule.length-1)]!;
+diff --git a/apps/web/src/snapshot.ts b/apps/web/src/snapshot.ts
+index b39ca78..b856cc4 100644
+--- a/apps/web/src/snapshot.ts
++++ b/apps/web/src/snapshot.ts
+@@ -1,3 +1,3 @@
+ namespace HF {
+-  export const SNAPSHOT: Dashboard = {"version":"0.2.0","data_kind":"synthetic","as_of":"Illustrative scenario · not live","market":"FR","portfolio":[{"id":"HF-101","name":"Solstice industrial","market":"FR","technology":"PV + BESS","stage":"Due diligence","pv_mwp":68,"bess_mwh":24,"capex_meur":54.1,"progress":74},{"id":"HF-102","name":"Nordlicht campus","market":"DE","technology":"BESS","stage":"Feasibility","pv_mwp":0,"bess_mwh":40,"capex_meur":15.6,"progress":48},{"id":"HF-103","name":"Aurora solar","market":"ES","technology":"PV","stage":"Design review","pv_mwp":125,"bess_mwh":0,"capex_meur":73.8,"progress":86},{"id":"HF-104","name":"Vento repower","market":"IT","technology":"Wind","stage":"M&A screening","pv_mwp":0,"wind_mw":54,"bess_mwh":0,"capex_meur":67.4,"progress":32},{"id":"HF-105","name":"Delta logistics","market":"NL","technology":"PV + BESS","stage":"Pilot","pv_mwp":12,"bess_mwh":10,"capex_meur":10.3,"progress":63},{"id":"HF-106","name":"Meridian works","market":"GB","technology":"PV + BESS","stage":"Feasibility","pv_mwp":32,"bess_mwh":16,"capex_meur":28.7,"progress":41}],"markets":[{"code":"FR","name":"France","regulator":"CRE","url":"https://www.cre.fr/","segment":"Industrial campuses","hypothesis":"Increase solar self-use and test time-of-use exposure.","status":"needs_review","effective_date":null,"reviewed_on":null,"currency":"EUR","tariff_basis":"illustrative","connector_status":"source_link_only"},{"code":"DE","name":"Germany","regulator":"Bundesnetzagentur","url":"https://www.bundesnetzagentur.de/EN/Home/home_node.html","segment":"Energy-intensive industry","hypothesis":"Compare load management with the actual site network tariff.","status":"needs_review","effective_date":null,"reviewed_on":null,"currency":"EUR","tariff_basis":"illustrative","connector_status":"source_link_only"},{"code":"ES","name":"Spain","regulator":"CNMC","url":"https://www.cnmc.es/","segment":"Solar-rich commercial sites","hypothesis":"Shift on-site PV generation into evening consumption.","status":"needs_review","effective_date":null,"reviewed_on":null,"currency":"EUR","tariff_basis":"illustrative","connector_status":"source_link_only"},{"code":"IT","name":"Italy","regulator":"ARERA","url":"https://www.arera.it/en/","segment":"Manufacturing clusters","hypothesis":"Evaluate procurement savings alongside resilience requirements.","status":"needs_review","effective_date":null,"reviewed_on":null,"currency":"EUR","tariff_basis":"illustrative","connector_status":"source_link_only"},{"code":"NL","name":"Netherlands","regulator":"ACM","url":"https://www.acm.nl/en","segment":"Logistics and distribution","hypothesis":"Test storage against site connection constraints and loading patterns.","status":"needs_review","effective_date":null,"reviewed_on":null,"currency":"EUR","tariff_basis":"illustrative","connector_status":"source_link_only"},{"code":"GB","name":"Great Britain","regulator":"Ofgem","url":"https://www.ofgem.gov.uk/","segment":"Commercial portfolios","hypothesis":"Compare flexible tariffs and aggregator proposals using actual contracts.","status":"needs_review","effective_date":null,"reviewed_on":null,"currency":"EUR","tariff_basis":"illustrative","connector_status":"source_link_only"}],"sources":[{"id":"entsoe","name":"ENTSO-E Transparency Platform","url":"https://www.entsoe.eu/data/transparency-platform/","scope":"Electricity fundamentals and transparency data","status":"not_connected"},{"id":"pvgis","name":"European Commission · PVGIS","url":"https://re.jrc.ec.europa.eu/pvg_tools/en/","scope":"Site-specific PV yield inputs","status":"not_connected"},{"id":"acer","name":"ACER Monitoring Reports","url":"https://www.acer.europa.eu/monitoring/MMR","scope":"European market monitoring publications","status":"source_link_only"}],"pilots":[{"id":"P-01","title":"Thermal signature study","pillar":"Reliability","status":"running","site":"Solstice industrial","instrument":"Cell temperature · Modbus gateway","owner":"Reliability team","evidence_note":"Synthetic record: baseline logging configured; no real asset connection.","target":"Reduce false fault alerts"},{"id":"P-02","title":"Low-impact foundations","pillar":"Construction","status":"instrumenting","site":"Aurora solar","instrument":"Load cell · displacement probe","owner":"Civil engineering","evidence_note":"Synthetic record: instrument installation checklist pending.","target":"Compare ground disturbance"},{"id":"P-03","title":"Habitat baseline survey","pillar":"Sustainability","status":"planned","site":"Delta logistics","instrument":"Transect protocol · field observations","owner":"Ecology team","evidence_note":"Synthetic record: ecological baseline survey has not been completed.","target":"Establish an ecological baseline"},{"id":"P-04","title":"Adaptive load envelope","pillar":"Efficiency","status":"validated","site":"Meridian works","instrument":"Revenue meter · synthetic load profile","owner":"Energy systems","evidence_note":"Synthetic record: validation describes a simulated test only.","target":"Validate a peak-demand hypothesis"}],"dispatch":{"model":"btm-milp-v1","data_kind":"synthetic","market":"FR","duration_hours":24.0,"capacity_kwh":10000.0,"power_kw":5000.0,"baseline_cost_eur":7536.48,"optimized_cost_eur":5402.25,"savings_eur":2134.22,"savings_pct":28.32,"energy_savings_eur":2311.85,"peak_savings_eur":-0.0,"wear_cost_eur":177.63,"baseline_peak_kw":3897.506,"optimized_peak_kw":6769.828,"discharged_kwh":11841.915,"equivalent_discharge_cycles":1.1842,"terminal_soc_kwh":5000.0,"solver":"SciPy / HiGHS MILP","solver_status":"optimal","schedule":[{"hour":0.0,"label":"00:00","load_kw":2452.145,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":2452.145,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":5000.0,"soc_end_kwh":5000.0,"soc_pct":50.0,"import_eur_mwh":105.0},{"hour":1.0,"label":"01:00","load_kw":2455.83,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":2455.83,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":5000.0,"soc_end_kwh":5000.0,"soc_pct":50.0,"import_eur_mwh":92.0},{"hour":2.0,"label":"02:00","load_kw":2464.628,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":2464.628,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":5000.0,"soc_end_kwh":5000.0,"soc_pct":50.0,"import_eur_mwh":88.0},{"hour":3.0,"label":"03:00","load_kw":2483.884,"pv_kw":0.0,"charge_kw":508.573,"discharge_kw":0.0,"grid_import_kw":2992.457,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":5000.0,"soc_end_kwh":5482.475,"soc_pct":54.825,"import_eur_mwh":85.0},{"hour":4.0,"label":"04:00","load_kw":2522.453,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":2522.453,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":5482.475,"soc_end_kwh":5482.475,"soc_pct":54.825,"import_eur_mwh":90.0},{"hour":5.0,"label":"05:00","load_kw":2593.014,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":2593.014,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":5482.475,"soc_end_kwh":5482.475,"soc_pct":54.825,"import_eur_mwh":105.0},{"hour":6.0,"label":"06:00","load_kw":2710.588,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":2710.588,"grid_import_kw":0.0,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":5482.475,"soc_end_kwh":2625.264,"soc_pct":26.253,"import_eur_mwh":140.0},{"hour":7.0,"label":"07:00","load_kw":2888.316,"pv_kw":1527.032,"charge_kw":0.0,"discharge_kw":1361.284,"grid_import_kw":0.0,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":2625.264,"soc_end_kwh":1190.345,"soc_pct":11.903,"import_eur_mwh":200.0},{"hour":8.0,"label":"08:00","load_kw":3130.577,"pv_kw":2950.0,"charge_kw":0.0,"discharge_kw":180.577,"grid_import_kw":0.0,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":1190.345,"soc_end_kwh":1000.0,"soc_pct":10.0,"import_eur_mwh":230.0},{"hour":9.0,"label":"09:00","load_kw":3425.491,"pv_kw":4171.93,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":0.0,"grid_export_kw":746.439,"curtailed_kw":0.0,"soc_start_kwh":1000.0,"soc_end_kwh":1000.0,"soc_pct":10.0,"import_eur_mwh":180.0},{"hour":10.0,"label":"10:00","load_kw":3740.703,"pv_kw":5109.55,"charge_kw":1368.847,"discharge_kw":0.0,"grid_import_kw":0.0,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":1000.0,"soc_end_kwh":2298.602,"soc_pct":22.986,"import_eur_mwh":130.0},{"hour":11.0,"label":"11:00","load_kw":4026.498,"pv_kw":5698.962,"charge_kw":1672.464,"discharge_kw":0.0,"grid_import_kw":0.0,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":2298.602,"soc_end_kwh":3885.241,"soc_pct":38.852,"import_eur_mwh":100.0},{"hour":12.0,"label":"12:00","load_kw":4227.815,"pv_kw":5900.0,"charge_kw":1672.185,"discharge_kw":0.0,"grid_import_kw":0.0,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":3885.241,"soc_end_kwh":5471.615,"soc_pct":54.716,"import_eur_mwh":80.0},{"hour":13.0,"label":"13:00","load_kw":4302.836,"pv_kw":5698.962,"charge_kw":2777.749,"discharge_kw":0.0,"grid_import_kw":1381.623,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":5471.615,"soc_end_kwh":8106.819,"soc_pct":81.068,"import_eur_mwh":70.0},{"hour":14.0,"label":"14:00","load_kw":4243.945,"pv_kw":5109.55,"charge_kw":865.605,"discharge_kw":0.0,"grid_import_kw":0.0,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":8106.819,"soc_end_kwh":8928.005,"soc_pct":89.28,"import_eur_mwh":75.0},{"hour":15.0,"label":"15:00","load_kw":4096.04,"pv_kw":4171.93,"charge_kw":75.89,"discharge_kw":0.0,"grid_import_kw":0.0,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":8928.005,"soc_end_kwh":9000.0,"soc_pct":90.0,"import_eur_mwh":110.0},{"hour":16.0,"label":"16:00","load_kw":3953.936,"pv_kw":2950.0,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":1003.936,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":9000.0,"soc_end_kwh":9000.0,"soc_pct":90.0,"import_eur_mwh":180.0},{"hour":17.0,"label":"17:00","load_kw":3900.054,"pv_kw":1527.032,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":2373.022,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":9000.0,"soc_end_kwh":9000.0,"soc_pct":90.0,"import_eur_mwh":280.0},{"hour":18.0,"label":"18:00","load_kw":3897.506,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":3897.506,"grid_import_kw":0.0,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":9000.0,"soc_end_kwh":4891.668,"soc_pct":48.917,"import_eur_mwh":350.0},{"hour":19.0,"label":"19:00","load_kw":3788.316,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":3691.96,"grid_import_kw":96.356,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":4891.668,"soc_end_kwh":1000.0,"soc_pct":10.0,"import_eur_mwh":320.0},{"hour":20.0,"label":"20:00","load_kw":3477.517,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":3477.517,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":1000.0,"soc_end_kwh":1000.0,"soc_pct":10.0,"import_eur_mwh":270.0},{"hour":21.0,"label":"21:00","load_kw":3067.577,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":3067.577,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":1000.0,"soc_end_kwh":1000.0,"soc_pct":10.0,"import_eur_mwh":205.0},{"hour":22.0,"label":"22:00","load_kw":2735.688,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":2735.688,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":1000.0,"soc_end_kwh":1000.0,"soc_pct":10.0,"import_eur_mwh":160.0},{"hour":23.0,"label":"23:00","load_kw":2553.458,"pv_kw":0.0,"charge_kw":4216.37,"discharge_kw":0.0,"grid_import_kw":6769.828,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":1000.0,"soc_end_kwh":5000.0,"soc_pct":50.0,"import_eur_mwh":125.0}],"warnings":["Synthetic daily profile is not an annual revenue forecast.","Peak tariff applies once to this modeled period, not automatically to a month.","Perfect foresight; no ancillary services, taxes, fixed fees or availability reserve."]},"finance":{"model":"project-finance-v1","npv_eur":1857086.59,"irr_pct":16.128,"payback_years":5.36,"minimum_dscr":0.547878,"dscr_covenant":1.3,"covenant_pass":false,"level_payment_debt_capacity_eur":741742.56,"capex_eur":3200000.0,"rows":[{"year":1,"gross_margin_eur":697000.0,"opex_eur":70000.0,"augmentation_eur":0,"cfads_eur":627000.0,"debt_service_eur":233495.27,"interest_eur":96800.0,"debt_balance_eur":1623304.73,"equity_cashflow_eur":393504.73,"dscr":2.685279,"cumulative_eur":-2573000.0,"contracted_fraction":0.4},{"year":2,"gross_margin_eur":684454.0,"opex_eur":71400.0,"augmentation_eur":0,"cfads_eur":613054.0,"debt_service_eur":233495.27,"interest_eur":89281.76,"debt_balance_eur":1479091.21,"equity_cashflow_eur":379558.73,"dscr":2.625552,"cumulative_eur":-1959946.0,"contracted_fraction":0.4},{"year":3,"gross_margin_eur":672133.83,"opex_eur":72828.0,"augmentation_eur":0,"cfads_eur":599305.83,"debt_service_eur":233495.27,"interest_eur":81350.02,"debt_balance_eur":1326945.96,"equity_cashflow_eur":365810.56,"dscr":2.566672,"cumulative_eur":-1360640.17,"contracted_fraction":0.4},{"year":4,"gross_margin_eur":660035.42,"opex_eur":74284.56,"augmentation_eur":0,"cfads_eur":585750.86,"debt_service_eur":233495.27,"interest_eur":72982.03,"debt_balance_eur":1166432.71,"equity_cashflow_eur":352255.59,"dscr":2.50862,"cumulative_eur":-774889.31,"contracted_fraction":0.4},{"year":5,"gross_margin_eur":648154.78,"opex_eur":75770.25,"augmentation_eur":0,"cfads_eur":572384.53,"debt_service_eur":233495.27,"interest_eur":64153.8,"debt_balance_eur":997091.24,"equity_cashflow_eur":338889.26,"dscr":2.451375,"cumulative_eur":-202504.78,"contracted_fraction":0.4},{"year":6,"gross_margin_eur":636488.0,"opex_eur":77285.66,"augmentation_eur":0,"cfads_eur":559202.34,"debt_service_eur":233495.27,"interest_eur":54840.02,"debt_balance_eur":818435.98,"equity_cashflow_eur":325707.07,"dscr":2.394919,"cumulative_eur":356697.56,"contracted_fraction":0.4},{"year":7,"gross_margin_eur":625031.21,"opex_eur":78831.37,"augmentation_eur":0,"cfads_eur":546199.84,"debt_service_eur":233495.27,"interest_eur":45013.98,"debt_balance_eur":629954.69,"equity_cashflow_eur":312704.57,"dscr":2.339233,"cumulative_eur":902897.4,"contracted_fraction":0.4},{"year":8,"gross_margin_eur":613780.65,"opex_eur":80408.0,"augmentation_eur":0,"cfads_eur":533372.65,"debt_service_eur":233495.27,"interest_eur":34647.51,"debt_balance_eur":431106.93,"equity_cashflow_eur":299877.38,"dscr":2.284297,"cumulative_eur":1436270.05,"contracted_fraction":0.4},{"year":9,"gross_margin_eur":602732.6,"opex_eur":82016.16,"augmentation_eur":0,"cfads_eur":520716.44,"debt_service_eur":233495.27,"interest_eur":23710.88,"debt_balance_eur":221322.53,"equity_cashflow_eur":287221.17,"dscr":2.230094,"cumulative_eur":1956986.49,"contracted_fraction":0.4},{"year":10,"gross_margin_eur":661583.41,"opex_eur":83656.48,"augmentation_eur":450000.0,"cfads_eur":127926.93,"debt_service_eur":233495.27,"interest_eur":12172.74,"debt_balance_eur":0,"equity_cashflow_eur":-105568.34,"dscr":0.547878,"cumulative_eur":2084913.42,"contracted_fraction":0.4},{"year":11,"gross_margin_eur":573242.57,"opex_eur":85329.61,"augmentation_eur":0,"cfads_eur":487912.96,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":487912.96,"dscr":null,"cumulative_eur":2572826.38,"contracted_fraction":0},{"year":12,"gross_margin_eur":562924.2,"opex_eur":87036.2,"augmentation_eur":0,"cfads_eur":475888.0,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":475888.0,"dscr":null,"cumulative_eur":3048714.38,"contracted_fraction":0},{"year":13,"gross_margin_eur":552791.57,"opex_eur":88776.93,"augmentation_eur":0,"cfads_eur":464014.64,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":464014.64,"dscr":null,"cumulative_eur":3512729.02,"contracted_fraction":0},{"year":14,"gross_margin_eur":542841.32,"opex_eur":90552.46,"augmentation_eur":0,"cfads_eur":452288.85,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":452288.85,"dscr":null,"cumulative_eur":3965017.88,"contracted_fraction":0},{"year":15,"gross_margin_eur":533070.17,"opex_eur":92363.51,"augmentation_eur":0,"cfads_eur":440706.66,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":440706.66,"dscr":null,"cumulative_eur":4405724.54,"contracted_fraction":0},{"year":16,"gross_margin_eur":523474.91,"opex_eur":94210.78,"augmentation_eur":0,"cfads_eur":429264.13,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":429264.13,"dscr":null,"cumulative_eur":4834988.66,"contracted_fraction":0},{"year":17,"gross_margin_eur":514052.36,"opex_eur":96095.0,"augmentation_eur":0,"cfads_eur":417957.36,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":417957.36,"dscr":null,"cumulative_eur":5252946.03,"contracted_fraction":0},{"year":18,"gross_margin_eur":504799.42,"opex_eur":98016.9,"augmentation_eur":0,"cfads_eur":406782.52,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":406782.52,"dscr":null,"cumulative_eur":5659728.55,"contracted_fraction":0},{"year":19,"gross_margin_eur":495713.03,"opex_eur":99977.24,"augmentation_eur":0,"cfads_eur":395735.79,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":395735.79,"dscr":null,"cumulative_eur":6055464.34,"contracted_fraction":0},{"year":20,"gross_margin_eur":486790.2,"opex_eur":101976.78,"augmentation_eur":0,"cfads_eur":384813.41,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":384813.41,"dscr":null,"cumulative_eur":6440277.75,"contracted_fraction":0}],"warnings":["Pre-tax nominal screening; no VAT, working capital, DSRA, inflation-linked revenue or terminal value.","Gross margin is an independent user assumption, not the daily dispatch result annualized.","Augmentation is deducted before debt service; debt is level-payment, not sculpted."]},"pv":{"model":"discounted-pv-v1","capex_eur":32500000.0,"lcoe_eur_mwh":51.38,"npv_eur":13126119.24,"first_year_generation_mwh":66150.0,"panel_count":83334,"indicative_land_ha":66.67,"capture_price_eur_mwh":68.0,"rows":[{"year":1,"generation_mwh":66150.0,"cashflow_eur":3898200.0,"replacement_eur":0},{"year":2,"generation_mwh":65885.4,"cashflow_eur":3880207.2,"replacement_eur":0},{"year":3,"generation_mwh":65621.86,"cashflow_eur":3862286.37,"replacement_eur":0},{"year":4,"generation_mwh":65359.37,"cashflow_eur":3844437.23,"replacement_eur":0},{"year":5,"generation_mwh":65097.93,"cashflow_eur":3826659.48,"replacement_eur":0},{"year":6,"generation_mwh":64837.54,"cashflow_eur":3808952.84,"replacement_eur":0},{"year":7,"generation_mwh":64578.19,"cashflow_eur":3791317.03,"replacement_eur":0},{"year":8,"generation_mwh":64319.88,"cashflow_eur":3773751.76,"replacement_eur":0},{"year":9,"generation_mwh":64062.6,"cashflow_eur":3756256.75,"replacement_eur":0},{"year":10,"generation_mwh":63806.35,"cashflow_eur":3738831.73,"replacement_eur":0},{"year":11,"generation_mwh":63551.12,"cashflow_eur":3721476.4,"replacement_eur":0},{"year":12,"generation_mwh":63296.92,"cashflow_eur":3704190.49,"replacement_eur":0},{"year":13,"generation_mwh":63043.73,"cashflow_eur":3686973.73,"replacement_eur":0},{"year":14,"generation_mwh":62791.56,"cashflow_eur":3669825.84,"replacement_eur":0},{"year":15,"generation_mwh":62540.39,"cashflow_eur":1902746.53,"replacement_eur":1750000.0},{"year":16,"generation_mwh":62290.23,"cashflow_eur":3635735.55,"replacement_eur":0},{"year":17,"generation_mwh":62041.07,"cashflow_eur":3618792.6,"replacement_eur":0},{"year":18,"generation_mwh":61792.9,"cashflow_eur":3601917.43,"replacement_eur":0},{"year":19,"generation_mwh":61545.73,"cashflow_eur":3585109.76,"replacement_eur":0},{"year":20,"generation_mwh":61299.55,"cashflow_eur":3568369.33,"replacement_eur":0},{"year":21,"generation_mwh":61054.35,"cashflow_eur":3551695.85,"replacement_eur":0},{"year":22,"generation_mwh":60810.13,"cashflow_eur":3535089.06,"replacement_eur":0},{"year":23,"generation_mwh":60566.89,"cashflow_eur":3518548.71,"replacement_eur":0},{"year":24,"generation_mwh":60324.63,"cashflow_eur":3502074.51,"replacement_eur":0},{"year":25,"generation_mwh":60083.33,"cashflow_eur":3485666.22,"replacement_eur":0},{"year":26,"generation_mwh":59842.99,"cashflow_eur":3469323.55,"replacement_eur":0},{"year":27,"generation_mwh":59603.62,"cashflow_eur":3453046.26,"replacement_eur":0},{"year":28,"generation_mwh":59365.21,"cashflow_eur":3436834.07,"replacement_eur":0},{"year":29,"generation_mwh":59127.75,"cashflow_eur":3420686.73,"replacement_eur":0},{"year":30,"generation_mwh":58891.24,"cashflow_eur":3404603.99,"replacement_eur":0}],"warnings":["Yield and capture price are user assumptions, not site-specific PVGIS results.","Constant money basis; no escalation. Discount rate must be consistent with that basis.","Land-area estimate excludes setbacks, terrain, roads and interconnection; not a technical layout."]},"acquisition":{"model":"ma-screen-v1","ev_ebitda":9.27,"implied_equity_value_eur":29000000.0,"screening_dcf_eur":35928220.68,"valuation_gap_eur":-2071779.32,"unlevered_irr_pct":7.244,"warnings":["Pre-tax enterprise screening only: EBITDA less maintenance capex is a proxy, not full FCFF.","No tax, working capital, terminal value or technology-specific production model.","Negative implied equity is reported, not silently floored at zero."]},"forecast":{"model":"mean-reverting-scenario-v1","market":"FR","seed":42,"paths":1500,"data_kind":"synthetic","rows":[{"year":2027,"p10_eur_mwh":57.94,"p50_eur_mwh":77.55,"p90_eur_mwh":96.87,"negative_price_probability":0.0},{"year":2028,"p10_eur_mwh":50.89,"p50_eur_mwh":74.21,"p90_eur_mwh":99.86,"negative_price_probability":0.0},{"year":2029,"p10_eur_mwh":47.9,"p50_eur_mwh":74.03,"p90_eur_mwh":99.85,"negative_price_probability":0.0},{"year":2030,"p10_eur_mwh":45.79,"p50_eur_mwh":74.12,"p90_eur_mwh":101.51,"negative_price_probability":0.0},{"year":2031,"p10_eur_mwh":45.06,"p50_eur_mwh":73.34,"p90_eur_mwh":101.76,"negative_price_probability":0.0007},{"year":2032,"p10_eur_mwh":42.87,"p50_eur_mwh":73.66,"p90_eur_mwh":101.35,"negative_price_probability":0.0},{"year":2033,"p10_eur_mwh":43.08,"p50_eur_mwh":72.75,"p90_eur_mwh":100.32,"negative_price_probability":0.0007},{"year":2034,"p10_eur_mwh":43.47,"p50_eur_mwh":71.63,"p90_eur_mwh":103.05,"negative_price_probability":0.0007},{"year":2035,"p10_eur_mwh":43.29,"p50_eur_mwh":71.76,"p90_eur_mwh":102.83,"negative_price_probability":0.0},{"year":2036,"p10_eur_mwh":45.84,"p50_eur_mwh":73.0,"p90_eur_mwh":102.8,"negative_price_probability":0.0007},{"year":2037,"p10_eur_mwh":45.47,"p50_eur_mwh":74.35,"p90_eur_mwh":102.73,"negative_price_probability":0.0},{"year":2038,"p10_eur_mwh":46.32,"p50_eur_mwh":76.36,"p90_eur_mwh":104.06,"negative_price_probability":0.0},{"year":2039,"p10_eur_mwh":47.51,"p50_eur_mwh":75.37,"p90_eur_mwh":106.02,"negative_price_probability":0.0007},{"year":2040,"p10_eur_mwh":48.18,"p50_eur_mwh":76.94,"p90_eur_mwh":106.21,"negative_price_probability":0.0007},{"year":2041,"p10_eur_mwh":49.24,"p50_eur_mwh":76.85,"p90_eur_mwh":104.59,"negative_price_probability":0.0013},{"year":2042,"p10_eur_mwh":49.01,"p50_eur_mwh":77.56,"p90_eur_mwh":105.3,"negative_price_probability":0.0},{"year":2043,"p10_eur_mwh":48.09,"p50_eur_mwh":78.68,"p90_eur_mwh":106.96,"negative_price_probability":0.0007},{"year":2044,"p10_eur_mwh":49.37,"p50_eur_mwh":79.63,"p90_eur_mwh":108.06,"negative_price_probability":0.0},{"year":2045,"p10_eur_mwh":49.36,"p50_eur_mwh":79.42,"p90_eur_mwh":108.74,"negative_price_probability":0.0007},{"year":2046,"p10_eur_mwh":50.01,"p50_eur_mwh":78.46,"p90_eur_mwh":108.43,"negative_price_probability":0.0}],"warnings":["Uncalibrated annual-price scenarios, not market forecasts or backtested confidence intervals.","P10/P50/P90 are numerical quantiles, not exceedance-probability energy-yield labels.","Negative annual outcomes are allowed, not clipped. Currency is constant EUR, including GB demo.","Market code is metadata; geography changes require user-specified scenario parameters."]},"drift":{"model":"robust-residual-v1","baseline_fraction":0.3333333333333333,"sigma_fraction":0.00732,"drift_pct":-6.03,"alert_count":10,"alert_indices":[26,27,28,29,30,31,32,33,34,35],"series":[{"index":0,"residual_pct":0.031,"z_score":0.055},{"index":1,"residual_pct":1.224,"z_score":1.685},{"index":2,"residual_pct":1.102,"z_score":1.519},{"index":3,"residual_pct":-0.459,"z_score":-0.614},{"index":4,"residual_pct":-0.268,"z_score":-0.353},{"index":5,"residual_pct":-0.475,"z_score":-0.635},{"index":6,"residual_pct":0.513,"z_score":0.714},{"index":7,"residual_pct":-0.05,"z_score":-0.055},{"index":8,"residual_pct":0.672,"z_score":0.932},{"index":9,"residual_pct":-1.663,"z_score":-2.258},{"index":10,"residual_pct":1.41,"z_score":1.94},{"index":11,"residual_pct":-0.087,"z_score":-0.105},{"index":12,"residual_pct":0.612,"z_score":0.85},{"index":13,"residual_pct":-0.123,"z_score":-0.154},{"index":14,"residual_pct":-0.341,"z_score":-0.453},{"index":15,"residual_pct":0.417,"z_score":0.583},{"index":16,"residual_pct":0.742,"z_score":1.027},{"index":17,"residual_pct":-0.182,"z_score":-0.236},{"index":18,"residual_pct":-0.138,"z_score":-0.174},{"index":19,"residual_pct":0.617,"z_score":0.857},{"index":20,"residual_pct":-0.783,"z_score":-1.057},{"index":21,"residual_pct":-1.363,"z_score":-1.849},{"index":22,"residual_pct":0.355,"z_score":0.499},{"index":23,"residual_pct":-0.604,"z_score":-0.811},{"index":24,"residual_pct":-1.728,"z_score":-2.348},{"index":25,"residual_pct":-0.733,"z_score":-0.987},{"index":26,"residual_pct":-6.396,"z_score":-8.724},{"index":27,"residual_pct":-7.009,"z_score":-9.563},{"index":28,"residual_pct":-7.263,"z_score":-9.909},{"index":29,"residual_pct":-5.969,"z_score":-8.141},{"index":30,"residual_pct":-5.241,"z_score":-7.147},{"index":31,"residual_pct":-6.197,"z_score":-8.453},{"index":32,"residual_pct":-6.629,"z_score":-9.043},{"index":33,"residual_pct":-5.674,"z_score":-7.739},{"index":34,"residual_pct":-5.393,"z_score":-7.355},{"index":35,"residual_pct":-6.254,"z_score":-8.53}],"warnings":["The first third must represent healthy operation; thresholds are not validated field alarms.","Pointwise robust residual screening, not causal diagnosis or an RUL model."]},"reliability":{"model":"conditional-weibull-v1","survival_pct":91.98,"conditional_failure_pct":14.341,"conditional_median_remaining_hours":24503.68,"warnings":["User-specified Weibull parameters; no fit to censored field data or calibrated prognostics."]},"sustainability":{"model":"carbon-screen-v1","lifetime_generation_mwh":1841010.73,"intensity_gco2e_kwh":23.139,"net_counterfactual_avoided_tco2e":417652.68,"project_lifecycle_tco2e":42600.0,"warnings":["Screening inventory, not an ISO-conformant or independently verified life-cycle assessment.","Avoided emissions depend on the assumed counterfactual; they are not carbon credits.","Biodiversity requires a separate ecological baseline and field survey; no automatic biodiversity score."]},"defaults":{"storage":{"market":"FR","capacity_kwh":10000.0,"power_kw":5000.0,"round_trip_efficiency":0.9,"min_soc_fraction":0.1,"max_soc_fraction":0.9,"initial_soc_fraction":0.5,"interval_hours":1.0,"wear_eur_per_kwh":0.015,"peak_charge_eur_per_kw_period":0.0,"grid_import_limit_kw":20000.0,"grid_export_limit_kw":10000.0,"import_eur_per_kwh":[],"export_eur_per_kwh":[],"load_kw":[],"pv_kw":[]},"finance":{"capex_eur":3200000.0,"annual_gross_margin_eur":820000.0,"annual_opex_eur":70000.0,"years":20,"discount_rate":0.08,"annual_margin_degradation":0.018,"escalation_rate":0.02,"debt_fraction":0.55,"debt_interest_rate":0.055,"debt_tenor_years":10,"augmentation_year":10,"augmentation_cost_eur":450000.0,"augmentation_retention_restore":0.1,"contracted_fraction":0.4,"contract_years":10,"merchant_margin_factor":0.75,"minimum_dscr":1.3},"pv":{"capacity_kwp":50000.0,"specific_yield_kwh_kwp":1350.0,"capex_eur_kwp":650.0,"opex_eur_kwp_year":12.0,"degradation_fraction":0.004,"discount_rate":0.07,"years":30,"capture_price_eur_mwh":68.0,"curtailment_fraction":0.02,"inverter_replacement_year":15,"inverter_replacement_eur_kwp":35.0,"panel_kwp":0.6,"panel_area_m2":2.8,"ground_coverage_ratio":0.35},"forecast":{"market":"FR","base_price_eur_mwh":80.0,"long_run_price_eur_mwh":70.0,"mean_reversion":0.25,"annual_shock_eur_mwh":15.0,"trend_eur_mwh_year":0.5,"years":20,"paths":1500,"seed":42,"start_year":2027},"acquisition":{"enterprise_value_eur":38000000.0,"annual_ebitda_eur":4100000.0,"net_debt_eur":9000000.0,"years":20,"discount_rate":0.08,"annual_maintenance_capex_eur":300000.0,"annual_degradation":0.005},"reliability":{"shape":2.4,"scale_hours":45000.0,"age_hours":16000.0,"horizon_hours":8760.0},"sustainability":{"annual_generation_kwh":65000000.0,"years":30,"degradation_fraction":0.004,"embodied_kgco2e":38000000.0,"annual_operational_kgco2e":120000.0,"counterfactual_kgco2e_kwh":0.25,"end_of_life_kgco2e":1000000.0}},"professional_context":{"user_reported_pv_pipeline_gwp":"not included","as_of":"not applicable","note":"Private professional context is excluded from the public synthetic demonstration."},"council":{"mode":"local","hybrid_run_id":null,"execution":"deterministic_rule_based","reviewed_brief":"Review a 5 MW / 10 MWh BTM storage investment for an industrial customer.","market":"FR","reviews":[{"agent":"Storage engineer","summary":"The synthetic 24-hour optimization is optimal; terminal SOC is preserved.","risks":["Perfect foresight and one illustrative day do not establish annual value."],"required_evidence":["Interval meter data, import/export limits and battery warranty throughput."]},{"agent":"Investment analyst","summary":"The independent finance assumptions produce NPV EUR 1,857,087; minimum DSCR is 0.547878.","risks":["Revenue is an assumed gross margin; validate contract duration, augmentation and downside."],"required_evidence":["Contract terms, cost quotations and a reconciled annual dispatch-to-finance bridge."]},{"agent":"Market reviewer","summary":"France has a CRE source link, but no approved tariff or regulatory determination.","risks":["Market access, network fees, metering and stacking eligibility are unresolved."],"required_evidence":["Dated primary rules, customer tariff and an accountable local reviewer."]},{"agent":"Sustainability reviewer","summary":"Carbon screening and biodiversity field work are separate evidence streams.","risks":["Illustrative emissions factors are not certified LCA data or biodiversity outcomes."],"required_evidence":["Supplier inventory, system boundary, counterfactual and ecological baseline."]},{"agent":"Hybrid architect","summary":"No saved hybrid run was supplied; architecture-specific adequacy has not been reviewed.","risks":["A greedy hourly energy balance does not establish GFM stability, transfer performance or protection."],"required_evidence":["Reviewed topology, dynamic models, equipment limits and site-specific measurements."]},{"agent":"Learning designer","summary":"The catalogue contains 36 architecture lessons with local self-checks; none is an accredited qualification.","risks":["Self-check completion is not independently verified mastery."],"required_evidence":["Instructor review, learner feedback and independently checked assessment outcomes."]},{"agent":"Accessibility reviewer","summary":"Documented keyboard, text-alternative and motion controls require real assistive-technology testing.","risks":["This rule-based reviewer has not inspected a browser or conducted a WCAG audit."],"required_evidence":["Keyboard, screen-reader, contrast, reduced-motion and mobile test evidence."]},{"agent":"Reproducibility reviewer","summary":"Synthetic cases and input hashes support reproducibility; no stars, award or public deployment is assumed.","risks":["Different initial/terminal SOC, demand and horizons can bias run comparisons."],"required_evidence":["Pinned input files, regression outputs, boundary checks and an independent solver benchmark."]}],"decision":{"recommendation":"Proceed to evidence collection, not investment approval.","unresolved_risks":["Unvalidated annual economics","Unreviewed local framework","No field calibration"],"next_actions":["Obtain site and tariff data.","Validate annual cash flows and debt covenant downside.","Assign legal, engineering and ecological reviewers."]},"warnings":["No LLM was used in local mode. The brief is recorded; this is a fixed-scope checklist, not free-form analysis."]}};
++  export const SNAPSHOT: Dashboard = {"version":"0.3.0","data_kind":"synthetic","as_of":"Illustrative scenario · not live","market":"FR","portfolio":[{"id":"HF-101","name":"Solstice industrial","market":"FR","technology":"PV + BESS","stage":"Due diligence","pv_mwp":68,"bess_mwh":24,"capex_meur":54.1,"progress":74},{"id":"HF-102","name":"Nordlicht campus","market":"DE","technology":"BESS","stage":"Feasibility","pv_mwp":0,"bess_mwh":40,"capex_meur":15.6,"progress":48},{"id":"HF-103","name":"Aurora solar","market":"ES","technology":"PV","stage":"Design review","pv_mwp":125,"bess_mwh":0,"capex_meur":73.8,"progress":86},{"id":"HF-104","name":"Vento repower","market":"IT","technology":"Wind","stage":"M&A screening","pv_mwp":0,"wind_mw":54,"bess_mwh":0,"capex_meur":67.4,"progress":32},{"id":"HF-105","name":"Delta logistics","market":"NL","technology":"PV + BESS","stage":"Pilot","pv_mwp":12,"bess_mwh":10,"capex_meur":10.3,"progress":63},{"id":"HF-106","name":"Meridian works","market":"GB","technology":"PV + BESS","stage":"Feasibility","pv_mwp":32,"bess_mwh":16,"capex_meur":28.7,"progress":41}],"markets":[{"code":"FR","name":"France","regulator":"CRE","url":"https://www.cre.fr/","segment":"Industrial campuses","hypothesis":"Increase solar self-use and test time-of-use exposure.","status":"needs_review","effective_date":null,"reviewed_on":null,"currency":"EUR","tariff_basis":"illustrative","connector_status":"source_link_only"},{"code":"DE","name":"Germany","regulator":"Bundesnetzagentur","url":"https://www.bundesnetzagentur.de/EN/Home/home_node.html","segment":"Energy-intensive industry","hypothesis":"Compare load management with the actual site network tariff.","status":"needs_review","effective_date":null,"reviewed_on":null,"currency":"EUR","tariff_basis":"illustrative","connector_status":"source_link_only"},{"code":"ES","name":"Spain","regulator":"CNMC","url":"https://www.cnmc.es/","segment":"Solar-rich commercial sites","hypothesis":"Shift on-site PV generation into evening consumption.","status":"needs_review","effective_date":null,"reviewed_on":null,"currency":"EUR","tariff_basis":"illustrative","connector_status":"source_link_only"},{"code":"IT","name":"Italy","regulator":"ARERA","url":"https://www.arera.it/en/","segment":"Manufacturing clusters","hypothesis":"Evaluate procurement savings alongside resilience requirements.","status":"needs_review","effective_date":null,"reviewed_on":null,"currency":"EUR","tariff_basis":"illustrative","connector_status":"source_link_only"},{"code":"NL","name":"Netherlands","regulator":"ACM","url":"https://www.acm.nl/en","segment":"Logistics and distribution","hypothesis":"Test storage against site connection constraints and loading patterns.","status":"needs_review","effective_date":null,"reviewed_on":null,"currency":"EUR","tariff_basis":"illustrative","connector_status":"source_link_only"},{"code":"GB","name":"Great Britain","regulator":"Ofgem","url":"https://www.ofgem.gov.uk/","segment":"Commercial portfolios","hypothesis":"Compare flexible tariffs and aggregator proposals using actual contracts.","status":"needs_review","effective_date":null,"reviewed_on":null,"currency":"EUR","tariff_basis":"illustrative","connector_status":"source_link_only"}],"sources":[{"id":"entsoe","name":"ENTSO-E Transparency Platform","url":"https://www.entsoe.eu/data/transparency-platform/","scope":"Electricity fundamentals and transparency data","status":"not_connected"},{"id":"pvgis","name":"European Commission · PVGIS","url":"https://re.jrc.ec.europa.eu/pvg_tools/en/","scope":"Site-specific PV yield inputs","status":"not_connected"},{"id":"acer","name":"ACER Monitoring Reports","url":"https://www.acer.europa.eu/monitoring/MMR","scope":"European market monitoring publications","status":"source_link_only"}],"pilots":[{"id":"P-01","title":"Thermal signature study","pillar":"Reliability","status":"running","site":"Solstice industrial","instrument":"Cell temperature · Modbus gateway","owner":"Reliability team","evidence_note":"Synthetic record: baseline logging configured; no real asset connection.","target":"Reduce false fault alerts"},{"id":"P-02","title":"Low-impact foundations","pillar":"Construction","status":"instrumenting","site":"Aurora solar","instrument":"Load cell · displacement probe","owner":"Civil engineering","evidence_note":"Synthetic record: instrument installation checklist pending.","target":"Compare ground disturbance"},{"id":"P-03","title":"Habitat baseline survey","pillar":"Sustainability","status":"planned","site":"Delta logistics","instrument":"Transect protocol · field observations","owner":"Ecology team","evidence_note":"Synthetic record: ecological baseline survey has not been completed.","target":"Establish an ecological baseline"},{"id":"P-04","title":"Adaptive load envelope","pillar":"Efficiency","status":"validated","site":"Meridian works","instrument":"Revenue meter · synthetic load profile","owner":"Energy systems","evidence_note":"Synthetic record: validation describes a simulated test only.","target":"Validate a peak-demand hypothesis"}],"dispatch":{"model":"btm-milp-v1","data_kind":"synthetic","market":"FR","duration_hours":24.0,"capacity_kwh":10000.0,"power_kw":5000.0,"baseline_cost_eur":7536.48,"optimized_cost_eur":5402.25,"savings_eur":2134.22,"savings_pct":28.32,"energy_savings_eur":2311.85,"peak_savings_eur":-0.0,"wear_cost_eur":177.63,"baseline_peak_kw":3897.506,"optimized_peak_kw":6769.828,"discharged_kwh":11841.915,"equivalent_discharge_cycles":1.1842,"terminal_soc_kwh":5000.0,"solver":"SciPy / HiGHS MILP","solver_status":"optimal","schedule":[{"hour":0.0,"label":"00:00","load_kw":2452.145,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":2452.145,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":5000.0,"soc_end_kwh":5000.0,"soc_pct":50.0,"import_eur_mwh":105.0},{"hour":1.0,"label":"01:00","load_kw":2455.83,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":2455.83,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":5000.0,"soc_end_kwh":5000.0,"soc_pct":50.0,"import_eur_mwh":92.0},{"hour":2.0,"label":"02:00","load_kw":2464.628,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":2464.628,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":5000.0,"soc_end_kwh":5000.0,"soc_pct":50.0,"import_eur_mwh":88.0},{"hour":3.0,"label":"03:00","load_kw":2483.884,"pv_kw":0.0,"charge_kw":508.573,"discharge_kw":0.0,"grid_import_kw":2992.457,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":5000.0,"soc_end_kwh":5482.475,"soc_pct":54.825,"import_eur_mwh":85.0},{"hour":4.0,"label":"04:00","load_kw":2522.453,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":2522.453,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":5482.475,"soc_end_kwh":5482.475,"soc_pct":54.825,"import_eur_mwh":90.0},{"hour":5.0,"label":"05:00","load_kw":2593.014,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":2593.014,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":5482.475,"soc_end_kwh":5482.475,"soc_pct":54.825,"import_eur_mwh":105.0},{"hour":6.0,"label":"06:00","load_kw":2710.588,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":2710.588,"grid_import_kw":0.0,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":5482.475,"soc_end_kwh":2625.264,"soc_pct":26.253,"import_eur_mwh":140.0},{"hour":7.0,"label":"07:00","load_kw":2888.316,"pv_kw":1527.032,"charge_kw":0.0,"discharge_kw":1361.284,"grid_import_kw":0.0,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":2625.264,"soc_end_kwh":1190.345,"soc_pct":11.903,"import_eur_mwh":200.0},{"hour":8.0,"label":"08:00","load_kw":3130.577,"pv_kw":2950.0,"charge_kw":0.0,"discharge_kw":180.577,"grid_import_kw":0.0,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":1190.345,"soc_end_kwh":1000.0,"soc_pct":10.0,"import_eur_mwh":230.0},{"hour":9.0,"label":"09:00","load_kw":3425.491,"pv_kw":4171.93,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":0.0,"grid_export_kw":746.439,"curtailed_kw":0.0,"soc_start_kwh":1000.0,"soc_end_kwh":1000.0,"soc_pct":10.0,"import_eur_mwh":180.0},{"hour":10.0,"label":"10:00","load_kw":3740.703,"pv_kw":5109.55,"charge_kw":1368.847,"discharge_kw":0.0,"grid_import_kw":0.0,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":1000.0,"soc_end_kwh":2298.602,"soc_pct":22.986,"import_eur_mwh":130.0},{"hour":11.0,"label":"11:00","load_kw":4026.498,"pv_kw":5698.962,"charge_kw":1672.464,"discharge_kw":0.0,"grid_import_kw":0.0,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":2298.602,"soc_end_kwh":3885.241,"soc_pct":38.852,"import_eur_mwh":100.0},{"hour":12.0,"label":"12:00","load_kw":4227.815,"pv_kw":5900.0,"charge_kw":1672.185,"discharge_kw":0.0,"grid_import_kw":0.0,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":3885.241,"soc_end_kwh":5471.615,"soc_pct":54.716,"import_eur_mwh":80.0},{"hour":13.0,"label":"13:00","load_kw":4302.836,"pv_kw":5698.962,"charge_kw":2777.749,"discharge_kw":0.0,"grid_import_kw":1381.623,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":5471.615,"soc_end_kwh":8106.819,"soc_pct":81.068,"import_eur_mwh":70.0},{"hour":14.0,"label":"14:00","load_kw":4243.945,"pv_kw":5109.55,"charge_kw":865.605,"discharge_kw":0.0,"grid_import_kw":0.0,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":8106.819,"soc_end_kwh":8928.005,"soc_pct":89.28,"import_eur_mwh":75.0},{"hour":15.0,"label":"15:00","load_kw":4096.04,"pv_kw":4171.93,"charge_kw":75.89,"discharge_kw":0.0,"grid_import_kw":0.0,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":8928.005,"soc_end_kwh":9000.0,"soc_pct":90.0,"import_eur_mwh":110.0},{"hour":16.0,"label":"16:00","load_kw":3953.936,"pv_kw":2950.0,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":1003.936,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":9000.0,"soc_end_kwh":9000.0,"soc_pct":90.0,"import_eur_mwh":180.0},{"hour":17.0,"label":"17:00","load_kw":3900.054,"pv_kw":1527.032,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":2373.022,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":9000.0,"soc_end_kwh":9000.0,"soc_pct":90.0,"import_eur_mwh":280.0},{"hour":18.0,"label":"18:00","load_kw":3897.506,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":3897.506,"grid_import_kw":0.0,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":9000.0,"soc_end_kwh":4891.668,"soc_pct":48.917,"import_eur_mwh":350.0},{"hour":19.0,"label":"19:00","load_kw":3788.316,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":3691.96,"grid_import_kw":96.356,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":4891.668,"soc_end_kwh":1000.0,"soc_pct":10.0,"import_eur_mwh":320.0},{"hour":20.0,"label":"20:00","load_kw":3477.517,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":3477.517,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":1000.0,"soc_end_kwh":1000.0,"soc_pct":10.0,"import_eur_mwh":270.0},{"hour":21.0,"label":"21:00","load_kw":3067.577,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":3067.577,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":1000.0,"soc_end_kwh":1000.0,"soc_pct":10.0,"import_eur_mwh":205.0},{"hour":22.0,"label":"22:00","load_kw":2735.688,"pv_kw":0.0,"charge_kw":0.0,"discharge_kw":0.0,"grid_import_kw":2735.688,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":1000.0,"soc_end_kwh":1000.0,"soc_pct":10.0,"import_eur_mwh":160.0},{"hour":23.0,"label":"23:00","load_kw":2553.458,"pv_kw":0.0,"charge_kw":4216.37,"discharge_kw":0.0,"grid_import_kw":6769.828,"grid_export_kw":0.0,"curtailed_kw":0.0,"soc_start_kwh":1000.0,"soc_end_kwh":5000.0,"soc_pct":50.0,"import_eur_mwh":125.0}],"warnings":["Synthetic daily profile is not an annual revenue forecast.","Peak tariff applies once to this modeled period, not automatically to a month.","Perfect foresight; no ancillary services, taxes, fixed fees or availability reserve."]},"finance":{"model":"project-finance-v1","npv_eur":1857086.59,"irr_pct":16.128,"payback_years":5.36,"minimum_dscr":0.547878,"dscr_covenant":1.3,"covenant_pass":false,"level_payment_debt_capacity_eur":741742.56,"capex_eur":3200000.0,"rows":[{"year":1,"gross_margin_eur":697000.0,"opex_eur":70000.0,"augmentation_eur":0,"cfads_eur":627000.0,"debt_service_eur":233495.27,"interest_eur":96800.0,"debt_balance_eur":1623304.73,"equity_cashflow_eur":393504.73,"dscr":2.685279,"cumulative_eur":-2573000.0,"contracted_fraction":0.4},{"year":2,"gross_margin_eur":684454.0,"opex_eur":71400.0,"augmentation_eur":0,"cfads_eur":613054.0,"debt_service_eur":233495.27,"interest_eur":89281.76,"debt_balance_eur":1479091.21,"equity_cashflow_eur":379558.73,"dscr":2.625552,"cumulative_eur":-1959946.0,"contracted_fraction":0.4},{"year":3,"gross_margin_eur":672133.83,"opex_eur":72828.0,"augmentation_eur":0,"cfads_eur":599305.83,"debt_service_eur":233495.27,"interest_eur":81350.02,"debt_balance_eur":1326945.96,"equity_cashflow_eur":365810.56,"dscr":2.566672,"cumulative_eur":-1360640.17,"contracted_fraction":0.4},{"year":4,"gross_margin_eur":660035.42,"opex_eur":74284.56,"augmentation_eur":0,"cfads_eur":585750.86,"debt_service_eur":233495.27,"interest_eur":72982.03,"debt_balance_eur":1166432.71,"equity_cashflow_eur":352255.59,"dscr":2.50862,"cumulative_eur":-774889.31,"contracted_fraction":0.4},{"year":5,"gross_margin_eur":648154.78,"opex_eur":75770.25,"augmentation_eur":0,"cfads_eur":572384.53,"debt_service_eur":233495.27,"interest_eur":64153.8,"debt_balance_eur":997091.24,"equity_cashflow_eur":338889.26,"dscr":2.451375,"cumulative_eur":-202504.78,"contracted_fraction":0.4},{"year":6,"gross_margin_eur":636488.0,"opex_eur":77285.66,"augmentation_eur":0,"cfads_eur":559202.34,"debt_service_eur":233495.27,"interest_eur":54840.02,"debt_balance_eur":818435.98,"equity_cashflow_eur":325707.07,"dscr":2.394919,"cumulative_eur":356697.56,"contracted_fraction":0.4},{"year":7,"gross_margin_eur":625031.21,"opex_eur":78831.37,"augmentation_eur":0,"cfads_eur":546199.84,"debt_service_eur":233495.27,"interest_eur":45013.98,"debt_balance_eur":629954.69,"equity_cashflow_eur":312704.57,"dscr":2.339233,"cumulative_eur":902897.4,"contracted_fraction":0.4},{"year":8,"gross_margin_eur":613780.65,"opex_eur":80408.0,"augmentation_eur":0,"cfads_eur":533372.65,"debt_service_eur":233495.27,"interest_eur":34647.51,"debt_balance_eur":431106.93,"equity_cashflow_eur":299877.38,"dscr":2.284297,"cumulative_eur":1436270.05,"contracted_fraction":0.4},{"year":9,"gross_margin_eur":602732.6,"opex_eur":82016.16,"augmentation_eur":0,"cfads_eur":520716.44,"debt_service_eur":233495.27,"interest_eur":23710.88,"debt_balance_eur":221322.53,"equity_cashflow_eur":287221.17,"dscr":2.230094,"cumulative_eur":1956986.49,"contracted_fraction":0.4},{"year":10,"gross_margin_eur":661583.41,"opex_eur":83656.48,"augmentation_eur":450000.0,"cfads_eur":127926.93,"debt_service_eur":233495.27,"interest_eur":12172.74,"debt_balance_eur":0,"equity_cashflow_eur":-105568.34,"dscr":0.547878,"cumulative_eur":2084913.42,"contracted_fraction":0.4},{"year":11,"gross_margin_eur":573242.57,"opex_eur":85329.61,"augmentation_eur":0,"cfads_eur":487912.96,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":487912.96,"dscr":null,"cumulative_eur":2572826.38,"contracted_fraction":0},{"year":12,"gross_margin_eur":562924.2,"opex_eur":87036.2,"augmentation_eur":0,"cfads_eur":475888.0,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":475888.0,"dscr":null,"cumulative_eur":3048714.38,"contracted_fraction":0},{"year":13,"gross_margin_eur":552791.57,"opex_eur":88776.93,"augmentation_eur":0,"cfads_eur":464014.64,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":464014.64,"dscr":null,"cumulative_eur":3512729.02,"contracted_fraction":0},{"year":14,"gross_margin_eur":542841.32,"opex_eur":90552.46,"augmentation_eur":0,"cfads_eur":452288.85,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":452288.85,"dscr":null,"cumulative_eur":3965017.88,"contracted_fraction":0},{"year":15,"gross_margin_eur":533070.17,"opex_eur":92363.51,"augmentation_eur":0,"cfads_eur":440706.66,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":440706.66,"dscr":null,"cumulative_eur":4405724.54,"contracted_fraction":0},{"year":16,"gross_margin_eur":523474.91,"opex_eur":94210.78,"augmentation_eur":0,"cfads_eur":429264.13,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":429264.13,"dscr":null,"cumulative_eur":4834988.66,"contracted_fraction":0},{"year":17,"gross_margin_eur":514052.36,"opex_eur":96095.0,"augmentation_eur":0,"cfads_eur":417957.36,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":417957.36,"dscr":null,"cumulative_eur":5252946.03,"contracted_fraction":0},{"year":18,"gross_margin_eur":504799.42,"opex_eur":98016.9,"augmentation_eur":0,"cfads_eur":406782.52,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":406782.52,"dscr":null,"cumulative_eur":5659728.55,"contracted_fraction":0},{"year":19,"gross_margin_eur":495713.03,"opex_eur":99977.24,"augmentation_eur":0,"cfads_eur":395735.79,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":395735.79,"dscr":null,"cumulative_eur":6055464.34,"contracted_fraction":0},{"year":20,"gross_margin_eur":486790.2,"opex_eur":101976.78,"augmentation_eur":0,"cfads_eur":384813.41,"debt_service_eur":0,"interest_eur":0,"debt_balance_eur":0,"equity_cashflow_eur":384813.41,"dscr":null,"cumulative_eur":6440277.75,"contracted_fraction":0}],"warnings":["Pre-tax nominal screening; no VAT, working capital, DSRA, inflation-linked revenue or terminal value.","Gross margin is an independent user assumption, not the daily dispatch result annualized.","Augmentation is deducted before debt service; debt is level-payment, not sculpted."]},"pv":{"model":"discounted-pv-v1","capex_eur":32500000.0,"lcoe_eur_mwh":51.38,"npv_eur":13126119.24,"first_year_generation_mwh":66150.0,"panel_count":83334,"indicative_land_ha":66.67,"capture_price_eur_mwh":68.0,"rows":[{"year":1,"generation_mwh":66150.0,"cashflow_eur":3898200.0,"replacement_eur":0},{"year":2,"generation_mwh":65885.4,"cashflow_eur":3880207.2,"replacement_eur":0},{"year":3,"generation_mwh":65621.86,"cashflow_eur":3862286.37,"replacement_eur":0},{"year":4,"generation_mwh":65359.37,"cashflow_eur":3844437.23,"replacement_eur":0},{"year":5,"generation_mwh":65097.93,"cashflow_eur":3826659.48,"replacement_eur":0},{"year":6,"generation_mwh":64837.54,"cashflow_eur":3808952.84,"replacement_eur":0},{"year":7,"generation_mwh":64578.19,"cashflow_eur":3791317.03,"replacement_eur":0},{"year":8,"generation_mwh":64319.88,"cashflow_eur":3773751.76,"replacement_eur":0},{"year":9,"generation_mwh":64062.6,"cashflow_eur":3756256.75,"replacement_eur":0},{"year":10,"generation_mwh":63806.35,"cashflow_eur":3738831.73,"replacement_eur":0},{"year":11,"generation_mwh":63551.12,"cashflow_eur":3721476.4,"replacement_eur":0},{"year":12,"generation_mwh":63296.92,"cashflow_eur":3704190.49,"replacement_eur":0},{"year":13,"generation_mwh":63043.73,"cashflow_eur":3686973.73,"replacement_eur":0},{"year":14,"generation_mwh":62791.56,"cashflow_eur":3669825.84,"replacement_eur":0},{"year":15,"generation_mwh":62540.39,"cashflow_eur":1902746.53,"replacement_eur":1750000.0},{"year":16,"generation_mwh":62290.23,"cashflow_eur":3635735.55,"replacement_eur":0},{"year":17,"generation_mwh":62041.07,"cashflow_eur":3618792.6,"replacement_eur":0},{"year":18,"generation_mwh":61792.9,"cashflow_eur":3601917.43,"replacement_eur":0},{"year":19,"generation_mwh":61545.73,"cashflow_eur":3585109.76,"replacement_eur":0},{"year":20,"generation_mwh":61299.55,"cashflow_eur":3568369.33,"replacement_eur":0},{"year":21,"generation_mwh":61054.35,"cashflow_eur":3551695.85,"replacement_eur":0},{"year":22,"generation_mwh":60810.13,"cashflow_eur":3535089.06,"replacement_eur":0},{"year":23,"generation_mwh":60566.89,"cashflow_eur":3518548.71,"replacement_eur":0},{"year":24,"generation_mwh":60324.63,"cashflow_eur":3502074.51,"replacement_eur":0},{"year":25,"generation_mwh":60083.33,"cashflow_eur":3485666.22,"replacement_eur":0},{"year":26,"generation_mwh":59842.99,"cashflow_eur":3469323.55,"replacement_eur":0},{"year":27,"generation_mwh":59603.62,"cashflow_eur":3453046.26,"replacement_eur":0},{"year":28,"generation_mwh":59365.21,"cashflow_eur":3436834.07,"replacement_eur":0},{"year":29,"generation_mwh":59127.75,"cashflow_eur":3420686.73,"replacement_eur":0},{"year":30,"generation_mwh":58891.24,"cashflow_eur":3404603.99,"replacement_eur":0}],"warnings":["Yield and capture price are user assumptions, not site-specific PVGIS results.","Constant money basis; no escalation. Discount rate must be consistent with that basis.","Land-area estimate excludes setbacks, terrain, roads and interconnection; not a technical layout."]},"acquisition":{"model":"ma-screen-v1","ev_ebitda":9.27,"implied_equity_value_eur":29000000.0,"screening_dcf_eur":35928220.68,"valuation_gap_eur":-2071779.32,"unlevered_irr_pct":7.244,"warnings":["Pre-tax enterprise screening only: EBITDA less maintenance capex is a proxy, not full FCFF.","No tax, working capital, terminal value or technology-specific production model.","Negative implied equity is reported, not silently floored at zero."]},"forecast":{"model":"mean-reverting-scenario-v1","market":"FR","seed":42,"paths":1500,"data_kind":"synthetic","rows":[{"year":2027,"p10_eur_mwh":57.94,"p50_eur_mwh":77.55,"p90_eur_mwh":96.87,"negative_price_probability":0.0},{"year":2028,"p10_eur_mwh":50.89,"p50_eur_mwh":74.21,"p90_eur_mwh":99.86,"negative_price_probability":0.0},{"year":2029,"p10_eur_mwh":47.9,"p50_eur_mwh":74.03,"p90_eur_mwh":99.85,"negative_price_probability":0.0},{"year":2030,"p10_eur_mwh":45.79,"p50_eur_mwh":74.12,"p90_eur_mwh":101.51,"negative_price_probability":0.0},{"year":2031,"p10_eur_mwh":45.06,"p50_eur_mwh":73.34,"p90_eur_mwh":101.76,"negative_price_probability":0.0007},{"year":2032,"p10_eur_mwh":42.87,"p50_eur_mwh":73.66,"p90_eur_mwh":101.35,"negative_price_probability":0.0},{"year":2033,"p10_eur_mwh":43.08,"p50_eur_mwh":72.75,"p90_eur_mwh":100.32,"negative_price_probability":0.0007},{"year":2034,"p10_eur_mwh":43.47,"p50_eur_mwh":71.63,"p90_eur_mwh":103.05,"negative_price_probability":0.0007},{"year":2035,"p10_eur_mwh":43.29,"p50_eur_mwh":71.76,"p90_eur_mwh":102.83,"negative_price_probability":0.0},{"year":2036,"p10_eur_mwh":45.84,"p50_eur_mwh":73.0,"p90_eur_mwh":102.8,"negative_price_probability":0.0007},{"year":2037,"p10_eur_mwh":45.47,"p50_eur_mwh":74.35,"p90_eur_mwh":102.73,"negative_price_probability":0.0},{"year":2038,"p10_eur_mwh":46.32,"p50_eur_mwh":76.36,"p90_eur_mwh":104.06,"negative_price_probability":0.0},{"year":2039,"p10_eur_mwh":47.51,"p50_eur_mwh":75.37,"p90_eur_mwh":106.02,"negative_price_probability":0.0007},{"year":2040,"p10_eur_mwh":48.18,"p50_eur_mwh":76.94,"p90_eur_mwh":106.21,"negative_price_probability":0.0007},{"year":2041,"p10_eur_mwh":49.24,"p50_eur_mwh":76.85,"p90_eur_mwh":104.59,"negative_price_probability":0.0013},{"year":2042,"p10_eur_mwh":49.01,"p50_eur_mwh":77.56,"p90_eur_mwh":105.3,"negative_price_probability":0.0},{"year":2043,"p10_eur_mwh":48.09,"p50_eur_mwh":78.68,"p90_eur_mwh":106.96,"negative_price_probability":0.0007},{"year":2044,"p10_eur_mwh":49.37,"p50_eur_mwh":79.63,"p90_eur_mwh":108.06,"negative_price_probability":0.0},{"year":2045,"p10_eur_mwh":49.36,"p50_eur_mwh":79.42,"p90_eur_mwh":108.74,"negative_price_probability":0.0007},{"year":2046,"p10_eur_mwh":50.01,"p50_eur_mwh":78.46,"p90_eur_mwh":108.43,"negative_price_probability":0.0}],"warnings":["Uncalibrated annual-price scenarios, not market forecasts or backtested confidence intervals.","P10/P50/P90 are numerical quantiles, not exceedance-probability energy-yield labels.","Negative annual outcomes are allowed, not clipped. Currency is constant EUR, including GB demo.","Market code is metadata; geography changes require user-specified scenario parameters."]},"drift":{"model":"robust-residual-v1","baseline_fraction":0.3333333333333333,"sigma_fraction":0.00732,"drift_pct":-6.03,"alert_count":10,"alert_indices":[26,27,28,29,30,31,32,33,34,35],"series":[{"index":0,"residual_pct":0.031,"z_score":0.055},{"index":1,"residual_pct":1.224,"z_score":1.685},{"index":2,"residual_pct":1.102,"z_score":1.519},{"index":3,"residual_pct":-0.459,"z_score":-0.614},{"index":4,"residual_pct":-0.268,"z_score":-0.353},{"index":5,"residual_pct":-0.475,"z_score":-0.635},{"index":6,"residual_pct":0.513,"z_score":0.714},{"index":7,"residual_pct":-0.05,"z_score":-0.055},{"index":8,"residual_pct":0.672,"z_score":0.932},{"index":9,"residual_pct":-1.663,"z_score":-2.258},{"index":10,"residual_pct":1.41,"z_score":1.94},{"index":11,"residual_pct":-0.087,"z_score":-0.105},{"index":12,"residual_pct":0.612,"z_score":0.85},{"index":13,"residual_pct":-0.123,"z_score":-0.154},{"index":14,"residual_pct":-0.341,"z_score":-0.453},{"index":15,"residual_pct":0.417,"z_score":0.583},{"index":16,"residual_pct":0.742,"z_score":1.027},{"index":17,"residual_pct":-0.182,"z_score":-0.236},{"index":18,"residual_pct":-0.138,"z_score":-0.174},{"index":19,"residual_pct":0.617,"z_score":0.857},{"index":20,"residual_pct":-0.783,"z_score":-1.057},{"index":21,"residual_pct":-1.363,"z_score":-1.849},{"index":22,"residual_pct":0.355,"z_score":0.499},{"index":23,"residual_pct":-0.604,"z_score":-0.811},{"index":24,"residual_pct":-1.728,"z_score":-2.348},{"index":25,"residual_pct":-0.733,"z_score":-0.987},{"index":26,"residual_pct":-6.396,"z_score":-8.724},{"index":27,"residual_pct":-7.009,"z_score":-9.563},{"index":28,"residual_pct":-7.263,"z_score":-9.909},{"index":29,"residual_pct":-5.969,"z_score":-8.141},{"index":30,"residual_pct":-5.241,"z_score":-7.147},{"index":31,"residual_pct":-6.197,"z_score":-8.453},{"index":32,"residual_pct":-6.629,"z_score":-9.043},{"index":33,"residual_pct":-5.674,"z_score":-7.739},{"index":34,"residual_pct":-5.393,"z_score":-7.355},{"index":35,"residual_pct":-6.254,"z_score":-8.53}],"warnings":["The first third must represent healthy operation; thresholds are not validated field alarms.","Pointwise robust residual screening, not causal diagnosis or an RUL model."]},"reliability":{"model":"conditional-weibull-v1","survival_pct":91.98,"conditional_failure_pct":14.341,"conditional_median_remaining_hours":24503.68,"warnings":["User-specified Weibull parameters; no fit to censored field data or calibrated prognostics."]},"sustainability":{"model":"carbon-screen-v1","lifetime_generation_mwh":1841010.73,"intensity_gco2e_kwh":23.139,"net_counterfactual_avoided_tco2e":417652.68,"project_lifecycle_tco2e":42600.0,"warnings":["Screening inventory, not an ISO-conformant or independently verified life-cycle assessment.","Avoided emissions depend on the assumed counterfactual; they are not carbon credits.","Biodiversity requires a separate ecological baseline and field survey; no automatic biodiversity score."]},"defaults":{"storage":{"market":"FR","capacity_kwh":10000.0,"power_kw":5000.0,"round_trip_efficiency":0.9,"min_soc_fraction":0.1,"max_soc_fraction":0.9,"initial_soc_fraction":0.5,"interval_hours":1.0,"wear_eur_per_kwh":0.015,"peak_charge_eur_per_kw_period":0.0,"grid_import_limit_kw":20000.0,"grid_export_limit_kw":10000.0,"import_eur_per_kwh":[],"export_eur_per_kwh":[],"load_kw":[],"pv_kw":[]},"finance":{"capex_eur":3200000.0,"annual_gross_margin_eur":820000.0,"annual_opex_eur":70000.0,"years":20,"discount_rate":0.08,"annual_margin_degradation":0.018,"escalation_rate":0.02,"debt_fraction":0.55,"debt_interest_rate":0.055,"debt_tenor_years":10,"augmentation_year":10,"augmentation_cost_eur":450000.0,"augmentation_retention_restore":0.1,"contracted_fraction":0.4,"contract_years":10,"merchant_margin_factor":0.75,"minimum_dscr":1.3},"pv":{"capacity_kwp":50000.0,"specific_yield_kwh_kwp":1350.0,"capex_eur_kwp":650.0,"opex_eur_kwp_year":12.0,"degradation_fraction":0.004,"discount_rate":0.07,"years":30,"capture_price_eur_mwh":68.0,"curtailment_fraction":0.02,"inverter_replacement_year":15,"inverter_replacement_eur_kwp":35.0,"panel_kwp":0.6,"panel_area_m2":2.8,"ground_coverage_ratio":0.35},"forecast":{"market":"FR","base_price_eur_mwh":80.0,"long_run_price_eur_mwh":70.0,"mean_reversion":0.25,"annual_shock_eur_mwh":15.0,"trend_eur_mwh_year":0.5,"years":20,"paths":1500,"seed":42,"start_year":2027},"acquisition":{"enterprise_value_eur":38000000.0,"annual_ebitda_eur":4100000.0,"net_debt_eur":9000000.0,"years":20,"discount_rate":0.08,"annual_maintenance_capex_eur":300000.0,"annual_degradation":0.005},"reliability":{"shape":2.4,"scale_hours":45000.0,"age_hours":16000.0,"horizon_hours":8760.0},"sustainability":{"annual_generation_kwh":65000000.0,"years":30,"degradation_fraction":0.004,"embodied_kgco2e":38000000.0,"annual_operational_kgco2e":120000.0,"counterfactual_kgco2e_kwh":0.25,"end_of_life_kgco2e":1000000.0}},"professional_context":{"user_reported_pv_pipeline_gwp":"not included","as_of":"not applicable","note":"Private professional context is excluded from the public synthetic demonstration."},"council":{"mode":"local","hybrid_run_id":null,"execution":"deterministic_rule_based","reviewed_brief":"Review a 5 MW / 10 MWh BTM storage investment for an industrial customer.","market":"FR","reviews":[{"agent":"Storage engineer","summary":"The synthetic 24-hour optimization is optimal; terminal SOC is preserved.","risks":["Perfect foresight and one illustrative day do not establish annual value."],"required_evidence":["Interval meter data, import/export limits and battery warranty throughput."]},{"agent":"Investment analyst","summary":"The independent finance assumptions produce NPV EUR 1,857,087; minimum DSCR is 0.547878.","risks":["Revenue is an assumed gross margin; validate contract duration, augmentation and downside."],"required_evidence":["Contract terms, cost quotations and a reconciled annual dispatch-to-finance bridge."]},{"agent":"Market reviewer","summary":"France has a CRE source link, but no approved tariff or regulatory determination.","risks":["Market access, network fees, metering and stacking eligibility are unresolved."],"required_evidence":["Dated primary rules, customer tariff and an accountable local reviewer."]},{"agent":"Sustainability reviewer","summary":"Carbon screening and biodiversity field work are separate evidence streams.","risks":["Illustrative emissions factors are not certified LCA data or biodiversity outcomes."],"required_evidence":["Supplier inventory, system boundary, counterfactual and ecological baseline."]},{"agent":"Hybrid architect","summary":"No saved hybrid run was supplied; architecture-specific adequacy has not been reviewed.","risks":["A greedy hourly energy balance does not establish GFM stability, transfer performance or protection."],"required_evidence":["Reviewed topology, dynamic models, equipment limits and site-specific measurements."]},{"agent":"Learning designer","summary":"The catalogue contains 36 architecture lessons with local self-checks; none is an accredited qualification.","risks":["Self-check completion is not independently verified mastery."],"required_evidence":["Instructor review, learner feedback and independently checked assessment outcomes."]},{"agent":"Accessibility reviewer","summary":"Documented keyboard, text-alternative and motion controls require real assistive-technology testing.","risks":["This rule-based reviewer has not inspected a browser or conducted a WCAG audit."],"required_evidence":["Keyboard, screen-reader, contrast, reduced-motion and mobile test evidence."]},{"agent":"Reproducibility reviewer","summary":"Synthetic cases and input hashes support reproducibility; no stars, award or public deployment is assumed.","risks":["Different initial/terminal SOC, demand and horizons can bias run comparisons."],"required_evidence":["Pinned input files, regression outputs, boundary checks and an independent solver benchmark."]}],"decision":{"recommendation":"Proceed to evidence collection, not investment approval.","unresolved_risks":["Unvalidated annual economics","Unreviewed local framework","No field calibration"],"next_actions":["Obtain site and tariff data.","Validate annual cash flows and debt covenant downside.","Assign legal, engineering and ecological reviewers."]},"warnings":["No LLM was used in local mode. The brief is recorded; this is a fixed-scope checklist, not free-form analysis."]}};
+ }
+diff --git a/apps/web/src/types.ts b/apps/web/src/types.ts
+index 5f3dc1d..e1964ea 100644
+--- a/apps/web/src/types.ts
++++ b/apps/web/src/types.ts
+@@ -26,6 +26,6 @@ namespace HF {
+     defaults: { storage: Inputs; finance: Inputs; pv: Inputs; forecast: Inputs; acquisition: Inputs; reliability: Inputs; sustainability: Inputs };
+     professional_context: { user_reported_pv_pipeline_gwp: string; as_of: string; note: string };
+   }
+-  export interface ViewState { hybrid: HybridState; page: Page; connected: boolean; busy: boolean; data: Dashboard; marketFilter: string; search: string; chartMode: 'dispatch' | 'prices'; forecastYears: number; runs: RunRecord[]; motionOff: boolean }
++  export interface ViewState { champion?: ChampionState; hybrid: HybridState; page: Page; connected: boolean; busy: boolean; data: Dashboard; marketFilter: string; search: string; chartMode: 'dispatch' | 'prices'; forecastYears: number; runs: RunRecord[]; motionOff: boolean }
+   export interface Series { name: string; values: number[]; color: string; dashed?: boolean; area?: boolean }
+ }
+diff --git a/apps/web/src/views.ts b/apps/web/src/views.ts
+index 945541f..8832a75 100644
+--- a/apps/web/src/views.ts
++++ b/apps/web/src/views.ts
+@@ -112,9 +112,9 @@ namespace HF {
+   }
+   export function shell(state: ViewState): string {
+     const page=PAGES.find(p=>p.id===state.page)!;
+-    return `<a class="skip-link" href="#main-content">Skip to content</a><aside class="sidebar" id="sidebar"><a class="brand" href="#overview" aria-label="HelioForge command centre">${brandMark()}<div>helioforge<span>ENERGY INTELLIGENCE</span></div></a><div class="workspace-picker"><span class="workspace-logo">${icon('layers',18)}</span><div>Research workspace<small>Hybrid energy & learning</small></div>${icon('down',13)}</div><nav aria-label="Main navigation">${PAGES.map(p=>`${p.group?`<p class="nav-group">${p.group}</p>`:''}<button data-nav="${p.id}" class="nav-item ${state.page===p.id?'selected':''}" ${state.page===p.id?'aria-current="page"':''}>${icon(p.icon,18)}<span>${p.title}</span>${p.id==='council'?'<span class="nav-badge">8+1</span>':''}</button>`).join('')}</nav><div class="sidebar-bottom"><div class="open-source-card">${icon('code',20)}<strong>Built to be questioned.</strong><p>Open models. Visible assumptions.<br>Evidence you can inspect.</p><button data-action="methodology" class="text-link">Explore methodology ${icon('diagonal',13)}</button></div><div class="profile"><span class="avatar">HF</span><div>Energy R&D team<small>Local research edition</small></div><span class="presence"></span></div></div></aside>
+-    <div class="app-main"><header class="topbar"><div class="breadcrumb"><button class="icon-button mobile-menu" data-action="menu" aria-label="Toggle navigation">${icon('menu',21)}</button><span>Workspace</span>${icon('arrow',12)}<strong>${page.title}</strong></div><div class="topbar-right"><button class="connection-chip ${state.connected?'online':''}" data-action="reconnect" title="Reconnect to the local API"><i></i>${state.connected?'API connected':'Snapshot preview'}</button><span class="topbar-divider"></span><button class="icon-button" data-action="motion" aria-label="${state.motionOff?'Enable':'Reduce'} animations" aria-pressed="${state.motionOff}">${icon(state.motionOff?'play':'pause',16)}</button><button class="icon-button" data-action="history" aria-label="Open analysis history">${icon('clock',19)}</button><span class="avatar top-avatar">HF</span></div></header>
+-    <main id="main-content" tabindex="-1"><div class="page-heading"><div><div class="page-kicker">HELIOFORGE / RESEARCH OPERATING SYSTEM</div><h1>${page.title}<span class="beta-label">v0.2</span></h1><p>${page.subtitle}</p></div><div class="page-tools">${['hybrid','lessons','compare'].includes(state.page)?'':`<label class="select-wrap context-select">${icon('globe',16)}<span class="sr-only">Analysis market</span><select id="context-market" ${state.busy?'disabled':''}>${state.data.markets.map(m=>`<option value="${m.code}" ${m.code===state.data.market?'selected':''}>${m.name}</option>`).join('')}</select></label>`}<button class="btn secondary" data-action="export-evidence">${icon('download',16)}<span>Export evidence</span></button></div></div><div class="data-ribbon"><span><i></i> SYNTHETIC DATA</span><p>Illustrative scenarios, not live market data or investment advice.</p><button data-action="methodology">Model boundaries ${icon('diagonal',13)}</button></div><div id="page-content">${content(state)}</div><footer><span>${brandMark()} helioforge <b>·</b> Open energy intelligence</span><span>Transparent by design. Human decisions, always.</span></footer></main></div><div id="toast" class="toast" role="status" aria-live="polite"></div><div id="celebration" class="celebration" aria-hidden="true"></div><dialog id="modal" aria-labelledby="modal-title"></dialog>`;
++    return `<a class="skip-link" href="#main-content">Skip to content</a><aside class="sidebar" id="sidebar"><a class="brand" href="#overview" aria-label="HelioForge command centre">${brandMark()}<div>helioforge<span>ENERGY INTELLIGENCE</span></div></a><button type="button" class="workspace-picker" data-champion-action="workspace" aria-label="Open saved setups"><span class="workspace-logo">${icon('layers',18)}</span><div>Research workspace<small>Saved setups & local recovery</small></div>${icon('down',13)}</button><nav aria-label="Main navigation">${PAGES.map(p=>`${p.group?`<p class="nav-group">${p.group}</p>`:''}<button data-nav="${p.id}" class="nav-item ${state.page===p.id?'selected':''}" ${state.page===p.id?'aria-current="page"':''}>${icon(p.icon,18)}<span>${p.title}</span>${p.id==='council'?'<span class="nav-badge">8+1</span>':''}</button>`).join('')}</nav><div class="sidebar-bottom"><div class="open-source-card">${icon('code',20)}<strong>Built to be questioned.</strong><p>Open models. Visible assumptions.<br>Evidence you can inspect.</p><button data-action="methodology" class="text-link">Explore methodology ${icon('diagonal',13)}</button></div><div class="profile"><span class="avatar">HF</span><div>Energy R&D team<small>Champion · local edition</small></div><span class="presence"></span></div></div></aside>
++    <div class="app-main"><header class="topbar"><div class="breadcrumb"><button class="icon-button mobile-menu" data-action="menu" aria-label="Toggle navigation" aria-controls="sidebar" aria-expanded="false">${icon('menu',21)}</button><span>Workspace</span>${icon('arrow',12)}<strong>${page.title}</strong></div><div class="topbar-right"><button class="command-trigger" data-champion-action="commands" aria-label="Search commands and architectures">${icon('search',16)}<span>Find anything</span><kbd>Ctrl K</kbd></button><button class="connection-chip ${state.connected?'online':''}" data-action="reconnect" title="Reconnect to the local API"><i></i>${state.connected?'API connected':'Snapshot preview'}</button><span class="topbar-divider"></span><button class="icon-button" data-action="motion" aria-label="${state.motionOff?'Enable':'Reduce'} animations" aria-pressed="${state.motionOff}">${icon(state.motionOff?'play':'pause',16)}</button><button class="icon-button" data-action="history" aria-label="Open analysis history">${icon('clock',19)}</button><span class="avatar top-avatar">HF</span></div></header>
++    <main id="main-content" tabindex="-1"><div class="page-heading"><div><div class="page-kicker">HELIOFORGE / HYBRID ENERGY WORKBENCH</div><h1>${page.title}<span class="beta-label">CHAMPION · 0.3</span></h1><p>${page.subtitle}</p></div><div class="page-tools">${['hybrid','lessons','compare'].includes(state.page)?'':`<label class="select-wrap context-select">${icon('globe',16)}<span class="sr-only">Analysis market</span><select id="context-market" ${state.busy?'disabled':''}>${state.data.markets.map(m=>`<option value="${m.code}" ${m.code===state.data.market?'selected':''}>${m.name}</option>`).join('')}</select></label>`}<button class="btn secondary" data-action="export-evidence">${icon('download',16)}<span>Export evidence</span></button></div></div><div class="data-ribbon"><span><i></i> SYNTHETIC DATA</span><p>Illustrative scenarios, not live market data or investment advice.</p><button data-action="methodology">Model boundaries ${icon('diagonal',13)}</button></div><div id="champion-toolbar">${championToolbar(state)}</div><div id="page-content">${content(state)}</div><footer><span>${brandMark()} helioforge <b>·</b> Open energy intelligence</span><span>Transparent by design. Human decisions, always.</span></footer></main></div><div id="toast" class="toast" role="status" aria-live="polite"></div><div id="celebration" class="celebration" aria-hidden="true"></div><dialog id="modal" aria-labelledby="modal-title"></dialog>`;
+   }
+   export function updateProjectTable(state: ViewState): void { const t=document.getElementById('project-table'); if(t)t.innerHTML=projectTable(state); }
+ }
+diff --git a/apps/web/tests/champion.test.mjs b/apps/web/tests/champion.test.mjs
+new file mode 100644
+index 0000000..1e1485e
+--- /dev/null
++++ b/apps/web/tests/champion.test.mjs
+@@ -0,0 +1,44 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import fs from 'node:fs';
++import vm from 'node:vm';
++const code=fs.readFileSync(new URL('../dist/app.js',import.meta.url),'utf8');
++function setup(){
++ const memory=new Map();
++ const sandbox=vm.createContext({URL,Intl,Number,String,Math,Array,Object,JSON,Set,Map,Date,structuredClone,
++  localStorage:{getItem:k=>memory.get(k)??null,setItem:(k,v)=>memory.set(k,v),removeItem:k=>memory.delete(k)}});
++ vm.runInContext(code,sandbox);const h=sandbox.HF;
++ const state={hybrid:h.initialHybridState(),page:'hybrid',connected:true,busy:false,data:structuredClone(h.SNAPSHOT),marketFilter:'ALL',search:'',chartMode:'dispatch',forecastYears:20,runs:[],motionOff:true};
++ state.champion=h.initialChampionState(state.hybrid);
++ return {h,state,memory,sandbox};
++}
++const uuid='d85c1ad4-98b3-46e1-af53-23a202435683';
++const clone=x=>JSON.parse(JSON.stringify(x));
++test('a workspace serializes inputs and run IDs, not result payloads',()=>{const {h,state}=setup();const c=h.workspaceCache(state);assert.equal(c.schema,'helioforge.workspace.v1');assert.ok(c.inputs.system_id);assert.equal('result' in c,false);assert.equal(c.last_run_id,null);});
++test('valid workspace round trip',()=>{const {h,state}=setup();const original=h.workspaceCache(state);assert.deepEqual(clone(h.parseWorkspace(original)),clone(original));});
++test('browser storage restores a valid setup without fabricating a result',()=>{const {h,state,memory}=setup();state.hybrid.inputs.battery_kwh=321;assert.equal(h.persistWorkspace(state),true);const next=h.initialHybridState(),c=h.initialChampionState(next);assert.equal(next.inputs.battery_kwh,321);assert.equal(next.result,null);assert.equal(c.storage,'available');});
++test('corrupt JSON is retained, with no silent overwrite',()=>{const {h,state,memory}=setup();memory.set(h.WORKSPACE_KEY,'{broken');state.champion=h.initialChampionState(state.hybrid);assert.equal(state.champion.recoveryRaw,'{broken');assert.equal(h.persistWorkspace(state),false);assert.equal(memory.get(h.WORKSPACE_KEY),'{broken');});
++test('oversized cache is retained for recovery',()=>{const {h,state,memory}=setup();memory.set(h.WORKSPACE_KEY,'x'.repeat(100001));assert.ok(h.initialChampionState(state.hybrid).recoveryRaw);});
++test('storage denied is reported as memory-only',()=>{const {h,state,sandbox}=setup();sandbox.localStorage.setItem=()=>{throw new Error('denied')};assert.equal(h.persistWorkspace(state),false);assert.equal(state.champion.storage,'unavailable');});
++test('invalid draft cannot overwrite last valid cache',()=>{const {h,state,memory}=setup();h.persistWorkspace(state);const before=memory.get(h.WORKSPACE_KEY);state.hybrid.inputError='Check battery';assert.equal(h.persistWorkspace(state),false);assert.equal(memory.get(h.WORKSPACE_KEY),before);});
++for(const [name,mutate] of [
++ ['unknown schema',x=>x.schema='unknown'],['extra key',x=>x.inject='x'],['unknown lesson',x=>x.lesson_id='missing'],
++ ['bad timestamp',x=>x.saved_at='invalid'],['bad reference',x=>x.last_run_id='../bad'],
++ ['duplicate pins',x=>x.pinned_run_ids=[uuid,uuid]],['too many pins',x=>x.pinned_run_ids=[uuid,uuid,uuid,uuid]],
++ ['out-of-range inputs',x=>x.inputs.battery_kwh=-1],['bad setup name',x=>x.saved_setups=[{id:'setup-'+uuid,name:' ',created_at:x.saved_at,inputs:x.inputs}]],
++ ['duplicate setups',x=>{const s={id:'setup-'+uuid,name:'Test',created_at:x.saved_at,inputs:x.inputs};x.saved_setups=[s,s]}]
++])test('workspace rejects '+name,()=>{const {h,state}=setup();const c=clone(h.workspaceCache(state));mutate(c);assert.throws(()=>h.parseWorkspace(c));});
++test('named setups are escaped in rendered markup',()=>{const {h,state}=setup();state.champion.saved=[{id:'setup-'+uuid,name:'<img src=x onerror=alert(1)>',created_at:new Date().toISOString(),inputs:state.hybrid.inputs}];const html=h.workspaceDialog(state);assert.ok(html.includes('&lt;img'));assert.ok(!html.includes('<img src=x'));});
++test('configuration comparison ignores JSON key order',()=>{const {h,state}=setup();const reversed=Object.fromEntries(Object.entries(state.hybrid.inputs).reverse());assert.equal(h.configurationKey(reversed),h.configurationKey(state.hybrid.inputs));});
++test('invalid in-progress input invalidates the result immediately',()=>{const {h,state}=setup();state.hybrid.inputError='Battery energy must be a number';assert.equal(h.hybridDirty(state.hybrid),true);const html=h.hybridResults(state);assert.match(html,/Battery energy must be a number/);assert.ok(!html.includes('98.9%'));});
++test('palette finds battery screens with BESS alias',()=>{const {h}=setup();const rows=h.commandEntries('bess');assert.ok(rows.length>0);assert.ok(rows.some(r=>(r.label+r.detail).toLowerCase().includes('battery')));});
++test('palette is bounded and handles no results',()=>{const {h}=setup();assert.ok(h.commandEntries('').length<=10);assert.equal(h.commandEntries('no-match-zzzz').length,0);});
++test('history empty state is actionable',()=>{const {h}=setup();assert.match(h.historyRows([],''),/No matching runs/);});
++function savedFixture(h,state){return {run_id:uuid,kind:'hybrid',created_at:new Date().toISOString(),input_sha256:'a'.repeat(64),inputs:clone(state.hybrid.inputs),result:clone(state.hybrid.result)};}
++test('saved API result is reopened with exact inputs and metadata',()=>{const {h,state}=setup();const f=savedFixture(h,state);const saved=h.parseSavedHybrid(f);assert.equal(saved.run_id,uuid);assert.equal(saved.result.run_id,uuid);assert.deepEqual(clone(saved.inputs),f.inputs);});
++for(const [name,mutate] of [
++ ['wrong model',f=>f.result.model='made-up'],['mismatched system',f=>f.result.system_id='missing'],
++ ['wrong horizon',f=>f.result.duration_hours=1],['missing schedule',f=>f.result.schedule=[]],
++ ['nonfinite summary',f=>f.result.served_kwh=Infinity],['nonfinite hour',f=>f.result.schedule[0].load_kw=NaN],
++ ['wrong row order',f=>f.result.schedule[0].hour=7],['unknown run kind',f=>f.kind='storage'],['malformed hash',f=>f.input_sha256='bad']
++])test('saved result rejects '+name,()=>{const {h,state}=setup();const f=savedFixture(h,state);mutate(f);assert.throws(()=>h.parseSavedHybrid(f));});
+diff --git a/apps/web/tsconfig.json b/apps/web/tsconfig.json
+index 1faf9e5..98a9e15 100644
+--- a/apps/web/tsconfig.json
++++ b/apps/web/tsconfig.json
+@@ -26,10 +26,13 @@
+     "src/snapshot.ts",
+     "src/hybrid-data.ts",
+     "src/hybrid-core.ts",
++    "src/champion-core.ts",
+     "src/scene.ts",
+     "src/hybrid-views.ts",
+     "src/hybrid-controller.ts",
+     "src/views.ts",
++    "src/champion-views.ts",
++    "src/champion-controller.ts",
+     "src/app.ts"
+   ]
+ }
+diff --git a/launch.py b/launch.py
+new file mode 100755
+index 0000000..3a527c0
+--- /dev/null
++++ b/launch.py
+@@ -0,0 +1,94 @@
++#!/usr/bin/env python3
++"""Launch the packaged, single-user local app without a Node.js runtime.
++
++Does not install packages, expose the server on a network interface, or enable
++external AI. Setup scripts perform the explicit one-time dependency installation.
++"""
++from __future__ import annotations
++import argparse
++import importlib.metadata
++import json
++import os
++from pathlib import Path
++import socket
++import subprocess
++import sys
++import threading
++import time
++from urllib.error import URLError
++from urllib.request import urlopen
++import webbrowser
++
++ROOT = Path(__file__).resolve().parent
++REQUIRED = {'fastapi':'0.128.2','uvicorn':'0.48.0','pydantic':'2.13.4','numpy':'2.3.5','scipy':'1.17.0'}
++
++def check() -> list[str]:
++    problems=[]
++    if not (3,11) <= sys.version_info[:2] <= (3,13):
++        problems.append('Use Python 3.11, 3.12 or 3.13 for this packaged environment.')
++    for name, version in REQUIRED.items():
++        try:
++            actual=importlib.metadata.version(name)
++            if actual!=version:problems.append(f'{name}: expected {version}; found {actual}. Use the project virtual environment.')
++        except importlib.metadata.PackageNotFoundError:
++            problems.append(f'{name} is not installed.')
++    for path in ['apps/web/dist/index.html','apps/web/dist/app.js','apps/web/dist/styles.css','apps/api/helioforge/main.py']:
++        if not (ROOT/path).is_file():problems.append(f'Missing packaged file: {path}. Extract the complete ZIP first.')
++    return problems
++
++def main() -> int:
++    parser=argparse.ArgumentParser(description='Run HelioForge Champion on this computer only.')
++    parser.add_argument('--port',type=int,default=8000)
++    parser.add_argument('--no-browser',action='store_true')
++    parser.add_argument('--check',action='store_true',help='Check the environment without starting the server.')
++    args=parser.parse_args()
++    if not 1024<=args.port<=65535:parser.error('Choose a port from 1024 to 65535.')
++    problems=check()
++    if problems:
++        print('Setup needs attention:\n'+'\n'.join('  - '+p for p in problems),file=sys.stderr)
++        print('Run start-windows.cmd or start-macos.command / start-linux.sh, or install apps/api into a virtual environment.',file=sys.stderr)
++        return 1
++    if args.check:
++        print('PASS: Python, pinned runtime dependencies and packaged frontend are available. External AI remains disabled.')
++        return 0
++    try:
++        with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as sock:sock.bind(('127.0.0.1',args.port))
++    except OSError:
++        print(f'Port {args.port} is in use. Close the existing app or use --port {args.port+1 if args.port<65535 else 8000}. No process was stopped.',file=sys.stderr)
++        return 2
++    env=os.environ.copy()
++    env['PYTHONPATH']=str(ROOT/'apps/api')+os.pathsep+env.get('PYTHONPATH','')
++    db=Path(env.get('HELIOFORGE_DB',str(ROOT/'data/helioforge.sqlite3'))).expanduser().resolve()
++    try:db.parent.mkdir(parents=True,exist_ok=True)
++    except OSError as exc:
++        print(f'Cannot create the local data folder: {exc}',file=sys.stderr);return 1
++    env['HELIOFORGE_DB']=str(db)
++    env['ALLOWED_HOSTS']='127.0.0.1,localhost,[::1]'
++    env['ALLOWED_ORIGINS']=f'http://127.0.0.1:{args.port},http://localhost:{args.port}'
++    env['ENABLE_OPENAI']='false'
++    url=f'http://127.0.0.1:{args.port}'
++    print(f'HelioForge Champion 0.3.0\nLocal app: {url}\nLocal data: {db}\nExternal AI: disabled\nPress Ctrl+C to stop.',flush=True)
++    child=subprocess.Popen([sys.executable,'-m','uvicorn','helioforge.main:app','--host','127.0.0.1','--port',str(args.port)],cwd=ROOT,env=env)
++    def open_when_ready() -> None:
++        for _ in range(100):
++            if child.poll() is not None:return
++            try:
++                with urlopen(url+'/api/health',timeout=0.5) as response:
++                    health=json.load(response)
++                if health.get('version')=='0.3.0':
++                    if not webbrowser.open(url):print(f'Open {url} in your browser.',flush=True)
++                    return
++            except (URLError,OSError,ValueError):pass
++            time.sleep(0.15)
++        print(f'Automatic browser opening was not completed. Check the server output and open {url} manually.',flush=True)
++    if not args.no_browser:threading.Thread(target=open_when_ready,daemon=True).start()
++    try:return child.wait()
++    except KeyboardInterrupt:
++        if child.poll() is None:
++            child.terminate()
++            try:child.wait(timeout=8)
++            except subprocess.TimeoutExpired:child.kill();child.wait()
++        print('\nHelioForge stopped. Saved runs remain in the local database.')
++        return 0
++
++if __name__=='__main__':raise SystemExit(main())
+diff --git a/scripts/browser-champion.py b/scripts/browser-champion.py
+new file mode 100644
+index 0000000..970f791
+--- /dev/null
++++ b/scripts/browser-champion.py
+@@ -0,0 +1,191 @@
++"""Champion UI regressions against the real local Python API.
++
++Default: direct browser HTTP and native localStorage. --bridge: host HTTP transport;
++localStorage and randomUUID are test adapters on about:blank. The adapter validates
++save/restore logic, NOT native browser storage or direct networking/CSP.
++"""
++from __future__ import annotations
++import argparse
++import json
++import os
++from pathlib import Path
++import httpx
++from playwright.sync_api import sync_playwright, expect
++
++ROOT=Path(__file__).resolve().parents[1]
++p=argparse.ArgumentParser();p.add_argument('--url',default='http://127.0.0.1:8000');p.add_argument('--bridge',action='store_true');p.add_argument('--executable',default=os.getenv('CHROMIUM_EXECUTABLE'));p.add_argument('--screenshots',action='store_true');a=p.parse_args()
++checks=[];errors=[]
++out=ROOT/'docs/champion';out.mkdir(parents=True,exist_ok=True)
++def passed(text):
++    checks.append(text);print('PASS',text,flush=True)
++
++with sync_playwright() as pw,httpx.Client(base_url=a.url,timeout=40) as client:
++    browser=pw.chromium.launch(executable_path=a.executable,headless=True,args=['--no-sandbox'] if a.executable else [])
++    def bridge(path,options=None):
++        if not path.startswith('/api/'):raise ValueError('Only local API requests are permitted.')
++        o=options or {};r=client.request(o.get('method','GET'),path,headers=o.get('headers',{}),content=o.get('body'))
++        return {'status':r.status_code,'body':r.text,'headers':{'content-type':r.headers.get('content-type','application/json')}}
++    def new_page(cache=None,offline=False):
++        page=browser.new_page(viewport={'width':1600,'height':1100});page.set_default_timeout(8000)
++        page.on('pageerror',lambda e:errors.append(str(e)))
++        if a.bridge:
++            page.expose_function('hfChampionTransport',bridge)
++            page.evaluate('''({cache,offline})=>{
++              window.__testCache=cache||{};
++              Object.defineProperty(window,'localStorage',{configurable:true,value:{
++                getItem:k=>window.__testCache[k]??null,setItem:(k,v)=>{if(window.__denyStorage)throw new Error('Test storage denied');window.__testCache[k]=String(v)},
++                removeItem:k=>{delete window.__testCache[k]}
++              }});
++              if(!crypto.randomUUID)crypto.randomUUID=()=> '10000000-1000-4000-8000-100000000000'.replace(/[018]/g,c=>(+c^crypto.getRandomValues(new Uint8Array(1))[0]&15>>+c/4).toString(16));
++              window.fetch=async(path,options)=>{
++                if(offline)throw new Error('Offline test');
++                if(window.__holdPath===path)await new Promise(resolve=>window.__release=resolve);
++                const r=await window.hfChampionTransport(String(path),options||{});
++                if(window.__failAfterSave===path){window.__failAfterSave=null;throw new Error('Injected response loss after API save');}
++                return new Response(r.body,{status:r.status,headers:r.headers});
++              };
++            }''',{'cache':cache or {},'offline':offline})
++            page.set_content((ROOT/'HelioForge-Preview.html').read_text(),wait_until='load')
++        else:
++            if offline:page.route('**/api/**',lambda r:r.abort())
++            page.goto(a.url,wait_until='networkidle')
++            if cache:
++                page.evaluate('(cache)=>{for(const [k,v] of Object.entries(cache))localStorage.setItem(k,v)}',cache);page.reload(wait_until='networkidle')
++        expect(page.locator('.connection-chip')).to_have_text('Snapshot preview' if offline else 'API connected')
++        return page
++    page=new_page()
++    def nav(name):
++        if page.locator('[data-action="menu"]').is_visible():page.locator('[data-action="menu"]').click()
++        page.locator(f'.nav-item[data-nav="{name}"]').click()
++    def run():
++        page.locator('#run-hybrid').click();expect(page.locator('#toast')).to_contain_text('Hybrid energy screen complete',timeout=30000)
++        expect(page.locator('#hybrid-output .hybrid-metrics')).to_have_count(1)
++    def cache():return page.evaluate("({[HF.WORKSPACE_KEY]:localStorage.getItem(HF.WORKSPACE_KEY)})")
++    def close():page.locator('[data-action="close-modal"]').click()
++
++    page.locator('#hybrid-config [name="battery_kwh"]').fill('')
++    expect(page.locator('#hybrid-output .hybrid-metrics')).to_have_count(0)
++    expect(page.locator('#hybrid-output')).to_contain_text('Check')
++    nav('lessons');nav('hybrid')
++    expect(page.locator('#hybrid-config [name="battery_kwh"]')).to_have_value('')
++    page.locator('#hybrid-config [name="battery_kwh"]').fill('1300')
++    assert page.evaluate('''()=>{const b=document.querySelector('#champion-toolbar [data-champion-action="workspace"]');document.querySelector('[name="battery_kwh"]').dispatchEvent(new Event('change',{bubbles:true}));return b.isConnected}''')
++    passed('Unchanged blur preserves toolbar button identity instead of consuming the next click')
++    run();passed('HF-001: invalid in-progress hybrid input hides results immediately; raw input survives navigation and recovers')
++    page.locator('[data-hybrid-action="pin"]').click()
++    first_cache=cache();first_id=json.loads(first_cache['hf-workspace-v3'])['last_run_id'];assert first_id
++    before=client.get('/api/runs/'+first_id).json();assert before['inputs']['battery_kwh']==1300
++
++    nav('storage');page.locator('[name="capacity_mwh"]').fill('23');nav('pv');nav('storage')
++    expect(page.locator('[name="capacity_mwh"]')).to_have_value('23')
++    expect(page.locator('.draft-note')).to_contain_text('Unsaved input edits')
++    passed('HF-002: unsubmitted model inputs survive workspace navigation and are labelled as uncalculated')
++    page.locator('[name="capacity_mwh"]').fill('12');page.locator('form[data-model="storage"] button[type="submit"]').click()
++    expect(page.locator('#toast')).to_contain_text('Calculation complete',timeout=30000)
++    page.locator('[data-action="reconnect"]').click()
++    expect(page.locator('#toast')).to_contain_text('Completed calculations retained')
++    expect(page.locator('[name="capacity_mwh"]')).to_have_value('12')
++    passed('HF-003: reconnect preserves a completed 12 MWh calculation instead of resetting it to 10 MWh')
++
++    nav('hybrid');page.locator('#champion-toolbar [data-champion-action="workspace"]').click()
++    name='Hospital reference <study>'
++    page.locator('#save-setup-form [name="setup_name"]').fill(name);page.locator('#save-setup-form button[type="submit"]').click()
++    expect(page.locator('.setup-row')).to_have_count(1);expect(page.locator('.setup-copy')).to_contain_text(name)
++    saved_cache=cache();assert json.loads(saved_cache['hf-workspace-v3'])['saved_setups'][0]['name']==name
++    assert page.locator('study').count()==0
++    with page.expect_download() as dl:page.locator('[data-export-setup]').click()
++    assert json.loads(Path(dl.value.path()).read_text())['schema']=='helioforge.hybrid.v1'
++    passed('Named setup saves validated inputs, escapes its name and exports an import-compatible file')
++    if a.screenshots:page.screenshot(path=str(out/'saved-setups-desktop.png'),animations='disabled')
++    close();page.locator('#hybrid-config [name="battery_kwh"]').fill('1500')
++    page.locator('#champion-toolbar [data-champion-action="workspace"]').click();page.locator('[data-load-setup]').click()
++    expect(page.locator('[name="battery_kwh"]')).to_have_value('1300');expect(page.locator('#hybrid-output .hybrid-metrics')).to_have_count(0)
++    passed('Opening a saved setup restores exact inputs without pretending to calculate')
++    page.locator('[data-action="history"]').click();page.locator('#run-search').fill(first_id)
++    expect(page.locator('[data-restore-run]')).to_have_count(1);page.locator('[data-restore-run]').click()
++    expect(page.locator('#hybrid-output .hybrid-metrics')).to_have_count(1);expect(page.locator('[name="battery_kwh"]')).to_have_value('1300')
++    assert client.get('/api/runs/'+first_id).json()==before
++    passed('History filtering and run reopening preserve stored inputs/results without rewriting the API record')
++
++    page.keyboard.press('Control+k');expect(page.locator('#command-search')).to_be_focused()
++    page.locator('#command-search').fill('solar hydrogen');expect(page.locator('#command-results')).to_contain_text('Study only')
++    page.keyboard.press('Enter');expect(page.locator('#hybrid-system')).to_have_value('solar-hydrogen');expect(page.locator('#run-hybrid')).to_be_disabled()
++    page.keyboard.press('Control+k');page.locator('#command-search').fill('saved setups');page.keyboard.press('ArrowDown');page.keyboard.press('Enter')
++    expect(page.locator('#save-setup-form')).to_be_visible();close()
++    passed('Keyboard command palette finds study-only systems, navigates by Enter, and opens actions')
++    page.locator('[data-champion-action="guide"]').click();page.locator('[data-champion-action="start-hospital"]').click()
++    expect(page.locator('#hybrid-system')).to_have_value('hospital-island');run();page.locator('[data-hybrid-action="pin"]').click()
++    current_cache=cache();parsed=json.loads(current_cache['hf-workspace-v3']);assert parsed['last_run_id'];assert len(parsed['pinned_run_ids'])==2
++    page.close();page=new_page(current_cache)
++    expect(page.locator('#hybrid-output .hybrid-metrics')).to_have_count(1)
++    nav('compare');expect(page.locator('.compare-panel')).to_contain_text('2 pinned runs')
++    passed('Workspace reconstruction restores named setups and verifies last result plus comparison IDs against the real API')
++    nav('hybrid')
++    if a.screenshots:page.screenshot(path=str(out/'champion-desktop.png'),animations='disabled')
++
++    if a.bridge:
++        ids_before={r['id'] for r in client.get('/api/runs').json()}
++        page.evaluate("()=>{window.__holdPath='/api/hybrid/simulate'}")
++        page.locator('#run-hybrid').click();expect(page.locator('#run-hybrid')).to_be_disabled()
++        page.evaluate("()=>document.getElementById('run-hybrid').click()")
++        nav('compare');nav('hybrid');expect(page.locator('#run-hybrid')).to_be_disabled();expect(page.locator('[name="battery_kwh"]')).to_be_disabled()
++        page.evaluate('()=>{window.__holdPath=null;window.__release()}')
++        expect(page.locator('#toast')).to_contain_text('Hybrid energy screen complete',timeout=30000)
++        assert len({r['id'] for r in client.get('/api/runs').json()}-ids_before)==1
++        passed('Pending-request navigation keeps inputs locked; repeated submit creates only one run')
++        page.evaluate("()=>{window.__failAfterSave='/api/hybrid/simulate'}")
++        ids_before={r['id'] for r in client.get('/api/runs').json()};page.locator('#run-hybrid').click()
++        expect(page.locator('#toast')).to_contain_text('may have completed',timeout=30000)
++        expect(page.locator('#run-hybrid')).to_be_enabled();assert len({r['id'] for r in client.get('/api/runs').json()}-ids_before)==1
++        expect(page.locator('#toast')).to_contain_text('Check Analysis history')
++        passed('Injected response loss after a real API save is reported as ambiguous, with recovery through history')
++
++    page.locator('#champion-toolbar [data-champion-action="workspace"]').click();page.locator('[data-delete-setup]').click()
++    expect(page.locator('#modal-title')).to_contain_text('Delete');page.locator('#modal [data-champion-action="workspace"]').click()
++    expect(page.locator('.setup-row')).to_have_count(1)
++    page.locator('[data-delete-setup]').click();page.locator('[data-confirm-delete]').click();expect(page.locator('.setup-row')).to_have_count(0);close()
++    assert client.get('/api/runs/'+first_id).status_code==200
++    passed('Deleting a setup requires confirmation and does not delete historical calculations')
++
++    page.emulate_media(reduced_motion='reduce')
++    for width in [320,390,768,1440]:
++        page.set_viewport_size({'width':width,'height':900})
++        for view in ['hybrid','lessons','compare','overview','storage','pv','research','markets','forecast','investment','pilots','council']:
++            nav(view)
++            assert not page.evaluate('document.documentElement.scrollWidth>innerWidth'),(width,view)
++        passed(f'All 12 workspaces fit {width}px without document overflow')
++    page.set_viewport_size({'width':390,'height':844});nav('hybrid')
++    page.locator('[data-action="menu"]').click()
++    assert page.locator('.app-main').evaluate('(e)=>e.inert')
++    page.keyboard.press('Escape');expect(page.locator('[data-action="menu"]')).to_be_focused()
++    assert page.locator('#sidebar').evaluate('(e)=>e.inert')
++    passed('Mobile navigation uses inert background/hidden menu and restores focus on Escape')
++    if a.screenshots:page.screenshot(path=str(out/'champion-mobile.png'),full_page=True,animations='disabled')
++    page.locator('#champion-toolbar [data-champion-action="workspace"]').click()
++    assert not page.evaluate('document.documentElement.scrollWidth>innerWidth')
++    if a.screenshots:page.screenshot(path=str(out/'saved-setups-mobile.png'),animations='disabled')
++    close()
++
++    bad=new_page({'hf-workspace-v3':'{broken-workspace'})
++    expect(bad.locator('.workspace-notice')).to_contain_text('not been overwritten')
++    bad.locator('[data-champion-action="workspace"]').first.click()
++    with bad.expect_download() as dl:bad.locator('[data-champion-action="recovery-export"]').click()
++    assert Path(dl.value.path()).read_text()=='{broken-workspace'
++    bad.locator('[data-champion-action="recovery-reset"]').click();bad.locator('[data-champion-action="confirm-recovery-reset"]').click()
++    assert json.loads(bad.evaluate('localStorage.getItem(HF.WORKSPACE_KEY)'))['schema']=='helioforge.workspace.v1'
++    passed('Damaged workspace is retained, downloadable, and reset only after explicit confirmation')
++    bad.close()
++    if a.bridge:
++        page.set_viewport_size({'width':1440,'height':900});page.evaluate('()=>{window.__denyStorage=true}')
++        page.locator('#champion-toolbar [data-champion-action="workspace"]').click();page.locator('#save-setup-form [name="setup_name"]').fill('Memory only')
++        page.locator('#save-setup-form button[type="submit"]').click();expect(page.locator('#toast')).to_contain_text('memory only')
++        expect(page.locator('.workspace-dialog')).to_contain_text('in memory only');close()
++        passed('Storage write failure retains setup in memory and never claims it was durably saved')
++    offline=new_page(offline=True);expect(offline.locator('#run-hybrid')).to_be_disabled()
++    offline.locator('[data-champion-action="guide"]').click();expect(offline.locator('.quick-start')).to_contain_text('local API')
++    passed('Offline preview keeps new calculations disabled and states the local API prerequisite')
++    assert not errors,errors;passed('No uncaught JavaScript exceptions in the checked journeys')
++    browser.close()
++report={'checks_passed':len(checks),'checks':checks,'transport':'host HTTP bridge' if a.bridge else 'direct browser HTTP','storage':'test adapter on about:blank' if a.bridge else 'native browser localStorage','limitations':['No physical-device, assistive-technology or human UAT sessions.']+(['No direct browser networking, CSP, file launch, or native storage durability verified.'] if a.bridge else [])}
++(out/'browser-champion.json').write_text(json.dumps(report,indent=2)+'\n')
++print(f'{len(checks)} Champion checks passed.',flush=True)
+diff --git a/scripts/browser-smoke.py b/scripts/browser-smoke.py
+index 2850ac4..a34cb47 100644
+--- a/scripts/browser-smoke.py
++++ b/scripts/browser-smoke.py
+@@ -130,7 +130,9 @@ with sync_playwright() as pw, httpx.Client(base_url=args.url, timeout=40) as cli
+     if args.screenshots:
+         page.screenshot(path=str(ROOT/'docs/council-desktop.png'),full_page=True,animations='disabled')
+     page.locator('[data-action="history"]').click()
+-    expect(page.locator('.history-list button')).not_to_have_count(0)
++    # History now exposes explicit per-record export controls, rather than whole-row buttons.
++    expect(page.locator('#run-results [data-run]')).not_to_have_count(0)
++    expect(page.locator('#run-results')).to_contain_text('saved')
+     page.locator('[data-action="close-modal"]').click()
+     passed('Saved model runs visible in history')
+     page.locator('[data-action="motion"]').click()
+diff --git a/scripts/build-web.mjs b/scripts/build-web.mjs
+index 9e4d2ad..6095c39 100644
+--- a/scripts/build-web.mjs
++++ b/scripts/build-web.mjs
+@@ -6,7 +6,8 @@ const web=path.join(root,'apps/web'), dist=path.join(web,'dist');
+ await mkdir(dist,{recursive:true});
+ for(const [from,to] of [['index.html','index.html'],['src/styles.css','styles.css'],['public/favicon.svg','favicon.svg']])await copyFile(path.join(web,from),path.join(dist,to));
+ const html=await readFile(path.join(web,'index.html'),'utf8');
+-const css=await readFile(path.join(web,'src/styles.css'),'utf8');
++const css=(await readFile(path.join(web,'src/styles.css'),'utf8'))+'\n'+(await readFile(path.join(web,'src/champion.css'),'utf8'));
++await writeFile(path.join(dist,'styles.css'),css);
+ const js=await readFile(path.join(dist,'app.js'),'utf8');
+ const favicon=await readFile(path.join(web,'public/favicon.svg'),'utf8');
+ const standalone=html.replace('<link rel="icon" href="favicon.svg" type="image/svg+xml">',`<link rel="icon" href="data:image/svg+xml,${encodeURIComponent(favicon)}" type="image/svg+xml">`)
+diff --git a/scripts/check-launcher.py b/scripts/check-launcher.py
+new file mode 100644
+index 0000000..3e658cf
+--- /dev/null
++++ b/scripts/check-launcher.py
+@@ -0,0 +1,83 @@
++"""Local process launch and synthetic database recovery checks. No production data."""
++from __future__ import annotations
++import json
++import os
++from pathlib import Path
++import signal
++import socket
++import sqlite3
++import subprocess
++import sys
++import tempfile
++import time
++import httpx
++
++ROOT=Path(__file__).resolve().parents[1]
++checks=[]
++def passed(name):checks.append(name);print('PASS',name,flush=True)
++
++def stop(process):
++    if process.poll() is None:
++        if os.name=='nt':process.terminate()
++        else:process.send_signal(signal.SIGINT)
++        try:process.wait(timeout=10)
++        except subprocess.TimeoutExpired:process.kill();process.wait();raise
++
++with tempfile.TemporaryDirectory(prefix='helioforge-launch-check-') as folder:
++    tmp=Path(folder)
++    with socket.socket() as s:s.bind(('127.0.0.1',0));port=s.getsockname()[1]
++    url=f'http://127.0.0.1:{port}';db=tmp/'original.sqlite3'
++    env=os.environ.copy();env['HELIOFORGE_DB']=str(db);env['ENABLE_OPENAI']='true' # Launcher must deliberately override this.
++    r=subprocess.run([sys.executable,'launch.py','--check'],cwd=ROOT,capture_output=True,text=True)
++    assert r.returncode==0,r.stderr;passed('Packaged runtime preflight passes without installing or starting anything')
++    procs=[]
++    try:
++        def start(database):
++            env['HELIOFORGE_DB']=str(database)
++            log=open(tmp/(database.stem+'-server.log'),'a')
++            proc=subprocess.Popen([sys.executable,'launch.py','--port',str(port),'--no-browser'],cwd=ROOT,env=env,stdout=log,stderr=subprocess.STDOUT)
++            procs.append(proc)
++            for _ in range(120):
++                if proc.poll() is not None:raise RuntimeError((tmp/(database.stem+'-server.log')).read_text())
++                try:
++                    response=httpx.get(url+'/api/health',timeout=0.4)
++                    if response.status_code==200:return proc,response.json()
++                except httpx.HTTPError:pass
++                time.sleep(0.1)
++            raise RuntimeError('Local launcher did not become ready')
++        process,health=start(db)
++        assert health['version']=='0.3.0' and health['openai_enabled'] is False
++        passed('Local launcher starts the packaged app on a custom loopback port with external AI disabled')
++        with httpx.Client(base_url=url,timeout=40) as c:
++            index=c.get('/');assert index.status_code==200 and 'HelioForge Champion' in index.text
++            assert 'script-src' in index.headers['content-security-policy']
++            assert c.get('/app.js').status_code==200
++            assert c.get('/styles.css').status_code==200
++            passed('Served HTML, compiled JavaScript and CSS are available with the declared CSP header')
++            assert c.get('/api/health',headers={'host':'hostile.example'}).status_code==400
++            r=c.post('/api/storage/optimize',json={},headers={'origin':url});assert r.status_code==200,r.text
++            saved=c.get('/api/runs/'+r.json()['run_id']).json()
++            passed('Custom-port origin works; unexpected hostname is rejected; real synthetic calculation is saved')
++        collision=subprocess.run([sys.executable,'launch.py','--port',str(port),'--no-browser'],cwd=ROOT,env=env,capture_output=True,text=True)
++        assert collision.returncode==2 and 'in use' in collision.stderr
++        assert process.poll() is None
++        passed('Occupied-port launch is rejected without stopping the already-running app')
++        stop(process)
++        process,health=start(db)
++        assert httpx.get(url+'/api/runs/'+saved['run_id'],timeout=10).json()==saved
++        passed('A saved calculation survives a real process stop and restart with identical inputs/results')
++        stop(process)
++        backup=tmp/'restored.sqlite3'
++        with sqlite3.connect(db) as source,sqlite3.connect(backup) as target:
++            source.backup(target)
++            assert target.execute('PRAGMA integrity_check').fetchone()[0]=='ok'
++        process,health=start(backup)
++        assert httpx.get(url+'/api/runs/'+saved['run_id'],timeout=10).json()==saved
++        passed('Synthetic SQLite backup/restore rehearsal passes integrity check and restores the exact saved run')
++        stop(process)
++        if os.name!='nt':assert process.returncode==0;passed('Ctrl+C stops the local launcher and child server cleanly on the tested Linux environment')
++    finally:
++        for process in procs:stop(process)
++report={'checks_passed':len(checks),'checks':checks,'platform':sys.platform,'python':sys.version,'limitations':'Small synthetic database only. Windows/macOS scripts and automatic browser opening not executed.'}
++out=ROOT/'docs/champion/launcher-validation.json';out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps(report,indent=2)+'\n')
++print(f'{len(checks)} local launcher/recovery checks passed.')
+diff --git a/start-linux.sh b/start-linux.sh
+new file mode 100755
+index 0000000..06622b1
+--- /dev/null
++++ b/start-linux.sh
+@@ -0,0 +1,14 @@
++#!/usr/bin/env sh
++set -eu
++cd "$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"
++if ! command -v python3 >/dev/null 2>&1; then
++  printf '%s\n' 'Python 3.11-3.13 is required.' >&2
++  exit 1
++fi
++if [ ! -x .venv/bin/python ]; then python3 -m venv .venv; fi
++.venv/bin/python -c 'import sys; sys.exit(0 if (3,11)<=sys.version_info[:2]<=(3,13) else 1)' || { printf '%s\n' 'This environment requires Python 3.11-3.13. See START_HERE.md.' >&2; exit 1; }
++if ! .venv/bin/python launch.py --check >/dev/null 2>&1; then
++  printf '%s\n' 'Installing pinned local-app dependencies. Initial setup requires internet access.'
++  .venv/bin/python -m pip install -e apps/api
++fi
++exec .venv/bin/python launch.py "$@"
+diff --git a/start-macos.command b/start-macos.command
+new file mode 100755
+index 0000000..06622b1
+--- /dev/null
++++ b/start-macos.command
+@@ -0,0 +1,14 @@
++#!/usr/bin/env sh
++set -eu
++cd "$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"
++if ! command -v python3 >/dev/null 2>&1; then
++  printf '%s\n' 'Python 3.11-3.13 is required.' >&2
++  exit 1
++fi
++if [ ! -x .venv/bin/python ]; then python3 -m venv .venv; fi
++.venv/bin/python -c 'import sys; sys.exit(0 if (3,11)<=sys.version_info[:2]<=(3,13) else 1)' || { printf '%s\n' 'This environment requires Python 3.11-3.13. See START_HERE.md.' >&2; exit 1; }
++if ! .venv/bin/python launch.py --check >/dev/null 2>&1; then
++  printf '%s\n' 'Installing pinned local-app dependencies. Initial setup requires internet access.'
++  .venv/bin/python -m pip install -e apps/api
++fi
++exec .venv/bin/python launch.py "$@"
+diff --git a/start-windows.cmd b/start-windows.cmd
+index 4d11ec0..455dc31 100644
+--- a/start-windows.cmd
++++ b/start-windows.cmd
+@@ -1,22 +1,36 @@
+-@echo off
+-setlocal
+-cd /d "%~dp0"
+-where python >nul 2>nul
+-if errorlevel 1 (
+-  echo Python 3.11-3.13 is required. Install Python and enable its PATH option.
+-  pause
+-  exit /b 1
+-)
+-if not exist .venv\Scripts\python.exe (
+-  python -m venv .venv
+-  if errorlevel 1 goto failure
+-)
+-.venv\Scripts\python.exe -m pip install -e apps/api
+-if errorlevel 1 goto failure
+-echo Open http://127.0.0.1:8000 after the server starts. Press Ctrl+C to stop.
+-.venv\Scripts\python.exe scripts/dev.py
+-exit /b %errorlevel%
+-:failure
+-echo Setup failed. Check the error above, Python version and internet access.
+-pause
+-exit /b 1
++@echo off
++setlocal
++cd /d "%~dp0"
++if not exist .venv\Scripts\python.exe (
++  where py >nul 2>nul
++  if errorlevel 1 (
++    where python >nul 2>nul
++    if errorlevel 1 goto python_missing
++    python -m venv .venv
++  ) else (
++    py -3 -m venv .venv
++  )
++  if errorlevel 1 goto failure
++)
++.venv\Scripts\python.exe -c "import sys; sys.exit(0 if (3,11)<=sys.version_info[:2]<=(3,13) else 1)"
++if errorlevel 1 (
++  echo This virtual environment needs Python 3.11-3.13. Review START_HERE.md.
++  goto failure
++)
++.venv\Scripts\python.exe launch.py --check >nul 2>nul
++if errorlevel 1 (
++  echo Installing pinned local-app dependencies. This initial setup requires internet access.
++  .venv\Scripts\python.exe -m pip install -e apps/api
++  if errorlevel 1 goto failure
++)
++.venv\Scripts\python.exe launch.py %*
++if errorlevel 1 goto failure
++exit /b 0
++:python_missing
++echo Python 3.11-3.13 is required. Install Python and enable its PATH option.
++pause
++exit /b 1
++:failure
++echo The app could not start. Review the message above and the START_HERE.md guide.
++pause
++exit /b 1

@@ -1,0 +1,13 @@
+{
+  "name": "@helioforge/dashboard",
+  "version": "0.3.0",
+  "private": true,
+  "description": "Zero-runtime-dependency TypeScript energy intelligence dashboard",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "tsc -p tsconfig.json && node ../../scripts/build-web.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "devDependencies": {"typescript": "5.8.3"},
+  "engines": {"node": ">=22"}
+}
