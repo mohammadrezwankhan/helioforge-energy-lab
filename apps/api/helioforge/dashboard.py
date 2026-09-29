@@ -10,9 +10,17 @@ from helioforge.engines.finance import calculate_finance, calculate_pv, screen_a
 from helioforge.engines.forecast import forecast_prices
 from helioforge.engines.research import detect_drift, reliability, sustainability
 from helioforge.engines.storage import optimize_storage
-from helioforge.schemas import (CouncilRequest, DriftRequest, FinanceRequest, ForecastRequest,
-                               MARequest, PVRequest, ReliabilityRequest, StorageRequest,
-                               SustainabilityRequest)
+from helioforge.schemas import (
+    CouncilRequest,
+    DriftRequest,
+    FinanceRequest,
+    ForecastRequest,
+    MARequest,
+    PVRequest,
+    ReliabilityRequest,
+    StorageRequest,
+    SustainabilityRequest,
+)
 
 
 @lru_cache(maxsize=6)

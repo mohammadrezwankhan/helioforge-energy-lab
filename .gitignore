@@ -22,3 +22,15 @@ test-results/
 build/
 dist-wheel/
 _site/
+
+# Local environments and sensitive state
+node_modules/
+.venv/
+.venv-*/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.env
+.env.*
+!.env.example
+*.log

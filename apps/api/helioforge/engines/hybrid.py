@@ -86,7 +86,8 @@ def simulate_hybrid(p: HybridRequest) -> dict:
                          import_eur_kwh=tariff,
                          variable_cost_eur=imp*tariff-exp*p.export_eur_kwh+generation*p.generator_eur_kwh,
                          balance_residual_kw=residual))
-    total = lambda key: sum(r[key] for r in rows)
+    def total(key):
+        return sum(r[key] for r in rows)
     demand, critical_demand = total('load_kw'), total('critical_load_kw')
     warnings = [
         'Synthetic hourly energy screen using a fixed greedy policy, not cost optimization, a forecast or a dispatch instruction.',
