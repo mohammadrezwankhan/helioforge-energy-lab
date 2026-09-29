@@ -9,7 +9,14 @@ from fastapi.testclient import TestClient
 from pydantic import ValidationError
 
 from helioforge.engines.hybrid import simulate_hybrid
-from helioforge.hybrid import HybridRequest, applicability, catalog, get_scenario, get_system, validate_configuration
+from helioforge.hybrid import (
+    HybridRequest,
+    applicability,
+    catalog,
+    get_scenario,
+    get_system,
+    validate_configuration,
+)
 from helioforge.main import app
 
 C = catalog()
@@ -154,7 +161,8 @@ def test_seeded_input_fuzz_preserves_invariants():
         s=rng.choice(candidates)
         inputs={**s['preset'],'hours':rng.randint(2,168),'load_kw':rng.uniform(1,1500)}
         for key in ['solar_kw','wind_kw','hydro_kw','generator_kw','battery_kw','battery_kwh']:
-            if inputs[key]: inputs[key]*=rng.uniform(.05,4)
+            if inputs[key]:
+                inputs[key]*=rng.uniform(.05,4)
         p=HybridRequest(**inputs)
         invariant(p,simulate_hybrid(p))
 
@@ -163,7 +171,8 @@ def test_seeded_input_fuzz_preserves_invariants():
 def client(tmp_path,monkeypatch):
     monkeypatch.setenv('HELIOFORGE_DB',str(tmp_path/'hybrid.sqlite3'))
     monkeypatch.setenv('ENABLE_OPENAI','false')
-    with TestClient(app, base_url="http://127.0.0.1") as c: yield c
+    with TestClient(app, base_url="http://127.0.0.1") as c:
+        yield c
 
 
 def test_api_catalogue_validation_run_hash_and_exact_review_attachment(client):

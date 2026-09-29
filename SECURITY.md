@@ -20,6 +20,6 @@ SQLite is not encrypted or tamper-evident here. Make local backups and apply dev
 
 ## Reporting
 
-Do not post credentials, personal data or exploitable private details in a public issue. Before public deployment, the repository owner must enable GitHub private vulnerability reporting or publish a monitored private security contact. That channel is **not configured by this local deliverable**. For local-only use, stop the server and contact the repository owner through an already trusted private channel.
+Do not post credentials, personal data or exploitable private details in a public issue. Use [GitHub private vulnerability reporting](https://github.com/mohammadrezwankhan/helioforge-energy-lab/security/advisories/new) for a confidential report. Include the affected commit and a synthetic reproduction. If the route is unavailable, stop the local server and use an already trusted private contact; do not post exploit details publicly.
 
 No penetration test, formal security certification, dependency vulnerability clearance or production sign-off is claimed. See docs/VALIDATION.md for checks actually performed.

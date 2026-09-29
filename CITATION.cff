@@ -3,7 +3,8 @@ message: "Please cite the version and commit you actually used, and identify syn
 title: "HelioForge: Hybrid Energy Learning and Research"
 authors:
   - name: "HelioForge contributors"
-version: 0.3.0
-date-released: 2026-09-28
+version: "preview-2026.09.30"
+date-released: 2026-09-30
 license: MIT
 abstract: "Local-first Python and TypeScript research software for transparent energy screening."
+repository-code: "https://github.com/mohammadrezwankhan/helioforge-energy-lab"

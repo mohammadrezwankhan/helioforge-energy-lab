@@ -4,12 +4,27 @@ import numpy as np
 import pytest
 from pydantic import ValidationError
 
-from helioforge.engines.finance import annuity, calculate_finance, calculate_pv, conventional_irr, npv, screen_acquisition
+from helioforge.engines.finance import (
+    annuity,
+    calculate_finance,
+    calculate_pv,
+    conventional_irr,
+    npv,
+    screen_acquisition,
+)
 from helioforge.engines.forecast import forecast_prices
 from helioforge.engines.research import detect_drift, reliability, sustainability
 from helioforge.engines.storage import optimize_storage
-from helioforge.schemas import (DriftRequest, FinanceRequest, ForecastRequest, MARequest, PVRequest,
-                               ReliabilityRequest, StorageRequest, SustainabilityRequest)
+from helioforge.schemas import (
+    DriftRequest,
+    FinanceRequest,
+    ForecastRequest,
+    MARequest,
+    PVRequest,
+    ReliabilityRequest,
+    StorageRequest,
+    SustainabilityRequest,
+)
 
 
 def flat_storage(**updates):

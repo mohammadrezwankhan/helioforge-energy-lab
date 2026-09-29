@@ -1,3 +1,59 @@
+# HelioForge Energy Lab
+
+[![CI](https://github.com/mohammadrezwankhan/helioforge-energy-lab/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mohammadrezwankhan/helioforge-energy-lab/actions/workflows/ci.yml) · [MIT license](LICENSE) · [Verification and limits](QUALITY_REPORT.md)
+
+Interactive hybrid-energy research and learning workbench with auditable numerical screens and a local Python API.
+
+If HelioForge Energy Lab helps you study this workflow, a star helps other energy researchers and engineering educators find it.
+
+![Actual desktop demo](docs/repository/demo-desktop.png)
+
+## Try the demo
+
+[Open the hosted synthetic demo](https://mohammadrezwankhan.github.io/helioforge-energy-lab/) or run the identical standalone artifact locally:
+
+Prerequisite: Node.js 22 or later; tested here with Node.js 24. This runs locally with synthetic examples. It does not connect to a live provider or publish user input.
+
+```sh
+git clone https://github.com/mohammadrezwankhan/helioforge-energy-lab.git
+cd helioforge-energy-lab
+node scripts/preview-demo.mjs
+```
+
+Open **http://127.0.0.1:4173**. Stop the server with Ctrl+C. The first screen is a demonstration, not verified current information. Keep private or real-world records out of this evaluation. The standalone preview does not run new Python calculations; use the source guide below for the local API.
+
+## Why inspect this project?
+
+HelioForge connects a browsable energy-learning interface to an optional local Python calculation API. The standalone preview preserves a reproducible starting point; new numerical runs use the backend and its explicit scenario assumptions.
+
+Read the [engineering walkthrough](docs/engineering/CASE_STUDY.md) and [adjacent-tool comparison](docs/ALTERNATIVES.md), or follow the [source map](PROJECT_ANALYSIS.md).
+
+- [Current verification and limits](QUALITY_REPORT.md)
+- [Architecture and source map](docs/architecture/system-overview.md)
+- [Contribution guide](CONTRIBUTING.md) and [small contribution tasks](docs/CHAMPION_QUESTS.md)
+- [Security reporting](SECURITY.md), [support](SUPPORT.md), and [roadmap](ROADMAP.md)
+
+## Develop and verify
+
+Install the Python project with its development extras in an isolated environment; follow the original guide below. HelioForge also has a separately locked web workspace.
+
+```sh
+python -m pytest apps/api/tests
+python -m ruff check apps/api
+npm --prefix apps/web ci
+npm --prefix apps/web run build
+npm --prefix apps/web test
+```
+
+Prior reports under `docs/` describe the supplied candidate. They do not replace the current [quality report](QUALITY_REPORT.md). Passing software checks is not clinical, educational, financial, safety, or production-service validation.
+
+## License and scope
+
+First-party source is available under [MIT](LICENSE). Bundled dependencies retain their upstream notices; trademarks and third-party content are not relicensed.
+
+<details>
+<summary>Supplied engineering guide, product boundaries, and detailed usage</summary>
+
 <div align="center">
 
 # HelioForge Champion · 0.3.0
@@ -129,3 +185,6 @@ A good contribution adds a reproducible experiment, not just another attractive 
 [Contributing](CONTRIBUTING.md) · [Good first issues](docs/ROADMAP.md) · [Security](SECURITY.md) · [Code of conduct](CODE_OF_CONDUCT.md) · [MIT license](LICENSE)
 
 **5,000 stars is a community ambition, not a delivered result.** The [open-source launch plan](docs/OPEN_SOURCE_LAUNCH.md) defines usefulness and contribution milestones. No fabricated stars, awards, affiliations, testimonials or adoption statistics are included.
+
+
+</details>

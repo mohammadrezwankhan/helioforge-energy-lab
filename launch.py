@@ -20,7 +20,7 @@ from urllib.request import urlopen
 import webbrowser
 
 ROOT = Path(__file__).resolve().parent
-REQUIRED = {'fastapi':'0.128.2','uvicorn':'0.48.0','pydantic':'2.13.4','numpy':'2.3.5','scipy':'1.17.0'}
+REQUIRED = {'fastapi':'0.142.0','starlette':'1.3.1','uvicorn':'0.48.0','pydantic':'2.13.4','numpy':'2.3.5','scipy':'1.17.0'}
 
 def check() -> list[str]:
     problems=[]

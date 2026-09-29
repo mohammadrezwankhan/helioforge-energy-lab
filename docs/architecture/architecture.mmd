@@ -1,0 +1,5 @@
+flowchart LR
+    I["Scenario assumptions"] --> R["Local Python calculations"]
+    R --> V["Research and learning views"]
+    V --> L["Device-local state / explicit export"]
+    T["Regression and build checks"] -. verifies .-> R

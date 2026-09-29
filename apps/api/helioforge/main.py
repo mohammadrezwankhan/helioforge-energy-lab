@@ -11,22 +11,32 @@ from uuid import uuid4
 
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.concurrency import run_in_threadpool
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from helioforge.council import local_council, openai_council
 from helioforge.dashboard import dashboard
 from helioforge.engines.finance import calculate_finance, calculate_pv, screen_acquisition
 from helioforge.engines.forecast import forecast_prices
+from helioforge.engines.hybrid import simulate_hybrid
 from helioforge.engines.research import detect_drift, reliability, sustainability
 from helioforge.engines.storage import optimize_storage
-from helioforge.engines.hybrid import simulate_hybrid
 from helioforge.hybrid import HybridRequest, catalog, validate_configuration
-from helioforge.schemas import (CouncilRequest, DriftRequest, FinanceRequest, ForecastRequest,
-                               MARequest, Market, PilotUpdate, PVRequest, ReliabilityRequest,
-                               StorageRequest, SustainabilityRequest)
+from helioforge.schemas import (
+    CouncilRequest,
+    DriftRequest,
+    FinanceRequest,
+    ForecastRequest,
+    MARequest,
+    Market,
+    PilotUpdate,
+    PVRequest,
+    ReliabilityRequest,
+    StorageRequest,
+    SustainabilityRequest,
+)
 from helioforge.store import Store
 
 logger = logging.getLogger("helioforge")

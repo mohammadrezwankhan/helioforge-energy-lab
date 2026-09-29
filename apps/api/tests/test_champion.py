@@ -1,7 +1,9 @@
 """Regression coverage for the explicit local-only host and cache boundary."""
 import pytest
 from fastapi.testclient import TestClient
+
 from helioforge.main import app
+
 
 @pytest.fixture
 def client(tmp_path, monkeypatch):
