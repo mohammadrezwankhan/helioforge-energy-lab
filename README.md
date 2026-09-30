@@ -1,5 +1,9 @@
 # HelioForge Energy Lab
 
+## Cloudflare browser edition
+
+[Open the public browser app](https://khanlab.co.technology/apps/helioforge-energy-lab/run/) · [Purpose, usage and limits](https://khanlab.co.technology/apps/helioforge-energy-lab/) · [Build and deployment guide](docs/CLOUDFLARE.md)
+
 [![CI](https://github.com/mohammadrezwankhan/helioforge-energy-lab/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mohammadrezwankhan/helioforge-energy-lab/actions/workflows/ci.yml) · [MIT license](LICENSE) · [Verification and limits](QUALITY_REPORT.md)
 
 Interactive hybrid-energy research and learning workbench with auditable numerical screens and a local Python API.
