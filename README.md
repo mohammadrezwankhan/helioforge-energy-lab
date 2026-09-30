@@ -2,7 +2,7 @@
 
 ## Cloudflare browser edition
 
-[Open the public browser app](https://mklab.co.technology/apps/helioforge-energy-lab/run/) · [Purpose, usage and limits](https://mklab.co.technology/apps/helioforge-energy-lab/) · [Build and deployment guide](docs/CLOUDFLARE.md)
+[Open the public browser preview](https://mkgrid.co.technology/run/) · [Purpose, usage and limits](https://mkgrid.co.technology/) · [Methodology](https://mkgrid.co.technology/methodology/) · [Build and deployment guide](docs/CLOUDFLARE.md)
 
 [![CI](https://github.com/mohammadrezwankhan/helioforge-energy-lab/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mohammadrezwankhan/helioforge-energy-lab/actions/workflows/ci.yml) · [MIT license](LICENSE) · [Verification and limits](QUALITY_REPORT.md)
 
