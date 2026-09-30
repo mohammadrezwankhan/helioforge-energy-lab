@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "slug": "helioforge-energy-lab",
+  "title": "HelioForge Energy Lab",
+  "shortDescription": "Explore hybrid-energy layouts, learning activities, and bundled example results in an interactive research and education preview.",
+  "summary": "HelioForge is an energy-learning workbench for exploring hybrid-system designs and scenario assumptions. Its standalone preview shows bundled examples; new calculations require the local Python application.",
+  "features": [
+    "Browse hybrid-energy architectures and inspect their labeled system layouts.",
+    "Read architecture-linked lessons with experiment steps and self-check questions.",
+    "Review bundled scenario examples and compare visible energy assumptions and outcomes."
+  ],
+  "steps": [
+    "Choose an architecture and inspect its components and stated assumptions.",
+    "Open a linked lesson and follow its experiment prompts and self-check.",
+    "Review a bundled scenario result and compare its energy and cost measures."
+  ],
+  "limitations": [
+    "The standalone browser preview uses bundled examples and does not run new Python calculations or optimization.",
+    "New numerical runs require the separate local Python API and its setup.",
+    "Models are educational research screens, not calibrated plant controls, forecasts, or investment advice."
+  ],
+  "faqs": [
+    {
+      "question": "Can the standalone preview calculate a new scenario?",
+      "answer": "No. It displays the interface and bundled examples; run the separate local Python app for new calculations."
+    },
+    {
+      "question": "Are the model results operational guidance?",
+      "answer": "No. They are bounded research and learning examples with explicit assumptions, not a plant controller or calibrated digital twin."
+    }
+  ],
+  "category": "Energy",
+  "canonical": "https://khanlab.co.technology/apps/helioforge-energy-lab/",
+  "updated": "2026-09-30",
+  "publicSource": "https://github.com/mohammadrezwankhan/helioforge-energy-lab",
+  "demoArtifact": "HelioForge-Preview.html",
+  "runtimePatches": [
+    {
+      "from": "location.protocol === 'file:'",
+      "to": "true",
+      "occurrences": 2,
+      "reason": "Cloudflare browser edition always uses the existing snapshot mode; it has no Python API."
+    }
+  ],
+  "noticeFiles": [
+    "LICENSE"
+  ]
+}
