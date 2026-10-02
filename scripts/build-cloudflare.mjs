@@ -69,7 +69,7 @@ const copyright = (config.noticeFiles ?? []).map(name => `===== ${name} =====\n\
 fs.writeFileSync(path.join(out,'NOTICES.txt'),`Browser release: ${config.title}\n\nBundled third-party notices remain applicable. Public browser access does not grant a new license over private source or third-party material.\n\n${copyright}`);
 if(!fs.existsSync(path.join(out,'run','THIRD-PARTY-NOTICES.txt')))fs.copyFileSync(path.join(out,'NOTICES.txt'),path.join(out,'run','THIRD-PARTY-NOTICES.txt'));
 const list = items => items.map(text => `<li>${escape(text)}</li>`).join('');
-const author = {'@type':'Person',name:'Mohammad Rezwan Khan',url:siteOrigin+'/about/'};
+const author = {'@type':'Person','@id':'https://mrkhan.co.technology/#person',name:'Mohammad Rezwan Khan',url:'https://mrkhan.co.technology/'};
 const structured = {'@context':'https://schema.org','@graph':[
   {'@type':'SoftwareApplication','@id':canonical+'#app',name:config.title,description:config.shortDescription,url:canonical,applicationCategory:'EducationalApplication',operatingSystem:'Web browser',isAccessibleForFree:true,author,featureList:config.features,softwareHelp:{'@type':'WebPage',url:canonical+'#how-to-use'}},
   {'@type':'WebPage','@id':canonical+'#page',url:canonical,name:config.title+' — Browser Demo',description:config.shortDescription,inLanguage:'en',dateModified:config.updated,mainEntity:{'@id':canonical+'#app'},author},
