@@ -35,11 +35,14 @@
     "src/champion-controller.ts",
     "src/roadmap-types.ts",
     "src/roadmap-data.ts",
+    "src/advanced-visuals.ts",
     "src/study-visuals.ts",
     "src/roadmap.ts",
     "src/evidence.ts",
     "src/workflows.ts",
     "src/experiences.ts",
+    "src/completion-ui.ts",
+    "src/integrations-ui.ts",
     "src/app.ts"
   ]
 }

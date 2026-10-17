@@ -63,6 +63,8 @@ jobs:
           python scripts/browser-hybrid.py --screenshots
           python scripts/browser-champion.py --screenshots
           python scripts/browser-roadmap.py
+          python scripts/browser-completion.py --url http://127.0.0.1:8000
+          python scripts/browser-accessibility.py --url http://127.0.0.1:8000
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
@@ -77,3 +79,5 @@ jobs:
             docs/champion/*.png
             docs/champion/browser-champion.json
             docs/roadmap/browser-validation.json
+            docs/roadmap/completion-browser/
+            docs/roadmap/accessibility-report.json

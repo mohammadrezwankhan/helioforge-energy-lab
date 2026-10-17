@@ -9,10 +9,18 @@ from typing import Any
 
 from pydantic import Field
 
-from helioforge.engines import decision_studies, engineering_studies, toolkit_studies, workflow_studies
+from helioforge.engines import (
+    control_studies,
+    decision_studies,
+    engineering_studies,
+    physical_studies,
+    planning_studies,
+    toolkit_studies,
+    workflow_studies,
+)
 from helioforge.schemas import StrictModel
 
-MODULES = (engineering_studies, decision_studies, workflow_studies, toolkit_studies)
+MODULES = (engineering_studies, decision_studies, workflow_studies, toolkit_studies, physical_studies, planning_studies, control_studies)
 
 
 class StudyRequest(StrictModel):

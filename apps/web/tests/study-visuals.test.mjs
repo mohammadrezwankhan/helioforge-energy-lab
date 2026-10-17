@@ -19,6 +19,7 @@ try {
     '--noUnusedParameters', '--module', 'none', '--outFile', out,
     path.join(root, 'src/roadmap-types.ts'),
     path.join(root, 'src/roadmap-data.ts'),
+    path.join(root, 'src/advanced-visuals.ts'),
     path.join(root, 'src/study-visuals.ts'),
   ], { stdio: 'pipe' });
 } catch (error) {
@@ -54,7 +55,7 @@ test('PV sensitivity renders all 81 actual Python LCOE cells as titled accessibl
 
 test('all default roadmap study results produce accessible finite visual markup', () => {
   const { catalogue, results } = hf.STUDY_BUNDLE;
-  assert.equal(catalogue.length, 39);
+  assert.equal(catalogue.length, 59);
   for (const def of catalogue) {
     const html = hf.studyVisual(def, results[def.id], 0);
     assert.match(html, /role="img"/, def.id);

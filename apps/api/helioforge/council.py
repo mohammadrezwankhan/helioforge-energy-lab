@@ -7,7 +7,10 @@ from __future__ import annotations
 
 import asyncio
 import json
+import math
 import os
+from hashlib import sha256
+from typing import Literal
 
 from pydantic import Field
 
@@ -27,15 +30,31 @@ ROLES = [
 
 
 class AgentFinding(StrictModel):
-    summary: str
+    summary: str = Field(max_length=2400)
     risks: list[str] = Field(min_length=1, max_length=6)
     required_evidence: list[str] = Field(min_length=1, max_length=6)
+    stance: Literal['proceed_research', 'revise', 'insufficient'] = 'insufficient'
+    response_to_challenge: str = Field(default='', max_length=2400)
 
 
 class CouncilDecision(StrictModel):
     recommendation: str
     unresolved_risks: list[str]
     next_actions: list[str]
+
+
+def vote_summary(findings: list[dict]) -> dict:
+    """Describe votes, never a posterior probability of engineering correctness."""
+    counts = {key: 0 for key in ('proceed_research', 'revise', 'insufficient')}
+    for finding in findings:
+        counts[finding['stance']] += 1
+    n = len(findings)
+    entropy = -sum((v/n)*math.log2(v/n) for v in counts.values() if v) if n else None
+    return {'counts': counts, 'entropy_bits': entropy,
+            'dirichlet_mean': {key: (v+1)/(n+3) for key, v in counts.items()},
+            'prior': 'Dirichlet(1,1,1), descriptive pseudo-count update; correlated reviewers are not independent evidence',
+            'unanimous': bool(n and max(counts.values()) == n),
+            'probability_of_correctness': None, 'identity_verified': False}
 
 
 def local_council(request: CouncilRequest, evidence: dict) -> dict:
@@ -100,31 +119,64 @@ async def openai_council(request: CouncilRequest, evidence: dict) -> dict:
     payload = json.dumps({"brief": request.brief, "market": request.market, "calculated_evidence": evidence})
     config = RunConfig(tracing_disabled=True)  # Avoid sending separate traces containing deal data.
 
-    async def review(role: str, focus: str) -> dict:
-        agent = Agent(name=role, instructions=shared+focus, model=model,
-                      model_settings=ModelSettings(max_tokens=1800), output_type=AgentFinding)
-        result = await Runner.run(agent, payload, max_turns=2, run_config=config)
+    async def review(role: str, focus: str, content: str) -> dict:
+        agent = Agent(name=role, instructions=shared+focus+
+                      " State a research-only stance. In cross-examination, answer the other reviewer's challenge; "
+                      "preserve disagreements when evidence does not resolve them. Never manufacture unanimity.",
+                      model=model, model_settings=ModelSettings(max_tokens=1800), output_type=AgentFinding)
+        result = await Runner.run(agent, content, max_turns=2, run_config=config)
         return {"agent": role, **result.final_output.model_dump()}
 
-    async def workflow() -> dict:
-        tasks = [asyncio.create_task(review(role, focus)) for role, focus in ROLES]
+    async def batch(contents: list[str]) -> list[dict]:
+        tasks = [asyncio.create_task(review(role, focus, content))
+                 for (role, focus), content in zip(ROLES, contents, strict=True)]
         try:
-            findings = await asyncio.gather(*tasks)
+            return await asyncio.gather(*tasks)
         except BaseException:
-            # Do not leave potentially billable sibling requests running after a failure.
+            # Cancel potentially billable siblings on failure AND cancellation/timeout.
             for task in tasks:
                 task.cancel()
             await asyncio.gather(*tasks, return_exceptions=True)
             raise
-        critic = Agent(name="Independent committee critic", instructions=shared +
-                       "Reconcile the eight specialist findings. Highlight disagreements and missing evidence. "
-                       "Return a conditional research recommendation, unresolved risks and concrete next actions.",
-                       model=model, model_settings=ModelSettings(max_tokens=2200), output_type=CouncilDecision)
-        result = await Runner.run(critic, json.dumps({"brief": request.brief, "findings": findings}),
-                                  max_turns=2, run_config=config)
-        return {"mode": "openai", "execution": "eight_parallel_specialists_then_critic", "model": model,
-                "market": request.market, "hybrid_run_id": request.hybrid_run_id, "reviewed_brief": request.brief, "reviews": findings,
-                "decision": result.final_output.model_dump(),
-                "warnings": ["AI-generated review; human verification required. No live web research was performed."]}
 
-    return await asyncio.wait_for(workflow(), timeout=120)
+    async def workflow() -> dict:
+        rounds, protocol = [], []
+        task_id = 'HF-' + sha256(payload.encode()).hexdigest()[:16]
+
+        def log_round(index: int, phase: str, findings: list[dict]) -> None:
+            rounds.append({'round': index, 'phase': phase, 'reviews': findings,
+                           'consensus': vote_summary(findings)})
+            for finding in findings:
+                protocol.append({'sender': finding['agent'], 'recipient': 'Independent committee critic',
+                                 'task_id': task_id, 'action': 'PROPOSE' if index == 0 else 'CHALLENGE',
+                                 'round': index, 'payload': finding, 'critic_signoff': False})
+
+        findings = await batch([payload] * len(ROLES))
+        log_round(0, 'independent_review', findings)
+        # Storage and finance directly challenge one another; remaining disciplines pair off.
+        counterparts = [1, 0, 3, 2, 7, 6, 5, 4]
+        for index in range(1, request.cross_examination_rounds + 1):
+            contents = [json.dumps({'evidence': json.loads(payload), 'own_previous_review': findings[i],
+                                    'counterparty_review': findings[counterparts[i]],
+                                    'phase': 'cross_examination', 'round': index}) for i in range(len(ROLES))]
+            findings = await batch(contents)
+            log_round(index, 'cross_examination', findings)
+        critic = Agent(name="Independent committee critic", instructions=shared +
+                       "Reconcile all rounds and calculated evidence. Explicitly preserve unresolved dissent. "
+                       "Votes are correlated opinions, not proof or an approval. Return a conditional research "
+                       "recommendation, unresolved risks and concrete next actions.",
+                       model=model, model_settings=ModelSettings(max_tokens=2200), output_type=CouncilDecision)
+        result = await Runner.run(critic, json.dumps({'calculated_evidence': evidence, 'brief': request.brief,
+                                                     'rounds': rounds}), max_turns=2, run_config=config)
+        decision = result.final_output.model_dump()
+        protocol.append({'sender': 'Independent committee critic', 'recipient': 'User', 'task_id': task_id,
+                         'action': 'VALIDATE', 'payload': decision, 'critic_signoff': False})
+        return {"mode": "openai", "execution": "eight_specialists_cross_examination_then_critic", "model": model,
+                "market": request.market, "hybrid_run_id": request.hybrid_run_id, "reviewed_brief": request.brief,
+                "reviews": findings, "rounds": rounds, "protocol": protocol,
+                "consensus": vote_summary(findings), "model_calls": len(protocol), "decision": decision,
+                "warnings": ["AI-generated review; human verification required. No live web research was performed.",
+                             "Agreement and entropy measure stated opinions, not correctness or certification.",
+                             "Provider cancellation is best effort; already consumed tokens may still be billed."]}
+
+    return await asyncio.wait_for(workflow(), timeout=300)

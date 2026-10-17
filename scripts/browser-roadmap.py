@@ -32,7 +32,7 @@ with sync_playwright() as pw:
     catalogue = page.request.get(args.url + '/api/studies').json()
     if isinstance(catalogue, dict):
         catalogue = catalogue.get('studies', catalogue.get('catalogue'))
-    assert len(catalogue) == 39
+    assert len(catalogue) == 59
 
     def nav(name):
         menu = page.locator('[data-action="menu"]')
@@ -177,8 +177,8 @@ with sync_playwright() as pw:
     offline.goto((ROOT/'HelioForge-Preview.html').as_uri(), wait_until='load')
     expect(offline.locator('.connection-chip')).to_have_text('Snapshot preview')
     expect(offline.locator('#study-form button[type="submit"]')).to_be_disabled()
-    assert offline.evaluate('HF.STUDY_BUNDLE.catalogue.length') == 39
-    passed('Standalone file retains all 39 examples and disables unavailable Python calculations')
+    assert offline.evaluate('HF.STUDY_BUNDLE.catalogue.length') == 59
+    passed('Standalone file retains all 59 examples and disables unavailable Python calculations')
     assert not errors, errors
     browser.close()
 

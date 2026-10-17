@@ -22,7 +22,7 @@ assert.match(html,/href="\.\/run\/"/);
 const schemas=[...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].map(m=>JSON.parse(m[1]));
 assert.equal(schemas.length,1);assert.equal(schemas[0]['@graph'][0].url,config.canonical);
 assert.equal(schemas[0]['@graph'][0].name,config.title);
-assert.equal(facts.features.length,3);assert.equal(facts.steps.length,3);
+assert.deepEqual(facts.features,config.features);assert.deepEqual(facts.steps,config.steps);
 assert.ok(facts.limitations.length>=2);assert.ok(read('llms.txt').includes(config.canonical));
 assert.ok(fs.statSync(path.join(output,'social-preview.png')).size>100);
 assert.ok(fs.statSync(path.join(output,'preview.png')).size>100);

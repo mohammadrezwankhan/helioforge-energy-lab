@@ -41,3 +41,23 @@
 | storage | `storage-annual` | 8760-hour dispatch and tariff builder |
 | pv | `pv-sensitivity` | LCOE contour sensitivity |
 | pv | `pv-reserve` | Inverter repowering reserve |
+| hybrid | `hybrid-powerflow` | Balanced AC nodal power flow |
+| hybrid | `hybrid-switching` | PWM inverter/filter transient |
+| lessons | `lessons-energization` | Timed LRC energization transient |
+| storage | `storage-response` | Sub-second frequency droop response |
+| storage | `storage-agingfit` | Capacity-fade coefficient fit |
+| compare | `compare-thermalphysics` | Lumped thermal reaction screen |
+| pv | `pv-raytrace` | Panel-sample ray-triangle shading |
+| pv | `pv-setbacks` | Parcel setbacks and crop-light screen |
+| research | `research-bearing` | Bearing spectrum envelope comparison |
+| storage | `storage-annualopt` | Full-year storage optimization |
+| compare | `compare-reliability` | Chronological reliability ensemble |
+| forecast | `forecast-cointegration` | Rank-assumed energy-price VECM |
+| forecast | `forecast-backtest` | Chronological price forecast backtest |
+| markets | `markets-network` | Six-zone DC optimal power flow |
+| investment | `investment-contracts` | Contract, tax, and reserve cash flows |
+| lessons | `lessons-hydrogenaux` | Hydrogen auxiliary energy ledger |
+| overview | `overview-risk` | Portfolio evidence and threshold screen |
+| pilots | `pilots-registration` | Unpaired point-cloud registration |
+| hybrid | `hybrid-controls` | Averaged inverter control response |
+| research | `research-eigenmodes` | Closed-loop inverter eigenmodes |

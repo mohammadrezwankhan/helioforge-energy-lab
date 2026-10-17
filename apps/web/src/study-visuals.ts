@@ -486,6 +486,8 @@ namespace HF {
 
   /** Return an accessible, page-specific visual built only from the supplied study contract values. */
   export function studyVisual(def: StudyDefinition, result: StudyResult, slice: number): string {
+    const advanced=advancedStudyVisual(def,result,slice);
+    if(advanced!==null)return advanced;
     if (def.id === 'pv-sensitivity') return pvSensitivity(def, result, slice);
     if (def.id === 'pv-agrivoltaic') return agrivoltaic(def, result);
     if (def.id === 'pv-backtracking') return trackerHeliodon(def, result, slice);

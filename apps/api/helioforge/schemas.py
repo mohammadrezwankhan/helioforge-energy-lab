@@ -159,6 +159,8 @@ class CouncilRequest(StrictModel):
     brief: str = Field(default="Review a 5 MW / 10 MWh BTM storage investment for an industrial customer.", min_length=8, max_length=6000)
     mode: Literal["local", "openai"] = "local"
     consent_to_external_processing: bool = False
+    cross_examination_rounds: int = Field(default=1, ge=1, le=2)
+    evidence_run_ids: list[str] = Field(default_factory=list, max_length=6)
 
 
 class PilotUpdate(StrictModel):

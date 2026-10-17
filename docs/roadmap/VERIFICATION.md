@@ -1,30 +1,29 @@
-# Verification — 17 October 2026
+# Verification — 18 October 2026
 
-The following checks ran on the local full-spectrum branch. They are software evidence, not scientific, regulatory or accessibility certification. The five independent-review counterexamples and their repairs are recorded in [DELIVERY.md](DELIVERY.md).
+Software evidence for the 59-study release; see the [completion ledger](COMPLETION.md) for all twelve views and external prerequisites. This does not establish scientific, regulatory, identity or accessibility certification.
 
-| Check | Result |
+| Check | Observed result |
 |---|---|
-| `python -m ruff check apps/api` | Passed |
-| `python -m pytest apps/api/tests -q` | 521 passed; 0 failures/errors/skips, confirmed from JUnit XML |
-| `python scripts/generate-studies.py` | 39 finite examples, all 12 actual navigation IDs; 3,635,648-byte JSON payload |
-| `npm --prefix apps/web run typecheck` | Passed strict TypeScript |
-| `npm --prefix apps/web run build` | Source JS/CSS and standalone preview built, no runtime package dependencies |
-| `npm --prefix apps/web test` | 130 passed; 0 failed/skipped |
-| `python scripts/browser-smoke.py --url http://127.0.0.1:8017` | 18 passed against real loopback API |
-| `python scripts/browser-hybrid.py --url http://127.0.0.1:8017` | 14 passed; includes 320/390px, cameras, saved runs, lessons, offline boundaries |
-| `python scripts/browser-champion.py --url http://127.0.0.1:8017` | 18 passed; native browser storage, 320/390/768/1440px, workspace recovery and keyboard navigation |
-| `python scripts/browser-roadmap.py --url http://127.0.0.1:8017` | 24 passed; all 39 Python experiments through real browser forms, 8,760 CSV records, stale/error states, actual signing/tamper rejection/co-signing, tariff dialog, pilot dragging, raw paths, all 12 mobile views and file preview |
-| Research display control check | Moving window changed to 8, cutoff changed to 0; displayed values updated |
-| `node scripts/check-preview.mjs` | Exact source-built JS/CSS parity with standalone HTML |
-| `node scripts/build-cloudflare.mjs` | Passed; snapshot-only runtime patches applied |
-| `node scripts/build-domain.mjs` | Passed; dedicated MKGrid artifact generated |
-| `node scripts/check-domain.mjs` | Passed; 3 content pages, 20 files, canonical/schema/runtime digest assertions |
-| `git diff --check` | Passed |
+| Ruff on apps/api | Passed |
+| Python full unit/API suite | **579 passed**, 0 failures/errors/skips, confirmed from JUnit XML |
+| Generated Python examples | **59** finite study envelopes across 12 navigation IDs |
+| Strict TypeScript and build | Passed; no browser runtime package dependencies |
+| Frontend tests | **141 passed**, 0 failures/skips |
+| npm audit, moderate threshold | 0 known vulnerabilities at check time |
+| Existing Playwright suites | **74 passed**: smoke 18, hybrid 14, Champion 18, roadmap 24 |
+| Remaining-roadmap browser suite | **10 passed**: requirements panels, four geometry visuals, tariff editing/staleness, real CSV/GeoJSON/document/telemetry import journeys, nine Foundation quiz gates, saved-run scenes, all views at 390px |
+| axe-core 4.14.0 | **0 automated violations** across 12 default desktop views, including enhanced contrast; incomplete/manual checks remain |
+| Standalone parity | Exact compiled JavaScript/CSS equality with generated HTML |
+| Cloudflare export checks | Public facts, canonical, schema, digest, assets and source-file exclusions pass |
+| Dedicated MKGrid export | 3 content pages, 20 files; canonical/schema/runtime digest checks pass |
+| Independent completion review | Rare-event confidence interval, bearing-envelope score and ICP-retention findings independently rechecked after repairs; no remaining blocker within the review scope |
+| Live Open-Meteo request | 24 Paris hourly rows retrieved 2026-10-17T22:07:44.275184Z |
+| Frame scheduling | 120 headless Chromium samples, median/p95 16.7 ms; not rendering latency or a device FPS guarantee |
 
-Browser reports are `docs/browser-validation.json`, `docs/hybrid-browser-validation.json`, `docs/champion/browser-champion.json` and `docs/roadmap/browser-validation.json`. Screenshots of PV sensitivity, interval storage, hybrid scene, markets, investment and mobile council were captured in the delivery output directory and visually inspected. There were no uncaught JavaScript errors in the checked journeys.
+Reports: [original browser](../browser-validation.json), [hybrid](../hybrid-browser-validation.json), [Champion](../champion/browser-champion.json), [59 studies](browser-validation.json), [new interactions](completion-browser-report.json), [accessibility summary](accessibility-summary.json), [frame cadence](frame-cadence.json). Full logs, JUnit XML, axe incomplete-node output and screenshots are retained in the local delivery output. CI uploads its independently generated browser evidence.
 
-Local versions: Windows, Python 3.12.14, Node 24.20.0, TypeScript 5.8.3, NumPy 2.3.5, SciPy 1.17.0, FastAPI 0.142.0, Pydantic 2.13.4. The Python suite emitted two dependency deprecation notices concerning TestClient/httpx and the AnyIO BlockingPortal alias; neither was a test failure. CI independently exercises its Python matrix. Floating-point/solver schedules can vary by platform, so CI regenerates study examples and validates mathematical invariants rather than promising identical floating-point bytes across environments.
+No uncaught JavaScript exceptions were observed in the checked journeys. Browser proof includes actual P-256 signing, tamper rejection and co-signature verification, full annual CSV export and snapshot-only boundaries. Screenshots of advanced graphics, synchronized scenes and mobile layouts were captured; selected images were visually inspected. Integration repairs include MutationObserver feedback starvation, synchronous lesson-score persistence and cached-page lifecycle handling. The export checker now compares complete configured public features/steps instead of an obsolete fixed count.
 
-The visible hybrid scene's 120-sample headless Chromium requestAnimationFrame cadence measured a 16.7 ms median and 16.7 ms p95. This measures scheduling in one environment, not rendering latency, a physical device or a universal 60 FPS guarantee. See `frame-cadence.json`.
+Environment: Windows, Python 3.12.14, Node 24.20.0, TypeScript 5.8.3, NumPy 2.3.5, SciPy 1.17.0, Shapely 2.1.2. Python emitted two dependency deprecation notices (TestClient/httpx and AnyIO BlockingPortal alias). CI separately exercises Python 3.11/3.12/3.13 and browser flows. A local pass does not claim remote CI completion. Floating-point schedules may vary across solver/BLAS environments; CI regenerates examples and tests mathematical invariants.
 
-No public deployment, Git push, paid provider call, live market connection, assistive-technology session, physical-device session, independent calibration, field alarm validation, or production Astra execution was performed. The prepared archive and signed receipt identify the exact local commit and build hashes. The public site was read successfully during the audit and remains separate from this local implementation.
+Public publication follows these gates. The live app.json source revision/runtime digest, Git merge and signed release receipt identify the delivered build. Paid AI, ENTSO-E credentials, live Modbus, real survey reconstruction, authenticated document provenance, independent calibration, assistive-technology sessions and physical-device performance were not exercised. They remain explicit external requirements.

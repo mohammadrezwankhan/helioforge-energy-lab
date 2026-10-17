@@ -17,6 +17,9 @@ namespace HF {
     const studies=createStudyController(()=>state);
     const workflows=createWorkflowController(()=>state,()=>render());
     const experiences=createExperienceController(()=>state);
+    const completion=createCompletionController(()=>state);
+    const integrations=createIntegrationController(()=>state);
+    window.addEventListener('pagehide',event=>{if(!event.persisted)completion.destroy();});
     function render(): void {
       sceneCleanup?.();
       root!.innerHTML=shell(state);
@@ -42,6 +45,8 @@ namespace HF {
       studies.refresh();
       workflows.refresh();
       experiences.refresh();
+      completion.refresh();
+      integrations.refresh();
     }
     function applyBusyState():void {
       document.querySelector('.council-topology')?.classList.toggle('working',state.busy&&state.page==='council');
@@ -81,7 +86,7 @@ namespace HF {
       const headers:Record<string,string>={}; if(body!==undefined)headers['Content-Type']='application/json';
       if(adminKey)headers['X-API-Key']=adminKey;
       let response:Response;
-      try { response=await fetch(`/api/${path}`,{method:body===undefined?'GET':method,headers,body:body===undefined?undefined:JSON.stringify(body),signal:AbortSignal.timeout(path.startsWith('council')?125000:30000)}); }
+      try { response=await fetch(`/api/${path}`,{method:body===undefined?'GET':method,headers,body:body===undefined?undefined:JSON.stringify(body),signal:AbortSignal.timeout(path.startsWith('council')?310000:30000)}); }
       catch { throw new Error(body===undefined?'The local API could not be reached. Start the Python app, then reconnect.':'The response was interrupted. The operation may have completed. Your inputs are retained. Check Analysis history before trying again.'); }
       let data:unknown;
       try { data=await response.json(); }
@@ -211,7 +216,7 @@ namespace HF {
         }else if(model==='sustainability'){
           inputs={...state.data.defaults.sustainability,annual_generation_kwh:n('generation')*1e6,embodied_kgco2e:n('embodied')*1000,counterfactual_kgco2e_kwh:n('counterfactual')/1000,annual_operational_kgco2e:n('operational')*1000};path='research/carbon';
         }else if(model==='council'){
-          inputs={hybrid_run_id:String(fd.get('hybrid_run_id')??'')||null,market:state.data.market,brief:String(fd.get('brief')??''),mode:String(fd.get('mode')??'local'),consent_to_external_processing:fd.get('consent')==='on'};path='council/review';adminKey=String(fd.get('admin_key')??'')||undefined;
+          inputs={hybrid_run_id:String(fd.get('hybrid_run_id')??'')||null,market:state.data.market,brief:String(fd.get('brief')??''),mode:String(fd.get('mode')??'local'),consent_to_external_processing:fd.get('consent')==='on',cross_examination_rounds:Number(fd.get('cross_examination_rounds')??1),evidence_run_ids:String(fd.get('evidence_run_ids')??'').split(',').map(x=>x.trim()).filter(Boolean)};path='council/review';adminKey=String(fd.get('admin_key')??'')||undefined;
         }else throw new Error('Unknown model.');
         state.busy=true;applyBusyState();
         // Keep entered values and focus while pending; no whole-form rerender.

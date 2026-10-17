@@ -1,5 +1,7 @@
 # Full-spectrum implementation and audit — 17 October 2026
 
+> Historical 39-study baseline. The [59-study completion ledger](COMPLETION.md) supersedes the implementation gaps and publication boundary below. [Current verification](VERIFICATION.md) records the expanded release.
+
 This release adds 39 independently named experiments across all 12 existing views. Numerical results come from Python, are saved through the local API, and include inputs, equations, source references, model limits and SHA-256 evidence digests. The browser includes reproducible examples for offline inspection and exports. Edited calculations require the local Python app. The original 19 runnable / 17 study-only hybrid architecture boundary remains intact.
 
 This is a research implementation of the roadmap. It does **not** establish a production Astra deployment, scientific calibration, regulatory compliance, WCAG AAA certification or a minimum frame rate on arbitrary hardware. The table below distinguishes working software from those claims.

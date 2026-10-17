@@ -23,7 +23,7 @@
     "Forecast raw-path CSV retains every seeded path-year observation",
     "Storage interval telemetry responds with reduced motion enabled",
     "All twelve views fit a 390px mobile viewport without document overflow",
-    "Standalone file retains all 39 examples and disables unavailable Python calculations"
+    "Standalone file retains all 59 examples and disables unavailable Python calculations"
   ],
   "browser_errors": [],
   "browser": "Playwright Chromium",

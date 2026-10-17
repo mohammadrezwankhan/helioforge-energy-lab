@@ -8,7 +8,7 @@
     "Browse hybrid-energy architectures and inspect their labeled system layouts.",
     "Read architecture-linked lessons with experiment steps and self-check questions.",
     "Review bundled scenario examples and compare visible energy assumptions and outcomes.",
-    "Explore 39 distinct experimental studies across twelve views, with Python-generated examples and explicit model boundaries.",
+    "Explore 59 distinct experimental studies across twelve views, with Python-generated examples and explicit model boundaries.",
     "Inspect timelines, sensitivity maps, tariff inputs, signed local evidence and complete result exports."
   ],
   "steps": [
@@ -33,7 +33,7 @@
   ],
   "category": "Energy",
   "canonical": "https://mklab.co.technology/apps/helioforge-energy-lab/",
-  "updated": "2026-10-17",
+  "updated": "2026-10-18",
   "publicSource": "https://github.com/mohammadrezwankhan/helioforge-energy-lab",
   "demoArtifact": "HelioForge-Preview.html",
   "runtimePatches": [

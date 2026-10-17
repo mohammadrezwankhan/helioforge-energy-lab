@@ -1,7 +1,7 @@
 namespace HF {
   export type MarketCode = 'FR' | 'DE' | 'ES' | 'IT' | 'NL' | 'GB';
   export type Page = 'hybrid' | 'lessons' | 'compare' | 'overview' | 'storage' | 'pv' | 'research' | 'markets' | 'forecast' | 'investment' | 'pilots' | 'council';
-  export type Inputs = Record<string, string | number | boolean | null | number[]>;
+  export type Inputs = Record<string, string | number | boolean | null | number[] | string[]>;
   export interface BaseResult { model: string; warnings: string[]; run_id?: string; created_at?: string; input_sha256?: string }
   export interface DispatchPoint { hour: number; label: string; load_kw: number; pv_kw: number; charge_kw: number; discharge_kw: number; grid_import_kw: number; grid_export_kw: number; curtailed_kw: number; soc_start_kwh: number; soc_end_kwh: number; soc_pct: number; import_eur_mwh: number }
   export interface Dispatch extends BaseResult { data_kind: string; market: MarketCode; duration_hours: number; capacity_kwh: number; power_kw: number; baseline_cost_eur: number; optimized_cost_eur: number; savings_eur: number; savings_pct: number | null; energy_savings_eur: number; peak_savings_eur: number; wear_cost_eur: number; baseline_peak_kw: number; optimized_peak_kw: number; discharged_kwh: number; equivalent_discharge_cycles: number; terminal_soc_kwh: number; solver: string; solver_status: string; schedule: DispatchPoint[] }

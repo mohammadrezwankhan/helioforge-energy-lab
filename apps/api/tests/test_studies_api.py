@@ -10,8 +10,8 @@ from helioforge.studies import StudyRequest, catalogue, evaluate
 
 def test_catalogue_is_complete_unique_and_examples_are_finite():
     definitions=catalogue()
-    assert len(definitions)==39
-    assert len({s['id'] for s in definitions})==39
+    assert len(definitions)==59
+    assert len({s['id'] for s in definitions})==59
     assert {s['page'] for s in definitions}=={'overview','hybrid','lessons','compare','storage','pv','research','markets','forecast','investment','pilots','council'}
     for study in definitions:
         r=evaluate(StudyRequest(study=study['id']))
@@ -28,7 +28,7 @@ def client(tmp_path,monkeypatch):
 
 
 def test_study_api_persists_inputs_and_evidence(client):
-    assert len(client.get('/api/studies').json())==39
+    assert len(client.get('/api/studies').json())==59
     response=client.post('/api/studies/evaluate',json={'study':'pv-reserve','inputs':{'cost_eur':1000,'inflation':0,'fund_return':0,'years':10}})
     assert response.status_code==200,response.text
     r=response.json()
