@@ -111,12 +111,12 @@ test('a polygon with a null vertex is marked missing instead of silently redrawn
 
 test('missing values stay visible as missing and untrusted labels are escaped', () => {
   const def = definition('pv-sensitivity', 'pv');
-  def.title = '<script>bad()</script>';
+  def.title = '<ScRiPt>bad()</ScRiPt>';
   const html = hf.studyVisual(def, result('pv-sensitivity', [
     { capex_eur_kwp: 650, yield_kwh_kwp: 1350, lcoe_eur_mwh: null },
   ]), 0);
-  assert.doesNotMatch(html, /<script>/);
-  assert.match(html, /&lt;script&gt;bad\(\)&lt;\/script&gt;/);
+  assert.doesNotMatch(html, /<script(?:\s|>)/i);
+  assert.match(html, /&lt;ScRiPt&gt;bad\(\)&lt;\/ScRiPt&gt;/);
   assert.match(html, /Missing/);
   assert.match(html, /data-state="missing"/);
 });
