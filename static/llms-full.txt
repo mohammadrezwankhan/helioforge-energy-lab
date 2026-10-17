@@ -1,0 +1,154 @@
+# HelioForge Energy Lab — full static page text
+
+Generated from the visible main content of the three published static HTML pages during this build. Interactive app states and external source repositories are not included. These are published site claims, not independent certification.
+
+## Overview
+
+Source: https://mkgrid.co.technology/
+
+HYBRID ENERGY / RESEARCH / LEARNING
+
+Explore the system.
+Understand its limits.
+
+HelioForge is an energy-learning workbench for exploring hybrid-system designs and scenario assumptions. Its standalone preview shows bundled examples; new calculations require the local Python application.
+
+Open HelioForge preview ↗ (https://mkgrid.co.technology/run/) Read the model boundaries (https://mkgrid.co.technology/methodology/)
+
+Free browser preview · No sign-in · Bundled example results
+
+HelioForge’s actual hybrid-energy learning interface
+
+Actual preview interface. New numerical runs require the local Python app.
+
+EXPLORE
+
+Follow the energy and the assumptions
+
+Browse hybrid-energy architectures and inspect their labeled system layouts.
+
+Read architecture-linked lessons with experiment steps and self-check questions.
+
+Review bundled scenario examples and compare visible energy assumptions and outcomes.
+
+START HERE
+
+Try it in three steps
+
+Choose an architecture and inspect its components and stated assumptions.
+
+Open a linked lesson and follow its experiment prompts and self-check.
+
+Review a bundled scenario result and compare its energy and cost measures.
+
+CAPABILITY & LIMITS
+
+A research preview with a visible boundary
+
+The catalogue contains 36 architectures and 36 linked lessons . In the separate local Python application, 19 architectures have electricity-balance screens and 17 remain study-only. This hosted preview shows bundled examples; it does not perform new Python calculations.
+
+The standalone browser preview uses bundled examples and does not run new Python calculations or optimization.
+
+New numerical runs require the separate local Python API and its setup.
+
+Models are educational research screens, not calibrated plant controls, forecasts, or investment advice.
+
+Read what is implemented and what remains a study → (https://mkgrid.co.technology/methodology/)
+
+COMMON QUESTIONS
+
+Before you explore
+
+Can the standalone preview calculate a new scenario?
+
+No. It displays the interface and bundled examples; run the separate local Python app for new calculations.
+
+Are the model results operational guidance?
+
+No. They are bounded research and learning examples with explicit assumptions, not a plant controller or calibrated digital twin.
+
+Does this website call external AI?
+
+No. The public browser preview has no external AI integration. The separate local application’s optional provider adapter requires explicit configuration and consent.
+
+Does local progress transfer from MKLab?
+
+No. Browser storage belongs to the current origin and device. Local progress saved on another domain is not automatically transferred.
+
+Source, methods and evidence
+
+Maintained by Mohammad Rezwan Khan (https://mrkhan.co.technology/) . Updated 2026-09-30 .
+
+Public source and verification (https://github.com/mohammadrezwankhan/helioforge-energy-lab) · App facts (https://mkgrid.co.technology/app.json) · Plain-text guide (https://mkgrid.co.technology/llms.txt) · Notices (https://mkgrid.co.technology/NOTICES.txt)
+
+Source revision 5f408d436ef2 · Browser runtime SHA-256 9c3bb931cb0124c7
+## About
+
+Source: https://mkgrid.co.technology/about/
+
+HELIOFORGE / ABOUT
+
+Energy research you can inspect.
+
+HelioForge Energy Lab is maintained by Mohammad Rezwan Khan as a hybrid-energy research and learning workbench.
+
+Author and public source
+
+Mohammad Rezwan Khan’s profile (https://mrkhan.co.technology/) identifies the maintainer. The public repository (https://github.com/mohammadrezwankhan/helioforge-energy-lab) contains source, numerical methodology, lessons, validation records and contribution guidance. First-party source is available under the MIT license; bundled material retains its applicable notices.
+
+What MKGrid provides
+
+MKGrid hosts HelioForge’s free browser preview: architecture exploration, learning activities and bundled scenario results. It does not expose a public Python API. New calculations require the separate local application and its setup. The preview has no account or sign-in.
+
+Privacy and local state
+
+Supported browser progress remains local to this origin and device. The application has no external analytics scripts or external AI calls. Cloudflare delivers the website and processes normal web requests. Browser saves from MKLab or another domain do not automatically transfer here. Export supported local records before clearing browser storage.
+
+Questions and corrections
+
+Follow the repository’s support guide (https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/SUPPORT.md) for questions and security reporting instructions (https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/SECURITY.md) for vulnerabilities. The methodology page (https://mkgrid.co.technology/methodology/) explains the scope of the hosted preview.
+
+Explore the wider MKLab browser collection (https://mklab.co.technology/) or the separate Datacenter Twin Lab course (https://khanlab.co.technology/) .
+## Methodology
+
+Source: https://mkgrid.co.technology/methodology/
+
+HELIOFORGE / METHODOLOGY
+
+Know what the model represents.
+
+Hybrid-energy learning activities and research screens with explicit capability boundaries.
+
+Hosted preview and local calculations
+
+This website serves the standalone preview and bundled examples. It does not host the Python API or run new numerical calculations. The local setup guide (https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/START_HERE.md) explains how to run the separate research application on your own machine.
+
+Catalogue coverage
+
+The source catalogue includes 36 architectures, 24 scenarios and 36 architecture-linked lessons. In the local application, 19 architectures have runnable electricity-balance screens; 17 advanced architectures are explicitly study-only. There are 20 numerical scenario presets and four dynamic/control study presets. A displayed architecture is not evidence that all of its specialized physics have been implemented.
+
+Browse original system layouts, read assumptions and follow the lessons’ experiment prompts and self-check questions. The hosted preview preserves these distinctions and presents bundled examples rather than newly calculated outcomes.
+
+Energy-model boundaries
+
+The hybrid hourly screen and the battery dispatch optimization are separate models. Their state-of-charge conditions, grid limits, units and energy-balance assumptions must be read in context. The hybrid methodology (https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/docs/HYBRID_METHODOLOGY.md) and numerical methodology (https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/docs/METHODOLOGY.md) are the detailed source references.
+
+A demonstration day must not be multiplied into an annual business case without a reviewed annual model. A cheaper case that serves less demand is not automatically a better case. The interface’s geometry is explanatory; animated links are not solved electrical branch flows.
+
+Finance, forecasts and evidence
+
+Storage, project finance, PV, carbon and forecast examples are separate screening cases. No hidden automated revenue bridge connects them. Project and equity cash flows, nominal and real assumptions, and null or undefined metrics remain distinct. Synthetic examples are not calibrated forecasts, plant controls, investment recommendations or regulatory approvals.
+
+AI and review roles
+
+The public preview makes no external AI calls. The local application’s deterministic review mode is a checklist, not independently executed agents. Its optional external adapter requires explicit configuration and consent; it is not part of this hosted website.
+
+Separate synthetic wind-market model
+
+MKTrade methodology (https://mktrade.co.business/methodology/) documents a separate synthetic wind-market model. Its illustrative market assumptions and results belong to a different project; they do not feed HelioForge’s bundled examples or models.
+
+Verification and reproducibility
+
+Read the quality report (https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/QUALITY_REPORT.md) and release verification (https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/docs/champion/VERIFICATION.md) , and inspect CI runs (https://github.com/mohammadrezwankhan/helioforge-energy-lab/actions) . The website’s source revision and runtime SHA-256 are in app.json (https://mkgrid.co.technology/app.json) . Software checks do not establish independent scientific calibration or operational approval.
+
+Explore the preview ↗ (https://mkgrid.co.technology/run/)

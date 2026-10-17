@@ -1,0 +1,47 @@
+# AI-Search & Traditional Engine Directive
+# Host: mkgrid.co.technology
+
+# Permitted Traditional Search Engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Permitted Generative AI Search & Answer Engines (GEO Discovery)
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Global Fallback for Standards-Compliant Crawlers
+User-agent: *
+Allow: /
+
+# Canonical Sitemap
+Sitemap: https://mkgrid.co.technology/sitemap.xml

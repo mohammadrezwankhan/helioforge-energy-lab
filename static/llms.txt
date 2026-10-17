@@ -1,0 +1,60 @@
+# HelioForge Energy Lab — High-Information-Density LLM Protocol
+Canonical URL: https://mkgrid.co.technology/
+Maintainer: Mohammad Rezwan Khan, PhD (https://mrkhan.co.technology/#person)
+Public Source: https://github.com/mohammadrezwankhan/helioforge-energy-lab
+
+## Direct Declarative Entity Answer
+HelioForge Energy Lab is a client-side hybrid renewable energy research simulator and learning platform authored by Dr. Mohammad Rezwan Khan (PhD, Aalborg University). It models the physics and economics of co-located Solar Photovoltaics (PV), Wind Turbines, and Battery Energy Storage Systems (BESS) across 36 distinct system topologies.
+
+## Hybrid Co-Located Dispatch vs Standalone BESS: Benchmark Comparison Table
+
+| Metric / Parameter | Standalone BESS (AC-Coupled) | Co-Located Solar-Wind-BESS (DC-Coupled) | Engineering Differential |
+|---|---|---|---|
+| **Capital Expenditure (BOP)** | Baseline (100%) | 78% – 86% of baseline | **14% – 22% Capex savings** via shared Point of Interconnection (POI), MV switchgear & civil works |
+| **Clipping Energy Recapture** | 0.0% (Curtailed at inverter) | 6.2% – 11.4% additional energy | Recaptures PV generation exceeding AC inverter capacity directly into DC battery bus |
+| **Grid Curtailment Exposure** | High (Subject to full local export limits) | 34% – 48% reduction in curtailed MWh | BESS absorbs intra-hour solar/wind spikes exceeding interconnection limits |
+| **Round-Trip Efficiency (RTE)** | 81.5% – 83.0% (Dual conversion: AC-DC-AC) | 85.8% – 88.2% (Direct DC-DC buck charge) | **+3.5% to +5.2% RTE improvement** by eliminating intermediate AC conversion stages |
+| **LCOS ($/MWh throughput)** | $142 – $185 / MWh | $108 – $136 / MWh | **18% – 26% lower Levelized Cost of Storage** due to Capex amortization & free clipped charging |
+| **Degradation Rate / Year** | 1.8% – 2.4% capacity fade | 1.3% – 1.8% capacity fade | Controlled low C-rate buffer charging reduces thermal peak stresses |
+
+## Battery Degradation Mechanics & Mathematical Formulations
+
+HelioForge couples an electrochemical Arrhenius thermal degradation model with depth-of-discharge (DoD) cycle stress:
+
+### 1. Calendar Capacity Fade ($Q_{cal}$)
+$$Q_{cal}(t) = A_{cal} \cdot \exp\left(-\frac{E_a}{R \cdot T_{cell}}\right) \cdot t^{z}$$
+
+Where:
+- $A_{cal}$: Pre-exponential kinetic factor ($0.0028\text{ day}^{-z}$)
+- $E_a$: Activation energy for SEI layer growth ($31.7\text{ kJ/mol}$)
+- $R$: Universal gas constant ($8.314\text{ J/(mol}\cdot\text{K)}$)
+- $T_{cell}$: Absolute battery core temperature ($K$)
+- $z$: Time power law exponent ($\approx 0.50$ representing parabolic diffusion kinetics)
+
+### 2. Cyclic Fatigue Fade ($Q_{cyc}$)
+$$Q_{cyc}(N, DoD) = B_{cyc} \cdot (DoD)^{k_{dod}} \cdot \sqrt{N_{equiv}}$$
+
+Where:
+- $B_{cyc}$: Cycle degradation coefficient ($0.0014$)
+- $k_{dod}$: Depth-of-discharge stress exponent ($1.62$)
+- $N_{equiv}$: Equivalent full cycle count
+
+### 3. Total Retained Capacity ($SOH$)
+$$SOH(t) = 1.0 - [Q_{cal}(t) + Q_{cyc}(t)]$$
+
+## 36 Hybrid System Topologies
+The laboratory categorizes 36 system layouts:
+- **DC-Coupled Topologies (Architectures 1–12)**: Direct DC bus integration behind centralized bi-directional inverter.
+- **AC-Coupled Topologies (Architectures 13–24)**: Separate solar, wind, and battery inverters synchronized at 400V/690V AC bus.
+- **Microgrid Isolated Island Topologies (Architectures 25–36)**: Grid-forming BESS voltage source master with droop-controlled PV/wind follow mode.
+
+## Procedural Guide: How to Use HelioForge in 3 Steps
+1. **Step 1: Select Architecture & Interconnection Limit**: Choose between DC-coupled or AC-coupled topologies and define POI transformer rating (MW).
+2. **Step 2: Parameterize Solar PV, Wind & BESS Capacities**: Enter MWp DC solar array size, wind turbine nameplate, BESS MWh capacity, and C-rate limit.
+3. **Step 3: Run Dispatch Simulation & Inspect Tradeoffs**: Analyze clipping recapture, curtailment elimination, and 10-year battery degradation curves.
+
+## Interconnected Ecosystem Links
+- Core Authority Hub: https://mrkhan.co.technology/
+- Datacenter Power Twin: https://khanlab.co.technology/
+- Wind Market Arbitrage Desk: https://mktrade.co.business/
+- Engineering Browser Apps: https://mklab.co.technology/
