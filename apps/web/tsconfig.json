@@ -33,6 +33,13 @@
     "src/views.ts",
     "src/champion-views.ts",
     "src/champion-controller.ts",
+    "src/roadmap-types.ts",
+    "src/roadmap-data.ts",
+    "src/study-visuals.ts",
+    "src/roadmap.ts",
+    "src/evidence.ts",
+    "src/workflows.ts",
+    "src/experiences.ts",
     "src/app.ts"
   ]
 }

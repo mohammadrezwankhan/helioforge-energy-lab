@@ -192,3 +192,7 @@ A good contribution adds a reproducible experiment, not just another attractive 
 
 
 </details>
+
+## Full-spectrum research studies
+
+The local workbench now contains 39 distinct experimental studies across all twelve views, with source-backed limits, result exports, visual editors and signed local evidence. See [delivery and audit](docs/roadmap/DELIVERY.md), the [experiment index](docs/roadmap/INDEX.md), and [verification](docs/roadmap/VERIFICATION.md). The standalone edition contains generated examples; edited numerical runs require Python.

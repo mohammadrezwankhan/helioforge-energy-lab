@@ -16,7 +16,7 @@
     "Offline preview allows exploration and learning but never claims a new numerical calculation",
     "No uncaught JavaScript errors in the exercised hybrid flows"
   ],
-  "transport": "host HTTP bridge",
+  "transport": "direct browser HTTP",
   "limits": [
     "Not a formal accessibility certification or WebGL performance benchmark.",
     "Cross-reload localStorage persistence and file:// navigation were not verified in bridge mode."

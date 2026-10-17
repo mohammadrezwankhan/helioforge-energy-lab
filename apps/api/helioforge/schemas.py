@@ -115,15 +115,15 @@ class ForecastRequest(StrictModel):
 
 
 class ReliabilityRequest(StrictModel):
-    shape: Positive = 2.4
-    scale_hours: Positive = 45000
-    age_hours: NonNegative = 16000
-    horizon_hours: Positive = 8760
+    shape: Positive = Field(default=2.4, ge=0.05, le=20)
+    scale_hours: Positive = Field(default=45000, ge=0.001, le=1e9)
+    age_hours: NonNegative = Field(default=16000, le=1e9)
+    horizon_hours: Positive = Field(default=8760, ge=0.001, le=1e9)
 
 
 class DriftRequest(StrictModel):
-    expected: list[Positive] = Field(min_length=10, max_length=8760)
-    observed: list[NonNegative] = Field(min_length=10, max_length=8760)
+    expected: list[Annotated[float, Field(ge=1e-12, le=1e12, allow_inf_nan=False)]] = Field(min_length=10, max_length=8760)
+    observed: list[Annotated[float, Field(ge=0, le=1e12, allow_inf_nan=False)]] = Field(min_length=10, max_length=8760)
     threshold_sigma: Positive = 3
 
     @model_validator(mode="after")

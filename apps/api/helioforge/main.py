@@ -38,6 +38,9 @@ from helioforge.schemas import (
     SustainabilityRequest,
 )
 from helioforge.store import Store
+from helioforge.studies import StudyRequest
+from helioforge.studies import catalogue as study_catalogue
+from helioforge.studies import evaluate as evaluate_study
 
 logger = logging.getLogger("helioforge")
 
@@ -94,6 +97,16 @@ async def bad_model_input(request: Request, exc: ValueError):
 def health():
     return {"status": "ok", "version": "0.3.0", "data_kind": "synthetic", "live_market_feeds": False,
             "openai_enabled": os.getenv("ENABLE_OPENAI", "false").lower() == "true"}
+
+
+@app.get("/api/studies")
+def studies_catalogue():
+    return study_catalogue()
+
+
+@app.post("/api/studies/evaluate")
+def study_evaluate(p: StudyRequest, request: Request):
+    return record(request, "study", p, evaluate_study(p))
 
 
 @app.get("/api/overview")

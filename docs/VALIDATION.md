@@ -43,3 +43,7 @@ This validates the exercised UI and API workflows, not browser networking policy
 ## Release acceptance interpretation
 
 The release is suitable for local educational/research evaluation under documented limits. Internal conservation and regression tests are not independent scientific validation. A coverage percentage is not a benchmark or a security guarantee. The external agent adapter's structured concurrency and error paths were tested with a fake SDK, not a live paid model. Read [FINAL_AUDIT.md](FINAL_AUDIT.md) before wider release.
+
+## Full-spectrum studies — 17 October 2026
+
+The additional 39 studies and 12-view interaction layer are verified in [roadmap/VERIFICATION.md](roadmap/VERIFICATION.md), with exact scientific boundaries and review repairs in [roadmap/DELIVERY.md](roadmap/DELIVERY.md). The full Python suite now passes 521 tests; the frontend suite passes 130.

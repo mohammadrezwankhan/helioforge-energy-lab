@@ -81,7 +81,7 @@ namespace HF {
       const el=event.target as HTMLInputElement;
       if(el.closest('#hybrid-config')&&el.name)syncHybridInput(el);
       if(el.id==='hybrid-search'){h.search=el.value;updateLibrary();}
-      if(el.id==='hybrid-hour'&&h.result){h.hour=Number(el.value);const point=h.result.schedule[h.hour]!;const read=document.getElementById('interval-readout'),label=document.getElementById('hour-label');if(read)read.innerHTML=intervalReadout(point);if(label)label.textContent=point.label;}
+      if(el.id==='hybrid-hour'&&h.result){h.hour=Number(el.value);const point=h.result.schedule[h.hour]!;const read=document.getElementById('interval-readout'),label=document.getElementById('hour-label');if(read)read.innerHTML=intervalReadout(point);if(label)label.textContent=point.label;document.getElementById('energy-scene')?.dispatchEvent(new Event('scene-telemetry'));}
     });
     document.addEventListener('change',event=>{
       const el=event.target as HTMLInputElement;

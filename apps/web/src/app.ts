@@ -14,6 +14,9 @@ namespace HF {
     let hasConnected=false;
     let connectionEpoch=0, toastTimer=0, modalReturn:HTMLElement|null=null;
     let sceneCleanup:(()=>void)|undefined;
+    const studies=createStudyController(()=>state);
+    const workflows=createWorkflowController(()=>state,()=>render());
+    const experiences=createExperienceController(()=>state);
     function render(): void {
       sceneCleanup?.();
       root!.innerHTML=shell(state);
@@ -34,10 +37,14 @@ namespace HF {
       applyBusyState();
       const sidebar=document.getElementById('sidebar');if(sidebar)sidebar.inert=window.matchMedia('(max-width:800px)').matches;
       const canvas=document.getElementById('energy-scene') as HTMLCanvasElement|null;
-      if(canvas)sceneCleanup=mountEnergyScene(canvas,systemById(state.hybrid.inputs.system_id),state.motionOff,id=>{state.hybrid.objectId=id;const el=document.getElementById('asset-inspector');if(el)el.innerHTML=assetInspector(state.hybrid);document.querySelectorAll<HTMLButtonElement>('[data-asset]').forEach(b=>{b.classList.toggle('selected',b.dataset.asset===id);b.setAttribute('aria-pressed',String(b.dataset.asset===id));});});
+      if(canvas)sceneCleanup=mountEnergyScene(canvas,systemById(state.hybrid.inputs.system_id),state.motionOff,id=>{state.hybrid.objectId=id;const el=document.getElementById('asset-inspector');if(el)el.innerHTML=assetInspector(state.hybrid);document.querySelectorAll<HTMLButtonElement>('[data-asset]').forEach(b=>{b.classList.toggle('selected',b.dataset.asset===id);b.setAttribute('aria-pressed',String(b.dataset.asset===id));});},()=>hybridDirty(state.hybrid)?null:state.hybrid.result?.schedule[state.hybrid.hour]??null);
       document.title=`${PAGES.find(p=>p.id===state.page)!.title} · HelioForge`;
+      studies.refresh();
+      workflows.refresh();
+      experiences.refresh();
     }
     function applyBusyState():void {
+      document.querySelector('.council-topology')?.classList.toggle('working',state.busy&&state.page==='council');
       document.querySelectorAll<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>('form[data-model] input,form[data-model] select,form[data-model] textarea').forEach(e=>e.disabled=state.busy);
       document.querySelectorAll<HTMLInputElement|HTMLSelectElement>('#hybrid-config input,#hybrid-config select').forEach(e=>e.disabled=state.hybrid.busy);
       document.querySelectorAll<HTMLButtonElement>('[data-system],[data-scenario],[data-hybrid-action="reset"],[data-hybrid-action="import"],[data-hybrid-action="launch-lesson"]').forEach(e=>e.disabled=state.hybrid.busy);
@@ -154,6 +161,14 @@ namespace HF {
     document.addEventListener('input',event=>{
       const el=event.target as HTMLInputElement;
       if(el.id==='project-search'){state.search=el.value;updateProjectTable(state);}
+      if(el.id==='dispatch-interval'){
+        state.storageIndex=dispatchIndex(state.data.dispatch,Number(el.value));
+        const row=state.data.dispatch.schedule[state.storageIndex];
+        const out=document.getElementById('dispatch-readout'),telemetry=document.getElementById('dispatch-telemetry');
+        if(out)out.textContent=row?.label??'';
+        el.setAttribute('aria-valuetext',row?.label??'');
+        if(telemetry)telemetry.innerHTML=energyFlow(state.data.dispatch,state.storageIndex);
+      }
     });
     document.addEventListener('change',event=>{
       const el=event.target as HTMLInputElement;
