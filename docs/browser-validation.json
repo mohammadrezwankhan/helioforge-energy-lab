@@ -20,6 +20,6 @@
     "Standalone snapshot renders with calculations explicitly disabled",
     "No uncaught JavaScript errors"
   ],
-  "transport": "host HTTP bridge",
-  "notes": "Bridge mode does not validate direct browser network, CSP enforcement, or file:// navigation."
+  "transport": "direct browser HTTP",
+  "notes": "Browser HTTP tested."
 }

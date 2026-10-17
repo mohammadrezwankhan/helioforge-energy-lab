@@ -14,6 +14,12 @@ namespace HF {
     let hasConnected=false;
     let connectionEpoch=0, toastTimer=0, modalReturn:HTMLElement|null=null;
     let sceneCleanup:(()=>void)|undefined;
+    const studies=createStudyController(()=>state);
+    const workflows=createWorkflowController(()=>state,()=>render());
+    const experiences=createExperienceController(()=>state);
+    const completion=createCompletionController(()=>state);
+    const integrations=createIntegrationController(()=>state);
+    window.addEventListener('pagehide',event=>{if(!event.persisted)completion.destroy();});
     function render(): void {
       sceneCleanup?.();
       root!.innerHTML=shell(state);
@@ -34,10 +40,16 @@ namespace HF {
       applyBusyState();
       const sidebar=document.getElementById('sidebar');if(sidebar)sidebar.inert=window.matchMedia('(max-width:800px)').matches;
       const canvas=document.getElementById('energy-scene') as HTMLCanvasElement|null;
-      if(canvas)sceneCleanup=mountEnergyScene(canvas,systemById(state.hybrid.inputs.system_id),state.motionOff,id=>{state.hybrid.objectId=id;const el=document.getElementById('asset-inspector');if(el)el.innerHTML=assetInspector(state.hybrid);document.querySelectorAll<HTMLButtonElement>('[data-asset]').forEach(b=>{b.classList.toggle('selected',b.dataset.asset===id);b.setAttribute('aria-pressed',String(b.dataset.asset===id));});});
+      if(canvas)sceneCleanup=mountEnergyScene(canvas,systemById(state.hybrid.inputs.system_id),state.motionOff,id=>{state.hybrid.objectId=id;const el=document.getElementById('asset-inspector');if(el)el.innerHTML=assetInspector(state.hybrid);document.querySelectorAll<HTMLButtonElement>('[data-asset]').forEach(b=>{b.classList.toggle('selected',b.dataset.asset===id);b.setAttribute('aria-pressed',String(b.dataset.asset===id));});},()=>hybridDirty(state.hybrid)?null:state.hybrid.result?.schedule[state.hybrid.hour]??null);
       document.title=`${PAGES.find(p=>p.id===state.page)!.title} · HelioForge`;
+      studies.refresh();
+      workflows.refresh();
+      experiences.refresh();
+      completion.refresh();
+      integrations.refresh();
     }
     function applyBusyState():void {
+      document.querySelector('.council-topology')?.classList.toggle('working',state.busy&&state.page==='council');
       document.querySelectorAll<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>('form[data-model] input,form[data-model] select,form[data-model] textarea').forEach(e=>e.disabled=state.busy);
       document.querySelectorAll<HTMLInputElement|HTMLSelectElement>('#hybrid-config input,#hybrid-config select').forEach(e=>e.disabled=state.hybrid.busy);
       document.querySelectorAll<HTMLButtonElement>('[data-system],[data-scenario],[data-hybrid-action="reset"],[data-hybrid-action="import"],[data-hybrid-action="launch-lesson"]').forEach(e=>e.disabled=state.hybrid.busy);
@@ -74,7 +86,7 @@ namespace HF {
       const headers:Record<string,string>={}; if(body!==undefined)headers['Content-Type']='application/json';
       if(adminKey)headers['X-API-Key']=adminKey;
       let response:Response;
-      try { response=await fetch(`/api/${path}`,{method:body===undefined?'GET':method,headers,body:body===undefined?undefined:JSON.stringify(body),signal:AbortSignal.timeout(path.startsWith('council')?125000:30000)}); }
+      try { response=await fetch(`/api/${path}`,{method:body===undefined?'GET':method,headers,body:body===undefined?undefined:JSON.stringify(body),signal:AbortSignal.timeout(path.startsWith('council')?310000:30000)}); }
       catch { throw new Error(body===undefined?'The local API could not be reached. Start the Python app, then reconnect.':'The response was interrupted. The operation may have completed. Your inputs are retained. Check Analysis history before trying again.'); }
       let data:unknown;
       try { data=await response.json(); }
@@ -154,6 +166,14 @@ namespace HF {
     document.addEventListener('input',event=>{
       const el=event.target as HTMLInputElement;
       if(el.id==='project-search'){state.search=el.value;updateProjectTable(state);}
+      if(el.id==='dispatch-interval'){
+        state.storageIndex=dispatchIndex(state.data.dispatch,Number(el.value));
+        const row=state.data.dispatch.schedule[state.storageIndex];
+        const out=document.getElementById('dispatch-readout'),telemetry=document.getElementById('dispatch-telemetry');
+        if(out)out.textContent=row?.label??'';
+        el.setAttribute('aria-valuetext',row?.label??'');
+        if(telemetry)telemetry.innerHTML=energyFlow(state.data.dispatch,state.storageIndex);
+      }
     });
     document.addEventListener('change',event=>{
       const el=event.target as HTMLInputElement;
@@ -196,7 +216,7 @@ namespace HF {
         }else if(model==='sustainability'){
           inputs={...state.data.defaults.sustainability,annual_generation_kwh:n('generation')*1e6,embodied_kgco2e:n('embodied')*1000,counterfactual_kgco2e_kwh:n('counterfactual')/1000,annual_operational_kgco2e:n('operational')*1000};path='research/carbon';
         }else if(model==='council'){
-          inputs={hybrid_run_id:String(fd.get('hybrid_run_id')??'')||null,market:state.data.market,brief:String(fd.get('brief')??''),mode:String(fd.get('mode')??'local'),consent_to_external_processing:fd.get('consent')==='on'};path='council/review';adminKey=String(fd.get('admin_key')??'')||undefined;
+          inputs={hybrid_run_id:String(fd.get('hybrid_run_id')??'')||null,market:state.data.market,brief:String(fd.get('brief')??''),mode:String(fd.get('mode')??'local'),consent_to_external_processing:fd.get('consent')==='on',cross_examination_rounds:Number(fd.get('cross_examination_rounds')??1),evidence_run_ids:String(fd.get('evidence_run_ids')??'').split(',').map(x=>x.trim()).filter(Boolean)};path='council/review';adminKey=String(fd.get('admin_key')??'')||undefined;
         }else throw new Error('Unknown model.');
         state.busy=true;applyBusyState();
         // Keep entered values and focus while pending; no whole-form rerender.

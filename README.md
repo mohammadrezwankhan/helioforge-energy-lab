@@ -8,6 +8,8 @@
 
 Interactive hybrid-energy research and learning workbench with auditable numerical screens and a local Python API.
 
+The full-spectrum roadmap now includes **59 executable studies across all 12 views**, advanced model visuals, local evidence imports and optional provider/device connectors. See the [per-view completion and external-dependency ledger](docs/roadmap/COMPLETION.md), [current verification](docs/roadmap/VERIFICATION.md), and [connector setup](docs/roadmap/CONNECTORS.md). The public preview bundles examples; new calculations require the local Python API.
+
 If HelioForge Energy Lab helps you study this workflow, a star helps other energy researchers and engineering educators find it.
 
 ![Actual desktop demo](docs/repository/demo-desktop.png)
@@ -192,3 +194,7 @@ A good contribution adds a reproducible experiment, not just another attractive 
 
 
 </details>
+
+## Full-spectrum research studies
+
+The local workbench now contains 39 distinct experimental studies across all twelve views, with source-backed limits, result exports, visual editors and signed local evidence. See [delivery and audit](docs/roadmap/DELIVERY.md), the [experiment index](docs/roadmap/INDEX.md), and [verification](docs/roadmap/VERIFICATION.md). The standalone edition contains generated examples; edited numerical runs require Python.

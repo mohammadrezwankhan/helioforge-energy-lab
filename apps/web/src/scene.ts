@@ -1,13 +1,32 @@
 namespace HF {
   type Vec3=[number,number,number];
-  interface Face {points:Vec3[];fill:string;stroke?:string;depth?:number}
+  interface Face {points:Vec3[];fill:string;stroke?:string;depth?:number;wireframe?:boolean}
   interface SceneAsset {id:string;x:number;z:number;label:string}
+  export function sceneAssetPower(point:HybridPoint|null,id:string):number|null {
+    if(!point)return null;
+    const powers:Record<string,number>={solar:point.pv_kw,wind:point.wind_kw,hydro:point.hydro_kw,generator:point.generator_kw,battery:point.discharge_kw-point.charge_kw,grid:point.grid_import_kw-point.grid_export_kw,load:-point.served_kw};
+    return Object.hasOwn(powers,id)&&Number.isFinite(powers[id])?powers[id]!:null;
+  }
+  export type ScenePreset='isometric'|'top-down'|'oblique'|'wireframe';
+  export interface ScenePresetState {preset:ScenePreset;yaw:number;pitch:number;zoom:number;wireframe:boolean}
+  /** Camera presets for the orthographic canvas renderer. Top-down uses a 90° pitch. */
+  export function scenePresetState(name:string):ScenePresetState|null {
+    switch(name){
+      case 'isometric':return {preset:name,yaw:-Math.PI/4,pitch:35*Math.PI/180,zoom:1,wireframe:false};
+      case 'top-down':return {preset:name,yaw:0,pitch:Math.PI/2,zoom:1,wireframe:false};
+      case 'oblique':return {preset:name,yaw:-Math.PI/6,pitch:22*Math.PI/180,zoom:1,wireframe:false};
+      case 'wireframe':return {preset:name,yaw:-Math.PI/4,pitch:35*Math.PI/180,zoom:1,wireframe:true};
+      default:return null;
+    }
+  }
   /** Small original orthographic software-3D renderer. Real 3D vertices and
    * camera transforms, rendered to Canvas2D; no WebGL/CDN/runtime package.
    * Energy links are conceptual, not solved branch power flows. */
-  export function mountEnergyScene(canvas:HTMLCanvasElement,system:HybridSystem,reduced:boolean,onSelect:(id:string)=>void):()=>void {
+  export function mountEnergyScene(canvas:HTMLCanvasElement,system:HybridSystem,reduced:boolean,onSelect:(id:string)=>void,getPoint:()=>HybridPoint|null=()=>null):()=>void {
     const ctx=canvas.getContext('2d');if(!ctx)return ()=>{};
-    let yaw=-.57,pitch=.55,zoom=1,frame=0,disposed=false,visible=true,drag=false,moved=false,lastX=0,lastY=0,lastTime=0;
+    const initial=scenePresetState('isometric')!;
+    let yaw=initial.yaw,pitch=initial.pitch,zoom=initial.zoom,wireframe=initial.wireframe,activePreset:ScenePreset|null=initial.preset;
+    let frame=0,disposed=false,visible=true,drag=false,moved=false,lastX=0,lastY=0,lastTime=0;
     let width=0,height=0,phase=0,dirty=true;
     const pos:Vec3[]=[[-1.7,0,1.0],[-1.9,0,-1.15],[.45,0,1.25],[.5,0,-1.15],[2.3,0,.8],[2.2,0,-1.35],[-.45,0,.1]];
     const ids=[...system.technologies,'load',...(system.topology==='Off-grid'?[]:['grid'])];
@@ -24,7 +43,9 @@ namespace HF {
       const background=ctx.createRadialGradient(width*.48,height*.6,15,width*.48,height*.6,width*.6);
       background.addColorStop(0,'#172a2b');background.addColorStop(1,'#0d171d');ctx.fillStyle=background;ctx.fillRect(0,0,width,height);
       const faces:Face[]=[];
-      const face=(points:Vec3[],fill:string,stroke?:string):void=>{faces.push({points,fill,stroke});};
+      const telemetry=getPoint();
+      const maxPower=Math.max(1,...assets.map(a=>Math.abs(sceneAssetPower(telemetry,a.id)??0)));
+      const face=(points:Vec3[],fill:string,stroke?:string,wireframeEdge=true):void=>{faces.push({points,fill,stroke,wireframe:wireframeEdge});};
       function cube(x:number,y:number,z:number,w:number,h:number,d:number,colors:[string,string,string]):void {
         const a:Vec3=[x-w/2,y,z-d/2],b:Vec3=[x+w/2,y,z-d/2],c:Vec3=[x+w/2,y,z+d/2],e:Vec3=[x-w/2,y,z+d/2];
         const up=(v:Vec3):Vec3=>[v[0],v[1]+h,v[2]];
@@ -39,8 +60,8 @@ namespace HF {
       }
       // Raised base and ground-plane grid.
       cube(0,-.15,0,6.25,.15,4.45,['#1a3033','#132226','#101e24']);
-      for(let x=-3;x<=3;x+=.5)face([[x,.005,-2.1],[x+.008,.005,-2.1],[x+.008,.005,2.1],[x,.005,2.1]],'#284345');
-      for(let z=-2;z<=2;z+=.5)face([[-3,.005,z],[3,.005,z],[3,.005,z+.008],[-3,.005,z+.008]],'#284345');
+      for(let x=-3;x<=3;x+=.5)face([[x,.005,-2.1],[x+.008,.005,-2.1],[x+.008,.005,2.1],[x,.005,2.1]],'#284345',undefined,false);
+      for(let z=-2;z<=2;z+=.5)face([[-3,.005,z],[3,.005,z],[3,.005,z+.008],[-3,.005,z+.008]],'#284345',undefined,false);
       for(const a of assets){
         const {id,x,z}=a,tech=techById(id);
         cube(x,.02,z,1.26,.09,1.02,['#304449','#24353d','#1b2b31']);
@@ -55,7 +76,7 @@ namespace HF {
           cube(x,.1,z,.075,1.9,.075,['#e4edf2','#a6c2cc','#779ba8']);
           cube(x,1.96,z,.24,.18,.19,['#f1f7f8','#b4cad0','#88a9b5']);
           for(let j=0;j<3;j++){
-            const ang=phase+j*Math.PI*2/3;
+            const ang=phase*(telemetry?clamp(telemetry.wind_kw/maxPower,0,1):1)+j*Math.PI*2/3;
             const vx=Math.cos(ang),vy=Math.sin(ang);
             face([[x-vy*.05,2+vx*.05,z+.15],[x+vx*.94-vy*.028,2+vy*.94+vx*.028,z+.15],[x+vx*.55+vy*.07,2+vy*.55-vx*.07,z+.15]],'#e1f1f3','#94cad9');
           }
@@ -86,27 +107,44 @@ namespace HF {
       }
       faces.forEach(f=>f.depth=f.points.reduce((s,v)=>s+projection(v)[2],0)/f.points.length);
       faces.sort((a,b)=>(a.depth??0)-(b.depth??0));
-      for(const f of faces){ctx.beginPath();f.points.forEach((v,i)=>{const [x,y]=projection(v);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});ctx.closePath();ctx.fillStyle=f.fill;ctx.fill();if(f.stroke){ctx.strokeStyle=f.stroke;ctx.lineWidth=.7;ctx.stroke();}}
-      // Schematic connector route overlays; these are NOT numerical branch flows.
-      for(const a of assets){const b=projection([a.x,.11,a.z]),hub=projection([.05,.11,.05]);
-        ctx.strokeStyle=techById(a.id).color+'66';ctx.lineWidth=1;ctx.setLineDash([3,5]);ctx.beginPath();ctx.moveTo(b[0],b[1]);ctx.lineTo(hub[0],hub[1]);ctx.stroke();ctx.setLineDash([]);
-        if(!reduced){const k=(phase*.20)%1;ctx.fillStyle=techById(a.id).color;ctx.beginPath();ctx.arc(b[0]+(hub[0]-b[0])*k,b[1]+(hub[1]-b[1])*k,2.2,0,Math.PI*2);ctx.fill();}
+      for(const f of faces){ctx.beginPath();f.points.forEach((v,i)=>{const [x,y]=projection(v);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});ctx.closePath();ctx.fillStyle=f.fill;ctx.fill();if(f.stroke||wireframe&&f.wireframe!==false){ctx.strokeStyle=wireframe&&f.wireframe!==false?'#a4e7d8b0':f.stroke!;ctx.lineWidth=wireframe?1:.7;ctx.stroke();}}
+      // Schematic connector route overlays; these remain conceptual, not solved power flows.
+      const hub=projection([.05,.11,.05]);
+      const hubGlow=ctx.createRadialGradient(hub[0],hub[1],1,hub[0],hub[1],14);
+      hubGlow.addColorStop(0,'#c4ef99cc');hubGlow.addColorStop(.4,'#c4ef9944');hubGlow.addColorStop(1,'transparent');
+      ctx.fillStyle=hubGlow;ctx.beginPath();ctx.arc(hub[0],hub[1],14,0,Math.PI*2);ctx.fill();
+      for(const a of assets){const b=projection([a.x,.11,a.z]),color=techById(a.id).color;
+        ctx.save();ctx.strokeStyle=color+'38';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(b[0],b[1]);ctx.lineTo(hub[0],hub[1]);ctx.stroke();
+        ctx.strokeStyle=color+'aa';ctx.lineWidth=.9;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(b[0],b[1]);ctx.lineTo(hub[0],hub[1]);ctx.stroke();ctx.setLineDash([]);
+        const power=sceneAssetPower(telemetry,a.id),ratio=power===null?.5:Math.abs(power)/maxPower;
+        const count=power===null?3:Math.abs(power)<.01?0:Math.ceil(ratio*6);
+        if(!reduced)for(let i=0;i<count;i++){
+          const progress=(phase*(.12+ratio*.5)+i/count)%1,k=power!==null&&power<0?1-progress:progress,x=b[0]+(hub[0]-b[0])*k,y=b[1]+(hub[1]-b[1])*k;
+          const glow=ctx.createRadialGradient(x,y,.5,x,y,6);glow.addColorStop(0,color);glow.addColorStop(.4,color+'88');glow.addColorStop(1,'transparent');
+          ctx.fillStyle=glow;ctx.beginPath();ctx.arc(x,y,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(x,y,1.4,0,Math.PI*2);ctx.fill();
+        }
+        ctx.restore();
       }
       hit=[];ctx.font='500 10px "Segoe UI",sans-serif';ctx.textAlign='center';
-      for(const a of assets){const p=projection([a.x,.08,a.z+.75]),w=ctx.measureText(a.label).width+19;
-        ctx.fillStyle='#101e28e8';ctx.beginPath();ctx.roundRect(p[0]-w/2,p[1]-9,w,20,5);ctx.fill();ctx.fillStyle=techById(a.id).color;ctx.fillText(a.label,p[0],p[1]+5);hit.push({id:a.id,x:p[0],y:p[1]-20});}
+      for(const a of [...assets].sort((a,b)=>projection([a.x,0,a.z])[2]-projection([b.x,0,b.z])[2])){const power=sceneAssetPower(telemetry,a.id),label=a.label+(power===null?'':` · ${fmt(power,0)} kW`)+(a.id==='battery'&&telemetry?` · ${fmt(telemetry.soc_pct,0)}%`:''),p=projection([a.x,.08,a.z+.75]),w=ctx.measureText(label).width+19;
+        ctx.fillStyle='#101e28e8';ctx.beginPath();ctx.roundRect(p[0]-w/2,p[1]-9,w,20,5);ctx.fill();ctx.fillStyle=techById(a.id).color;ctx.fillText(label,p[0],p[1]+5);hit.push({id:a.id,x:p[0],y:p[1]-20});}
     }
     const resize=():void=>{const rect=canvas.getBoundingClientRect();width=rect.width;height=rect.height;const dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);dirty=true;draw();};
     const observer=new ResizeObserver(resize);observer.observe(canvas);
     const intersection=new IntersectionObserver(e=>{visible=e[0]?.isIntersecting??true;dirty=true;});intersection.observe(canvas);
     const down=(e:PointerEvent):void=>{drag=true;moved=false;lastX=e.clientX;lastY=e.clientY;canvas.setPointerCapture(e.pointerId);};
-    const move=(e:PointerEvent):void=>{if(!drag)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;if(Math.abs(dx)+Math.abs(dy)>2)moved=true;yaw+=dx*.006;pitch=clamp(pitch+dy*.002,.25,1.05);lastX=e.clientX;lastY=e.clientY;dirty=true;draw();};
+    const syncPresetButtons=(preset:ScenePreset|null):void=>{canvas.parentElement?.querySelectorAll<HTMLButtonElement>('[data-camera-preset]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.cameraPreset===preset)));};
+    const applyPreset=(preset:ScenePreset):void=>{const state=scenePresetState(preset)!;yaw=state.yaw;pitch=state.pitch;zoom=state.zoom;wireframe=state.wireframe;activePreset=preset;syncPresetButtons(activePreset);dirty=true;draw();};
+    const markCustom=():void=>{if(activePreset!==null){activePreset=null;syncPresetButtons(null);}};
+    const move=(e:PointerEvent):void=>{if(!drag)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;if(Math.abs(dx)+Math.abs(dy)>2)moved=true;yaw+=dx*.006;pitch=clamp(pitch+dy*.002,.25,Math.PI/2);lastX=e.clientX;lastY=e.clientY;markCustom();dirty=true;draw();};
     const up=(e:PointerEvent):void=>{drag=false;if(!moved){const rect=canvas.getBoundingClientRect();const x=e.clientX-rect.left,y=e.clientY-rect.top;const nearest=[...hit].sort((a,b)=>Math.hypot(a.x-x,a.y-y)-Math.hypot(b.x-x,b.y-y))[0];if(nearest&&Math.hypot(nearest.x-x,nearest.y-y)<70)onSelect(nearest.id);}};
-    const key=(e:KeyboardEvent):void=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-','Home'].includes(e.key)){e.preventDefault();if(e.key==='ArrowLeft')yaw-=.15;if(e.key==='ArrowRight')yaw+=.15;if(e.key==='ArrowUp')pitch=clamp(pitch+.1,.25,1.05);if(e.key==='ArrowDown')pitch=clamp(pitch-.1,.25,1.05);if(e.key==='+')zoom=clamp(zoom+.1,.7,1.4);if(e.key==='-')zoom=clamp(zoom-.1,.7,1.4);if(e.key==='Home'){yaw=-.57;pitch=.55;zoom=1;}dirty=true;draw();}};
-    const command=(e:Event):void=>{const cmd=(e as CustomEvent<string>).detail;key(new KeyboardEvent('keydown',{key:cmd}));};
+    const key=(e:KeyboardEvent):void=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-','Home'].includes(e.key)){e.preventDefault();if(e.key==='Home'){applyPreset('isometric');return;}if(e.key==='ArrowLeft')yaw-=.15;if(e.key==='ArrowRight')yaw+=.15;if(e.key==='ArrowUp')pitch=clamp(pitch+.1,.25,Math.PI/2);if(e.key==='ArrowDown')pitch=clamp(pitch-.1,.25,Math.PI/2);if(e.key==='+')zoom=clamp(zoom+.1,.7,1.4);if(e.key==='-')zoom=clamp(zoom-.1,.7,1.4);markCustom();dirty=true;draw();}};
+    const command=(e:Event):void=>{const cmd=(e as CustomEvent<string>).detail;if(cmd==='isometric'||cmd==='top-down'||cmd==='oblique'||cmd==='wireframe'){applyPreset(cmd);return;}key(new KeyboardEvent('keydown',{key:cmd}));};
     canvas.addEventListener('pointerdown',down);canvas.addEventListener('pointermove',move);canvas.addEventListener('pointerup',up);canvas.addEventListener('pointercancel',up);canvas.addEventListener('keydown',key);canvas.addEventListener('scene-command',command);
-    function tick(time:number):void{if(disposed)return;if(visible&&!document.hidden&&(dirty||!reduced)&&time-lastTime>40){phase+=reduced?0:.025;draw();lastTime=time;dirty=false;}frame=requestAnimationFrame(tick);}
+    syncPresetButtons(activePreset);
+    const telemetryChanged=():void=>{dirty=true;draw();};canvas.addEventListener('scene-telemetry',telemetryChanged);
+    function tick(time:number):void{if(disposed)return;if(visible&&!document.hidden&&(dirty||!reduced)){phase+=reduced?0:Math.min(50,time-lastTime)*.000625;draw();lastTime=time;dirty=false;}frame=requestAnimationFrame(tick);}
     resize();frame=requestAnimationFrame(tick);
-    return ()=>{disposed=true;cancelAnimationFrame(frame);observer.disconnect();intersection.disconnect();canvas.removeEventListener('pointerdown',down);canvas.removeEventListener('pointermove',move);canvas.removeEventListener('pointerup',up);canvas.removeEventListener('pointercancel',up);canvas.removeEventListener('keydown',key);canvas.removeEventListener('scene-command',command);};
+    return ()=>{disposed=true;cancelAnimationFrame(frame);observer.disconnect();intersection.disconnect();canvas.removeEventListener('pointerdown',down);canvas.removeEventListener('pointermove',move);canvas.removeEventListener('pointerup',up);canvas.removeEventListener('pointercancel',up);canvas.removeEventListener('keydown',key);canvas.removeEventListener('scene-command',command);canvas.removeEventListener('scene-telemetry',telemetryChanged);};
   }
 }

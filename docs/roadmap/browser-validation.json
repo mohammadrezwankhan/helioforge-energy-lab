@@ -1,0 +1,32 @@
+{
+  "checks": [
+    "hybrid: all experiment forms calculate via Python with finite evidence envelopes",
+    "storage: all experiment forms calculate via Python with finite evidence envelopes",
+    "pv: all experiment forms calculate via Python with finite evidence envelopes",
+    "research: all experiment forms calculate via Python with finite evidence envelopes",
+    "overview: all experiment forms calculate via Python with finite evidence envelopes",
+    "markets: all experiment forms calculate via Python with finite evidence envelopes",
+    "forecast: all experiment forms calculate via Python with finite evidence envelopes",
+    "investment: all experiment forms calculate via Python with finite evidence envelopes",
+    "lessons: all experiment forms calculate via Python with finite evidence envelopes",
+    "compare: all experiment forms calculate via Python with finite evidence envelopes",
+    "pilots: all experiment forms calculate via Python with finite evidence envelopes",
+    "council: all experiment forms calculate via Python with finite evidence envelopes",
+    "Annual tariff edits hide stale results, persist through navigation and export all 8,760 unique hours",
+    "Rejected JSON model input never reveals the previous successful results",
+    "81-cell sensitivity selection and polygon editing are interactive and preserve stale-result rules",
+    "Actual browser P-256 signature verifies and payload tampering fails",
+    "Imported evidence is inspected and co-signed with a distinct verified key; portfolio threshold responds",
+    "Editable market tariffs populate the modal; ENTSO-E selection preserves the documented area code",
+    "Conceptual lesson continuity switches are keyboard operable",
+    "Pilot drag/drop opens an unsaved stage request and requires a fresh evidence note",
+    "Forecast raw-path CSV retains every seeded path-year observation",
+    "Storage interval telemetry responds with reduced motion enabled",
+    "All twelve views fit a 390px mobile viewport without document overflow",
+    "Standalone file retains all 59 examples and disables unavailable Python calculations"
+  ],
+  "browser_errors": [],
+  "browser": "Playwright Chromium",
+  "url": "http://127.0.0.1:8017",
+  "reduced_motion": true
+}

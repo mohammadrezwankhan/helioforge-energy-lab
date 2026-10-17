@@ -1,5 +1,7 @@
 # HelioForge Energy Lab: verification and limits
 
+**Current release evidence (18 October 2026):** [full-spectrum verification](docs/roadmap/VERIFICATION.md) and [roadmap completion / external prerequisites](docs/roadmap/COMPLETION.md). The checks below are historical evidence for the named September commit, not current test counts or publication status.
+
 Recorded 2026-09-30. **Eligible for source-demo publication under the first-party MIT grant, with upstream notices retained. This does not authorize a live domain service or relicense third-party content.**
 
 ## Executed source checks

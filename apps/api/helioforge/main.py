@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
 import os
 import secrets
@@ -24,6 +25,25 @@ from helioforge.engines.hybrid import simulate_hybrid
 from helioforge.engines.research import detect_drift, reliability, sustainability
 from helioforge.engines.storage import optimize_storage
 from helioforge.hybrid import HybridRequest, catalog, validate_configuration
+from helioforge.integrations import (
+    DocumentImport,
+    GeoImport,
+    MarketRequest,
+    ModbusRequest,
+    RegulatoryRequest,
+    SeriesImport,
+    TelemetryImport,
+    WeatherRequest,
+    connector_status,
+    extract_document,
+    import_geography,
+    import_series,
+    inspect_telemetry,
+    market_prices,
+    modbus_read,
+    regulatory_feed,
+    weather,
+)
 from helioforge.schemas import (
     CouncilRequest,
     DriftRequest,
@@ -38,6 +58,9 @@ from helioforge.schemas import (
     SustainabilityRequest,
 )
 from helioforge.store import Store
+from helioforge.studies import StudyRequest
+from helioforge.studies import catalogue as study_catalogue
+from helioforge.studies import evaluate as evaluate_study
 
 logger = logging.getLogger("helioforge")
 
@@ -96,6 +119,72 @@ def health():
             "openai_enabled": os.getenv("ENABLE_OPENAI", "false").lower() == "true"}
 
 
+@app.get("/api/studies")
+def studies_catalogue():
+    return study_catalogue()
+
+
+@app.get('/api/connectors/status')
+def connectors_status():
+    return connector_status()
+
+
+@app.post('/api/evidence/series')
+def evidence_series(p: SeriesImport, request: Request):
+    return record(request, 'series_import', p, import_series(p))
+
+
+@app.post('/api/evidence/geography')
+def evidence_geography(p: GeoImport, request: Request):
+    return record(request, 'geography_import', p, import_geography(p))
+
+
+@app.post('/api/evidence/document')
+def evidence_document(p: DocumentImport, request: Request):
+    result = extract_document(p)
+    return request.app.state.store.save('document_import',
+        {**p.model_dump(exclude={'content_base64'}), 'file_sha256':result['sha256']}, result)
+
+
+@app.post('/api/evidence/telemetry')
+def evidence_telemetry(p: TelemetryImport, request: Request):
+    return record(request, 'telemetry_import', p, inspect_telemetry(p))
+
+
+@app.post('/api/connectors/weather')
+async def connector_weather(p: WeatherRequest, request: Request):
+    if not p.consent:
+        raise HTTPException(403, 'Confirm sending these coordinates to Open-Meteo.')
+    return record(request, 'weather_feed', p, await weather(p))
+
+
+@app.post('/api/connectors/market')
+async def connector_market(p: MarketRequest, request: Request):
+    if not p.consent:
+        raise HTTPException(403, 'Confirm the ENTSO-E request using server credentials.')
+    return record(request, 'market_feed', p, await market_prices(p))
+
+
+@app.post('/api/connectors/regulatory')
+async def connector_regulatory(p: RegulatoryRequest, request: Request):
+    if not p.consent:
+        raise HTTPException(403, 'Confirm the official regulator feed request.')
+    return record(request, 'regulatory_feed', p, await regulatory_feed(p))
+
+
+@app.post('/api/connectors/modbus')
+def connector_modbus(p: ModbusRequest, request: Request, x_api_key: str | None = Header(default=None)):
+    expected = os.getenv('ADMIN_API_KEY','')
+    if not expected or not secrets.compare_digest(x_api_key or '',expected):
+        raise HTTPException(401, 'A configured server ADMIN_API_KEY is required for device reads.')
+    return record(request, 'modbus_read', p, modbus_read(p))
+
+
+@app.post("/api/studies/evaluate")
+def study_evaluate(p: StudyRequest, request: Request):
+    return record(request, "study", p, evaluate_study(p))
+
+
 @app.get("/api/overview")
 def overview(request: Request, market: Market = "FR"):
     result = dict(dashboard(market))
@@ -151,6 +240,15 @@ def acquisition(p: MARequest, request: Request):
 async def council(p: CouncilRequest, request: Request, x_api_key: str | None = Header(default=None)):
     evidence_dashboard = await run_in_threadpool(dashboard, p.market)
     evidence = {k: evidence_dashboard[k] for k in ["dispatch", "finance", "sustainability"]}
+    evidence['supplied_records'] = []
+    for run_id in p.evidence_run_ids:
+        saved = request.app.state.store.get_run(run_id)
+        if saved is None:
+            raise HTTPException(404, 'An evidence run was not found.')
+        item = {k:saved[k] for k in ('run_id','kind','created_at','input_sha256','result')}
+        if len(json.dumps(item))>30000:
+            raise HTTPException(422, 'Each council evidence record must be at most 30 KB. Supply a bounded summary with the source digest.')
+        evidence['supplied_records'].append(item)
     if p.hybrid_run_id:
         saved = request.app.state.store.get_run(p.hybrid_run_id)
         if saved is None or saved["kind"] != "hybrid":

@@ -24,7 +24,7 @@ def install_fake_sdk(monkeypatch, runner):
     monkeypatch.setenv('OPENAI_MODEL', 'test-model-no-real-provider')
 
 
-def test_eight_concurrent_specialists_then_critic(monkeypatch):
+def test_eight_concurrent_specialists_then_cross_examination_then_critic(monkeypatch):
     started, finished, calls = [], [], []
 
     class Runner:
@@ -35,16 +35,16 @@ def test_eight_concurrent_specialists_then_critic(monkeypatch):
             assert max_turns == 2
             assert run_config.tracing_disabled is True
             if agent.name == 'Independent committee critic':
-                assert len(finished) == 8
+                assert len(finished) == 16
                 value = agent.output_type(recommendation='Collect evidence.',
                                           unresolved_risks=['Synthetic inputs'], next_actions=['Verify data.'])
             else:
                 started.append(agent.name)
                 for _ in range(20):
-                    if len(started) == 8:
+                    if len(started) >= 8:
                         break
                     await asyncio.sleep(0)
-                assert len(started) == 8
+                assert len(started) >= 8
                 finished.append(agent.name)
                 value = agent.output_type(summary='Mock result, not a live review.',
                                           risks=['Evidence missing'], required_evidence=['Site data'])
@@ -52,10 +52,23 @@ def test_eight_concurrent_specialists_then_critic(monkeypatch):
 
     install_fake_sdk(monkeypatch, Runner)
     result = asyncio.run(openai_council(CouncilRequest(), {'data_kind':'synthetic'}))
-    assert len(calls) == 9
+    assert len(calls) == 17
     assert len(result['reviews']) == 8
     assert calls[-1] == 'Independent committee critic'
-    assert result['execution'] == 'eight_parallel_specialists_then_critic'
+    assert result['execution'] == 'eight_specialists_cross_examination_then_critic'
+    assert len(result['rounds']) == 2
+    assert len(result['protocol']) == 17
+    assert result['consensus']['identity_verified'] is False
+    assert result['rounds'][1]['phase'] == 'cross_examination'
+
+
+def test_consensus_preserves_disagreement():
+    from helioforge.council import vote_summary
+    result = vote_summary([{'stance':'revise'}, {'stance':'insufficient'}, {'stance':'proceed_research'}])
+    assert result['unanimous'] is False
+    assert result['entropy_bits'] == pytest.approx(1.5849625)
+    assert result['probability_of_correctness'] is None
+    assert sum(result['dirichlet_mean'].values()) == pytest.approx(1)
 
 
 def test_provider_failure_cancels_sibling_reviews(monkeypatch):

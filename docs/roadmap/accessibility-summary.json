@@ -1,0 +1,240 @@
+{
+  "tool": "axe-core 4.14.0",
+  "scope": "Default desktop states; incomplete checks and assistive-technology review remain external.",
+  "pages": [
+    {
+      "page": "overview",
+      "violations": 0,
+      "passes": 32,
+      "manual_checks": [
+        {
+          "id": "aria-prohibited-attr",
+          "description": "Ensure ARIA attributes are not prohibited for an element's role",
+          "nodes": 2
+        },
+        {
+          "id": "color-contrast-enhanced",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AAA enhanced contrast ratio thresholds",
+          "nodes": 14
+        },
+        {
+          "id": "color-contrast",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "nodes": 172
+        }
+      ]
+    },
+    {
+      "page": "hybrid",
+      "violations": 0,
+      "passes": 32,
+      "manual_checks": [
+        {
+          "id": "aria-prohibited-attr",
+          "description": "Ensure ARIA attributes are not prohibited for an element's role",
+          "nodes": 2
+        },
+        {
+          "id": "color-contrast-enhanced",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AAA enhanced contrast ratio thresholds",
+          "nodes": 17
+        },
+        {
+          "id": "color-contrast",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "nodes": 265
+        }
+      ]
+    },
+    {
+      "page": "lessons",
+      "violations": 0,
+      "passes": 31,
+      "manual_checks": [
+        {
+          "id": "aria-prohibited-attr",
+          "description": "Ensure ARIA attributes are not prohibited for an element's role",
+          "nodes": 2
+        },
+        {
+          "id": "color-contrast",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "nodes": 129
+        }
+      ]
+    },
+    {
+      "page": "compare",
+      "violations": 0,
+      "passes": 29,
+      "manual_checks": [
+        {
+          "id": "aria-prohibited-attr",
+          "description": "Ensure ARIA attributes are not prohibited for an element's role",
+          "nodes": 1
+        },
+        {
+          "id": "color-contrast",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "nodes": 62
+        }
+      ]
+    },
+    {
+      "page": "storage",
+      "violations": 0,
+      "passes": 30,
+      "manual_checks": [
+        {
+          "id": "aria-prohibited-attr",
+          "description": "Ensure ARIA attributes are not prohibited for an element's role",
+          "nodes": 2
+        },
+        {
+          "id": "color-contrast-enhanced",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AAA enhanced contrast ratio thresholds",
+          "nodes": 15
+        },
+        {
+          "id": "color-contrast",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "nodes": 142
+        }
+      ]
+    },
+    {
+      "page": "pv",
+      "violations": 0,
+      "passes": 32,
+      "manual_checks": [
+        {
+          "id": "aria-prohibited-attr",
+          "description": "Ensure ARIA attributes are not prohibited for an element's role",
+          "nodes": 1
+        },
+        {
+          "id": "color-contrast",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "nodes": 134
+        }
+      ]
+    },
+    {
+      "page": "research",
+      "violations": 0,
+      "passes": 30,
+      "manual_checks": [
+        {
+          "id": "aria-prohibited-attr",
+          "description": "Ensure ARIA attributes are not prohibited for an element's role",
+          "nodes": 1
+        },
+        {
+          "id": "color-contrast",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "nodes": 156
+        },
+        {
+          "id": "duplicate-id-aria",
+          "description": "Ensure every id attribute value used in ARIA and in labels is unique",
+          "nodes": 2
+        }
+      ]
+    },
+    {
+      "page": "markets",
+      "violations": 0,
+      "passes": 30,
+      "manual_checks": [
+        {
+          "id": "aria-prohibited-attr",
+          "description": "Ensure ARIA attributes are not prohibited for an element's role",
+          "nodes": 1
+        },
+        {
+          "id": "color-contrast",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "nodes": 137
+        }
+      ]
+    },
+    {
+      "page": "forecast",
+      "violations": 0,
+      "passes": 30,
+      "manual_checks": [
+        {
+          "id": "aria-prohibited-attr",
+          "description": "Ensure ARIA attributes are not prohibited for an element's role",
+          "nodes": 1
+        },
+        {
+          "id": "color-contrast",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "nodes": 109
+        }
+      ]
+    },
+    {
+      "page": "investment",
+      "violations": 0,
+      "passes": 30,
+      "manual_checks": [
+        {
+          "id": "aria-prohibited-attr",
+          "description": "Ensure ARIA attributes are not prohibited for an element's role",
+          "nodes": 1
+        },
+        {
+          "id": "color-contrast",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "nodes": 146
+        },
+        {
+          "id": "duplicate-id-aria",
+          "description": "Ensure every id attribute value used in ARIA and in labels is unique",
+          "nodes": 2
+        }
+      ]
+    },
+    {
+      "page": "pilots",
+      "violations": 0,
+      "passes": 30,
+      "manual_checks": [
+        {
+          "id": "aria-prohibited-attr",
+          "description": "Ensure ARIA attributes are not prohibited for an element's role",
+          "nodes": 1
+        },
+        {
+          "id": "color-contrast-enhanced",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AAA enhanced contrast ratio thresholds",
+          "nodes": 4
+        },
+        {
+          "id": "color-contrast",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "nodes": 124
+        }
+      ]
+    },
+    {
+      "page": "council",
+      "violations": 0,
+      "passes": 30,
+      "manual_checks": [
+        {
+          "id": "aria-prohibited-attr",
+          "description": "Ensure ARIA attributes are not prohibited for an element's role",
+          "nodes": 1
+        },
+        {
+          "id": "color-contrast",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "nodes": 148
+        }
+      ]
+    }
+  ]
+}
