@@ -12,6 +12,8 @@ Version 0.1 is for a trusted user on their own machine. Bind to `127.0.0.1`. **D
 
 Implemented defences include strict bounded request schemas, a 1 MB request-body limit, parameterized SQLite statements, HTML escaping, safe source URLs, spreadsheet-formula-safe text CSV exports, browser-origin checks for writes, limited CORS, security headers and an explicit key/consent gate for potentially billable AI calls. CORS and origin checks are not authentication. Same-origin XSS, compromised local software, DNS rebinding/Host policies, denial of service and an attacker with filesystem access require broader controls.
 
+External market and regulator XML rejects document type declarations at the parser boundary after encoding detection, including UTF-16. This prevents DTD-defined entity expansion while retaining ordinary character references and supported feed encodings. Upstream URLs remain fixed or restricted to configured official regulator hosts; these controls do not establish that a publication is factually correct or legally applicable.
+
 The source has no trading, SCADA, BMS or inverter control connector. Pilot state changes do not authorize fieldwork. Treat an AI result as untrusted research text, never an operational command.
 
 Keep API keys in environment/secrets management. Never commit `.env`, `data/`, `.sqlite3` files, client inputs, audit logs or model prompts containing confidential information. SDK tracing is disabled, but opt-in external execution still transmits the brief and evidence to the configured provider. Configure actual provider spending limits.
