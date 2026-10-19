@@ -33,4 +33,6 @@ Every simplified physical proxy names its assumptions. Do not label deterministi
 
 ## Evidence
 
+![Section 04 · Verification / output](../visuals/sections/section-04-verification.svg)
+
 Write meaningful pytest tests in the module's assigned test file: independent hand cases, invariants, null/zero boundaries, rejection of unknown/nonfinite/extreme inputs, deterministic seed where relevant. Test every default study and JSON finiteness. Scientific sources must be primary references and may justify equations, not claim a calibrated model or legal effective status. Report unimplemented or data-dependent requirements explicitly.

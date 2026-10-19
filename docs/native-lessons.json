@@ -1,0 +1,1655 @@
+{
+  "schema_version": 1,
+  "repository": {
+    "name": "helioforge-energy-lab",
+    "name_with_owner": "mohammadrezwankhan/helioforge-energy-lab",
+    "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab"
+  },
+  "native_source": {
+    "commit": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+    "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/tree/c0f26c3327c2c3088de56d1fd333872e18dc608d",
+    "source_path_override": null
+  },
+  "browser_lab_package_provenance": {
+    "commit": "130b8c9664f5349b77941a03903dde29bef6aa74",
+    "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/tree/130b8c9664f5349b77941a03903dde29bef6aa74",
+    "scope": "This browser lab is a standalone teaching approximation. Use the linked source for the project implementation.",
+    "calibration_status": "synthetic-analytical-fixtures",
+    "config_path": "docs/lesson-config.json"
+  },
+  "native_catalog_source": "Tracked Markdown in source lesson, example, study-case, concept, model, and documentation paths.",
+  "native_material_count": 61,
+  "reproduction_command_count": 5,
+  "materials": [
+    {
+      "id": "doc-fd45fecaceb5",
+      "title": "Architecture",
+      "path": "docs/ARCHITECTURE.md",
+      "line": 1,
+      "source_paths": [
+        "docs/ARCHITECTURE.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/ARCHITECTURE.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "The gate in the diagram describes permission, not a silent fallback: an explicit OpenAI request that fails configuration or consent checks returns an error. It is never relabelled as an actual AI success.",
+      "type": "Native reading",
+      "section": "question",
+      "tags": [
+        "native-reading"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-c6606393c17a",
+      "title": "Cloudflare browser edition",
+      "path": "docs/CLOUDFLARE.md",
+      "line": 1,
+      "source_paths": [
+        "docs/CLOUDFLARE.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/CLOUDFLARE.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Public overview: <https://mkgrid.co.technology/>",
+      "type": "Native reading",
+      "section": "question",
+      "tags": [
+        "native-reading"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-b1f816ee1088",
+      "title": "Completion UI implementation",
+      "path": "docs/roadmap/COMPLETION_UI.md",
+      "line": 1,
+      "source_paths": [
+        "docs/roadmap/COMPLETION_UI.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/COMPLETION_UI.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "apps/web/src/completion-ui.ts adds a DOM enhancement controller for the existing learning studio, study workbench and saved-run comparison. It exports:",
+      "type": "Native reading",
+      "section": "question",
+      "tags": [
+        "native-reading"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-bf83d3655768",
+      "title": "Experiment index",
+      "path": "docs/roadmap/INDEX.md",
+      "line": 1,
+      "source_paths": [
+        "docs/roadmap/INDEX.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/INDEX.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "",
+      "type": "Native reading",
+      "section": "question",
+      "tags": [
+        "native-reading"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-c1ceb41698c1",
+      "title": "From useful release to a 5,000-star ambition",
+      "path": "docs/OPEN_SOURCE_LAUNCH.md",
+      "line": 1,
+      "source_paths": [
+        "docs/OPEN_SOURCE_LAUNCH.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/OPEN_SOURCE_LAUNCH.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Stars are an external community outcome. There is no honest implementation that guarantees 5,000 stars, an award, adoption or product-market fit. Do not buy engagement, spam communities, fabricate customers or place a false achievement badge in the UI.",
+      "type": "Native reading",
+      "section": "question",
+      "tags": [
+        "native-reading"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-5ba5ba21dce1",
+      "title": "Hybrid coverage matrix",
+      "path": "docs/HYBRID_COVERAGE.md",
+      "line": 1,
+      "source_paths": [
+        "docs/HYBRID_COVERAGE.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/HYBRID_COVERAGE.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "36 curated architectures, not every physically possible hybrid. Screening and study-only capabilities are explicitly separated.",
+      "type": "Native reading",
+      "section": "question",
+      "tags": [
+        "native-reading"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-4c7a2793e54a",
+      "title": "Optional OpenAI council",
+      "path": "docs/AI_SETUP.md",
+      "line": 1,
+      "source_paths": [
+        "docs/AI_SETUP.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/AI_SETUP.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "The numerical application and local checklist need no AI service. Actual multi-agent mode is optional, external and potentially billable. It has not been run against a live provider as part of this delivery.",
+      "type": "Native reading",
+      "section": "question",
+      "tags": [
+        "native-reading"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-b4db05a031b1",
+      "title": "Averaged inverter control studies",
+      "path": "docs/roadmap/CONTROL_MODELS.md",
+      "line": 1,
+      "source_paths": [
+        "docs/roadmap/CONTROL_MODELS.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/CONTROL_MODELS.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "This addition provides two executable research studies alongside the switching",
+      "type": "Native reading",
+      "section": "equations",
+      "tags": [
+        "model"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-acd9717d01ad",
+      "title": "HelioForge Energy Lab: awesome-list research",
+      "path": "docs/promotion/AWESOME_LIST_TARGETS.md",
+      "line": 1,
+      "source_paths": [
+        "docs/promotion/AWESOME_LIST_TARGETS.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/promotion/AWESOME_LIST_TARGETS.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Checked live GitHub metadata on 2026-09-30. Ten existing lists were investigated; this is a screening log, not ten claims of eligibility. No PR was submitted. Relevance and current contribution rules take priority over filling a quota.",
+      "type": "Native reading",
+      "section": "equations",
+      "tags": [
+        "model"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-1b569ae70194",
+      "title": "HelioForge Energy Lab: community teaching draft",
+      "path": "docs/promotion/REDDIT_LAUNCH.md",
+      "line": 1,
+      "source_paths": [
+        "docs/promotion/REDDIT_LAUNCH.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/promotion/REDDIT_LAUNCH.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Candidate communities: r/webdev for implementation discussion; r/opensource for source review; r/Python for numerical Python methods.",
+      "type": "Native reading",
+      "section": "equations",
+      "tags": [
+        "model"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-ad6b17fcfd87",
+      "title": "HelioForge Energy Lab: conditional launch calendar",
+      "path": "docs/promotion/LAUNCH_CALENDAR.md",
+      "line": 1,
+      "source_paths": [
+        "docs/promotion/LAUNCH_CALENDAR.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/promotion/LAUNCH_CALENDAR.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "T−7: complete current checks and source/rights review; inspect first-run demo.",
+      "type": "Native reading",
+      "section": "equations",
+      "tags": [
+        "model"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-5d13833e68e6",
+      "title": "HelioForge Energy Lab: growth experiments",
+      "path": "docs/promotion/GROWTH_EXPERIMENTS.md",
+      "line": 1,
+      "source_paths": [
+        "docs/promotion/GROWTH_EXPERIMENTS.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/promotion/GROWTH_EXPERIMENTS.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Stars are an aspiration, not a guaranteed outcome. No current metric is asserted here.",
+      "type": "Native reading",
+      "section": "equations",
+      "tags": [
+        "model"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-c07cca5325ea",
+      "title": "HelioForge Energy Lab: LinkedIn drafts",
+      "path": "docs/promotion/LINKEDIN_LAUNCH.md",
+      "line": 1,
+      "source_paths": [
+        "docs/promotion/LINKEDIN_LAUNCH.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/promotion/LINKEDIN_LAUNCH.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Not posted.",
+      "type": "Native reading",
+      "section": "equations",
+      "tags": [
+        "model"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-95d81e0b4c20",
+      "title": "HelioForge Energy Lab: newsletter and publisher pitch drafts",
+      "path": "docs/promotion/NEWSLETTER_OUTREACH.md",
+      "line": 1,
+      "source_paths": [
+        "docs/promotion/NEWSLETTER_OUTREACH.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/promotion/NEWSLETTER_OUTREACH.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Promotion hold: Current readiness score 86/100 is below the 90/100 gate. These drafts remain unsent. Confirm public access, current editorial rules and project-specific fit before any submission.",
+      "type": "Native reading",
+      "section": "equations",
+      "tags": [
+        "model"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-a7e76d59f314",
+      "title": "HelioForge Energy Lab: press kit",
+      "path": "docs/promotion/PRESS_KIT.md",
+      "line": 1,
+      "source_paths": [
+        "docs/promotion/PRESS_KIT.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/promotion/PRESS_KIT.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Name: HelioForge Energy Lab",
+      "type": "Native reading",
+      "section": "equations",
+      "tags": [
+        "model"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-a6ea76a8b130",
+      "title": "HelioForge Energy Lab: shots",
+      "path": "docs/demo/SHOT_LIST.md",
+      "line": 1,
+      "source_paths": [
+        "docs/demo/SHOT_LIST.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/demo/SHOT_LIST.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "1440×1000 overview with demo label.",
+      "type": "Native reading",
+      "section": "equations",
+      "tags": [
+        "model"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-180ab5997874",
+      "title": "HelioForge Energy Lab: Show HN draft",
+      "path": "docs/promotion/HACKER_NEWS_LAUNCH.md",
+      "line": 1,
+      "source_paths": [
+        "docs/promotion/HACKER_NEWS_LAUNCH.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/promotion/HACKER_NEWS_LAUNCH.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Selected title: Show HN: HelioForge Energy Lab — an inspectable local demo",
+      "type": "Native reading",
+      "section": "equations",
+      "tags": [
+        "model"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-91f505361fff",
+      "title": "HelioForge Energy Lab: technical thread draft",
+      "path": "docs/promotion/X_LAUNCH.md",
+      "line": 1,
+      "source_paths": [
+        "docs/promotion/X_LAUNCH.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/promotion/X_LAUNCH.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Not posted.",
+      "type": "Native reading",
+      "section": "equations",
+      "tags": [
+        "model"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-e52ccb755b62",
+      "title": "Hybrid electricity screen: numerical contract",
+      "path": "docs/HYBRID_METHODOLOGY.md",
+      "line": 1,
+      "source_paths": [
+        "docs/HYBRID_METHODOLOGY.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/HYBRID_METHODOLOGY.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Version: hybrid-greedy-hourly-v1 · catalogue 0.2.0 · synthetic educational data.",
+      "type": "Native reading",
+      "section": "equations",
+      "tags": [
+        "scope"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-0a3866ea42a4",
+      "title": "Internal readiness score: HelioForge Energy Lab",
+      "path": "docs/CHAMPION_SCORE.md",
+      "line": 1,
+      "source_paths": [
+        "docs/CHAMPION_SCORE.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/CHAMPION_SCORE.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Assessed 2026-09-30 using the same seven weights for all 37 projects. This is an editorial QA prioritization rubric, not a calibrated metric, external rating or promise of adoption.",
+      "type": "Native reading",
+      "section": "equations",
+      "tags": [
+        "model"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-70c8e4dc63c3",
+      "title": "Mapping the supplied reference archive",
+      "path": "docs/REFERENCE_MAPPING.md",
+      "line": 1,
+      "source_paths": [
+        "docs/REFERENCE_MAPPING.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/REFERENCE_MAPPING.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "The supplied hybrid_power_systems_archive.zip contains a Markdown overview, PDF and two diagrams. Its Markdown describes five conceptual configurations. These were used to identify topology, assets and lesson goals; the new UI uses original software-3D geometry and does not embed the supplied diagrams. No third-party licence is inferred for those reference images.",
+      "type": "Native reading",
+      "section": "equations",
+      "tags": [
+        "model",
+        "native-lesson"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-612ed9e8338e",
+      "title": "Useful contribution quests for HelioForge Energy Lab",
+      "path": "docs/CHAMPION_QUESTS.md",
+      "line": 1,
+      "source_paths": [
+        "docs/CHAMPION_QUESTS.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/CHAMPION_QUESTS.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "These are contribution proposals, not rewards for stars. Check existing issues before starting.",
+      "type": "Native reading",
+      "section": "equations",
+      "tags": [
+        "model"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-99990f5b4cbe",
+      "title": "HelioForge Energy Lab: community outreach",
+      "path": "docs/promotion/COMMUNITY_OUTREACH.md",
+      "line": 1,
+      "source_paths": [
+        "docs/promotion/COMMUNITY_OUTREACH.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/promotion/COMMUNITY_OUTREACH.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Start with existing repository issues after public release. Discuss one concrete workflow with energy researchers and engineering educators. Use an existing authenticated account and follow the receiving community’s current rules. No Discord, Slack, research affiliation or domain partnership is invented.",
+      "type": "Native reading",
+      "section": "reproduce",
+      "tags": [
+        "model",
+        "reproduction"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-41967c492b27",
+      "title": "Learning, comparison, pilot, and council study models",
+      "path": "docs/roadmap/WORKFLOW_MODELS.md",
+      "line": 1,
+      "source_paths": [
+        "docs/roadmap/WORKFLOW_MODELS.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/WORKFLOW_MODELS.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "This page documents the twelve deterministic Python experiments in",
+      "type": "Native reading",
+      "section": "reproduce",
+      "tags": [
+        "model",
+        "reproduction"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-46e39b542edd",
+      "title": "README CTA alternatives",
+      "path": "docs/promotion/README_CTA_OPTIONS.md",
+      "line": 1,
+      "source_paths": [
+        "docs/promotion/README_CTA_OPTIONS.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/promotion/README_CTA_OPTIONS.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "If HelioForge Energy Lab helps you study this workflow, a star helps other energy researchers and engineering educators find it.",
+      "type": "Native reading",
+      "section": "reproduce",
+      "tags": [
+        "model",
+        "reproduction"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-9d0f69d6e677",
+      "title": "Reproducible synthetic examples",
+      "path": "examples/README.md",
+      "line": 1,
+      "source_paths": [
+        "examples/README.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/examples/README.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "All inputs are illustrative, not a real customer tariff, project or forecast. Each *-default.json contains the complete API input contract for its named model. dashboard-snapshot.json is generated by the Python engines and feeds the standalone preview.",
+      "type": "Native lesson / example",
+      "section": "reproduce",
+      "tags": [
+        "model",
+        "native-lesson",
+        "reproduction"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-caf4c17f81e3",
+      "title": "45-second HelioForge Energy Lab demo",
+      "path": "docs/demo/DEMO_SCRIPT.md",
+      "line": 1,
+      "source_paths": [
+        "docs/demo/DEMO_SCRIPT.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/demo/DEMO_SCRIPT.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "0–8s: Show the title and synthetic-data label. Explain: Interactive hybrid-energy research and learning workbench with auditable numerical screens and a local Python API.",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "model",
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-630b4dba9a75",
+      "title": "Advanced physical studies",
+      "path": "docs/roadmap/PHYSICAL_MODELS.md",
+      "line": 1,
+      "source_paths": [
+        "docs/roadmap/PHYSICAL_MODELS.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/PHYSICAL_MODELS.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Status: executable bounded research screens with synthetic examples. The equations and software paths have internal hand-case and invariant tests. No model here has been calibrated against a real plant, cell, crop, sensor, mesh, or operator record.",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "model",
+        "native-lesson",
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-4eca8b84f877",
+      "title": "Advanced planning and calibration studies",
+      "path": "docs/roadmap/PLANNING_MODELS.md",
+      "line": 1,
+      "source_paths": [
+        "docs/roadmap/PLANNING_MODELS.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/PLANNING_MODELS.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "These nine models are registered through the roadmap study contract. They run locally in Python, return finite JSON, and keep synthetic defaults separate from user-supplied data. A successful solver or a small residual is software evidence only; neither is proof of calibration, commercial readiness, survey accuracy, or legal compliance.",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "model",
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-9e4850665d43",
+      "title": "Advanced study visuals",
+      "path": "docs/roadmap/ADVANCED_VISUALS.md",
+      "line": 1,
+      "source_paths": [
+        "docs/roadmap/ADVANCED_VISUALS.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/ADVANCED_VISUALS.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "HF.advancedStudyVisual(def: StudyDefinition, result: StudyResult, slice: number): string | null supplies geometry-specific SVG for four roadmap study IDs: hybrid-powerflow, markets-network, pv-raytrace, and pilots-registration. It returns null for every other study so the established study renderer can continue to handle those views. The current renderers are static and use the result an…",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "model",
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-d3fd7f734f6a",
+      "title": "Change report — Champion 0.3.0",
+      "path": "docs/champion/CHANGE_REPORT.md",
+      "line": 1,
+      "source_paths": [
+        "docs/champion/CHANGE_REPORT.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/champion/CHANGE_REPORT.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Base: the uploaded HelioForge-Hybrid-Lab-v0.2.0.zip. The original upload was not overwritten. SOURCE_CHANGES.patch is the reviewable source/test/configuration patch against the isolated local baseline; the full ZIP also includes generated browser assets and documentation. Apply a patch only to a separate matching baseline and rebuild the frontend. The complete packaged app does not need…",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-fb531f7512c1",
+      "title": "Controlled release preparation — not a deployment",
+      "path": "docs/champion/RELEASE_PLAN.md",
+      "line": 1,
+      "source_paths": [
+        "docs/champion/RELEASE_PLAN.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/champion/RELEASE_PLAN.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "HelioForge Champion 0.3.0 is delivered for local evaluation. The full source, built frontend, starter scripts, verification records and file-hash manifest are included. The standard launcher uses this computer's loopback interface and disables external AI. No service was published, repository pushed, billable integration called or staged rollout started.",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-645b1fdebb9e",
+      "title": "Engineering experimental studies",
+      "path": "docs/roadmap/ENGINEERING_MODELS.md",
+      "line": 1,
+      "source_paths": [
+        "docs/roadmap/ENGINEERING_MODELS.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/ENGINEERING_MODELS.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "These twelve studies are bounded, deterministic Python screens for the hybrid, storage, PV and research views. Their defaults are illustrative. The catalogue and per-study Pydantic inputs live in apps/api/helioforge/engines/engineering_studies.py; results contain finite JSON metrics, series, tables, details and warnings. The registry remains responsible for attaching model version, sourc…",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "model",
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-485d67539427",
+      "title": "Experimental study contract",
+      "path": "docs/roadmap/CONTRACT.md",
+      "line": 1,
+      "source_paths": [
+        "docs/roadmap/CONTRACT.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/CONTRACT.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "The roadmap adds separately named experimental studies without changing the capability declarations of the existing hybrid engine. All numerical calculations execute in tested Python. Public static pages show Python-generated example outputs; new calculations require the local API. No new runtime JavaScript dependencies.",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "native-lesson",
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-cc307420171c",
+      "title": "HelioForge Champion 0.3.0 — verification and handoff",
+      "path": "docs/champion/VERIFICATION.md",
+      "line": 1,
+      "source_paths": [
+        "docs/champion/VERIFICATION.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/champion/VERIFICATION.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Assessment date: 28 September 2026. Deliverable: implemented local-evaluation app, compiled interface, source, starter scripts and evidence. Production status: not deployed; production approval is blocked pending the checks and decisions below. “Champion” is an edition name, not an award or certification.",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-fb33dc3289e2",
+      "title": "HelioForge Energy Lab: launch strategy",
+      "path": "docs/promotion/LAUNCH_STRATEGY.md",
+      "line": 1,
+      "source_paths": [
+        "docs/promotion/LAUNCH_STRATEGY.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/promotion/LAUNCH_STRATEGY.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Audience: energy researchers and engineering educators. Positioning: Interactive hybrid-energy research and learning workbench with auditable numerical screens and a local Python API.",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "model",
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-6011e3ae3067",
+      "title": "Human acceptance script — pending",
+      "path": "docs/champion/UAT.md",
+      "line": 1,
+      "source_paths": [
+        "docs/champion/UAT.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/champion/UAT.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "No human beta sessions or assistive-technology sessions were completed in this build. Have a real evaluator use the exact packaged candidate on the intended computer and browser. Record date, candidate manifest hash, browser/OS, task outcome, time if relevant, observed confusion, screenshots and reproducible defects. Use synthetic inputs only.",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "reproduction",
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-9950dbf6bdf4",
+      "title": "Interrupted invocation",
+      "path": "docs/champion/evidence/interrupted-attempt.md",
+      "line": 1,
+      "source_paths": [
+        "docs/champion/evidence/interrupted-attempt.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/champion/evidence/interrupted-attempt.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "The champion-browser-existing-2 wrapper was terminated by the container call timeout before a complete log was retained. It has no PASS result. It was superseded by instrumented, separately recorded invocations. A requested streaming exec session was unavailable; later longer jobs were collected to on-disk logs and their exit results inspected before handoff.",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-b92e35cd6304",
+      "title": "Local evidence and connector setup",
+      "path": "docs/roadmap/CONNECTORS.md",
+      "line": 1,
+      "source_paths": [
+        "docs/roadmap/CONNECTORS.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/CONNECTORS.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "The static public preview displays bundled examples. Imports, new calculations and upstream/device connections run only through the local Python API. Settings below are environment variables; neither .env.example nor the development launcher automatically loads a private .env file. Keep the server on loopback. launch.py deliberately disables external AI; an operator enabling it must star…",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "native-lesson",
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-91738b5163ef",
+      "title": "Numerical methodology and model boundaries",
+      "path": "docs/METHODOLOGY.md",
+      "line": 1,
+      "source_paths": [
+        "docs/METHODOLOGY.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/METHODOLOGY.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Version 0.2.0 (retained research engines) · screening, not an investment recommendation. Parameters and outputs include units. The source code and regression tests are the executable specification; the following explains the calculation boundaries.",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "model",
+        "scope",
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-44ed8dec1dec",
+      "title": "Primary sources and evidence status",
+      "path": "docs/SOURCES.md",
+      "line": 1,
+      "source_paths": [
+        "docs/SOURCES.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/SOURCES.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "The original source register is retained from the supplied repository; it is not an independent re-verification of every inherited source during this upgrade. Hybrid/control, Canvas, motion and agent-orchestration references below were checked for this extension on 23 September 2026. This is a developer source register, not substantive legal review or evidence that a particular customer…",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-085ac2b8234b",
+      "title": "Roadmap completion and external evidence — 18 October 2026",
+      "path": "docs/roadmap/COMPLETION.md",
+      "line": 1,
+      "source_paths": [
+        "docs/roadmap/COMPLETION.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/COMPLETION.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "The software implementation now covers all twelve views and 59 executable research studies. The original 39-study delivery is retained as historical evidence; twenty further studies, evidence connectors, prerequisite gates, comparison scenes and external council rounds close its implementation gaps. All numerical studies can run through the local Python API. The public static edition car…",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-3ea46177b637",
+      "title": "Roadmap: from research release to operational evidence platform",
+      "path": "docs/ROADMAP.md",
+      "line": 1,
+      "source_paths": [
+        "docs/ROADMAP.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/ROADMAP.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "This document describes future work, not hidden shipped capabilities.",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-fbde9eac9405",
+      "title": "Validation record — 0.2.0",
+      "path": "docs/VALIDATION.md",
+      "line": 3,
+      "source_paths": [
+        "docs/VALIDATION.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/VALIDATION.md#L3",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Date: 23 September 2026. These are observed checks in the build environment, not declarations that every deployment or scientific use is safe.",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-d6348488e996",
+      "title": "Verification — 18 October 2026",
+      "path": "docs/roadmap/VERIFICATION.md",
+      "line": 1,
+      "source_paths": [
+        "docs/roadmap/VERIFICATION.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/VERIFICATION.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Software evidence for the 59-study release; see the completion ledger for all twelve views and external prerequisites. This does not establish scientific, regulatory, identity or accessibility certification.",
+      "type": "Native reading",
+      "section": "verification",
+      "tags": [
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-1e6caab9c889",
+      "title": "Alternatives and adjacent tools: HelioForge Energy Lab",
+      "path": "docs/ALTERNATIVES.md",
+      "line": 1,
+      "source_paths": [
+        "docs/ALTERNATIVES.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/ALTERNATIVES.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "HelioForge connects a browsable energy-learning interface to an optional local Python calculation API. The standalone preview preserves a reproducible starting point; new numerical runs use the backend and its explicit scenario assumptions.",
+      "type": "Native reading",
+      "section": "scope",
+      "tags": [
+        "model",
+        "reproduction",
+        "scope"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-f81573952de3",
+      "title": "Author a lesson or architecture",
+      "path": "docs/LESSON_AUTHORING.md",
+      "line": 1,
+      "source_paths": [
+        "docs/LESSON_AUTHORING.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/LESSON_AUTHORING.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Edit apps/api/helioforge/data/hybrid_catalog.json. Each system has a stable ID, topology, coupling, control assumption, technology IDs, capability mode, preset inputs, learning focus, evidence requirements and source references. Each lesson references an existing system and applicable scenario; it supplies original objectives, steps, quiz options, one answer index per question and explan…",
+      "type": "Native lesson / example",
+      "section": "scope",
+      "tags": [
+        "native-lesson",
+        "scope",
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-edaaf1841da6",
+      "title": "Champion design and journey notes",
+      "path": "docs/champion/DESIGN_AND_JOURNEYS.md",
+      "line": 1,
+      "source_paths": [
+        "docs/champion/DESIGN_AND_JOURNEYS.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/champion/DESIGN_AND_JOURNEYS.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Audience assumptions: researchers, teachers and engineering students exploring synthetic hybrid-energy configurations on a personal computer. These are inferred from the app's existing capabilities, not new stakeholder interviews. Primary success is an inspectable baseline/stress comparison with intact inputs and clear model boundaries. New human-user evidence has not been collected.",
+      "type": "Native reading",
+      "section": "scope",
+      "tags": [
+        "model",
+        "scope",
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-c016cd3d7a45",
+      "title": "Decision studies: model notes and limits",
+      "path": "docs/roadmap/DECISION_MODELS.md",
+      "line": 1,
+      "source_paths": [
+        "docs/roadmap/DECISION_MODELS.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/DECISION_MODELS.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "These twelve experiments are implemented in apps/api/helioforge/engines/decision_studies.py. They share the experimental-study contract in CONTRACT.md: each has a strict bounded Pydantic input, a catalogue entry with defaults and equations, and a result with metrics, series, table, details and warnings. Unknown inputs, fractional integer fields, non-finite values, oversized arrays and ou…",
+      "type": "Native reading",
+      "section": "scope",
+      "tags": [
+        "model",
+        "scope",
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-35f753c7ae64",
+      "title": "Full-spectrum implementation and audit — 17 October 2026",
+      "path": "docs/roadmap/DELIVERY.md",
+      "line": 1,
+      "source_paths": [
+        "docs/roadmap/DELIVERY.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/DELIVERY.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "This release adds 39 independently named experiments across all 12 existing views. Numerical results come from Python, are saved through the local API, and include inputs, equations, source references, model limits and SHA-256 evidence digests. The browser includes reproducible examples for offline inspection and exports. Edited calculations require the local Python app. The original 19…",
+      "type": "Native reading",
+      "section": "scope",
+      "tags": [
+        "model",
+        "native-lesson",
+        "reproduction",
+        "scope",
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-e20239adf122",
+      "title": "Full-spectrum roadmap implementation",
+      "path": "docs/roadmap/IMPLEMENTATION.md",
+      "line": 1,
+      "source_paths": [
+        "docs/roadmap/IMPLEMENTATION.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/IMPLEMENTATION.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "User scope confirmed 17 October 2026: implement the entire roadmap across all twelve views. The initial preservation sprint is included in this larger scope.",
+      "type": "Native reading",
+      "section": "scope",
+      "tags": [
+        "scope"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-509b2c9a905a",
+      "title": "HelioForge 0.2.0 — final build audit",
+      "path": "docs/FINAL_AUDIT.md",
+      "line": 3,
+      "source_paths": [
+        "docs/FINAL_AUDIT.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/FINAL_AUDIT.md#L3",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Audited: 23 September 2026. Release scope: local-first hybrid-energy education and research. Verdict: deliverable as a tested research/learning release; not approved as a production multi-tenant service, engineering design tool, complete multi-carrier solver or accredited course.",
+      "type": "Native reading",
+      "section": "scope",
+      "tags": [
+        "model",
+        "native-lesson",
+        "scope",
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-8ec9a00bfd09",
+      "title": "HelioForge Energy Lab",
+      "path": "README.md",
+      "line": 1,
+      "source_paths": [
+        "README.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/README.md#L1",
+      "source_revision": "130b8c9664f5349b77941a03903dde29bef6aa74",
+      "source_kind": "historical-reconciled-readme",
+      "source_label": "Historical README/source guide at 130b8c9664f5",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Open the public browser preview · Purpose, usage and limits · Methodology · Build and deployment guide",
+      "type": "Native overview",
+      "section": "scope",
+      "tags": [
+        "model",
+        "scope"
+      ],
+      "track": null,
+      "lesson_id": null,
+      "source_blob_path": "README.md",
+      "source_blob_sha256": "292fa21bd30fa811992c0758503592fac4fe6dd76e68d6c2d575ca9e71030a24",
+      "source_blob_retrieval": "git-show",
+      "source_blob_cache": null
+    },
+    {
+      "id": "doc-278e4bb1f783",
+      "title": "HelioForge Energy Lab visual identity",
+      "path": "docs/repository/VISUAL_IDENTITY.md",
+      "line": 1,
+      "source_paths": [
+        "docs/repository/VISUAL_IDENTITY.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/repository/VISUAL_IDENTITY.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Repository accent: #8bc4f8. Shared background: #0c1923; text: #f7fafc; secondary text: #c6d4dc. Keep the supplied application palette and functional status labels. Diagrams use labeled boxes and arrows, never color alone. Social assets identify the synthetic/demo scope; screenshots are actual rendered app states. Editable SVG sources accompany the PNG preview.",
+      "type": "Native reading",
+      "section": "scope",
+      "tags": [
+        "model",
+        "scope"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-04ed33387c7e",
+      "title": "HelioForge Energy Lab: data and rule boundaries",
+      "path": "docs/architecture/system-overview.md",
+      "line": 1,
+      "source_paths": [
+        "docs/architecture/system-overview.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/architecture/system-overview.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "HelioForge connects a browsable energy-learning interface to an optional local Python calculation API. The standalone preview preserves a reproducible starting point; new numerical runs use the backend and its explicit scenario assumptions.",
+      "type": "Native reading",
+      "section": "scope",
+      "tags": [
+        "model",
+        "reproduction",
+        "scope"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-1cc356cbc6ac",
+      "title": "HelioForge Energy Lab: voiceover draft",
+      "path": "docs/demo/VOICEOVER.md",
+      "line": 1,
+      "source_paths": [
+        "docs/demo/VOICEOVER.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/demo/VOICEOVER.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "Interactive hybrid-energy research and learning workbench with auditable numerical screens and a local Python API. The example runs locally. Start from the README, open a supplied record, and inspect what is known, what is synthetic, and what stays on the device. The source and tests let you inspect the rule behind the interface. This is a demonstration under documented limits. If this w…",
+      "type": "Native reading",
+      "section": "scope",
+      "tags": [
+        "model",
+        "native-lesson",
+        "scope",
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-0c42e24df7f9",
+      "title": "Package checks",
+      "path": "docs/champion/PACKAGE_CHECKS.md",
+      "line": 1,
+      "source_paths": [
+        "docs/champion/PACKAGE_CHECKS.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/champion/PACKAGE_CHECKS.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "The packager excludes virtual environments, node_modules, Git internals, caches, runtime/test databases, real .env files and font binaries. It retains .env.example, compiled browser assets, source and audit evidence. No matching common private-key/API-token patterns were found in the scanned text files. This limited pattern check is not a comprehensive secret or vulnerability audit.",
+      "type": "Native reading",
+      "section": "scope",
+      "tags": [
+        "native-lesson",
+        "scope",
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-91885dded457",
+      "title": "Remaining roadmap implementation — 17 October 2026",
+      "path": "docs/roadmap/COMPLETION_PLAN.md",
+      "line": 1,
+      "source_paths": [
+        "docs/roadmap/COMPLETION_PLAN.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/COMPLETION_PLAN.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "User authorization: implement the remaining items in every view, identify real-data/credential/external-validation requirements, then merge, commit and publish. This supersedes the prior no-publication boundary. No claim of certification, field truth, signer identity or executed paid agents may be manufactured.",
+      "type": "Native reading",
+      "section": "scope",
+      "tags": [
+        "verification"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-b355ec748c90",
+      "title": "Separating a numerical model from its explanation",
+      "path": "docs/engineering/CASE_STUDY.md",
+      "line": 1,
+      "source_paths": [
+        "docs/engineering/CASE_STUDY.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/engineering/CASE_STUDY.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "HelioForge connects a browsable energy-learning interface to an optional local Python calculation API. The standalone preview preserves a reproducible starting point; new numerical runs use the backend and its explicit scenario assumptions.",
+      "type": "Native reading",
+      "section": "scope",
+      "tags": [
+        "model",
+        "reproduction",
+        "scope"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-eb44ea58f905",
+      "title": "Separating a numerical model from its explanation",
+      "path": "docs/promotion/DEVTO_ARTICLE.md",
+      "line": 1,
+      "source_paths": [
+        "docs/promotion/DEVTO_ARTICLE.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/promotion/DEVTO_ARTICLE.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "HelioForge connects a browsable energy-learning interface to an optional local Python calculation API. The standalone preview preserves a reproducible starting point; new numerical runs use the backend and its explicit scenario assumptions.",
+      "type": "Native reading",
+      "section": "scope",
+      "tags": [
+        "model",
+        "reproduction",
+        "scope"
+      ],
+      "track": null,
+      "lesson_id": null
+    },
+    {
+      "id": "doc-35ca5b5a2382",
+      "title": "Three boundaries in HelioForge Energy Lab",
+      "path": "docs/promotion/HASHNODE_ARTICLE.md",
+      "line": 1,
+      "source_paths": [
+        "docs/promotion/HASHNODE_ARTICLE.md"
+      ],
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/promotion/HASHNODE_ARTICLE.md#L1",
+      "source_revision": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+      "source_kind": "audited-native-source",
+      "source_label": "Source at c0f26c3327c2",
+      "catalog_url": null,
+      "native_url": null,
+      "excerpt": "HelioForge connects a browsable energy-learning interface to an optional local Python calculation API. The standalone preview preserves a reproducible starting point; new numerical runs use the backend and its explicit scenario assumptions.",
+      "type": "Native reading",
+      "section": "scope",
+      "tags": [
+        "model",
+        "reproduction",
+        "scope"
+      ],
+      "track": null,
+      "lesson_id": null
+    }
+  ],
+  "commands": [
+    {
+      "command": "make build",
+      "label": "Source-defined example command",
+      "path": "Makefile",
+      "line": 6,
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/Makefile#L6"
+    },
+    {
+      "command": "make test",
+      "label": "Source-defined validation command",
+      "path": "Makefile",
+      "line": 9,
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/Makefile#L9"
+    },
+    {
+      "command": "npm run typecheck: tsc -p tsconfig.json --noEmit",
+      "label": "Source-defined validation command",
+      "path": "apps/web/package.json",
+      "line": null,
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/apps/web/package.json"
+    },
+    {
+      "command": "npm run build: tsc -p tsconfig.json && node ../../scripts/build-web.mjs",
+      "label": "Source-defined example command",
+      "path": "apps/web/package.json",
+      "line": null,
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/apps/web/package.json"
+    },
+    {
+      "command": "npm run test: node --test tests/*.test.mjs",
+      "label": "Source-defined validation command",
+      "path": "apps/web/package.json",
+      "line": null,
+      "source_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/apps/web/package.json"
+    }
+  ],
+  "engineering_curriculum_exclusions": [
+    {
+      "path": "docs/champion/EVIDENCE_LOG.md",
+      "reason": "historical evidence index is owned by parent integration; referenced log files are not shipped"
+    }
+  ],
+  "visuals": {
+    "mapped_diagrams": [],
+    "section_banners": [
+      "section-01-question.svg",
+      "section-02-equations.svg",
+      "section-03-reproduce.svg",
+      "section-04-verification.svg",
+      "section-05-scope.svg"
+    ]
+  },
+  "native_document_banner_insertions": [
+    {
+      "path": "docs/roadmap/WORKFLOW_MODELS.md",
+      "section": "equations",
+      "section_title": "Equations / provenance",
+      "banner": "docs/visuals/sections/section-02-equations.svg",
+      "markdown_relative_banner": "../visuals/sections/section-02-equations.svg",
+      "insert_after_heading": "Learning, comparison, pilot, and council study models",
+      "heading_line": 1,
+      "source_link": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/WORKFLOW_MODELS.md#L1",
+      "reason": "The existing heading 'Learning, comparison, pilot, and council study models' matches the equations / provenance section."
+    },
+    {
+      "path": "docs/roadmap/WORKFLOW_MODELS.md",
+      "section": "verification",
+      "section_title": "Verification / output",
+      "banner": "docs/visuals/sections/section-04-verification.svg",
+      "markdown_relative_banner": "../visuals/sections/section-04-verification.svg",
+      "insert_after_heading": "Pilot evidence",
+      "heading_line": 63,
+      "source_link": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/WORKFLOW_MODELS.md#L63",
+      "reason": "The existing heading 'Pilot evidence' matches the verification / output section."
+    },
+    {
+      "path": "docs/roadmap/CONTRACT.md",
+      "section": "verification",
+      "section_title": "Verification / output",
+      "banner": "docs/visuals/sections/section-04-verification.svg",
+      "markdown_relative_banner": "../visuals/sections/section-04-verification.svg",
+      "insert_after_heading": "Evidence",
+      "heading_line": 34,
+      "source_link": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/CONTRACT.md#L34",
+      "reason": "The existing heading 'Evidence' matches the verification / output section."
+    },
+    {
+      "path": "docs/LESSON_AUTHORING.md",
+      "section": "question",
+      "section_title": "Question / topology",
+      "banner": "docs/visuals/sections/section-01-question.svg",
+      "markdown_relative_banner": "visuals/sections/section-01-question.svg",
+      "insert_after_heading": "Author a lesson or architecture",
+      "heading_line": 1,
+      "source_link": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/LESSON_AUTHORING.md#L1",
+      "reason": "The existing heading 'Author a lesson or architecture' matches the question / topology section."
+    }
+  ],
+  "native_document_banner_audit": {
+    "schema_version": 1,
+    "eligibility_rule": "Tracked indexed Markdown in an examples, tutorials, lessons, studies, study-cases, concepts or notes directory, or whose path/title explicitly names a lesson, tutorial, example, walkthrough, study case or study. Banners are based only on existing semantic heading text, never directory names.",
+    "eligible_document_count": 5,
+    "lesson_document_candidates": 5,
+    "modified_document_count": 3,
+    "banner_insertion_count": 4,
+    "audit_gap_count": 2,
+    "banners": [
+      {
+        "path": "docs/roadmap/WORKFLOW_MODELS.md",
+        "section": "equations",
+        "section_title": "Equations / provenance",
+        "banner": "docs/visuals/sections/section-02-equations.svg",
+        "markdown_relative_banner": "../visuals/sections/section-02-equations.svg",
+        "insert_after_heading": "Learning, comparison, pilot, and council study models",
+        "heading_line": 1,
+        "source_link": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/WORKFLOW_MODELS.md#L1",
+        "reason": "The existing heading 'Learning, comparison, pilot, and council study models' matches the equations / provenance section."
+      },
+      {
+        "path": "docs/roadmap/WORKFLOW_MODELS.md",
+        "section": "verification",
+        "section_title": "Verification / output",
+        "banner": "docs/visuals/sections/section-04-verification.svg",
+        "markdown_relative_banner": "../visuals/sections/section-04-verification.svg",
+        "insert_after_heading": "Pilot evidence",
+        "heading_line": 63,
+        "source_link": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/WORKFLOW_MODELS.md#L63",
+        "reason": "The existing heading 'Pilot evidence' matches the verification / output section."
+      },
+      {
+        "path": "docs/roadmap/CONTRACT.md",
+        "section": "verification",
+        "section_title": "Verification / output",
+        "banner": "docs/visuals/sections/section-04-verification.svg",
+        "markdown_relative_banner": "../visuals/sections/section-04-verification.svg",
+        "insert_after_heading": "Evidence",
+        "heading_line": 34,
+        "source_link": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/roadmap/CONTRACT.md#L34",
+        "reason": "The existing heading 'Evidence' matches the verification / output section."
+      },
+      {
+        "path": "docs/LESSON_AUTHORING.md",
+        "section": "question",
+        "section_title": "Question / topology",
+        "banner": "docs/visuals/sections/section-01-question.svg",
+        "markdown_relative_banner": "visuals/sections/section-01-question.svg",
+        "insert_after_heading": "Author a lesson or architecture",
+        "heading_line": 1,
+        "source_link": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/LESSON_AUTHORING.md#L1",
+        "reason": "The existing heading 'Author a lesson or architecture' matches the question / topology section."
+      }
+    ],
+    "audit_gaps": [
+      {
+        "path": "examples/README.md",
+        "reason": "no existing heading matches a five-color section; retained as a source-linked catalog entry"
+      },
+      {
+        "path": "docs/roadmap/ADVANCED_VISUALS.md",
+        "reason": "no existing heading matches a five-color section; retained as a source-linked catalog entry"
+      }
+    ],
+    "explicit_exclusions": [
+      {
+        "path": "docs/champion/EVIDENCE_LOG.md",
+        "reason": "historical evidence index is owned by parent integration; referenced log files are not shipped"
+      }
+    ]
+  },
+  "dashboard": {
+    "browser_lab_is_surrogate": true,
+    "native_execution_in_browser": false,
+    "localStorage_or_existing_dashboard_scripts_preserved": true
+  }
+}

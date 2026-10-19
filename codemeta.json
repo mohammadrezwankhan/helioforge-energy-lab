@@ -1,0 +1,24 @@
+{
+  "@context": "https://w3id.org/codemeta/3.0",
+  "@type": "SoftwareSourceCode",
+  "name": "HelioForge: Hybrid Energy Learning and Research",
+  "codeRepository": "https://github.com/mohammadrezwankhan/helioforge-energy-lab",
+  "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab",
+  "author": [
+    {
+      "@type": "Organization",
+      "name": "HelioForge contributors"
+    }
+  ],
+  "readme": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/HEAD/README.md",
+  "issueTracker": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/issues",
+  "continuousIntegration": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/actions",
+  "relatedLink": [
+    "https://rezwankhan.tech/",
+    "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/HEAD/CITATION.cff"
+  ],
+  "description": "Local-first Python and TypeScript research software for transparent energy screening.",
+  "version": "preview-2026.09.30",
+  "datePublished": "2026-09-30",
+  "license": "https://spdx.org/licenses/MIT.html"
+}

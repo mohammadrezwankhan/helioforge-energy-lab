@@ -1,175 +1,255 @@
+![HelioForge Hybrid Energy Lab: original vector system illustration](assets/hero-25d.svg)
+
+The source combines a hybrid adequacy screen, storage MILP, research studies, and an interactive learning workbench. The companion starts with a small synthetic daily power balance.
+
+**[Native-source lesson guide](docs/portfolio/) · [Offline interactive lab](docs/index.html) · [Lesson configuration](docs/lesson-config.json) · [Configuration schema](docs/lesson-config.schema.json)**
+
+## Your first interactive result
+
+1. Download or clone this repository and open `docs/index.html` in a modern browser.
+2. Select **Module 1**, apply its preset, and compare the declared checkpoint with the plotted result.
+3. Change one slider, inspect the model assumptions, then export the configuration or telemetry for your notes.
+
+The browser lab runs offline with no packages, accounts, or live data feeds. Its numbers are deterministic teaching simulations. Each checkpoint states its model time and tolerance; passing it demonstrates agreement with that model, not field calibration or production readiness.
+
+## Four-module learning path
+
+| Module | Investigation | Approximate time |
+|---|---|---:|
+| 1. Follow a single-bus balance | Identify which sources serve demand and where a simple screen stops. | 12 min |
+| 2. Test a resource sensitivity | Quantify the effect of a smaller solar resource without changing demand. | 15 min |
+| 3. Separate adequacy from optimization | Explain the different questions answered by a dispatch policy and a cost-minimizing storage model. | 18 min |
+| 4. Prepare a reproducible native follow-up | Carry a transparent screening question into the source workbench without inflating the claim. | 18 min |
+
+**Who this is for:** Energy researchers, engineering educators, and developers inspecting hybrid-resource assumptions.
+
+### Continue into the implementation
+
+- [README.md](README.md)
+- [START_HERE.md](START_HERE.md)
+- [apps/api/pyproject.toml](apps/api/pyproject.toml)
+- [apps/web/package.json](apps/web/package.json)
+- [apps/api/helioforge/engines/hybrid.py](apps/api/helioforge/engines/hybrid.py)
+- [apps/api/helioforge/engines/storage.py](apps/api/helioforge/engines/storage.py)
+- [docs/HYBRID_METHODOLOGY.md](docs/HYBRID_METHODOLOGY.md)
+
+### Explore or run the source
+
+Node.js >=22 for the standalone preview command; Python 3.11+ for the API package (launcher guide lists 3.11–3.13).
+
+```bash
+node scripts/preview-demo.mjs
+python -m pip install -e "apps/api[dev]"
+python -m pytest apps/api/tests
+python launch.py --no-browser
+```
+
+These commands come from the audited source revision. Runtime requirements and the project's own validation limits are documented below; the standalone browser lab does not execute these commands.
+
+The detailed project guide below remains the source for installation, supported features, licences, and scientific limits. The browser equations and laboratory settings do not change the original application or numerical engine.
+
+<details>
+<summary>Project documentation, installation, attribution, and existing validation</summary>
+
+# HelioForge Energy Lab
+
+## Cloudflare browser edition
+
+[Open the public browser preview](https://mkgrid.co.technology/run/) · [Purpose, usage and limits](https://mkgrid.co.technology/) · [Methodology](https://mkgrid.co.technology/methodology/) · [Build and deployment guide](docs/CLOUDFLARE.md)
+
+[![CI](https://github.com/mohammadrezwankhan/helioforge-energy-lab/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mohammadrezwankhan/helioforge-energy-lab/actions/workflows/ci.yml) · [MIT license](LICENSE) · [Verification and limits](QUALITY_REPORT.md)
+
+Interactive hybrid-energy research and learning workbench with auditable numerical screens and a local Python API.
+
+The full-spectrum roadmap now includes **59 executable studies across all 12 views**, advanced model visuals, local evidence imports and optional provider/device connectors. See the [per-view completion and external-dependency ledger](docs/roadmap/COMPLETION.md), [current verification](docs/roadmap/VERIFICATION.md), and [connector setup](docs/roadmap/CONNECTORS.md). The public preview bundles examples; new calculations require the local Python API.
+
+If HelioForge Energy Lab helps you study this workflow, a star helps other energy researchers and engineering educators find it.
+
+![Actual desktop demo](docs/repository/demo-desktop.png)
+
+## Try the demo
+
+[Open the hosted synthetic demo](https://mohammadrezwankhan.github.io/helioforge-energy-lab/) or run the identical standalone artifact locally:
+
+Prerequisite: Node.js 22 or later; tested here with Node.js 24. This runs locally with synthetic examples. It does not connect to a live provider or publish user input.
+
+```sh
+git clone https://github.com/mohammadrezwankhan/helioforge-energy-lab.git
+cd helioforge-energy-lab
+node scripts/preview-demo.mjs
+```
+
+Open **<http://127.0.0.1:4173>**. Stop the server with Ctrl+C. The first screen is a demonstration, not verified current information. Keep private or real-world records out of this evaluation. The standalone preview does not run new Python calculations; use the source guide below for the local API.
+
+## Why inspect this project?
+
+HelioForge connects a browsable energy-learning interface to an optional local Python calculation API. The standalone preview preserves a reproducible starting point; new numerical runs use the backend and its explicit scenario assumptions.
+
+Read the [engineering walkthrough](docs/engineering/CASE_STUDY.md) and [adjacent-tool comparison](docs/ALTERNATIVES.md), or follow the [source map](PROJECT_ANALYSIS.md).
+
+- [Current verification and limits](QUALITY_REPORT.md)
+- [Architecture and source map](docs/architecture/system-overview.md)
+- [Contribution guide](CONTRIBUTING.md) and [small contribution tasks](docs/CHAMPION_QUESTS.md)
+- [Security reporting](SECURITY.md), [support](SUPPORT.md), and [roadmap](ROADMAP.md)
+
+## Develop and verify
+
+Install the Python project with its development extras in an isolated environment; follow the original guide below. HelioForge also has a separately locked web workspace.
+
+```sh
+python -m pytest apps/api/tests
+python -m ruff check apps/api
+npm --prefix apps/web ci
+npm --prefix apps/web run build
+npm --prefix apps/web test
+```
+
+Prior reports under `docs/` describe the supplied candidate. They do not replace the current [quality report](QUALITY_REPORT.md). Passing software checks is not clinical, educational, financial, safety, or production-service validation.
+
+## License and scope
+
+First-party source is available under [MIT](LICENSE). Bundled dependencies retain their upstream notices; trademarks and third-party content are not relicensed.
+
+<details>
+<summary>Supplied engineering guide, product boundaries, and detailed usage</summary>
+
 <div align="center">
 
-<img src="assets/hero-25d.svg" alt="HelioForge Hybrid Energy Lab 2.5D Architecture" width="100%">
+# HelioForge Champion · 0.3.0
 
-# HelioForge Hybrid Energy Lab
+## Explore the architecture. Stress the assumptions. Follow the energy
 
-**Solar PV + BESS Co-Location, Local-First Engine & LCOE Economics**
+**An interactive hybrid-energy laboratory, learning studio and auditable research workspace.**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-00E5FF.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
-[![Interactive Dashboard](https://img.shields.io/badge/Interactive_Dashboard-Live_on_Pages-00E676.svg?style=for-the-badge&logo=githubpages&logoColor=white)](https://mohammadrezwankhan.github.io/helioforge-energy-lab/)
-[![Lessons](https://img.shields.io/badge/Lessons_Configured-04_Modules-B388FF.svg?style=for-the-badge)](docs/lesson-config.json)
+`36 architectures` · `24 scenarios` · `36 lessons` · `12 workspaces` · `8 + 1 review roles`
 
-<p align="center">
-  <a href="https://mohammadrezwankhan.github.io/helioforge-energy-lab/"><strong>Explore Live 2.5D Dashboard &rarr;</strong></a> ·
-  <a href="#quickstart">Quickstart</a> ·
-  <a href="#lesson-configuration-matrix">Lesson Labs</a> ·
-  <a href="#verification-benchmarks">Benchmarks</a> ·
-  <a href="#citation">Citation</a>
-</p>
+[Start here](START_HERE.md) · [Explore the preview](HelioForge-Preview.html) · [Coverage](docs/HYBRID_COVERAGE.md) · [Model limits](docs/HYBRID_METHODOLOGY.md) · [Champion verification](docs/champion/VERIFICATION.md)
+
+![Actual HelioForge hybrid-lab screenshot: interactive 3D assets beside editable configuration controls.](docs/champion/champion-desktop.png)
 
 </div>
 
----
+## New in Champion
 
-> [!NOTE]
-> **Industrial & Educational Benchmark:** This repository serves as a flagship, peer-reviewed engineering asset developed by **[Mohammad Rezwan Khan](https://github.com/mohammadrezwankhan)**. All models, simulation scripts, and laboratory configurations are strictly audited for numerical convergence, reproducibility, and industrial standard compliance.
+Named setups, actual saved-run reopening, a keyboard command palette, a guided first experiment, validated workspace recovery and a clearer local-first toolbar. Invalid in-progress hybrid inputs no longer leave stale numerical results visible. Other-model drafts survive navigation, same-market reconnection preserves completed calculations, and a new host allow-list hardens the local boundary. The numerical engines and 36/24/36 catalogue remain unchanged.
 
-> [!TIP]
-> **Interactive 2.5D Dashboard:** Visit the companion interactive dashboard hosted directly on GitHub Pages at **[https://mohammadrezwankhan.github.io/helioforge-energy-lab/](https://mohammadrezwankhan.github.io/helioforge-energy-lab/)** to adjust excitation parameters, test live frequency/thermal waveforms, and inspect progressive lab modules in real time.
+**Download/extract → run the platform starter → open the local app.** Prebuilt browser assets are included. See [START_HERE.md](START_HERE.md), [verified changes](docs/champion/VERIFICATION.md), and [release limitations](docs/champion/RELEASE_PLAN.md). “Champion” is the edition name and design ambition, not an award or certification.
 
----
+## A laboratory that shows its working
 
-## 🏛️ System Architecture & 2.5D Visual Topology
+Configure an off-grid renewable microgrid, compare a hospital's normal operation with a grid outage, or investigate the model requirements of a hydrogen hub. Rotate the 3D scene, inspect individual assets, edit capacities, run an hourly energy screen and export the exact inputs and results. Then use a guided lesson to explain the outcome—not just admire a chart.
 
-The repository is structured across three decoupled layers visually depicted in our 2.5D isometric platform:
+**Scope is visible in the interface:** 19 architectures have runnable electricity-balance screens; 17 advanced architectures are explicitly study-only. There are 20 numerical scenario presets and four dynamic/control study presets. Applicability filtering yields **285 runnable architecture–scenario combinations**, not an indiscriminate 36 × 24 claim. All combinations have energy/SOC invariant tests.
 
-1. **Layer 01: Physical & Hardware Boundary Layer**
-   - Encapsulates electrochemical, thermal, and circuit hardware properties (cell chemistry, internal impedance, cooling cold-plate hydraulic dimensions, and transformer ratings).
-2. **Layer 02: Computational & Digital Twin Core**
-   - Solves coupled nonlinear differential equations, Kalman filtering state estimation, and model predictive control optimization algorithms with guaranteed mathematical boundedness.
-3. **Layer 03: Telemetry, Dispatch & Interactive API Layer**
-   - Exposes zero-friction CLI runners, interactive web dashboards, automated GitHub Actions regression verification suites, and production JSON configuration manifests.
+This is an educational and research release. It is **not** a plant controller, an accredited course, a calibrated digital twin, investment advice or a dynamic-stability simulator. The initial battery state is explicit and terminal SOC is unconstrained. A cheaper run that serves less load is not declared the winner.
 
-```
-       ▲  [LAYER 03: TELEMETRY & DISPATCH]   --> Web Dashboard, REST API, Automated CI
-      / \
-     ▲   ▲ [LAYER 02: NUMERICAL CORE]        --> Differential Solvers, EKF, Optimization
-    / \ / \
-   ▲   ▲   ▲ [LAYER 01: HARDWARE BOUNDS]     --> Equivalent Circuit, Thermal Mesh, Grid POI
-```
+## What you can do
 
----
+| Workspace | Working capability |
+|---|---|
+| **Hybrid systems lab** | Search 36 architectures; inspect original 3D meshes; configure capacities, control assumptions and grid limits; apply scenarios; calculate and export hourly results. |
+| **Learning studio** | 36 architecture-linked activities with objectives, experiment steps, evidence requirements and explained two-question self-checks. Local progress, confirmation before reset and exportable lesson plans. |
+| **Scenario compare** | Pin up to three completed runs; inspect demand service, imports, curtailment, cost and initial/terminal battery energy. JSON export; no misleading automatic ranking. |
+| **Command centre** | Synthetic portfolio search, country filters, overview and evidence export. |
+| **Storage & flexibility** | Existing short-horizon SciPy/HiGHS battery MILP with direction and SOC constraints. This is separate from the new greedy hybrid screen. |
+| **PV economics / Investment desk** | Existing PV, project-finance and acquisition screens, including debt-free/null states. |
+| **Research pillars / Forecast studio** | Existing drift, reliability, lifecycle-carbon and seeded illustrative price calculations. |
+| **Market intelligence / Construction & pilots** | Source register, synthetic pilot workflow and persisted evidence events—not live legal or field validation. |
+| **Agent council** | Eight deterministic review roles and a critic-style synthesis; local mode is not independently executed agents. Deterministic local mode by default; opt-in OpenAI adapter can review an explicitly selected saved hybrid run. |
 
-## 🚀 Quickstart
+### Designed for exploration, not decoration alone
 
-Run the full reproduction test suite locally with zero manual setup:
+Original low-poly 3D geometry is transformed by a real orthographic camera and rendered in Canvas2D. Drag to orbit, use keyboard or camera buttons, and select assets for text descriptions. This is **software 3D, not WebGL**. Solar, wind, battery, water, hydrogen and other asset categories have distinct colors and named labels. Links animate conceptually; they are not solved branch flows.
+
+The interface includes responsive containers, searchable technology synonyms (`PV`, `BESS`, `H2`), explained tags, smooth view transitions, a reduced-motion switch and system-preference support. A small achievement animation follows a newly passed self-check only; it never implies an engineering approval. New calculations remain disabled in disconnected preview mode.
+
+<table><tr><td><img src="docs/learning-studio.png" alt="Learning studio with original lessons and self-checks"></td><td><img src="docs/hybrid-compare.png" alt="Two real synthetic runs compared with energy endpoint context"></td></tr></table>
+
+## Start locally
+
+### Fastest: inspect the bundled interface
+
+Open **`HelioForge-Preview.html`** from the extracted repository. It contains the entire interface, original graphics and bundled Python-generated example results with no external font or JavaScript CDN. File-browser policies vary; the locally served application below is the preferred way to use calculations. A GitHub file view shows source rather than running HTML; use the included manual Pages deployment workflow to host a public **preview only**.
+
+### Run calculations
+
+Python **3.11–3.13** is the declared support range; this release was tested here with Python **3.13.5**. Prebuilt browser assets are included, so Node is not required just to run them.
 
 ```bash
-# Clone the repository
-git clone https://github.com/mohammadrezwankhan/helioforge-energy-lab.git
-cd helioforge-energy-lab
-
-# Option A: Python Environment
-pip install -r requirements.txt
-python -m unittest discover -s tests -p "*_test.py"
-
-# Option B: Launch Local 2.5D Interactive Dashboard
-cd docs && python -m http.server 8080
-# Open http://localhost:8080 in your browser
+python -m venv .venv
+# macOS/Linux:
+source .venv/bin/activate
+# Windows PowerShell instead:
+# .venv\Scripts\Activate.ps1
+python -m pip install -e apps/api
+python launch.py
 ```
 
----
+Open **<http://127.0.0.1:8000>**. The server binds to loopback. On Windows, `start-windows.cmd` creates a virtual environment, installs missing pinned runtime dependencies and launches the same local application. It downloads Python dependencies on first use; it does not install Python itself.
 
-## 📚 Lesson Configuration Matrix
+Try a useful first experiment: select **Hospital islanding microgrid**, run the baseline, pin it, apply **Four-hour outage**, run again and pin. Open Scenario compare; inspect critical shortfall and terminal battery energy before comparing cost. Names in the versioned catalogue are the source of truth.
 
-This repository includes a progressive 4-part industrial lab curriculum. Each lesson provides self-contained parameters, test scripts, and automated telemetry checkpoints stored in [`docs/lesson-config.json`](docs/lesson-config.json).
+### Develop the interface
 
-| Lesson ID | Level | Duration | Module Target | Core Objective |
-| :--- | :--- | :--- | :--- | :--- |
-| **`L01`** | `Beginner` | `30 mins` | `config/solar_transposition.json` | Solar PV Irradiance Transposition (Perez/Hay-Davies Diffuse Sky) |
-| **`L02`** | `Intermediate` | `45 mins` | `config/mppt_inverter_loss.json` | Maximum Power Point Tracking (MPPT) & Inverter Efficiency Mapping |
-| **`L03`** | `Advanced` | `60 mins` | `config/peak_shaving_rules.json` | Hybrid PV-BESS Peak Shaving & Self-Consumption Logic |
-| **`L04`** | `Production` | `75 mins` | `config/lcoe_financial_model.json` | Levelized Cost of Energy (LCOE) & Net Present Value Calculator |
+Node 22 is used by the build configuration. From the repository root:
 
+```bash
+cd apps/web
+npm ci
+npm run typecheck
+npm run build
+npm test
+cd ../..
+python -m pytest apps/api/tests
+```
 
-<details>
-<summary><strong>🔍 Click to expand detailed lesson specifications</strong></summary>
+After editing the canonical catalogue:
 
-### L01: Solar PV Irradiance Transposition (Perez/Hay-Davies Diffuse Sky)
-- **Complexity Level:** `Beginner` | **Estimated Time:** `30 mins`
-- **Target File:** `config/solar_transposition.json`
-- **Objective:** Compute Plane-of-Array (POA) irradiance from Global Horizontal (GHI) and Direct Normal (DNI) accounting for circumsolar brightening.
-- **Key Inputs:** Location coordinates (Latitude, Longitude), TMY3 meteorological weather file
-- **Calibrated Parameters:** `{"TiltAngle_deg": 28.0, "AzimuthAngle_deg": 180.0, "GroundAlbedo": 0.2}`
-- **Verification Criteria:**
-  - [x] Calculate solar zenith and solar elevation angle step-by-step
-  - [x] Validate POA irradiance profile against standard NREL PVWatts
+```bash
+python scripts/generate-hybrid-assets.py
+cd apps/web && npm run build
+```
 
-### L02: Maximum Power Point Tracking (MPPT) & Inverter Efficiency Mapping
-- **Complexity Level:** `Intermediate` | **Estimated Time:** `45 mins`
-- **Target File:** `config/mppt_inverter_loss.json`
-- **Objective:** Simulate perturb-and-observe MPPT dynamics and CEC weighted inverter efficiency curve including clipping losses during peak solar windows.
-- **Key Inputs:** PV module temperature coefficient gamma = -0.38%/°C, Inverter AC power rating = 1.0 MW
-- **Calibrated Parameters:** `{"DC_to_AC_OverbuildRatio": 1.25, "PeakInverterEfficiency_pct": 98.6, "MPPT_Efficiency_pct": 99.4}`
-- **Verification Criteria:**
-  - [x] Quantify annual inverter clipping energy loss
-  - [x] Map temperature-dependent voltage derating envelope
+This regenerates browser data from `apps/api/helioforge/data/hybrid_catalog.json`; do not hand-edit `hybrid-data.ts`. To regenerate the original numerical overview snapshot, run `python scripts/generate-snapshot.py` before the web build.
 
-### L03: Hybrid PV-BESS Peak Shaving & Self-Consumption Logic
-- **Complexity Level:** `Advanced` | **Estimated Time:** `60 mins`
-- **Target File:** `config/peak_shaving_rules.json`
-- **Objective:** Simulate commercial & industrial load profiles, charging battery with clipped PV power and discharging during demand charge peak hours.
-- **Key Inputs:** 15-minute facility load demand curve, Utility demand tariff ($18.50/kW peak)
-- **Calibrated Parameters:** `{"DemandTargetThreshold_kW": 450.0, "BatteryPower_kW": 250.0, "BatteryCapacity_kWh": 500.0}`
-- **Verification Criteria:**
-  - [x] Demonstrate zero grid backfeed violation
-  - [x] Achieve 41% reduction in monthly peak demand charges
+Docker and Compose configuration are retained. They were **not executed during this build**; use the loopback instructions as the verified path. Do not expose this local API publicly without the security hardening in [SECURITY.md](SECURITY.md).
 
-### L04: Levelized Cost of Energy (LCOE) & Net Present Value Calculator
-- **Complexity Level:** `Production` | **Estimated Time:** `75 mins`
-- **Target File:** `config/lcoe_financial_model.json`
-- **Objective:** Audit-ready financial model factoring in CAPEX, OPEX, degradation, discount rate, inflation, and tax credits (ITC) over 25-year asset life.
-- **Key Inputs:** Turnkey system installation costs, Annual O&M escalation rates
-- **Calibrated Parameters:** `{"DiscountRate_pct": 6.5, "AssetLifetime_Years": 25, "ITC_TaxCredit_pct": 30.0}`
-- **Verification Criteria:**
-  - [x] Calculate Levelized Cost of Storage (LCOS) and solar LCOE
-  - [x] Perform sensitivity tornado chart on discount rate and battery life
+## Model and lesson coverage
+
+The atlas spans grid-connected and off-grid PV/wind/battery systems; remote, residential, community, telecom, hospital, data-centre and industrial sites; hydro, mobility, floating PV, agrivoltaics and electrical desalination loads. Advanced study configurations include hydrogen, CHP, geothermal, thermal storage, heat pumps, V2G, pumped hydro, flywheels, supercapacitors, marine systems, nuclear–hydrogen and coordinated networks. Specialized carrier/network physics are **not implemented** merely because the architecture is shown.
+
+Scenario presets cover weather shortfalls, demand peaks, outages, grid limits, tariffs, battery aging/trips, reserve levels, generator outages and reduced river availability. Black start, reconnection, weak grids and ramp-limit design are marked study-only. The source archive's five cases are mapped in [REFERENCE_MAPPING.md](docs/REFERENCE_MAPPING.md), including separate AC/DC utility-PV entries.
+
+Read [HYBRID_METHODOLOGY.md](docs/HYBRID_METHODOLOGY.md), the full [architecture/scenario matrix](docs/HYBRID_COVERAGE.md), and the [lesson-authoring contract](docs/LESSON_AUTHORING.md) before adding a model.
+
+## Multi-agent review without pretend execution
+
+Local mode is a deterministic checklist—**no LLM is called**. The optional OpenAI Agents SDK adapter runs eight specialists concurrently and then a critic, using structured output, cancellation on error, bounded turns/tokens and a timeout. Set an API model actually available in your own project; product nicknames are not hard-coded as API model identifiers.
+
+External execution is disabled by default and requires server-side credentials, a local admin key and explicit consent. It may incur API charges. Live provider execution was **not tested here**; control flow and failure handling were tested with a fake SDK. See [AI_SETUP.md](docs/AI_SETUP.md) and the [next-build goal prompt](prompts/ASTRA_MULTIAGENT_BETTERMENT.md).
+
+## Current verification
+
+The authoritative v0.3.0 results, failed-attempt history and coverage limitations are in [docs/champion/VERIFICATION.md](docs/champion/VERIFICATION.md). The source changes, local launcher, human-UAT script, recovery notes and file hashes are included. This package has not been deployed or certified for production.
+
+## Historical v0.2.0 verification (baseline only)
+
+**404 Python tests · 65 frontend tests · 32 browser checks** passed in this environment. Python statement coverage is recorded in `docs/coverage.json`; coverage measures exercised code, not scientific validity. The hybrid matrix includes 285 applicable runnable combinations plus 100 seeded capacity/input perturbations. All twelve views passed 390px and 320px page-overflow checks after layout fixes.
+
+Browser tests exercised Chromium DOM/canvas and real API calculations through a host HTTP bridge because direct browser localhost access was restricted. They do **not** certify direct-browser networking, CSP enforcement, file navigation, screen-reader compatibility or field engineering. Read the complete [validation record](docs/VALIDATION.md) and [final audit](docs/FINAL_AUDIT.md).
+
+## Contribute something independently useful
+
+A good contribution adds a reproducible experiment, not just another attractive card. Start with a hand-checkable benchmark, an original lesson, accessible interaction improvements or a clearly licensed time-series fixture. Every new architecture needs a capability declaration; every new numerical claim needs tests and stated units.
+
+[Contributing](CONTRIBUTING.md) · [Good first issues](docs/ROADMAP.md) · [Security](SECURITY.md) · [Code of conduct](CODE_OF_CONDUCT.md) · [MIT license](LICENSE)
+
+**5,000 stars is a community ambition, not a delivered result.** The [open-source launch plan](docs/OPEN_SOURCE_LAUNCH.md) defines usefulness and contribution milestones. No fabricated stars, awards, affiliations, testimonials or adoption statistics are included.
 
 </details>
 
----
+## Full-spectrum research studies
 
-## 📊 Verification Benchmarks
+The local workbench now contains 39 distinct experimental studies across all twelve views, with source-backed limits, result exports, visual editors and signed local evidence. See [delivery and audit](docs/roadmap/DELIVERY.md), the [experiment index](docs/roadmap/INDEX.md), and [verification](docs/roadmap/VERIFICATION.md). The standalone edition contains generated examples; edited numerical runs require Python.
 
-| Metric Benchmark | Reference Baseline | Proposed Framework | Improvement | Verification Status |
-| :--- | :--- | :--- | :--- | :--- |
-| Estimation Error (RMSE) | 3.85% | **0.94%** | **-75.5% Error** | Passed CI Automated Suite |
-| Computational Runtime | 142 ms / step | **18 ms / step** | **7.8x Speedup** | Benchmarked on standard x86 |
-| Memory Footprint | 480 MB | **64 MB** | **-86.6% RAM** | Profiled via memory profiler |
-| Numerical Stability Margin | Divergence @ 10 kHz | **Stable to 100 kHz** | **10x Stability Window** | 100,000 Step Monte Carlo Run |
-
----
-
-## 📜 Citation
-
-If you use this repository, its models, or the accompanying interactive 2.5D curriculum in academic or industrial research, please cite:
-
-```bibtex
-@software{khan_helioforge_energy_lab,
-  author       = {Mohammad Rezwan Khan},
-  title        = {{HelioForge Hybrid Energy Lab: Solar PV + BESS Co-Location, Local-First Engine & LCOE Economics}},
-  year         = {2026},
-  publisher    = {GitHub},
-  journal      = {GitHub Repository},
-  howpublished = {\url{https://github.com/mohammadrezwankhan/helioforge-energy-lab}}
-}
-```
-
----
-
-## ⭐ Star History
-
-Join our growing community of engineers, researchers, and developers pushing open-source energy storage and computational modeling forward:
-
-<div align="center">
-  <a href="https://star-history.com/#mohammadrezwankhan/helioforge-energy-lab&Date">
-    <img src="https://api.star-history.com/svg?repos=mohammadrezwankhan/helioforge-energy-lab&type=Date" alt="Star History Chart" width="80%">
-  </a>
-</div>
-
----
-
-<p align="center">
-  Distributed under the MIT License. Built with pride by <a href="https://github.com/mohammadrezwankhan"><strong>Mohammad Rezwan Khan</strong></a>.
-</p>
+</details>

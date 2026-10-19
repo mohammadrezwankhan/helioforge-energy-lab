@@ -1,5 +1,7 @@
 # Learning, comparison, pilot, and council study models
 
+![Section 02 · Equations / provenance](../visuals/sections/section-02-equations.svg)
+
 This page documents the twelve deterministic Python experiments in
 apps/api/helioforge/engines/workflow_studies.py. They are reduced-order
 educational screens with bounded input validation. They do not change the
@@ -62,6 +64,8 @@ not a battery-life prediction. The index is intentionally not clipped to 100%.
 
 ## Pilot evidence
 
+![Section 04 · Verification / output](../visuals/sections/section-04-verification.svg)
+
 The photogrammetry study compares equal-length point arrays by index. Per-point
 error is the 3D Euclidean residual after applying the input coordinate scale;
 RMSE is sqrt(mean(error squared)), with maximum and empirical percentile
@@ -105,7 +109,7 @@ consensus grants approval or an operational decision.
 
 ## Primary references
 
-- [NREL renewable-integration ramping study](https://docs.nrel.gov/docs/fy18osti/71151.pdf) for net-load/ramping terminology.
+- [NREL 2016 Renewable Energy Grid Integration Data Book](https://docs.nlr.gov/docs/fy18osti/71151.pdf) for net-load/ramping terminology.
 - [NERC black-start procedure practice guide](https://www.nerc.com/pa/comp/guidance/CMEPPracticeGuidesDL/CMEP%20Practice%20Guide%20-%20Evaluating%20Blackstart%20Documented%20Procedures.pdf) for restoration-procedure context.
 - [DOE hydrogen LHV basis](https://www.energy.gov/cmei/fuels/doe-technical-targets-onboard-hydrogen-storage-light-duty-vehicles) and [DOE compression-energy record](https://www.hydrogen.energy.gov/docs/hydrogenprogramlibraries/pdfs/9013_energy_requirements_for_hydrogen_gas_compression.pdf).
 - [Deb et al. Pareto-dominance optimization paper](https://doi.org/10.1109/4235.996017) and [SciPy mixed-integer linear programming documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.milp.html).
