@@ -1,0 +1,93 @@
+{
+  "repository": "helioforge-energy-lab",
+  "domain": "DOMAIN_C",
+  "title": "HelioForge Hybrid Energy Lab",
+  "version": "2.0.0",
+  "author": "Mohammad Rezwan Khan",
+  "lessons": [
+    {
+      "id": "L01",
+      "title": "Solar PV Irradiance Transposition (Perez/Hay-Davies Diffuse Sky)",
+      "level": "Beginner",
+      "duration": "30 mins",
+      "config_file": "config/solar_transposition.json",
+      "summary": "Compute Plane-of-Array (POA) irradiance from Global Horizontal (GHI) and Direct Normal (DNI) accounting for circumsolar brightening.",
+      "inputs": [
+        "Location coordinates (Latitude, Longitude)",
+        "TMY3 meteorological weather file"
+      ],
+      "parameters": {
+        "TiltAngle_deg": 28.0,
+        "AzimuthAngle_deg": 180.0,
+        "GroundAlbedo": 0.2
+      },
+      "checkpoints": [
+        "Calculate solar zenith and solar elevation angle step-by-step",
+        "Validate POA irradiance profile against standard NREL PVWatts"
+      ]
+    },
+    {
+      "id": "L02",
+      "title": "Maximum Power Point Tracking (MPPT) & Inverter Efficiency Mapping",
+      "level": "Intermediate",
+      "duration": "45 mins",
+      "config_file": "config/mppt_inverter_loss.json",
+      "summary": "Simulate perturb-and-observe MPPT dynamics and CEC weighted inverter efficiency curve including clipping losses during peak solar windows.",
+      "inputs": [
+        "PV module temperature coefficient gamma = -0.38%/\u00b0C",
+        "Inverter AC power rating = 1.0 MW"
+      ],
+      "parameters": {
+        "DC_to_AC_OverbuildRatio": 1.25,
+        "PeakInverterEfficiency_pct": 98.6,
+        "MPPT_Efficiency_pct": 99.4
+      },
+      "checkpoints": [
+        "Quantify annual inverter clipping energy loss",
+        "Map temperature-dependent voltage derating envelope"
+      ]
+    },
+    {
+      "id": "L03",
+      "title": "Hybrid PV-BESS Peak Shaving & Self-Consumption Logic",
+      "level": "Advanced",
+      "duration": "60 mins",
+      "config_file": "config/peak_shaving_rules.json",
+      "summary": "Simulate commercial & industrial load profiles, charging battery with clipped PV power and discharging during demand charge peak hours.",
+      "inputs": [
+        "15-minute facility load demand curve",
+        "Utility demand tariff ($18.50/kW peak)"
+      ],
+      "parameters": {
+        "DemandTargetThreshold_kW": 450.0,
+        "BatteryPower_kW": 250.0,
+        "BatteryCapacity_kWh": 500.0
+      },
+      "checkpoints": [
+        "Demonstrate zero grid backfeed violation",
+        "Achieve 41% reduction in monthly peak demand charges"
+      ]
+    },
+    {
+      "id": "L04",
+      "title": "Levelized Cost of Energy (LCOE) & Net Present Value Calculator",
+      "level": "Production",
+      "duration": "75 mins",
+      "config_file": "config/lcoe_financial_model.json",
+      "summary": "Audit-ready financial model factoring in CAPEX, OPEX, degradation, discount rate, inflation, and tax credits (ITC) over 25-year asset life.",
+      "inputs": [
+        "Turnkey system installation costs",
+        "Annual O&M escalation rates"
+      ],
+      "parameters": {
+        "DiscountRate_pct": 6.5,
+        "AssetLifetime_Years": 25,
+        "ITC_TaxCredit_pct": 30.0
+      },
+      "checkpoints": [
+        "Calculate Levelized Cost of Storage (LCOS) and solar LCOE",
+        "Perform sensitivity tornado chart on discount rate and battery life"
+      ]
+    }
+  ]
+}
