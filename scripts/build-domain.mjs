@@ -37,11 +37,14 @@ const write=(file,content)=>{fs.mkdirSync(path.dirname(path.join(out,file)),{rec
 const facts=JSON.parse(fs.readFileSync(path.join(out,'app.json'),'utf8'));
 let runtime=fs.readFileSync(path.join(out,'run/index.html'),'utf8');
 if(runtime.split(config.canonical).length-1!==1)throw Error('Runtime canonical anchor changed');
-runtime=runtime.replace(config.canonical,site.canonical);
+runtime=runtime.replace(config.canonical,origin+'/run/');
 write('run/index.html',runtime);
 facts.url=site.canonical;facts.applicationUrl=origin+'/run/';facts.runtimeSha256=sha(runtime);
 facts.methodologyUrl=origin+'/methodology/';facts.authorUrl='https://mrkhan.co.technology/';
 facts.capabilities={architectures:36,lessons:36,localApiRunnableArchitectures:19,studyOnlyArchitectures:17,browserMode:'bundled snapshot; new numerical runs disabled'};
+const hybridBundle=JSON.parse(fs.readFileSync(path.join(root,'examples/hybrid-bundle.json'),'utf8'));
+if(hybridBundle.schema!=='helioforge.hybrid-bundle.v1'||hybridBundle.cases.length!==285)throw Error('Regenerate the complete hybrid preset archive before publication');
+facts.bundledHybrid={schema:hybridBundle.schema,version:hybridBundle.version,catalogueVersion:hybridBundle.catalogue_version,cases:hybridBundle.cases.length,datasetSha256:hybridBundle.dataset_sha256};
 write('app.json',JSON.stringify(facts,null,2)+'\n');
 const author={'@type':'Person','@id':'https://mrkhan.co.technology/#person',name:'Mohammad Rezwan Khan',url:'https://mrkhan.co.technology/',sameAs:['https://github.com/mohammadrezwankhan']};
 const nav=`<header class="masthead"><a class="wordmark" href="/">H<span>↗</span> HelioForge</a><nav aria-label="Main"><a href="/run/">Open app</a><a href="/methodology/">Methodology</a><a href="/about/">About</a></nav></header>`;

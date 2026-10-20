@@ -3,3 +3,6 @@
 *.jpg binary
 *.zip binary
 *.gz binary
+
+# Release-media checksums cover exact bytes, including on Windows checkouts.
+assets/engineering-hero/v1/** -text

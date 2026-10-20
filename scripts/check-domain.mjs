@@ -45,7 +45,9 @@ if(site.engineeringHero===true){
  assert.ok(!headers.includes('/assets/engineering-hero/v1/\n'));
  assert.ok(!files.some(file=>file.startsWith(heroDirectory+'/')));
 }
-const facts=JSON.parse(read('app.json')),runtime=read('run/index.html');assert.equal(facts.url,site.canonical);assert.equal(facts.applicationUrl,origin+'/run/');assert.equal(facts.runtimeSha256,createHash('sha256').update(runtime).digest('hex'));assert.match(runtime,/name="robots" content="noindex,follow"/);assert.ok(runtime.includes(`rel="canonical" href="${site.canonical}"`));assert.ok(!runtime.includes("location.protocol === 'file:'"));
+const facts=JSON.parse(read('app.json')),runtime=read('run/index.html');assert.equal(facts.url,site.canonical);assert.equal(facts.applicationUrl,origin+'/run/');assert.equal(facts.runtimeSha256,createHash('sha256').update(runtime).digest('hex'));assert.match(runtime,/name="robots" content="noindex,follow"/);assert.ok(runtime.includes(`rel="canonical" href="${facts.applicationUrl}"`));assert.ok(!runtime.includes("location.protocol === 'file:'"));
+const hybridBundle=JSON.parse(fs.readFileSync(path.join(root,'examples/hybrid-bundle.json'),'utf8'));
+assert.equal(facts.bundledHybrid.cases,285);assert.equal(facts.bundledHybrid.version,hybridBundle.version);assert.equal(facts.bundledHybrid.datasetSha256,hybridBundle.dataset_sha256);
 assert.equal((read('sitemap.xml').match(/<loc>/g)||[]).length,3);assert.ok(!read('sitemap.xml').includes('/run/'));assert.ok(read('robots.txt').includes(origin+'/sitemap.xml'));assert.ok(read('llms.txt').includes('36 architectures'));assert.ok(read('_headers').includes(site.project+'.pages.dev/*'));
 const personUrl='https://mrkhan.co.technology/#person',profileUrl='https://mrkhan.co.technology/';
 const findPeople=value=>{

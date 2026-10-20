@@ -8,7 +8,7 @@ namespace HF {
     const h=state.hybrid;
     function selectSystem(id:string):void {
       const s=systemById(id);h.inputs=presetInputs(id);h.objectId=s.technologies.includes('battery')?'battery':s.technologies[0]!;
-      h.result=null;h.resultInputs=null;h.inputError=null;h.draft=null;h.hour=12;if(state.champion)state.champion.lastRunId=null;cb.persist?.();cb.navigate('hybrid');
+      h.result=null;h.resultInputs=null;h.inputError=null;h.draft=null;h.hour=12;attachBundledHybridResult(h);if(state.champion)state.champion.lastRunId=null;cb.persist?.();cb.navigate('hybrid');
     }
     function collect(form:HTMLFormElement):HybridInputs {
       const value:Record<string,unknown>={...h.inputs};
@@ -23,25 +23,24 @@ namespace HF {
       else if(name==='clear-filters'){h.search='';h.family='All';h.topology='All';cb.render();document.getElementById('architecture-library')?.scrollIntoView({behavior:'instant'});}
       else if(name==='import'){
         const file=document.createElement('input');file.type='file';file.accept='.json,application/json';
-        file.onchange=async()=>{try{if(h.busy)throw new Error('Complete the current run before importing a configuration.');const f=file.files?.[0];if(!f)return;if(f.size>100_000)throw new Error('Configuration file must be under 100 KB.');const p=parseConfiguration(JSON.parse(await f.text()));h.inputs=p;h.result=null;h.resultInputs=null;h.inputError=null;h.draft=null;if(state.champion)state.champion.lastRunId=null;cb.persist?.();h.objectId=systemById(p.system_id).technologies[0]!;cb.render();cb.toast('Configuration imported. Run the API to calculate this setup.');}catch(e){cb.toast(e instanceof Error?e.message:'Invalid configuration file.',true);}};file.click();
+        file.onchange=async()=>{try{if(h.busy)throw new Error('Complete the current run before importing a configuration.');const f=file.files?.[0];if(!f)return;if(f.size>100_000)throw new Error('Configuration file must be under 100 KB.');const p=parseConfiguration(JSON.parse(await f.text()));h.inputs=p;h.result=null;h.resultInputs=null;h.inputError=null;h.draft=null;attachBundledHybridResult(h);if(state.champion)state.champion.lastRunId=null;cb.persist?.();h.objectId=systemById(p.system_id).technologies[0]!;cb.render();cb.toast(h.result?'Exact preset imported with its bundled Python result.':'Configuration imported. Start the local Python API to calculate these edited inputs.');}catch(e){cb.toast(e instanceof Error?e.message:'Invalid configuration file.',true);}};file.click();
       }else if(name==='csv'){if(!h.result||hybridDirty(h))throw new Error('Run this configuration first.');download('helioforge-hybrid-dispatch.csv',toCSV(h.result.schedule.map(x=>({...x}))),'text/csv');}
       else if(name==='pin'){
         if(!h.result||hybridDirty(h)||!h.resultInputs)throw new Error('Only a completed, current result can be compared.');
         if(h.compare.length>=3)throw new Error('The comparison holds three runs. Remove a pinned run first.');
-        const id=h.result.run_id??'bundled-example';if(h.compare.some(x=>x.id===id))throw new Error('This exact run is already pinned.');
+        const id=h.result.run_id??h.result.bundle_case_id??'bundled-example';if(h.compare.some(x=>x.id===id))throw new Error('This exact run is already pinned.');
         h.compare.push({id,name:`${systemById(h.result.system_id).name} / ${scenarioById(h.result.scenario_id).name}`,inputs:structuredClone(h.resultInputs),result:structuredClone(h.result)});
         cb.persist?.();cb.toast(`Pinned ${h.compare.length} of 3 runs. Open Scenario compare to inspect them.`);
       }else if(name==='export-compare')downloadJSON('helioforge-comparison.json',{schema:'helioforge.comparison.v1',note:'Synthetic, different service and SOC endpoints must be reconciled before ranking.',runs:h.compare});
       else if(name==='clear-compare'){h.compare=[];if(state.champion)state.champion.pendingPins=[];cb.persist?.();cb.render();}
       else if(name==='launch-lesson'){
         const l=HYBRID_CATALOG.lessons.find(x=>x.id===h.lessonId)!;
-        selectSystem(l.system_id);h.inputs=presetInputs(l.system_id,l.scenario_id);h.draft=null;h.inputError=null;cb.persist?.();cb.render();cb.toast('Lesson configuration loaded. Begin with a reference run, then apply the lesson stress.');
+        selectSystem(l.system_id);h.inputs=presetInputs(l.system_id,l.scenario_id);h.draft=null;h.inputError=null;attachBundledHybridResult(h);cb.persist?.();cb.render();cb.toast(h.result?'Lesson preset loaded with its bundled Python result. Compare available presets; edited inputs require the local Python API.':'Study-only lesson configuration loaded. Read the model boundary and experiment prompts.');
       }else if(name==='export-lesson'){
         const l=HYBRID_CATALOG.lessons.find(x=>x.id===h.lessonId)!;
         downloadJSON(`helioforge-${l.id}.json`,{schema:'helioforge.lesson.v1',lesson:l,configuration:presetInputs(l.system_id,l.scenario_id),notice:'Original local self-study material; not accredited or field-validated.'});
       }else if(name==='export-progress')downloadJSON('helioforge-learning-progress.json',{schema:'helioforge.progress.v1',exported_at:new Date().toISOString(),passed_self_checks:h.progress,notice:'Self-reported browser-local practice. Not verified credentials.'});
-      else if(name==='reset-progress')cb.openModal('Reset learning progress?',`<div class="modal-copy"><p>This removes the ${h.progress.length} passed self-checks stored in this browser. It does not delete exported records or API runs.</p><button class="btn secondary" data-hybrid-action="confirm-reset-progress">Reset browser progress</button></div>`);
-      else if(name==='confirm-reset-progress'){h.progress=[];try{localStorage.removeItem('hf-lessons-v2');}catch{/* optional */}cb.render();cb.toast('Browser learning progress reset.');}
+      else if(name==='reset-progress')cb.openModal('Reset learning progress?',`<div class="modal-copy"><p>This removes the ${h.progress.length} passed self-checks stored in this browser. It does not delete exported records or API runs.</p><p id="learning-reset-status" role="alert"></p><button class="btn secondary" data-hybrid-action="confirm-reset-progress">Reset browser progress</button></div>`);
       else if(name==='review-hybrid'){
         if(!h.result?.run_id||hybridDirty(h))throw new Error('Calculate and save a current hybrid run first.');
         cb.navigate('council');
@@ -51,7 +50,7 @@ namespace HF {
       const el=(event.target as Element).closest<HTMLElement>('button');if(!el)return;
       try{
         if(el.dataset.system){if(h.busy)return;selectSystem(el.dataset.system);window.scrollTo({top:0,behavior:'instant'});}
-        if(el.dataset.scenario){if(h.busy)return;if(h.inputError)throw new Error('Correct the input error before changing the scenario.');h.draft=null;const c=scenarioById(el.dataset.scenario);h.inputs={...h.inputs,scenario_id:c.id,hours:Math.max(h.inputs.hours,Number(c.modifiers.hours??0))};h.hour=Math.min(h.hour,h.inputs.hours-1);cb.persist?.();cb.render();}
+        if(el.dataset.scenario){if(h.busy)return;if(h.inputError)throw new Error('Correct the input error before changing the scenario.');const wasPreset=configurationKey(h.inputs)===configurationKey(presetInputs(h.inputs.system_id,h.inputs.scenario_id));const c=scenarioById(el.dataset.scenario);if(!applicable(systemById(h.inputs.system_id),c))throw new Error('This scenario does not apply to the selected architecture.');h.draft=null;h.inputs=wasPreset?presetInputs(h.inputs.system_id,c.id):{...h.inputs,scenario_id:c.id,hours:Math.max(h.inputs.hours,Number(c.modifiers.hours??0))};h.hour=Math.min(h.hour,h.inputs.hours-1);attachBundledHybridResult(h);if(state.champion)state.champion.lastRunId=null;cb.persist?.();cb.render();}
         if(el.dataset.lesson){h.lessonId=el.dataset.lesson;h.quizResult=null;cb.persist?.();cb.navigate('lessons');}
         if(el.dataset.asset){h.objectId=el.dataset.asset;const inspector=document.getElementById('asset-inspector');if(inspector)inspector.innerHTML=assetInspector(h);document.querySelectorAll<HTMLButtonElement>('[data-asset]').forEach(b=>{b.classList.toggle('selected',b.dataset.asset===h.objectId);b.setAttribute('aria-pressed',String(b.dataset.asset===h.objectId));});}
         if(el.dataset.sceneCommand)document.getElementById('energy-scene')?.dispatchEvent(new CustomEvent('scene-command',{detail:el.dataset.sceneCommand}));
@@ -114,8 +113,7 @@ namespace HF {
         if(result.passed){
           const first=!h.progress.includes(lesson.id);if(first){h.progress.push(lesson.id);try{localStorage.setItem('hf-lessons-v2',JSON.stringify(h.progress));}catch{cb.toast('Self-check passed. Browser storage is unavailable; export your progress.');}}
           if(first)cb.celebrate();
-          const progress=document.querySelector('.achievement-orb strong');if(progress)progress.innerHTML=`${h.progress.length}<small> / 36</small>`;
-          const number=document.querySelector(`.lesson-list [data-lesson="${lesson.id}"] .lesson-number`);if(number){number.classList.add('done');number.innerHTML=icon('check',14);}
+          syncLessonProgressDisplays(h.progress);
         }
       }
     });

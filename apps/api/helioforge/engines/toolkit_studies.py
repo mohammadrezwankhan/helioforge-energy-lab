@@ -147,6 +147,14 @@ STUDIES = [
 ]
 
 
+def _bounded_battery_step(soc: float, charge: float, discharge: float, eta: float,
+                          floor: float, ceiling: float) -> tuple[float, float, float]:
+    """Project stored energy, then reconstruct the nonnegative AC-side flows."""
+    end = min(ceiling, max(floor, soc + eta * charge - discharge / eta))
+    delta = end - soc
+    return max(delta, 0.0) / eta, max(-delta, 0.0) * eta, end
+
+
 def annual(p: Annual) -> dict:
     rng = np.random.default_rng(p.seed)
     t = np.arange(8760)
@@ -191,14 +199,7 @@ def annual(p: Annual) -> dict:
             )
         elif price >= high:
             discharge = min(p.power_kw, max(0, (soc - floor) * eta), max(0, net))
-        projected = soc + eta * charge - discharge / eta
-        if projected < floor:
-            discharge = 0
-            charge = (floor - soc) / eta
-        elif projected > ceiling:
-            charge = 0
-            discharge = (soc - ceiling) * eta
-        soc = soc + eta * charge - discharge / eta
+        charge, discharge, soc = _bounded_battery_step(soc, charge, discharge, eta, floor, ceiling)
         grid = net + charge - discharge
         imp = max(0, grid)
         exp = max(0, -grid)
