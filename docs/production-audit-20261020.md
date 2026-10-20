@@ -26,6 +26,7 @@ Windows, Python 3.12.14, Node 24.20.0, npm 11.19.0, pytest 9.1.1 and Ruff 0.17.1
 | Patched audited base | 587 Python and 171 frontend tests passed |
 | Integrated source | 613 Python and 171 frontend tests passed |
 | Added artifact-verifier regressions | 11 passed; roundoff, type and nonfinite regressions failed the initial exact-comparison implementation |
+| Final local unit suites | 624 Python and 172 frontend tests passed |
 | Original numerical bugs | Four focused tests failed the original engines; patched complete suites passed |
 | Typecheck/build, generated-data arithmetic, preview/domain/collection checks | Passed |
 | Engineering-film release checks | Three tests passed |
@@ -51,6 +52,13 @@ Every stored dataset digest must still match its own complete content. Changed
 inputs, material results, nonfinite values and corrupt digests are rejected.
 The checker reports the actual numerical difference; CI then builds its own
 platform's results. No generated numerical value is hand-edited.
+
+Linux CI measured 1,315 roundoff differences, with a maximum absolute difference
+of `9.094947017729282e-13`; the complete release and export workflows passed.
+CodeQL also identified incomplete tag removal in the test-only controller
+fixture. Its text projection now scans tag boundaries, including unfinished
+tags, with a regression that fails the former single-pass regex. The fixture
+does not sanitize production HTML.
 
 A separate read-only source review found no blocking defect. One minor test
 improvement remains: the provenance fetch mock could also assert URL/options;

@@ -6,7 +6,17 @@ export function controllerFixture({mode = 'normal', saved = false, progress = []
   const memory = new Map(), events = new Map(), toasts = [], exports = [], microtasks = [];
   class Element {
     constructor() { this.dataset = {}; this.attributes = new Map(); this.textContent = ''; this.classes = new Set(); this.classList = {add: x => this.classes.add(x), remove: x => this.classes.delete(x), contains: x => this.classes.has(x), toggle: (x, on) => on ? this.classes.add(x) : this.classes.delete(x)}; }
-    set innerHTML(value) { this.markup = value; this.textContent = value.replace(/<[^>]*>/g, ''); }
+    set innerHTML(value) {
+      this.markup = value;
+      // Minimal text projection for controlled fixture markup, not an HTML sanitizer.
+      let text = '', inTag = false;
+      for (const character of value) {
+        if (inTag) { if (character === '>') inTag = false; }
+        else if (character === '<') inTag = true;
+        else text += character;
+      }
+      this.textContent = text;
+    }
     get innerHTML() { return this.markup ?? ''; }
     setAttribute(key, value) { this.attributes.set(key, value); }
     getAttribute(key) { return this.attributes.get(key) ?? null; }
