@@ -24,6 +24,7 @@ namespace HF {
     grid_connected:boolean;state:string;import_eur_kwh:number;variable_cost_eur:number;balance_residual_kw:number;
   }
   export interface HybridResult extends BaseResult {
+    bundle_case_id?:string; bundle_version?:string;
     data_kind:string;system_id:string;scenario_id:string;duration_hours:number;policy:string;
     total_load_kwh:number;served_kwh:number;unserved_kwh:number;critical_unserved_kwh:number;
     critical_served_pct:number;load_served_pct:number;renewable_available_kwh:number;
@@ -33,6 +34,10 @@ namespace HF {
     variable_cost_eur:number;max_balance_residual_kw:number;tags:HybridTag[];schedule:HybridPoint[];
   }
   export interface ComparedRun {id:string;name:string;inputs:HybridInputs;result:HybridResult}
+  export interface HybridBundledCase {id:string;inputs:HybridInputs;result:HybridResult}
+  export interface HybridBundle {
+    schema:'helioforge.hybrid-bundle.v1';version:string;catalogue_version:string;dataset_sha256:string;cases:HybridBundledCase[];
+  }
   export interface HybridState {
     inputs:HybridInputs; result:HybridResult|null; resultInputs:HybridInputs|null; search:string;family:string;topology:string;
     lessonId:string;progress:string[];quizResult:{passed:boolean;correct:number;total:number}|null;

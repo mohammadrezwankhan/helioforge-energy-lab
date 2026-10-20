@@ -8,7 +8,7 @@ from unittest.mock import patch
 import numpy as np
 import pytest
 
-from helioforge.engines.planning_studies import _RUNNERS, STUDIES, _fit_vecm, run
+from helioforge.engines.planning_studies import _RUNNERS, STUDIES, AnnualStorageInput, _fit_vecm, run
 
 
 def test_every_default_study_returns_finite_contract_result() -> None:
@@ -48,6 +48,25 @@ def test_annual_storage_matches_hand_calculated_energy_and_monthly_peak_cost() -
     assert result["metrics"][0]["value"] == pytest.approx(72_000)
     assert result["metrics"][1]["value"] == pytest.approx(72_000)
     assert result["details"]["monthly_peaks_kw"] == pytest.approx([80] * 12)
+
+
+@pytest.mark.parametrize("demand_charge", [0.0, 2.0])
+def test_annual_monthly_peaks_are_observed_import_maxima_with_and_without_peak_pricing(demand_charge):
+    p = AnnualStorageInput(monthly_demand_charge_eur_kw=demand_charge)
+    result = run("storage-annualopt", {"monthly_demand_charge_eur_kw": demand_charge})
+    expected = [max(row["grid_import_kw"] for row in result["table"] if row["month"] == month)
+                for month in range(1, 13)]
+    details = result["details"]
+    assert details["monthly_peaks_kw"] == pytest.approx(expected)
+    assert details["maximum_monthly_peak_import_kw"] == pytest.approx(max(expected))
+    assert result["series"][2]["y"] == pytest.approx(expected)
+    assert details["annual_demand_charge_eur"] == pytest.approx(sum(expected) * demand_charge)
+    energy_cost = sum(row["grid_import_kw"] * p.import_price_eur_kwh[row["hour"] % 24]
+                      - row["grid_export_kw"] * p.export_price_eur_kwh[row["hour"] % 24]
+                      + row["discharge_kw"] * p.discharge_wear_eur_kwh
+                      for row in result["table"])
+    assert details["annual_energy_cost_eur"] == pytest.approx(energy_cost)
+    assert result["metrics"][0]["value"] == pytest.approx(energy_cost + sum(expected) * demand_charge)
 
 
 def test_annual_storage_rejects_solver_timeout_without_returning_schedule() -> None:

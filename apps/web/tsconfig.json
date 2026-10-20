@@ -21,6 +21,7 @@
     "src/types.ts",
     "src/hybrid-types.ts",
     "src/core.ts",
+    "src/release-provenance.ts",
     "src/icons.ts",
     "src/charts.ts",
     "src/snapshot.ts",

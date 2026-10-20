@@ -17,7 +17,7 @@ namespace HF {
     const studies=createStudyController(()=>state);
     const workflows=createWorkflowController(()=>state,()=>render());
     const experiences=createExperienceController(()=>state);
-    const completion=createCompletionController(()=>state);
+    const completion=createCompletionController(()=>state,toast);
     const integrations=createIntegrationController(()=>state);
     window.addEventListener('pagehide',event=>{if(!event.persisted)completion.destroy();});
     function render(): void {
@@ -47,6 +47,7 @@ namespace HF {
       experiences.refresh();
       completion.refresh();
       integrations.refresh();
+      void refreshReleaseProvenance();
     }
     function applyBusyState():void {
       document.querySelector('.council-topology')?.classList.toggle('working',state.busy&&state.page==='council');
@@ -150,7 +151,7 @@ namespace HF {
       else if(name==='motion'){
         state.motionOff=!state.motionOff;try{localStorage.setItem('hf-motion-off',String(state.motionOff));}catch{/* Optional preference only. */}render();toast(state.motionOff?'Animations reduced.':'Animations enabled.');
       }else if(name==='close-modal')(document.getElementById('modal') as HTMLDialogElement).close();
-      else if(name==='methodology')openModal('Visible assumptions. Verifiable work.',`<div class="modal-copy"><p>HelioForge is a local-first research and investment-screening application. All included sites, prices, portfolios and pilot records are synthetic.</p><h3>What the models do</h3><p>Storage: mixed-integer cost optimization with energy balance, state-of-charge limits and no simultaneous charging/discharging or importing/exporting. The no-storage comparator is optimized under the same constraints.</p><p>Finance: pre-tax nominal cash flows, a conservative augmentation-year debt-service screen and a level-payment debt-capacity estimate. PV: discounted lifecycle costs divided by discounted generation.</p><p>Forecasting: seeded, uncalibrated annual-price scenarios. Reliability: user-specified Weibull assumptions. Carbon: a screening inventory, not a certified life-cycle assessment.</p><h3>What this release does not claim</h3><p>No live regulatory monitoring, bankable price forecast, calibrated fault diagnosis, certified biodiversity result, production authentication or operational equipment control. The country registry provides official starting points, not approved rules.</p><p>The full repository includes methodology, limitations, tests, a multi-agent build prompt and a production-hardening roadmap.</p><button class="btn primary" data-action="export-evidence">${icon('download',16)} Download current evidence</button></div>`);
+      else if(name==='methodology')openModal('Visible assumptions. Verifiable work.',`<div class="modal-copy"><p>HelioForge is a local-first research and investment-screening application. All included sites, prices, portfolios and pilot records are synthetic.</p><h3>What the models do</h3><p>Storage: mixed-integer cost optimization with energy balance, state-of-charge limits and no simultaneous charging/discharging or importing/exporting. The no-storage comparator is optimized under the same constraints.</p><p>Finance: pre-tax nominal cash flows, a conservative augmentation-year debt-service screen and a level-payment debt-capacity estimate. PV: discounted lifecycle costs divided by discounted generation.</p><p>Forecasting: seeded, uncalibrated annual-price scenarios. Reliability: user-specified Weibull assumptions. Carbon: a screening inventory, not a certified life-cycle assessment.</p><h3>What this release does not claim</h3><p>No live regulatory monitoring, bankable price forecast, calibrated fault diagnosis, certified biodiversity result, production authentication or operational equipment control. The country registry provides official starting points, not approved rules.</p><p>The full repository includes methodology, limitations, tests, a multi-agent build prompt and a production-hardening roadmap.</p>${releaseProvenanceMarkup()}<button class="btn primary" data-action="export-evidence">${icon('download',16)} Download current evidence</button></div>`);
       else if(name==='history')await champion.history();
     }
     document.addEventListener('click',event=>{

@@ -56,6 +56,19 @@ namespace HF {
     const correct=lesson.quiz.filter((q,i)=>answers[i]===q.answer).length;
     return {passed:correct===lesson.quiz.length,correct,total:lesson.quiz.length};
   }
+  const hybridPresets=new Map(HYBRID_BUNDLE.cases.map(entry=>[`${entry.inputs.system_id}/${entry.inputs.scenario_id}`,entry]));
+  /** Only an exact frozen input record can display a build-time Python result. */
+  export function bundledHybridCase(inputs:HybridInputs):HybridBundledCase|null {
+    const entry=hybridPresets.get(`${inputs.system_id}/${inputs.scenario_id}`);
+    return HYBRID_BUNDLE.catalogue_version===HYBRID_CATALOG.version&&entry&&configurationKey(entry.inputs)===configurationKey(inputs)?entry:null;
+  }
+  export function attachBundledHybridResult(h:HybridState):boolean {
+    h.result=null;h.resultInputs=null;
+    const entry=h.inputError?null:bundledHybridCase(h.inputs);
+    if(!entry)return false;
+    h.result=structuredClone(entry.result);h.resultInputs={...entry.inputs};h.hour=clamp(h.hour,0,h.result.schedule.length-1);
+    return true;
+  }
   export function initialHybridState():HybridState {
     let progress:string[]=[];
     try{const raw:unknown=JSON.parse(localStorage.getItem('hf-lessons-v2')??'[]');if(Array.isArray(raw))progress=[...new Set(raw.filter((x):x is string=>typeof x==='string'&&HYBRID_CATALOG.lessons.some(l=>l.id===x)))];}catch{/* Local persistence is optional. */}

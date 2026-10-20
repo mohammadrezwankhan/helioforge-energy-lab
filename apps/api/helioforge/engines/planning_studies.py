@@ -508,9 +508,10 @@ STUDIES = [
         ["status = missing_value if value is absent; otherwise compare to the supplied min/max threshold",
          "provenance is complete only when a source reference and observation date are both supplied"],
         ["No asset values, thresholds, or sources are fabricated; an empty dataset returns an explicit no-evidence state.",
-         "Threshold comparison does not authenticate records, normalize units, or imply risk approval."],
-        [{"title": "NIST: Guide to Evaluating Data Quality",
-          "url": "https://www.nist.gov/publications/guide-evaluating-data-quality"}]),
+         "Threshold comparison does not authenticate records, normalize units, or imply risk approval.",
+         "The NIST publication provides materials-data evaluation context; the source-plus-date completeness rule is this application’s own checklist, not a NIST validation standard."],
+        [{"title": "NIST Interactive Data Evaluation Assessment Tool",
+          "url": "https://www.nist.gov/publications/nist-interactive-data-evaluation-assessment-tool"}]),
     _entry("pilots-registration", "pilots", "Unpaired point-cloud registration",
         "Register unordered design and survey XYZ points with trimmed nearest-neighbor ICP and a rigid Kabsch transform.", "survey",
         [_f("maximum_correspondence_distance_m", "Maximum match distance", 1, 0.0001, 1_000_000, 0.1, "m"),
@@ -649,7 +650,9 @@ def _annual_storage(p: AnnualStorageInput) -> dict:
     soc = x[soc_idx]
     residual = imports - exports + pv - curtailment + discharge - load - charge
     soc_residual = soc[1:] - soc[:-1] - eta * charge + discharge / eta
-    peaks = x[peak_idx:peak_idx + 12]
+    # Epigraph variables are only tight when the demand charge is positive.
+    # Report physical observations even when those variables have zero cost.
+    peaks = np.asarray([np.max(imports[month == i]) for i in range(12)])
     energy_cost = float(np.dot(imports, buy) - np.dot(exports, sell) + np.sum(discharge) * p.discharge_wear_eur_kwh)
     demand_cost = float(np.sum(peaks) * p.monthly_demand_charge_eur_kw)
 
