@@ -79,7 +79,38 @@ namespace HF {
     return {schema: completionSchema, passed_self_checks: passed, mastery_checks: checks};
   }
 
-  export function createCompletionController(getState: () => ViewState): {refresh: () => void; destroy: () => void} {
+  export function lessonProgressNote(progress: readonly string[]): string {
+    const passed = new Set(HYBRID_CATALOG.lessons.filter(lesson => progress.includes(lesson.id)).map(lesson => lesson.id));
+    return `Passed ${passed.size} of ${HYBRID_CATALOG.lessons.length} local self-checks. Tiers provide suggested study order; completion is not a qualification, credential or verified mastery.`;
+  }
+
+  export function syncLessonProgressDisplays(progress: readonly string[]): void {
+    const lessons = HYBRID_CATALOG.lessons;
+    const passed = new Set(lessons.filter(lesson => progress.includes(lesson.id)).map(lesson => lesson.id));
+    const hero = document.querySelector<HTMLElement>('.achievement-orb strong');
+    if (hero) hero.innerHTML = `${passed.size}<small> / ${lessons.length}</small>`;
+    for (const button of document.querySelectorAll<HTMLElement>('.skill-tree [data-lesson]')) button.classList.toggle('done', passed.has(button.dataset.lesson ?? ''));
+    for (const button of document.querySelectorAll<HTMLElement>('.lesson-list [data-lesson]')) {
+      const number = button.querySelector<HTMLElement>('.lesson-number');
+      if (number) {
+        const done = passed.has(button.dataset.lesson ?? '');
+        number.classList.toggle('done', done);
+        number.textContent = done ? '✓' : String(lessons.findIndex(lesson => lesson.id === button.dataset.lesson) + 1).padStart(2, '0');
+      }
+    }
+    const note = document.querySelector<HTMLElement>('[data-learning-progress-note]');
+    if (note) note.textContent = lessonProgressNote(progress);
+    const status = document.querySelector<HTMLElement>('[data-hf-completion-status]');
+    if (status) {
+      const counts = ['Foundation', 'Applied', 'Advanced'].map(level => {
+        const tier = lessons.filter(lesson => lesson.level === level);
+        return `${level} ${tier.filter(lesson => passed.has(lesson.id)).length}/${tier.length}`;
+      });
+      status.textContent = `Local self-check progress: ${counts.join(' · ')}. A lesson counts as passed only after every quiz answer is correct.`;
+    }
+  }
+
+  export function createCompletionController(getState: () => ViewState, notify?: (message: string, error?: boolean) => void): {refresh: () => void; destroy: () => void} {
     let record = parseCompletionRecord(null);
     let sceneCleanups: Array<() => void> = [];
     let sceneKey = '';
@@ -97,9 +128,13 @@ namespace HF {
     function readStored(): void {
       try {
         const raw = localStorage.getItem('hf-learning-mastery-v1');
-        record = parseCompletionRecord(raw ? JSON.parse(raw) : null);
+        const stored = parseCompletionRecord(raw ? JSON.parse(raw) : null);
+        record = parseCompletionRecord({
+          passed_self_checks: [...stored.passed_self_checks, ...record.passed_self_checks],
+          mastery_checks: {...stored.mastery_checks, ...record.mastery_checks},
+        });
       } catch {
-        record = parseCompletionRecord(null);
+        // Navigation must retain checks earned in this session when storage fails.
       }
     }
     function validLessonIds(values: readonly string[]): string[] {
@@ -132,11 +167,11 @@ namespace HF {
     function announce(message: string): void {
       const host = document.getElementById('page-content');
       if (!host) return;
-      let status = host.querySelector<HTMLElement>('[data-hf-completion-status]');
+      let status = host.querySelector<HTMLElement>('[data-hf-completion-notice]');
       if (!status) {
         status = document.createElement('p');
         status.className = 'hf-completion-status';
-        status.dataset.hfCompletionStatus = 'true';
+        status.dataset.hfCompletionNotice = 'true';
         status.setAttribute('role', 'status');
         status.setAttribute('aria-live', 'polite');
         host.prepend(status);
@@ -161,9 +196,7 @@ namespace HF {
         const note = gate.unlocked ? `${lesson.level} lesson. ${passed.has(lesson.id) ? 'Self-check passed in this browser.' : 'Self-check not yet passed.'}` : gateMessage(lesson, gate);
         button.title = note;
         if (button.hasAttribute('aria-label')) {
-          const base = button.dataset.hfBaseLabel ?? button.getAttribute('aria-label') ?? lesson.title;
-          button.dataset.hfBaseLabel = base;
-          button.setAttribute('aria-label', `${base}; ${note}`);
+          button.setAttribute('aria-label', `${lesson.title}; ${lesson.level}; ${passed.has(lesson.id) ? 'self-check passed' : 'not passed'}; ${note}`);
         }
       }
       const list = document.querySelector<HTMLElement>('.lesson-list');
@@ -232,12 +265,7 @@ namespace HF {
         caveat.textContent = 'The browser-generated signature seals the local payload only. It does not establish signer identity, authority, mastery or certification.';
         sign.after(caveat);
       }
-      const counts = ['Foundation', 'Applied', 'Advanced'].map(level => {
-        const tier = HYBRID_CATALOG.lessons.filter(item => item.level === level);
-        return `${level} ${tier.filter(item => passed.has(item.id)).length}/${tier.length}`;
-      });
-      const status = document.querySelector<HTMLElement>('[data-hf-completion-status]');
-      if (status && !status.textContent) status.textContent = `Local self-check progress: ${counts.join(' · ')}. Every lesson requires a full correct score to count as passed.`;
+      syncLessonProgressDisplays(completed);
     }
     function clearScenes(): void {
       for (const cleanup of sceneCleanups.splice(0)) cleanup();
@@ -397,14 +425,7 @@ namespace HF {
         status.setAttribute('aria-live', 'polite');
         host.prepend(status);
       }
-      if (status && !status.textContent) {
-        const completed = new Set(getState().hybrid.progress);
-        const counts = ['Foundation', 'Applied', 'Advanced'].map(level => {
-          const tier = HYBRID_CATALOG.lessons.filter(item => item.level === level);
-          return `${level} ${tier.filter(item => completed.has(item.id)).length}/${tier.length}`;
-        });
-        status.textContent = `Local self-check progress: ${counts.join(' · ')}. A lesson counts as passed only after every quiz answer is correct.`;
-      }
+      syncLessonProgressDisplays(getState().hybrid.progress);
     }
     function decorateWorkflow(): void {
       const sign = document.querySelector<HTMLButtonElement>('[data-workflow-action="sign-progress"]');
@@ -467,8 +488,35 @@ namespace HF {
         return;
       }
       if (action === 'confirm-reset-progress') {
-        try { localStorage.removeItem('hf-learning-mastery-v1'); } catch { /* Reset still proceeds for the legacy IDs. */ }
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        const keys = ['hf-learning-mastery-v1', 'hf-lessons-v2'];
+        let removed = true;
+        for (const key of keys) {
+          try { localStorage.removeItem(key); } catch { removed = false; }
+        }
+        for (const key of keys) {
+          try { if (localStorage.getItem(key) !== null) removed = false; } catch { removed = false; }
+        }
+        if (!removed) {
+          const message = 'Browser storage did not confirm removal. Your current progress is retained. Retry the reset or clear this site’s data in your browser settings.';
+          const status = document.getElementById('learning-reset-status');
+          if (status) status.textContent = message;
+          announce(message);
+          notify?.(message, true);
+          return;
+        }
         record = parseCompletionRecord(null);
+        const h = getState().hybrid;
+        h.progress = [];
+        h.quizResult = null;
+        const feedback = document.getElementById('quiz-feedback');
+        if (feedback) feedback.innerHTML = '';
+        const dialog = document.querySelector<HTMLDialogElement>('dialog[open]');
+        dialog?.close();
+        syncDecorations();
+        announce('Browser learning progress reset.');
+        notify?.('Browser learning progress reset.');
         return;
       }
       const lessonId = button.dataset.lesson;

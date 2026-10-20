@@ -73,3 +73,5 @@ html[data-motion=off] #page-content{animation:none}html[data-motion=off] .system
 html[data-motion=off] .flow-node-card{transition:none}
 html[data-motion=off] .flow-node-card:hover{transform:none}
 html[data-motion=off] .flux-beam::after{left:25%;opacity:.65;animation:none}
+
+.release-provenance{flex-basis:100%;min-width:0;font-size:12px;line-height:1.7}.release-provenance nav{display:flex;gap:16px;flex-wrap:wrap}.release-provenance p{margin:5px 0}.release-provenance code{overflow-wrap:anywhere;word-break:break-word}footer:has(.release-provenance){flex-wrap:wrap}

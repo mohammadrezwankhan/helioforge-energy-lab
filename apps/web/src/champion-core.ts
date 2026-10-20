@@ -48,9 +48,10 @@ namespace HF {
       if(raw.length>100_000)throw new Error('Workspace record is too large.');
       const saved=parseWorkspace(JSON.parse(raw));
       h.inputs=saved.inputs;h.result=null;h.resultInputs=null;h.lessonId=saved.lesson_id;
+      const bundled=attachBundledHybridResult(h);
       h.objectId=systemById(h.inputs.system_id).technologies[0]!;
       c.saved=saved.saved_setups;c.lastRunId=saved.last_run_id;c.pendingPins=saved.pinned_run_ids;c.lastSavedAt=saved.saved_at;
-      c.notice='Your last valid setup is restored. Saved results are verified against the local API before display.';
+      c.notice=bundled?'Your exact preset is restored with its bundled Python result. Saved API runs require local reconnection.':'Your last valid setup is restored. Edited inputs require the local Python API for a new calculation.';
     } catch {
       c.recoveryRaw=raw;c.notice='The saved workspace could not be read. It has not been overwritten. Open Saved setups to download or reset it.';
     }

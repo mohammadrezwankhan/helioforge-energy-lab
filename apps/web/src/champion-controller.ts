@@ -8,6 +8,7 @@ namespace HF {
     function setInputs(inputs:HybridInputs):void {
       h.inputs=parseConfiguration(inputs);h.result=null;h.resultInputs=null;h.inputError=null;h.draft=null;
       h.objectId=systemById(h.inputs.system_id).technologies[0]!;h.hour=Math.min(12,h.inputs.hours-1);c.lastRunId=null;
+      attachBundledHybridResult(h);
     }
     function showWorkspace():void {cb.openModal('Saved setups',workspaceDialog(state));}
     async function history():Promise<void> {
@@ -60,7 +61,7 @@ namespace HF {
       else if(name==='dismiss-notice'){c.notice='';refreshToolbar();}
       else if(name==='start-hospital'){
         if(h.busy)throw new Error('Wait for the current energy screen.');
-        setInputs(presetInputs('hospital-island'));persist();cb.navigate('hybrid');cb.toast('Hospital reference case loaded. Run it, pin it, then apply Four-hour outage.');
+        setInputs(presetInputs('hospital-island'));persist();cb.navigate('hybrid');cb.toast('Hospital bundled reference loaded. Pin it, then select Four-hour outage to compare the bundled stress case. Edited inputs require the local Python API.');
       }else if(name==='export-workspace')download('helioforge-workspace.json',JSON.stringify(workspaceCache(state),null,2));
       else if(name==='recovery-export')download('helioforge-workspace-recovery.txt',c.recoveryRaw??'No damaged cache is present.','text/plain');
       else if(name==='recovery-reset')cb.openModal('Reset the damaged workspace cache?',`<div class="modal-copy"><p>This removes the unreadable browser cache. It does not delete your API runs, lesson progress or exported files. Download the recovery record first to keep a copy.</p><div class="h-actions"><button class="btn secondary" data-champion-action="workspace">Keep it</button><button class="btn primary" data-champion-action="confirm-recovery-reset">Reset browser cache</button></div></div>`);
@@ -77,7 +78,7 @@ namespace HF {
         const setupId=el.dataset.loadSetup??el.dataset.exportSetup??el.dataset.deleteSetup??el.dataset.confirmDelete;
         if(setupId){
           const s=c.saved.find(x=>x.id===setupId);if(!s)throw new Error('The saved setup is no longer available.');
-          if(el.dataset.loadSetup){if(h.busy)throw new Error('Wait for the current energy screen.');setInputs(s.inputs);persist();cb.navigate('hybrid');cb.toast('Saved setup loaded. Run it to calculate fresh results.');}
+          if(el.dataset.loadSetup){if(h.busy)throw new Error('Wait for the current energy screen.');setInputs(s.inputs);persist();cb.navigate('hybrid');cb.toast(h.result?'Saved preset loaded with its bundled Python result.':'Saved setup loaded. Start the local Python API to calculate these edited inputs.');}
           if(el.dataset.exportSetup)download('helioforge-saved-setup.json',JSON.stringify({schema:'helioforge.hybrid.v1',inputs:s.inputs},null,2));
           if(el.dataset.deleteSetup)cb.openModal('Delete this saved setup?',`<div class="modal-copy"><p>Remove <strong>${escapeHTML(s.name)}</strong> from this browser? The current configuration and API runs will not be deleted.</p><div class="h-actions"><button class="btn secondary" data-champion-action="workspace">Keep setup</button><button class="btn primary" data-confirm-delete="${s.id}">Delete saved setup</button></div></div>`);
           if(el.dataset.confirmDelete){c.saved=c.saved.filter(x=>x.id!==setupId);const ok=persist();showWorkspace();cb.toast(ok?'Saved setup removed from this browser.':'Removed in this tab only; browser storage could not be updated.',!ok);}
