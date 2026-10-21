@@ -1,3 +1,62 @@
+![HelioForge Hybrid Energy Lab: original vector system illustration](assets/hero-25d.svg)
+
+The source combines a hybrid adequacy screen, storage MILP, research studies, and an interactive learning workbench. The companion starts with a small synthetic daily power balance.
+
+**[Native-source lesson guide](docs/portfolio/) · [Offline interactive lab](docs/index.html) · [Lesson configuration](docs/lesson-config.json) · [Configuration schema](docs/lesson-config.schema.json)**
+
+## Previous animations
+
+[Open the previous-animation gallery](https://mohammadrezwankhan.github.io/helioforge-energy-lab/animations/) · [Local gallery](docs/animations/index.html)
+
+Earlier animated artwork, waveform demos, and original interactive experiences are linked alongside the current animations.
+
+## Your first interactive result
+
+1. Download or clone this repository and open `docs/index.html` in a modern browser.
+2. Select **Module 1**, apply its preset, and compare the declared checkpoint with the plotted result.
+3. Change one slider, inspect the model assumptions, then export the configuration or telemetry for your notes.
+
+The browser lab runs offline with no packages, accounts, or live data feeds. Its numbers are deterministic teaching simulations. Each checkpoint states its model time and tolerance; passing it demonstrates agreement with that model, not field calibration or production readiness.
+
+## Four-module learning path
+
+| Module | Investigation | Approximate time |
+|---|---|---:|
+| 1. Follow a single-bus balance | Identify which sources serve demand and where a simple screen stops. | 12 min |
+| 2. Test a resource sensitivity | Quantify the effect of a smaller solar resource without changing demand. | 15 min |
+| 3. Separate adequacy from optimization | Explain the different questions answered by a dispatch policy and a cost-minimizing storage model. | 18 min |
+| 4. Prepare a reproducible native follow-up | Carry a transparent screening question into the source workbench without inflating the claim. | 18 min |
+
+**Who this is for:** Energy researchers, engineering educators, and developers inspecting hybrid-resource assumptions.
+
+### Continue into the implementation
+
+- [README.md](README.md)
+- [START_HERE.md](START_HERE.md)
+- [apps/api/pyproject.toml](apps/api/pyproject.toml)
+- [apps/web/package.json](apps/web/package.json)
+- [apps/api/helioforge/engines/hybrid.py](apps/api/helioforge/engines/hybrid.py)
+- [apps/api/helioforge/engines/storage.py](apps/api/helioforge/engines/storage.py)
+- [docs/HYBRID_METHODOLOGY.md](docs/HYBRID_METHODOLOGY.md)
+
+### Explore or run the source
+
+Node.js >=22 for the standalone preview command; Python 3.11+ for the API package (launcher guide lists 3.11–3.13).
+
+```bash
+node scripts/preview-demo.mjs
+python -m pip install -e "apps/api[dev]"
+python -m pytest apps/api/tests
+python launch.py --no-browser
+```
+
+These commands come from the audited source revision. Runtime requirements and the project's own validation limits are documented below; the standalone browser lab does not execute these commands.
+
+The detailed project guide below remains the source for installation, supported features, licences, and scientific limits. The browser equations and laboratory settings do not change the original application or numerical engine.
+
+<details>
+<summary>Project documentation, installation, attribution, and existing validation</summary>
+
 # HelioForge Energy Lab
 
 ## Cloudflare browser edition
@@ -26,7 +85,7 @@ cd helioforge-energy-lab
 node scripts/preview-demo.mjs
 ```
 
-Open **http://127.0.0.1:4173**. Stop the server with Ctrl+C. The first screen is a demonstration, not verified current information. Keep private or real-world records out of this evaluation. The standalone preview does not run new Python calculations; use the source guide below for the local API.
+Open **<http://127.0.0.1:4173>**. Stop the server with Ctrl+C. The first screen is a demonstration, not verified current information. Keep private or real-world records out of this evaluation. The standalone preview does not run new Python calculations; use the source guide below for the local API.
 
 ## Why inspect this project?
 
@@ -63,7 +122,8 @@ First-party source is available under [MIT](LICENSE). Bundled dependencies retai
 <div align="center">
 
 # HelioForge Champion · 0.3.0
-### Explore the architecture. Stress the assumptions. Follow the energy.
+
+## Explore the architecture. Stress the assumptions. Follow the energy
 
 **An interactive hybrid-energy laboratory, learning studio and auditable research workspace.**
 
@@ -131,7 +191,7 @@ python -m pip install -e apps/api
 python launch.py
 ```
 
-Open **http://127.0.0.1:8000**. The server binds to loopback. On Windows, `start-windows.cmd` creates a virtual environment, installs missing pinned runtime dependencies and launches the same local application. It downloads Python dependencies on first use; it does not install Python itself.
+Open **<http://127.0.0.1:8000>**. The server binds to loopback. On Windows, `start-windows.cmd` creates a virtual environment, installs missing pinned runtime dependencies and launches the same local application. It downloads Python dependencies on first use; it does not install Python itself.
 
 Try a useful first experiment: select **Hospital islanding microgrid**, run the baseline, pin it, apply **Four-hour outage**, run again and pin. Open Scenario compare; inspect critical shortfall and terminal battery energy before comparing cost. Names in the versioned catalogue are the source of truth.
 
@@ -192,9 +252,10 @@ A good contribution adds a reproducible experiment, not just another attractive 
 
 **5,000 stars is a community ambition, not a delivered result.** The [open-source launch plan](docs/OPEN_SOURCE_LAUNCH.md) defines usefulness and contribution milestones. No fabricated stars, awards, affiliations, testimonials or adoption statistics are included.
 
-
 </details>
 
 ## Full-spectrum research studies
 
 The local workbench now contains 39 distinct experimental studies across all twelve views, with source-backed limits, result exports, visual editors and signed local evidence. See [delivery and audit](docs/roadmap/DELIVERY.md), the [experiment index](docs/roadmap/INDEX.md), and [verification](docs/roadmap/VERIFICATION.md). The standalone edition contains generated examples; edited numerical runs require Python.
+
+</details>

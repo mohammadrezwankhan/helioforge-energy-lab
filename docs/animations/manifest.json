@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "repository": "helioforge-energy-lab",
+  "preserved_current_commit": "7e699da28f13b2600200d9aaaeb89946533b4134",
+  "animations": [
+    {
+      "kind": "image",
+      "title": "Original floating-layer SVG",
+      "badge": "Earlier animated media",
+      "description": "Floating isometric tiers, pulsing circuits, and flowing dashed traces from the earlier repository hero.",
+      "format": "Animated SVG",
+      "preview": "media/hero-25d-4b95f8bed2bd.svg",
+      "preview_sha256": "0f90edfe732eb3de8b4ab3d673c08505d87e0d3a0080febb2afe02b5e8003e61",
+      "motion_identity": "4b95f8bed2bdcbc3b7affb41d9381c87dd16bb5bf31add09b1a8f1ff0c9a032f",
+      "sources": [
+        {
+          "path": "assets/hero-25d.svg",
+          "commit": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+          "sha256": "6c6b385976fce1dbae3727696ef8da7df3ad636b1ad93aa886826d39f33d5767",
+          "blob": "dbcc9b36e2e4413bd203e901790de362b603932f",
+          "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/assets/hero-25d.svg"
+        },
+        {
+          "path": "assets/hero-25d.svg",
+          "commit": "60763067c64a378a31c7e55ea65ca3734f4e88fe",
+          "sha256": "afed91f15e00effd4d94a4f5aba8b292ccf50996cc6d827e6208bdf06e9350e3",
+          "blob": "64d301e9dca11b2b74ca1e0c9d20b731eee58887",
+          "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/60763067c64a378a31c7e55ea65ca3734f4e88fe/assets/hero-25d.svg"
+        }
+      ]
+    },
+    {
+      "kind": "video",
+      "title": "Original engineering film",
+      "badge": "Earlier animated media",
+      "description": "The original 15-second engineering film at 1080p/60 fps. Conceptual animation; no live telemetry or certified engineering evidence.",
+      "format": "video/mp4",
+      "preview": "media/hero-1080p60-f0aee6779c76.mp4",
+      "preview_sha256": "f0aee6779c762133aff0961248af8cef575b7ae9f1e158fab27af72976e3667a",
+      "motion_identity": "f0aee6779c762133aff0961248af8cef575b7ae9f1e158fab27af72976e3667a",
+      "sources": [
+        {
+          "path": "assets/engineering-hero/v1/hero-1080p60.mp4",
+          "commit": "c1be9c616c9f7fa0fc31ab8f46f7c9572990b3c2",
+          "sha256": "f0aee6779c762133aff0961248af8cef575b7ae9f1e158fab27af72976e3667a",
+          "blob": "13f05e744bb650b48aebfb97d638a8b09dad300a",
+          "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c1be9c616c9f7fa0fc31ab8f46f7c9572990b3c2/assets/engineering-hero/v1/hero-1080p60.mp4"
+        }
+      ]
+    },
+    {
+      "kind": "waveform",
+      "title": "Original interactive waveform",
+      "badge": "Previous dashboard animation",
+      "description": "The earlier 2.5D perspective card and its moving waveform, with the original visual formulas and sliders.",
+      "preview": "waveform.html",
+      "preview_sha256": "eba61a9aa166365221b6a8438d7e79ab49215a979925cc23441f180e9c0dcb73",
+      "sources": [
+        {
+          "path": "docs/index.html",
+          "commit": "c0f26c3327c2c3088de56d1fd333872e18dc608d",
+          "blob": "dfb194d005288544b3783a63d02257f29359ad0f",
+          "sha256": "15031b1624d1e46fbcdb930da1145c07dcfe8744734332bbaa23746036fac9bd",
+          "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/c0f26c3327c2c3088de56d1fd333872e18dc608d/docs/index.html"
+        },
+        {
+          "path": "docs/index.html",
+          "commit": "60763067c64a378a31c7e55ea65ca3734f4e88fe",
+          "blob": "8daedacadab4e9de1366e1469f39810acbcb6aaf",
+          "sha256": "ff7498a37f3784abce9a923b83c14b8ca6f139e53e6ede707dbe2d470c29a511",
+          "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/60763067c64a378a31c7e55ea65ca3734f4e88fe/docs/index.html"
+        }
+      ]
+    }
+  ],
+  "native_links": [
+    {
+      "title": "Original interactive engineering scene",
+      "url": "https://mkgrid.co.technology/assets/engineering-hero/v1/index.html",
+      "description": "The preserved opt-in 3D scene: battery physics, models, evidence, and grid systems. Requires WebGL; the film remains available when WebGL is unavailable."
+    },
+    {
+      "title": "HelioForge original hybrid-system workbench",
+      "url": "https://mkgrid.co.technology/run/",
+      "description": "Original animated 3D assets, camera controls, and learning workspaces. The hosted preview uses bundled examples; new calculations require the local Python API."
+    }
+  ],
+  "historical_source_links": []
+}

@@ -1,0 +1,6 @@
+{
+  "repository": "helioforge-energy-lab",
+  "diagrams": [],
+  "fidelity": {},
+  "reason": "Hybrid PV+BESS workbench; none of the available diagrams faithfully represents its full scope."
+}

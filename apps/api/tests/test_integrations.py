@@ -205,3 +205,20 @@ def test_regulatory_allowlist_and_missing_configuration_fail_closed(monkeypatch)
     monkeypatch.delenv("HELIOFORGE_REGULATORY_FEEDS", raising=False)
     with pytest.raises(ValueError, match="Configure an official regulator"):
         asyncio.run(regulatory_feed(RegulatoryRequest(consent=True)))
+
+
+@pytest.mark.parametrize("encoding", ["utf-8", "utf-16", "utf-16-le", "utf-16-be"])
+def test_xml_rejects_entity_definitions_in_every_supported_encoding(encoding):
+    from helioforge.integrations import xml_root
+
+    document = '<!DOCTYPE feed [<!ENTITY injected "synthetic audit text">]><feed>&injected;</feed>'
+    with pytest.raises(ValueError, match="entities and document types are forbidden"):
+        xml_root(document.encode(encoding))
+
+
+@pytest.mark.parametrize("encoding", ["utf-8", "utf-16", "utf-16-le", "utf-16-be"])
+def test_xml_preserves_ordinary_encoded_feed_text(encoding):
+    from helioforge.integrations import xml_root
+
+    root = xml_root('<feed><title>Test &amp; evidence</title></feed>'.encode(encoding))
+    assert root.findtext("title") == "Test & evidence"

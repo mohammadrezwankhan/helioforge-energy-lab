@@ -449,10 +449,15 @@ async def weather(p: WeatherRequest) -> dict:
 
 
 def xml_root(raw: bytes):
+    class NoDoctypeTreeBuilder(ET.TreeBuilder):
+        def doctype(self, name, pubid, system):
+            # Parser callbacks cover UTF-16 too; a byte regex alone does not.
+            raise ValueError("XML entities and document types are forbidden.")
+
     if re.search(rb"<!\s*(?:DOCTYPE|ENTITY)", raw, re.I):
         raise ValueError("XML entities and document types are forbidden.")
     try:
-        root = ET.fromstring(raw)
+        root = ET.fromstring(raw, parser=ET.XMLParser(target=NoDoctypeTreeBuilder()))
     except ET.ParseError:
         raise ValueError("Upstream XML is invalid.") from None
     for element in root.iter():

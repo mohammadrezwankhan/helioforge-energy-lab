@@ -1,5 +1,7 @@
 # Author a lesson or architecture
 
+![Section 01 · Question / topology](visuals/sections/section-01-question.svg)
+
 ## Single source of truth
 
 Edit `apps/api/helioforge/data/hybrid_catalog.json`. Each system has a stable ID, topology, coupling, control assumption, technology IDs, capability mode, preset inputs, learning focus, evidence requirements and source references. Each lesson references an existing system and applicable scenario; it supplies original objectives, steps, quiz options, one answer index per question and explanations.

@@ -2081,7 +2081,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 0,
-          "explanation": "Size energy reserve independently from inverter power."
+          "explanation": "Battery energy sets how long a renewable shortfall can be supplied, while inverter power limits the instantaneous discharge rate. A large kWh reserve can still leave load unmet if the inverter cannot supply enough kW. Compare both constraints and the initial and terminal battery energy in the renewable-drought experiment."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -2092,7 +2092,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 2,
-          "explanation": "Critical-load measurements and a multi-year joint wind/solar weather record."
+          "explanation": "Critical-load measurements define the demand that must be served, and a joint wind/solar record shows when both resources are scarce. Those observations can challenge the synthetic repeating profiles used here. A screenshot or repeated default run cannot establish how the reserve performs across real weather years."
         }
       ],
       "source_ids": [
@@ -2136,7 +2136,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 1,
-          "explanation": "Separate the shared grid connection limit from individual asset ratings."
+          "explanation": "The grid connection is a shared export constraint, so adding the individual PV and battery ratings does not show how much power can leave the site. In the export-bottleneck comparison, inspect curtailment and battery headroom as well as export. The hourly balance does not itself establish a connection approval."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -2147,7 +2147,7 @@
             "Point-of-interconnection agreement and AC conversion loss measurements."
           ],
           "answer": 3,
-          "explanation": "Point-of-interconnection agreement and AC conversion loss measurements."
+          "explanation": "The connection agreement establishes the permitted exchange at the common boundary; measured conversion losses establish how much generated or stored energy reaches it. Nameplate ratings alone do not provide either quantity. These inputs are needed before transferring the illustrative AC-equivalent result to a particular plant."
         }
       ],
       "source_ids": [
@@ -2191,7 +2191,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 2,
-          "explanation": "An AC-equivalent screen cannot establish clipping recovery or DC protection."
+          "explanation": "This catalogue labels the architecture DC-coupled, but the hybrid engine still balances AC-equivalent power on one bus. It does not resolve DC voltage, shared-inverter clipping or protective devices. Changing the export limit can demonstrate an electrical bottleneck without proving that a DC-coupled installation recovers clipped PV energy."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -2202,7 +2202,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 0,
-          "explanation": "DC bus voltage envelope, inverter curve and DC-coupling design."
+          "explanation": "The DC voltage envelope, inverter curve and coupling design identify operating limits absent from the one-bus screen. They support a dedicated DC conversion and protection study. The architecture drawing or an AC-equivalent energy total cannot establish the behavior of the actual DC bus."
         }
       ],
       "source_ids": [
@@ -2246,7 +2246,7 @@
             "Compare import peaks without calling one day an annual saving."
           ],
           "answer": 3,
-          "explanation": "Compare import peaks without calling one day an annual saving."
+          "explanation": "A lower import peak in one synthetic day describes that modeled profile, not an annual bill reduction. The hybrid screen reports variable energy cost and omits demand charges. Compare the zero-export case and battery energy endpoints first; annual savings require the real billing period and applicable charging rules."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -2257,7 +2257,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 1,
-          "explanation": "Interval load data and actual demand-charge billing rules."
+          "explanation": "Interval load records reveal when the industrial peak occurs, while the billing rules determine which measured demand creates a charge. Both are needed to turn a physical peak comparison into a cost study. Multiplying one demonstration day by a year ignores different loads, billing periods and tariff conditions."
         }
       ],
       "source_ids": [
@@ -2301,7 +2301,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 0,
-          "explanation": "Power adequacy and stored energy limit different services."
+          "explanation": "Battery kW limits how much wind variation can be offset at once, while usable kWh limits how long that support lasts. The export-bottleneck lesson can expose curtailment and storage headroom, but hourly averages cannot demonstrate compliance with a faster ramp-rate requirement. More stored energy does not remove a converter power limit."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -2312,7 +2312,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 2,
-          "explanation": "Turbine power curves, measured wind and ramp-rate obligations."
+          "explanation": "Measured wind and the turbine power curve connect the resource to electrical production. Ramp obligations define the service and timescale the plant must meet. These inputs can reveal limits hidden by the synthetic hourly profile; the current lesson does not calculate a validated dynamic firming service."
         }
       ],
       "source_ids": [
@@ -2356,7 +2356,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 1,
-          "explanation": "Distinguish island energy adequacy from certified transfer performance."
+          "explanation": "The outage screen asks whether the declared island resources can supply the modeled critical demand during each hour. It does not resolve transfer-switch timing or inverter transients. Serving the hourly energy target therefore supports an adequacy comparison, but cannot demonstrate uninterrupted transfer or certify the hospital installation."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -2367,7 +2367,7 @@
             "Critical circuits, transfer-switch study and tested grid-forming inverter response."
           ],
           "answer": 3,
-          "explanation": "Critical circuits, transfer-switch study and tested grid-forming inverter response."
+          "explanation": "The critical-circuit inventory identifies what must remain supplied, and transfer and inverter-response studies address the transition that hourly energy accounting omits. These are different evidence needs. A grid-forming label or adequate battery energy alone does not establish the response of the actual hospital backup system."
         }
       ],
       "source_ids": [
@@ -2411,7 +2411,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 2,
-          "explanation": "A backup-capable installation needs more than a battery label."
+          "explanation": "A battery label identifies storage, but backup operation also depends on the circuits, islanding arrangement and declared reference. In this lesson, only an explicitly islandable configuration can support the outage target under the model assumptions. Compare service and reserve depletion without interpreting them as an installation design approval."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -2422,7 +2422,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 0,
-          "explanation": "Essential-circuit survey, installer design and outage measurements."
+          "explanation": "An essential-circuit survey defines the intended backup load, the installer design defines how it is supplied, and outage measurements test those assumptions. The generic household profile contains none of that site evidence. The four-hour experiment helps frame the question but cannot confirm a particular home’s backup capability."
         }
       ],
       "source_ids": [
@@ -2466,7 +2466,7 @@
             "Physical self-consumption is distinct from allocation and billing."
           ],
           "answer": 3,
-          "explanation": "Physical self-consumption is distinct from allocation and billing."
+          "explanation": "Self-consumption describes energy used inside the modeled electrical boundary instead of exported. It does not determine which community member receives that energy or the associated financial benefit. A zero-export balance can be correct while ownership, allocation and billing questions remain entirely unresolved."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -2477,7 +2477,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 1,
-          "explanation": "Metering arrangement, shared-ownership terms and community load records."
+          "explanation": "Metering arrangements define the measured boundaries, ownership terms define who can use or share the assets, and load records show the actual demand. Together they connect physical flows to a community arrangement. The single-bus aggregate alone cannot allocate savings or verify a billing scheme."
         }
       ],
       "source_ids": [
@@ -2521,7 +2521,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 0,
-          "explanation": "DC bus regulation is analogous here; AC GFM terminology is not a DC control specification."
+          "explanation": "The GFM label supplies a reference assumption for this teaching screen; it is not a DC voltage-control specification. The AC-equivalent model can compare energy shortfall during a renewable drought, but cannot show whether the telecom bus stays within its allowed voltage range or recovers from a fast disturbance."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -2532,7 +2532,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 2,
-          "explanation": "Telecom DC voltage limits, converter efficiency and backup autonomy requirements."
+          "explanation": "The allowable DC voltage range and converter efficiency define constraints that an energy total does not capture, while the autonomy requirement defines how long the telecom load needs support. Those specifications are needed for a dedicated DC backup design. Generic AC control labels cannot substitute for them."
         }
       ],
       "source_ids": [
@@ -2576,7 +2576,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 1,
-          "explanation": "A constant marginal generator model omits minimum loading and start costs."
+          "explanation": "The generator is represented as a limited electrical source with a constant variable cost. Minimum loading, startup costs and fuel inventory are absent, so a calculated diesel contribution is not a feasible fuel or start schedule. The renewable-drought comparison should be read with that simplified backup boundary in view."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -2587,7 +2587,7 @@
             "Fuel curve, fuel inventory and generator minimum-load specification."
           ],
           "answer": 3,
-          "explanation": "Fuel curve, fuel inventory and generator minimum-load specification."
+          "explanation": "A fuel curve relates electrical output to fuel use; inventory constrains the duration of backup; minimum-load specifications constrain operation. These can change conclusions drawn from a constant marginal-cost source. They are required before treating the illustrative generator output as an operational or fuel-supply plan."
         }
       ],
       "source_ids": [
@@ -2631,7 +2631,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 2,
-          "explanation": "Weather diversity does not remove the need to budget backup energy."
+          "explanation": "Combining wind and diesel offers different supply sources, but low wind can still require sustained backup. The lesson’s battery and generator ratings limit modeled support; they do not create fuel inventory or guarantee generator availability. Inspect the drought shortfall and remaining reserve before inferring resilience from technology diversity."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -2642,7 +2642,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 0,
-          "explanation": "Measured wind, generator maintenance windows and fuel delivery constraints."
+          "explanation": "Measured wind determines the duration of resource shortfalls, maintenance windows determine when the generator is unavailable, and fuel-delivery constraints determine whether backup can be sustained. The default electrical proxy does not contain those records. They are needed to test the assumptions behind a real wind-diesel reserve plan."
         }
       ],
       "source_ids": [
@@ -2686,7 +2686,7 @@
             "A fixed hydro availability factor is not a reservoir water balance."
           ],
           "answer": 3,
-          "explanation": "A fixed hydro availability factor is not a reservoir water balance."
+          "explanation": "Hydro output here is an electrical availability proxy, not the result of tracking water inflow, storage and head. It can support a mixed-renewable adequacy comparison, but does not establish whether that contribution is available through a dry period. Increasing the hydro rating cannot stand in for a reservoir calculation."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -2697,7 +2697,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 1,
-          "explanation": "Seasonal river flow, environmental release and head measurements."
+          "explanation": "River flow and head constrain potential generation, while environmental releases constrain the water available for it. Their seasonal records can test whether the assumed hydro contribution is defensible. Reusing the fixed availability factor cannot demonstrate water sustainability or long-duration reservoir flexibility."
         }
       ],
       "source_ids": [
@@ -2741,7 +2741,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 0,
-          "explanation": "Reduce hydro availability without inventing stored-water flexibility."
+          "explanation": "Run-of-river generation depends on available flow; this electrical screen does not create a reservoir that can shift water between hours. The battery is the modeled storage device. Whether exploring an export bottleneck or lower hydro availability, distinguish battery flexibility from unsupported claims about storing river energy as water."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -2752,7 +2752,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 2,
-          "explanation": "River flow-duration curve, turbine limits and ecological constraints."
+          "explanation": "The flow-duration curve describes the available river resource, turbine limits constrain its conversion, and ecological requirements can further restrict use. These determine whether the electrical availability assumption is appropriate. An export total by itself cannot show that the river can supply the same profile on demand."
         }
       ],
       "source_ids": [
@@ -2796,7 +2796,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 1,
-          "explanation": "Electrical aggregation does not quantify reservoir or water-quality effects."
+          "explanation": "Adding floating PV, hydro and battery output on an electrical bus says how modeled power is balanced. It does not calculate changes in reservoir operation, water quality or the floating installation’s physical behavior. Export and curtailment results must therefore remain separate from claims about water or environmental benefits."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -2807,7 +2807,7 @@
             "Mooring design, reservoir operations, environmental and grid studies."
           ],
           "answer": 3,
-          "explanation": "Mooring design, reservoir operations, environmental and grid studies."
+          "explanation": "Mooring design addresses the floating structure, reservoir records constrain operations, and environmental and grid studies address different effects of the combined site. The electrical catalogue cannot resolve those questions from asset ratings. Each evidence source is needed before extending the energy-screen result beyond its stated boundary."
         }
       ],
       "source_ids": [
@@ -2851,7 +2851,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 2,
-          "explanation": "Credit heat only against a defined and useful thermal load."
+          "explanation": "Heat has useful value only when there is a defined thermal demand that can accept it. Counting all CHP heat as a benefit would ignore whether it is delivered or needed. This multi-carrier architecture is study-only in the hybrid catalogue, so its electrical diagram must not be treated as a solved heat balance."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -2862,7 +2862,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 0,
-          "explanation": "Fuel sustainability, heat demand, CHP efficiency and emissions evidence."
+          "explanation": "Fuel sustainability, useful heat demand, conversion efficiency and emissions evidence address distinct parts of a CHP assessment. They are needed to test whether a proposed thermal credit and its environmental boundary are justified. A nameplate CHP rating does not establish useful heat delivery or a lifecycle benefit."
         }
       ],
       "source_ids": [
@@ -2906,7 +2906,7 @@
             "Reservoir sustainability and thermal delivery require separate models."
           ],
           "answer": 3,
-          "explanation": "Reservoir sustainability and thermal delivery require separate models."
+          "explanation": "Electrical output, reservoir behavior and thermal delivery are separate modeling questions. A single-bus energy balance cannot establish how extraction and reinjection affect the geothermal resource or whether heat reaches a user at the required conditions. The catalogue therefore retains this architecture as a study requiring dedicated models."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -2917,7 +2917,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 1,
-          "explanation": "Reservoir data, reinjection design, plant availability and heat contracts."
+          "explanation": "Reservoir and reinjection data constrain the resource assumptions; availability records constrain the plant contribution; heat contracts define the intended delivery. Those records connect the proposed hub to a particular site and use. The illustrative architecture alone cannot establish sustained output or contracted heat service."
         }
       ],
       "source_ids": [
@@ -2961,7 +2961,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 0,
-          "explanation": "Track electrolyzer, storage and fuel-cell conversion losses separately."
+          "explanation": "Electricity entering an electrolyzer is not all returned later as electricity: conversion and storage stages have separate losses and limits. Treating hydrogen as an ordinary battery with one assumed efficiency would hide those distinctions. This catalogue entry is study-only and requires an explicit multi-carrier balance before numerical conclusions."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -2972,7 +2972,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 2,
-          "explanation": "Electrolyzer map, hydrogen inventory, storage losses and fuel-cell response."
+          "explanation": "The electrolyzer map defines conversion behavior, the inventory and storage-loss records track retained hydrogen, and fuel-cell response defines its return to electricity. Each stage can constrain service independently. A single energy-capacity label cannot establish the full solar-to-hydrogen-to-electricity pathway."
         }
       ],
       "source_ids": [
@@ -3016,7 +3016,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 1,
-          "explanation": "Electrical production and hydrogen sales cannot use the same energy twice."
+          "explanation": "Wind electricity sent to hydrogen production is no longer available for electrical export at the same time. Crediting both uses for the same energy would double-count production. This study-only architecture needs separate electrical and hydrogen flows, including conversion requirements, before comparing output or sales opportunities."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -3027,7 +3027,7 @@
             "Water, compression, electrolyzer load range and offtake specifications."
           ],
           "answer": 3,
-          "explanation": "Water, compression, electrolyzer load range and offtake specifications."
+          "explanation": "Water and compression requirements affect the conversion pathway, the electrolyzer load range constrains operation, and offtake specifications define the intended hydrogen product. Those are inputs to a dedicated multi-carrier assessment. Wind output and a sales assumption alone cannot establish feasible hydrogen delivery."
         }
       ],
       "source_ids": [
@@ -3071,7 +3071,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 2,
-          "explanation": "Thermal megawatt-hours are not electrical megawatt-hours."
+          "explanation": "Stored thermal energy must pass through a heat-to-electricity conversion process before it can serve an electrical load. Losses and conversion limits make thermal MWh different from electrical MWh. The study-only CSP entry does not solve that pathway, so its thermal store must not be interpreted as an equivalent electrical battery."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -3082,7 +3082,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 0,
-          "explanation": "DNI weather series, thermal losses, heat-engine efficiency and startup heat."
+          "explanation": "Direct-normal-irradiance records define the solar resource, while thermal losses, heat-engine efficiency and startup heat determine how much useful electricity can follow. These quantities are absent from the generic electrical screen. A thermal storage rating alone cannot establish electrical output or startup capability."
         }
       ],
       "source_ids": [
@@ -3126,7 +3126,7 @@
             "Heat-pump COP varies with operating temperatures."
           ],
           "answer": 3,
-          "explanation": "Heat-pump COP varies with operating temperatures."
+          "explanation": "A heat pump’s electrical input and delivered heat are related by COP, which depends on operating temperatures. Treating COP as a universal constant can misstate demand when conditions change. This multi-carrier lesson asks for a dedicated heat-and-electricity model, rather than treating the study-only diagram as a solved heating system."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -3137,7 +3137,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 1,
-          "explanation": "Building heat loss, comfort bounds, COP curves and storage losses."
+          "explanation": "Building heat loss and comfort bounds define the required service; temperature-dependent COP and storage losses define how electricity can provide it. Those inputs must be aligned over time. A PV energy total or a nominal heat-pump rating cannot establish comfort or electrical demand for the building."
         }
       ],
       "source_ids": [
@@ -3181,7 +3181,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 0,
-          "explanation": "A heat-led operating schedule differs from electricity-only dispatch."
+          "explanation": "A heat-led CHP schedule must respond to thermal demand as well as electrical conditions. An electricity-only rule can suggest output that does not match useful heat needs or the plant’s feasible operating region. The district-hub catalogue entry remains study-only until those coupled constraints are modeled explicitly."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -3192,7 +3192,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 2,
-          "explanation": "Hourly heat demand, network losses and CHP feasible operating region."
+          "explanation": "Hourly heat demand identifies when service is needed, network losses distinguish generation from delivery, and the CHP operating region constrains simultaneous heat and electricity output. Those records are essential to a coupled schedule. An annual heat total or electrical nameplate alone cannot establish its feasibility."
         }
       ],
       "source_ids": [
@@ -3236,7 +3236,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 1,
-          "explanation": "Aggregate demand is not proof that every vehicle departs charged."
+          "explanation": "Serving an aggregate depot load does not track each vehicle’s arrival, departure or required charge. An hourly energy balance can look adequate even when an individual vehicle misses its target. The zero-export lesson explores the shared electrical boundary; it does not validate a vehicle-level charging schedule."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -3247,7 +3247,7 @@
             "Charging intervals, arrival/departure schedules and connection capacity."
           ],
           "answer": 3,
-          "explanation": "Charging intervals, arrival/departure schedules and connection capacity."
+          "explanation": "Arrival and departure times define when each vehicle can charge, charging intervals constrain how energy is delivered, and connection capacity constrains the shared supply. These are needed to check departure requirements. A generic depot demand curve does not retain the vehicle-level information required for that check."
         }
       ],
       "source_ids": [
@@ -3291,7 +3291,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 2,
-          "explanation": "Do not spend vehicle energy required for the next trip."
+          "explanation": "Vehicle energy available for grid support must exclude the reserve required for travel, and a vehicle can contribute only while connected. Treating the fleet as an always-present stationary battery can spend energy needed for the next trip. This study-only lesson requires explicit mobility and availability constraints."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -3302,7 +3302,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 0,
-          "explanation": "Vehicle availability, charger interoperability, driver consent and warranty terms."
+          "explanation": "Availability records establish when vehicles are connected, interoperability determines whether chargers can provide the intended service, and consent and warranty terms constrain participation. These differ from an energy-capacity total. They must be checked before a fleet aggregate can support a defensible V2G study."
         }
       ],
       "source_ids": [
@@ -3346,7 +3346,7 @@
             "Critical-load classification must be agreed with port operators."
           ],
           "answer": 3,
-          "explanation": "Critical-load classification must be agreed with port operators."
+          "explanation": "The outage screen allocates service according to an assumed critical-load fraction; it does not decide which port operations are essential. That classification changes the demand target and must come from the responsible operators. A favorable critical-service percentage is conditional on the selected fraction, not proof of an emergency plan."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -3357,7 +3357,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 1,
-          "explanation": "Vessel connection schedules, shore-power standards and emergency demand."
+          "explanation": "Vessel schedules describe changing connection demand, shore-power requirements define the service interface, and emergency-demand records identify essential operations. Together they can challenge the assumed critical fraction and load profile. The generic port example does not establish which real operations can tolerate interruption."
         }
       ],
       "source_ids": [
@@ -3401,7 +3401,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 0,
-          "explanation": "Hourly adequacy cannot establish UPS ride-through or tier certification."
+          "explanation": "An hourly adequacy calculation averages over the much shorter events that UPS and transfer systems must handle. Enough energy over an outage hour therefore does not prove uninterrupted IT service, transfer performance or a redundancy classification. This lesson compares declared energy resources while keeping those faster continuity questions separate."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -3412,7 +3412,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 2,
-          "explanation": "UPS design, transfer sequences, redundancy and measured IT/cooling demand."
+          "explanation": "UPS design, transfer sequences and redundancy arrangements address continuity paths and timing; measured IT and cooling loads establish actual demand. These are needed to test assumptions hidden by an aggregate hourly profile. A battery capacity or a served-energy percentage cannot establish a datacentre certification."
         }
       ],
       "source_ids": [
@@ -3456,7 +3456,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 1,
-          "explanation": "Energy dispatch alone does not establish crop or biodiversity outcomes."
+          "explanation": "The electrical screen can compare generation, pumping demand and export constraints, but does not model crop response or ecological conditions. Better self-consumption does not imply better yield or biodiversity. Keep the zero-export experiment’s electrical conclusion separate from agricultural and environmental outcomes that require other evidence."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -3467,7 +3467,7 @@
             "Crop-shading study, irrigation needs, pumping curve and ecological baseline."
           ],
           "answer": 3,
-          "explanation": "Crop-shading study, irrigation needs, pumping curve and ecological baseline."
+          "explanation": "Crop shading and irrigation needs define agricultural constraints, the pumping curve connects water movement to electrical demand, and an ecological baseline supports comparison of environmental change. None is established by a PV dispatch result. These records are needed before extending the lesson to crop or biodiversity claims."
         }
       ],
       "source_ids": [
@@ -3511,7 +3511,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 2,
-          "explanation": "Water storage and product quality are outside the electrical screen."
+          "explanation": "In this lesson desalination is an electrical load, so serving that load does not demonstrate a water-production target or product quality. Water inventory can shift water service in ways the electrical screen does not track. The renewable-drought result must therefore remain a power-adequacy comparison, not a complete water-supply assessment."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -3522,7 +3522,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 0,
-          "explanation": "Desalination power curve, water demand, intake and brine permits."
+          "explanation": "The desalination power curve relates the process to electrical demand, while water-demand records define the service requirement. Intake and brine permissions address site constraints outside that balance. These inputs are needed before interpreting electrical service as a viable or permitted desalination operation."
         }
       ],
       "source_ids": [
@@ -3566,7 +3566,7 @@
             "Water head, pumping and generation paths require a dedicated storage model."
           ],
           "answer": 3,
-          "explanation": "Water head, pumping and generation paths require a dedicated storage model."
+          "explanation": "Pumped storage depends on water inventory and head, with different pumping and generating conversion paths. A fixed hydro output factor cannot represent that storage cycle. This study-only entry requires a dedicated water-and-energy model before the apparent reservoir capacity can be treated as dispatchable electrical energy."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -3577,7 +3577,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 1,
-          "explanation": "Reservoir geometry, head curves, water permits and pump-turbine efficiency."
+          "explanation": "Reservoir geometry and head curves relate water inventory to operating conditions; pump-turbine efficiency relates electrical and hydraulic energy; water permissions constrain use. These determine the storage behavior. A capacity label or a generic battery efficiency cannot establish the pumped-hydro operating envelope."
         }
       ],
       "source_ids": [
@@ -3621,7 +3621,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 0,
-          "explanation": "An hourly model cannot resolve sub-second flywheel services."
+          "explanation": "A flywheel can be studied for services on timescales much shorter than an hour, but the hybrid catalogue’s hourly balance cannot resolve that response. Matching hourly energy does not demonstrate transient support. This architecture stays study-only while the required response, losses and control dynamics are assessed separately."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -3632,7 +3632,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 2,
-          "explanation": "Power response, bearing losses, cycle limits and validated dynamic models."
+          "explanation": "Power-response data and a validated dynamic model address the service timescale, while bearing losses and cycle limits constrain operation. These can change conclusions hidden by an hourly energy total. The drawing of a flywheel beside a battery does not establish their coordinated response or duty capability."
         }
       ],
       "source_ids": [
@@ -3676,7 +3676,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 1,
-          "explanation": "DC-link transients need much finer time resolution than hourly dispatch."
+          "explanation": "A DC-link disturbance involves voltage and current changing within an hourly interval, so an hourly energy sum can miss the behavior being studied. The supercapacitor entry requires a finer-time model and retains study-only status. Adequate aggregate kWh cannot establish DC-link voltage regulation or transient performance."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -3687,7 +3687,7 @@
             "Voltage-dependent capacitance, ESR, converter limits and control data."
           ],
           "answer": 3,
-          "explanation": "Voltage-dependent capacitance, ESR, converter limits and control data."
+          "explanation": "Capacitance behavior, equivalent series resistance, converter limits and control data determine how the device exchanges energy during a voltage disturbance. Those quantities are not represented by the catalogue’s generic storage picture. They are needed for a dedicated DC transient model and its comparison with measured behavior."
         }
       ],
       "source_ids": [
@@ -3731,7 +3731,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 2,
-          "explanation": "Site-specific tidal and wave conversion are not generic wind profiles."
+          "explanation": "Tidal and wave devices respond to different site resources and conversion characteristics than the synthetic wind profile. Reusing that profile would not establish their production or complementarity. This study-only lesson requires marine resource and device models before an energy-adequacy claim can be made for the proposed combination."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -3742,7 +3742,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 0,
-          "explanation": "Marine resource record, device power matrices and environmental constraints."
+          "explanation": "A marine resource record characterizes the site, and device power matrices connect that resource to electrical output. Environmental constraints can limit the operating case. These are the evidence needed to replace generic assumptions; technology labels and a reused wind series cannot establish marine generation performance."
         }
       ],
       "source_ids": [
@@ -3786,7 +3786,7 @@
             "Do not omit transmission, compression or marine operating constraints."
           ],
           "answer": 3,
-          "explanation": "Do not omit transmission, compression or marine operating constraints."
+          "explanation": "Wind generation is only one part of an offshore electrical-and-hydrogen system. Transmission limits, conversion auxiliaries, compression and marine operating constraints can restrict what reaches the delivery boundary. This study-only architecture must account for those paths rather than treating all nameplate generation as saleable output."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -3797,7 +3797,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 1,
-          "explanation": "Cable ratings, electrolyzer auxiliaries, hydrogen export and marine safety studies."
+          "explanation": "Cable ratings constrain electrical transfer, auxiliary and export specifications constrain the hydrogen pathway, and marine safety studies address the operating setting. Those records test separate assumptions in the proposed hub. A wind production total cannot establish feasible transfer, hydrogen delivery or safe offshore operation."
         }
       ],
       "source_ids": [
@@ -3841,7 +3841,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 0,
-          "explanation": "An educational diagram is not a nuclear plant safety or licensing assessment."
+          "explanation": "The diagram identifies possible electricity and heat pathways but contains no plant-specific operating authorization or safety analysis. Combining those carriers does not establish that a nuclear installation can follow the proposed duty. The entry remains an educational, study-only configuration and cannot be used as a licensing or safety conclusion."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -3852,7 +3852,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 2,
-          "explanation": "Authorized plant operating limits, heat integration and independent safety review."
+          "explanation": "Authorized operating limits identify the permitted plant envelope, heat-integration work tests the proposed coupling, and independent safety review addresses questions outside this catalogue. These cannot be inferred from a generic architecture or energy balance. The lesson identifies required evidence without supplying nuclear design or operating approval."
         }
       ],
       "source_ids": [
@@ -3896,7 +3896,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 1,
-          "explanation": "Feedstock accounting and lifecycle boundaries need independent review."
+          "explanation": "Waste feedstock composition and the chosen lifecycle boundary affect how useful energy and environmental consequences are counted. An electrical output alone does not determine avoided emissions or responsible waste treatment. This study-only lesson requires a separately reviewed feedstock and lifecycle assessment before those broader claims are considered."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -3907,7 +3907,7 @@
             "Feedstock composition, emissions controls, heat contracts and waste hierarchy review."
           ],
           "answer": 3,
-          "explanation": "Feedstock composition, emissions controls, heat contracts and waste hierarchy review."
+          "explanation": "Feedstock composition and emissions-control records describe the process inputs and releases; heat contracts identify useful demand; a waste-hierarchy review tests the wider treatment context. These address different parts of the assessment. A generation total cannot replace them or establish a lifecycle benefit."
         }
       ],
       "source_ids": [
@@ -3951,7 +3951,7 @@
             "Transfer results from a different site without checking assumptions."
           ],
           "answer": 2,
-          "explanation": "Virtual aggregation must preserve each site and network constraint."
+          "explanation": "Aggregating sites virtually does not remove an individual site’s energy, power or connection limits. A feasible total may still require an infeasible contribution at one location. This study-only entry needs site-level constraints and coordination, rather than treating the portfolio as one unconstrained battery or electrical bus."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -3962,7 +3962,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 0,
-          "explanation": "Site-level meter data, communications, customer permissions and settlement rules."
+          "explanation": "Site meters reveal individual behavior, communications define what coordination is possible, and customer permissions and settlement rules define participation. Those records connect the aggregate to real sites and services. A portfolio total or dashboard cannot establish that every dispatched contribution is available and permitted."
         }
       ],
       "source_ids": [
@@ -4006,7 +4006,7 @@
             "A one-bus energy model cannot validate network power flows or protection."
           ],
           "answer": 3,
-          "explanation": "A one-bus energy model cannot validate network power flows or protection."
+          "explanation": "A one-bus balance can account for total energy while omitting where it flows, voltage changes and protective coordination. Connecting microgrids introduces constraints that cannot be inferred from their summed capacity. This catalogue entry remains study-only until a dedicated network and control assessment addresses those interactions."
         },
         {
           "question": "Which evidence is most relevant before extending this lesson to a real project?",
@@ -4017,7 +4017,7 @@
             "The same default profile reused without provenance."
           ],
           "answer": 1,
-          "explanation": "Feeder impedances, switching plan, protection settings and coordinated control study."
+          "explanation": "Feeder impedances determine electrical relationships, switching plans define possible topologies, and protection and coordinated-control studies address behavior across those arrangements. These are needed to assess the links between microgrids. Separate positive energy balances at each site do not validate network flows or protection."
         }
       ],
       "source_ids": [

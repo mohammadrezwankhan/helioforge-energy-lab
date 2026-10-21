@@ -1,0 +1,314 @@
+{
+  "$schema": "./lesson-config.schema.json",
+  "schema_version": "1.0",
+  "repository": {
+    "owner": "mohammadrezwankhan",
+    "slug": "helioforge-energy-lab",
+    "name": "helioforge-energy-lab",
+    "title": "HelioForge Hybrid Energy Lab",
+    "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab",
+    "default_branch": "main",
+    "description": "Explore hybrid-energy assumptions, storage dispatch & auditable numerical screens using a reproducible Python workbench.",
+    "summary": "The source combines a hybrid adequacy screen, storage MILP, research studies, and an interactive learning workbench. The companion starts with a small synthetic daily power balance.",
+    "audience": "Energy researchers, engineering educators, and developers inspecting hybrid-resource assumptions.",
+    "topics": [
+      "hybrid-energy",
+      "renewable-energy",
+      "energy-modeling",
+      "solar-energy",
+      "battery-energy-storage",
+      "microgrid",
+      "energy-management",
+      "simulation",
+      "python",
+      "fastapi",
+      "typescript",
+      "engineering-education",
+      "optimization",
+      "reproducible-research",
+      "local-first"
+    ],
+    "source_paths": [
+      "README.md",
+      "START_HERE.md",
+      "apps/api/pyproject.toml",
+      "apps/web/package.json",
+      "apps/api/helioforge/engines/hybrid.py",
+      "apps/api/helioforge/engines/storage.py",
+      "docs/HYBRID_METHODOLOGY.md",
+      "docs/roadmap/COMPLETION.md",
+      "apps/api/tests/test_hybrid.py",
+      "apps/api/tests/test_engines.py"
+    ],
+    "is_fork": false,
+    "upstream": null
+  },
+  "domain": {
+    "id": "A",
+    "name": "Energy systems",
+    "primary": "#00E5FF",
+    "secondary": "#00E676",
+    "surface": "#0A192F",
+    "glow": "rgba(0,229,255,0.35)"
+  },
+  "model": {
+    "title": "Hybrid screening · follow the daily power balance",
+    "timeUnit": "h",
+    "horizon": 24,
+    "parameters": [
+      {
+        "key": "demandKW",
+        "label": "Demand baseline",
+        "unit": "kW",
+        "min": 100,
+        "max": 1200,
+        "step": 25,
+        "default": 500,
+        "calibration": "Illustrative input; verified against the declared analytical model, not field measurements."
+      },
+      {
+        "key": "solarKW",
+        "label": "Solar peak",
+        "unit": "kW",
+        "min": 0,
+        "max": 1400,
+        "step": 25,
+        "default": 600,
+        "calibration": "Illustrative input; verified against the declared analytical model, not field measurements."
+      },
+      {
+        "key": "batteryKW",
+        "label": "Battery discharge",
+        "unit": "kW",
+        "min": 0,
+        "max": 300,
+        "step": 10,
+        "default": 0,
+        "calibration": "Illustrative input; verified against the declared analytical model, not field measurements."
+      },
+      {
+        "key": "carbonGPerKWh",
+        "label": "Grid carbon factor",
+        "unit": "g/kWh",
+        "min": 0,
+        "max": 800,
+        "step": 25,
+        "default": 400,
+        "calibration": "Illustrative input; verified against the declared analytical model, not field measurements."
+      }
+    ],
+    "metrics": [
+      {
+        "key": "gridImportKW",
+        "label": "Grid import",
+        "unit": "kW",
+        "decimals": 1
+      },
+      {
+        "key": "solarOutputKW",
+        "label": "Solar output",
+        "unit": "kW",
+        "decimals": 1
+      },
+      {
+        "key": "renewablePct",
+        "label": "Solar demand share",
+        "unit": "%",
+        "decimals": 1
+      },
+      {
+        "key": "emissionsKgPerH",
+        "label": "Grid emissions rate",
+        "unit": "kg/h",
+        "decimals": 1
+      }
+    ],
+    "equation": "solar = S · max(0, sin(π(t−6)/12)); demand = D · (0.8 + 0.18 cos(2π(t−19)/24) + 0.12 exp(−((t−19)/3)²)); import = max(demand−solar−battery, 0).",
+    "assumptions": [
+      "An idealized clear-day profile represents one 24-hour period.",
+      "Battery discharge is a fixed external power contribution; energy inventory and charge scheduling are omitted.",
+      "Solar share is capped at 100%; exports are not credited; grid carbon intensity is constant.",
+      "The native greedy hourly hybrid screen and storage MILP are different algorithms; this browser proxy executes neither.",
+      "PV and load profiles are invented and repeatable. No current weather, tariff, irradiance service, or device connector is active.",
+      "The fixed battery contribution has no capacity state, so lower import cannot prove outage adequacy or an optimized dispatch."
+    ],
+    "kind": "grid",
+    "introduction": "A simple solar-demand-battery contribution illustrates the accounting questions asked by the native workbench. It omits the native hybrid inventory rules, backup sequence, and separate storage optimization.",
+    "calibration_status": "Uncalibrated synthetic teaching proxy"
+  },
+  "modules": [
+    {
+      "id": "module-1",
+      "title": "Follow a single-bus balance",
+      "objective": "Identify which sources serve demand and where a simple screen stops.",
+      "minutes": 12,
+      "steps": [
+        "Read the scope and hourly units in docs/HYBRID_METHODOLOGY.md.",
+        "Apply 500 kW demand baseline, 600 kW PV peak, and zero battery contribution.",
+        "Compare noon with 19:00 and explain why a surplus at one hour does not automatically serve another."
+      ],
+      "preset": {
+        "demandKW": 500,
+        "solarKW": 600,
+        "batteryKW": 0,
+        "carbonGPerKWh": 400
+      },
+      "checkpoints": [
+        {
+          "label": "Noon solar output is 600 kW",
+          "metric": "solarOutputKW",
+          "operator": "==",
+          "expected": 600,
+          "tolerance": 0.02,
+          "atTime": 12
+        },
+        {
+          "label": "Evening import is 550 kW",
+          "metric": "gridImportKW",
+          "operator": "==",
+          "expected": 550,
+          "tolerance": 0.02,
+          "atTime": 19
+        }
+      ],
+      "reflection": "Which native state and efficiency terms are needed to move surplus energy from noon to evening?",
+      "source_paths": [
+        "docs/HYBRID_METHODOLOGY.md",
+        "apps/api/helioforge/engines/hybrid.py"
+      ],
+      "level": "Foundation"
+    },
+    {
+      "id": "module-2",
+      "title": "Test a resource sensitivity",
+      "objective": "Quantify the effect of a smaller solar resource without changing demand.",
+      "minutes": 15,
+      "steps": [
+        "Keep baseline demand fixed and reduce PV peak from 600 to 300 kW.",
+        "Predict whether noon imports become positive, then run the scenario.",
+        "Compare the constant clear-day shape with the source’s declared synthetic hourly profiles."
+      ],
+      "preset": {
+        "demandKW": 500,
+        "solarKW": 300,
+        "batteryKW": 0,
+        "carbonGPerKWh": 400
+      },
+      "checkpoints": [
+        {
+          "label": "Noon PV is 300 kW",
+          "metric": "solarOutputKW",
+          "operator": "==",
+          "expected": 300,
+          "tolerance": 0.02,
+          "atTime": 12
+        },
+        {
+          "label": "Noon grid import under reduced PV",
+          "metric": "gridImportKW",
+          "operator": "==",
+          "expected": 76.9655,
+          "tolerance": 0.02,
+          "atTime": 12
+        }
+      ],
+      "reflection": "Why would a result based on this profile need measured or sourced weather and load data before a site-specific study?",
+      "source_paths": [
+        "docs/HYBRID_METHODOLOGY.md",
+        "apps/api/helioforge/engines/hybrid.py"
+      ],
+      "level": "Parameter study"
+    },
+    {
+      "id": "module-3",
+      "title": "Separate adequacy from optimization",
+      "objective": "Explain the different questions answered by a dispatch policy and a cost-minimizing storage model.",
+      "minutes": 18,
+      "steps": [
+        "Raise demand to 800 kW, use a 400 kW PV peak, and add an assumed 100 kW battery contribution.",
+        "Inspect the evening import and emissions rate in the stress case.",
+        "Read the native hybrid-policy order and the storage MILP objective; identify their different terminal-inventory conventions."
+      ],
+      "preset": {
+        "demandKW": 800,
+        "solarKW": 400,
+        "batteryKW": 100,
+        "carbonGPerKWh": 400
+      },
+      "checkpoints": [
+        {
+          "label": "Stress-case evening import is 780 kW",
+          "metric": "gridImportKW",
+          "operator": "==",
+          "expected": 780,
+          "tolerance": 0.02,
+          "atTime": 19
+        },
+        {
+          "label": "Stress-case emissions rate is 312 kg/h",
+          "metric": "emissionsKgPerH",
+          "operator": "==",
+          "expected": 312,
+          "tolerance": 0.02,
+          "atTime": 19
+        }
+      ],
+      "reflection": "What inventory, power-direction, price, and terminal-state constraints would be required to call a schedule optimized?",
+      "source_paths": [
+        "apps/api/helioforge/engines/hybrid.py",
+        "apps/api/helioforge/engines/storage.py"
+      ],
+      "level": "Stress test"
+    },
+    {
+      "id": "module-4",
+      "title": "Prepare a reproducible native follow-up",
+      "objective": "Carry a transparent screening question into the source workbench without inflating the claim.",
+      "minutes": 18,
+      "steps": [
+        "Use 500 kW demand, 300 kW PV, 200 kW assumed battery discharge, and 200 g/kWh grid carbon.",
+        "Run and export the scenario, noting the missing battery-energy state.",
+        "Follow START_HERE.md to identify the local API route for a real native hybrid calculation and record its source revision and assumptions."
+      ],
+      "preset": {
+        "demandKW": 500,
+        "solarKW": 300,
+        "batteryKW": 200,
+        "carbonGPerKWh": 200
+      },
+      "checkpoints": [
+        {
+          "label": "Evening import is 350 kW",
+          "metric": "gridImportKW",
+          "operator": "==",
+          "expected": 350,
+          "tolerance": 0.02,
+          "atTime": 19
+        },
+        {
+          "label": "Evening emissions rate is 70 kg/h",
+          "metric": "emissionsKgPerH",
+          "operator": "==",
+          "expected": 70,
+          "tolerance": 0.02,
+          "atTime": 19
+        }
+      ],
+      "reflection": "Which findings would remain an adequacy screen, and which additional evidence would be required for finance, stability, or plant control?",
+      "source_paths": [
+        "START_HERE.md",
+        "docs/HYBRID_METHODOLOGY.md",
+        "apps/api/tests/test_hybrid.py"
+      ],
+      "level": "Transfer to source"
+    }
+  ],
+  "source": {
+    "commit": "130b8c9664f5349b77941a03903dde29bef6aa74",
+    "audited_at": "2026-10-19T08:39:24Z",
+    "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/tree/130b8c9664f5349b77941a03903dde29bef6aa74",
+    "calibration_status": "synthetic-analytical-fixtures",
+    "scope": "This browser lab is a standalone teaching approximation. Use the linked source for the project implementation."
+  },
+  "dashboard_url": "https://mohammadrezwankhan.github.io/helioforge-energy-lab/"
+}

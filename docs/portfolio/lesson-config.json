@@ -1,0 +1,576 @@
+{
+  "schema_version": 1,
+  "repository": "mohammadrezwankhan/helioforge-energy-lab",
+  "display_name": "HelioForge Energy Lab",
+  "description": "Hybrid-energy research and learning with explicit capability gates, auditable inputs and reproducible comparisons.",
+  "domain": "DOMAIN_A",
+  "theme": {
+    "accent": "#00E5FF",
+    "secondary": "#00E676",
+    "surface": "#0A192F",
+    "glow": "rgba(0, 229, 255, 0.35)",
+    "label": "Energy systems",
+    "short": "Energy"
+  },
+  "repo_type": "research application",
+  "source_revision": "130b8c9664f5349b77941a03903dde29bef6aa74",
+  "source_snapshot_date": "2026-10-19",
+  "repo_url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab",
+  "homepage": "https://mkgrid.co.technology/",
+  "upstream": null,
+  "lessons": [
+    {
+      "id": "path-01",
+      "title": "Remote renewable microgrid",
+      "summary": "Size energy reserve independently from inverter power.",
+      "objective": "Size energy reserve independently from inverter power.",
+      "checkpoint": "Pin baseline and challenge; compare demand service and initial/terminal energy before costs. Check energy/SOC invariants and applicability using existing hybrid tests. Rewrite the repeated explanation to explain the relevant physical distinction.",
+      "level": "Foundation",
+      "tags": [
+        "foundations",
+        "engineering",
+        "power-conversion",
+        "grid-control",
+        "evidence"
+      ],
+      "source_paths": [
+        "apps/api/helioforge/data/hybrid_catalog.json",
+        "apps/api/helioforge/engines/hybrid.py",
+        "apps/api/tests/test_hybrid.py",
+        "apps/web/tests/hybrid.test.mjs"
+      ],
+      "source_urls": [
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/helioforge/data/hybrid_catalog.json",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/helioforge/engines/hybrid.py",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/tests/test_hybrid.py",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/web/tests/hybrid.test.mjs"
+      ],
+      "parameters": [
+        {
+          "source_inputs": {
+            "system_id": "remote-triad",
+            "baseline": {
+              "system_id": "remote-triad",
+              "scenario_id": "baseline",
+              "hours": 24,
+              "control": "GFM",
+              "critical_fraction": 0.65,
+              "initial_soc": 0.6,
+              "min_soc": 0.15,
+              "max_soc": 0.9,
+              "round_trip_efficiency": 0.9,
+              "import_eur_kwh": 0.2,
+              "export_eur_kwh": 0.06,
+              "generator_eur_kwh": 0.28,
+              "solar_kw": 1200,
+              "wind_kw": 800,
+              "hydro_kw": 0,
+              "generator_kw": 0,
+              "battery_kwh": 3000,
+              "battery_kw": 750,
+              "load_kw": 650,
+              "grid_import_kw": 0,
+              "grid_export_kw": 0
+            },
+            "challenge_scenario": {
+              "id": "renewable-drought",
+              "name": "Renewable drought",
+              "category": "Weather",
+              "modifiers": {
+                "solar_factor": 0.15,
+                "wind_factor": 0.12
+              },
+              "description": "Stress both resources together; diversity is not a guarantee.",
+              "mode": "screening"
+            }
+          },
+          "expected_outputs": [
+            "served/critical load",
+            "grid import",
+            "terminal stored energy",
+            "saved input/result export"
+          ],
+          "note": "Source reference; execution and scientific verification are separate."
+        }
+      ],
+      "command": null,
+      "native_id": "lesson-remote-triad",
+      "native_route": null,
+      "execution_status": "source-linked guide; no execution by this dashboard"
+    },
+    {
+      "id": "path-02",
+      "title": "Utility solar + storage · AC",
+      "summary": "Separate the shared grid connection limit from individual asset ratings.",
+      "objective": "Separate the shared grid connection limit from individual asset ratings.",
+      "checkpoint": "Pin baseline and challenge; compare demand service and initial/terminal energy before costs. Check energy/SOC invariants and applicability using existing hybrid tests. Rewrite the repeated explanation to explain the relevant physical distinction.",
+      "level": "Foundation",
+      "tags": [
+        "foundations",
+        "engineering",
+        "grid-control",
+        "evidence"
+      ],
+      "source_paths": [
+        "apps/api/helioforge/data/hybrid_catalog.json",
+        "apps/api/helioforge/engines/hybrid.py",
+        "apps/api/tests/test_hybrid.py",
+        "apps/web/tests/hybrid.test.mjs"
+      ],
+      "source_urls": [
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/helioforge/data/hybrid_catalog.json",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/helioforge/engines/hybrid.py",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/tests/test_hybrid.py",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/web/tests/hybrid.test.mjs"
+      ],
+      "parameters": [
+        {
+          "source_inputs": {
+            "system_id": "utility-pv-ac",
+            "baseline": {
+              "system_id": "utility-pv-ac",
+              "scenario_id": "baseline",
+              "hours": 24,
+              "control": "GFL",
+              "critical_fraction": 0.65,
+              "initial_soc": 0.6,
+              "min_soc": 0.15,
+              "max_soc": 0.9,
+              "round_trip_efficiency": 0.9,
+              "import_eur_kwh": 0.2,
+              "export_eur_kwh": 0.06,
+              "generator_eur_kwh": 0.28,
+              "solar_kw": 1200,
+              "wind_kw": 0,
+              "hydro_kw": 0,
+              "generator_kw": 0,
+              "battery_kwh": 3000,
+              "battery_kw": 750,
+              "load_kw": 150,
+              "grid_import_kw": 1200,
+              "grid_export_kw": 800
+            },
+            "challenge_scenario": {
+              "id": "export-cap",
+              "name": "Export bottleneck",
+              "category": "Grid",
+              "modifiers": {
+                "export_factor": 0.15
+              },
+              "description": "Reduce the configured export limit to 15%.",
+              "mode": "screening"
+            }
+          },
+          "expected_outputs": [
+            "served/critical load",
+            "grid import",
+            "terminal stored energy",
+            "saved input/result export"
+          ],
+          "note": "Source reference; execution and scientific verification are separate."
+        }
+      ],
+      "command": null,
+      "native_id": "lesson-utility-pv-ac",
+      "native_route": null,
+      "execution_status": "source-linked guide; no execution by this dashboard"
+    },
+    {
+      "id": "path-03",
+      "title": "Utility solar + storage · DC",
+      "summary": "An AC-equivalent screen cannot establish clipping recovery or DC protection.",
+      "objective": "An AC-equivalent screen cannot establish clipping recovery or DC protection.",
+      "checkpoint": "Pin baseline and challenge; compare demand service and initial/terminal energy before costs. Check energy/SOC invariants and applicability using existing hybrid tests. Rewrite the repeated explanation to explain the relevant physical distinction.",
+      "level": "Applied",
+      "tags": [
+        "application",
+        "engineering",
+        "evidence"
+      ],
+      "source_paths": [
+        "apps/api/helioforge/data/hybrid_catalog.json",
+        "apps/api/helioforge/engines/hybrid.py",
+        "apps/api/tests/test_hybrid.py",
+        "apps/web/tests/hybrid.test.mjs"
+      ],
+      "source_urls": [
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/helioforge/data/hybrid_catalog.json",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/helioforge/engines/hybrid.py",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/tests/test_hybrid.py",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/web/tests/hybrid.test.mjs"
+      ],
+      "parameters": [
+        {
+          "source_inputs": {
+            "system_id": "utility-pv-dc",
+            "baseline": {
+              "system_id": "utility-pv-dc",
+              "scenario_id": "baseline",
+              "hours": 24,
+              "control": "GFL",
+              "critical_fraction": 0.65,
+              "initial_soc": 0.6,
+              "min_soc": 0.15,
+              "max_soc": 0.9,
+              "round_trip_efficiency": 0.9,
+              "import_eur_kwh": 0.2,
+              "export_eur_kwh": 0.06,
+              "generator_eur_kwh": 0.28,
+              "solar_kw": 1200,
+              "wind_kw": 0,
+              "hydro_kw": 0,
+              "generator_kw": 0,
+              "battery_kwh": 3000,
+              "battery_kw": 750,
+              "load_kw": 150,
+              "grid_import_kw": 1200,
+              "grid_export_kw": 800
+            },
+            "challenge_scenario": {
+              "id": "export-cap",
+              "name": "Export bottleneck",
+              "category": "Grid",
+              "modifiers": {
+                "export_factor": 0.15
+              },
+              "description": "Reduce the configured export limit to 15%.",
+              "mode": "screening"
+            }
+          },
+          "expected_outputs": [
+            "served/critical load",
+            "grid import",
+            "terminal stored energy",
+            "saved input/result export"
+          ],
+          "note": "Source reference; execution and scientific verification are separate."
+        }
+      ],
+      "command": null,
+      "native_id": "lesson-utility-pv-dc",
+      "native_route": null,
+      "execution_status": "source-linked guide; no execution by this dashboard"
+    },
+    {
+      "id": "path-04",
+      "title": "Industrial solar + storage",
+      "summary": "Compare import peaks without calling one day an annual saving.",
+      "objective": "Compare import peaks without calling one day an annual saving.",
+      "checkpoint": "Pin baseline and challenge; compare demand service and initial/terminal energy before costs. Check energy/SOC invariants and applicability using existing hybrid tests. Rewrite the repeated explanation to explain the relevant physical distinction.",
+      "level": "Applied",
+      "tags": [
+        "application",
+        "engineering",
+        "evidence"
+      ],
+      "source_paths": [
+        "apps/api/helioforge/data/hybrid_catalog.json",
+        "apps/api/helioforge/engines/hybrid.py",
+        "apps/api/tests/test_hybrid.py",
+        "apps/web/tests/hybrid.test.mjs"
+      ],
+      "source_urls": [
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/helioforge/data/hybrid_catalog.json",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/helioforge/engines/hybrid.py",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/tests/test_hybrid.py",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/web/tests/hybrid.test.mjs"
+      ],
+      "parameters": [
+        {
+          "source_inputs": {
+            "system_id": "industrial-btm",
+            "baseline": {
+              "system_id": "industrial-btm",
+              "scenario_id": "baseline",
+              "hours": 24,
+              "control": "GFL",
+              "critical_fraction": 0.65,
+              "initial_soc": 0.6,
+              "min_soc": 0.15,
+              "max_soc": 0.9,
+              "round_trip_efficiency": 0.9,
+              "import_eur_kwh": 0.2,
+              "export_eur_kwh": 0.06,
+              "generator_eur_kwh": 0.28,
+              "solar_kw": 1200,
+              "wind_kw": 0,
+              "hydro_kw": 0,
+              "generator_kw": 0,
+              "battery_kwh": 3000,
+              "battery_kw": 750,
+              "load_kw": 650,
+              "grid_import_kw": 1200,
+              "grid_export_kw": 800
+            },
+            "challenge_scenario": {
+              "id": "zero-export",
+              "name": "Zero-export constraint",
+              "category": "Grid",
+              "modifiers": {
+                "export_factor": 0
+              },
+              "description": "Enforce zero export at the point of connection.",
+              "mode": "screening"
+            }
+          },
+          "expected_outputs": [
+            "served/critical load",
+            "grid import",
+            "terminal stored energy",
+            "saved input/result export"
+          ],
+          "note": "Source reference; execution and scientific verification are separate."
+        }
+      ],
+      "command": null,
+      "native_id": "lesson-industrial-btm",
+      "native_route": null,
+      "execution_status": "source-linked guide; no execution by this dashboard"
+    },
+    {
+      "id": "path-05",
+      "title": "Wind + battery firming",
+      "summary": "Power adequacy and stored energy limit different services.",
+      "objective": "Power adequacy and stored energy limit different services.",
+      "checkpoint": "Pin baseline and challenge; compare demand service and initial/terminal energy before costs. Check energy/SOC invariants and applicability using existing hybrid tests. Rewrite the repeated explanation to explain the relevant physical distinction.",
+      "level": "Applied",
+      "tags": [
+        "application",
+        "engineering",
+        "battery",
+        "evidence"
+      ],
+      "source_paths": [
+        "apps/api/helioforge/data/hybrid_catalog.json",
+        "apps/api/helioforge/engines/hybrid.py",
+        "apps/api/tests/test_hybrid.py",
+        "apps/web/tests/hybrid.test.mjs"
+      ],
+      "source_urls": [
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/helioforge/data/hybrid_catalog.json",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/helioforge/engines/hybrid.py",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/tests/test_hybrid.py",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/web/tests/hybrid.test.mjs"
+      ],
+      "parameters": [
+        {
+          "source_inputs": {
+            "system_id": "wind-firming",
+            "baseline": {
+              "system_id": "wind-firming",
+              "scenario_id": "baseline",
+              "hours": 24,
+              "control": "GFL",
+              "critical_fraction": 0.65,
+              "initial_soc": 0.6,
+              "min_soc": 0.15,
+              "max_soc": 0.9,
+              "round_trip_efficiency": 0.9,
+              "import_eur_kwh": 0.2,
+              "export_eur_kwh": 0.06,
+              "generator_eur_kwh": 0.28,
+              "solar_kw": 0,
+              "wind_kw": 800,
+              "hydro_kw": 0,
+              "generator_kw": 0,
+              "battery_kwh": 3000,
+              "battery_kw": 750,
+              "load_kw": 150,
+              "grid_import_kw": 1200,
+              "grid_export_kw": 800
+            },
+            "challenge_scenario": {
+              "id": "export-cap",
+              "name": "Export bottleneck",
+              "category": "Grid",
+              "modifiers": {
+                "export_factor": 0.15
+              },
+              "description": "Reduce the configured export limit to 15%.",
+              "mode": "screening"
+            }
+          },
+          "expected_outputs": [
+            "served/critical load",
+            "grid import",
+            "terminal stored energy",
+            "saved input/result export"
+          ],
+          "note": "Source reference; execution and scientific verification are separate."
+        }
+      ],
+      "command": null,
+      "native_id": "lesson-wind-firming",
+      "native_route": null,
+      "execution_status": "source-linked guide; no execution by this dashboard"
+    },
+    {
+      "id": "path-06",
+      "title": "Hospital islanding microgrid",
+      "summary": "Distinguish island energy adequacy from certified transfer performance.",
+      "objective": "Distinguish island energy adequacy from certified transfer performance.",
+      "checkpoint": "Pin baseline and challenge; compare demand service and initial/terminal energy before costs. Check energy/SOC invariants and applicability using existing hybrid tests. Rewrite the repeated explanation to explain the relevant physical distinction.",
+      "level": "Applied",
+      "tags": [
+        "application",
+        "engineering",
+        "grid-control",
+        "evidence"
+      ],
+      "source_paths": [
+        "apps/api/helioforge/data/hybrid_catalog.json",
+        "apps/api/helioforge/engines/hybrid.py",
+        "apps/api/tests/test_hybrid.py",
+        "apps/web/tests/hybrid.test.mjs"
+      ],
+      "source_urls": [
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/helioforge/data/hybrid_catalog.json",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/helioforge/engines/hybrid.py",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/tests/test_hybrid.py",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/web/tests/hybrid.test.mjs"
+      ],
+      "parameters": [
+        {
+          "source_inputs": {
+            "system_id": "hospital-island",
+            "baseline": {
+              "system_id": "hospital-island",
+              "scenario_id": "baseline",
+              "hours": 24,
+              "control": "Dual",
+              "critical_fraction": 0.65,
+              "initial_soc": 0.6,
+              "min_soc": 0.15,
+              "max_soc": 0.9,
+              "round_trip_efficiency": 0.9,
+              "import_eur_kwh": 0.2,
+              "export_eur_kwh": 0.06,
+              "generator_eur_kwh": 0.28,
+              "solar_kw": 1200,
+              "wind_kw": 0,
+              "hydro_kw": 0,
+              "generator_kw": 700,
+              "battery_kwh": 3000,
+              "battery_kw": 750,
+              "load_kw": 650,
+              "grid_import_kw": 1200,
+              "grid_export_kw": 800
+            },
+            "challenge_scenario": {
+              "id": "outage-4h",
+              "name": "Four-hour outage",
+              "category": "Resilience",
+              "modifiers": {
+                "outage_start": 17,
+                "outage_hours": 4
+              },
+              "description": "Disconnect the grid during the evening peak.",
+              "mode": "screening"
+            }
+          },
+          "expected_outputs": [
+            "served/critical load",
+            "grid import",
+            "terminal stored energy",
+            "saved input/result export"
+          ],
+          "note": "Source reference; execution and scientific verification are separate."
+        }
+      ],
+      "command": null,
+      "native_id": "lesson-hospital-island",
+      "native_route": null,
+      "execution_status": "source-linked guide; no execution by this dashboard"
+    },
+    {
+      "id": "path-07",
+      "title": "Constrained battery dispatch",
+      "summary": "Compare a short-horizon battery MILP with baseline operation under the stated SOC and direction constraints.",
+      "objective": "Compare a short-horizon battery MILP with baseline operation under the stated SOC and direction constraints.",
+      "checkpoint": "Check charge/discharge direction and SOC feasibility. Report undefined savings ratios honestly and retain solver status.",
+      "level": "Advanced",
+      "tags": [
+        "verification",
+        "engineering",
+        "battery",
+        "state-estimation",
+        "optimization",
+        "evidence"
+      ],
+      "source_paths": [
+        "apps/api/helioforge/engines/storage.py",
+        "apps/web/src/types.ts",
+        "apps/api/tests/test_engines.py"
+      ],
+      "source_urls": [
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/helioforge/engines/storage.py",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/web/src/types.ts",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/tests/test_engines.py"
+      ],
+      "parameters": [
+        {
+          "source_inputs": [
+            "capacity_kwh",
+            "power_kw",
+            "initial and terminal SOC",
+            "hourly load/PV/prices from the actual form"
+          ],
+          "expected_outputs": [
+            "dispatch schedule",
+            "cost/savings",
+            "terminal_soc_kwh",
+            "solver status"
+          ],
+          "note": "Source reference; execution and scientific verification are separate."
+        }
+      ],
+      "command": null,
+      "native_id": null,
+      "native_route": null,
+      "execution_status": "source-linked guide; no execution by this dashboard"
+    },
+    {
+      "id": "path-08",
+      "title": "Review a saved run with explicit execution mode",
+      "summary": "Trace eight deterministic review roles and optional externally executed structured reviews to one selected saved run.",
+      "objective": "Trace eight deterministic review roles and optional externally executed structured reviews to one selected saved run.",
+      "checkpoint": "Default local mode must not claim agents executed independently. Do not invoke external provider in preview; preserve credential/consent prerequisites and failure reporting.",
+      "level": "Advanced",
+      "tags": [
+        "verification",
+        "engineering",
+        "evidence"
+      ],
+      "source_paths": [
+        "apps/api/helioforge/council.py",
+        "apps/api/tests/test_council.py",
+        "docs/AI_SETUP.md"
+      ],
+      "source_urls": [
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/helioforge/council.py",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/apps/api/tests/test_council.py",
+        "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/130b8c9664f5349b77941a03903dde29bef6aa74/docs/AI_SETUP.md"
+      ],
+      "parameters": [
+        {
+          "source_inputs": [
+            "saved hybrid run",
+            "local versus optional provider mode",
+            "bounded request settings"
+          ],
+          "expected_outputs": [
+            "review roles",
+            "critic synthesis",
+            "risk/evidence list",
+            "execution-mode provenance"
+          ],
+          "note": "Source reference; execution and scientific verification are separate."
+        }
+      ],
+      "command": null,
+      "native_id": null,
+      "native_route": null,
+      "execution_status": "source-linked guide; no execution by this dashboard"
+    }
+  ]
+}

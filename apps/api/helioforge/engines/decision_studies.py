@@ -348,7 +348,7 @@ STUDIES: list[dict] = [
         "data_fields": [_data("assets", "Asset value matrix", _defaults(MeritInput)["assets"])],
         "equations": ["net value_route,i = assumed value_route,i − variable cost_i", "weighted net value_i = Σ_route weight_route × net value_route,i"],
         "limitations": ["All matrix values and route weights are user assumptions; no dispatch, balancing eligibility, fees, shape or contract terms are inferred."],
-        "sources": [{"title": "U.S. EIA overview of electricity markets", "url": "https://www.eia.gov/energyexplained/electricity/electricity-markets.php"}],
+        "sources": [{"title": "U.S. EIA: Wholesale Electricity Markets", "url": "https://www.eia.gov/electricity/wholesalemarkets/"}],
     },
     {
         "id": "overview-carbon", "page": "overview", "title": "Hourly versus static emissions",
