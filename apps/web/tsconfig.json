@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "none",
+    "module": "preserve",
     "lib": [
       "ES2022",
       "DOM",
@@ -13,9 +13,10 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "forceConsistentCasingInFileNames": true,
-    "outFile": "dist/app.js",
     "sourceMap": false,
-    "removeComments": false
+    "removeComments": false,
+    "moduleDetection": "legacy",
+    "outDir": "dist/js"
   },
   "files": [
     "src/types.ts",

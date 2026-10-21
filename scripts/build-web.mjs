@@ -1,9 +1,12 @@
+import {compileScripts} from './compile-web.mjs';
 import { readFile, writeFile, mkdir, copyFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const web=path.join(root,'apps/web'), dist=path.join(web,'dist');
 await mkdir(dist,{recursive:true});
+const config=JSON.parse(await readFile(path.join(web,'tsconfig.json'),'utf8'));
+compileScripts(config.files.map(file=>path.join(web,file)),path.join(dist,'app.js'));
 for(const [from,to] of [['index.html','index.html'],['src/styles.css','styles.css'],['public/favicon.svg','favicon.svg']])await copyFile(path.join(web,from),path.join(dist,to));
 const html=await readFile(path.join(web,'index.html'),'utf8');
 const css=(await Promise.all(['styles.css','champion.css','study-visuals.css','workflows.css','experiences.css','completion-ui.css','integrations-ui.css','advanced-visuals.css'].map(file=>readFile(path.join(web,'src',file),'utf8')))).join('\n');

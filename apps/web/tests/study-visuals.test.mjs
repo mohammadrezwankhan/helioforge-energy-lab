@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import vm from 'node:vm';
-import { execFileSync } from 'node:child_process';
+import {compileScripts} from '../../../scripts/compile-web.mjs';
 import { fileURLToPath } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -12,16 +12,12 @@ const root = path.resolve(here, '..');
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'hf-study-visuals-'));
 const out = path.join(temp, 'study-visuals.js');
 try {
-  execFileSync(process.execPath, [
-    path.join(root, 'node_modules/typescript/bin/tsc'),
-    '--target', 'ES2022', '--lib', 'ES2022,DOM,DOM.Iterable', '--strict',
-    '--noUncheckedIndexedAccess', '--noImplicitOverride', '--noUnusedLocals',
-    '--noUnusedParameters', '--module', 'none', '--outFile', out,
+  compileScripts([
     path.join(root, 'src/roadmap-types.ts'),
     path.join(root, 'src/roadmap-data.ts'),
     path.join(root, 'src/advanced-visuals.ts'),
     path.join(root, 'src/study-visuals.ts'),
-  ], { stdio: 'pipe' });
+  ], out);
 } catch (error) {
   throw new Error(`Could not compile study visual sources: ${error.stderr?.toString() ?? error.message}`);
 }
