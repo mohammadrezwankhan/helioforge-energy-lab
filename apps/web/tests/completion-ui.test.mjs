@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import vm from 'node:vm';
-import {execFileSync} from 'node:child_process';
+import {compileScripts} from '../../../scripts/compile-web.mjs';
 import {fileURLToPath} from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -12,11 +12,7 @@ const root = path.resolve(here, '..');
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'hf-completion-ui-'));
 const out = path.join(temp, 'completion-ui.js');
 try {
-  execFileSync(process.execPath, [
-    path.join(root, 'node_modules/typescript/bin/tsc'),
-    '--target', 'ES2022', '--lib', 'ES2022,DOM,DOM.Iterable', '--strict',
-    '--noUncheckedIndexedAccess', '--noImplicitOverride', '--noUnusedLocals',
-    '--noUnusedParameters', '--module', 'none', '--outFile', out,
+  compileScripts([
     path.join(root, 'src/types.ts'),
     path.join(root, 'src/hybrid-types.ts'),
     path.join(root, 'src/core.ts'),
@@ -27,7 +23,7 @@ try {
     path.join(root, 'src/roadmap-data.ts'),
     path.join(root, 'src/scene.ts'),
     path.join(root, 'src/completion-ui.ts'),
-  ], {stdio: 'pipe'});
+  ], out);
 } catch (error) {
   throw new Error(`Could not compile completion UI sources: ${error.stderr?.toString() ?? error.message}`);
 }

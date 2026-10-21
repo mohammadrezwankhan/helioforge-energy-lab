@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import vm from 'node:vm';
-import { execFileSync } from 'node:child_process';
+import {compileScripts} from '../../../scripts/compile-web.mjs';
 import { fileURLToPath } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -20,14 +20,10 @@ fs.writeFileSync(stub, `namespace HF {
   export interface ViewState { page: Page; motionOff: boolean; connected: boolean; hybrid: { lessonId: string; quizResult: { passed: boolean; correct: number; total: number } | null }; data: { markets: Market[]; drift: Drift; portfolio: { id: string; capex_meur: number }[] } }
 }`);
 try {
-  execFileSync(process.execPath, [
-    path.join(root, 'node_modules/typescript/bin/tsc'),
-    '--target', 'ES2022', '--lib', 'ES2022,DOM,DOM.Iterable', '--strict',
-    '--noUncheckedIndexedAccess', '--noImplicitOverride', '--noUnusedLocals',
-    '--noUnusedParameters', '--module', 'none', '--outFile', out,
+  compileScripts([
     stub,
     path.join(root, 'src/experiences.ts'),
-  ], { stdio: 'pipe' });
+  ], out);
 } catch (error) {
   throw new Error(`Could not compile experiences sources: ${error.stderr?.toString() || error.stdout?.toString() || error.message}`);
 }
