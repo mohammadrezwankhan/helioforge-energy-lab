@@ -48,7 +48,7 @@ with sync_playwright() as pw, httpx.Client(base_url=args.url, timeout=40) as cli
             const r = await window.hfTestTransport(String(path), options || {});
             return new Response(r.body, {status:r.status, headers:r.headers});
         }; }''')
-        page.set_content((ROOT/'HelioForge-Preview.html').read_text(), wait_until='load')
+        page.set_content((ROOT/'HelioForge-Preview.html').read_text(encoding="utf-8"), wait_until='load')
     else:
         page.goto(args.url+'/#overview', wait_until='networkidle')
     expect(page.locator('.connection-chip')).to_have_text('API connected')
@@ -150,10 +150,10 @@ with sync_playwright() as pw, httpx.Client(base_url=args.url, timeout=40) as cli
     # Disconnected snapshot: verify no calculation pretends to have run.
     preview=browser.new_page(viewport={'width':1440,'height':900})
     preview.evaluate("() => { window.fetch = async () => { throw new Error('Offline test'); }; }")
-    preview.set_content((ROOT/'HelioForge-Preview.html').read_text(), wait_until='load')
+    preview.set_content((ROOT/'HelioForge-Preview.html').read_text(encoding="utf-8"), wait_until='load')
     expect(preview.locator('.connection-chip')).to_have_text('Snapshot preview')
     preview.locator('.nav-item[data-nav="storage"]').click()
-    expect(preview.locator('button[type="submit"]')).to_be_disabled()
+    expect(preview.locator('form[data-model="storage"] button[type="submit"]')).to_be_disabled()
     passed('Standalone snapshot renders with calculations explicitly disabled')
     assert not errors, errors
     passed('No uncaught JavaScript errors')

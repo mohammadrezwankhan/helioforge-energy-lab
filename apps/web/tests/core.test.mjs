@@ -24,6 +24,17 @@ test('all twelve views render without a DOM dependency',()=>{
  const state={hybrid:h.initialHybridState(),page:'overview',connected:false,busy:false,data:h.SNAPSHOT,marketFilter:'ALL',search:'',chartMode:'dispatch',forecastYears:20,runs:[],motionOff:false};
  for(const p of h.PAGES){state.page=p.id;assert.ok(h.content(state).length>500,p.id);}
 });
+test('unknown and inherited page values fall back to overview in content and shell',()=>{
+ const state={hybrid:h.initialHybridState(),page:'overview',connected:false,busy:false,data:h.SNAPSHOT,marketFilter:'ALL',search:'',chartMode:'dispatch',forecastYears:20,runs:[],motionOff:false};
+ for(const page of ['unexpected-page','<script>alert(1)</script>','toString','constructor','valueOf','hasOwnProperty','__proto__',null,{}]){
+  const rendered=h.content({...state,page});
+  assert.equal(typeof rendered,'string',String(page));
+  assert.ok(rendered.includes('Research with purpose'),String(page));
+ }
+ const shell=h.shell({...state,page:'toString'});
+ assert.ok(shell.includes('<h1>Command centre'));
+ assert.ok(shell.includes('Research with purpose'));
+});
 test('charts have accessible titles and data tables',()=>{
  const chart=h.lineChart(['a','b'],[{name:'Power',values:[1,2],color:'#aaa'}],{unit:'MW'});
  assert.ok(chart.includes('role="img"'));assert.ok(chart.includes('<table>'));assert.ok(chart.includes('Power (MW)'));

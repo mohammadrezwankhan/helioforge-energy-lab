@@ -1,0 +1,95 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://mkgrid.co.technology/#website",
+      "name": "HelioForge Energy Lab",
+      "url": "https://mkgrid.co.technology/",
+      "description": "Hybrid energy research simulator modeling co-located solar photovoltaics, wind turbines, and Battery Energy Storage Systems (BESS).",
+      "inLanguage": "en",
+      "publisher": {
+        "@type": "Person",
+        "@id": "https://mrkhan.co.technology/#person",
+        "name": "Mohammad Rezwan Khan",
+        "url": "https://mrkhan.co.technology/"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://mkgrid.co.technology/#app",
+      "name": "HelioForge Energy Lab Simulator",
+      "url": "https://mkgrid.co.technology/",
+      "applicationCategory": "EngineeringApplication",
+      "applicationSubCategory": "Hybrid Renewable Energy Microgrid Modeling & Dispatch Optimization",
+      "operatingSystem": "Web browser (HTML5/ES2020+); Python 3.12+",
+      "isAccessibleForFree": true,
+      "softwareVersion": "0.3.0",
+      "author": {
+        "@type": "Person",
+        "@id": "https://mrkhan.co.technology/#person"
+      },
+      "description": "Zero-login hybrid energy research simulator evaluating 36 system topologies, solar-wind-storage dispatch dynamics, and battery degradation curves with declared mathematical inputs and outputs.",
+      "featureList": [
+        "36 distinct hybrid system architectures across DC-coupled, AC-coupled, and islanded topologies",
+        "Declared Mathematical Inputs: Solar PV capacity P_pv (MWp), Wind turbine nameplate P_wind (MW), BESS storage capacity E_nom (MWh), BESS power rating P_bess (MW), Point of Interconnection limit P_poi (MW), Arrhenius activation energy E_a (31.7 kJ/mol), calendar degradation factor A_cal (0.0028/day^0.5), cycle stress exponent k_dod (1.62)",
+        "Declared Mathematical Outputs: Hourly net dispatch profile P_export(t) (MW), clipping energy recapture Delta_E_clip (+6.2% to +11.4%), curtailment avoidance eta_curtail (34% to 48% reduction), balance-of-plant Capex savings (14% to 22%), Levelized Cost of Storage LCOS ($108-$136/MWh), battery state of health SOH(t) = 1.0 - (Q_cal + Q_cyc)",
+        "Lithium-ion capacity fade and thermal derating simulations based on Arrhenius kinetics and cyclic depth-of-discharge stress",
+        "Levelized Cost of Storage (LCOS) and grid curtailment mitigation calculations"
+      ],
+      "softwareHelp": {
+        "@id": "https://mkgrid.co.technology/methodology/"
+      }
+    },
+    {
+      "@type": "Dataset",
+      "@id": "https://mkgrid.co.technology/#dataset",
+      "name": "HelioForge Hybrid Microgrid Dispatch Benchmark Dataset",
+      "description": "Standardized hourly dispatch profiles, PV generation curves, wind production distributions, and BESS throughput metrics across 24 operational scenarios with declared mathematical input and output variables.",
+      "creator": {
+        "@type": "Person",
+        "@id": "https://mrkhan.co.technology/#person"
+      },
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "variableMeasured": [
+        "Hourly Photovoltaic Generation P_pv(t) (MW)",
+        "Hourly Wind Turbine Generation P_wind(t) (MW)",
+        "BESS State of Charge SOC(t) (%)",
+        "BESS Charge/Discharge Power P_bess(t) (MW)",
+        "Point of Interconnection Net Export P_poi(t) (MW)",
+        "Photovoltaic Inverter Clipping Recaptured Energy Delta_E_clip(t) (MWh)",
+        "Interconnection Export Curtailment Loss P_curtail(t) (MW)",
+        "Cumulative Battery State of Health SOH(t) (fraction)",
+        "Levelized Cost of Storage LCOS ($/MWh)",
+        "Arrhenius Battery Cell Core Temperature T_cell(t) (Kelvin)"
+      ],
+      "distribution": {
+        "@type": "DataDownload",
+        "encodingFormat": "application/json",
+        "contentUrl": "https://mkgrid.co.technology/app.json"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://mkgrid.co.technology/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does co-located solar-plus-storage dispatch compare to standalone BESS?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Co-located solar-plus-storage shares Point of Interconnection (POI) transformer capacity and balance-of-plant infrastructure, reducing capital expenditure by 14-22% relative to standalone deployments. In DC-coupled topologies, clipping recapture captures otherwise curtailed photovoltaic energy directly behind the inverter, boosting round-trip energy yield by 6-11% compared to AC-coupled standalone configurations subjected to double inverter conversion losses."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is battery degradation modeled in HelioForge microgrid simulations?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "HelioForge implements a semi-empirical capacity fade model combining calendar aging (Arrhenius temperature dependence: Q_cal = A_cal * exp(-E_a / (R * T)) * t^0.5) and cyclic aging (throughput wear based on depth-of-discharge stress: Q_cyc = B_cyc * (DoD)^k_dod * sqrt(N_cycles)). Total capacity retention is evaluated continuously: Q_retention = 1.0 - (Q_cal + Q_cyc)."
+          }
+        }
+      ]
+    }
+  ]
+}

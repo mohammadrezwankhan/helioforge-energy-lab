@@ -115,15 +115,15 @@ class ForecastRequest(StrictModel):
 
 
 class ReliabilityRequest(StrictModel):
-    shape: Positive = 2.4
-    scale_hours: Positive = 45000
-    age_hours: NonNegative = 16000
-    horizon_hours: Positive = 8760
+    shape: Positive = Field(default=2.4, ge=0.05, le=20)
+    scale_hours: Positive = Field(default=45000, ge=0.001, le=1e9)
+    age_hours: NonNegative = Field(default=16000, le=1e9)
+    horizon_hours: Positive = Field(default=8760, ge=0.001, le=1e9)
 
 
 class DriftRequest(StrictModel):
-    expected: list[Positive] = Field(min_length=10, max_length=8760)
-    observed: list[NonNegative] = Field(min_length=10, max_length=8760)
+    expected: list[Annotated[float, Field(ge=1e-12, le=1e12, allow_inf_nan=False)]] = Field(min_length=10, max_length=8760)
+    observed: list[Annotated[float, Field(ge=0, le=1e12, allow_inf_nan=False)]] = Field(min_length=10, max_length=8760)
     threshold_sigma: Positive = 3
 
     @model_validator(mode="after")
@@ -159,6 +159,8 @@ class CouncilRequest(StrictModel):
     brief: str = Field(default="Review a 5 MW / 10 MWh BTM storage investment for an industrial customer.", min_length=8, max_length=6000)
     mode: Literal["local", "openai"] = "local"
     consent_to_external_processing: bool = False
+    cross_examination_rounds: int = Field(default=1, ge=1, le=2)
+    evidence_run_ids: list[str] = Field(default_factory=list, max_length=6)
 
 
 class PilotUpdate(StrictModel):

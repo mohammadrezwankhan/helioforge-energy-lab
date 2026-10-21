@@ -14,6 +14,12 @@ namespace HF {
     let hasConnected=false;
     let connectionEpoch=0, toastTimer=0, modalReturn:HTMLElement|null=null;
     let sceneCleanup:(()=>void)|undefined;
+    const studies=createStudyController(()=>state);
+    const workflows=createWorkflowController(()=>state,()=>render());
+    const experiences=createExperienceController(()=>state);
+    const completion=createCompletionController(()=>state,toast);
+    const integrations=createIntegrationController(()=>state);
+    window.addEventListener('pagehide',event=>{if(!event.persisted)completion.destroy();});
     function render(): void {
       sceneCleanup?.();
       root!.innerHTML=shell(state);
@@ -34,10 +40,17 @@ namespace HF {
       applyBusyState();
       const sidebar=document.getElementById('sidebar');if(sidebar)sidebar.inert=window.matchMedia('(max-width:800px)').matches;
       const canvas=document.getElementById('energy-scene') as HTMLCanvasElement|null;
-      if(canvas)sceneCleanup=mountEnergyScene(canvas,systemById(state.hybrid.inputs.system_id),state.motionOff,id=>{state.hybrid.objectId=id;const el=document.getElementById('asset-inspector');if(el)el.innerHTML=assetInspector(state.hybrid);document.querySelectorAll<HTMLButtonElement>('[data-asset]').forEach(b=>{b.classList.toggle('selected',b.dataset.asset===id);b.setAttribute('aria-pressed',String(b.dataset.asset===id));});});
+      if(canvas)sceneCleanup=mountEnergyScene(canvas,systemById(state.hybrid.inputs.system_id),state.motionOff,id=>{state.hybrid.objectId=id;const el=document.getElementById('asset-inspector');if(el)el.innerHTML=assetInspector(state.hybrid);document.querySelectorAll<HTMLButtonElement>('[data-asset]').forEach(b=>{b.classList.toggle('selected',b.dataset.asset===id);b.setAttribute('aria-pressed',String(b.dataset.asset===id));});},()=>hybridDirty(state.hybrid)?null:state.hybrid.result?.schedule[state.hybrid.hour]??null);
       document.title=`${PAGES.find(p=>p.id===state.page)!.title} · HelioForge`;
+      studies.refresh();
+      workflows.refresh();
+      experiences.refresh();
+      completion.refresh();
+      integrations.refresh();
+      void refreshReleaseProvenance();
     }
     function applyBusyState():void {
+      document.querySelector('.council-topology')?.classList.toggle('working',state.busy&&state.page==='council');
       document.querySelectorAll<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>('form[data-model] input,form[data-model] select,form[data-model] textarea').forEach(e=>e.disabled=state.busy);
       document.querySelectorAll<HTMLInputElement|HTMLSelectElement>('#hybrid-config input,#hybrid-config select').forEach(e=>e.disabled=state.hybrid.busy);
       document.querySelectorAll<HTMLButtonElement>('[data-system],[data-scenario],[data-hybrid-action="reset"],[data-hybrid-action="import"],[data-hybrid-action="launch-lesson"]').forEach(e=>e.disabled=state.hybrid.busy);
@@ -74,7 +87,7 @@ namespace HF {
       const headers:Record<string,string>={}; if(body!==undefined)headers['Content-Type']='application/json';
       if(adminKey)headers['X-API-Key']=adminKey;
       let response:Response;
-      try { response=await fetch(`/api/${path}`,{method:body===undefined?'GET':method,headers,body:body===undefined?undefined:JSON.stringify(body),signal:AbortSignal.timeout(path.startsWith('council')?125000:30000)}); }
+      try { response=await fetch(`/api/${path}`,{method:body===undefined?'GET':method,headers,body:body===undefined?undefined:JSON.stringify(body),signal:AbortSignal.timeout(path.startsWith('council')?310000:30000)}); }
       catch { throw new Error(body===undefined?'The local API could not be reached. Start the Python app, then reconnect.':'The response was interrupted. The operation may have completed. Your inputs are retained. Check Analysis history before trying again.'); }
       let data:unknown;
       try { data=await response.json(); }
@@ -138,7 +151,7 @@ namespace HF {
       else if(name==='motion'){
         state.motionOff=!state.motionOff;try{localStorage.setItem('hf-motion-off',String(state.motionOff));}catch{/* Optional preference only. */}render();toast(state.motionOff?'Animations reduced.':'Animations enabled.');
       }else if(name==='close-modal')(document.getElementById('modal') as HTMLDialogElement).close();
-      else if(name==='methodology')openModal('Visible assumptions. Verifiable work.',`<div class="modal-copy"><p>HelioForge is a local-first research and investment-screening application. All included sites, prices, portfolios and pilot records are synthetic.</p><h3>What the models do</h3><p>Storage: mixed-integer cost optimization with energy balance, state-of-charge limits and no simultaneous charging/discharging or importing/exporting. The no-storage comparator is optimized under the same constraints.</p><p>Finance: pre-tax nominal cash flows, a conservative augmentation-year debt-service screen and a level-payment debt-capacity estimate. PV: discounted lifecycle costs divided by discounted generation.</p><p>Forecasting: seeded, uncalibrated annual-price scenarios. Reliability: user-specified Weibull assumptions. Carbon: a screening inventory, not a certified life-cycle assessment.</p><h3>What this release does not claim</h3><p>No live regulatory monitoring, bankable price forecast, calibrated fault diagnosis, certified biodiversity result, production authentication or operational equipment control. The country registry provides official starting points, not approved rules.</p><p>The full repository includes methodology, limitations, tests, a multi-agent build prompt and a production-hardening roadmap.</p><button class="btn primary" data-action="export-evidence">${icon('download',16)} Download current evidence</button></div>`);
+      else if(name==='methodology')openModal('Visible assumptions. Verifiable work.',`<div class="modal-copy"><p>HelioForge is a local-first research and investment-screening application. All included sites, prices, portfolios and pilot records are synthetic.</p><h3>What the models do</h3><p>Storage: mixed-integer cost optimization with energy balance, state-of-charge limits and no simultaneous charging/discharging or importing/exporting. The no-storage comparator is optimized under the same constraints.</p><p>Finance: pre-tax nominal cash flows, a conservative augmentation-year debt-service screen and a level-payment debt-capacity estimate. PV: discounted lifecycle costs divided by discounted generation.</p><p>Forecasting: seeded, uncalibrated annual-price scenarios. Reliability: user-specified Weibull assumptions. Carbon: a screening inventory, not a certified life-cycle assessment.</p><h3>What this release does not claim</h3><p>No live regulatory monitoring, bankable price forecast, calibrated fault diagnosis, certified biodiversity result, production authentication or operational equipment control. The country registry provides official starting points, not approved rules.</p><p>The full repository includes methodology, limitations, tests, a multi-agent build prompt and a production-hardening roadmap.</p>${releaseProvenanceMarkup()}<button class="btn primary" data-action="export-evidence">${icon('download',16)} Download current evidence</button></div>`);
       else if(name==='history')await champion.history();
     }
     document.addEventListener('click',event=>{
@@ -154,6 +167,14 @@ namespace HF {
     document.addEventListener('input',event=>{
       const el=event.target as HTMLInputElement;
       if(el.id==='project-search'){state.search=el.value;updateProjectTable(state);}
+      if(el.id==='dispatch-interval'){
+        state.storageIndex=dispatchIndex(state.data.dispatch,Number(el.value));
+        const row=state.data.dispatch.schedule[state.storageIndex];
+        const out=document.getElementById('dispatch-readout'),telemetry=document.getElementById('dispatch-telemetry');
+        if(out)out.textContent=row?.label??'';
+        el.setAttribute('aria-valuetext',row?.label??'');
+        if(telemetry)telemetry.innerHTML=energyFlow(state.data.dispatch,state.storageIndex);
+      }
     });
     document.addEventListener('change',event=>{
       const el=event.target as HTMLInputElement;
@@ -196,7 +217,7 @@ namespace HF {
         }else if(model==='sustainability'){
           inputs={...state.data.defaults.sustainability,annual_generation_kwh:n('generation')*1e6,embodied_kgco2e:n('embodied')*1000,counterfactual_kgco2e_kwh:n('counterfactual')/1000,annual_operational_kgco2e:n('operational')*1000};path='research/carbon';
         }else if(model==='council'){
-          inputs={hybrid_run_id:String(fd.get('hybrid_run_id')??'')||null,market:state.data.market,brief:String(fd.get('brief')??''),mode:String(fd.get('mode')??'local'),consent_to_external_processing:fd.get('consent')==='on'};path='council/review';adminKey=String(fd.get('admin_key')??'')||undefined;
+          inputs={hybrid_run_id:String(fd.get('hybrid_run_id')??'')||null,market:state.data.market,brief:String(fd.get('brief')??''),mode:String(fd.get('mode')??'local'),consent_to_external_processing:fd.get('consent')==='on',cross_examination_rounds:Number(fd.get('cross_examination_rounds')??1),evidence_run_ids:String(fd.get('evidence_run_ids')??'').split(',').map(x=>x.trim()).filter(Boolean)};path='council/review';adminKey=String(fd.get('admin_key')??'')||undefined;
         }else throw new Error('Unknown model.');
         state.busy=true;applyBusyState();
         // Keep entered values and focus while pending; no whole-form rerender.

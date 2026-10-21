@@ -27,8 +27,13 @@ namespace HF {
   }
   export function download(name: string, content: string, mime = 'application/json'): void {
     const url = URL.createObjectURL(new Blob([content], {type: mime}));
-    const a = document.createElement('a'); a.href = url; a.download = name; a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    const a = document.createElement('a'); a.href = url; a.download = name;
+    // Let the initiating click finish before dispatching the nested anchor click.
+    // Chromium can drop a synchronous scripted download from a delegated click handler.
+    setTimeout(() => {
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }, 0);
   }
   export const PAGES: {id: Page; title: string; icon: string; group: string; subtitle: string}[] = [
     {id:'hybrid',title:'Hybrid systems lab',icon:'layers',group:'EXPLORE & LEARN',subtitle:'Explore architectures. Stress scenarios. Follow the energy.'},

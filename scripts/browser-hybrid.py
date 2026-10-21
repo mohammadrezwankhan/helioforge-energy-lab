@@ -47,7 +47,7 @@ with sync_playwright() as pw, httpx.Client(base_url=a.url, timeout=40) as client
             const r=await window.hfHybridTestTransport(String(path),options||{});
             return new Response(r.body,{status:r.status,headers:r.headers});
         }; }''')
-        page.set_content((ROOT/'HelioForge-Preview.html').read_text(),wait_until='load')
+        page.set_content((ROOT/'HelioForge-Preview.html').read_text(encoding="utf-8"),wait_until='load')
     else:
         page.goto(a.url,wait_until='networkidle')
     expect(page.locator('.connection-chip')).to_have_text('API connected')
@@ -108,11 +108,11 @@ with sync_playwright() as pw, httpx.Client(base_url=a.url, timeout=40) as client
     assert baseline['inputs']['scenario_id']=='baseline'
     with page.expect_download() as dl:
         page.locator('[data-hybrid-action="export"]').click()
-    exported=json.loads(Path(dl.value.path()).read_text())
+    exported=json.loads(Path(dl.value.path()).read_text(encoding="utf-8"))
     assert exported['inputs']['solar_kw']==777
     with page.expect_download() as dl:
         page.locator('[data-hybrid-action="csv"]').click()
-    csv=Path(dl.value.path()).read_text()
+    csv=Path(dl.value.path()).read_text(encoding="utf-8")
     assert 'balance_residual_kw' in csv
     page.locator('[data-hybrid-action="pin"]').click()
     page.locator('[data-scenario="outage-4h"]').click()
@@ -131,7 +131,7 @@ with sync_playwright() as pw, httpx.Client(base_url=a.url, timeout=40) as client
     expect(page.locator('.compare-panel')).to_contain_text('2 pinned runs')
     with page.expect_download() as dl:
         page.locator('[data-hybrid-action="export-compare"]').click()
-    comparison=json.loads(Path(dl.value.path()).read_text())
+    comparison=json.loads(Path(dl.value.path()).read_text(encoding="utf-8"))
     assert len(comparison['runs'])==2
     if a.screenshots:
         page.screenshot(path=str(ROOT/'docs/hybrid-compare.png'),animations='disabled')
@@ -180,17 +180,17 @@ with sync_playwright() as pw, httpx.Client(base_url=a.url, timeout=40) as client
     expect(page.locator('#quiz-feedback')).to_contain_text('2 / 2')
     with page.expect_download() as dl:
         page.locator('[data-hybrid-action="export-progress"]').click()
-    assert lesson['id'] in json.loads(Path(dl.value.path()).read_text())['passed_self_checks']
+    assert lesson['id'] in json.loads(Path(dl.value.path()).read_text(encoding="utf-8"))['passed_self_checks']
     page.locator('#lesson-quiz button[type="submit"]').click()
     with page.expect_download() as dl:
         page.locator('[data-hybrid-action="export-progress"]').click()
-    assert len(json.loads(Path(dl.value.path()).read_text())['passed_self_checks'])==1
+    assert len(json.loads(Path(dl.value.path()).read_text(encoding="utf-8"))['passed_self_checks'])==1
     if a.screenshots:
         page.evaluate('window.scrollTo(0,0)')
         page.screenshot(path=str(ROOT/'docs/learning-studio.png'),animations='disabled')
     with page.expect_download() as dl:
         page.locator('[data-hybrid-action="export-lesson"]').click()
-    assert json.loads(Path(dl.value.path()).read_text())['lesson']['id']==lesson['id']
+    assert json.loads(Path(dl.value.path()).read_text(encoding="utf-8"))['lesson']['id']==lesson['id']
     passed('Lesson self-check rejects wrong answers, grades correct answers, avoids duplicate progress and exports lesson/progress records')
     page.locator('[data-hybrid-action="reset-progress"]').click()
     expect(page.locator('dialog')).to_be_visible()
@@ -203,6 +203,7 @@ with sync_playwright() as pw, httpx.Client(base_url=a.url, timeout=40) as client
         page.set_viewport_size({'width':width,'height':844})
         for name in ['hybrid','lessons','compare','overview','storage','pv','research','markets','forecast','investment','pilots','council']:
             nav(name)
+            expect(page.locator('.page-heading [data-action="export-evidence"]')).to_have_accessible_name('Export evidence')
         passed(f'All twelve workspaces fit {width}px without page-level horizontal overflow')
     page.set_viewport_size({'width':390,'height':844});nav('hybrid')
     if a.screenshots:
@@ -210,14 +211,32 @@ with sync_playwright() as pw, httpx.Client(base_url=a.url, timeout=40) as client
 
     preview=browser.new_page(viewport={'width':1440,'height':1000})
     preview.evaluate("() => {window.fetch=async()=>{throw new Error('Offline test');};}")
-    preview.set_content((ROOT/'HelioForge-Preview.html').read_text(),wait_until='load')
+    preview.set_content((ROOT/'HelioForge-Preview.html').read_text(encoding="utf-8"),wait_until='load')
     expect(preview.locator('.connection-chip')).to_have_text('Snapshot preview')
     expect(preview.locator('#run-hybrid')).to_be_disabled()
-    preview.locator('#hybrid-system').select_option('hydro-triad')
+    systems=preview.evaluate('HF.HYBRID_CATALOG.systems.map(s=>({id:s.id,mode:s.mode}))')
+    for system in systems:
+        preview.locator('#hybrid-system').select_option(system['id'])
+        expect(preview.locator('#run-hybrid')).to_be_disabled()
+        expect(preview.locator('#hybrid-output .hybrid-metrics')).to_have_count(1 if system['mode']=='screening' else 0)
+        expect(preview.locator('#hybrid-output')).to_contain_text('Bundled Python preset' if system['mode']=='screening' else 'STUDY-ONLY')
+    preview.locator('#hybrid-system').select_option('hospital-island')
+    preview.locator('[data-hybrid-action="pin"]').click()
+    preview.locator('[data-scenario="outage-4h"]').click()
+    expect(preview.locator('#hybrid-output .hybrid-metrics')).to_have_count(1)
+    preview.locator('[data-hybrid-action="pin"]').click()
+    preview.locator('.nav-item[data-nav="compare"]').click()
+    expect(preview.locator('.compare-panel')).to_contain_text('2 pinned runs')
+    expect(preview.locator('.comparison-table thead')).to_contain_text('Bundled example')
+    preview.locator('.nav-item[data-nav="hybrid"]').click()
+    preview.locator('#hybrid-config [name="load_kw"]').fill('123')
     expect(preview.locator('#hybrid-output .hybrid-metrics')).to_have_count(0)
+    preview.locator('[data-hybrid-action="reset"]').click()
+    expect(preview.locator('#hybrid-output .hybrid-metrics')).to_have_count(1)
+    expect(preview.locator('#run-hybrid')).to_be_disabled()
     preview.locator('.nav-item[data-nav="lessons"]').click()
     expect(preview.locator('#lesson-quiz button[type="submit"]')).to_be_enabled()
-    passed('Offline preview allows exploration and learning but never claims a new numerical calculation')
+    passed('Offline preview restores all 19 frozen numerical baselines, preserves 17 study boundaries, compares distinct presets and rejects edited inputs without new calculations')
     assert not errors,errors
     passed('No uncaught JavaScript errors in the exercised hybrid flows')
     browser.close()

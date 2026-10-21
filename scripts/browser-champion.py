@@ -45,7 +45,7 @@ with sync_playwright() as pw,httpx.Client(base_url=a.url,timeout=40) as client:
                 return new Response(r.body,{status:r.status,headers:r.headers});
               };
             }''',{'cache':cache or {},'offline':offline})
-            page.set_content((ROOT/'HelioForge-Preview.html').read_text(),wait_until='load')
+            page.set_content((ROOT/'HelioForge-Preview.html').read_text(encoding="utf-8"),wait_until='load')
         else:
             if offline:page.route('**/api/**',lambda r:r.abort())
             page.goto(a.url,wait_until='networkidle')
@@ -94,7 +94,7 @@ with sync_playwright() as pw,httpx.Client(base_url=a.url,timeout=40) as client:
     saved_cache=cache();assert json.loads(saved_cache['hf-workspace-v3'])['saved_setups'][0]['name']==name
     assert page.locator('study').count()==0
     with page.expect_download() as dl:page.locator('[data-export-setup]').click()
-    assert json.loads(Path(dl.value.path()).read_text())['schema']=='helioforge.hybrid.v1'
+    assert json.loads(Path(dl.value.path()).read_text(encoding="utf-8"))['schema']=='helioforge.hybrid.v1'
     passed('Named setup saves validated inputs, escapes its name and exports an import-compatible file')
     if a.screenshots:page.screenshot(path=str(out/'saved-setups-desktop.png'),animations='disabled')
     close();page.locator('#hybrid-config [name="battery_kwh"]').fill('1500')
@@ -170,7 +170,7 @@ with sync_playwright() as pw,httpx.Client(base_url=a.url,timeout=40) as client:
     expect(bad.locator('.workspace-notice')).to_contain_text('not been overwritten')
     bad.locator('[data-champion-action="workspace"]').first.click()
     with bad.expect_download() as dl:bad.locator('[data-champion-action="recovery-export"]').click()
-    assert Path(dl.value.path()).read_text()=='{broken-workspace'
+    assert Path(dl.value.path()).read_text(encoding="utf-8")=='{broken-workspace'
     bad.locator('[data-champion-action="recovery-reset"]').click();bad.locator('[data-champion-action="confirm-recovery-reset"]').click()
     assert json.loads(bad.evaluate('localStorage.getItem(HF.WORKSPACE_KEY)'))['schema']=='helioforge.workspace.v1'
     passed('Damaged workspace is retained, downloadable, and reset only after explicit confirmation')

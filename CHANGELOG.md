@@ -24,6 +24,12 @@ The authoritative evidence and limitations are in `docs/champion/VERIFICATION.md
 
 # Changelog
 
+## 2026-09-30 — validated view dispatch follow-up
+
+- Resolve runtime page values against the supported page list and dispatch views through explicit branches. Unknown, malformed and inherited-property names now render the overview safely.
+- Rebuild both the browser bundle and standalone preview. Add a regression for invalid page values and shell rendering; web typecheck, build and all 99 web tests pass locally.
+- This addresses the dynamic-method dispatch identified by CodeQL after publication. The follow-up release records the final CI and scan results.
+
 ## 0.2.0 — 2026-09-23
 
 - Added a versioned 36-architecture / 24-scenario / 36-lesson hybrid catalogue, with 19 runnable electrical screens and 17 study-only configurations.

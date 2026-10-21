@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "none",
+    "module": "preserve",
     "lib": [
       "ES2022",
       "DOM",
@@ -13,14 +13,16 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "forceConsistentCasingInFileNames": true,
-    "outFile": "dist/app.js",
     "sourceMap": false,
-    "removeComments": false
+    "removeComments": false,
+    "moduleDetection": "legacy",
+    "outDir": "dist/js"
   },
   "files": [
     "src/types.ts",
     "src/hybrid-types.ts",
     "src/core.ts",
+    "src/release-provenance.ts",
     "src/icons.ts",
     "src/charts.ts",
     "src/snapshot.ts",
@@ -33,6 +35,16 @@
     "src/views.ts",
     "src/champion-views.ts",
     "src/champion-controller.ts",
+    "src/roadmap-types.ts",
+    "src/roadmap-data.ts",
+    "src/advanced-visuals.ts",
+    "src/study-visuals.ts",
+    "src/roadmap.ts",
+    "src/evidence.ts",
+    "src/workflows.ts",
+    "src/experiences.ts",
+    "src/completion-ui.ts",
+    "src/integrations-ui.ts",
     "src/app.ts"
   ]
 }
