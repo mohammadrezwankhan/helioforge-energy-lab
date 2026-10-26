@@ -263,4 +263,5 @@ The local workbench now contains 39 distinct experimental studies across all twe
 <!-- mklab-traceability:start -->
 [![MKLab app directory](https://img.shields.io/badge/MKLab-app%20directory-1769aa)](https://mklab.co.technology/)
 [Open HelioForge Energy Lab in MKLab](https://mkgrid.co.technology/)
+[Traceability checks and source-observation scope](docs/MKLAB_TRACEABILITY.md)
 <!-- mklab-traceability:end -->
