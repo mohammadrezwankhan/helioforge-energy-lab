@@ -12,7 +12,7 @@ node scripts/build-domain.mjs
 node scripts/check-domain.mjs
 ```
 
-Upload the entire `.cloudflare/site` directory to `mkgrid-helioforge`. `cloudflare-domain.json` defines its canonical address and project. The site includes an overview, methodology and About page, the browser preview, a three-page sitemap, robots directives, structured data and matching app facts. The runtime and Pages aliases use noindex. No paid Worker, database, storage or provider integration is required. New numerical runs require the separate local Python application; its API is not deployed publicly.
+Upload the entire `.cloudflare/site` directory to `mkgrid-helioforge`. `cloudflare-domain.json` defines its canonical address and project. The site includes an overview, methodology and About page, the browser preview, a three-page sitemap, robots directives, structured data and matching app facts. The runtime and Pages aliases use noindex. No paid Worker, database, storage or provider integration is required. The Terminal workbench calculates bounded 24-hour energy balances in-browser. Advanced studies require the local Python application; its API is not deployed publicly.
 
 ## Engineering film integration and rollback
 
@@ -48,7 +48,7 @@ The collection maintains the root sitemap and robots file. Canonical links ident
 ## Browser scope
 
 - The standalone browser preview uses bundled examples and does not run new Python calculations or optimization.
-- New numerical runs require the separate local Python API and its setup.
+- Terminal calculates new bounded hourly energy balances, sweeps and differences locally. Advanced studies and optimization require the Python API.
 - Models are educational research screens, not calibrated plant controls, forecasts, or investment advice.
 
 The source runtime and numerical models retain their existing boundaries. Hosting a browser demo does not provide a Python/Node server, professional validation, live provider connections or production approval.

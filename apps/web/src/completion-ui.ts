@@ -194,10 +194,8 @@ namespace HF {
         button.classList.toggle('hf-lesson-gated', !gate.unlocked);
         button.setAttribute('aria-disabled', String(!gate.unlocked));
         const note = gate.unlocked ? `${lesson.level} lesson. ${passed.has(lesson.id) ? 'Self-check passed in this browser.' : 'Self-check not yet passed.'}` : gateMessage(lesson, gate);
-        button.title = note;
-        if (button.hasAttribute('aria-label')) {
-          button.setAttribute('aria-label', `${lesson.title}; ${lesson.level}; ${passed.has(lesson.id) ? 'self-check passed' : 'not passed'}; ${note}`);
-        }
+        button.title = `${lesson.title}. ${note}`;
+        if (button.textContent?.trim()) button.removeAttribute('aria-label');
       }
       const list = document.querySelector<HTMLElement>('.lesson-list');
       if (list) {
@@ -207,7 +205,9 @@ namespace HF {
           path.className = 'hf-completion-path';
           path.dataset.hfCompletionPath = 'true';
           path.setAttribute('aria-label', 'Mastery unlock requirements');
-          list.insertBefore(path, list.querySelector('[data-lesson]') ?? null);
+          const firstLesson = list.querySelector('[data-lesson]');
+          const firstRow = firstLesson?.closest('.lesson-choice') ?? firstLesson;
+          list.insertBefore(path, firstRow?.parentElement === list ? firstRow : null);
         }
         const levels = ['Foundation', 'Applied', 'Advanced'];
         const markup = levels.map(level => {

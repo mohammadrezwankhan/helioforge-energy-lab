@@ -1,4 +1,4 @@
-* text=auto
+* text=auto eol=lf
 *.png binary
 *.jpg binary
 *.zip binary
@@ -6,3 +6,9 @@
 
 # Release-media checksums cover exact bytes, including on Windows checkouts.
 assets/engineering-hero/v1/** -text
+
+# Preserve byte-exact historical receipts and Windows launcher.
+docs/champion/BASELINE_RESULTS.csv -text
+docs/champion/ISSUE_REGISTER.csv -text
+docs/champion/SOURCE_CHANGES.patch -text
+start-windows.cmd -text

@@ -58,7 +58,7 @@ namespace HF {
 
   function advMissing(def: StudyDefinition, result: StudyResult, reason: string): string {
     return advFigure(def, result, `${def.title}: visualization unavailable`, reason,
-      '<rect x="45" y="35" width="610" height="250" rx="18" fill="none" stroke="#8295a4" stroke-dasharray="8 7"/><text x="350" y="168" text-anchor="middle" class="hfav-svg-note">Required result data missing</text>',
+      '<rect x="45" y="35" width="610" height="250" rx="18" fill="none" stroke="var(--color-muted)" stroke-dasharray="8 7"/><text x="350" y="168" text-anchor="middle" class="hfav-svg-note">Required result data missing</text>',
       `<span class="hfav-note">${advEscape(reason)} No values or geometry are filled in.</span>`);
   }
 
@@ -73,9 +73,7 @@ namespace HF {
 
   function advColor(value: number, minimum: number, maximum: number): string {
     const fraction = maximum === minimum ? 0.5 : Math.max(0, Math.min(1, (value - minimum) / (maximum - minimum)));
-    const low = [37, 107, 133], high = [231, 174, 93];
-    const channels = low.map((start, index) => Math.round(start + ((high[index] ?? start) - start) * fraction));
-    return `rgb(${channels[0] ?? 37} ${channels[1] ?? 107} ${channels[2] ?? 133})`;
+    return `color-mix(in oklch, var(--color-accent) ${Math.round(fraction*100)}%, var(--color-paper-3))`;
   }
 
   export interface AdvancedPowerflowProjection {
@@ -151,7 +149,7 @@ namespace HF {
     const buses = projection.buses.map(bus => `<g class="hfav-bus"><circle cx="${bus.x}" cy="${bus.y}" r="13"/><text class="hfav-node-value" x="${bus.x}" y="${(bus.y + 3.5).toFixed(1)}" text-anchor="middle">${advEscape(advFmt(bus.voltage, 3))}</text><text class="hfav-node-label" x="${bus.x}" y="${(bus.y + 28).toFixed(1)}" text-anchor="middle">${advEscape(bus.id)}</text></g>`).join('');
     const voltages = projection.buses.map(bus => bus.voltage);
     const note = `Schematic bus placement; the ground-contour-style voltage backdrop is inverse-distance interpolation of ${projection.buses.length} solved nodal voltage samples. This is visual interpolation on the topology diagram, not a solved spatial field or geographic map. Branch arrows use signed from_p_mw values; plotted branch count is ${projection.branches.length}.`;
-    const content = `<defs><marker id="${markerId}" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L0 6L7 3Z" fill="#f4bf68"/></marker></defs><g class="hfav-voltage-grid">${advVoltageGrid(projection.buses)}</g><g class="hfav-power-edges">${edges}</g>${buses}<text class="hfav-axis-hint" x="350" y="326" text-anchor="middle">Schematic node layout · solved voltage ${advEscape(advFmt(Math.min(...voltages), 3))}–${advEscape(advFmt(Math.max(...voltages), 3))} p.u.</text>`;
+    const content = `<defs><marker id="${markerId}" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L0 6L7 3Z" fill="var(--color-accent)"/></marker></defs><g class="hfav-voltage-grid">${advVoltageGrid(projection.buses)}</g><g class="hfav-power-edges">${edges}</g>${buses}<text class="hfav-axis-hint" x="350" y="326" text-anchor="middle">Schematic node layout · solved voltage ${advEscape(advFmt(Math.min(...voltages), 3))}–${advEscape(advFmt(Math.max(...voltages), 3))} p.u.</text>`;
     const caption = `<span>${advEscape(note)}</span><span class="hfav-note">Solved values shown at nodes · voltage display range ${advEscape(advFmt(Math.min(...voltages), 3))}–${advEscape(advFmt(Math.max(...voltages), 3))} p.u.</span>`;
     return advFigure(def, result, 'Solved hybrid network: voltage samples and active branch flow', note, content, caption);
   }
@@ -199,7 +197,7 @@ namespace HF {
     }).join('');
     const zones = projection.zones.map(zone => `<g class="hfav-market-zone"><circle cx="${zone.x}" cy="${zone.y}" r="16"/><text class="hfav-node-label" x="${zone.x}" y="${(zone.y + 30).toFixed(1)}" text-anchor="middle">${advEscape(zone.name)}</text>${zone.price == null ? '' : `<text class="hfav-node-value" x="${zone.x}" y="${(zone.y + 4).toFixed(1)}" text-anchor="middle">${advEscape(advFmt(zone.price))}</text>`}</g>`).join('');
     const note = `Actual six-zone DC-OPF line_flows and zonal table rows. The circular node layout is schematic, not a geographic map; line width and direction reflect supplied signed flow_mw.`;
-    const content = `<defs><marker id="${markerId}" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L0 6L7 3Z" fill="#f4bf68"/></marker></defs><g class="hfav-market-edges">${edges}</g>${zones}<text class="hfav-axis-hint" x="350" y="326" text-anchor="middle">Schematic network · nodal prices (EUR/MWh) inside nodes</text>`;
+    const content = `<defs><marker id="${markerId}" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L0 6L7 3Z" fill="var(--color-accent)"/></marker></defs><g class="hfav-market-edges">${edges}</g>${zones}<text class="hfav-axis-hint" x="350" y="326" text-anchor="middle">Schematic network · nodal prices (EUR/MWh) inside nodes</text>`;
     const missing = projection.flows.length ? '' : ' No line-flow rows were supplied, so only zonal nodes are shown.';
     return advFigure(def, result, 'Six-zone DC network flow and nodal price result', note, content,
       `<span>${advEscape(note)}${advEscape(missing)}</span><span class="hfav-note">${projection.zones.length} supplied zone rows · ${projection.flows.length} supplied line flows</span>`);
@@ -323,7 +321,7 @@ namespace HF {
     const note = 'Supplied XYZ terrain/obstacle triangles, panel sample positions and normals, and sun direction vectors. The 2.5D projection is relative geometry; normal and ray lengths are scaled for visibility and do not encode a measured distance. Shaded/clear labels come only from the supplied result table.';
     const triangleNotice = projection.triangleCount === 0 ? ' No terrain or obstacle triangles were supplied.' : '';
     const omittedNotice = omitted ? ` Rendering is capped at 100 geometry points: ${shownPoints} point markers/vertices are shown from the bounded input arrays.` : '';
-    const content = `<defs><marker id="${advSlug(def.id)}-ray-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L0 6L7 3Z" fill="#f5bd65"/></marker></defs><g class="hfav-triangles">${triangles}</g><g class="hfav-panels">${panelPoints}</g><g class="hfav-rays">${rays}</g><text class="hfav-axis-hint" x="350" y="324" text-anchor="middle">Relative XYZ projection · sun rays originate at the first panel sample</text>`;
+    const content = `<defs><marker id="${advSlug(def.id)}-ray-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L0 6L7 3Z" fill="var(--color-accent)"/></marker></defs><g class="hfav-triangles">${triangles}</g><g class="hfav-panels">${panelPoints}</g><g class="hfav-rays">${rays}</g><text class="hfav-axis-hint" x="350" y="324" text-anchor="middle">Relative XYZ projection · sun rays originate at the first panel sample</text>`;
     return advFigure(def, result, 'Panel sample, sun direction and supplied occluder geometry', note, content,
       `<span>${advEscape(note)}${advEscape(triangleNotice)}${advEscape(omittedNotice)}</span><span class="hfav-note">${projection.panelCount} panel samples · ${projection.sunCount} sun samples · ${projection.triangleCount} supplied triangles</span>`);
   }

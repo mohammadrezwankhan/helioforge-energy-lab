@@ -1,0 +1,58 @@
+/* Hallmark · theme: Terminal · fingerprint: Hanging|Asymmetric spans|Hairline|Outlined|Margin-aligned · pre-emit critique: P5 H4 E4 S5 R4 V4 · weakest: H/E/R/V; widened the analytical workbench, removed inherited rounded chrome, compacted mobile controls and separated computed plots from legacy examples. */
+:root {
+  color-scheme: dark;
+
+  --color-paper: oklch(12.5% 0.012 150);
+  --color-paper-2: oklch(16% 0.016 150);
+  --color-paper-3: oklch(20.5% 0.022 150);
+  --color-ink: oklch(94% 0.03 140);
+  --color-ink-2: oklch(82% 0.05 142);
+  --color-muted: oklch(78% 0.06 145);
+  --color-rule: oklch(27% 0.028 148);
+  --color-rule-2: oklch(38% 0.045 146);
+  --color-accent: oklch(87% 0.2 142);
+  --color-accent-ink: oklch(14% 0.02 150);
+  --color-focus: oklch(87% 0.2 142);
+  --color-accent-wash: oklch(23% 0.06 145);
+  --color-transparent: transparent;
+  --glyph-0: oklch(30% 0.06 146);
+  --glyph-1: oklch(38% 0.08 145);
+  --glyph-2: oklch(47% 0.11 144);
+  --glyph-3: oklch(57% 0.14 143);
+  --glyph-4: oklch(67% 0.17 142);
+  --glyph-5: oklch(77% 0.19 142);
+  --glyph-6: oklch(86% 0.2 141);
+  --glyph-7: oklch(94% 0.12 138);
+
+  --font-mono: "Martian Mono", ui-monospace, monospace;
+  --font-display: var(--font-mono);
+  --font-body: var(--font-mono);
+  --font-outlier: var(--font-mono);
+  --stretch-display: 112.5%;
+  --stretch-body: 87.5%;
+  --tracking-display: -0.02em;
+  --display-weight: 500;
+  --radius-card: 0;
+  --radius-pill: 0;
+  --rule-hair: 1px;
+  --shadow-card: none;
+  --text-display: 3.25rem;
+  --text-title: 1.125rem;
+
+  --bg: var(--color-paper);
+  --sidebar: var(--color-paper);
+  --panel: var(--color-paper-2);
+  --panel-hover: var(--color-paper-3);
+  --line: var(--color-rule);
+  --text: var(--color-ink);
+  --muted: var(--color-muted);
+  --subtle: var(--color-muted);
+  --accent: var(--color-accent);
+  --teal: var(--color-accent);
+  --amber: var(--color-accent);
+  --danger: var(--color-accent);
+  --radius: 0;
+  --shadow: none;
+  --motion-fast: 90ms;
+  --motion-medium: 120ms;
+}

@@ -1,4 +1,4 @@
-# HelioForge Champion 0.3.0 — start here
+# HelioForge Terminal 1.0.0 — start here
 
 ## Run the full app
 

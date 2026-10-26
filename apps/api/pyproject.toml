@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "helioforge-api"
-version = "0.3.0"
+version = "1.0.0"
 description = "Auditable energy research, storage dispatch and investment screening."
 readme = "README.md"
 requires-python = ">=3.11"

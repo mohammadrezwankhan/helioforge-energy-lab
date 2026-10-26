@@ -121,7 +121,7 @@ First-party source is available under [MIT](LICENSE). Bundled dependencies retai
 
 <div align="center">
 
-# HelioForge Champion · 0.3.0
+# HelioForge Terminal · 1.0.0
 
 ## Explore the architecture. Stress the assumptions. Follow the energy
 
@@ -236,7 +236,7 @@ External execution is disabled by default and requires server-side credentials, 
 
 ## Current verification
 
-The authoritative v0.3.0 results, failed-attempt history and coverage limitations are in [docs/champion/VERIFICATION.md](docs/champion/VERIFICATION.md). The source changes, local launcher, human-UAT script, recovery notes and file hashes are included. This package has not been deployed or certified for production.
+The historical v0.3.0 results, failed-attempt history and coverage limitations are in [docs/champion/VERIFICATION.md](docs/champion/VERIFICATION.md). The source changes, local launcher, human-UAT script, recovery notes and file hashes are included. Current release evidence is in [docs/terminal-audit/VERIFICATION.md](docs/terminal-audit/VERIFICATION.md).
 
 ## Historical v0.2.0 verification (baseline only)
 

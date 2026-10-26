@@ -1,3 +1,12 @@
+# 1.0.0 — Terminal workbench (2026-10-26)
+
+- Migrate all twelve views to a token-based carbon/phosphor Terminal system, hairline structure, monospace instrumentation and reduced motion.
+- Add a deterministic 24-hour browser/Python energy balance, one/two-axis linear/log sweeps, conditional Pareto comparison, local finite-difference sensitivity and pinned A/B deltas.
+- Expose equations, SOC bounds, residuals, shortfall and terminal energy drift. No thermal/dynamic physics or globally optimal dispatch is claimed.
+- Add CLI commands, verified JSON import, query reproduction and timestamped SHA-256 JSON/CSV/Markdown manifests.
+- Preserve original routes, catalogue, API models, setups, lessons and exports. Repair contrast, accessible names, chart keyboard scrolling and Canvas token resolution.
+- Executed evidence and limitations: AUDIT_MANIFEST.md and docs/terminal-audit. No scientific calibration or operational certification is implied.
+
 # Source preview: 2026-09-30
 
 ## preview-2026.09.30

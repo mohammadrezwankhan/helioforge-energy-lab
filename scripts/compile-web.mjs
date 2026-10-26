@@ -27,7 +27,7 @@ export function compileScripts(files, outFile) {
       path.join(temp, path.relative(rootDir, file).replace(/\.ts$/, '.js')), 'utf8',
     )).join('\n;\n');
     fs.mkdirSync(path.dirname(outFile), {recursive: true});
-    fs.writeFileSync(outFile, js + '\n');
+    fs.writeFileSync(outFile, js.trimEnd() + '\n');
   } finally {
     fs.rmSync(temp, {recursive: true, force: true});
   }

@@ -138,7 +138,10 @@ with sync_playwright() as pw:
     card=page.locator('article[data-pilot-card]').first
     current=card.evaluate('(el)=>el.closest("[data-pilot-stage]").dataset.pilotStage')
     target='planned' if current!='planned' else 'instrumenting'
-    card.drag_to(page.locator(f'[data-pilot-stage="{target}"]'))
+    # Drag the exposed article edge to the stage heading. The dense row's
+    # geometric centre is a text descendant, not a reliable native drag origin.
+    card.drag_to(page.locator(f'[data-pilot-stage="{target}"]'),
+                 source_position={'x': 10, 'y': 10}, target_position={'x': 40, 'y': 20})
     expect(page.locator('#pilot-form select[name="status"]')).to_have_value(target)
     expect(page.locator('#pilot-form textarea')).to_have_value('')
     page.locator('[data-action="close-modal"]').click()

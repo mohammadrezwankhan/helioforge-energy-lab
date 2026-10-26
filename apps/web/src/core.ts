@@ -1,4 +1,10 @@
 namespace HF {
+  export let analyticalWorkbench:(()=>string)|undefined;
+  /** Canvas resolves the same named palette used by SVG and CSS. */
+  export function resolveThemeColor(value:string):string{
+    const match=/^var\((--[a-z0-9-]+)\)$/.exec(value);
+    return match&&typeof document!=='undefined'?getComputedStyle(document.documentElement).getPropertyValue(match[1]!).trim():value;
+  }
   export const escapeHTML = (value: unknown): string => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c] ?? c));
   export const fmt = (value: number | null | undefined, digits = 0): string => value == null || !Number.isFinite(value) ? '—' : new Intl.NumberFormat('en-GB', {maximumFractionDigits: digits, minimumFractionDigits: digits}).format(value);
   export const money = (value: number, digits = 0): string => `${value < 0 ? '−' : ''}€${fmt(Math.abs(value), digits)}`;

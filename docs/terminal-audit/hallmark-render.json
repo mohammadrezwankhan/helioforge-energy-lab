@@ -1,0 +1,448 @@
+{
+  "summary": {
+    "fails": 0,
+    "reflex": 0,
+    "warns": 48,
+    "waived": 0,
+    "rejected": 0,
+    "answered": 0,
+    "dismissed": 0,
+    "notes": 0,
+    "files": 10,
+    "render": "ran"
+  },
+  "findings": [
+    {
+      "gate": "23",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "apps\\web\\src\\styles.css",
+      "line": 14,
+      "evidence": "accent background on viewport-scale rule \"body\"",
+      "fix": "Accent stays <= 5% of a viewport; large fills belong to paper/field tokens or a declared posture in the stamp"
+    },
+    {
+      "gate": "23",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "apps\\web\\src\\styles.css",
+      "line": 14,
+      "evidence": "accent background on viewport-scale rule \".hero\"",
+      "fix": "Accent stays <= 5% of a viewport; large fills belong to paper/field tokens or a declared posture in the stamp"
+    },
+    {
+      "gate": "40",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "apps\\web\\src\\champion.css",
+      "line": 186,
+      "evidence": "1.41:1 < 4.5:1 on .skill-tree button.selected",
+      "fix": "Raise the contrast to threshold"
+    },
+    {
+      "gate": "40",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "apps\\web\\src\\styles.css",
+      "line": 3,
+      "evidence": "1.41:1 < 4.5:1 on .skip-link",
+      "fix": "Raise the contrast to threshold"
+    },
+    {
+      "gate": "40",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "apps\\web\\src\\styles.css",
+      "line": 4,
+      "evidence": "1.41:1 < 4.5:1 on .btn.primary",
+      "fix": "Raise the contrast to threshold"
+    },
+    {
+      "gate": "40",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "apps\\web\\src\\styles.css",
+      "line": 14,
+      "evidence": "1.41:1 < 4.5:1 on .page-heading,.metrics-grid,.panel",
+      "fix": "Raise the contrast to threshold"
+    },
+    {
+      "gate": "40",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "apps\\web\\src\\styles.css",
+      "line": 14,
+      "evidence": "1.41:1 < 4.5:1 on body",
+      "fix": "Raise the contrast to threshold"
+    },
+    {
+      "gate": "41",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "apps\\web\\src\\champion.css",
+      "line": 1,
+      "evidence": "dark surface (L 16%) on .workflow-panel sets no text colour",
+      "fix": "Swap text to paper in the same rule"
+    },
+    {
+      "gate": "41",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "apps\\web\\src\\champion.css",
+      "line": 39,
+      "evidence": "dark surface (L 16%) on .scene-panel sets no text colour",
+      "fix": "Swap text to paper in the same rule"
+    },
+    {
+      "gate": "41",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "apps\\web\\src\\champion.css",
+      "line": 40,
+      "evidence": "dark surface (L 16%) on .configuration-panel sets no text colour",
+      "fix": "Swap text to paper in the same rule"
+    },
+    {
+      "gate": "41",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "apps\\web\\src\\champion.css",
+      "line": 42,
+      "evidence": "dark surface (L 16%) on .configuration-panel input,.configuration-panel select sets no text colour",
+      "fix": "Swap text to paper in the same rule"
+    },
+    {
+      "gate": "41",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "apps\\web\\src\\experiences.css",
+      "line": 8,
+      "evidence": "dark surface (L 16%) on .hf-experience-tariff-card sets no text colour",
+      "fix": "Swap text to paper in the same rule"
+    },
+    {
+      "gate": "41",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "apps\\web\\src\\experiences.css",
+      "line": 20,
+      "evidence": "dark surface (L 16%) on .hf-experience-subpanel sets no text colour",
+      "fix": "Swap text to paper in the same rule"
+    },
+    {
+      "gate": "41",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "apps\\web\\src\\styles.css",
+      "line": 5,
+      "evidence": "dark surface (L 16%) on .hero sets no text colour",
+      "fix": "Swap text to paper in the same rule"
+    },
+    {
+      "gate": "41",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "apps\\web\\src\\styles.css",
+      "line": 11,
+      "evidence": "dark surface (L 16%) on .hero-copy sets no text colour",
+      "fix": "Swap text to paper in the same rule"
+    },
+    {
+      "gate": "41",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "apps\\web\\src\\styles.css",
+      "line": 24,
+      "evidence": "dark surface (L 16%) on .lesson-hero sets no text colour",
+      "fix": "Swap text to paper in the same rule"
+    },
+    {
+      "gate": "41",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "apps\\web\\src\\styles.css",
+      "line": 45,
+      "evidence": "dark surface (L 16%) on .flow-node-card sets no text colour",
+      "fix": "Swap text to paper in the same rule"
+    },
+    {
+      "gate": "41",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "apps\\web\\src\\styles.css",
+      "line": 47,
+      "evidence": "dark surface (L 16%) on .flow-node-card.storage-center-node sets no text colour",
+      "fix": "Swap text to paper in the same rule"
+    },
+    {
+      "gate": "41",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "apps\\web\\src\\styles.css",
+      "line": 1408,
+      "evidence": "dark surface (L 12%) on .scene-panel canvas sets no text colour",
+      "fix": "Swap text to paper in the same rule"
+    },
+    {
+      "gate": "41",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "apps\\web\\src\\terminal.css",
+      "line": 944,
+      "evidence": "dark surface (L 16%) on .form-panel, .configuration-panel, .study-form sets no text colour",
+      "fix": "Swap text to paper in the same rule"
+    },
+    {
+      "gate": "F3",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "apps\\web\\src\\champion.css",
+      "line": 13,
+      "evidence": "no text-wrap: balance on any display head (68 head rule(s), e.g. h1)",
+      "fix": "Add text-wrap: balance to h1/h2-level heads"
+    },
+    {
+      "gate": "F4",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "apps\\web\\src\\champion.css",
+      "line": 186,
+      "evidence": "8 filled primary-button recipes: .skill-tree button.done + .skill-tree button.select\u2026",
+      "fix": "One filled primary per page; demote the rest to outline/quiet variants"
+    },
+    {
+      "gate": "F7",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "apps\\web\\src\\champion.css",
+      "line": 18,
+      "evidence": "same container recipe on 27 selectors (.data-ribbon, .workbench-bar, .hybrid-metric, .\u2026...)",
+      "fix": "Vary weight, radius, or fill by role; not every box is the same box"
+    },
+    {
+      "gate": "F7",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "apps\\web\\src\\champion.css",
+      "line": 50,
+      "evidence": "same container recipe on 12 selectors (.scenario-chip, .segmented, .scene-controls but\u2026...)",
+      "fix": "Vary weight, radius, or fill by role; not every box is the same box"
+    },
+    {
+      "gate": "F7",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "apps\\web\\src\\champion.css",
+      "line": 52,
+      "evidence": "same container recipe on 39 selectors (.system-card, .panel, .metric, .research-card...)",
+      "fix": "Vary weight, radius, or fill by role; not every box is the same box"
+    },
+    {
+      "gate": "F7",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "apps\\web\\src\\completion-ui.css",
+      "line": 41,
+      "evidence": "same container recipe on 6 selectors (.hf-scene-evidence, input, select, textarea...)",
+      "fix": "Vary weight, radius, or fill by role; not every box is the same box"
+    },
+    {
+      "gate": "F7",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "apps\\web\\src\\study-visuals.css",
+      "line": 15,
+      "evidence": "same container recipe on 6 selectors (.hf-study-visual figcaption i, .hf-radar-legend\u2026...)",
+      "fix": "Vary weight, radius, or fill by role; not every box is the same box"
+    },
+    {
+      "gate": "F7",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "apps\\web\\src\\terminal.css",
+      "line": 869,
+      "evidence": "same container recipe on 9 selectors (.notice, .risk-callout, .workspace-notice, .dra\u2026...)",
+      "fix": "Vary weight, radius, or fill by role; not every box is the same box"
+    },
+    {
+      "gate": "F7",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "apps\\web\\src\\terminal.css",
+      "line": 3063,
+      "evidence": "same container recipe on 13 selectors (.hf-advanced-visual, .hf-study-visual, .hf-expe\u2026...)",
+      "fix": "Vary weight, radius, or fill by role; not every box is the same box"
+    },
+    {
+      "gate": "F7",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "apps\\web\\src\\terminal.css",
+      "line": 3788,
+      "evidence": "same container recipe on 9 selectors (.comparison-stages article, .council-decision, \u2026...)",
+      "fix": "Vary weight, radius, or fill by role; not every box is the same box"
+    },
+    {
+      "gate": "F19",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "http://127.0.0.1:4182/run/#compare",
+      "line": 1,
+      "evidence": "[1440px] 4 font weights in running use (400, 500, 600, 700)",
+      "fix": "Three weights at most, display and body together, picked as extremes"
+    },
+    {
+      "gate": "F19",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "http://127.0.0.1:4182/run/#council",
+      "line": 1,
+      "evidence": "[1440px] 4 font weights in running use (400, 500, 600, 700)",
+      "fix": "Three weights at most, display and body together, picked as extremes"
+    },
+    {
+      "gate": "F19",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "http://127.0.0.1:4182/run/#forecast",
+      "line": 1,
+      "evidence": "[1440px] 4 font weights in running use (400, 500, 600, 700)",
+      "fix": "Three weights at most, display and body together, picked as extremes"
+    },
+    {
+      "gate": "F19",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "http://127.0.0.1:4182/run/#hybrid",
+      "line": 1,
+      "evidence": "[1440px] 4 font weights in running use (400, 500, 600, 700)",
+      "fix": "Three weights at most, display and body together, picked as extremes"
+    },
+    {
+      "gate": "F19",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "http://127.0.0.1:4182/run/#investment",
+      "line": 1,
+      "evidence": "[1440px] 4 font weights in running use (400, 500, 600, 700)",
+      "fix": "Three weights at most, display and body together, picked as extremes"
+    },
+    {
+      "gate": "F19",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "http://127.0.0.1:4182/run/#lessons",
+      "line": 1,
+      "evidence": "[1440px] 4 font weights in running use (400, 500, 600, 700)",
+      "fix": "Three weights at most, display and body together, picked as extremes"
+    },
+    {
+      "gate": "F19",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "http://127.0.0.1:4182/run/#markets",
+      "line": 1,
+      "evidence": "[1440px] 4 font weights in running use (400, 500, 600, 700)",
+      "fix": "Three weights at most, display and body together, picked as extremes"
+    },
+    {
+      "gate": "F19",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "http://127.0.0.1:4182/run/#overview",
+      "line": 1,
+      "evidence": "[1440px] 4 font weights in running use (400, 500, 600, 700)",
+      "fix": "Three weights at most, display and body together, picked as extremes"
+    },
+    {
+      "gate": "F19",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "http://127.0.0.1:4182/run/#pilots",
+      "line": 1,
+      "evidence": "[1440px] 4 font weights in running use (400, 500, 600, 700)",
+      "fix": "Three weights at most, display and body together, picked as extremes"
+    },
+    {
+      "gate": "F19",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "http://127.0.0.1:4182/run/#pv",
+      "line": 1,
+      "evidence": "[1440px] 4 font weights in running use (400, 500, 600, 700)",
+      "fix": "Three weights at most, display and body together, picked as extremes"
+    },
+    {
+      "gate": "F19",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "http://127.0.0.1:4182/run/#research",
+      "line": 1,
+      "evidence": "[1440px] 4 font weights in running use (400, 500, 600, 700)",
+      "fix": "Three weights at most, display and body together, picked as extremes"
+    },
+    {
+      "gate": "F19",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "http://127.0.0.1:4182/run/#storage",
+      "line": 1,
+      "evidence": "[1440px] 4 font weights in running use (400, 500, 600, 700)",
+      "fix": "Three weights at most, display and body together, picked as extremes"
+    },
+    {
+      "gate": "F25",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "http://127.0.0.1:4182/run/#overview",
+      "line": 1,
+      "evidence": "[375px] a table opens with 3 columns off-screen (from \"Screening CAPEX\")",
+      "fix": "Keep the column that names the row and the one that acts on it in view: restack each row, or pin the first column"
+    },
+    {
+      "gate": "F26",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "http://127.0.0.1:4182/run/#compare",
+      "line": 1,
+      "evidence": "[375px] h3 \"[05] Delta engine: run A versus \" ends on a stub",
+      "fix": "text-wrap: balance on heads and pretty on body copy, or rewrite the line; a <br> goes only between phrases and is checked at 375"
+    },
+    {
+      "gate": "F26",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "http://127.0.0.1:4182/run/#hybrid",
+      "line": 1,
+      "evidence": "[375px] h2 \"The energy story, hour by hour\" ends on a stub; h2 \"The hybrid architecture atlas\" ends on a stub",
+      "fix": "text-wrap: balance on heads and pretty on body copy, or rewrite the line; a <br> goes only between phrases and is checked at 375"
+    },
+    {
+      "gate": "F26",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "http://127.0.0.1:4182/run/#lessons",
+      "line": 1,
+      "evidence": "[375px] h3 \"By the end, you should be able t\" ends on a stub",
+      "fix": "text-wrap: balance on heads and pretty on body copy, or rewrite the line; a <br> goes only between phrases and is checked at 375"
+    },
+    {
+      "gate": "F26",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "http://127.0.0.1:4182/run/#overview",
+      "line": 1,
+      "evidence": "[375px] h2 \"Evidence and portfolio exports\" ends on a stub",
+      "fix": "text-wrap: balance on heads and pretty on body copy, or rewrite the line; a <br> goes only between phrases and is checked at 375"
+    },
+    {
+      "gate": "F26",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "http://127.0.0.1:4182/run/#pv",
+      "line": 1,
+      "evidence": "[375px] h3 \"From screening to technical dili\" ends on a stub",
+      "fix": "text-wrap: balance on heads and pretty on body copy, or rewrite the line; a <br> goes only between phrases and is checked at 375"
+    }
+  ]
+}

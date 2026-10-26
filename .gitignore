@@ -37,3 +37,4 @@ __pycache__/
 
 # Generated public browser export
 /.cloudflare/
+/.hallmark/

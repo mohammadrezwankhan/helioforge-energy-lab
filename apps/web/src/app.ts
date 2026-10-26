@@ -249,6 +249,7 @@ namespace HF {
     media.addEventListener('change',()=>{if(media.matches){state.motionOff=true;render();}});
     champion=installChampionController(state,{render,toast,navigate,api,celebrate,openModal});
     installHybridController(state,{render,toast,navigate,api,celebrate,openModal,persist:champion.persist});
+    installTerminalController({navigate,toast});
     render();void connect();
   }
   if(typeof document!=='undefined'){

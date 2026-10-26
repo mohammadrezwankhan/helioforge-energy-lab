@@ -179,7 +179,7 @@ namespace HF {
       document.querySelectorAll<HTMLButtonElement>('[data-wire-toggle]').forEach(button => {
         const isClosed = wireStates[button.dataset.wireToggle ?? ''] !== false;
         button.setAttribute('aria-pressed', String(isClosed));
-        button.setAttribute('aria-label', `${button.dataset.wireLabel ?? 'Connection'}, ${isClosed ? 'closed' : 'open'}`);
+        button.removeAttribute('aria-label');
         const status = button.querySelector('span');
         if (status) status.textContent = isClosed ? 'Closed' : 'Open';
       });
