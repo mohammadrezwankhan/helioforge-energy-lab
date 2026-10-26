@@ -55,6 +55,13 @@ with sync_playwright() as pw:
     after=json.loads(page.locator('#study-form [name="tariff"]').input_value())
     assert after[0]>before[0]
     expect(page.locator('#study-output')).to_be_hidden()
+    # Status prose must never cover the action when fonts or viewport change.
+    for width in [320,375,414,768,1024,1280,1440,1920]:
+        page.set_viewport_size({'width':width,'height':1050})
+        apply=page.locator('[data-hf-tariff-apply]')
+        apply.evaluate('b=>b.scrollIntoView({block:"center",inline:"nearest"})')
+        assert apply.evaluate('b=>{const r=b.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest("[data-hf-tariff-apply]")===b}'), width
+    page.set_viewport_size({'width':1600,'height':1050})
     page.locator('[data-hf-tariff-apply]').click()
     expect(page.locator('#study-output')).to_be_visible(timeout=30000)
     passed('Keyboard tariff edit changes the actual input, hides stale output, and recalculates successfully')

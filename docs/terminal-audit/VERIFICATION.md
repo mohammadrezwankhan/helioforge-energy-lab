@@ -4,8 +4,8 @@
 
 ## Build and environment
 
-- Source revision: `a22f868d41b7e2b6c05e71dc8d0d5cb5356e38dd`
-- Export runtime SHA-256: `53a8c16b58641086de9bc485107ad8656a605cff675edfdd8fcb50cfa86f4512`
+- Source revision: `85bbcbc4c1695d3ec357d27c878fa6590fa61533`
+- Export runtime SHA-256: `0bb540264b4446d3efd09abfee495cecd1dc4cb4f0024416bc28a4d44a21fdc7`
 - Browser: Chromium `156.0.8078.4`
 - axe-core: `4.14.0`
 - Runner: Python virtual environment with Playwright and Chromium installed
@@ -60,3 +60,5 @@ The final browser report was rerun after semantic selection-row repairs and the 
 ## Original API-backed regression suite
 
 After restoring full connection-status wording, the actual local API journeys pass: smoke18, hybrid14, Champion18, roadmap24 and completion10 (84 checks total). The separate API-connected axe run scans all12 routes with zero violations. The dense pilot row native drag test uses its exposed article edge rather than a text descendant; it still asserts the requested unsaved stage and empty fresh evidence note. No numerical API contract was changed.
+
+The Linux CI browser exposed a tariff status/action overlap after the first local run. Tariff help, action and live status now occupy separate grid rows. The real completion journey checks pointer hit testing at all eight requested widths before native recalculation. Terminal acceptance and the full Hallmark render were rerun after this fix.

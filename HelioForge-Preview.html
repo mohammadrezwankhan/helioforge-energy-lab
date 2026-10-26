@@ -5193,6 +5193,10 @@ details:not([open]) > :not(summary) { display: none; }
 @media (max-width: 800px) {
   .connection-detail { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 }
+
+.hf-tariff-profile-actions { grid-template-columns: minmax(0, 1fr); align-items: start; }
+.hf-tariff-profile-actions > button { justify-self: start; }
+.hf-tariff-profile-actions > p { min-width: 0; overflow-wrap: anywhere; }
 </style>
   <script>"use strict";
 
