@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-10-26T08:47:22Z",
+  "startedAt": "2026-10-26T08:57:46Z",
   "site": "local .cloudflare/site export",
   "routes": [
     "hybrid",
@@ -1234,7 +1234,7 @@
     {
       "name": "share action writes exact terminal inputs to query state",
       "status": "passed",
-      "detail": "http://127.0.0.1:53599/run/?terminal=%257B%2522batteryKw%2522%253A5%252C%2522batteryKwh%2522%253A20%252C%2522exportPrice%2522%253A0.05%252C%2522gridKw%2522%253A0%252C%2522importPrice%2522%253A0.25%252C%2522initialSocFraction%2522%253A0.5%252C%2522loadKw%2522%253A6%252C%2522maxSocFraction%2522%253A0.9%252C%2522minSocFraction%2522%253A0.1%252C%2522pvKw%2522%253A8%252C%2522roundtripEfficiency%2522%253A0.9%257D#compare"
+      "detail": "http://127.0.0.1:55633/run/?terminal=%257B%2522batteryKw%2522%253A5%252C%2522batteryKwh%2522%253A20%252C%2522exportPrice%2522%253A0.05%252C%2522gridKw%2522%253A0%252C%2522importPrice%2522%253A0.25%252C%2522initialSocFraction%2522%253A0.5%252C%2522loadKw%2522%253A6%252C%2522maxSocFraction%2522%253A0.9%252C%2522minSocFraction%2522%253A0.1%252C%2522pvKw%2522%253A8%252C%2522roundtripEfficiency%2522%253A0.9%257D#compare"
     },
     {
       "name": "shared query reload reproduces candidate inputs in a new browser tab",
@@ -1889,11 +1889,7 @@
       "scrollHost": ".pilot-board"
     }
   ],
-  "screenshots": [
-    "C:\\Users\\MRK\\Downloads\\Unclassified\\mkgrid-terminal-evidence\\terminal-desktop.png",
-    "C:\\Users\\MRK\\Downloads\\Unclassified\\mkgrid-terminal-evidence\\terminal-mobile.png",
-    "C:\\Users\\MRK\\Downloads\\Unclassified\\mkgrid-terminal-evidence\\terminal-sweep-results.png"
-  ],
+  "screenshots": [],
   "limits": [
     "Accessibility results are automated axe-core findings, not WCAG certification or a screen-reader audit.",
     "The export is a static snapshot: new API calculations and native hosting/CSP behavior are not exercised.",
@@ -1901,15 +1897,15 @@
   ],
   "exports": {
     "json": {
-      "filename": "helioforge-2026-10-26T08-47-47-462Z.json",
+      "filename": "helioforge-2026-10-26T08-58-14-002Z.json",
       "bytes": 12227
     },
     "csv": {
-      "filename": "helioforge-2026-10-26T08-47-47-944Z.csv",
+      "filename": "helioforge-2026-10-26T08-58-14-502Z.csv",
       "bytes": 48997
     },
     "md": {
-      "filename": "helioforge-2026-10-26T08-47-48-143Z.md",
+      "filename": "helioforge-2026-10-26T08-58-14-719Z.md",
       "bytes": 12703
     }
   },
@@ -1917,7 +1913,7 @@
     "name": "Chromium",
     "version": "156.0.8078.4"
   },
-  "finishedAt": "2026-10-26T08:47:51Z",
+  "finishedAt": "2026-10-26T08:58:18Z",
   "summary": {
     "passed": 248,
     "failed": 0,

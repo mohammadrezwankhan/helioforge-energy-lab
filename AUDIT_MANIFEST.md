@@ -63,3 +63,6 @@ Export supplement: preserve `helioforge-configuration.json`, dynamic per-lesson 
 | T18 / closed content | Collapsed details/offcanvas navigation still produced descendant geometry | Explicit closed-details display and mobile-nav visibility | Root/visible-control checks and render sweep |
 | T19 / non-text contrast | Field boundaries fell below3:1; muted text below requested APCA floor | Explicit field borders and78%L muted token | Render floor and measured min WCAG9.10:1 / abs Lc63.61 |
 | T20 / tall selection rows | Architecture descriptions lived inside75px buttons | Semantic rows preserve all descriptions beside compact selection buttons | Preservation/unit/browser checks |
+
+| T21 / connection status | API-backed CI expected full connection wording; compact copy reduced the accessible status to API or Preview (`views.ts`) | Restore API connected and Snapshot preview wording; visually hide detail only at narrow widths | Original API smoke/hybrid/Champion journeys and 248-check Terminal matrix |
+| T22 / drag automation | Dense pilot row centre lands on descendant text; default geometric drag origin fails (`scripts/browser-roadmap.py`) | Drag the exposed native article edge to the target stage heading; retain unsaved-stage and fresh-note assertions | Real Chromium native drag opens the unchanged evidence form |

@@ -4351,3 +4351,7 @@ details:not([open]) > :not(summary) { display: none; }
 .workflow-panel .skill-tree button > small { max-width: none; }
 .app-main a.btn { min-width: max-content; padding-inline: 16px; flex-shrink: 0; }
 @media(max-width:600px) { .pillar-row { grid-template-columns: auto minmax(0, 1fr); } .pillar-row .btn { grid-column: 2; justify-self: start; } }
+
+@media (max-width: 800px) {
+  .connection-detail { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+}
