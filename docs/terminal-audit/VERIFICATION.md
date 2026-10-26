@@ -4,8 +4,8 @@
 
 ## Build and environment
 
-- Source revision: `85bbcbc4c1695d3ec357d27c878fa6590fa61533`
-- Export runtime SHA-256: `0bb540264b4446d3efd09abfee495cecd1dc4cb4f0024416bc28a4d44a21fdc7`
+- Source revision: `f8b214dc3963b6f0d00bf51a97f05fa1d6b63f52`
+- Export runtime SHA-256: `d5b695375f01c0b6fc198cedf6051a57c7d37395b9db46c452253c1e646edc2f`
 - Browser: Chromium `156.0.8078.4`
 - axe-core: `4.14.0`
 - Runner: Python virtual environment with Playwright and Chromium installed
@@ -62,3 +62,5 @@ The final browser report was rerun after semantic selection-row repairs and the 
 After restoring full connection-status wording, the actual local API journeys pass: smoke18, hybrid14, Champion18, roadmap24 and completion10 (84 checks total). The separate API-connected axe run scans all12 routes with zero violations. The dense pilot row native drag test uses its exposed article edge rather than a text descendant; it still asserts the requested unsaved stage and empty fresh evidence note. No numerical API contract was changed.
 
 The Linux CI browser exposed a tariff status/action overlap after the first local run. Tariff help, action and live status now occupy separate grid rows. The real completion journey checks pointer hit testing at all eight requested widths before native recalculation. Terminal acceptance and the full Hallmark render were rerun after this fix.
+
+The final release is2.0.0 at the user’s request. Package/API metadata, citation, public facts, visible version, changelog and release manifest were updated together. The2.0.0 artifact passes186frontend tests,653Python tests, typecheck, Ruff and248browser checks with24zero-violation axe scans. Mathematical model and import schema IDs retain their existingv1identities because the calculations and contracts remain unchanged.

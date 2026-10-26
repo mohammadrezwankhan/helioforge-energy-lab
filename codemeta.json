@@ -18,7 +18,7 @@
     "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/HEAD/CITATION.cff"
   ],
   "description": "Local-first Python and TypeScript research software for transparent energy screening.",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "datePublished": "2026-10-26",
   "license": "https://spdx.org/licenses/MIT.html"
 }

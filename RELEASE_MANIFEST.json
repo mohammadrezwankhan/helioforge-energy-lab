@@ -1,8 +1,8 @@
 {
   "application": "HelioForge Terminal",
-  "version": "1.0.0",
-  "build_id": "terminal-1.0.0",
-  "prepared_utc": "2026-10-26T09:21:22.258979+00:00",
+  "version": "2.0.0",
+  "build_id": "terminal-2.0.0",
+  "prepared_utc": "2026-10-26T09:41:48.727394+00:00",
   "intended_use": "bounded synthetic research and education; see deployment receipt for publication",
   "catalog_version": "0.2.0",
   "catalogue_counts": {
@@ -27,7 +27,7 @@
   },
   "upstream_revision": "d14b71f50ef400a50d3ccd4792dcd59238c64f56",
   "hash_semantics": "SHA-256; LF-normalized UTF-8 where text_mode=lf, exact bytes otherwise; not signatures",
-  "file_list_sha256": "e5b11524144138f67a5915aa970af29091ae5b0235a7b138d05d0395f3cfa65e",
+  "file_list_sha256": "607f4fe19809b5b18114c81134cc7eb6e18994b655f0bc253da435c096a0b8dd",
   "files": [
     {
       "path": ".dockerignore",
@@ -141,13 +141,13 @@
       "path": "CHANGELOG.md",
       "bytes": 4869,
       "text_mode": "lf",
-      "sha256": "cbc85ca7f73f0224f235f35287bcf6f90998e167e853ffb9aa75e350e3291b73"
+      "sha256": "6ca999490245550303e0177c9a69c2f4a5c80bcd8abbbfe7e70e57c96ead92ba"
     },
     {
       "path": "CITATION.cff",
       "bytes": 450,
       "text_mode": "lf",
-      "sha256": "7cf4782bb25fa9f1581cdb4aa5d84ce40f2c2949ea3068cd99ceec3db3e538bc"
+      "sha256": "29f9f66abf07a4e4d7343e4f573d167950de73b5d8b40e1a2c7d8c9603daa944"
     },
     {
       "path": "CODE_OF_CONDUCT.md",
@@ -171,7 +171,7 @@
       "path": "HelioForge-Preview.html",
       "bytes": 13600650,
       "text_mode": "lf",
-      "sha256": "508267163e8ec9722ec2cdae973fbddd6b6d13c25c355f0b827ba55e7fa68598"
+      "sha256": "c4752e6421f170bb71e96c7d6c7aaaf771c812b30e80f132f32643ad7be62dbb"
     },
     {
       "path": "LICENSE",
@@ -201,7 +201,7 @@
       "path": "README.md",
       "bytes": 19271,
       "text_mode": "lf",
-      "sha256": "db48fc11d16e84bd59025fbe320dcdd6960b9dd6129a0447b7d5234e343ed904"
+      "sha256": "9bba50344ae41d23bcaf7275d9789f75ac320f2e9f527950ff9b9029428df27e"
     },
     {
       "path": "ROADMAP.md",
@@ -219,7 +219,7 @@
       "path": "START_HERE.md",
       "bytes": 7365,
       "text_mode": "lf",
-      "sha256": "9d72a8020682f1ddfb4649815c33237a96a798839e8724b3e00021a64128df93"
+      "sha256": "25c32e934ef5abdd7a06e8b777ffdf18aff7e20ba2f6141fdddb9a49b0c63e6e"
     },
     {
       "path": "SUPPORT.md",
@@ -247,7 +247,7 @@
       "path": "apps/api/helioforge/__init__.py",
       "bytes": 73,
       "text_mode": "lf",
-      "sha256": "fbaf5512e5127b01b784cd14b0a79ab5d409638536d6b54ae169d8c8947eb260"
+      "sha256": "dcbbe40bc93cf6a1a8e88fbc6356ee00ea38da08d60147b1131cf2825e0bf797"
     },
     {
       "path": "apps/api/helioforge/catalog.py",
@@ -397,7 +397,7 @@
       "path": "apps/api/pyproject.toml",
       "bytes": 884,
       "text_mode": "lf",
-      "sha256": "bfe90d787b7cd9489f0b2052bb8a54d060ac56bf1851e2e2ca6c3e1bdc4509cb"
+      "sha256": "d4ed033ce25186ce563eaddd760dde66bb1e422276919d5f84810fa463af47f0"
     },
     {
       "path": "apps/api/tests/test_api.py",
@@ -529,7 +529,7 @@
       "path": "apps/web/dist/app.js",
       "bytes": 13384641,
       "text_mode": "lf",
-      "sha256": "3a7cb4f3976ecb87b4fffce05acfe12e4d3d68f7f891cbbbde946e745fc9ed76"
+      "sha256": "fd1ba0d294b7979678826ceeba0853beb878e60a800b24b4acb761c7ef17c860"
     },
     {
       "path": "apps/web/dist/favicon.svg",
@@ -559,13 +559,13 @@
       "path": "apps/web/package-lock.json",
       "bytes": 12955,
       "text_mode": "lf",
-      "sha256": "96cae6ec6008066ab83697c2a2fd4263e70f509a4eccdd85aeab32b864906950"
+      "sha256": "4b3c41e62c5a063714e0a2037abcbf67c16a38d4878b9f67ce8ff8ab21ab4c7c"
     },
     {
       "path": "apps/web/package.json",
       "bytes": 445,
       "text_mode": "lf",
-      "sha256": "705b3c00b2e9fc7111aa3e05904d1f5f049f8526224e03a0bce494e362b82f65"
+      "sha256": "7cfedf5fe9f53091c19fca819da1ec76862ee36799a025de0348da098016f75d"
     },
     {
       "path": "apps/web/public/favicon.svg",
@@ -799,7 +799,7 @@
       "path": "apps/web/src/views.ts",
       "bytes": 38407,
       "text_mode": "lf",
-      "sha256": "b4db1b3c289ff9054acc0fd770e57ff71b82ec257eb2e335176e300fdbcac324"
+      "sha256": "133784ce2652e3878afe46f7e1ab23395998fe60eda417a42865807c9de70ce2"
     },
     {
       "path": "apps/web/src/workflows.css",
@@ -1241,7 +1241,7 @@
       "path": "codemeta.json",
       "bytes": 1039,
       "text_mode": "lf",
-      "sha256": "e42e0dbcb02268cd5adfe891263f163a35f877a077d1afd8d1b99760ade321ef"
+      "sha256": "98bf8070d3169b4cff778507fab43097e0a1b8b0c3220c7079473ee08149ce45"
     },
     {
       "path": "compose.yaml",
@@ -1996,25 +1996,25 @@
       "path": "docs/terminal-audit/IMPLEMENTATION_PLAN.md",
       "bytes": 2731,
       "text_mode": "lf",
-      "sha256": "7a41ebaa1816a43350c279809c166f6dda59b9ef674939389c1ff9fb78a8a912"
+      "sha256": "b366fcff3c7e63eb5ab71d0baa1d5f2ea2f5e7e1ab87bfbd17e1e3870c6faa8c"
     },
     {
       "path": "docs/terminal-audit/PRESERVATION.md",
       "bytes": 1232,
       "text_mode": "lf",
-      "sha256": "037d8ca55beec47ac4f388bc5f56c0fbf4030a16a3c825bf266ac36888c9dc49"
+      "sha256": "f0383cf749ffa7ed57a656ccc36ae43f2a80ed4754e387a1151edd29b094fc7e"
     },
     {
       "path": "docs/terminal-audit/RELEASE_NOTES.md",
       "bytes": 1227,
       "text_mode": "lf",
-      "sha256": "04d8e52f03f5c4edcdc9d726ab47ab71267d1baad1a81749aa5f9fc83721a3c8"
+      "sha256": "05e6a267d10709572bdb83daf9d6be9afbde541fd883fb3b167b8e77a5750da8"
     },
     {
       "path": "docs/terminal-audit/VERIFICATION.md",
-      "bytes": 5877,
+      "bytes": 6306,
       "text_mode": "lf",
-      "sha256": "5d645561a416ff967540c264f73d01b2ae1f87016388df4d96aff456e3d52874"
+      "sha256": "e19d5c68ffc726ceae3a5dd41874d3e13d158b5bbaf66b082dad5743bc4002c7"
     },
     {
       "path": "docs/terminal-audit/before-lint.json",
@@ -2026,7 +2026,7 @@
       "path": "docs/terminal-audit/browser-terminal.json",
       "bytes": 46470,
       "text_mode": "lf",
-      "sha256": "a4c86182d12fc80be3bf759d0fa502d89d33c7d32c0e93336e9461f006e23b0b"
+      "sha256": "f653275a5999d8b31dc41316b4740ba1ce0f73d9b45f031f0179679a61404104"
     },
     {
       "path": "docs/terminal-audit/contrast.json",
@@ -2224,7 +2224,7 @@
       "path": "scripts/build-domain.mjs",
       "bytes": 23058,
       "text_mode": "lf",
-      "sha256": "5038725b4f08303a4ce7ac36ac3b8c9b48f64ffb2940af3cfc8656ce3d1699d8"
+      "sha256": "bffa35a93c09ba6f250f897ac88f22e2c5de1f25965c1649b4d195503746ef53"
     },
     {
       "path": "scripts/build-web.mjs",
@@ -2308,7 +2308,7 @@
       "path": "scripts/generate-release-manifest.py",
       "bytes": 2434,
       "text_mode": "lf",
-      "sha256": "c26e2c3c911a8cbfe76983e87895b36b869d6aadd0708c67844248ed3e1b39f6"
+      "sha256": "d25ba5b34b36bb4b4f025028ca1721eebd00230c73049c6024daa41a8482794a"
     },
     {
       "path": "scripts/generate-snapshot.py",

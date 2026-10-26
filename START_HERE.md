@@ -1,4 +1,4 @@
-# HelioForge Terminal 1.0.0 — start here
+# HelioForge Terminal 2.0.0 — start here
 
 ## Run the full app
 

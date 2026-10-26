@@ -33,7 +33,7 @@ for name in sorted(set(names)):
     files.append(item)
 browser = json.loads((ROOT / 'docs/terminal-audit/browser-terminal.json').read_text(encoding='utf-8'))
 manifest = {
-    'application': 'HelioForge Terminal', 'version': '1.0.0', 'build_id': 'terminal-1.0.0',
+    'application': 'HelioForge Terminal', 'version': '2.0.0', 'build_id': 'terminal-2.0.0',
     'prepared_utc': datetime.now(UTC).isoformat(),
     'intended_use': 'bounded synthetic research and education; see deployment receipt for publication',
     'catalog_version': '0.2.0',

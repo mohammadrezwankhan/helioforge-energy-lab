@@ -1,4 +1,4 @@
-# 1.0.0 — Terminal workbench (2026-10-26)
+# 2.0.0 — Terminal workbench (2026-10-26)
 
 - Migrate all twelve views to a token-based carbon/phosphor Terminal system, hairline structure, monospace instrumentation and reduced motion.
 - Add a deterministic 24-hour browser/Python energy balance, one/two-axis linear/log sweeps, conditional Pareto comparison, local finite-difference sensitivity and pinned A/B deltas.

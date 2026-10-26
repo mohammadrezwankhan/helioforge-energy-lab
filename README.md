@@ -121,7 +121,7 @@ First-party source is available under [MIT](LICENSE). Bundled dependencies retai
 
 <div align="center">
 
-# HelioForge Terminal · 1.0.0
+# HelioForge Terminal · 2.0.0
 
 ## Explore the architecture. Stress the assumptions. Follow the energy
 

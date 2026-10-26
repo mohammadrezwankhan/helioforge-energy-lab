@@ -1,4 +1,4 @@
-# HelioForge Terminal1.0.0
+# HelioForge Terminal2.0.0
 
 A major release of the twelve-view energy research application. Terminal surfaces, Martian Mono typography, hairline structure and compact controls replace the former decorative interface. Existing numerical models, catalogue, lessons, study workflows and exports remain available.
 
