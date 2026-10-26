@@ -177,7 +177,7 @@ kbd { display:inline-grid; place-items:center; padding:4px 4px; min-width:20px; 
 .status-beacon.busy { background:var(--amber); animation:beacon-breathe 1.5s ease-in-out infinite; }
 @keyframes beacon-breathe { 50% { box-shadow:none; } }
 .workbench-actions { display:flex; align-items:center; gap:8px; }
-.workbench-actions b { font-size:12px; font-weight:600; background:var(--color-accent); border:1px solid var(--color-rule-2); padding:4px 8px; border-radius:5px; }
+.workbench-actions b { font-size:12px; font-weight:600; color:var(--color-accent-ink); background:var(--color-accent); border:1px solid var(--color-rule-2); padding:4px 8px; border-radius:0; }
 .workspace-notice { display:flex; align-items:flex-start; gap:8px; padding:12px 12px; margin:-8px 0 20px; border-left:2px solid var(--teal); background:var(--color-paper-2); color:var(--muted); font-size:12px; line-height:1.6; }
 .workspace-notice>svg { flex-shrink:0; margin-top:4px; color:var(--teal); }
 .workspace-notice .icon-button { flex-shrink:0; margin-left:auto; width:25px; height:25px; }
@@ -4355,8 +4355,8 @@ footer .release-provenance nav {
   min-height: 44px;
   padding:4px;
   color: var(--color-ink);
-  background: color-mix(in oklch, var(--color-paper-2), var(--color-accent) calc(var(--terminal-level, 0) * 100%));
-  border: 1px solid var(--color-var(--color-transparent));
+  background: color-mix(in oklch, var(--color-paper-2), var(--color-accent-wash) calc(var(--terminal-level, 0) * 100%));
+  border: 1px solid var(--color-muted);
   font-size: 12px;
   font-variant-numeric: tabular-nums slashed-zero;
 }
@@ -5197,6 +5197,10 @@ details:not([open]) > :not(summary) { display: none; }
 .hf-tariff-profile-actions { grid-template-columns: minmax(0, 1fr); align-items: start; }
 .hf-tariff-profile-actions > button { justify-self: start; }
 .hf-tariff-profile-actions > p { min-width: 0; overflow-wrap: anywhere; }
+
+.hf-heat-button-grid { grid-template-columns: repeat(9, minmax(48px, 1fr)); overflow-x: auto; margin-inline: 0; padding: 4px; }
+.hf-heat-button { min-height: 44px; background: color-mix(in oklch, var(--color-paper-2) 75%, var(--cell-color, var(--color-accent-wash)) 25%); border-color: var(--color-muted); }
+.hf-heat-button[aria-pressed="true"], .hf-heat-button:focus-visible { outline-color: var(--color-focus); }
 </style>
   <script>"use strict";
 
@@ -8174,7 +8178,7 @@ var HF;
             const value = finiteValue(row.lcoe_eur_mwh);
             const tone = value == null ? 0 : (value - extent.min) / (extent.max - extent.min);
             const cellState = value == null ? 'missing' : 'value';
-            return `<button type="button" class="hf-heat-button" data-pv-cell="${index}" data-state="${cellState}" style="--cell-color:${heatColor(tone)}" aria-pressed="${index === selected}" title="CAPEX ${visualEscape(visualNumber(row.capex_eur_kwp, 2))} EUR/kWp · yield ${visualEscape(visualNumber(row.yield_kwh_kwp, 2))} kWh/kWp · ${value == null ? 'LCOE Missing' : `${visualEscape(visualNumber(value, 3))} EUR/MWh`}" aria-label="CAPEX ${visualEscape(visualNumber(row.capex_eur_kwp, 2))} euros per kWp, yield ${visualEscape(visualNumber(row.yield_kwh_kwp, 2))} kilowatt-hours per kWp, LCOE ${value == null ? 'Missing' : `${visualEscape(visualNumber(value, 3))} euros per megawatt-hour`}">${value == null ? '—' : visualEscape(visualNumber(value, 1))}</button>`;
+            return `<button type="button" class="hf-heat-button" data-pv-cell="${index}" data-state="${cellState}" style="--cell-color:${heatColor(tone)}" aria-pressed="${index === selected}" title="CAPEX ${visualEscape(visualNumber(row.capex_eur_kwp, 2))} EUR/kWp · yield ${visualEscape(visualNumber(row.yield_kwh_kwp, 2))} kWh/kWp · ${value == null ? 'LCOE Missing' : `${visualEscape(visualNumber(value, 3))} EUR/MWh`}" aria-label="${value == null ? '— Missing' : visualEscape(visualNumber(value, 1))} EUR/MWh, CAPEX ${visualEscape(visualNumber(row.capex_eur_kwp, 2))} euros per kWp, yield ${visualEscape(visualNumber(row.yield_kwh_kwp, 2))} kilowatt-hours per kWp, LCOE ${value == null ? 'Missing' : `${visualEscape(visualNumber(value, 3))} euros per megawatt-hour`}">${value == null ? '—' : visualEscape(visualNumber(value, 1))}</button>`;
         }).join('');
         return `<figure class="hf-study-visual hf-sensitivity" data-state="complete"><div class="hf-heatmap-heading"><span>CAPEX · EUR/kWp</span><span>Specific yield · kWh/kWp</span></div>${svgImage(def, 'PV LCOE sensitivity heatmap', `Nine CAPEX values by nine specific-yield values from the Python result table. Low ${visualNumber(extent.min, 3)} and high ${visualNumber(extent.max, 3)} EUR/MWh; null cells remain missing.`, `<g class="hf-heat-cells">${cells}</g><g class="hf-axis-label">${rowLabels}${colLabels}</g>`, '0 0 450 285')}<div class="hf-heat-button-grid" role="group" aria-label="Select one of the 81 CAPEX and yield result cells">${buttons}</div><p class="hf-heat-selected" data-pv-selection aria-live="polite">${selection ? `Selected: ${visualNumber(selection.capex_eur_kwp, 2)} EUR/kWp · ${visualNumber(selection.yield_kwh_kwp, 2)} kWh/kWp · ${visualNumber(selection.lcoe_eur_mwh, 3)} EUR/MWh` : 'Selected record unavailable.'}</p><figcaption>Each cell is an actual Python result-table record. The parent page retains the complete accessible data table.</figcaption></figure>`;
     }

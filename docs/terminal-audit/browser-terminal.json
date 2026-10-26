@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-10-26T09:39:31Z",
+  "startedAt": "2026-10-26T10:03:23Z",
   "site": "local .cloudflare/site export",
   "routes": [
     "hybrid",
@@ -30,6 +30,16 @@
       "name": "export route loads the browser app and integrated workbench",
       "status": "passed",
       "detail": ""
+    },
+    {
+      "name": "toolbar count readouts clear 4.5:1 rendered contrast",
+      "status": "passed",
+      "detail": "[14.286044424045123, 14.286044424045123]"
+    },
+    {
+      "name": "all 81 original PV matrix values clear 4.5:1 rendered contrast",
+      "status": "passed",
+      "detail": "cells=81; min=9.816998330506369"
     },
     {
       "name": "hybrid has no page-level horizontal overflow at 320px",
@@ -1157,6 +1167,11 @@
       "detail": "points=49"
     },
     {
+      "name": "all 49 Terminal matrix values clear 4.5:1 rendered contrast",
+      "status": "passed",
+      "detail": "cells=49; min=14.112237147881267"
+    },
+    {
       "name": "matrix point selection exposes exact coordinates and metrics",
       "status": "passed",
       "detail": "Selected case 1: {\"pvKw\":2,\"batteryKwh\":5}. Cost 39.379 EUR; unserved 0.000 kWh; terminal SOC 0.500 kWh."
@@ -1234,7 +1249,7 @@
     {
       "name": "share action writes exact terminal inputs to query state",
       "status": "passed",
-      "detail": "http://127.0.0.1:53131/run/?terminal=%257B%2522batteryKw%2522%253A5%252C%2522batteryKwh%2522%253A20%252C%2522exportPrice%2522%253A0.05%252C%2522gridKw%2522%253A0%252C%2522importPrice%2522%253A0.25%252C%2522initialSocFraction%2522%253A0.5%252C%2522loadKw%2522%253A6%252C%2522maxSocFraction%2522%253A0.9%252C%2522minSocFraction%2522%253A0.1%252C%2522pvKw%2522%253A8%252C%2522roundtripEfficiency%2522%253A0.9%257D#compare"
+      "detail": "http://127.0.0.1:52564/run/?terminal=%257B%2522batteryKw%2522%253A5%252C%2522batteryKwh%2522%253A20%252C%2522exportPrice%2522%253A0.05%252C%2522gridKw%2522%253A0%252C%2522importPrice%2522%253A0.25%252C%2522initialSocFraction%2522%253A0.5%252C%2522loadKw%2522%253A6%252C%2522maxSocFraction%2522%253A0.9%252C%2522minSocFraction%2522%253A0.1%252C%2522pvKw%2522%253A8%252C%2522roundtripEfficiency%2522%253A0.9%257D#compare"
     },
     {
       "name": "shared query reload reproduces candidate inputs in a new browser tab",
@@ -1391,7 +1406,7 @@
       "route": "pv",
       "width": 1440,
       "violations": [],
-      "passes": 31,
+      "passes": 30,
       "incomplete": 2
     },
     {
@@ -1779,6 +1794,366 @@
   "clippedControls": [],
   "scrollAreaControls": [
     {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "37.6 EUR/MWh, CAPEX 455 euros per kWp, yield 1,400.62 kilowatt-hours per kWp, LCOE 37.624 euros per ",
+      "left": 280,
+      "right": 328,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "36.3 EUR/MWh, CAPEX 455 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 36.312 euros per ",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "35.1 EUR/MWh, CAPEX 455 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 35.088 euros per ",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "33.9 EUR/MWh, CAPEX 455 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 33.944 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "40.6 EUR/MWh, CAPEX 503.75 euros per kWp, yield 1,400.62 kilowatt-hours per kWp, LCOE 40.599 euros p",
+      "left": 280,
+      "right": 328,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "39.2 EUR/MWh, CAPEX 503.75 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 39.183 euros p",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "37.9 EUR/MWh, CAPEX 503.75 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 37.862 euros p",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "36.6 EUR/MWh, CAPEX 503.75 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 36.627 euros pe",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "43.6 EUR/MWh, CAPEX 552.5 euros per kWp, yield 1,400.62 kilowatt-hours per kWp, LCOE 43.574 euros pe",
+      "left": 280,
+      "right": 328,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "42.1 EUR/MWh, CAPEX 552.5 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 42.054 euros pe",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "40.6 EUR/MWh, CAPEX 552.5 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 40.636 euros pe",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "39.3 EUR/MWh, CAPEX 552.5 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 39.311 euros per",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "46.5 EUR/MWh, CAPEX 601.25 euros per kWp, yield 1,400.62 kilowatt-hours per kWp, LCOE 46.548 euros p",
+      "left": 280,
+      "right": 328,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "44.9 EUR/MWh, CAPEX 601.25 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 44.925 euros p",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "43.4 EUR/MWh, CAPEX 601.25 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 43.41 euros pe",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "42 EUR/MWh, CAPEX 601.25 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 41.995 euros per ",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "49.5 EUR/MWh, CAPEX 650 euros per kWp, yield 1,400.62 kilowatt-hours per kWp, LCOE 49.523 euros per ",
+      "left": 280,
+      "right": 328,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "47.8 EUR/MWh, CAPEX 650 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 47.796 euros per ",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "46.2 EUR/MWh, CAPEX 650 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 46.185 euros per ",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "44.7 EUR/MWh, CAPEX 650 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 44.678 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "52.5 EUR/MWh, CAPEX 698.75 euros per kWp, yield 1,400.62 kilowatt-hours per kWp, LCOE 52.498 euros p",
+      "left": 280,
+      "right": 328,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "50.7 EUR/MWh, CAPEX 698.75 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 50.667 euros p",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "49 EUR/MWh, CAPEX 698.75 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 48.959 euros per",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "47.4 EUR/MWh, CAPEX 698.75 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 47.362 euros pe",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "55.5 EUR/MWh, CAPEX 747.5 euros per kWp, yield 1,400.62 kilowatt-hours per kWp, LCOE 55.473 euros pe",
+      "left": 280,
+      "right": 328,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "53.5 EUR/MWh, CAPEX 747.5 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 53.537 euros pe",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "51.7 EUR/MWh, CAPEX 747.5 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 51.733 euros pe",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "50 EUR/MWh, CAPEX 747.5 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 50.046 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "58.4 EUR/MWh, CAPEX 796.25 euros per kWp, yield 1,400.62 kilowatt-hours per kWp, LCOE 58.447 euros p",
+      "left": 280,
+      "right": 328,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "56.4 EUR/MWh, CAPEX 796.25 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 56.408 euros p",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "54.5 EUR/MWh, CAPEX 796.25 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 54.507 euros p",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "52.7 EUR/MWh, CAPEX 796.25 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 52.73 euros per",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "61.4 EUR/MWh, CAPEX 845 euros per kWp, yield 1,400.62 kilowatt-hours per kWp, LCOE 61.422 euros per ",
+      "left": 280,
+      "right": 328,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "59.3 EUR/MWh, CAPEX 845 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 59.279 euros per ",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "57.3 EUR/MWh, CAPEX 845 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 57.281 euros per ",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "55.4 EUR/MWh, CAPEX 845 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 55.413 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
       "route": "pilots",
       "width": 320,
       "tag": "button",
@@ -1809,6 +2184,276 @@
       "scrollHost": ".pilot-board"
     },
     {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "36.3 EUR/MWh, CAPEX 455 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 36.312 euros per ",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "35.1 EUR/MWh, CAPEX 455 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 35.088 euros per ",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "33.9 EUR/MWh, CAPEX 455 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 33.944 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "39.2 EUR/MWh, CAPEX 503.75 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 39.183 euros p",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "37.9 EUR/MWh, CAPEX 503.75 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 37.862 euros p",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "36.6 EUR/MWh, CAPEX 503.75 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 36.627 euros pe",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "42.1 EUR/MWh, CAPEX 552.5 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 42.054 euros pe",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "40.6 EUR/MWh, CAPEX 552.5 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 40.636 euros pe",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "39.3 EUR/MWh, CAPEX 552.5 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 39.311 euros per",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "44.9 EUR/MWh, CAPEX 601.25 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 44.925 euros p",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "43.4 EUR/MWh, CAPEX 601.25 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 43.41 euros pe",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "42 EUR/MWh, CAPEX 601.25 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 41.995 euros per ",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "47.8 EUR/MWh, CAPEX 650 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 47.796 euros per ",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "46.2 EUR/MWh, CAPEX 650 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 46.185 euros per ",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "44.7 EUR/MWh, CAPEX 650 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 44.678 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "50.7 EUR/MWh, CAPEX 698.75 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 50.667 euros p",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "49 EUR/MWh, CAPEX 698.75 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 48.959 euros per",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "47.4 EUR/MWh, CAPEX 698.75 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 47.362 euros pe",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "53.5 EUR/MWh, CAPEX 747.5 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 53.537 euros pe",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "51.7 EUR/MWh, CAPEX 747.5 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 51.733 euros pe",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "50 EUR/MWh, CAPEX 747.5 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 50.046 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "56.4 EUR/MWh, CAPEX 796.25 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 56.408 euros p",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "54.5 EUR/MWh, CAPEX 796.25 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 54.507 euros p",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "52.7 EUR/MWh, CAPEX 796.25 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 52.73 euros per",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "59.3 EUR/MWh, CAPEX 845 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 59.279 euros per ",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "57.3 EUR/MWh, CAPEX 845 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 57.281 euros per ",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "55.4 EUR/MWh, CAPEX 845 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 55.413 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
       "route": "pilots",
       "width": 375,
       "tag": "button",
@@ -1837,6 +2482,186 @@
       "left": 767,
       "right": 972,
       "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "35.1 EUR/MWh, CAPEX 455 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 35.088 euros per ",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "33.9 EUR/MWh, CAPEX 455 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 33.944 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "37.9 EUR/MWh, CAPEX 503.75 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 37.862 euros p",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "36.6 EUR/MWh, CAPEX 503.75 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 36.627 euros pe",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "40.6 EUR/MWh, CAPEX 552.5 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 40.636 euros pe",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "39.3 EUR/MWh, CAPEX 552.5 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 39.311 euros per",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "43.4 EUR/MWh, CAPEX 601.25 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 43.41 euros pe",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "42 EUR/MWh, CAPEX 601.25 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 41.995 euros per ",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "46.2 EUR/MWh, CAPEX 650 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 46.185 euros per ",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "44.7 EUR/MWh, CAPEX 650 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 44.678 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "49 EUR/MWh, CAPEX 698.75 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 48.959 euros per",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "47.4 EUR/MWh, CAPEX 698.75 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 47.362 euros pe",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "51.7 EUR/MWh, CAPEX 747.5 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 51.733 euros pe",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "50 EUR/MWh, CAPEX 747.5 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 50.046 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "54.5 EUR/MWh, CAPEX 796.25 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 54.507 euros p",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "52.7 EUR/MWh, CAPEX 796.25 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 52.73 euros per",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "57.3 EUR/MWh, CAPEX 845 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 57.281 euros per ",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "55.4 EUR/MWh, CAPEX 845 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 55.413 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
     },
     {
       "route": "pilots",
@@ -1897,15 +2722,15 @@
   ],
   "exports": {
     "json": {
-      "filename": "helioforge-2026-10-26T09-40-06-771Z.json",
+      "filename": "helioforge-2026-10-26T10-03-54-463Z.json",
       "bytes": 12227
     },
     "csv": {
-      "filename": "helioforge-2026-10-26T09-40-07-553Z.csv",
+      "filename": "helioforge-2026-10-26T10-03-55-044Z.csv",
       "bytes": 48997
     },
     "md": {
-      "filename": "helioforge-2026-10-26T09-40-07-818Z.md",
+      "filename": "helioforge-2026-10-26T10-03-55-295Z.md",
       "bytes": 12703
     }
   },
@@ -1913,9 +2738,9 @@
     "name": "Chromium",
     "version": "156.0.8078.4"
   },
-  "finishedAt": "2026-10-26T09:40:12Z",
+  "finishedAt": "2026-10-26T10:03:59Z",
   "summary": {
-    "passed": 248,
+    "passed": 251,
     "failed": 0,
     "axeViewRuns": 24,
     "axeViolations": 0,

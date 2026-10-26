@@ -3517,8 +3517,8 @@ footer .release-provenance nav {
   min-height: 44px;
   padding:4px;
   color: var(--color-ink);
-  background: color-mix(in oklch, var(--color-paper-2), var(--color-accent) calc(var(--terminal-level, 0) * 100%));
-  border: 1px solid var(--color-var(--color-transparent));
+  background: color-mix(in oklch, var(--color-paper-2), var(--color-accent-wash) calc(var(--terminal-level, 0) * 100%));
+  border: 1px solid var(--color-muted);
   font-size: 12px;
   font-variant-numeric: tabular-nums slashed-zero;
 }
@@ -4359,3 +4359,7 @@ details:not([open]) > :not(summary) { display: none; }
 .hf-tariff-profile-actions { grid-template-columns: minmax(0, 1fr); align-items: start; }
 .hf-tariff-profile-actions > button { justify-self: start; }
 .hf-tariff-profile-actions > p { min-width: 0; overflow-wrap: anywhere; }
+
+.hf-heat-button-grid { grid-template-columns: repeat(9, minmax(48px, 1fr)); overflow-x: auto; margin-inline: 0; padding: 4px; }
+.hf-heat-button { min-height: 44px; background: color-mix(in oklch, var(--color-paper-2) 75%, var(--cell-color, var(--color-accent-wash)) 25%); border-color: var(--color-muted); }
+.hf-heat-button[aria-pressed="true"], .hf-heat-button:focus-visible { outline-color: var(--color-focus); }

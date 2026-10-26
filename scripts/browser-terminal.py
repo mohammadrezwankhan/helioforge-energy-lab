@@ -111,6 +111,24 @@ def offscreen_controls(page: Page) -> dict:
     }""")
 
 
+def rendered_text_contrasts(page: Page, selector: str) -> list[float]:
+    return page.evaluate("""selector => {
+              const canvas = document.createElement('canvas'); canvas.width = canvas.height = 1;
+              const ctx = canvas.getContext('2d', {willReadFrequently:true});
+              const luminance = colour => {
+                ctx.clearRect(0,0,1,1); ctx.fillStyle = colour; ctx.fillRect(0,0,1,1);
+                const rgb = [...ctx.getImageData(0,0,1,1).data].slice(0,3).map(c => {
+                  const v=c/255; return v<=0.04045 ? v/12.92 : ((v+0.055)/1.055)**2.4;
+                });
+                return rgb[0]*0.2126+rgb[1]*0.7152+rgb[2]*0.0722;
+              };
+              return [...document.querySelectorAll(selector)].map(b => {
+                const style=getComputedStyle(b), ink=luminance(style.color), paper=luminance(style.backgroundColor);
+                return (Math.max(ink,paper)+0.05)/(Math.min(ink,paper)+0.05);
+              });
+            }""", selector)
+
+
 def metrics_are_finite(page: Page) -> tuple[bool, str]:
     result = page.evaluate("""() => {
       const run = HF.terminalSolve(HF.terminalDefaults());
@@ -214,6 +232,10 @@ def exercise_terminal(page: Page, state: dict, scratch: Path, screenshot_dir: Pa
     page.locator("#terminal-sweep-results .terminal-matrix").wait_for(timeout=10_000)
     count = page.locator("#terminal-sweep-results [data-terminal-point]").count()
     check(state, "default two-axis sweep renders all 49 selectable matrix points", count == 49, f"points={count}")
+    sweep_contrast = rendered_text_contrasts(page, "#terminal-sweep-results [data-terminal-point]")
+    check(state, "all 49 Terminal matrix values clear 4.5:1 rendered contrast",
+          len(sweep_contrast) == 49 and min(sweep_contrast) >= 4.5,
+          f"cells={len(sweep_contrast)}; min={min(sweep_contrast) if sweep_contrast else None}")
     if count:
         page.locator('#terminal-sweep-results [data-terminal-point="0"]').click()
         selected = page.locator("#terminal-sweep-results [role=status]").inner_text()
@@ -461,6 +483,21 @@ def main() -> int:
             page.goto(page_url + "#compare", wait_until="load", timeout=30_000)
             page.locator("#terminal-root").wait_for(timeout=15_000)
             check(state, "export route loads the browser app and integrated workbench", page.locator("#terminal-root").count() == 1)
+
+            # Rasterize computed colours to sRGB so OKLCH inherits are measured,
+            # including count text that an automated accessibility scan can miss.
+            count_contrast = rendered_text_contrasts(page, "#champion-toolbar .workbench-actions b")
+            check(state, "toolbar count readouts clear 4.5:1 rendered contrast",
+                  len(count_contrast) == 2 and min(count_contrast) >= 4.5, json.dumps(count_contrast))
+
+            navigate(page, "pv", 1440)
+            page.locator('[data-study-select="pv-sensitivity"]').click()
+            page.locator('[data-pv-cell="80"]').wait_for()
+            pv_contrast = rendered_text_contrasts(page, "[data-pv-cell]")
+            check(state, "all 81 original PV matrix values clear 4.5:1 rendered contrast",
+                  len(pv_contrast) == 81 and min(pv_contrast) >= 4.5,
+                  f"cells={len(pv_contrast)}; min={min(pv_contrast) if pv_contrast else None}")
+            navigate(page, "compare", 1440)
 
             # Exercise actual navigation in every view at every requested width.
             for width in VIEWPORTS:
