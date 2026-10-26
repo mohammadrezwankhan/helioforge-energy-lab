@@ -259,3 +259,8 @@ A good contribution adds a reproducible experiment, not just another attractive 
 The local workbench now contains 39 distinct experimental studies across all twelve views, with source-backed limits, result exports, visual editors and signed local evidence. See [delivery and audit](docs/roadmap/DELIVERY.md), the [experiment index](docs/roadmap/INDEX.md), and [verification](docs/roadmap/VERIFICATION.md). The standalone edition contains generated examples; edited numerical runs require Python.
 
 </details>
+
+<!-- mklab-traceability:start -->
+[![MKLab app directory](https://img.shields.io/badge/MKLab-app%20directory-1769aa)](https://mklab.co.technology/)
+[Open HelioForge Energy Lab in MKLab](https://mkgrid.co.technology/)
+<!-- mklab-traceability:end -->
