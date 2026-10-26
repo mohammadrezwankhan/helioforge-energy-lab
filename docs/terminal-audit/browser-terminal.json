@@ -1,0 +1,1928 @@
+{
+  "startedAt": "2026-10-26T08:47:22Z",
+  "site": "local .cloudflare/site export",
+  "routes": [
+    "hybrid",
+    "lessons",
+    "compare",
+    "overview",
+    "storage",
+    "pv",
+    "research",
+    "markets",
+    "forecast",
+    "investment",
+    "pilots",
+    "council"
+  ],
+  "viewports": [
+    320,
+    375,
+    414,
+    768,
+    1024,
+    1280,
+    1440,
+    1920
+  ],
+  "checks": [
+    {
+      "name": "export route loads the browser app and integrated workbench",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "hybrid has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "hybrid has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "lessons has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "compare has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "overview has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "storage has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pv has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "research has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "markets has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "forecast has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "investment has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pilots has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "council has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "hybrid has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "hybrid has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "lessons has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "compare has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "overview has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "storage has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pv has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "research has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "markets has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "forecast has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "investment has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pilots has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "council has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "hybrid axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "hybrid has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "hybrid has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "lessons has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "compare has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "overview has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "storage has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pv has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "research has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "markets has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "forecast has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "investment has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pilots has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "council has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "hybrid has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "hybrid has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "lessons has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "compare has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "overview has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "storage has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pv has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "research has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "markets has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "forecast has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "investment has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pilots has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "council has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "hybrid has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "hybrid has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "lessons has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "compare has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "overview has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "storage has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pv has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "research has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "markets has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "forecast has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "investment has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pilots has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "council has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "hybrid has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "hybrid has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "lessons has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "compare has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "overview has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "storage has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pv has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "research has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "markets has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "forecast has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "investment has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pilots has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "council has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "hybrid has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "hybrid has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "lessons has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "compare has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "overview has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "storage has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pv has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "research has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "markets has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "forecast has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "investment has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pilots has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "council has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "hybrid axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "hybrid has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "hybrid has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "lessons has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "compare has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "overview has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "storage has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pv has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "research has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "markets has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "forecast has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "investment has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pilots has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "council has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "architecture card and preset selector restore the bundled baseline",
+      "status": "passed",
+      "detail": "{\"pressed\": \"true\", \"height\": 44, \"presetSelectorChanged\": true}"
+    },
+    {
+      "name": "original hybrid comparison still pins and shows two bundled cases",
+      "status": "passed",
+      "detail": "2 pinned runs\nExport comparison\nClear all\nAssumption / outcome\t\nA\nHospital islanding microgrid / Reference day\nBundled example\n\t\nB\nHospital islanding microgrid / Four-hour outage\nBundled example\n\nModel horizon\t24\nh\n\t24\nh\n\nTotal load served\t100.0\n%\n\t93.2\n%\n\nCritical shortfall\t0.0\nkWh\n\t0.0\nkWh\n\nGrid imports\t5,016.2\nkWh\n\t4,045.4\nkWh\n\nRenewable curtail"
+    },
+    {
+      "name": "terminal workbench is integrated into Scenario compare",
+      "status": "passed",
+      "detail": "new workbench and original comparison view coexist"
+    },
+    {
+      "name": "default 24-step browser calculation is finite and conservative",
+      "status": "passed",
+      "detail": "{\"finite\": true, \"rows\": 24, \"busResidual\": 0, \"socResidual\": 0}"
+    },
+    {
+      "name": "completed reference can be pinned as run A",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "input edits mark the displayed result stale and disable pin/export/sweep",
+      "status": "passed",
+      "detail": "{\"status\": \"IDLE / inputs changed\", \"pinDisabled\": true, \"exportDisabled\": true, \"sweepDisabled\": true}"
+    },
+    {
+      "name": "candidate B reruns against changed import tariff",
+      "status": "passed",
+      "detail": "A=15.61; B=21.85"
+    },
+    {
+      "name": "run A versus B diff includes the changed period cost",
+      "status": "passed",
+      "detail": "15.606 | 21.849 | 6.243 | 40.000%"
+    },
+    {
+      "name": "default two-axis sweep renders all 49 selectable matrix points",
+      "status": "passed",
+      "detail": "points=49"
+    },
+    {
+      "name": "matrix point selection exposes exact coordinates and metrics",
+      "status": "passed",
+      "detail": "Selected case 1: {\"pvKw\":2,\"batteryKwh\":5}. Cost 39.379 EUR; unserved 0.000 kWh; terminal SOC 0.500 kWh."
+    },
+    {
+      "name": "invalid lower-greater-than-upper sweep clears the previous valid matrix",
+      "status": "passed",
+      "detail": "before=1 matrix/49 points; after=0 matrix/0 points"
+    },
+    {
+      "name": "out-of-range sweep bounds are rejected visibly",
+      "status": "passed",
+      "detail": "pvKw sweep bounds must stay within at least 0 and at most 100000."
+    },
+    {
+      "name": "invalid logarithmic sweep reports positive-bound constraint",
+      "status": "passed",
+      "detail": "Log sweeps require positive lower and upper bounds."
+    },
+    {
+      "name": "JSON run export contains a SHA-256 manifest and 24 rows",
+      "status": "passed",
+      "detail": "hash=249f526ece9a714b56a4c881b9d330ed6f75c4de7bf92a954a1898a2e4d961c2; rows=24"
+    },
+    {
+      "name": "CSV run export contains inputs, residuals, and 24 hourly records",
+      "status": "passed",
+      "detail": "bytes=48997; lines=25; metadata=['dataKind', 'flags', 'status', 'warnings']"
+    },
+    {
+      "name": "Markdown run export includes model limits, metrics, and integrity payload",
+      "status": "passed",
+      "detail": "bytes=12703"
+    },
+    {
+      "name": "manifest import rejects output tampering",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "valid JSON manifest imports after digest check and deterministic rerun",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "Ctrl+K palette lists terminal commands",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "palette preset island performs a real zero-grid calculation",
+      "status": "passed",
+      "detail": "gridKw=0"
+    },
+    {
+      "name": "palette :pin pins the completed preset",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "palette :diff opens the existing compare view",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "colon opener opens command palette with command filtering",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "colon-opened command palette exports a verifiable JSON manifest",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "share action writes exact terminal inputs to query state",
+      "status": "passed",
+      "detail": "http://127.0.0.1:53599/run/?terminal=%257B%2522batteryKw%2522%253A5%252C%2522batteryKwh%2522%253A20%252C%2522exportPrice%2522%253A0.05%252C%2522gridKw%2522%253A0%252C%2522importPrice%2522%253A0.25%252C%2522initialSocFraction%2522%253A0.5%252C%2522loadKw%2522%253A6%252C%2522maxSocFraction%2522%253A0.9%252C%2522minSocFraction%2522%253A0.1%252C%2522pvKw%2522%253A8%252C%2522roundtripEfficiency%2522%253A0.9%257D#compare"
+    },
+    {
+      "name": "shared query reload reproduces candidate inputs in a new browser tab",
+      "status": "passed",
+      "detail": "gridKw=0"
+    },
+    {
+      "name": "query-state reload has no page exceptions",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "no uncaught page exceptions",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "no same-origin console errors",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "no failed same-origin resource requests",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "no same-origin 4xx/5xx responses",
+      "status": "passed",
+      "detail": "[]"
+    }
+  ],
+  "accessibility": [
+    {
+      "route": "hybrid",
+      "width": 375,
+      "violations": [],
+      "passes": 30,
+      "incomplete": 3
+    },
+    {
+      "route": "lessons",
+      "width": 375,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 2
+    },
+    {
+      "route": "compare",
+      "width": 375,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 2
+    },
+    {
+      "route": "overview",
+      "width": 375,
+      "violations": [],
+      "passes": 30,
+      "incomplete": 2
+    },
+    {
+      "route": "storage",
+      "width": 375,
+      "violations": [],
+      "passes": 28,
+      "incomplete": 2
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "violations": [],
+      "passes": 30,
+      "incomplete": 2
+    },
+    {
+      "route": "research",
+      "width": 375,
+      "violations": [],
+      "passes": 28,
+      "incomplete": 3
+    },
+    {
+      "route": "markets",
+      "width": 375,
+      "violations": [],
+      "passes": 27,
+      "incomplete": 2
+    },
+    {
+      "route": "forecast",
+      "width": 375,
+      "violations": [],
+      "passes": 28,
+      "incomplete": 2
+    },
+    {
+      "route": "investment",
+      "width": 375,
+      "violations": [],
+      "passes": 28,
+      "incomplete": 3
+    },
+    {
+      "route": "pilots",
+      "width": 375,
+      "violations": [],
+      "passes": 28,
+      "incomplete": 2
+    },
+    {
+      "route": "council",
+      "width": 375,
+      "violations": [],
+      "passes": 27,
+      "incomplete": 2
+    },
+    {
+      "route": "hybrid",
+      "width": 1440,
+      "violations": [],
+      "passes": 31,
+      "incomplete": 3
+    },
+    {
+      "route": "lessons",
+      "width": 1440,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 2
+    },
+    {
+      "route": "compare",
+      "width": 1440,
+      "violations": [],
+      "passes": 31,
+      "incomplete": 2
+    },
+    {
+      "route": "overview",
+      "width": 1440,
+      "violations": [],
+      "passes": 31,
+      "incomplete": 2
+    },
+    {
+      "route": "storage",
+      "width": 1440,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 2
+    },
+    {
+      "route": "pv",
+      "width": 1440,
+      "violations": [],
+      "passes": 31,
+      "incomplete": 2
+    },
+    {
+      "route": "research",
+      "width": 1440,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 3
+    },
+    {
+      "route": "markets",
+      "width": 1440,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 2
+    },
+    {
+      "route": "forecast",
+      "width": 1440,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 2
+    },
+    {
+      "route": "investment",
+      "width": 1440,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 3
+    },
+    {
+      "route": "pilots",
+      "width": 1440,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 2
+    },
+    {
+      "route": "council",
+      "width": 1440,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 2
+    }
+  ],
+  "accessibilityErrors": [],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "sameOriginConsoleErrors": [],
+  "externalConsoleErrors": [],
+  "failedRequests": [],
+  "sameOriginFailedRequests": [],
+  "externalFailedRequests": [],
+  "badResponses": [],
+  "bodyContentOverhangs": [
+    {
+      "route": "hybrid",
+      "viewport": 320,
+      "document": 320,
+      "body": 402,
+      "rootDelta": 0,
+      "bodyDelta": 82
+    },
+    {
+      "route": "lessons",
+      "viewport": 320,
+      "document": 320,
+      "body": 402,
+      "rootDelta": 0,
+      "bodyDelta": 82
+    },
+    {
+      "route": "compare",
+      "viewport": 320,
+      "document": 320,
+      "body": 402,
+      "rootDelta": 0,
+      "bodyDelta": 82
+    },
+    {
+      "route": "overview",
+      "viewport": 320,
+      "document": 320,
+      "body": 402,
+      "rootDelta": 0,
+      "bodyDelta": 82
+    },
+    {
+      "route": "storage",
+      "viewport": 320,
+      "document": 320,
+      "body": 402,
+      "rootDelta": 0,
+      "bodyDelta": 82
+    },
+    {
+      "route": "pv",
+      "viewport": 320,
+      "document": 320,
+      "body": 405,
+      "rootDelta": 0,
+      "bodyDelta": 85
+    },
+    {
+      "route": "research",
+      "viewport": 320,
+      "document": 320,
+      "body": 402,
+      "rootDelta": 0,
+      "bodyDelta": 82
+    },
+    {
+      "route": "markets",
+      "viewport": 320,
+      "document": 320,
+      "body": 402,
+      "rootDelta": 0,
+      "bodyDelta": 82
+    },
+    {
+      "route": "forecast",
+      "viewport": 320,
+      "document": 320,
+      "body": 402,
+      "rootDelta": 0,
+      "bodyDelta": 82
+    },
+    {
+      "route": "investment",
+      "viewport": 320,
+      "document": 320,
+      "body": 405,
+      "rootDelta": 0,
+      "bodyDelta": 85
+    },
+    {
+      "route": "pilots",
+      "viewport": 320,
+      "document": 320,
+      "body": 402,
+      "rootDelta": 0,
+      "bodyDelta": 82
+    },
+    {
+      "route": "council",
+      "viewport": 320,
+      "document": 320,
+      "body": 402,
+      "rootDelta": 0,
+      "bodyDelta": 82
+    },
+    {
+      "route": "hybrid",
+      "viewport": 375,
+      "document": 375,
+      "body": 444,
+      "rootDelta": 0,
+      "bodyDelta": 69
+    },
+    {
+      "route": "lessons",
+      "viewport": 375,
+      "document": 375,
+      "body": 444,
+      "rootDelta": 0,
+      "bodyDelta": 69
+    },
+    {
+      "route": "compare",
+      "viewport": 375,
+      "document": 375,
+      "body": 444,
+      "rootDelta": 0,
+      "bodyDelta": 69
+    },
+    {
+      "route": "overview",
+      "viewport": 375,
+      "document": 375,
+      "body": 444,
+      "rootDelta": 0,
+      "bodyDelta": 69
+    },
+    {
+      "route": "storage",
+      "viewport": 375,
+      "document": 375,
+      "body": 444,
+      "rootDelta": 0,
+      "bodyDelta": 69
+    },
+    {
+      "route": "pv",
+      "viewport": 375,
+      "document": 375,
+      "body": 450,
+      "rootDelta": 0,
+      "bodyDelta": 75
+    },
+    {
+      "route": "research",
+      "viewport": 375,
+      "document": 375,
+      "body": 446,
+      "rootDelta": 0,
+      "bodyDelta": 71
+    },
+    {
+      "route": "markets",
+      "viewport": 375,
+      "document": 375,
+      "body": 444,
+      "rootDelta": 0,
+      "bodyDelta": 69
+    },
+    {
+      "route": "forecast",
+      "viewport": 375,
+      "document": 375,
+      "body": 444,
+      "rootDelta": 0,
+      "bodyDelta": 69
+    },
+    {
+      "route": "investment",
+      "viewport": 375,
+      "document": 375,
+      "body": 451,
+      "rootDelta": 0,
+      "bodyDelta": 76
+    },
+    {
+      "route": "pilots",
+      "viewport": 375,
+      "document": 375,
+      "body": 444,
+      "rootDelta": 0,
+      "bodyDelta": 69
+    },
+    {
+      "route": "council",
+      "viewport": 375,
+      "document": 375,
+      "body": 444,
+      "rootDelta": 0,
+      "bodyDelta": 69
+    },
+    {
+      "route": "hybrid",
+      "viewport": 414,
+      "document": 414,
+      "body": 474,
+      "rootDelta": 0,
+      "bodyDelta": 60
+    },
+    {
+      "route": "lessons",
+      "viewport": 414,
+      "document": 414,
+      "body": 474,
+      "rootDelta": 0,
+      "bodyDelta": 60
+    },
+    {
+      "route": "compare",
+      "viewport": 414,
+      "document": 414,
+      "body": 474,
+      "rootDelta": 0,
+      "bodyDelta": 60
+    },
+    {
+      "route": "overview",
+      "viewport": 414,
+      "document": 414,
+      "body": 474,
+      "rootDelta": 0,
+      "bodyDelta": 60
+    },
+    {
+      "route": "storage",
+      "viewport": 414,
+      "document": 414,
+      "body": 474,
+      "rootDelta": 0,
+      "bodyDelta": 60
+    },
+    {
+      "route": "pv",
+      "viewport": 414,
+      "document": 414,
+      "body": 483,
+      "rootDelta": 0,
+      "bodyDelta": 69
+    },
+    {
+      "route": "research",
+      "viewport": 414,
+      "document": 414,
+      "body": 477,
+      "rootDelta": 0,
+      "bodyDelta": 63
+    },
+    {
+      "route": "markets",
+      "viewport": 414,
+      "document": 414,
+      "body": 474,
+      "rootDelta": 0,
+      "bodyDelta": 60
+    },
+    {
+      "route": "forecast",
+      "viewport": 414,
+      "document": 414,
+      "body": 474,
+      "rootDelta": 0,
+      "bodyDelta": 60
+    },
+    {
+      "route": "investment",
+      "viewport": 414,
+      "document": 414,
+      "body": 483,
+      "rootDelta": 0,
+      "bodyDelta": 69
+    },
+    {
+      "route": "pilots",
+      "viewport": 414,
+      "document": 414,
+      "body": 474,
+      "rootDelta": 0,
+      "bodyDelta": 60
+    },
+    {
+      "route": "council",
+      "viewport": 414,
+      "document": 414,
+      "body": 474,
+      "rootDelta": 0,
+      "bodyDelta": 60
+    },
+    {
+      "route": "pv",
+      "viewport": 768,
+      "document": 768,
+      "body": 779,
+      "rootDelta": 0,
+      "bodyDelta": 11
+    },
+    {
+      "route": "investment",
+      "viewport": 768,
+      "document": 768,
+      "body": 779,
+      "rootDelta": 0,
+      "bodyDelta": 11
+    },
+    {
+      "route": "pv",
+      "viewport": 1024,
+      "document": 1024,
+      "body": 1033,
+      "rootDelta": 0,
+      "bodyDelta": 9
+    },
+    {
+      "route": "markets",
+      "viewport": 1024,
+      "document": 1024,
+      "body": 1027,
+      "rootDelta": 0,
+      "bodyDelta": 3
+    },
+    {
+      "route": "investment",
+      "viewport": 1024,
+      "document": 1024,
+      "body": 1033,
+      "rootDelta": 0,
+      "bodyDelta": 9
+    }
+  ],
+  "clippedControls": [],
+  "scrollAreaControls": [
+    {
+      "route": "pilots",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 275,
+      "right": 480,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pilots",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 521,
+      "right": 726,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pilots",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 767,
+      "right": 972,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pilots",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 275,
+      "right": 480,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pilots",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 521,
+      "right": 726,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pilots",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 767,
+      "right": 972,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pilots",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 275,
+      "right": 480,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pilots",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 521,
+      "right": 726,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pilots",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 767,
+      "right": 972,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pilots",
+      "width": 768,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 767,
+      "right": 972,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pilots",
+      "width": 1024,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 1031,
+      "right": 1236,
+      "scrollHost": ".pilot-board"
+    }
+  ],
+  "screenshots": [
+    "C:\\Users\\MRK\\Downloads\\Unclassified\\mkgrid-terminal-evidence\\terminal-desktop.png",
+    "C:\\Users\\MRK\\Downloads\\Unclassified\\mkgrid-terminal-evidence\\terminal-mobile.png",
+    "C:\\Users\\MRK\\Downloads\\Unclassified\\mkgrid-terminal-evidence\\terminal-sweep-results.png"
+  ],
+  "limits": [
+    "Accessibility results are automated axe-core findings, not WCAG certification or a screen-reader audit.",
+    "The export is a static snapshot: new API calculations and native hosting/CSP behavior are not exercised.",
+    "Only the Chromium build supplied by the audit environment is exercised."
+  ],
+  "exports": {
+    "json": {
+      "filename": "helioforge-2026-10-26T08-47-47-462Z.json",
+      "bytes": 12227
+    },
+    "csv": {
+      "filename": "helioforge-2026-10-26T08-47-47-944Z.csv",
+      "bytes": 48997
+    },
+    "md": {
+      "filename": "helioforge-2026-10-26T08-47-48-143Z.md",
+      "bytes": 12703
+    }
+  },
+  "browser": {
+    "name": "Chromium",
+    "version": "156.0.8078.4"
+  },
+  "finishedAt": "2026-10-26T08:47:51Z",
+  "summary": {
+    "passed": 248,
+    "failed": 0,
+    "axeViewRuns": 24,
+    "axeViolations": 0,
+    "axeExecutionErrors": 0
+  }
+}

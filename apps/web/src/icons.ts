@@ -39,6 +39,6 @@ namespace HF {
     return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${glyphs[name] ?? glyphs['grid']}</svg>`;
   }
   export function brandMark(): string {
-    return '<svg class="brand-mark" width="38" height="38" viewBox="0 0 38 38" fill="none" aria-hidden="true"><rect x="1" y="1" width="36" height="36" rx="12" fill="#d7ff84"/><path d="M11 10v18m16-18v18M11 19h16" stroke="#111916" stroke-width="4"/><path d="m23 7-9 14h6l-5 10 12-15h-7l3-9Z" fill="#d7ff84" stroke="#111916" stroke-width="1.5"/></svg>';
+    return '<svg class="brand-mark" width="38" height="38" viewBox="0 0 38 38" fill="none" aria-hidden="true"><rect x="1" y="1" width="36" height="36" rx="12" fill="var(--color-accent)"/><path d="M11 10v18m16-18v18M11 19h16" stroke="var(--color-paper-2)" stroke-width="4"/><path d="m23 7-9 14h6l-5 10 12-15h-7l3-9Z" fill="var(--color-accent)" stroke="var(--color-paper-2)" stroke-width="1.5"/></svg>';
   }
 }

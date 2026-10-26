@@ -3,13 +3,14 @@
   "slug": "helioforge-energy-lab",
   "title": "HelioForge Energy Lab",
   "shortDescription": "Explore hybrid-energy layouts, learning activities, and bundled example results in an interactive research and education preview.",
-  "summary": "HelioForge is an energy-learning workbench for exploring hybrid-system designs and scenario assumptions. Its standalone preview shows bundled examples; new calculations require the local Python application.",
+  "summary": "Explore hybrid-system designs and inspect assumptions. The Terminal workbench calculates new bounded 24-hour synthetic energy-balance cases in your browser; advanced models require the local Python application.",
   "features": [
     "Browse hybrid-energy architectures and inspect their labeled system layouts.",
     "Read architecture-linked lessons with experiment steps and self-check questions.",
     "Review bundled scenario examples and compare visible energy assumptions and outcomes.",
     "Explore 59 distinct experimental studies across twelve views, with Python-generated examples and explicit model boundaries.",
-    "Inspect timelines, sensitivity maps, tariff inputs, signed local evidence and complete result exports."
+    "Inspect timelines, sensitivity maps, tariff inputs, signed local evidence and complete result exports.",
+    "Calculate browser energy balances, sweeps, local sensitivity and A/B deltas; export verified SHA-256 manifests."
   ],
   "steps": [
     "Choose an architecture and inspect its components and stated assumptions.",
@@ -18,13 +19,13 @@
   ],
   "limitations": [
     "The standalone browser preview uses bundled examples and does not run new Python calculations or optimization.",
-    "New numerical runs require the separate local Python API and its setup.",
+    "Advanced numerical studies and optimization require the local Python API. The browser Terminal model is a direct hourly energy balance, not an optimizer.",
     "Models are educational research screens, not calibrated plant controls, forecasts, or investment advice."
   ],
   "faqs": [
     {
       "question": "Can the standalone preview calculate a new scenario?",
-      "answer": "No. It displays the interface and bundled examples; run the separate local Python app for new calculations."
+      "answer": "Yes, the Terminal workbench calculates bounded 24-hour energy-balance cases in the browser. Advanced studies require the separate local Python app."
     },
     {
       "question": "Are the model results operational guidance?",
@@ -33,7 +34,7 @@
   ],
   "category": "Energy",
   "canonical": "https://mklab.co.technology/apps/helioforge-energy-lab/",
-  "updated": "2026-10-18",
+  "updated": "2026-10-26",
   "publicSource": "https://github.com/mohammadrezwankhan/helioforge-energy-lab",
   "demoArtifact": "HelioForge-Preview.html",
   "runtimePatches": [

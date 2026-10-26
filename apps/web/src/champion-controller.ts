@@ -102,7 +102,11 @@ namespace HF {
     });
     document.addEventListener('keydown',event=>{
       if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='k'){event.preventDefault();void action('commands').catch(fail);return;}
+      if(event.key===':'&&!(event.target as Element).closest('input,textarea,select,[contenteditable="true"]')){
+        event.preventDefault();void action('commands').then(()=>{const input=document.getElementById('command-search') as HTMLInputElement|null;if(input){input.value=':';input.dispatchEvent(new Event('input',{bubbles:true}));}}).catch(fail);return;
+      }
       const el=event.target as HTMLInputElement;if(el.id!=='command-search')return;
+      if(event.key==='Enter'&&el.value.trim().startsWith(':')){event.preventDefault();document.dispatchEvent(new CustomEvent('terminal-command',{detail:el.value}));return;}
       const buttons=[...document.querySelectorAll<HTMLButtonElement>('#command-results button')];if(!buttons.length)return;
       let selected=Math.max(0,buttons.findIndex(b=>b.classList.contains('active')));
       if(event.key==='ArrowDown'||event.key==='ArrowUp'){

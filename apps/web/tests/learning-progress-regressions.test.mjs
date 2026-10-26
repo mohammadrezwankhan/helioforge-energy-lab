@@ -14,6 +14,8 @@ test('the final correct quiz updates every progress presentation without losing 
   assert.match(x.note.textContent, /Passed 36 of 36/);
   const button = x.buttons.find(item => item.dataset.lesson === last.id);
   assert.equal(button.classList.contains('done'), true);
-  assert.doesNotMatch(button.getAttribute('aria-label'), /not passed/);
+  assert.equal(button.getAttribute('aria-label'), null, 'Visible lesson text supplies the accessible name');
+  assert.match(button.title, /Self-check passed in this browser/);
+  assert.ok(button.title.includes(last.title), 'The description retains the full lesson identity');
   assert.match(x.feedback.textContent, /2 \/ 2 correct/);
 });

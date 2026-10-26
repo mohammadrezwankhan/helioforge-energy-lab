@@ -19,6 +19,7 @@ export function controllerFixture({mode = 'normal', saved = false, progress = []
     }
     get innerHTML() { return this.markup ?? ''; }
     setAttribute(key, value) { this.attributes.set(key, value); }
+    removeAttribute(key) { this.attributes.delete(key); }
     getAttribute(key) { return this.attributes.get(key) ?? null; }
     hasAttribute(key) { return this.attributes.has(key); }
     closest(selector) { return selector === 'button' ? this : null; }
@@ -42,6 +43,7 @@ export function controllerFixture({mode = 'normal', saved = false, progress = []
   const hero = new Element(), status = new Element(), note = new Element(), feedback = new Element();
   const buttons = hf.HYBRID_CATALOG.lessons.map(item => {
     const button = new Element(); button.dataset.lesson = item.id;
+    button.textContent = item.title;
     button.setAttribute('aria-label', item.title + '; ' + item.level + '; not passed');
     button.number = new Element(); button.querySelector = selector => selector === '.lesson-number' ? button.number : null;
     return button;

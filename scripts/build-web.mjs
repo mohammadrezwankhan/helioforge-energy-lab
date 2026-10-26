@@ -9,7 +9,7 @@ const config=JSON.parse(await readFile(path.join(web,'tsconfig.json'),'utf8'));
 compileScripts(config.files.map(file=>path.join(web,file)),path.join(dist,'app.js'));
 for(const [from,to] of [['index.html','index.html'],['src/styles.css','styles.css'],['public/favicon.svg','favicon.svg']])await copyFile(path.join(web,from),path.join(dist,to));
 const html=await readFile(path.join(web,'index.html'),'utf8');
-const css=(await Promise.all(['styles.css','champion.css','study-visuals.css','workflows.css','experiences.css','completion-ui.css','integrations-ui.css','advanced-visuals.css'].map(file=>readFile(path.join(web,'src',file),'utf8')))).join('\n');
+const css=(await Promise.all(['tokens.css','styles.css','champion.css','study-visuals.css','workflows.css','experiences.css','completion-ui.css','integrations-ui.css','advanced-visuals.css','terminal.css'].map(file=>readFile(path.join(web,'src',file),'utf8')))).join('\n');
 await writeFile(path.join(dist,'styles.css'),css);
 const js=await readFile(path.join(dist,'app.js'),'utf8');
 const favicon=await readFile(path.join(web,'public/favicon.svg'),'utf8');

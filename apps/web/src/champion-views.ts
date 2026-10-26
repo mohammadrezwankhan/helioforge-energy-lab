@@ -20,6 +20,10 @@ namespace HF {
     return `<div class="command-dialog"><label class="command-input">${icon('search',22)}<input id="command-search" type="search" autocomplete="off" placeholder="Find a workspace, architecture or lesson…" aria-label="Search commands" role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="command-results"></label><div id="command-results" role="listbox" aria-label="Commands">${commandResults('')}</div><div class="command-footer"><span><kbd>↑</kbd><kbd>↓</kbd> Navigate <kbd>Enter</kbd> Open</span><span><kbd>Esc</kbd> Close</span></div></div>`;
   }
   export function commandResults(query:string):string {
+    if(query.trim().startsWith(':')){
+      const commands=[':sweep',':pin',':diff',':preset reference',':preset island',':preset solar',':preset storage',':reset',':export json',':export csv',':export md'];
+      return commands.filter(command=>command.startsWith(query.trim())).map((command,i)=>`<button class="command-option ${i===0?'active':''}" id="command-option-${i}" role="option" aria-selected="${i===0}" data-terminal-command="${escapeHTML(command)}"><span><strong>${escapeHTML(command)}</strong><small>Reduced daily energy workbench</small></span></button>`).join('')||'<p role="status">Unknown command. Try :sweep, :pin, :diff, :preset or :export.</p>';
+    }
     const rows=commandEntries(query);
     return rows.length?rows.map((r,i)=>`<button class="command-option ${i===0?'active':''}" id="command-option-${i}" role="option" aria-selected="${i===0}" data-command-kind="${r.kind}" data-command-target="${r.target}"><span class="command-icon">${icon(r.icon,18)}</span><span><strong>${escapeHTML(r.label)}</strong><small>${escapeHTML(r.detail)}</small></span>${icon('arrow',16)}</button>`).join(''):'<div class="shelf-empty" role="status">No matches. Try “hospital”, “BESS”, “hydrogen” or “finance”.</div>';
   }

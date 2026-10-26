@@ -1,0 +1,6175 @@
+{
+  "schema_version": "helioforge-terminal-audit-inventory-v1",
+  "baseline": {
+    "project_commit_claim": "d14b71f50ef400a50d3ccd4792dcd59238c64f56",
+    "commit_verification": "authenticated GitHub API verification reported by orchestrator; extracted checkout has no .git directory",
+    "archive": "../helioforge.zip",
+    "archive_sha256": "de3017a37d3c11d5afdcac4513256956c99da1fa92fb9aaa95c71b1d27bd70d6",
+    "preview_path_in_archive": "helioforge-energy-lab-main/HelioForge-Preview.html",
+    "preview_sha256": "825bf6405bb9c6e8977d45d906f4195fa23b00b7c8bd53851e50698fc4c3f4f8",
+    "preview_bytes": 13456115,
+    "live_baseline_html": "C:/Users/MRK/Downloads/misC/mkgrid-live-baseline.html",
+    "live_baseline_sha256": "a47e919e2a631226ce663726f91352ca5dd749c95b9163c1773e37bc48ab5cb4",
+    "live_baseline_bytes": 13456175,
+    "live_baseline_matches_archive_preview": false,
+    "api_route_count": 30
+  },
+  "scopes": {
+    "client_routes": [
+      {
+        "id": "hybrid",
+        "title": "Hybrid systems lab",
+        "stable_id": "page::hybrid"
+      },
+      {
+        "id": "lessons",
+        "title": "Learning studio",
+        "stable_id": "page::lessons"
+      },
+      {
+        "id": "compare",
+        "title": "Scenario compare",
+        "stable_id": "page::compare"
+      },
+      {
+        "id": "overview",
+        "title": "Command centre",
+        "stable_id": "page::overview"
+      },
+      {
+        "id": "storage",
+        "title": "Storage & flexibility",
+        "stable_id": "page::storage"
+      },
+      {
+        "id": "pv",
+        "title": "PV economics",
+        "stable_id": "page::pv"
+      },
+      {
+        "id": "research",
+        "title": "Research pillars",
+        "stable_id": "page::research"
+      },
+      {
+        "id": "markets",
+        "title": "Market intelligence",
+        "stable_id": "page::markets"
+      },
+      {
+        "id": "forecast",
+        "title": "Forecast studio",
+        "stable_id": "page::forecast"
+      },
+      {
+        "id": "investment",
+        "title": "Investment desk",
+        "stable_id": "page::investment"
+      },
+      {
+        "id": "pilots",
+        "title": "Construction & pilots",
+        "stable_id": "page::pilots"
+      },
+      {
+        "id": "council",
+        "title": "Agent council",
+        "stable_id": "page::council"
+      }
+    ],
+    "client_route_count": 12,
+    "api_routes": [
+      {
+        "method": "GET",
+        "path": "/api/health",
+        "handler": "health",
+        "line": 116,
+        "stable_id": "http::GET /api/health"
+      },
+      {
+        "method": "GET",
+        "path": "/api/studies",
+        "handler": "studies_catalogue",
+        "line": 122,
+        "stable_id": "http::GET /api/studies"
+      },
+      {
+        "method": "GET",
+        "path": "/api/connectors/status",
+        "handler": "connectors_status",
+        "line": 127,
+        "stable_id": "http::GET /api/connectors/status"
+      },
+      {
+        "method": "POST",
+        "path": "/api/evidence/series",
+        "handler": "evidence_series",
+        "line": 132,
+        "stable_id": "http::POST /api/evidence/series"
+      },
+      {
+        "method": "POST",
+        "path": "/api/evidence/geography",
+        "handler": "evidence_geography",
+        "line": 137,
+        "stable_id": "http::POST /api/evidence/geography"
+      },
+      {
+        "method": "POST",
+        "path": "/api/evidence/document",
+        "handler": "evidence_document",
+        "line": 142,
+        "stable_id": "http::POST /api/evidence/document"
+      },
+      {
+        "method": "POST",
+        "path": "/api/evidence/telemetry",
+        "handler": "evidence_telemetry",
+        "line": 149,
+        "stable_id": "http::POST /api/evidence/telemetry"
+      },
+      {
+        "method": "POST",
+        "path": "/api/connectors/weather",
+        "handler": "connector_weather",
+        "line": 154,
+        "stable_id": "http::POST /api/connectors/weather"
+      },
+      {
+        "method": "POST",
+        "path": "/api/connectors/market",
+        "handler": "connector_market",
+        "line": 161,
+        "stable_id": "http::POST /api/connectors/market"
+      },
+      {
+        "method": "POST",
+        "path": "/api/connectors/regulatory",
+        "handler": "connector_regulatory",
+        "line": 168,
+        "stable_id": "http::POST /api/connectors/regulatory"
+      },
+      {
+        "method": "POST",
+        "path": "/api/connectors/modbus",
+        "handler": "connector_modbus",
+        "line": 175,
+        "stable_id": "http::POST /api/connectors/modbus"
+      },
+      {
+        "method": "POST",
+        "path": "/api/studies/evaluate",
+        "handler": "study_evaluate",
+        "line": 183,
+        "stable_id": "http::POST /api/studies/evaluate"
+      },
+      {
+        "method": "GET",
+        "path": "/api/overview",
+        "handler": "overview",
+        "line": 188,
+        "stable_id": "http::GET /api/overview"
+      },
+      {
+        "method": "POST",
+        "path": "/api/storage/optimize",
+        "handler": "storage",
+        "line": 199,
+        "stable_id": "http::POST /api/storage/optimize"
+      },
+      {
+        "method": "POST",
+        "path": "/api/finance/evaluate",
+        "handler": "finance",
+        "line": 204,
+        "stable_id": "http::POST /api/finance/evaluate"
+      },
+      {
+        "method": "POST",
+        "path": "/api/pv/evaluate",
+        "handler": "pv",
+        "line": 209,
+        "stable_id": "http::POST /api/pv/evaluate"
+      },
+      {
+        "method": "POST",
+        "path": "/api/forecast/simulate",
+        "handler": "forecast",
+        "line": 214,
+        "stable_id": "http::POST /api/forecast/simulate"
+      },
+      {
+        "method": "POST",
+        "path": "/api/research/drift",
+        "handler": "drift",
+        "line": 219,
+        "stable_id": "http::POST /api/research/drift"
+      },
+      {
+        "method": "POST",
+        "path": "/api/research/reliability",
+        "handler": "predict_reliability",
+        "line": 224,
+        "stable_id": "http::POST /api/research/reliability"
+      },
+      {
+        "method": "POST",
+        "path": "/api/research/carbon",
+        "handler": "carbon",
+        "line": 229,
+        "stable_id": "http::POST /api/research/carbon"
+      },
+      {
+        "method": "POST",
+        "path": "/api/acquisitions/screen",
+        "handler": "acquisition",
+        "line": 234,
+        "stable_id": "http::POST /api/acquisitions/screen"
+      },
+      {
+        "method": "POST",
+        "path": "/api/council/review",
+        "handler": "council",
+        "line": 239,
+        "stable_id": "http::POST /api/council/review"
+      },
+      {
+        "method": "GET",
+        "path": "/api/runs",
+        "handler": "runs",
+        "line": 287,
+        "stable_id": "http::GET /api/runs"
+      },
+      {
+        "method": "GET",
+        "path": "/api/runs/{run_id}",
+        "handler": "run",
+        "line": 292,
+        "stable_id": "http::GET /api/runs/{run_id}"
+      },
+      {
+        "method": "GET",
+        "path": "/api/pilots",
+        "handler": "pilots",
+        "line": 300,
+        "stable_id": "http::GET /api/pilots"
+      },
+      {
+        "method": "GET",
+        "path": "/api/pilots/events",
+        "handler": "pilot_events",
+        "line": 305,
+        "stable_id": "http::GET /api/pilots/events"
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/pilots/{pilot_id}",
+        "handler": "update_pilot",
+        "line": 310,
+        "stable_id": "http::PATCH /api/pilots/{pilot_id}"
+      },
+      {
+        "method": "GET",
+        "path": "/api/hybrid/catalog",
+        "handler": "hybrid_catalog",
+        "line": 318,
+        "stable_id": "http::GET /api/hybrid/catalog"
+      },
+      {
+        "method": "POST",
+        "path": "/api/hybrid/validate",
+        "handler": "hybrid_validate",
+        "line": 323,
+        "stable_id": "http::POST /api/hybrid/validate"
+      },
+      {
+        "method": "POST",
+        "path": "/api/hybrid/simulate",
+        "handler": "hybrid_simulate",
+        "line": 328,
+        "stable_id": "http::POST /api/hybrid/simulate"
+      }
+    ],
+    "api_route_count": 30,
+    "schemas": [
+      {
+        "name": "StrictModel",
+        "line": 14,
+        "stable_id": "schema::StrictModel"
+      },
+      {
+        "name": "StorageRequest",
+        "line": 18,
+        "stable_id": "schema::StorageRequest"
+      },
+      {
+        "name": "FinanceRequest",
+        "line": 53,
+        "stable_id": "schema::FinanceRequest"
+      },
+      {
+        "name": "PVRequest",
+        "line": 81,
+        "stable_id": "schema::PVRequest"
+      },
+      {
+        "name": "ForecastRequest",
+        "line": 104,
+        "stable_id": "schema::ForecastRequest"
+      },
+      {
+        "name": "ReliabilityRequest",
+        "line": 117,
+        "stable_id": "schema::ReliabilityRequest"
+      },
+      {
+        "name": "DriftRequest",
+        "line": 124,
+        "stable_id": "schema::DriftRequest"
+      },
+      {
+        "name": "SustainabilityRequest",
+        "line": 136,
+        "stable_id": "schema::SustainabilityRequest"
+      },
+      {
+        "name": "MARequest",
+        "line": 146,
+        "stable_id": "schema::MARequest"
+      },
+      {
+        "name": "CouncilRequest",
+        "line": 156,
+        "stable_id": "schema::CouncilRequest"
+      },
+      {
+        "name": "PilotUpdate",
+        "line": 166,
+        "stable_id": "schema::PilotUpdate"
+      }
+    ],
+    "dom_event_hooks": [
+      {
+        "target": "window",
+        "source": "apps/web/src/app.ts",
+        "event": "pagehide",
+        "line": 22,
+        "stable_id": "window::apps/web/src/app.ts#pagehide@22"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/app.ts",
+        "event": "input",
+        "line": 77,
+        "stable_id": "document::apps/web/src/app.ts#input@77"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/app.ts",
+        "event": "change",
+        "line": 77,
+        "stable_id": "document::apps/web/src/app.ts#change@77"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/app.ts",
+        "event": "keydown",
+        "line": 78,
+        "stable_id": "document::apps/web/src/app.ts#keydown@78"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/app.ts",
+        "event": "click",
+        "line": 157,
+        "stable_id": "document::apps/web/src/app.ts#click@157"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/app.ts",
+        "event": "input",
+        "line": 167,
+        "stable_id": "document::apps/web/src/app.ts#input@167"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/app.ts",
+        "event": "change",
+        "line": 179,
+        "stable_id": "document::apps/web/src/app.ts#change@179"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/app.ts",
+        "event": "submit",
+        "line": 189,
+        "stable_id": "document::apps/web/src/app.ts#submit@189"
+      },
+      {
+        "target": "window",
+        "source": "apps/web/src/app.ts",
+        "event": "hashchange",
+        "line": 248,
+        "stable_id": "window::apps/web/src/app.ts#hashchange@248"
+      },
+      {
+        "target": "window",
+        "source": "apps/web/src/app.ts",
+        "event": "popstate",
+        "line": 248,
+        "stable_id": "window::apps/web/src/app.ts#popstate@248"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/hybrid-controller.ts",
+        "event": "click",
+        "line": 49,
+        "stable_id": "document::apps/web/src/hybrid-controller.ts#click@49"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/hybrid-controller.ts",
+        "event": "input",
+        "line": 79,
+        "stable_id": "document::apps/web/src/hybrid-controller.ts#input@79"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/hybrid-controller.ts",
+        "event": "change",
+        "line": 85,
+        "stable_id": "document::apps/web/src/hybrid-controller.ts#change@85"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/hybrid-controller.ts",
+        "event": "submit",
+        "line": 92,
+        "stable_id": "document::apps/web/src/hybrid-controller.ts#submit@92"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/champion-controller.ts",
+        "event": "click",
+        "line": 73,
+        "stable_id": "document::apps/web/src/champion-controller.ts#click@73"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/champion-controller.ts",
+        "event": "input",
+        "line": 95,
+        "stable_id": "document::apps/web/src/champion-controller.ts#input@95"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/champion-controller.ts",
+        "event": "keydown",
+        "line": 103,
+        "stable_id": "document::apps/web/src/champion-controller.ts#keydown@103"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/champion-controller.ts",
+        "event": "submit",
+        "line": 114,
+        "stable_id": "document::apps/web/src/champion-controller.ts#submit@114"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/roadmap.ts",
+        "event": "keydown",
+        "line": 84,
+        "stable_id": "document::apps/web/src/roadmap.ts#keydown@84"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/roadmap.ts",
+        "event": "input",
+        "line": 91,
+        "stable_id": "document::apps/web/src/roadmap.ts#input@91"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/roadmap.ts",
+        "event": "change",
+        "line": 98,
+        "stable_id": "document::apps/web/src/roadmap.ts#change@98"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/roadmap.ts",
+        "event": "submit",
+        "line": 103,
+        "stable_id": "document::apps/web/src/roadmap.ts#submit@103"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/roadmap.ts",
+        "event": "click",
+        "line": 119,
+        "stable_id": "document::apps/web/src/roadmap.ts#click@119"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/workflows.ts",
+        "event": "click",
+        "line": 190,
+        "stable_id": "document::apps/web/src/workflows.ts#click@190"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/workflows.ts",
+        "event": "change",
+        "line": 198,
+        "stable_id": "document::apps/web/src/workflows.ts#change@198"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/workflows.ts",
+        "event": "input",
+        "line": 219,
+        "stable_id": "document::apps/web/src/workflows.ts#input@219"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/workflows.ts",
+        "event": "dragstart",
+        "line": 227,
+        "stable_id": "document::apps/web/src/workflows.ts#dragstart@227"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/workflows.ts",
+        "event": "dragover",
+        "line": 234,
+        "stable_id": "document::apps/web/src/workflows.ts#dragover@234"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/workflows.ts",
+        "event": "dragleave",
+        "line": 239,
+        "stable_id": "document::apps/web/src/workflows.ts#dragleave@239"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/workflows.ts",
+        "event": "dragend",
+        "line": 242,
+        "stable_id": "document::apps/web/src/workflows.ts#dragend@242"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/workflows.ts",
+        "event": "drop",
+        "line": 246,
+        "stable_id": "document::apps/web/src/workflows.ts#drop@246"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/experiences.ts",
+        "event": "input",
+        "line": 343,
+        "stable_id": "document::apps/web/src/experiences.ts#input@343"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/experiences.ts",
+        "event": "change",
+        "line": 381,
+        "stable_id": "document::apps/web/src/experiences.ts#change@381"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/experiences.ts",
+        "event": "change",
+        "line": 386,
+        "stable_id": "document::apps/web/src/experiences.ts#change@386"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/experiences.ts",
+        "event": "click",
+        "line": 391,
+        "stable_id": "document::apps/web/src/experiences.ts#click@391"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/experiences.ts",
+        "event": "keydown",
+        "line": 408,
+        "stable_id": "document::apps/web/src/experiences.ts#keydown@408"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/experiences.ts",
+        "event": "submit",
+        "line": 420,
+        "stable_id": "document::apps/web/src/experiences.ts#submit@420"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/integrations-ui.ts",
+        "event": "submit",
+        "line": 70,
+        "stable_id": "document::apps/web/src/integrations-ui.ts#submit@70"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/integrations-ui.ts",
+        "event": "click",
+        "line": 84,
+        "stable_id": "document::apps/web/src/integrations-ui.ts#click@84"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/integrations-ui.ts",
+        "event": "input",
+        "line": 96,
+        "stable_id": "document::apps/web/src/integrations-ui.ts#input@96"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/completion-ui.ts",
+        "event": "click",
+        "line": 669,
+        "stable_id": "document::apps/web/src/completion-ui.ts#click@669"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/completion-ui.ts",
+        "event": "submit",
+        "line": 670,
+        "stable_id": "document::apps/web/src/completion-ui.ts#submit@670"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/completion-ui.ts",
+        "event": "change",
+        "line": 671,
+        "stable_id": "document::apps/web/src/completion-ui.ts#change@671"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/completion-ui.ts",
+        "event": "input",
+        "line": 672,
+        "stable_id": "document::apps/web/src/completion-ui.ts#input@672"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/completion-ui.ts",
+        "event": "pointerdown",
+        "line": 673,
+        "stable_id": "document::apps/web/src/completion-ui.ts#pointerdown@673"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/completion-ui.ts",
+        "event": "pointermove",
+        "line": 674,
+        "stable_id": "document::apps/web/src/completion-ui.ts#pointermove@674"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/completion-ui.ts",
+        "event": "pointerup",
+        "line": 675,
+        "stable_id": "document::apps/web/src/completion-ui.ts#pointerup@675"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/completion-ui.ts",
+        "event": "pointercancel",
+        "line": 676,
+        "stable_id": "document::apps/web/src/completion-ui.ts#pointercancel@676"
+      },
+      {
+        "target": "document",
+        "source": "apps/web/src/completion-ui.ts",
+        "event": "keydown",
+        "line": 677,
+        "stable_id": "document::apps/web/src/completion-ui.ts#keydown@677"
+      }
+    ],
+    "exports": [
+      {
+        "stable_id": "export::helioforge-evidence.json",
+        "file": "helioforge-evidence.json",
+        "format": "JSON",
+        "owner": "app.ts"
+      },
+      {
+        "stable_id": "export::helioforge-fictional-portfolio.csv",
+        "file": "helioforge-fictional-portfolio.csv",
+        "format": "CSV",
+        "owner": "app.ts"
+      },
+      {
+        "stable_id": "export::helioforge-dispatch.csv",
+        "file": "helioforge-dispatch.csv",
+        "format": "CSV",
+        "owner": "app.ts"
+      },
+      {
+        "stable_id": "export::helioforge-pilot-register.json",
+        "file": "helioforge-pilot-register.json",
+        "format": "JSON",
+        "owner": "app.ts"
+      },
+      {
+        "stable_id": "export::helioforge-council-review.md",
+        "file": "helioforge-council-review.md",
+        "format": "Markdown",
+        "owner": "app.ts"
+      },
+      {
+        "stable_id": "export::helioforge-regulatory-review-checklist.md",
+        "file": "helioforge-regulatory-review-checklist.md",
+        "format": "Markdown",
+        "owner": "app.ts"
+      },
+      {
+        "stable_id": "export::helioforge-run-{id}.json",
+        "file": "helioforge-run-{id}.json",
+        "format": "JSON",
+        "owner": "app.ts"
+      },
+      {
+        "stable_id": "export::helioforge-workspace.json",
+        "file": "helioforge-workspace.json",
+        "format": "JSON",
+        "owner": "champion-controller.ts"
+      },
+      {
+        "stable_id": "export::helioforge-workspace-recovery.txt",
+        "file": "helioforge-workspace-recovery.txt",
+        "format": "text",
+        "owner": "champion-controller.ts"
+      },
+      {
+        "stable_id": "export::helioforge-saved-setup.json",
+        "file": "helioforge-saved-setup.json",
+        "format": "JSON",
+        "owner": "champion-controller.ts"
+      },
+      {
+        "stable_id": "export::helioforge-hybrid-dispatch.csv",
+        "file": "helioforge-hybrid-dispatch.csv",
+        "format": "CSV",
+        "owner": "hybrid-controller.ts"
+      },
+      {
+        "stable_id": "export::helioforge-comparison.json",
+        "file": "helioforge-comparison.json",
+        "format": "JSON",
+        "owner": "hybrid-controller.ts"
+      },
+      {
+        "stable_id": "export::helioforge-learning-progress.json",
+        "file": "helioforge-learning-progress.json",
+        "format": "JSON",
+        "owner": "completion-ui.ts"
+      },
+      {
+        "stable_id": "export::helioforge-portfolio.jsonld",
+        "file": "helioforge-portfolio.jsonld",
+        "format": "JSON-LD",
+        "owner": "workflows.ts"
+      },
+      {
+        "stable_id": "export::helioforge-cosigned-evidence.json",
+        "file": "helioforge-cosigned-evidence.json",
+        "format": "JSON",
+        "owner": "workflows.ts"
+      },
+      {
+        "stable_id": "export::helioforge-portfolio.geojson",
+        "file": "helioforge-portfolio.geojson",
+        "format": "GeoJSON",
+        "owner": "workflows.ts"
+      },
+      {
+        "stable_id": "export::helioforge-portfolio.csv",
+        "file": "helioforge-portfolio.csv",
+        "format": "CSV",
+        "owner": "workflows.ts"
+      },
+      {
+        "stable_id": "export::helioforge-local-learning-evidence.json",
+        "file": "helioforge-local-learning-evidence.json",
+        "format": "signed JSON",
+        "owner": "workflows.ts"
+      },
+      {
+        "stable_id": "export::helioforge-pilot-registry-signed.json",
+        "file": "helioforge-pilot-registry-signed.json",
+        "format": "signed JSON",
+        "owner": "workflows.ts"
+      },
+      {
+        "stable_id": "export::helioforge-research-dossier.md",
+        "file": "helioforge-research-dossier.md",
+        "format": "Markdown",
+        "owner": "workflows.ts"
+      },
+      {
+        "stable_id": "export::helioforge-investment-committee-screen.md",
+        "file": "helioforge-investment-committee-screen.md",
+        "format": "Markdown",
+        "owner": "workflows.ts"
+      },
+      {
+        "stable_id": "export::helioforge-council-determination.json",
+        "file": "helioforge-council-determination.json",
+        "format": "signed JSON",
+        "owner": "workflows.ts"
+      },
+      {
+        "stable_id": "export::{study}.json",
+        "file": "{study}.json",
+        "format": "JSON",
+        "owner": "roadmap.ts"
+      },
+      {
+        "stable_id": "export::{study}.csv",
+        "file": "{study}.csv",
+        "format": "CSV all table rows",
+        "owner": "roadmap.ts"
+      },
+      {
+        "stable_id": "export::{study}-series.csv",
+        "file": "{study}-series.csv",
+        "format": "CSV selected series",
+        "owner": "roadmap.ts"
+      },
+      {
+        "stable_id": "export::{study}-memorandum.md",
+        "file": "{study}-memorandum.md",
+        "format": "Markdown",
+        "owner": "roadmap.ts"
+      },
+      {
+        "stable_id": "export::{study}-raw-paths.csv",
+        "file": "{study}-raw-paths.csv",
+        "format": "CSV conditional seeded paths",
+        "owner": "roadmap.ts"
+      }
+    ],
+    "api_middleware": [
+      {
+        "name": "request_security_and_response_policy",
+        "line": 85
+      }
+    ],
+    "api_exception_handlers": [
+      {
+        "name": "bad_model_input",
+        "line": 111
+      }
+    ],
+    "dom_event_hook_count": 49,
+    "api_request_contracts": [
+      {
+        "stable_id": "http::GET /api/health",
+        "handler": "health",
+        "request_model": null,
+        "line": 117
+      },
+      {
+        "stable_id": "http::GET /api/studies",
+        "handler": "studies_catalogue",
+        "request_model": null,
+        "line": 123
+      },
+      {
+        "stable_id": "http::GET /api/connectors/status",
+        "handler": "connectors_status",
+        "request_model": null,
+        "line": 128
+      },
+      {
+        "stable_id": "http::POST /api/evidence/series",
+        "handler": "evidence_series",
+        "request_model": "SeriesImport",
+        "line": 133
+      },
+      {
+        "stable_id": "http::POST /api/evidence/geography",
+        "handler": "evidence_geography",
+        "request_model": "GeoImport",
+        "line": 138
+      },
+      {
+        "stable_id": "http::POST /api/evidence/document",
+        "handler": "evidence_document",
+        "request_model": "DocumentImport",
+        "line": 143
+      },
+      {
+        "stable_id": "http::POST /api/evidence/telemetry",
+        "handler": "evidence_telemetry",
+        "request_model": "TelemetryImport",
+        "line": 150
+      },
+      {
+        "stable_id": "http::POST /api/connectors/weather",
+        "handler": "connector_weather",
+        "request_model": "WeatherRequest",
+        "line": 155
+      },
+      {
+        "stable_id": "http::POST /api/connectors/market",
+        "handler": "connector_market",
+        "request_model": "MarketRequest",
+        "line": 162
+      },
+      {
+        "stable_id": "http::POST /api/connectors/regulatory",
+        "handler": "connector_regulatory",
+        "request_model": "RegulatoryRequest",
+        "line": 169
+      },
+      {
+        "stable_id": "http::POST /api/connectors/modbus",
+        "handler": "connector_modbus",
+        "request_model": "ModbusRequest",
+        "line": 176
+      },
+      {
+        "stable_id": "http::POST /api/studies/evaluate",
+        "handler": "study_evaluate",
+        "request_model": "StudyRequest",
+        "line": 184
+      },
+      {
+        "stable_id": "http::GET /api/overview",
+        "handler": "overview",
+        "request_model": null,
+        "line": 189
+      },
+      {
+        "stable_id": "http::POST /api/storage/optimize",
+        "handler": "storage",
+        "request_model": "StorageRequest",
+        "line": 200
+      },
+      {
+        "stable_id": "http::POST /api/finance/evaluate",
+        "handler": "finance",
+        "request_model": "FinanceRequest",
+        "line": 205
+      },
+      {
+        "stable_id": "http::POST /api/pv/evaluate",
+        "handler": "pv",
+        "request_model": "PVRequest",
+        "line": 210
+      },
+      {
+        "stable_id": "http::POST /api/forecast/simulate",
+        "handler": "forecast",
+        "request_model": "ForecastRequest",
+        "line": 215
+      },
+      {
+        "stable_id": "http::POST /api/research/drift",
+        "handler": "drift",
+        "request_model": "DriftRequest",
+        "line": 220
+      },
+      {
+        "stable_id": "http::POST /api/research/reliability",
+        "handler": "predict_reliability",
+        "request_model": "ReliabilityRequest",
+        "line": 225
+      },
+      {
+        "stable_id": "http::POST /api/research/carbon",
+        "handler": "carbon",
+        "request_model": "SustainabilityRequest",
+        "line": 230
+      },
+      {
+        "stable_id": "http::POST /api/acquisitions/screen",
+        "handler": "acquisition",
+        "request_model": "MARequest",
+        "line": 235
+      },
+      {
+        "stable_id": "http::POST /api/council/review",
+        "handler": "council",
+        "request_model": "CouncilRequest",
+        "line": 240
+      },
+      {
+        "stable_id": "http::GET /api/runs",
+        "handler": "runs",
+        "request_model": null,
+        "line": 288
+      },
+      {
+        "stable_id": "http::GET /api/runs/{run_id}",
+        "handler": "run",
+        "request_model": null,
+        "line": 293
+      },
+      {
+        "stable_id": "http::GET /api/pilots",
+        "handler": "pilots",
+        "request_model": null,
+        "line": 301
+      },
+      {
+        "stable_id": "http::GET /api/pilots/events",
+        "handler": "pilot_events",
+        "request_model": null,
+        "line": 306
+      },
+      {
+        "stable_id": "http::PATCH /api/pilots/{pilot_id}",
+        "handler": "update_pilot",
+        "request_model": "PilotUpdate",
+        "line": 311
+      },
+      {
+        "stable_id": "http::GET /api/hybrid/catalog",
+        "handler": "hybrid_catalog",
+        "request_model": null,
+        "line": 319
+      },
+      {
+        "stable_id": "http::POST /api/hybrid/validate",
+        "handler": "hybrid_validate",
+        "request_model": "HybridRequest",
+        "line": 324
+      },
+      {
+        "stable_id": "http::POST /api/hybrid/simulate",
+        "handler": "hybrid_simulate",
+        "request_model": "HybridRequest",
+        "line": 329
+      }
+    ],
+    "api_model_classes": [
+      {
+        "name": "StrictModel",
+        "source": "apps/api/helioforge/schemas.py",
+        "line": 14,
+        "stable_id": "model::StrictModel"
+      },
+      {
+        "name": "StorageRequest",
+        "source": "apps/api/helioforge/schemas.py",
+        "line": 18,
+        "stable_id": "model::StorageRequest"
+      },
+      {
+        "name": "FinanceRequest",
+        "source": "apps/api/helioforge/schemas.py",
+        "line": 53,
+        "stable_id": "model::FinanceRequest"
+      },
+      {
+        "name": "PVRequest",
+        "source": "apps/api/helioforge/schemas.py",
+        "line": 81,
+        "stable_id": "model::PVRequest"
+      },
+      {
+        "name": "ForecastRequest",
+        "source": "apps/api/helioforge/schemas.py",
+        "line": 104,
+        "stable_id": "model::ForecastRequest"
+      },
+      {
+        "name": "ReliabilityRequest",
+        "source": "apps/api/helioforge/schemas.py",
+        "line": 117,
+        "stable_id": "model::ReliabilityRequest"
+      },
+      {
+        "name": "DriftRequest",
+        "source": "apps/api/helioforge/schemas.py",
+        "line": 124,
+        "stable_id": "model::DriftRequest"
+      },
+      {
+        "name": "SustainabilityRequest",
+        "source": "apps/api/helioforge/schemas.py",
+        "line": 136,
+        "stable_id": "model::SustainabilityRequest"
+      },
+      {
+        "name": "MARequest",
+        "source": "apps/api/helioforge/schemas.py",
+        "line": 146,
+        "stable_id": "model::MARequest"
+      },
+      {
+        "name": "CouncilRequest",
+        "source": "apps/api/helioforge/schemas.py",
+        "line": 156,
+        "stable_id": "model::CouncilRequest"
+      },
+      {
+        "name": "PilotUpdate",
+        "source": "apps/api/helioforge/schemas.py",
+        "line": 166,
+        "stable_id": "model::PilotUpdate"
+      },
+      {
+        "name": "HybridRequest",
+        "source": "apps/api/helioforge/hybrid.py",
+        "line": 37,
+        "stable_id": "model::HybridRequest"
+      },
+      {
+        "name": "StudyRequest",
+        "source": "apps/api/helioforge/studies.py",
+        "line": 26,
+        "stable_id": "model::StudyRequest"
+      },
+      {
+        "name": "SeriesImport",
+        "source": "apps/api/helioforge/integrations.py",
+        "line": 68,
+        "stable_id": "model::SeriesImport"
+      },
+      {
+        "name": "DocumentImport",
+        "source": "apps/api/helioforge/integrations.py",
+        "line": 108,
+        "stable_id": "model::DocumentImport"
+      },
+      {
+        "name": "GeoImport",
+        "source": "apps/api/helioforge/integrations.py",
+        "line": 115,
+        "stable_id": "model::GeoImport"
+      },
+      {
+        "name": "Reading",
+        "source": "apps/api/helioforge/integrations.py",
+        "line": 249,
+        "stable_id": "model::Reading"
+      },
+      {
+        "name": "TelemetryImport",
+        "source": "apps/api/helioforge/integrations.py",
+        "line": 263,
+        "stable_id": "model::TelemetryImport"
+      },
+      {
+        "name": "WeatherRequest",
+        "source": "apps/api/helioforge/integrations.py",
+        "line": 299,
+        "stable_id": "model::WeatherRequest"
+      },
+      {
+        "name": "MarketRequest",
+        "source": "apps/api/helioforge/integrations.py",
+        "line": 306,
+        "stable_id": "model::MarketRequest"
+      },
+      {
+        "name": "RegulatoryRequest",
+        "source": "apps/api/helioforge/integrations.py",
+        "line": 312,
+        "stable_id": "model::RegulatoryRequest"
+      },
+      {
+        "name": "ModbusRequest",
+        "source": "apps/api/helioforge/integrations.py",
+        "line": 552,
+        "stable_id": "model::ModbusRequest"
+      }
+    ],
+    "dom_data_attribute_names": [
+      "data-action",
+      "data-active-pillar",
+      "data-asset",
+      "data-camera-preset",
+      "data-champion-action",
+      "data-chart",
+      "data-check-state",
+      "data-circuit-path",
+      "data-command-kind",
+      "data-command-target",
+      "data-confirm-delete",
+      "data-delete-setup",
+      "data-experience-action",
+      "data-export-setup",
+      "data-hf-camera",
+      "data-hf-experiences",
+      "data-hf-pause",
+      "data-hf-run-select",
+      "data-hf-scene-canvas",
+      "data-hf-scene-slot",
+      "data-hf-scene-status",
+      "data-horizon",
+      "data-hybrid-action",
+      "data-integration",
+      "data-integration-export",
+      "data-lesson",
+      "data-load-setup",
+      "data-model",
+      "data-nav",
+      "data-pilot",
+      "data-pilot-card",
+      "data-pilot-id",
+      "data-pilot-stage",
+      "data-polygon-action",
+      "data-preset",
+      "data-project",
+      "data-pv-cell",
+      "data-radar-angle-deg",
+      "data-radar-step",
+      "data-remove-compare",
+      "data-restore-run",
+      "data-review-date",
+      "data-review-url",
+      "data-run",
+      "data-scenario",
+      "data-scene-command",
+      "data-state",
+      "data-study",
+      "data-study-action",
+      "data-study-dial",
+      "data-study-export",
+      "data-study-file",
+      "data-study-id",
+      "data-study-select",
+      "data-study-step",
+      "data-study-unit",
+      "data-study-unpin",
+      "data-system",
+      "data-tariff-bar",
+      "data-tariff-code",
+      "data-tariff-hour",
+      "data-tariff-layer",
+      "data-tariff-total",
+      "data-tariff-value",
+      "data-wire-label",
+      "data-wire-toggle",
+      "data-workflow-action"
+    ],
+    "dom_selector_data_attribute_names": [
+      "data-action",
+      "data-active-pillar",
+      "data-asset",
+      "data-camera-preset",
+      "data-capex-status",
+      "data-capex-threshold",
+      "data-capex-value",
+      "data-champion-action",
+      "data-chart",
+      "data-check-state",
+      "data-circuit-load",
+      "data-circuit-path",
+      "data-circuit-ripple",
+      "data-circuit-status",
+      "data-command-kind",
+      "data-command-target",
+      "data-comparison-body",
+      "data-confirm-delete",
+      "data-cutoff-output",
+      "data-delete-setup",
+      "data-details",
+      "data-drift-chart",
+      "data-drift-cutoff",
+      "data-drift-window",
+      "data-entsoe-country",
+      "data-entsoe-eic",
+      "data-entsoe-link",
+      "data-entsoe-note",
+      "data-experience-action",
+      "data-export-setup",
+      "data-hf-active",
+      "data-hf-camera",
+      "data-hf-completion-host",
+      "data-hf-completion-notice",
+      "data-hf-completion-path",
+      "data-hf-completion-scenes",
+      "data-hf-completion-status",
+      "data-hf-experiences",
+      "data-hf-lesson-lock",
+      "data-hf-pause",
+      "data-hf-record-caveat",
+      "data-hf-run-select",
+      "data-hf-scene-canvas",
+      "data-hf-scene-evidence",
+      "data-hf-scene-slot",
+      "data-hf-scene-status",
+      "data-hf-sign-caveat",
+      "data-hf-sync-hour",
+      "data-hf-sync-label",
+      "data-hf-tariff-actions",
+      "data-hf-tariff-apply",
+      "data-hf-tariff-live",
+      "data-hf-tariff-profile",
+      "data-horizon",
+      "data-hybrid-action",
+      "data-integration",
+      "data-integration-apply",
+      "data-integration-attach",
+      "data-integration-export",
+      "data-integration-round",
+      "data-land-map",
+      "data-land-polygon",
+      "data-land-status",
+      "data-land-vertices",
+      "data-learning-progress-note",
+      "data-lesson",
+      "data-lesson-check",
+      "data-load-setup",
+      "data-model",
+      "data-nav",
+      "data-pilot",
+      "data-pilot-card",
+      "data-pilot-id",
+      "data-pilot-stage",
+      "data-polygon-action",
+      "data-preset",
+      "data-project",
+      "data-pv-cell",
+      "data-pv-selection",
+      "data-radar-angle",
+      "data-radar-angle-deg",
+      "data-radar-stage",
+      "data-radar-step",
+      "data-release-identity",
+      "data-release-provenance",
+      "data-release-source",
+      "data-remove-compare",
+      "data-restore-run",
+      "data-review-date",
+      "data-review-url",
+      "data-review-validation",
+      "data-ribbon",
+      "data-run",
+      "data-scenario",
+      "data-scene-command",
+      "data-state",
+      "data-study",
+      "data-study-action",
+      "data-study-dial",
+      "data-study-export",
+      "data-study-file",
+      "data-study-id",
+      "data-study-json",
+      "data-study-jump",
+      "data-study-select",
+      "data-study-series",
+      "data-study-slice",
+      "data-study-step",
+      "data-study-unit",
+      "data-study-unpin",
+      "data-system",
+      "data-table",
+      "data-tariff-bar",
+      "data-tariff-code",
+      "data-tariff-dialog",
+      "data-tariff-hour",
+      "data-tariff-layer",
+      "data-tariff-total",
+      "data-tariff-value",
+      "data-tetra-stage",
+      "data-window-output",
+      "data-wire-label",
+      "data-wire-toggle",
+      "data-workflow-action",
+      "data-workflow-council-filter",
+      "data-workflow-council-round",
+      "data-workflow-import",
+      "data-workflow-sensor"
+    ]
+  },
+  "hybrid_catalogue": {
+    "version": "0.2.0",
+    "architectures": [
+      {
+        "id": "remote-triad",
+        "stable_id": "architecture::remote-triad",
+        "name": "Remote renewable microgrid",
+        "mode": "screening"
+      },
+      {
+        "id": "utility-pv-ac",
+        "stable_id": "architecture::utility-pv-ac",
+        "name": "Utility solar + storage · AC",
+        "mode": "screening"
+      },
+      {
+        "id": "utility-pv-dc",
+        "stable_id": "architecture::utility-pv-dc",
+        "name": "Utility solar + storage · DC",
+        "mode": "screening"
+      },
+      {
+        "id": "industrial-btm",
+        "stable_id": "architecture::industrial-btm",
+        "name": "Industrial solar + storage",
+        "mode": "screening"
+      },
+      {
+        "id": "wind-firming",
+        "stable_id": "architecture::wind-firming",
+        "name": "Wind + battery firming",
+        "mode": "screening"
+      },
+      {
+        "id": "hospital-island",
+        "stable_id": "architecture::hospital-island",
+        "name": "Hospital islanding microgrid",
+        "mode": "screening"
+      },
+      {
+        "id": "home-resilience",
+        "stable_id": "architecture::home-resilience",
+        "name": "Home solar + battery",
+        "mode": "screening"
+      },
+      {
+        "id": "community-energy",
+        "stable_id": "architecture::community-energy",
+        "name": "Community energy hub",
+        "mode": "screening"
+      },
+      {
+        "id": "telecom-dc",
+        "stable_id": "architecture::telecom-dc",
+        "name": "Off-grid DC telecom station",
+        "mode": "screening"
+      },
+      {
+        "id": "solar-diesel",
+        "stable_id": "architecture::solar-diesel",
+        "name": "Solar + diesel + battery",
+        "mode": "screening"
+      },
+      {
+        "id": "wind-diesel",
+        "stable_id": "architecture::wind-diesel",
+        "name": "Wind + diesel + battery",
+        "mode": "screening"
+      },
+      {
+        "id": "hydro-triad",
+        "stable_id": "architecture::hydro-triad",
+        "name": "Solar + wind + small hydro",
+        "mode": "screening"
+      },
+      {
+        "id": "hydro-battery",
+        "stable_id": "architecture::hydro-battery",
+        "name": "Run-of-river + battery",
+        "mode": "screening"
+      },
+      {
+        "id": "floating-solar",
+        "stable_id": "architecture::floating-solar",
+        "name": "Floating solar + hydro + battery",
+        "mode": "screening"
+      },
+      {
+        "id": "biomass-chp",
+        "stable_id": "architecture::biomass-chp",
+        "name": "Biomass CHP + solar + battery",
+        "mode": "study"
+      },
+      {
+        "id": "geothermal-hub",
+        "stable_id": "architecture::geothermal-hub",
+        "name": "Geothermal + solar energy hub",
+        "mode": "study"
+      },
+      {
+        "id": "solar-hydrogen",
+        "stable_id": "architecture::solar-hydrogen",
+        "name": "Solar + hydrogen + battery",
+        "mode": "study"
+      },
+      {
+        "id": "wind-hydrogen",
+        "stable_id": "architecture::wind-hydrogen",
+        "name": "Wind + hydrogen export hub",
+        "mode": "study"
+      },
+      {
+        "id": "csp-storage",
+        "stable_id": "architecture::csp-storage",
+        "name": "Concentrated solar + thermal storage",
+        "mode": "study"
+      },
+      {
+        "id": "heatpump-hub",
+        "stable_id": "architecture::heatpump-hub",
+        "name": "PV + heat pump + thermal store",
+        "mode": "study"
+      },
+      {
+        "id": "district-chp",
+        "stable_id": "architecture::district-chp",
+        "name": "District CHP + thermal storage",
+        "mode": "study"
+      },
+      {
+        "id": "ev-depot",
+        "stable_id": "architecture::ev-depot",
+        "name": "Solar + battery EV depot",
+        "mode": "screening"
+      },
+      {
+        "id": "v2g-fleet",
+        "stable_id": "architecture::v2g-fleet",
+        "name": "Bidirectional fleet + solar",
+        "mode": "study"
+      },
+      {
+        "id": "port-microgrid",
+        "stable_id": "architecture::port-microgrid",
+        "name": "Port shore-power microgrid",
+        "mode": "screening"
+      },
+      {
+        "id": "data-centre",
+        "stable_id": "architecture::data-centre",
+        "name": "Data-centre hybrid backup",
+        "mode": "screening"
+      },
+      {
+        "id": "agrivoltaics",
+        "stable_id": "architecture::agrivoltaics",
+        "name": "Agrivoltaics + irrigation storage",
+        "mode": "screening"
+      },
+      {
+        "id": "desalination",
+        "stable_id": "architecture::desalination",
+        "name": "Renewable desalination microgrid",
+        "mode": "screening"
+      },
+      {
+        "id": "pumped-hydro",
+        "stable_id": "architecture::pumped-hydro",
+        "name": "Wind + PV + pumped storage",
+        "mode": "study"
+      },
+      {
+        "id": "flywheel-hybrid",
+        "stable_id": "architecture::flywheel-hybrid",
+        "name": "Battery + flywheel microgrid",
+        "mode": "study"
+      },
+      {
+        "id": "supercapacitor",
+        "stable_id": "architecture::supercapacitor",
+        "name": "PV + battery + supercapacitor",
+        "mode": "study"
+      },
+      {
+        "id": "marine-hybrid",
+        "stable_id": "architecture::marine-hybrid",
+        "name": "Tidal + wave + battery",
+        "mode": "study"
+      },
+      {
+        "id": "offshore-island",
+        "stable_id": "architecture::offshore-island",
+        "name": "Offshore wind + hydrogen island",
+        "mode": "study"
+      },
+      {
+        "id": "nuclear-hydrogen",
+        "stable_id": "architecture::nuclear-hydrogen",
+        "name": "Nuclear + hydrogen + heat",
+        "mode": "study"
+      },
+      {
+        "id": "waste-energy",
+        "stable_id": "architecture::waste-energy",
+        "name": "Waste-to-energy district hub",
+        "mode": "study"
+      },
+      {
+        "id": "virtual-plant",
+        "stable_id": "architecture::virtual-plant",
+        "name": "Virtual power plant portfolio",
+        "mode": "study"
+      },
+      {
+        "id": "networked-microgrids",
+        "stable_id": "architecture::networked-microgrids",
+        "name": "Networked community microgrids",
+        "mode": "study"
+      }
+    ],
+    "architecture_count": 36,
+    "screening_count": 19,
+    "study_only_count": 17,
+    "scenarios": [
+      {
+        "id": "baseline",
+        "stable_id": "scenario::baseline",
+        "name": "Reference day"
+      },
+      {
+        "id": "cloud-cover",
+        "stable_id": "scenario::cloud-cover",
+        "name": "Cloud cover"
+      },
+      {
+        "id": "wind-lull",
+        "stable_id": "scenario::wind-lull",
+        "name": "Wind lull"
+      },
+      {
+        "id": "renewable-drought",
+        "stable_id": "scenario::renewable-drought",
+        "name": "Renewable drought"
+      },
+      {
+        "id": "heatwave",
+        "stable_id": "scenario::heatwave",
+        "name": "Heatwave demand"
+      },
+      {
+        "id": "winter-peak",
+        "stable_id": "scenario::winter-peak",
+        "name": "Winter peak"
+      },
+      {
+        "id": "load-step",
+        "stable_id": "scenario::load-step",
+        "name": "Evening load step"
+      },
+      {
+        "id": "outage-4h",
+        "stable_id": "scenario::outage-4h",
+        "name": "Four-hour outage"
+      },
+      {
+        "id": "outage-24h",
+        "stable_id": "scenario::outage-24h",
+        "name": "24-hour outage"
+      },
+      {
+        "id": "outage-72h",
+        "stable_id": "scenario::outage-72h",
+        "name": "72-hour outage"
+      },
+      {
+        "id": "black-start",
+        "stable_id": "scenario::black-start",
+        "name": "Black-start sequence"
+      },
+      {
+        "id": "reconnection",
+        "stable_id": "scenario::reconnection",
+        "name": "Grid reconnection"
+      },
+      {
+        "id": "weak-grid",
+        "stable_id": "scenario::weak-grid",
+        "name": "Weak-grid stability"
+      },
+      {
+        "id": "ramp-limit",
+        "stable_id": "scenario::ramp-limit",
+        "name": "Ramp-rate compliance"
+      },
+      {
+        "id": "zero-export",
+        "stable_id": "scenario::zero-export",
+        "name": "Zero-export constraint"
+      },
+      {
+        "id": "export-cap",
+        "stable_id": "scenario::export-cap",
+        "name": "Export bottleneck"
+      },
+      {
+        "id": "import-cap",
+        "stable_id": "scenario::import-cap",
+        "name": "Import bottleneck"
+      },
+      {
+        "id": "negative-prices",
+        "stable_id": "scenario::negative-prices",
+        "name": "Negative midday prices"
+      },
+      {
+        "id": "price-spike",
+        "stable_id": "scenario::price-spike",
+        "name": "Evening tariff spike"
+      },
+      {
+        "id": "aged-battery",
+        "stable_id": "scenario::aged-battery",
+        "name": "Aged battery"
+      },
+      {
+        "id": "battery-trip",
+        "stable_id": "scenario::battery-trip",
+        "name": "Battery converter outage"
+      },
+      {
+        "id": "generator-outage",
+        "stable_id": "scenario::generator-outage",
+        "name": "Generator unavailable"
+      },
+      {
+        "id": "low-river",
+        "stable_id": "scenario::low-river",
+        "name": "Low river flow"
+      },
+      {
+        "id": "reserve-floor",
+        "stable_id": "scenario::reserve-floor",
+        "name": "Higher reserve floor"
+      }
+    ],
+    "scenario_count": 24,
+    "lessons": [
+      {
+        "id": "lesson-remote-triad",
+        "stable_id": "lesson::lesson-remote-triad",
+        "title": "Remote renewable microgrid",
+        "system_id": "remote-triad"
+      },
+      {
+        "id": "lesson-utility-pv-ac",
+        "stable_id": "lesson::lesson-utility-pv-ac",
+        "title": "Utility solar + storage · AC",
+        "system_id": "utility-pv-ac"
+      },
+      {
+        "id": "lesson-utility-pv-dc",
+        "stable_id": "lesson::lesson-utility-pv-dc",
+        "title": "Utility solar + storage · DC",
+        "system_id": "utility-pv-dc"
+      },
+      {
+        "id": "lesson-industrial-btm",
+        "stable_id": "lesson::lesson-industrial-btm",
+        "title": "Industrial solar + storage",
+        "system_id": "industrial-btm"
+      },
+      {
+        "id": "lesson-wind-firming",
+        "stable_id": "lesson::lesson-wind-firming",
+        "title": "Wind + battery firming",
+        "system_id": "wind-firming"
+      },
+      {
+        "id": "lesson-hospital-island",
+        "stable_id": "lesson::lesson-hospital-island",
+        "title": "Hospital islanding microgrid",
+        "system_id": "hospital-island"
+      },
+      {
+        "id": "lesson-home-resilience",
+        "stable_id": "lesson::lesson-home-resilience",
+        "title": "Home solar + battery",
+        "system_id": "home-resilience"
+      },
+      {
+        "id": "lesson-community-energy",
+        "stable_id": "lesson::lesson-community-energy",
+        "title": "Community energy hub",
+        "system_id": "community-energy"
+      },
+      {
+        "id": "lesson-telecom-dc",
+        "stable_id": "lesson::lesson-telecom-dc",
+        "title": "Off-grid DC telecom station",
+        "system_id": "telecom-dc"
+      },
+      {
+        "id": "lesson-solar-diesel",
+        "stable_id": "lesson::lesson-solar-diesel",
+        "title": "Solar + diesel + battery",
+        "system_id": "solar-diesel"
+      },
+      {
+        "id": "lesson-wind-diesel",
+        "stable_id": "lesson::lesson-wind-diesel",
+        "title": "Wind + diesel + battery",
+        "system_id": "wind-diesel"
+      },
+      {
+        "id": "lesson-hydro-triad",
+        "stable_id": "lesson::lesson-hydro-triad",
+        "title": "Solar + wind + small hydro",
+        "system_id": "hydro-triad"
+      },
+      {
+        "id": "lesson-hydro-battery",
+        "stable_id": "lesson::lesson-hydro-battery",
+        "title": "Run-of-river + battery",
+        "system_id": "hydro-battery"
+      },
+      {
+        "id": "lesson-floating-solar",
+        "stable_id": "lesson::lesson-floating-solar",
+        "title": "Floating solar + hydro + battery",
+        "system_id": "floating-solar"
+      },
+      {
+        "id": "lesson-biomass-chp",
+        "stable_id": "lesson::lesson-biomass-chp",
+        "title": "Biomass CHP + solar + battery",
+        "system_id": "biomass-chp"
+      },
+      {
+        "id": "lesson-geothermal-hub",
+        "stable_id": "lesson::lesson-geothermal-hub",
+        "title": "Geothermal + solar energy hub",
+        "system_id": "geothermal-hub"
+      },
+      {
+        "id": "lesson-solar-hydrogen",
+        "stable_id": "lesson::lesson-solar-hydrogen",
+        "title": "Solar + hydrogen + battery",
+        "system_id": "solar-hydrogen"
+      },
+      {
+        "id": "lesson-wind-hydrogen",
+        "stable_id": "lesson::lesson-wind-hydrogen",
+        "title": "Wind + hydrogen export hub",
+        "system_id": "wind-hydrogen"
+      },
+      {
+        "id": "lesson-csp-storage",
+        "stable_id": "lesson::lesson-csp-storage",
+        "title": "Concentrated solar + thermal storage",
+        "system_id": "csp-storage"
+      },
+      {
+        "id": "lesson-heatpump-hub",
+        "stable_id": "lesson::lesson-heatpump-hub",
+        "title": "PV + heat pump + thermal store",
+        "system_id": "heatpump-hub"
+      },
+      {
+        "id": "lesson-district-chp",
+        "stable_id": "lesson::lesson-district-chp",
+        "title": "District CHP + thermal storage",
+        "system_id": "district-chp"
+      },
+      {
+        "id": "lesson-ev-depot",
+        "stable_id": "lesson::lesson-ev-depot",
+        "title": "Solar + battery EV depot",
+        "system_id": "ev-depot"
+      },
+      {
+        "id": "lesson-v2g-fleet",
+        "stable_id": "lesson::lesson-v2g-fleet",
+        "title": "Bidirectional fleet + solar",
+        "system_id": "v2g-fleet"
+      },
+      {
+        "id": "lesson-port-microgrid",
+        "stable_id": "lesson::lesson-port-microgrid",
+        "title": "Port shore-power microgrid",
+        "system_id": "port-microgrid"
+      },
+      {
+        "id": "lesson-data-centre",
+        "stable_id": "lesson::lesson-data-centre",
+        "title": "Data-centre hybrid backup",
+        "system_id": "data-centre"
+      },
+      {
+        "id": "lesson-agrivoltaics",
+        "stable_id": "lesson::lesson-agrivoltaics",
+        "title": "Agrivoltaics + irrigation storage",
+        "system_id": "agrivoltaics"
+      },
+      {
+        "id": "lesson-desalination",
+        "stable_id": "lesson::lesson-desalination",
+        "title": "Renewable desalination microgrid",
+        "system_id": "desalination"
+      },
+      {
+        "id": "lesson-pumped-hydro",
+        "stable_id": "lesson::lesson-pumped-hydro",
+        "title": "Wind + PV + pumped storage",
+        "system_id": "pumped-hydro"
+      },
+      {
+        "id": "lesson-flywheel-hybrid",
+        "stable_id": "lesson::lesson-flywheel-hybrid",
+        "title": "Battery + flywheel microgrid",
+        "system_id": "flywheel-hybrid"
+      },
+      {
+        "id": "lesson-supercapacitor",
+        "stable_id": "lesson::lesson-supercapacitor",
+        "title": "PV + battery + supercapacitor",
+        "system_id": "supercapacitor"
+      },
+      {
+        "id": "lesson-marine-hybrid",
+        "stable_id": "lesson::lesson-marine-hybrid",
+        "title": "Tidal + wave + battery",
+        "system_id": "marine-hybrid"
+      },
+      {
+        "id": "lesson-offshore-island",
+        "stable_id": "lesson::lesson-offshore-island",
+        "title": "Offshore wind + hydrogen island",
+        "system_id": "offshore-island"
+      },
+      {
+        "id": "lesson-nuclear-hydrogen",
+        "stable_id": "lesson::lesson-nuclear-hydrogen",
+        "title": "Nuclear + hydrogen + heat",
+        "system_id": "nuclear-hydrogen"
+      },
+      {
+        "id": "lesson-waste-energy",
+        "stable_id": "lesson::lesson-waste-energy",
+        "title": "Waste-to-energy district hub",
+        "system_id": "waste-energy"
+      },
+      {
+        "id": "lesson-virtual-plant",
+        "stable_id": "lesson::lesson-virtual-plant",
+        "title": "Virtual power plant portfolio",
+        "system_id": "virtual-plant"
+      },
+      {
+        "id": "lesson-networked-microgrids",
+        "stable_id": "lesson::lesson-networked-microgrids",
+        "title": "Networked community microgrids",
+        "system_id": "networked-microgrids"
+      }
+    ],
+    "lesson_count": 36
+  },
+  "analytical_studies": {
+    "count": 59,
+    "by_page": {
+      "hybrid": 6,
+      "lessons": 5,
+      "compare": 5,
+      "overview": 4,
+      "storage": 7,
+      "pv": 7,
+      "research": 5,
+      "markets": 4,
+      "forecast": 5,
+      "investment": 4,
+      "pilots": 4,
+      "council": 3
+    },
+    "items": [
+      {
+        "id": "hybrid-resonance",
+        "stable_id": "study::hybrid-resonance",
+        "page": "hybrid",
+        "title": "Coupled oscillation modes",
+        "engine_module": "engineering_studies",
+        "fields": [
+          {
+            "name": "mode_1_hz",
+            "default": 12,
+            "min": 1,
+            "max": 80,
+            "step": 1,
+            "unit": "Hz"
+          },
+          {
+            "name": "mode_2_hz",
+            "default": 24,
+            "min": 1,
+            "max": 100,
+            "step": 1,
+            "unit": "Hz"
+          },
+          {
+            "name": "damping_1",
+            "default": 0.04,
+            "min": 0.01,
+            "max": 0.45,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "damping_2",
+            "default": 0.07,
+            "min": 0.01,
+            "max": 0.45,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "coupling_fraction",
+            "default": 0.15,
+            "min": 0,
+            "max": 0.9,
+            "step": 0.01,
+            "unit": "fraction"
+          }
+        ],
+        "data_fields": []
+      },
+      {
+        "id": "hybrid-clipping",
+        "stable_id": "study::hybrid-clipping",
+        "page": "hybrid",
+        "title": "DC clipping recovery",
+        "engine_module": "engineering_studies",
+        "fields": [
+          {
+            "name": "pv_dc_kw",
+            "default": 1400,
+            "min": 0,
+            "max": 100000,
+            "step": 10,
+            "unit": "kW"
+          },
+          {
+            "name": "inverter_ac_kw",
+            "default": 1000,
+            "min": 1,
+            "max": 100000,
+            "step": 10,
+            "unit": "kW"
+          },
+          {
+            "name": "inverter_efficiency",
+            "default": 0.98,
+            "min": 0.01,
+            "max": 1,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "battery_capacity_kwh",
+            "default": 500,
+            "min": 0,
+            "max": 100000,
+            "step": 10,
+            "unit": "kWh"
+          },
+          {
+            "name": "battery_initial_kwh",
+            "default": 100,
+            "min": 0,
+            "max": 100000,
+            "step": 10,
+            "unit": "kWh"
+          },
+          {
+            "name": "battery_charge_limit_kw",
+            "default": 300,
+            "min": 0,
+            "max": 100000,
+            "step": 10,
+            "unit": "kW"
+          }
+        ],
+        "data_fields": []
+      },
+      {
+        "id": "hybrid-inertia",
+        "stable_id": "study::hybrid-inertia",
+        "page": "hybrid",
+        "title": "Synthetic inertia and RoCoF",
+        "engine_module": "engineering_studies",
+        "fields": [
+          {
+            "name": "trip_mw",
+            "default": 1000,
+            "min": 1,
+            "max": 20000,
+            "step": 50,
+            "unit": "MW"
+          },
+          {
+            "name": "system_base_mw",
+            "default": 100000,
+            "min": 1000,
+            "max": 2000000,
+            "step": 1000,
+            "unit": "MW"
+          },
+          {
+            "name": "inertia_seconds",
+            "default": 4,
+            "min": 0.1,
+            "max": 30,
+            "step": 0.1,
+            "unit": "s"
+          },
+          {
+            "name": "damping_mw_per_hz",
+            "default": 4000,
+            "min": 0,
+            "max": 500000,
+            "step": 100,
+            "unit": "MW/Hz"
+          },
+          {
+            "name": "synthetic_inertia_mw_s_per_hz",
+            "default": 10000,
+            "min": 0,
+            "max": 200000,
+            "step": 500,
+            "unit": "MW·s/Hz"
+          },
+          {
+            "name": "synthetic_inertia_limit_mw",
+            "default": 1000,
+            "min": 0,
+            "max": 100000,
+            "step": 50,
+            "unit": "MW"
+          }
+        ],
+        "data_fields": []
+      },
+      {
+        "id": "storage-degradation",
+        "stable_id": "study::storage-degradation",
+        "page": "storage",
+        "title": "Separate battery aging mechanisms",
+        "engine_module": "engineering_studies",
+        "fields": [
+          {
+            "name": "years",
+            "default": 8,
+            "min": 0,
+            "max": 30,
+            "step": 1,
+            "unit": "years"
+          },
+          {
+            "name": "temperature_c",
+            "default": 25,
+            "min": -20,
+            "max": 60,
+            "step": 1,
+            "unit": "°C"
+          },
+          {
+            "name": "charge_c_rate",
+            "default": 1,
+            "min": 0,
+            "max": 5,
+            "step": 0.1,
+            "unit": "C"
+          },
+          {
+            "name": "equivalent_full_cycles",
+            "default": 2400,
+            "min": 0,
+            "max": 100000,
+            "step": 100,
+            "unit": "cycles"
+          },
+          {
+            "name": "depth_of_discharge_fraction",
+            "default": 0.8,
+            "min": 0,
+            "max": 1,
+            "step": 0.01,
+            "unit": "fraction"
+          }
+        ],
+        "data_fields": []
+      },
+      {
+        "id": "storage-stacking",
+        "stable_id": "study::storage-stacking",
+        "page": "storage",
+        "title": "Reserve and arbitrage headroom",
+        "engine_module": "engineering_studies",
+        "fields": [
+          {
+            "name": "capacity_kwh",
+            "default": 10000,
+            "min": 1,
+            "max": 1000000,
+            "step": 100,
+            "unit": "kWh"
+          },
+          {
+            "name": "power_kw",
+            "default": 5000,
+            "min": 1,
+            "max": 500000,
+            "step": 50,
+            "unit": "kW"
+          },
+          {
+            "name": "round_trip_efficiency",
+            "default": 0.9,
+            "min": 0.01,
+            "max": 1,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "initial_soc_fraction",
+            "default": 0.5,
+            "min": 0,
+            "max": 1,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "interval_hours",
+            "default": 1,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.25,
+            "unit": "h"
+          },
+          {
+            "name": "reserve_duration_hours",
+            "default": 0.25,
+            "min": 0,
+            "max": 4,
+            "step": 0.25,
+            "unit": "h"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "price_eur_mwh",
+            "default_kind": "array",
+            "default_length": 24,
+            "default_sha256": "844e24698dd65f798e3c355854d4a0e0802790af6ba7cc45aa9a94f1fe3a3460"
+          },
+          {
+            "name": "reserve_up_price_eur_mw_h",
+            "default_kind": "array",
+            "default_length": 24,
+            "default_sha256": "4b01acc643f27123bb98a3d87677331510ea157d67668acc8174e5155e54f970"
+          },
+          {
+            "name": "reserve_down_price_eur_mw_h",
+            "default_kind": "array",
+            "default_length": 24,
+            "default_sha256": "64d8e7cd79dce3b686001f3e3fdfaba6399146a2b2a3a945e06cc30c4f456b62"
+          },
+          {
+            "name": "reserve_up_request_mw",
+            "default_kind": "array",
+            "default_length": 24,
+            "default_sha256": "e357056133590e45824e1a5be336becb75f41c002eb1ab689819a92d97a311a0"
+          },
+          {
+            "name": "reserve_down_request_mw",
+            "default_kind": "array",
+            "default_length": 24,
+            "default_sha256": "e357056133590e45824e1a5be336becb75f41c002eb1ab689819a92d97a311a0"
+          }
+        ]
+      },
+      {
+        "id": "storage-synergy",
+        "stable_id": "study::storage-synergy",
+        "page": "storage",
+        "title": "Flywheel and battery split-frequency dispatch",
+        "engine_module": "engineering_studies",
+        "fields": [
+          {
+            "name": "interval_seconds",
+            "default": 1,
+            "min": 0.1,
+            "max": 60,
+            "step": 0.1,
+            "unit": "s"
+          },
+          {
+            "name": "filter_time_constant_s",
+            "default": 4,
+            "min": 0,
+            "max": 600,
+            "step": 0.5,
+            "unit": "s"
+          },
+          {
+            "name": "flywheel_power_kw",
+            "default": 500,
+            "min": 0,
+            "max": 100000,
+            "step": 10,
+            "unit": "kW"
+          },
+          {
+            "name": "flywheel_energy_kwh",
+            "default": 20,
+            "min": 0.1,
+            "max": 100000,
+            "step": 1,
+            "unit": "kWh"
+          },
+          {
+            "name": "battery_power_kw",
+            "default": 1000,
+            "min": 0,
+            "max": 500000,
+            "step": 10,
+            "unit": "kW"
+          },
+          {
+            "name": "battery_energy_kwh",
+            "default": 4000,
+            "min": 0.1,
+            "max": 1000000,
+            "step": 10,
+            "unit": "kWh"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "disturbance_kw",
+            "default_kind": "array",
+            "default_length": 8,
+            "default_sha256": "b97931082cf8195d983b72773f12089418179ed8eada57d21149241538cbfa7b"
+          }
+        ]
+      },
+      {
+        "id": "pv-backtracking",
+        "stable_id": "study::pv-backtracking",
+        "page": "pv",
+        "title": "Slope-aware tracker backtracking screen",
+        "engine_module": "engineering_studies",
+        "fields": [
+          {
+            "name": "row_pitch_m",
+            "default": 6,
+            "min": 0.1,
+            "max": 30,
+            "step": 0.1,
+            "unit": "m"
+          },
+          {
+            "name": "module_width_m",
+            "default": 2.4,
+            "min": 0.1,
+            "max": 10,
+            "step": 0.1,
+            "unit": "m"
+          },
+          {
+            "name": "tracker_axis_azimuth_deg",
+            "default": 0,
+            "min": 0,
+            "max": 360,
+            "step": 1,
+            "unit": "°"
+          },
+          {
+            "name": "terrain_slope_deg",
+            "default": 5,
+            "min": 0,
+            "max": 30,
+            "step": 1,
+            "unit": "°"
+          },
+          {
+            "name": "terrain_slope_azimuth_deg",
+            "default": 90,
+            "min": 0,
+            "max": 360,
+            "step": 1,
+            "unit": "°"
+          },
+          {
+            "name": "backtracking",
+            "default": 1,
+            "min": 0,
+            "max": 1,
+            "step": 1,
+            "unit": "0/1"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "sun_elevation_deg",
+            "default_kind": "array",
+            "default_length": 11,
+            "default_sha256": "a96c29e5705e5226962245cb55357ad39c081f258bfb1ed54e3d2e71fa670cd0"
+          },
+          {
+            "name": "sun_azimuth_deg",
+            "default_kind": "array",
+            "default_length": 11,
+            "default_sha256": "618f795cffa2937872e0c30dd674912ccf280794edab53e1de71ea89dfba8c58"
+          }
+        ]
+      },
+      {
+        "id": "pv-agrivoltaic",
+        "stable_id": "study::pv-agrivoltaic",
+        "page": "pv",
+        "title": "Agrivoltaic PAR and land geometry",
+        "engine_module": "engineering_studies",
+        "fields": [
+          {
+            "name": "ground_coverage_ratio",
+            "default": 0.35,
+            "min": 0,
+            "max": 0.9,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "module_transmission_fraction",
+            "default": 0.08,
+            "min": 0,
+            "max": 0.8,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "setback_m",
+            "default": 2,
+            "min": 0,
+            "max": 100,
+            "step": 0.5,
+            "unit": "m"
+          },
+          {
+            "name": "baseline_par_mol_m2_day",
+            "default": 35,
+            "min": 0.1,
+            "max": 100,
+            "step": 0.5,
+            "unit": "mol/m²/day"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "land_polygon_m",
+            "default_kind": "array",
+            "default_length": 4,
+            "default_sha256": "e44a8eb6c81e45a9989ef07f517067b12aa24897dbf1394790961bcc5fd732e9"
+          }
+        ]
+      },
+      {
+        "id": "pv-albedo",
+        "stable_id": "study::pv-albedo",
+        "page": "pv",
+        "title": "Monthly bifacial albedo response",
+        "engine_module": "engineering_studies",
+        "fields": [
+          {
+            "name": "system_capacity_kwp",
+            "default": 5000,
+            "min": 1,
+            "max": 10000000,
+            "step": 100,
+            "unit": "kWp"
+          },
+          {
+            "name": "performance_ratio",
+            "default": 0.82,
+            "min": 0.01,
+            "max": 1,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "bifaciality",
+            "default": 0.7,
+            "min": 0,
+            "max": 1,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "albedo",
+            "default": 0.25,
+            "min": 0,
+            "max": 1,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "rear_view_factor",
+            "default": 0.25,
+            "min": 0,
+            "max": 1,
+            "step": 0.01,
+            "unit": "fraction"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "front_plane_irradiance_kwh_m2",
+            "default_kind": "array",
+            "default_length": 12,
+            "default_sha256": "d369ad29f2beaccfdec6fb8157fc5197e81513d90a0e49e04c93d3b08cf0919f"
+          },
+          {
+            "name": "rear_ground_irradiance_kwh_m2",
+            "default_kind": "array",
+            "default_length": 12,
+            "default_sha256": "4f9a61aef4ceda4a0794201463d2e431bed74b58bcdb92dd1f372db6e2bf46e6"
+          }
+        ]
+      },
+      {
+        "id": "research-vibration",
+        "stable_id": "study::research-vibration",
+        "page": "research",
+        "title": "Vibration spectrum and drift",
+        "engine_module": "engineering_studies",
+        "fields": [
+          {
+            "name": "sample_rate_hz",
+            "default": 256,
+            "min": 128,
+            "max": 20000,
+            "step": 1,
+            "unit": "Hz"
+          },
+          {
+            "name": "synthetic_frequency_hz",
+            "default": 24,
+            "min": 1,
+            "max": 10000,
+            "step": 1,
+            "unit": "Hz"
+          },
+          {
+            "name": "synthetic_drift_hz",
+            "default": 3,
+            "min": -5000,
+            "max": 5000,
+            "step": 0.1,
+            "unit": "Hz"
+          },
+          {
+            "name": "synthetic_amplitude",
+            "default": 1,
+            "min": 0,
+            "max": 1000000,
+            "step": 0.1,
+            "unit": "signal unit"
+          },
+          {
+            "name": "noise_std",
+            "default": 0.05,
+            "min": 0,
+            "max": 1000000,
+            "step": 0.01,
+            "unit": "signal unit"
+          },
+          {
+            "name": "sample_count",
+            "default": 1024,
+            "min": 64,
+            "max": 8192,
+            "step": 64,
+            "unit": "samples"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "signal",
+            "default_kind": "array",
+            "default_length": 0,
+            "default_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        ]
+      },
+      {
+        "id": "research-epd",
+        "stable_id": "study::research-epd",
+        "page": "research",
+        "title": "Supplier-stage emissions evidence ledger",
+        "engine_module": "engineering_studies",
+        "fields": [
+          {
+            "name": "include_materials",
+            "default": 1,
+            "min": 0,
+            "max": 1,
+            "step": 1,
+            "unit": "0/1"
+          },
+          {
+            "name": "include_manufacturing",
+            "default": 1,
+            "min": 0,
+            "max": 1,
+            "step": 1,
+            "unit": "0/1"
+          },
+          {
+            "name": "include_transport",
+            "default": 1,
+            "min": 0,
+            "max": 1,
+            "step": 1,
+            "unit": "0/1"
+          },
+          {
+            "name": "include_use",
+            "default": 1,
+            "min": 0,
+            "max": 1,
+            "step": 1,
+            "unit": "0/1"
+          },
+          {
+            "name": "include_end_of_life",
+            "default": 1,
+            "min": 0,
+            "max": 1,
+            "step": 1,
+            "unit": "0/1"
+          },
+          {
+            "name": "include_other",
+            "default": 1,
+            "min": 0,
+            "max": 1,
+            "step": 1,
+            "unit": "0/1"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "records",
+            "default_kind": "array",
+            "default_length": 3,
+            "default_sha256": "9537165dab30ba98d28a3bdbb869b4eb9be65bec4e9dc9fb2b7d0b27a6aa0fa8"
+          }
+        ]
+      },
+      {
+        "id": "research-scr",
+        "stable_id": "study::research-scr",
+        "page": "research",
+        "title": "Short-circuit strength and voltage drop",
+        "engine_module": "engineering_studies",
+        "fields": [
+          {
+            "name": "short_circuit_mva",
+            "default": 600,
+            "min": 0.1,
+            "max": 2000000,
+            "step": 10,
+            "unit": "MVA"
+          },
+          {
+            "name": "plant_mw",
+            "default": 100,
+            "min": 0.1,
+            "max": 2000000,
+            "step": 1,
+            "unit": "MW"
+          },
+          {
+            "name": "active_power_mw",
+            "default": 80,
+            "min": 0,
+            "max": 2000000,
+            "step": 1,
+            "unit": "MW"
+          },
+          {
+            "name": "reactive_power_mvar",
+            "default": 20,
+            "min": -2000000,
+            "max": 2000000,
+            "step": 1,
+            "unit": "Mvar"
+          },
+          {
+            "name": "voltage_kv",
+            "default": 20,
+            "min": 0.1,
+            "max": 1000,
+            "step": 0.1,
+            "unit": "kV"
+          },
+          {
+            "name": "line_r_ohm",
+            "default": 0.1,
+            "min": 0,
+            "max": 100000,
+            "step": 0.01,
+            "unit": "Ω/phase"
+          }
+        ],
+        "data_fields": []
+      },
+      {
+        "id": "overview-weather",
+        "stable_id": "study::overview-weather",
+        "page": "overview",
+        "title": "Correlated weather stress",
+        "engine_module": "decision_studies",
+        "fields": [
+          {
+            "name": "horizon_years",
+            "default": 10,
+            "min": 1,
+            "max": 40,
+            "step": 1,
+            "unit": "years"
+          },
+          {
+            "name": "common_shock_fraction",
+            "default": 0.75,
+            "min": 0,
+            "max": 1,
+            "step": 0.05,
+            "unit": "fraction"
+          },
+          {
+            "name": "seed",
+            "default": 42,
+            "min": 0,
+            "max": 4294967295,
+            "step": 1,
+            "unit": "integer"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "assets",
+            "default_kind": "array",
+            "default_length": 6,
+            "default_sha256": "3d2b44be96a9f2ea3eb44142b28efa704484d30fb8bcbbd4e64cd13f90c05722"
+          }
+        ]
+      },
+      {
+        "id": "overview-merit",
+        "stable_id": "study::overview-merit",
+        "page": "overview",
+        "title": "Value versus variable cost",
+        "engine_module": "decision_studies",
+        "fields": [
+          {
+            "name": "bilateral_weight",
+            "default": 0.4,
+            "min": 0,
+            "max": 1,
+            "step": 0.05,
+            "unit": "fraction"
+          },
+          {
+            "name": "spot_weight",
+            "default": 0.4,
+            "min": 0,
+            "max": 1,
+            "step": 0.05,
+            "unit": "fraction"
+          },
+          {
+            "name": "balancing_weight",
+            "default": 0.2,
+            "min": 0,
+            "max": 1,
+            "step": 0.05,
+            "unit": "fraction"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "assets",
+            "default_kind": "array",
+            "default_length": 6,
+            "default_sha256": "ff68c3009caaec86220b91aab9c2f28344006a685d1b6a9bb8bbace3d2b49f65"
+          }
+        ]
+      },
+      {
+        "id": "overview-carbon",
+        "stable_id": "study::overview-carbon",
+        "page": "overview",
+        "title": "Hourly versus static emissions",
+        "engine_module": "decision_studies",
+        "fields": [
+          {
+            "name": "static_factor_kgco2e_mwh",
+            "default": 400,
+            "min": 0,
+            "max": 5000,
+            "step": 10,
+            "unit": "kgCO2e/MWh"
+          },
+          {
+            "name": "sample_hours",
+            "default": 24,
+            "min": 1,
+            "max": 8760,
+            "step": 1,
+            "unit": "hours"
+          },
+          {
+            "name": "generation_scale",
+            "default": 1,
+            "min": 0.01,
+            "max": 100,
+            "step": 0.1,
+            "unit": "multiplier"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "generation_mwh",
+            "default_kind": "array",
+            "default_length": 24,
+            "default_sha256": "bf32ee70831cd863b1e035b2c3a6a354b28e919ae037dd2f71dbf13b9ccfb295"
+          },
+          {
+            "name": "marginal_factors_kgco2e_mwh",
+            "default_kind": "array",
+            "default_length": 24,
+            "default_sha256": "a9aca9519e8a385e9007bdaf066e5f28c2666445e8975f3675a638b86c3d757f"
+          }
+        ]
+      },
+      {
+        "id": "markets-capture",
+        "stable_id": "study::markets-capture",
+        "page": "markets",
+        "title": "Generation-weighted capture price",
+        "engine_module": "decision_studies",
+        "fields": [
+          {
+            "name": "penetration_fraction",
+            "default": 0.4,
+            "min": 0,
+            "max": 1,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "reference_penetration_fraction",
+            "default": 0.1,
+            "min": 0,
+            "max": 1,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "cannibalization_slope_eur_mwh",
+            "default": 100,
+            "min": 0,
+            "max": 5000,
+            "step": 5,
+            "unit": "EUR/MWh per fraction"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "intervals",
+            "default_kind": "array",
+            "default_length": 24,
+            "default_sha256": "f97a89f3ce29d9f23a79e8a68f856d1d8733f2b43c41928f1803dcfce5e64822"
+          }
+        ]
+      },
+      {
+        "id": "markets-negative",
+        "stable_id": "study::markets-negative",
+        "page": "markets",
+        "title": "Negative settlement intervals",
+        "engine_module": "decision_studies",
+        "fields": [
+          {
+            "name": "interval_minutes",
+            "default": 15,
+            "min": 15,
+            "max": 15,
+            "step": 15,
+            "unit": "minutes"
+          },
+          {
+            "name": "suspension_duration_minutes",
+            "default": 60,
+            "min": 15,
+            "max": 10080,
+            "step": 15,
+            "unit": "minutes"
+          },
+          {
+            "name": "negative_threshold_eur_mwh",
+            "default": 0,
+            "min": -10000,
+            "max": 0,
+            "step": 1,
+            "unit": "EUR/MWh"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "prices_eur_mwh",
+            "default_kind": "array",
+            "default_length": 24,
+            "default_sha256": "3ec91323320c3971492dc7420f11a49ca3228b33e8007e00eb688a5d4b902d6a"
+          },
+          {
+            "name": "country_scenario",
+            "default_kind": "object",
+            "default_length": 1,
+            "default_sha256": "67c482243f604951ac751908daddf1a2b1b3f3cf9923d9526c2e2b25e909176d"
+          }
+        ]
+      },
+      {
+        "id": "markets-interconnection",
+        "stable_id": "study::markets-interconnection",
+        "page": "markets",
+        "title": "Two-zone interconnection",
+        "engine_module": "decision_studies",
+        "fields": [
+          {
+            "name": "capacity_mw",
+            "default": 500,
+            "min": 0,
+            "max": 1000000,
+            "step": 10,
+            "unit": "MW"
+          },
+          {
+            "name": "supply_slope_a_eur_mwh_mw",
+            "default": 0.02,
+            "min": 1e-06,
+            "max": 1000,
+            "step": 0.001,
+            "unit": "EUR/MWh per MW"
+          },
+          {
+            "name": "supply_slope_b_eur_mwh_mw",
+            "default": 0.02,
+            "min": 1e-06,
+            "max": 1000,
+            "step": 0.001,
+            "unit": "EUR/MWh per MW"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "intervals",
+            "default_kind": "array",
+            "default_length": 24,
+            "default_sha256": "5ec5d531b207546cef34c918113c65c701eec32791153660694062b2939374a5"
+          }
+        ]
+      },
+      {
+        "id": "forecast-regimes",
+        "stable_id": "study::forecast-regimes",
+        "page": "forecast",
+        "title": "Three-state price regimes",
+        "engine_module": "decision_studies",
+        "fields": [
+          {
+            "name": "years",
+            "default": 20,
+            "min": 1,
+            "max": 40,
+            "step": 1,
+            "unit": "years"
+          },
+          {
+            "name": "paths",
+            "default": 1000,
+            "min": 20,
+            "max": 10000,
+            "step": 100,
+            "unit": "paths"
+          },
+          {
+            "name": "seed",
+            "default": 42,
+            "min": 0,
+            "max": 4294967295,
+            "step": 1,
+            "unit": "integer"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "state_means_eur_mwh",
+            "default_kind": "array",
+            "default_length": 3,
+            "default_sha256": "ea8fc1f7044eb4acf80481fda16d88cd75a2eb10f0a3868816a9600a5bcbc66e"
+          },
+          {
+            "name": "state_volatilities_eur_mwh",
+            "default_kind": "array",
+            "default_length": 3,
+            "default_sha256": "b87ded6902f53207e46f1ffa803a8c834f4c5da3d1bd1cffa402ac185a446d9a"
+          },
+          {
+            "name": "transition_matrix",
+            "default_kind": "array",
+            "default_length": 3,
+            "default_sha256": "420f835981c8cb3bf1c70dc11705a0cd5616a01d7367a8b1bc1472c845cbf041"
+          },
+          {
+            "name": "initial_state_probabilities",
+            "default_kind": "array",
+            "default_length": 3,
+            "default_sha256": "1df1fa431ecaacee744db67ebb1e05ecc0994dc725e3fecfb42831655c9e56f9"
+          }
+        ]
+      },
+      {
+        "id": "forecast-commodities",
+        "stable_id": "study::forecast-commodities",
+        "page": "forecast",
+        "title": "Correlated commodity shocks",
+        "engine_module": "decision_studies",
+        "fields": [
+          {
+            "name": "years",
+            "default": 20,
+            "min": 1,
+            "max": 40,
+            "step": 1,
+            "unit": "years"
+          },
+          {
+            "name": "paths",
+            "default": 1000,
+            "min": 20,
+            "max": 5000,
+            "step": 100,
+            "unit": "paths"
+          },
+          {
+            "name": "seed",
+            "default": 42,
+            "min": 0,
+            "max": 4294967295,
+            "step": 1,
+            "unit": "integer"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "starting_prices",
+            "default_kind": "array",
+            "default_length": 3,
+            "default_sha256": "c003aac7172d8d6004634f2557af5ba9a7731059689f06d92f61f37e3abfd751"
+          },
+          {
+            "name": "annual_volatilities",
+            "default_kind": "array",
+            "default_length": 3,
+            "default_sha256": "5bc297ef73bd42e8f4b3f05a4be5df313d6937fac161637443835948eecd3905"
+          },
+          {
+            "name": "annual_log_drifts",
+            "default_kind": "array",
+            "default_length": 3,
+            "default_sha256": "eb52fd75fdccfeb5a497bdc83277ad64c8ff226314d5f323f5ad79c9ce3c4661"
+          },
+          {
+            "name": "correlation_matrix",
+            "default_kind": "array",
+            "default_length": 3,
+            "default_sha256": "ec13922f5fabf6d246e06520528173d0b2ed4b4dcd88308a273cc0d0af7c434f"
+          }
+        ]
+      },
+      {
+        "id": "forecast-tail",
+        "stable_id": "study::forecast-tail",
+        "page": "forecast",
+        "title": "PPA settlement tail risk",
+        "engine_module": "decision_studies",
+        "fields": [
+          {
+            "name": "strike_eur_mwh",
+            "default": 80,
+            "min": 0.01,
+            "max": 5000,
+            "step": 1,
+            "unit": "EUR/MWh"
+          },
+          {
+            "name": "volume_mwh",
+            "default": 10000,
+            "min": 0,
+            "max": 10000000,
+            "step": 100,
+            "unit": "MWh/year"
+          },
+          {
+            "name": "years",
+            "default": 10,
+            "min": 1,
+            "max": 40,
+            "step": 1,
+            "unit": "years"
+          },
+          {
+            "name": "paths",
+            "default": 1500,
+            "min": 100,
+            "max": 10000,
+            "step": 100,
+            "unit": "paths"
+          },
+          {
+            "name": "seed",
+            "default": 42,
+            "min": 0,
+            "max": 4294967295,
+            "step": 1,
+            "unit": "integer"
+          },
+          {
+            "name": "annual_volatility",
+            "default": 0.25,
+            "min": 0,
+            "max": 2,
+            "step": 0.05,
+            "unit": "fraction"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "histogram_year",
+            "default_kind": "object",
+            "default_length": 2,
+            "default_sha256": "7c3888e0f543e35c434e0fa049ad3ce20f5a3bf020de8eb57ab5884ddea0ab87"
+          }
+        ]
+      },
+      {
+        "id": "investment-sculpt",
+        "stable_id": "study::investment-sculpt",
+        "page": "investment",
+        "title": "DSCR-constrained sculpted debt",
+        "engine_module": "decision_studies",
+        "fields": [
+          {
+            "name": "target_dscr",
+            "default": 1.3,
+            "min": 1,
+            "max": 5,
+            "step": 0.05,
+            "unit": "ratio"
+          },
+          {
+            "name": "requested_debt_eur",
+            "default": 1760000,
+            "min": 0,
+            "max": 1000000000,
+            "step": 10000,
+            "unit": "EUR"
+          },
+          {
+            "name": "discount_rate",
+            "default": 0.08,
+            "min": 0,
+            "max": 0.4,
+            "step": 0.005,
+            "unit": "fraction"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "finance_request",
+            "default_kind": "object",
+            "default_length": 17,
+            "default_sha256": "a158f49ec9d3ec13f21818f6f341e2d412873a5c6c3bced55f363bab73c0a91c"
+          }
+        ]
+      },
+      {
+        "id": "investment-tranches",
+        "stable_id": "study::investment-tranches",
+        "page": "investment",
+        "title": "Contracted and merchant tranches",
+        "engine_module": "decision_studies",
+        "fields": [
+          {
+            "name": "target_dscr",
+            "default": 1.3,
+            "min": 1,
+            "max": 5,
+            "step": 0.05,
+            "unit": "ratio"
+          },
+          {
+            "name": "merchant_haircut_fraction",
+            "default": 0.5,
+            "min": 0,
+            "max": 1,
+            "step": 0.05,
+            "unit": "fraction"
+          },
+          {
+            "name": "interest_rate",
+            "default": 0.055,
+            "min": 0,
+            "max": 0.3,
+            "step": 0.005,
+            "unit": "fraction"
+          },
+          {
+            "name": "tenor_years",
+            "default": 10,
+            "min": 1,
+            "max": 40,
+            "step": 1,
+            "unit": "years"
+          },
+          {
+            "name": "contract_years",
+            "default": 10,
+            "min": 0,
+            "max": 40,
+            "step": 1,
+            "unit": "years"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "annual_rows",
+            "default_kind": "array",
+            "default_length": 20,
+            "default_sha256": "03b92070d23173b535a75617dcaf20d4a2881ad33119ad323625ec0169285288"
+          }
+        ]
+      },
+      {
+        "id": "investment-waterfall",
+        "stable_id": "study::investment-waterfall",
+        "page": "investment",
+        "title": "Capital and promote waterfall",
+        "engine_module": "decision_studies",
+        "fields": [
+          {
+            "name": "capital_eur",
+            "default": 5000000,
+            "min": 0,
+            "max": 1000000000000,
+            "step": 10000,
+            "unit": "EUR"
+          },
+          {
+            "name": "distribution_pool_eur",
+            "default": 12000000,
+            "min": 0,
+            "max": 1000000000000,
+            "step": 10000,
+            "unit": "EUR"
+          },
+          {
+            "name": "years",
+            "default": 10,
+            "min": 1,
+            "max": 50,
+            "step": 1,
+            "unit": "years"
+          },
+          {
+            "name": "preferred_return_rate",
+            "default": 0.08,
+            "min": 0,
+            "max": 0.5,
+            "step": 0.005,
+            "unit": "fraction"
+          },
+          {
+            "name": "catchup_share",
+            "default": 0.5,
+            "min": 0.01,
+            "max": 1,
+            "step": 0.05,
+            "unit": "fraction"
+          },
+          {
+            "name": "sponsor_promote_share",
+            "default": 0.2,
+            "min": 0,
+            "max": 0.99,
+            "step": 0.05,
+            "unit": "fraction"
+          }
+        ],
+        "data_fields": []
+      },
+      {
+        "id": "lessons-duck",
+        "stable_id": "study::lessons-duck",
+        "page": "lessons",
+        "title": "Net load and ramps",
+        "engine_module": "workflow_studies",
+        "fields": [
+          {
+            "name": "interval_hours",
+            "default": 1,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.25,
+            "unit": "h"
+          },
+          {
+            "name": "ramp_limit_kw_per_hour",
+            "default": 45,
+            "min": 0,
+            "max": 10000,
+            "step": 5,
+            "unit": "kW/h"
+          },
+          {
+            "name": "ramp_percentile",
+            "default": 95,
+            "min": 50,
+            "max": 99.9,
+            "step": 1,
+            "unit": "%"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "load_kw",
+            "default_kind": "array",
+            "default_length": 24,
+            "default_sha256": "0c82ad30214dafaeec9938c4bd816d27356e7f9c63d6c18e9bf6f53d559456ec"
+          },
+          {
+            "name": "solar_kw",
+            "default_kind": "array",
+            "default_length": 24,
+            "default_sha256": "70d084ad33c21b92b2e2b1d9f33872251bcbe2840fc8bac39fccaade11582bdf"
+          },
+          {
+            "name": "wind_kw",
+            "default_kind": "array",
+            "default_length": 24,
+            "default_sha256": "76d00b5e6b22d8851836d4b3d9482ba1d9c1e336b613328e4ee350564175ac26"
+          }
+        ]
+      },
+      {
+        "id": "lessons-blackstart",
+        "stable_id": "study::lessons-blackstart",
+        "page": "lessons",
+        "title": "Black-start sequence exercise",
+        "engine_module": "workflow_studies",
+        "fields": [
+          {
+            "name": "gfm_rated_kw",
+            "default": 500,
+            "min": 1,
+            "max": 100000,
+            "step": 10,
+            "unit": "kW"
+          },
+          {
+            "name": "available_power_fraction",
+            "default": 0.8,
+            "min": 0.01,
+            "max": 1,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "inrush_budget_kw",
+            "default": 250,
+            "min": 0,
+            "max": 100000,
+            "step": 10,
+            "unit": "kW"
+          },
+          {
+            "name": "reserve_fraction",
+            "default": 0.15,
+            "min": 0,
+            "max": 0.99,
+            "step": 0.01,
+            "unit": "fraction"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "steps",
+            "default_kind": "array",
+            "default_length": 3,
+            "default_sha256": "cab7cc7fb867753a7600370a8af4f3a1b2f5c8a6bf4d4a115d83918d40f39055"
+          }
+        ]
+      },
+      {
+        "id": "lessons-hydrogen",
+        "stable_id": "study::lessons-hydrogen",
+        "page": "lessons",
+        "title": "Hydrogen energy pathway",
+        "engine_module": "workflow_studies",
+        "fields": [
+          {
+            "name": "electrolyzer_kwh_per_kg",
+            "default": 52,
+            "min": 33.3,
+            "max": 200,
+            "step": 0.5,
+            "unit": "kWh/kg H2"
+          },
+          {
+            "name": "compression_kwh_per_kg",
+            "default": 2,
+            "min": 0,
+            "max": 100,
+            "step": 0.5,
+            "unit": "kWh/kg H2"
+          },
+          {
+            "name": "fuel_cell_electric_efficiency",
+            "default": 0.5,
+            "min": 0,
+            "max": 1,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "hydrogen_lhv_kwh_per_kg",
+            "default": 33.3,
+            "min": 33.3,
+            "max": 33.3,
+            "step": 0.1,
+            "unit": "kWh/kg H2"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "batch",
+            "default_kind": "object",
+            "default_length": 2,
+            "default_sha256": "576500d0ef9c90dbfa6f097862e0186506043c8ab5fda9ccb5e460c69202e256"
+          }
+        ]
+      },
+      {
+        "id": "compare-pareto",
+        "stable_id": "study::compare-pareto",
+        "page": "compare",
+        "title": "Comparable-run Pareto screen",
+        "engine_module": "workflow_studies",
+        "fields": [
+          {
+            "name": "cost_weight",
+            "default": 0.4,
+            "min": 0,
+            "max": 1,
+            "step": 0.05,
+            "unit": "fraction"
+          },
+          {
+            "name": "service_weight",
+            "default": 0.3,
+            "min": 0,
+            "max": 1,
+            "step": 0.05,
+            "unit": "fraction"
+          },
+          {
+            "name": "loss_of_load_weight",
+            "default": 0.3,
+            "min": 0,
+            "max": 1,
+            "step": 0.05,
+            "unit": "fraction"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "candidates",
+            "default_kind": "array",
+            "default_length": 3,
+            "default_sha256": "2a66d8ca20fa1409aed033e87b239e12c3cf564a838726febcc89ba3128683c0"
+          }
+        ]
+      },
+      {
+        "id": "compare-dunkelflaute",
+        "stable_id": "study::compare-dunkelflaute",
+        "page": "compare",
+        "title": "Fourteen-day storage dispatch",
+        "engine_module": "workflow_studies",
+        "fields": [
+          {
+            "name": "energy_capacity_kwh",
+            "default": 500,
+            "min": 0.001,
+            "max": 10000000,
+            "step": 10,
+            "unit": "kWh"
+          },
+          {
+            "name": "power_limit_kw",
+            "default": 120,
+            "min": 0.001,
+            "max": 1000000,
+            "step": 10,
+            "unit": "kW"
+          },
+          {
+            "name": "charge_efficiency",
+            "default": 0.94,
+            "min": 0.01,
+            "max": 1,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "discharge_efficiency",
+            "default": 0.94,
+            "min": 0.01,
+            "max": 1,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "initial_soc_kwh",
+            "default": 250,
+            "min": 0,
+            "max": 10000000,
+            "step": 10,
+            "unit": "kWh"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "load_kw",
+            "default_kind": "array",
+            "default_length": 336,
+            "default_sha256": "8ae9e9e065776ec09b8b9581c36db83d6b2f475b1c22436161a3f4e0166e009e"
+          },
+          {
+            "name": "renewable_kw",
+            "default_kind": "array",
+            "default_length": 336,
+            "default_sha256": "7591e40d252a1168119fad73b30ece299aa1c38315c2805ca08277e25cd4f7c3"
+          }
+        ]
+      },
+      {
+        "id": "compare-thermal",
+        "stable_id": "study::compare-thermal",
+        "page": "compare",
+        "title": "Thermal and cycle-wear screen",
+        "engine_module": "workflow_studies",
+        "fields": [
+          {
+            "name": "reference_temperature_c",
+            "default": 25,
+            "min": -40,
+            "max": 100,
+            "step": 1,
+            "unit": "°C"
+          },
+          {
+            "name": "temperature_factor_per_c",
+            "default": 0.025,
+            "min": 0,
+            "max": 0.1,
+            "step": 0.001,
+            "unit": "1/°C"
+          },
+          {
+            "name": "screening_loss_fraction_per_1000_efc",
+            "default": 0.025,
+            "min": 0,
+            "max": 1,
+            "step": 0.005,
+            "unit": "fraction"
+          },
+          {
+            "name": "years",
+            "default": 1,
+            "min": 1,
+            "max": 30,
+            "step": 1,
+            "unit": "year"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "regimes",
+            "default_kind": "array",
+            "default_length": 3,
+            "default_sha256": "ff179db39fd082e0f3350c7b2a0b538d4a32e1109972038818791d4855896ff0"
+          }
+        ]
+      },
+      {
+        "id": "pilots-photogrammetry",
+        "stable_id": "study::pilots-photogrammetry",
+        "page": "pilots",
+        "title": "Paired as-built geometry check",
+        "engine_module": "workflow_studies",
+        "fields": [
+          {
+            "name": "coordinate_scale_m",
+            "default": 1,
+            "min": 1e-06,
+            "max": 100000,
+            "step": 0.1,
+            "unit": "m/unit"
+          },
+          {
+            "name": "reporting_limit_m",
+            "default": 0.05,
+            "min": 0,
+            "max": 100000,
+            "step": 0.01,
+            "unit": "m"
+          },
+          {
+            "name": "percentile",
+            "default": 95,
+            "min": 50,
+            "max": 99.9,
+            "step": 1,
+            "unit": "%"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "design_points_xyz",
+            "default_kind": "array",
+            "default_length": 4,
+            "default_sha256": "6e9106a2fce695bf8b464f17641c8dd54e531b9f38ec1e444421c41f5949a69e"
+          },
+          {
+            "name": "asbuilt_points_xyz",
+            "default_kind": "array",
+            "default_length": 4,
+            "default_sha256": "1d773ffb0ac6f68200d7106dfdcb01307dd29bc286e38cf9cad8a9dfd46cc887"
+          }
+        ]
+      },
+      {
+        "id": "pilots-dts",
+        "stable_id": "study::pilots-dts",
+        "page": "pilots",
+        "title": "Distributed temperature profile",
+        "engine_module": "workflow_studies",
+        "fields": [
+          {
+            "name": "hot_spot_threshold_c",
+            "default": 75,
+            "min": -50,
+            "max": 200,
+            "step": 1,
+            "unit": "°C"
+          },
+          {
+            "name": "gradient_threshold_c_per_m",
+            "default": 0.25,
+            "min": 0,
+            "max": 100000,
+            "step": 0.05,
+            "unit": "°C/m"
+          },
+          {
+            "name": "maximum_age_hours",
+            "default": 2,
+            "min": 0,
+            "max": 100000,
+            "step": 0.25,
+            "unit": "h"
+          },
+          {
+            "name": "current_time_hour",
+            "default": 10,
+            "min": 0,
+            "max": 1000000,
+            "step": 1,
+            "unit": "h"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "samples",
+            "default_kind": "array",
+            "default_length": 5,
+            "default_sha256": "1bcf94d8bbd2a4c3b870a17302b07fbde25a88ce3e5a2918135dc0e15c29dd35"
+          }
+        ]
+      },
+      {
+        "id": "pilots-offgas",
+        "stable_id": "study::pilots-offgas",
+        "page": "pilots",
+        "title": "Hypothetical multisensor warning vote",
+        "engine_module": "workflow_studies",
+        "fields": [
+          {
+            "name": "temperature_threshold_c",
+            "default": 70,
+            "min": -100,
+            "max": 500,
+            "step": 1,
+            "unit": "°C"
+          },
+          {
+            "name": "co_threshold_ppm",
+            "default": 35,
+            "min": 0.001,
+            "max": 100000,
+            "step": 1,
+            "unit": "ppm"
+          },
+          {
+            "name": "voc_threshold_ppm",
+            "default": 5,
+            "min": 0.001,
+            "max": 100000,
+            "step": 0.5,
+            "unit": "ppm"
+          },
+          {
+            "name": "votes_required",
+            "default": 2,
+            "min": 1,
+            "max": 32,
+            "step": 1,
+            "unit": "sensors"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "sensors",
+            "default_kind": "array",
+            "default_length": 3,
+            "default_sha256": "02784d3a1195bfb3bf704df82bc03182c22d719079b271a971f4a9ad858e50bc"
+          }
+        ]
+      },
+      {
+        "id": "council-debate",
+        "stable_id": "study::council-debate",
+        "page": "council",
+        "title": "Finance versus storage debate",
+        "engine_module": "workflow_studies",
+        "fields": [
+          {
+            "name": "capex_eur",
+            "default": 1200000,
+            "min": 0,
+            "max": 1000000000000,
+            "step": 10000,
+            "unit": "EUR"
+          },
+          {
+            "name": "annual_net_value_eur",
+            "default": 230000,
+            "min": -1000000000,
+            "max": 1000000000,
+            "step": 1000,
+            "unit": "EUR/year"
+          },
+          {
+            "name": "life_years",
+            "default": 15,
+            "min": 1,
+            "max": 60,
+            "step": 1,
+            "unit": "year"
+          },
+          {
+            "name": "discount_rate_fraction",
+            "default": 0.08,
+            "min": 0,
+            "max": 0.5,
+            "step": 0.01,
+            "unit": "fraction"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "finance_evidence",
+            "default_kind": "array",
+            "default_length": 2,
+            "default_sha256": "1fe862a73f360a5e2fba728e50ed9174d7a59d859b73173157cb9f616bbb55dd"
+          },
+          {
+            "name": "storage_evidence",
+            "default_kind": "array",
+            "default_length": 2,
+            "default_sha256": "271546ffb361280af9676e04b76fcbc558b5b548c24ce6a3f8e9df2683de3437"
+          }
+        ]
+      },
+      {
+        "id": "council-evidence",
+        "stable_id": "study::council-evidence",
+        "page": "council",
+        "title": "Structured evidence manifest",
+        "engine_module": "workflow_studies",
+        "fields": [
+          {
+            "name": "maximum_manifest_age_days",
+            "default": 3650,
+            "min": 0,
+            "max": 36500,
+            "step": 30,
+            "unit": "days"
+          },
+          {
+            "name": "maximum_tariff_eur_mwh",
+            "default": 2000,
+            "min": 0.001,
+            "max": 100000,
+            "step": 10,
+            "unit": "EUR/MWh"
+          },
+          {
+            "name": "maximum_warranty_years",
+            "default": 50,
+            "min": 0.001,
+            "max": 100,
+            "step": 1,
+            "unit": "years"
+          },
+          {
+            "name": "maximum_single_line_nodes",
+            "default": 10000,
+            "min": 1,
+            "max": 1000000,
+            "step": 100,
+            "unit": "nodes"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "manifest",
+            "default_kind": "object",
+            "default_length": 2,
+            "default_sha256": "13fab004e43f65a29ea4769e6cee62b6b8e59d59c87415ebda96bb5142ff2755"
+          }
+        ]
+      },
+      {
+        "id": "council-consensus",
+        "stable_id": "study::council-consensus",
+        "page": "council",
+        "title": "Bayesian evidence toy model",
+        "engine_module": "workflow_studies",
+        "fields": [
+          {
+            "name": "prior_probability",
+            "default": 0.35,
+            "min": 0,
+            "max": 1,
+            "step": 0.01,
+            "unit": "probability"
+          },
+          {
+            "name": "maximum_absolute_log_likelihood_ratio",
+            "default": 4,
+            "min": 0,
+            "max": 20,
+            "step": 0.25,
+            "unit": "log ratio"
+          },
+          {
+            "name": "evidence_weight",
+            "default": 1,
+            "min": 0,
+            "max": 1,
+            "step": 0.05,
+            "unit": "fraction"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "evidence",
+            "default_kind": "array",
+            "default_length": 3,
+            "default_sha256": "9d07bef887eaa2282ddf2d9637913f31e6032f6a06d5349dbc1841ee9c7c3bca"
+          }
+        ]
+      },
+      {
+        "id": "storage-annual",
+        "stable_id": "study::storage-annual",
+        "page": "storage",
+        "title": "8760-hour dispatch and tariff builder",
+        "engine_module": "toolkit_studies",
+        "fields": [
+          {
+            "name": "capacity_kwh",
+            "default": 10000,
+            "min": 1,
+            "max": 1000000.0,
+            "step": 100,
+            "unit": "kWh"
+          },
+          {
+            "name": "power_kw",
+            "default": 5000,
+            "min": 1,
+            "max": 1000000.0,
+            "step": 100,
+            "unit": "kW"
+          },
+          {
+            "name": "pv_kwp",
+            "default": 5900,
+            "min": 0,
+            "max": 1000000.0,
+            "step": 100,
+            "unit": "kWp"
+          },
+          {
+            "name": "base_load_kw",
+            "default": 3000,
+            "min": 0,
+            "max": 1000000.0,
+            "step": 100,
+            "unit": "kW"
+          },
+          {
+            "name": "efficiency",
+            "default": 0.9,
+            "min": 0.5,
+            "max": 1,
+            "step": 0.01,
+            "unit": ""
+          },
+          {
+            "name": "wear",
+            "default": 0.015,
+            "min": 0,
+            "max": 1,
+            "step": 0.001,
+            "unit": "EUR/kWh"
+          },
+          {
+            "name": "monthly_peak",
+            "default": 0,
+            "min": 0,
+            "max": 100,
+            "step": 0.1,
+            "unit": "EUR/kW"
+          },
+          {
+            "name": "export_price",
+            "default": 0.04,
+            "min": 0,
+            "max": 3,
+            "step": 0.01,
+            "unit": "EUR/kWh"
+          },
+          {
+            "name": "seed",
+            "default": 42,
+            "min": 0,
+            "max": 4294967295,
+            "step": 1,
+            "unit": ""
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "tariff",
+            "default_kind": "array",
+            "default_length": 24,
+            "default_sha256": "e6f1e10aab1b4a79ab1c7096d8bbbb39a396e2e228db4141f7cd2b5ad4d0b7a1"
+          },
+          {
+            "name": "hourly_load_kw",
+            "default_kind": "array",
+            "default_length": 0,
+            "default_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          {
+            "name": "hourly_pv_kw",
+            "default_kind": "array",
+            "default_length": 0,
+            "default_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        ]
+      },
+      {
+        "id": "pv-sensitivity",
+        "stable_id": "study::pv-sensitivity",
+        "page": "pv",
+        "title": "LCOE contour sensitivity",
+        "engine_module": "toolkit_studies",
+        "fields": [
+          {
+            "name": "capex_eur_kwp",
+            "default": 650,
+            "min": 100,
+            "max": 5000,
+            "step": 10,
+            "unit": "EUR/kWp"
+          },
+          {
+            "name": "yield_kwh_kwp",
+            "default": 1350,
+            "min": 400,
+            "max": 2200,
+            "step": 10,
+            "unit": "kWh/kWp"
+          },
+          {
+            "name": "discount",
+            "default": 0.07,
+            "min": 0,
+            "max": 0.4,
+            "step": 0.01,
+            "unit": ""
+          },
+          {
+            "name": "opex",
+            "default": 12,
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "EUR/kWp"
+          }
+        ],
+        "data_fields": []
+      },
+      {
+        "id": "pv-reserve",
+        "stable_id": "study::pv-reserve",
+        "page": "pv",
+        "title": "Inverter repowering reserve",
+        "engine_module": "toolkit_studies",
+        "fields": [
+          {
+            "name": "cost_eur",
+            "default": 1750000,
+            "min": 0,
+            "max": 10000000000.0,
+            "step": 1000,
+            "unit": "EUR"
+          },
+          {
+            "name": "inflation",
+            "default": 0.02,
+            "min": 0,
+            "max": 0.2,
+            "step": 0.005,
+            "unit": ""
+          },
+          {
+            "name": "fund_return",
+            "default": 0.03,
+            "min": 0,
+            "max": 0.2,
+            "step": 0.005,
+            "unit": ""
+          },
+          {
+            "name": "years",
+            "default": 15,
+            "min": 1,
+            "max": 50,
+            "step": 1,
+            "unit": ""
+          }
+        ],
+        "data_fields": []
+      },
+      {
+        "id": "hybrid-powerflow",
+        "stable_id": "study::hybrid-powerflow",
+        "page": "hybrid",
+        "title": "Balanced AC nodal power flow",
+        "engine_module": "physical_studies",
+        "fields": [
+          {
+            "name": "base_mva",
+            "default": 100,
+            "min": 1,
+            "max": 1000000,
+            "step": 1,
+            "unit": "MVA"
+          },
+          {
+            "name": "tolerance_pu",
+            "default": 1e-09,
+            "min": 1e-12,
+            "max": 0.0001,
+            "step": 1e-09,
+            "unit": "p.u."
+          },
+          {
+            "name": "max_iterations",
+            "default": 40,
+            "min": 2,
+            "max": 200,
+            "step": 1,
+            "unit": "iterations"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "buses",
+            "default_kind": "array",
+            "default_length": 3,
+            "default_sha256": "a7a96238b8d127c619657a0d5d5369ccc06d7163a1cba24dcc27df2e9fd197de"
+          },
+          {
+            "name": "branches",
+            "default_kind": "array",
+            "default_length": 3,
+            "default_sha256": "e8cfa4e15e2be03e4304365aff45787fdf3c00e9b6be91340725ac13894f584c"
+          }
+        ]
+      },
+      {
+        "id": "hybrid-switching",
+        "stable_id": "study::hybrid-switching",
+        "page": "hybrid",
+        "title": "PWM inverter/filter transient",
+        "engine_module": "physical_studies",
+        "fields": [
+          {
+            "name": "switching_enabled",
+            "default": 1,
+            "min": 0,
+            "max": 1,
+            "step": 1,
+            "unit": ""
+          },
+          {
+            "name": "dc_link_voltage_v",
+            "default": 650,
+            "min": 100,
+            "max": 2000,
+            "step": 10,
+            "unit": "V"
+          },
+          {
+            "name": "modulation_index",
+            "default": 0.85,
+            "min": 0,
+            "max": 0.95,
+            "step": 0.01,
+            "unit": ""
+          },
+          {
+            "name": "fundamental_hz",
+            "default": 50,
+            "min": 40,
+            "max": 70,
+            "step": 1,
+            "unit": "Hz"
+          },
+          {
+            "name": "switching_hz",
+            "default": 2000,
+            "min": 100,
+            "max": 5000,
+            "step": 100,
+            "unit": "Hz"
+          },
+          {
+            "name": "filter_inductance_h",
+            "default": 0.003,
+            "min": 0.0001,
+            "max": 0.1,
+            "step": 0.0001,
+            "unit": "H"
+          },
+          {
+            "name": "filter_resistance_ohm",
+            "default": 0.5,
+            "min": 0.05,
+            "max": 20,
+            "step": 0.05,
+            "unit": "Ω"
+          },
+          {
+            "name": "grid_voltage_rms_v",
+            "default": 230,
+            "min": 10,
+            "max": 1000,
+            "step": 1,
+            "unit": "V RMS"
+          },
+          {
+            "name": "time_step_s",
+            "default": 2e-05,
+            "min": 1e-06,
+            "max": 5e-05,
+            "step": 1e-06,
+            "unit": "s"
+          },
+          {
+            "name": "simulation_cycles",
+            "default": 2,
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "unit": ""
+          }
+        ],
+        "data_fields": []
+      },
+      {
+        "id": "lessons-energization",
+        "stable_id": "study::lessons-energization",
+        "page": "lessons",
+        "title": "Timed LRC energization transient",
+        "engine_module": "physical_studies",
+        "fields": [
+          {
+            "name": "source_voltage_rms_v",
+            "default": 230,
+            "min": 1,
+            "max": 1000,
+            "step": 1,
+            "unit": "V RMS"
+          },
+          {
+            "name": "frequency_hz",
+            "default": 50,
+            "min": 40,
+            "max": 70,
+            "step": 1,
+            "unit": "Hz"
+          },
+          {
+            "name": "breaker_close_s",
+            "default": 0.005,
+            "min": 0,
+            "max": 0.1,
+            "step": 0.0001,
+            "unit": "s"
+          },
+          {
+            "name": "resistance_ohm",
+            "default": 5,
+            "min": 0.1,
+            "max": 100,
+            "step": 0.1,
+            "unit": "Ω"
+          },
+          {
+            "name": "inductance_h",
+            "default": 0.05,
+            "min": 0.001,
+            "max": 2,
+            "step": 0.001,
+            "unit": "H"
+          },
+          {
+            "name": "capacitance_f",
+            "default": 0.001,
+            "min": 0.0001,
+            "max": 0.5,
+            "step": 0.0001,
+            "unit": "F"
+          },
+          {
+            "name": "initial_capacitor_voltage_v",
+            "default": 0,
+            "min": -1000,
+            "max": 1000,
+            "step": 1,
+            "unit": "V"
+          },
+          {
+            "name": "closing_phase_deg",
+            "default": 0,
+            "min": -180,
+            "max": 180,
+            "step": 1,
+            "unit": "degrees"
+          },
+          {
+            "name": "time_step_s",
+            "default": 2e-05,
+            "min": 1e-06,
+            "max": 5e-05,
+            "step": 1e-06,
+            "unit": "s"
+          },
+          {
+            "name": "simulation_cycles",
+            "default": 2,
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "unit": ""
+          }
+        ],
+        "data_fields": []
+      },
+      {
+        "id": "storage-response",
+        "stable_id": "study::storage-response",
+        "page": "storage",
+        "title": "Sub-second frequency droop response",
+        "engine_module": "physical_studies",
+        "fields": [
+          {
+            "name": "nominal_frequency_hz",
+            "default": 50,
+            "min": 45,
+            "max": 65,
+            "step": 0.1,
+            "unit": "Hz"
+          },
+          {
+            "name": "deadband_hz",
+            "default": 0.02,
+            "min": 0,
+            "max": 1,
+            "step": 0.01,
+            "unit": "Hz"
+          },
+          {
+            "name": "droop_kw_per_hz",
+            "default": 2500,
+            "min": 0,
+            "max": 1000000,
+            "step": 100,
+            "unit": "kW/Hz"
+          },
+          {
+            "name": "power_limit_kw",
+            "default": 1000,
+            "min": 0,
+            "max": 1000000,
+            "step": 10,
+            "unit": "kW"
+          },
+          {
+            "name": "ramp_kw_per_s",
+            "default": 1000,
+            "min": 0,
+            "max": 10000000,
+            "step": 10,
+            "unit": "kW/s"
+          },
+          {
+            "name": "capacity_kwh",
+            "default": 2000,
+            "min": 1,
+            "max": 1000000,
+            "step": 10,
+            "unit": "kWh"
+          },
+          {
+            "name": "initial_soc_fraction",
+            "default": 0.5,
+            "min": 0.1,
+            "max": 0.9,
+            "step": 0.01,
+            "unit": ""
+          },
+          {
+            "name": "minimum_soc_fraction",
+            "default": 0.1,
+            "min": 0,
+            "max": 0.89,
+            "step": 0.01,
+            "unit": ""
+          },
+          {
+            "name": "maximum_soc_fraction",
+            "default": 0.9,
+            "min": 0.11,
+            "max": 1,
+            "step": 0.01,
+            "unit": ""
+          },
+          {
+            "name": "round_trip_efficiency",
+            "default": 0.9,
+            "min": 0.5,
+            "max": 1,
+            "step": 0.01,
+            "unit": ""
+          },
+          {
+            "name": "interval_s",
+            "default": 0.1,
+            "min": 0.001,
+            "max": 0.5,
+            "step": 0.01,
+            "unit": "s"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "frequency_hz",
+            "default_kind": "array",
+            "default_length": 12,
+            "default_sha256": "530dfac6fa6eebdee7b67fa75a0e2a8ca77118ebeab4bc55a3f7de855249222b"
+          }
+        ]
+      },
+      {
+        "id": "storage-agingfit",
+        "stable_id": "study::storage-agingfit",
+        "page": "storage",
+        "title": "Capacity-fade coefficient fit",
+        "engine_module": "physical_studies",
+        "fields": [],
+        "data_fields": [
+          {
+            "name": "observations",
+            "default_kind": "array",
+            "default_length": 15,
+            "default_sha256": "0f13d2b5bfa24dc5757e602d4ebbd5e5d5efd76a0fd8e6ed0cb4f9c867f6e841"
+          }
+        ]
+      },
+      {
+        "id": "compare-thermalphysics",
+        "stable_id": "study::compare-thermalphysics",
+        "page": "compare",
+        "title": "Lumped thermal reaction screen",
+        "engine_module": "physical_studies",
+        "fields": [
+          {
+            "name": "initial_temperature_c",
+            "default": 25,
+            "min": -20,
+            "max": 120,
+            "step": 1,
+            "unit": "°C"
+          },
+          {
+            "name": "ambient_temperature_c",
+            "default": 25,
+            "min": -30,
+            "max": 80,
+            "step": 1,
+            "unit": "°C"
+          },
+          {
+            "name": "thermal_mass_j_per_k",
+            "default": 10000,
+            "min": 1000,
+            "max": 1000000,
+            "step": 100,
+            "unit": "J/K"
+          },
+          {
+            "name": "cooling_w_per_k",
+            "default": 20,
+            "min": 0,
+            "max": 100000,
+            "step": 1,
+            "unit": "W/K"
+          },
+          {
+            "name": "activation_energy_kj_mol",
+            "default": 35,
+            "min": 0,
+            "max": 80,
+            "step": 1,
+            "unit": "kJ/mol"
+          },
+          {
+            "name": "reaction_rate_ref_per_s",
+            "default": 0.002,
+            "min": 0,
+            "max": 0.005,
+            "step": 0.0001,
+            "unit": "1/s"
+          },
+          {
+            "name": "reaction_energy_j",
+            "default": 25000,
+            "min": 0,
+            "max": 10000000,
+            "step": 100,
+            "unit": "J"
+          },
+          {
+            "name": "reference_temperature_c",
+            "default": 25,
+            "min": -20,
+            "max": 80,
+            "step": 1,
+            "unit": "°C"
+          },
+          {
+            "name": "duration_s",
+            "default": 60,
+            "min": 0.01,
+            "max": 120,
+            "step": 1,
+            "unit": "s"
+          },
+          {
+            "name": "time_step_s",
+            "default": 0.05,
+            "min": 0.001,
+            "max": 0.1,
+            "step": 0.001,
+            "unit": "s"
+          },
+          {
+            "name": "termination_temperature_c",
+            "default": 100,
+            "min": 30,
+            "max": 150,
+            "step": 1,
+            "unit": "°C"
+          },
+          {
+            "name": "reaction_fraction_trip",
+            "default": 0.95,
+            "min": 0.01,
+            "max": 1,
+            "step": 0.01,
+            "unit": ""
+          }
+        ],
+        "data_fields": []
+      },
+      {
+        "id": "pv-raytrace",
+        "stable_id": "study::pv-raytrace",
+        "page": "pv",
+        "title": "Panel-sample ray-triangle shading",
+        "engine_module": "physical_studies",
+        "fields": [],
+        "data_fields": [
+          {
+            "name": "panel_samples",
+            "default_kind": "array",
+            "default_length": 1,
+            "default_sha256": "5a6cc1da801faa796c817be8d7a663ab52e8613989eefa7ce38b46b7657ce929"
+          },
+          {
+            "name": "sun_vectors",
+            "default_kind": "array",
+            "default_length": 4,
+            "default_sha256": "cc98c685138dc56d58403c4cf5488fe95779a4d8d3c86c4bfa2b4478a7cfd693"
+          },
+          {
+            "name": "occluder_triangles",
+            "default_kind": "array",
+            "default_length": 0,
+            "default_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        ]
+      },
+      {
+        "id": "pv-setbacks",
+        "stable_id": "study::pv-setbacks",
+        "page": "pv",
+        "title": "Parcel setbacks and crop-light screen",
+        "engine_module": "physical_studies",
+        "fields": [
+          {
+            "name": "setback_m",
+            "default": 2,
+            "min": 0,
+            "max": 100,
+            "step": 0.5,
+            "unit": "m"
+          },
+          {
+            "name": "pv_cover_fraction",
+            "default": 0.3,
+            "min": 0,
+            "max": 0.9,
+            "step": 0.01,
+            "unit": ""
+          },
+          {
+            "name": "module_par_transmission_fraction",
+            "default": 0.1,
+            "min": 0,
+            "max": 0.8,
+            "step": 0.01,
+            "unit": ""
+          },
+          {
+            "name": "baseline_par_mol_m2_day",
+            "default": 35,
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "mol/m²/day"
+          },
+          {
+            "name": "light_half_saturation_mol_m2_day",
+            "default": 12,
+            "min": 0.1,
+            "max": 100,
+            "step": 1,
+            "unit": "mol/m²/day"
+          },
+          {
+            "name": "photosynthesis_max_g_m2_day",
+            "default": 20,
+            "min": 0,
+            "max": 1000,
+            "step": 1,
+            "unit": "g/m²/day"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "parcels",
+            "default_kind": "array",
+            "default_length": 1,
+            "default_sha256": "c5e58b43e49cc7f4a68662dfa3a2b06ef34304c34e0f692b76a522d421181d37"
+          }
+        ]
+      },
+      {
+        "id": "research-bearing",
+        "stable_id": "study::research-bearing",
+        "page": "research",
+        "title": "Bearing spectrum envelope comparison",
+        "engine_module": "physical_studies",
+        "fields": [
+          {
+            "name": "sample_rate_hz",
+            "default": 256,
+            "min": 64,
+            "max": 20000,
+            "step": 1,
+            "unit": "Hz"
+          },
+          {
+            "name": "threshold_sigma",
+            "default": 4,
+            "min": 1,
+            "max": 20,
+            "step": 0.5,
+            "unit": "scaled MAD"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "training_records",
+            "default_kind": "array",
+            "default_length": 6,
+            "default_sha256": "ca6f35d073fb32eaf32bf8c94aee2a6a341b212fb4de405f12cf7f2d01d62ec8"
+          },
+          {
+            "name": "heldout_records",
+            "default_kind": "array",
+            "default_length": 2,
+            "default_sha256": "e4e2f70f37c2617806bb48d3bb0bbcc849b2e0bec127a7ef9a36a6149a225d9a"
+          }
+        ]
+      },
+      {
+        "id": "storage-annualopt",
+        "stable_id": "study::storage-annualopt",
+        "page": "storage",
+        "title": "Full-year storage optimization",
+        "engine_module": "planning_studies",
+        "fields": [
+          {
+            "name": "capacity_kwh",
+            "default": 600,
+            "min": 0,
+            "max": 10000000,
+            "step": 50,
+            "unit": "kWh"
+          },
+          {
+            "name": "power_kw",
+            "default": 150,
+            "min": 0,
+            "max": 100000,
+            "step": 10,
+            "unit": "kW"
+          },
+          {
+            "name": "round_trip_efficiency",
+            "default": 0.9,
+            "min": 0.01,
+            "max": 1,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "monthly_demand_charge_eur_kw",
+            "default": 0,
+            "min": 0,
+            "max": 100000,
+            "step": 1,
+            "unit": "EUR/kW-month"
+          },
+          {
+            "name": "solver_time_limit_seconds",
+            "default": 4,
+            "min": 0.25,
+            "max": 10,
+            "step": 0.25,
+            "unit": "s"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "load_kw",
+            "default_kind": "array",
+            "default_length": 8760,
+            "default_sha256": "97902bcf6ba9243906789bdec47d9ae6e80bbe7ca2753b7552e28a0add115c6c"
+          },
+          {
+            "name": "pv_kw",
+            "default_kind": "array",
+            "default_length": 8760,
+            "default_sha256": "21ab8ebed5d8699342a65b532255638288da0a3fcfeb66d149a64d62f03a6a4b"
+          },
+          {
+            "name": "import_price_eur_kwh",
+            "default_kind": "array",
+            "default_length": 24,
+            "default_sha256": "568a0ae914630d1131e4b90f41c350ef18d217f0789ad7583e31e3d9e2885834"
+          },
+          {
+            "name": "export_price_eur_kwh",
+            "default_kind": "array",
+            "default_length": 24,
+            "default_sha256": "e871ea33962c8f9b5c9d50afd403cdcfa448e8b061866e5fd54b0876e57b16af"
+          }
+        ]
+      },
+      {
+        "id": "compare-reliability",
+        "stable_id": "study::compare-reliability",
+        "page": "compare",
+        "title": "Chronological reliability ensemble",
+        "engine_module": "planning_studies",
+        "fields": [
+          {
+            "name": "trials",
+            "default": 250,
+            "min": 20,
+            "max": 5000,
+            "step": 10,
+            "unit": "trials"
+          },
+          {
+            "name": "weather_cv",
+            "default": 0.2,
+            "min": 0,
+            "max": 1,
+            "step": 0.05,
+            "unit": "fraction"
+          },
+          {
+            "name": "battery_capacity_kwh",
+            "default": 80,
+            "min": 0,
+            "max": 10000000,
+            "step": 10,
+            "unit": "kWh"
+          },
+          {
+            "name": "battery_power_kw",
+            "default": 40,
+            "min": 0,
+            "max": 100000,
+            "step": 5,
+            "unit": "kW"
+          },
+          {
+            "name": "generator_failure_probability_per_hour",
+            "default": 0.002,
+            "min": 0,
+            "max": 1,
+            "step": 0.001,
+            "unit": "per hour"
+          },
+          {
+            "name": "generator_repair_probability_per_hour",
+            "default": 0.08,
+            "min": 0.001,
+            "max": 1,
+            "step": 0.01,
+            "unit": "per hour"
+          },
+          {
+            "name": "annualization_hours",
+            "default": 8760,
+            "min": 8760,
+            "max": 8784,
+            "step": 24,
+            "unit": "hours"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "load_kw",
+            "default_kind": "array",
+            "default_length": 168,
+            "default_sha256": "a5e397763c5131eee8e4218c4adac020eb230055eff1530567b5d781d4e66589"
+          },
+          {
+            "name": "renewable_kw",
+            "default_kind": "array",
+            "default_length": 168,
+            "default_sha256": "37b75f3b7fcb03cd1380f869c01b50edcf8d2709e4795bd60fc0887ecda9ee30"
+          }
+        ]
+      },
+      {
+        "id": "forecast-cointegration",
+        "stable_id": "study::forecast-cointegration",
+        "page": "forecast",
+        "title": "Rank-assumed energy-price VECM",
+        "engine_module": "planning_studies",
+        "fields": [
+          {
+            "name": "training_fraction",
+            "default": 0.75,
+            "min": 0.5,
+            "max": 0.9,
+            "step": 0.05,
+            "unit": "fraction"
+          },
+          {
+            "name": "rank_assumption",
+            "default": 1,
+            "min": 1,
+            "max": 1,
+            "step": 1,
+            "unit": "rank"
+          },
+          {
+            "name": "lag_count",
+            "default": 1,
+            "min": 1,
+            "max": 4,
+            "step": 1,
+            "unit": "lags"
+          },
+          {
+            "name": "forecast_steps",
+            "default": 12,
+            "min": 1,
+            "max": 48,
+            "step": 1,
+            "unit": "observations"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "gas_price_eur_mwh",
+            "default_kind": "array",
+            "default_length": 120,
+            "default_sha256": "66049b925d4a3b89fe92bb8cfcbc72549e237b8fa728a21b04aaf5c01780cc0f"
+          },
+          {
+            "name": "carbon_price_eur_t",
+            "default_kind": "array",
+            "default_length": 120,
+            "default_sha256": "159abb03d541d1fa4d3849329f794a5a422dcee4b29629ce0d6ffbc7c195a3ac"
+          },
+          {
+            "name": "power_price_eur_mwh",
+            "default_kind": "array",
+            "default_length": 120,
+            "default_sha256": "95afc7d77563ec545a0b2bcc0c66472f45cd9c6c75826dde00b5253bf1ec0b44"
+          }
+        ]
+      },
+      {
+        "id": "forecast-backtest",
+        "stable_id": "study::forecast-backtest",
+        "page": "forecast",
+        "title": "Chronological price forecast backtest",
+        "engine_module": "planning_studies",
+        "fields": [
+          {
+            "name": "training_fraction",
+            "default": 0.75,
+            "min": 0.5,
+            "max": 0.9,
+            "step": 0.05,
+            "unit": "fraction"
+          },
+          {
+            "name": "interval_z_score",
+            "default": 1.96,
+            "min": 0.5,
+            "max": 4,
+            "step": 0.05,
+            "unit": "z"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "target_price_eur_mwh",
+            "default_kind": "array",
+            "default_length": 120,
+            "default_sha256": "95afc7d77563ec545a0b2bcc0c66472f45cd9c6c75826dde00b5253bf1ec0b44"
+          },
+          {
+            "name": "gas_price_eur_mwh",
+            "default_kind": "array",
+            "default_length": 120,
+            "default_sha256": "66049b925d4a3b89fe92bb8cfcbc72549e237b8fa728a21b04aaf5c01780cc0f"
+          },
+          {
+            "name": "carbon_price_eur_t",
+            "default_kind": "array",
+            "default_length": 120,
+            "default_sha256": "159abb03d541d1fa4d3849329f794a5a422dcee4b29629ce0d6ffbc7c195a3ac"
+          }
+        ]
+      },
+      {
+        "id": "markets-network",
+        "stable_id": "study::markets-network",
+        "page": "markets",
+        "title": "Six-zone DC optimal power flow",
+        "engine_module": "planning_studies",
+        "fields": [],
+        "data_fields": [
+          {
+            "name": "zone_names",
+            "default_kind": "array",
+            "default_length": 6,
+            "default_sha256": "8be8e041255567ca9d0281045dbd0dff33546df05cecf735906113d83c2dc1ca"
+          },
+          {
+            "name": "demand_mw",
+            "default_kind": "array",
+            "default_length": 6,
+            "default_sha256": "ad466d9d56fc96afa7c8701ebe784ad0ce72fc36a05be4f1587bd599692b045f"
+          },
+          {
+            "name": "generator_capacity_mw",
+            "default_kind": "array",
+            "default_length": 6,
+            "default_sha256": "84d97a2e95b8a98952f06a60726c9f0fca44312651da05b787349638bdf2ba4c"
+          },
+          {
+            "name": "generator_cost_eur_mwh",
+            "default_kind": "array",
+            "default_length": 6,
+            "default_sha256": "21702b464e9c841d1df98ebc0c4a85ef7af2b2e9030f7bd251e47a34f09bc138"
+          },
+          {
+            "name": "lines",
+            "default_kind": "array",
+            "default_length": 7,
+            "default_sha256": "1fcbaab72ca6fd1437cc970c11e8ce12620c06e8bd74c93e0b08a17947a8c3a4"
+          }
+        ]
+      },
+      {
+        "id": "investment-contracts",
+        "stable_id": "study::investment-contracts",
+        "page": "investment",
+        "title": "Contract, tax, and reserve cash flows",
+        "engine_module": "planning_studies",
+        "fields": [
+          {
+            "name": "capex_eur",
+            "default": 8000000,
+            "min": 0,
+            "max": 1000000000000,
+            "step": 100000,
+            "unit": "EUR"
+          },
+          {
+            "name": "debt_share",
+            "default": 0.55,
+            "min": 0,
+            "max": 0.9,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "debt_interest_rate",
+            "default": 0.055,
+            "min": 0,
+            "max": 0.5,
+            "step": 0.005,
+            "unit": "fraction"
+          },
+          {
+            "name": "tax_rate",
+            "default": 0.25,
+            "min": 0,
+            "max": 0.6,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "dsra_months",
+            "default": 6,
+            "min": 0,
+            "max": 12,
+            "step": 1,
+            "unit": "months"
+          },
+          {
+            "name": "working_capital_fraction_of_revenue",
+            "default": 0.08,
+            "min": 0,
+            "max": 0.5,
+            "step": 0.01,
+            "unit": "fraction"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "operating_years",
+            "default_kind": "array",
+            "default_length": 5,
+            "default_sha256": "149488b1b7659b51192a91c8fc7af19e8f11e58073b59d0fd746b8795a57c732"
+          },
+          {
+            "name": "contracts",
+            "default_kind": "array",
+            "default_length": 1,
+            "default_sha256": "eef80e2b46e4e29489add81f401360da597f4d3fdf629ce7dd0977f94e84a3a2"
+          }
+        ]
+      },
+      {
+        "id": "lessons-hydrogenaux",
+        "stable_id": "study::lessons-hydrogenaux",
+        "page": "lessons",
+        "title": "Hydrogen auxiliary energy ledger",
+        "engine_module": "planning_studies",
+        "fields": [
+          {
+            "name": "hydrogen_kg",
+            "default": 100,
+            "min": 0,
+            "max": 1000000,
+            "step": 10,
+            "unit": "kg"
+          },
+          {
+            "name": "electrolyzer_kwh_per_kg",
+            "default": 52,
+            "min": 33.3,
+            "max": 200,
+            "step": 0.5,
+            "unit": "kWh/kg"
+          },
+          {
+            "name": "water_recovery_fraction",
+            "default": 0.8,
+            "min": 0.01,
+            "max": 1,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "demineralization_kwh_per_m3",
+            "default": 3,
+            "min": 0,
+            "max": 10000,
+            "step": 0.5,
+            "unit": "kWh/m³"
+          },
+          {
+            "name": "fuel_cell_gross_efficiency",
+            "default": 0.52,
+            "min": 0,
+            "max": 0.8,
+            "step": 0.01,
+            "unit": "fraction"
+          },
+          {
+            "name": "fuel_cell_auxiliary_fraction",
+            "default": 0.06,
+            "min": 0,
+            "max": 0.4,
+            "step": 0.01,
+            "unit": "fraction"
+          }
+        ],
+        "data_fields": []
+      },
+      {
+        "id": "overview-risk",
+        "stable_id": "study::overview-risk",
+        "page": "overview",
+        "title": "Portfolio evidence and threshold screen",
+        "engine_module": "planning_studies",
+        "fields": [],
+        "data_fields": [
+          {
+            "name": "evidence",
+            "default_kind": "array",
+            "default_length": 0,
+            "default_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        ]
+      },
+      {
+        "id": "pilots-registration",
+        "stable_id": "study::pilots-registration",
+        "page": "pilots",
+        "title": "Unpaired point-cloud registration",
+        "engine_module": "planning_studies",
+        "fields": [
+          {
+            "name": "maximum_correspondence_distance_m",
+            "default": 1,
+            "min": 0.0001,
+            "max": 1000000,
+            "step": 0.1,
+            "unit": "m"
+          },
+          {
+            "name": "trim_fraction",
+            "default": 0.8,
+            "min": 0.25,
+            "max": 1,
+            "step": 0.05,
+            "unit": "fraction"
+          },
+          {
+            "name": "maximum_iterations",
+            "default": 60,
+            "min": 1,
+            "max": 100,
+            "step": 1,
+            "unit": "iterations"
+          },
+          {
+            "name": "convergence_tolerance_m",
+            "default": 1e-07,
+            "min": 1e-07,
+            "max": 0.1,
+            "step": 1e-07,
+            "unit": "m"
+          }
+        ],
+        "data_fields": [
+          {
+            "name": "design_points_xyz",
+            "default_kind": "array",
+            "default_length": 6,
+            "default_sha256": "5610c62d6c175a074b59cbd5203e85fd9abd260a965e7329f581d29b23709b0e"
+          },
+          {
+            "name": "survey_points_xyz",
+            "default_kind": "array",
+            "default_length": 6,
+            "default_sha256": "e463ddc6e523cc0e6475d39ab73dbb9f947c1ca8b4dab2eed062c84c014d539d"
+          }
+        ]
+      },
+      {
+        "id": "hybrid-controls",
+        "stable_id": "study::hybrid-controls",
+        "page": "hybrid",
+        "title": "Averaged inverter control response",
+        "engine_module": "control_studies",
+        "fields": [
+          {
+            "name": "duration_s",
+            "default": 0.04,
+            "min": 0.001,
+            "max": 0.12,
+            "step": 0.001,
+            "unit": "s"
+          },
+          {
+            "name": "time_step_s",
+            "default": 5e-05,
+            "min": 1e-05,
+            "max": 0.0005,
+            "step": 1e-05,
+            "unit": "s"
+          },
+          {
+            "name": "load_step_time_s",
+            "default": 0.004,
+            "min": 0,
+            "max": 0.12,
+            "step": 0.001,
+            "unit": "s"
+          },
+          {
+            "name": "load_step_a",
+            "default": 8.0,
+            "min": 0,
+            "max": 500,
+            "step": 1,
+            "unit": "A"
+          },
+          {
+            "name": "filter_inductance_h",
+            "default": 0.0015,
+            "min": 0.0001,
+            "max": 0.02,
+            "step": 0.0001,
+            "unit": "H"
+          },
+          {
+            "name": "filter_resistance_ohm",
+            "default": 0.08,
+            "min": 0.001,
+            "max": 10,
+            "step": 0.01,
+            "unit": "Ω"
+          },
+          {
+            "name": "filter_capacitance_f",
+            "default": 2e-05,
+            "min": 1e-06,
+            "max": 0.001,
+            "step": 1e-06,
+            "unit": "F"
+          },
+          {
+            "name": "grid_inductance_h",
+            "default": 0.001,
+            "min": 0.0001,
+            "max": 0.1,
+            "step": 0.0001,
+            "unit": "H"
+          },
+          {
+            "name": "grid_resistance_ohm",
+            "default": 0.05,
+            "min": 0.001,
+            "max": 10,
+            "step": 0.01,
+            "unit": "Ω"
+          },
+          {
+            "name": "grid_angular_frequency_rad_s",
+            "default": 314.1592653589793,
+            "min": 250,
+            "max": 400,
+            "step": 1,
+            "unit": "rad/s"
+          },
+          {
+            "name": "grid_voltage_peak_v",
+            "default": 325.27,
+            "min": 50,
+            "max": 800,
+            "step": 1,
+            "unit": "V peak"
+          },
+          {
+            "name": "dc_bus_v",
+            "default": 800,
+            "min": 100,
+            "max": 1800,
+            "step": 10,
+            "unit": "V"
+          },
+          {
+            "name": "modulation_index_max",
+            "default": 0.95,
+            "min": 0.4,
+            "max": 0.95,
+            "step": 0.01,
+            "unit": "ratio"
+          },
+          {
+            "name": "current_limit_a",
+            "default": 40,
+            "min": 0.1,
+            "max": 1000,
+            "step": 1,
+            "unit": "A"
+          },
+          {
+            "name": "current_kp_v_per_a",
+            "default": 1.5,
+            "min": 0.001,
+            "max": 100,
+            "step": 0.1,
+            "unit": "V/A"
+          },
+          {
+            "name": "current_ki_v_per_as",
+            "default": 1000,
+            "min": 0.01,
+            "max": 100000,
+            "step": 10,
+            "unit": "V/(A·s)"
+          },
+          {
+            "name": "voltage_kp_a_per_v",
+            "default": 0.2,
+            "min": 0.001,
+            "max": 100,
+            "step": 0.01,
+            "unit": "A/V"
+          },
+          {
+            "name": "voltage_ki_a_per_vs",
+            "default": 80,
+            "min": 0.01,
+            "max": 100000,
+            "step": 10,
+            "unit": "A/(V·s)"
+          },
+          {
+            "name": "current_antiwindup_per_s",
+            "default": 100,
+            "min": 0,
+            "max": 10000,
+            "step": 10,
+            "unit": "s⁻¹"
+          },
+          {
+            "name": "voltage_antiwindup_per_s",
+            "default": 50,
+            "min": 0,
+            "max": 10000,
+            "step": 10,
+            "unit": "s⁻¹"
+          },
+          {
+            "name": "trace_points",
+            "default": 240,
+            "min": 50,
+            "max": 500,
+            "step": 10,
+            "unit": "points"
+          }
+        ],
+        "data_fields": []
+      },
+      {
+        "id": "research-eigenmodes",
+        "stable_id": "study::research-eigenmodes",
+        "page": "research",
+        "title": "Closed-loop inverter eigenmodes",
+        "engine_module": "control_studies",
+        "fields": [
+          {
+            "name": "filter_inductance_h",
+            "default": 0.0015,
+            "min": 0.0001,
+            "max": 0.02,
+            "step": 0.0001,
+            "unit": "H"
+          },
+          {
+            "name": "filter_resistance_ohm",
+            "default": 0.08,
+            "min": 0.001,
+            "max": 10,
+            "step": 0.01,
+            "unit": "Ω"
+          },
+          {
+            "name": "filter_capacitance_f",
+            "default": 2e-05,
+            "min": 1e-06,
+            "max": 0.001,
+            "step": 1e-06,
+            "unit": "F"
+          },
+          {
+            "name": "grid_inductance_h",
+            "default": 0.001,
+            "min": 0.0001,
+            "max": 0.1,
+            "step": 0.0001,
+            "unit": "H"
+          },
+          {
+            "name": "grid_resistance_ohm",
+            "default": 0.05,
+            "min": 0.001,
+            "max": 10,
+            "step": 0.01,
+            "unit": "Ω"
+          },
+          {
+            "name": "grid_angular_frequency_rad_s",
+            "default": 314.1592653589793,
+            "min": 250,
+            "max": 400,
+            "step": 1,
+            "unit": "rad/s"
+          },
+          {
+            "name": "grid_voltage_peak_v",
+            "default": 325.27,
+            "min": 50,
+            "max": 800,
+            "step": 1,
+            "unit": "V peak"
+          },
+          {
+            "name": "dc_bus_v",
+            "default": 800,
+            "min": 100,
+            "max": 1800,
+            "step": 10,
+            "unit": "V"
+          },
+          {
+            "name": "modulation_index_max",
+            "default": 0.95,
+            "min": 0.4,
+            "max": 0.95,
+            "step": 0.01,
+            "unit": "ratio"
+          },
+          {
+            "name": "current_limit_a",
+            "default": 40,
+            "min": 0.1,
+            "max": 1000,
+            "step": 1,
+            "unit": "A"
+          },
+          {
+            "name": "current_kp_v_per_a",
+            "default": 1.5,
+            "min": 0.001,
+            "max": 100,
+            "step": 0.1,
+            "unit": "V/A"
+          },
+          {
+            "name": "current_ki_v_per_as",
+            "default": 1000,
+            "min": 0.01,
+            "max": 100000,
+            "step": 10,
+            "unit": "V/(A·s)"
+          },
+          {
+            "name": "voltage_kp_a_per_v",
+            "default": 0.2,
+            "min": 0.001,
+            "max": 100,
+            "step": 0.01,
+            "unit": "A/V"
+          },
+          {
+            "name": "voltage_ki_a_per_vs",
+            "default": 80,
+            "min": -100000,
+            "max": 100000,
+            "step": 10,
+            "unit": "A/(V·s)"
+          }
+        ],
+        "data_fields": []
+      }
+    ],
+    "module_mapping_missing": []
+  },
+  "hallmark": {
+    "gate_ids": [
+      "2a",
+      "2b",
+      "7a",
+      "7b",
+      "22",
+      "23",
+      "29",
+      "65",
+      "74",
+      "1",
+      "25",
+      "37",
+      "38i",
+      "38ii",
+      "38iii",
+      "55a",
+      "55b",
+      "64",
+      "75",
+      "67",
+      "3",
+      "4",
+      "6a",
+      "6b",
+      "8",
+      "9",
+      "24a",
+      "24b",
+      "34",
+      "44a",
+      "44b",
+      "44c",
+      "44d",
+      "50",
+      "53",
+      "56",
+      "58",
+      "59",
+      "71",
+      "72",
+      "77",
+      "78",
+      "79",
+      "80",
+      "81",
+      "82",
+      "83",
+      "84",
+      "85",
+      "19",
+      "20",
+      "42",
+      "46a",
+      "46b",
+      "47a",
+      "47b",
+      "47c",
+      "54",
+      "63",
+      "66",
+      "68",
+      "69",
+      "70",
+      "10a",
+      "10b",
+      "11",
+      "12",
+      "15",
+      "16",
+      "17",
+      "18",
+      "26a",
+      "26b",
+      "27",
+      "28a",
+      "28b",
+      "39a",
+      "39b",
+      "62",
+      "30a",
+      "30b",
+      "33",
+      "76",
+      "73",
+      "40",
+      "41",
+      "48",
+      "49a",
+      "49b",
+      "32"
+    ],
+    "gate_row_count": 90,
+    "slop_test_reference_present": false,
+    "reference_hashes": {
+      "SKILL.md": {
+        "bytes": 18239,
+        "sha256": "25a1ff92d925b2389e8409f42fb8ad7e033fceca8b5d1f07ed4ca4c28da53dc3"
+      },
+      "references/redesign.md": {
+        "bytes": 12231,
+        "sha256": "cd3fc1dd10af22bb0374b41340fbab8f2b3be997ea5b63716da3d44ba0bb0552"
+      },
+      "references/gates.md": {
+        "bytes": 39061,
+        "sha256": "63ad234a1acab5e081dfe8ecf2331518a43cbf42760dc5c6ababfb24d7b3e50c"
+      }
+    },
+    "before_record": "docs/terminal-audit/.hallmark/before.json",
+    "before_lint_output": "docs/terminal-audit/before-lint.json",
+    "before_execution": "sloplint --scope app --render --before --json on archive HelioForge-Preview.html",
+    "before_outcome": {
+      "fails": 989,
+      "reflex": 590,
+      "warns": 19,
+      "render": "not run: no puppeteer-core found locally/globally/HALLMARK_PUPPETEER",
+      "internal_error": "check30 Maximum call stack size exceeded"
+    }
+  },
+  "baseline_file_hashes": [
+    {
+      "path": "AGENTS.md",
+      "bytes": 2837,
+      "sha256": "36e9b564b24232f5d6d9a03f2e5647221886c4fcce4885fe0ab8eff2fd75b342"
+    },
+    {
+      "path": "HelioForge-Preview.html",
+      "bytes": 13456115,
+      "sha256": "825bf6405bb9c6e8977d45d906f4195fa23b00b7c8bd53851e50698fc4c3f4f8"
+    },
+    {
+      "path": "README.md",
+      "bytes": 19231,
+      "sha256": "6db4bba9166f2fb6ef2f63708a69e9db086e924b3eee7f30bb54a274673e9127"
+    },
+    {
+      "path": "SECURITY.md",
+      "bytes": 3441,
+      "sha256": "fe71ee362dead473971f4d68f8c4b49caa80890852bcdf38636087387b4ddab8"
+    },
+    {
+      "path": "apps/api/helioforge/__init__.py",
+      "bytes": 73,
+      "sha256": "d2518e5bf46540405c5729a1a5abe913eac7f0efe97fbf68a178e2e859c85ac0"
+    },
+    {
+      "path": "apps/api/helioforge/catalog.py",
+      "bytes": 4843,
+      "sha256": "6132dc65861fa4bfb7f56705652a6bdb5019defcc9ce0f80b5171bd788e36295"
+    },
+    {
+      "path": "apps/api/helioforge/council.py",
+      "bytes": 12723,
+      "sha256": "986845e1f047e1479b69fdc9570ba0688283a45a067e78e13c78171c6e0fca37"
+    },
+    {
+      "path": "apps/api/helioforge/dashboard.py",
+      "bytes": 2490,
+      "sha256": "485da1fe8b4ca2e87633d119bdbe4c20cc52eeca9d6568f06127f35be7c722a4"
+    },
+    {
+      "path": "apps/api/helioforge/data/hybrid_catalog.json",
+      "bytes": 162268,
+      "sha256": "1cd3e0d70172b8ca431db242fd78ba7a6493e887a65c731db33146d5240f4665"
+    },
+    {
+      "path": "apps/api/helioforge/engines/__init__.py",
+      "bytes": 73,
+      "sha256": "45280d06fbb9454171e1466d8be34e2c96bff0392e1574983f6e124b9e45d2fe"
+    },
+    {
+      "path": "apps/api/helioforge/engines/control_studies.py",
+      "bytes": 30905,
+      "sha256": "0e5e6fbbee0fb171c2703eff122cf6bcede34869b7cfe521040dfac565680f48"
+    },
+    {
+      "path": "apps/api/helioforge/engines/decision_studies.py",
+      "bytes": 69066,
+      "sha256": "6c52512ad3c03b3abe89d85ce009b0d1c2b8c414eb21f1d1c9b9ccc8948f0b6f"
+    },
+    {
+      "path": "apps/api/helioforge/engines/engineering_studies.py",
+      "bytes": 73194,
+      "sha256": "3cebc8222e67c45db07c0e288098f53735a4991e773e1cac13751372c9fec642"
+    },
+    {
+      "path": "apps/api/helioforge/engines/finance.py",
+      "bytes": 7838,
+      "sha256": "393528feb42fbec36fa51e642d16e63ba9e9b968c91d9466214ceb01f6c4f136"
+    },
+    {
+      "path": "apps/api/helioforge/engines/forecast.py",
+      "bytes": 1533,
+      "sha256": "f4dddba708533f9d49246f91c7f6e1c269f23c46a7d2ec4ee4d5dbffe7930e77"
+    },
+    {
+      "path": "apps/api/helioforge/engines/hybrid.py",
+      "bytes": 7645,
+      "sha256": "a6a7a5027a95e552cff5572bee0ee8968e1cff05baa074da0d7ea77bda14c3ca"
+    },
+    {
+      "path": "apps/api/helioforge/engines/physical_studies.py",
+      "bytes": 68697,
+      "sha256": "7414df30acfea75c77b1a4ed0e88c7b2b4ea9b32644f8f753a38de145bb0342a"
+    },
+    {
+      "path": "apps/api/helioforge/engines/planning_studies.py",
+      "bytes": 91611,
+      "sha256": "5334bb9e0dec5acbc4b57b10ca675d2157bdc89f0fb0620e903b676184d8376c"
+    },
+    {
+      "path": "apps/api/helioforge/engines/research.py",
+      "bytes": 3276,
+      "sha256": "bce5c56abb73c3a9b7c88c537dd4379de75032338212ab6602303d978b7401bb"
+    },
+    {
+      "path": "apps/api/helioforge/engines/storage.py",
+      "bytes": 7753,
+      "sha256": "41d6cc76c6c8712d8882122c8afe8a315a17c24946b28749702185c04d79eec9"
+    },
+    {
+      "path": "apps/api/helioforge/engines/toolkit_studies.py",
+      "bytes": 14149,
+      "sha256": "594cdfe63633c466250091c80a03c201dfabbaa76708eb6eb21eb336719b7357"
+    },
+    {
+      "path": "apps/api/helioforge/engines/workflow_studies.py",
+      "bytes": 71924,
+      "sha256": "021597dd1d8b016f15bffa8494fb23a553fb93b26f9ae48c7a17061ec19ca585"
+    },
+    {
+      "path": "apps/api/helioforge/hybrid.py",
+      "bytes": 7023,
+      "sha256": "7baf41b42e3c5e8d00be064f60a134c447ff0a6f25f0b4d2581dc55d88f2c03f"
+    },
+    {
+      "path": "apps/api/helioforge/integrations.py",
+      "bytes": 26124,
+      "sha256": "73877f1973eb2dcd8e285fe38a9d98cd675fc6000762a727319b502abe147374"
+    },
+    {
+      "path": "apps/api/helioforge/main.py",
+      "bytes": 13335,
+      "sha256": "4448d31767ad781b062e589de240c2f3094847525724d8bbecbc006fe96fe430"
+    },
+    {
+      "path": "apps/api/helioforge/schemas.py",
+      "bytes": 7955,
+      "sha256": "4c03d0ba4e4b20a7a8e6a869954bd9d0bb2a6fad7fdf9a8ffa5f4ba801152d22"
+    },
+    {
+      "path": "apps/api/helioforge/store.py",
+      "bytes": 4075,
+      "sha256": "0efdb708bdace82bb7a1877d41609243961d5fd012f6f48f829118734c092a38"
+    },
+    {
+      "path": "apps/api/helioforge/studies.py",
+      "bytes": 2072,
+      "sha256": "d539b08c640f48c37e3c2434f1dd0f09d3d99fa9094ee8b3409e667a222e8c29"
+    },
+    {
+      "path": "apps/api/pyproject.toml",
+      "bytes": 884,
+      "sha256": "ce9d35f71751f1bb3fe55f7ad4c8f5849b2ced9eb6182fb4ff4cec4aaa22596a"
+    },
+    {
+      "path": "apps/api/tests/test_api.py",
+      "bytes": 5525,
+      "sha256": "14d8b06936b34e9264e83b397b162ed18631749701b6bbbad815126f55c79fe5"
+    },
+    {
+      "path": "apps/api/tests/test_champion.py",
+      "bytes": 1835,
+      "sha256": "ec1fad49aa4c195d7e7db27455f6e0582560d7c8741b926134f96ef81f7c0139"
+    },
+    {
+      "path": "apps/api/tests/test_control_studies.py",
+      "bytes": 7522,
+      "sha256": "d4c7620200be16e5fe8c4d12a60fdd4221b1387d3121d978258537050953dd53"
+    },
+    {
+      "path": "apps/api/tests/test_council.py",
+      "bytes": 3732,
+      "sha256": "f40c70c1146a179361cb22564866c6c6f9841f813dd18a89007235c84afc982d"
+    },
+    {
+      "path": "apps/api/tests/test_decision_studies.py",
+      "bytes": 12047,
+      "sha256": "857d6c292f08b499b133f2b42de828d700c3e82cf7472d84d7b1ccf5183f1dfd"
+    },
+    {
+      "path": "apps/api/tests/test_engineering_studies.py",
+      "bytes": 13451,
+      "sha256": "240899798522fe3061c8aa817f59eeb91bf66ea1907e8b41163b16371913644b"
+    },
+    {
+      "path": "apps/api/tests/test_engines.py",
+      "bytes": 11631,
+      "sha256": "520dc77368cb0d49ec341e49e81329c62b099f34b8f1c75f408d399a0eb4fbf9"
+    },
+    {
+      "path": "apps/api/tests/test_hybrid.py",
+      "bytes": 9441,
+      "sha256": "7971a5e753cb8fd053feecf16fa00f35e3f36176d49020d7a85cad1c825d8159"
+    },
+    {
+      "path": "apps/api/tests/test_hybrid_asset_check.py",
+      "bytes": 2379,
+      "sha256": "067927bdc172fdc1644a4ad5a39c366a3ac56d720878651143944c9335cfbb39"
+    },
+    {
+      "path": "apps/api/tests/test_hybrid_bundle.py",
+      "bytes": 1779,
+      "sha256": "8ff0cbea35365674ada2129778c0bf7cb8c044840db665e94b8e38d44d620e0c"
+    },
+    {
+      "path": "apps/api/tests/test_integrations.py",
+      "bytes": 9374,
+      "sha256": "5a78fba5eb8bfee65e23bbe473392c0c7f7b12716645fc5c94b63460b3db5163"
+    },
+    {
+      "path": "apps/api/tests/test_physical_studies.py",
+      "bytes": 13806,
+      "sha256": "734ebf9b04f0c67f9c95a5e3b4e1f1d85db5e6d7768356bbd99121acd1ccf4f6"
+    },
+    {
+      "path": "apps/api/tests/test_planning_studies.py",
+      "bytes": 17975,
+      "sha256": "3e5e2eccbc88a1d0eff85a8f1d40dbef5fd6bcb203645b5ab2b185be796ce4ce"
+    },
+    {
+      "path": "apps/api/tests/test_reconstruction.py",
+      "bytes": 1979,
+      "sha256": "b43a87afc053d434a715361c51f3f907f71f0846dc5142c736f50cae5e5ebafa"
+    },
+    {
+      "path": "apps/api/tests/test_research_bounds.py",
+      "bytes": 450,
+      "sha256": "a18bc2282890a4c5e0d00931d7b5711c666f7531d6f20f5dab72845e4263bc07"
+    },
+    {
+      "path": "apps/api/tests/test_security_xml.py",
+      "bytes": 2769,
+      "sha256": "35eb7c8551c448f142f68ea368fbaeb0ecfddda315ef387cefbd640360b824d4"
+    },
+    {
+      "path": "apps/api/tests/test_store.py",
+      "bytes": 904,
+      "sha256": "aca393ae7d0c765f387f1b9ee64f92d85d23b9c348df4c799a0ef50d5ab20428"
+    },
+    {
+      "path": "apps/api/tests/test_studies_api.py",
+      "bytes": 1893,
+      "sha256": "64f5a5698cb4936b785e96e6b22088b14cb2f30a763b6f01f3978b464ab73ea3"
+    },
+    {
+      "path": "apps/api/tests/test_toolkit_studies.py",
+      "bytes": 4530,
+      "sha256": "ebb884d97685468ac53b1545b6ca8b5a56f37ba8d69af1dce62835a97e15ad12"
+    },
+    {
+      "path": "apps/api/tests/test_workflow_studies.py",
+      "bytes": 14398,
+      "sha256": "5649c323bcfa2ade89e03a7c12417835938366fbc0444f5b4b2954d65eee0221"
+    },
+    {
+      "path": "apps/web/package-lock.json",
+      "bytes": 12955,
+      "sha256": "094257ab1f4011b06412adaae2ec49fb87e62773be4854c94cb263083c1c258f"
+    },
+    {
+      "path": "apps/web/package.json",
+      "bytes": 445,
+      "sha256": "73375a4ceee3ec9d900ec54347316bec79aa704c57fe9cf0d31b86bcf04eea29"
+    },
+    {
+      "path": "apps/web/src/advanced-visuals.css",
+      "bytes": 4924,
+      "sha256": "7aee289bc4f0e836e7630e8be8b06f1429e6b9e52629e1543751b5cca4313c15"
+    },
+    {
+      "path": "apps/web/src/advanced-visuals.ts",
+      "bytes": 30179,
+      "sha256": "499a7f662dcd42d7fe282bd49ad7558ab09fe3610308ef905dd997469e4f2ede"
+    },
+    {
+      "path": "apps/web/src/app.ts",
+      "bytes": 26803,
+      "sha256": "e612b646600e7e2d7a690f0ae665f79c423c1dc6495d84f0cdb10e586f2a5e55"
+    },
+    {
+      "path": "apps/web/src/champion-controller.ts",
+      "bytes": 10691,
+      "sha256": "c2daad6f60f845a2567db4d4917973a47f7d40311542df915721d339cc8fe663"
+    },
+    {
+      "path": "apps/web/src/champion-core.ts",
+      "bytes": 9846,
+      "sha256": "fe67424d7ed3f31118be4af022ec9cc8dad18505368d9928ceec3f3d1e2a0f6e"
+    },
+    {
+      "path": "apps/web/src/champion-views.ts",
+      "bytes": 8366,
+      "sha256": "f876861f89c1e5d1897172f44d945b00a3aedfcbf63f46e2382742c9b5531355"
+    },
+    {
+      "path": "apps/web/src/champion.css",
+      "bytes": 20647,
+      "sha256": "d421a21c94548a4e5461a5c59fe4c235e67ebe17d56b10e61ff2b9caa5adddf0"
+    },
+    {
+      "path": "apps/web/src/charts.ts",
+      "bytes": 9092,
+      "sha256": "8c3aff2b9dbf10286e02cb4498d10a8ef1b06b64b3e9020b07755abe8134aab5"
+    },
+    {
+      "path": "apps/web/src/completion-ui.css",
+      "bytes": 6574,
+      "sha256": "c06bdb20e46d70eb526f683d9ced5f65e8e6f84564cdf955bb604ca4ca86f7c4"
+    },
+    {
+      "path": "apps/web/src/completion-ui.ts",
+      "bytes": 41294,
+      "sha256": "7b8319de6300e33f77602fa9cac53b4ab5405f63bf2cdf2fb209500e62e54f06"
+    },
+    {
+      "path": "apps/web/src/core.ts",
+      "bytes": 4372,
+      "sha256": "2ce2e084c2c40ba2bcece8a6b20b80ffa1ea61b87384ab142e79d27db3f2c813"
+    },
+    {
+      "path": "apps/web/src/evidence.ts",
+      "bytes": 2966,
+      "sha256": "9ece3d24222619016e523d61b71dfede3459ed9bf6952e5b3ecb2af7746913b9"
+    },
+    {
+      "path": "apps/web/src/experiences.css",
+      "bytes": 12962,
+      "sha256": "3719aba46f7433bddf6db4ae46af9e0ce4d263208997ee2766318afc3698d895"
+    },
+    {
+      "path": "apps/web/src/experiences.ts",
+      "bytes": 39697,
+      "sha256": "c66402b7f1094ceb3431732c83b60aadd9ab77549ec42862650f6de815c048e4"
+    },
+    {
+      "path": "apps/web/src/hybrid-controller.ts",
+      "bytes": 13066,
+      "sha256": "3dfc325adea2ceebb5dbdf3d7a4280c167ea18a3db5d76c6d36e9df2780a2381"
+    },
+    {
+      "path": "apps/web/src/hybrid-core.ts",
+      "bytes": 8421,
+      "sha256": "c67b01887d78a6d1f4d1bccba4cac565e1a169e1b8249097e15f25f6e17ef81e"
+    },
+    {
+      "path": "apps/web/src/hybrid-data.ts",
+      "bytes": 5329138,
+      "sha256": "6282980991c5f81c1e52c85d92847475d0cd20e8cecde3689f3bb3535bda90ae"
+    },
+    {
+      "path": "apps/web/src/hybrid-types.ts",
+      "bytes": 3767,
+      "sha256": "22ae03fe1ac8c3adddc920321b3f5a4eaf4f7ec114f8d81f0e1503e337a19319"
+    },
+    {
+      "path": "apps/web/src/hybrid-views.ts",
+      "bytes": 22501,
+      "sha256": "9ca0793cda4c9577261675ee75e0dee41f837e0fdaacbd8c0f88438952dd6de3"
+    },
+    {
+      "path": "apps/web/src/icons.ts",
+      "bytes": 3608,
+      "sha256": "bd56a8e444e4a5cb18a62bebdf3e4272e00ca2b4af0df74fa698b7e0f3ab53c4"
+    },
+    {
+      "path": "apps/web/src/integrations-ui.css",
+      "bytes": 808,
+      "sha256": "40c672500e96381316630a296ca8c996b1dd05adfc2a88694b1a31fe4e95538f"
+    },
+    {
+      "path": "apps/web/src/integrations-ui.ts",
+      "bytes": 18522,
+      "sha256": "230351a3966529ad85b56c6dc737d366281626f47579f18a205fd1bdf8b4f96e"
+    },
+    {
+      "path": "apps/web/src/release-provenance.ts",
+      "bytes": 4124,
+      "sha256": "8f9223b9144ae51b2391799a94296dd241f6bfe6daed2c5398d0c8dfed007a76"
+    },
+    {
+      "path": "apps/web/src/roadmap-data.ts",
+      "bytes": 6423431,
+      "sha256": "da09f6ffc3db1551cd9109894caf34d7d85fa9dc7725f5640cae50e9ce4210fa"
+    },
+    {
+      "path": "apps/web/src/roadmap-types.ts",
+      "bytes": 1103,
+      "sha256": "4276583175031ec0585764ed3b9f4dc8505e59cebd11663519588ab182dbc752"
+    },
+    {
+      "path": "apps/web/src/roadmap.ts",
+      "bytes": 18862,
+      "sha256": "c8e573af83e664c843f6fe27e971d7817a6e70ac4626d916bdd2f14ca9429050"
+    },
+    {
+      "path": "apps/web/src/scene.ts",
+      "bytes": 14066,
+      "sha256": "79e78ecc1ae458bf9ad02675ccb305636109a62af79541803f41b583d82f03e7"
+    },
+    {
+      "path": "apps/web/src/snapshot.ts",
+      "bytes": 32364,
+      "sha256": "7f254bfb9fb7f9462be6f5f0c6212869b06a4bc28c947ff75a2c73a0188c0127"
+    },
+    {
+      "path": "apps/web/src/study-visuals.css",
+      "bytes": 6726,
+      "sha256": "7733969c5962deb35acc98fbe4f4710f9bcd7bf62ffc4e70d00de2d17fccf160"
+    },
+    {
+      "path": "apps/web/src/study-visuals.ts",
+      "bytes": 63104,
+      "sha256": "af1944bd615af94dba7ede730209091fa6ab7ed9da8831c306f75f13acec5b11"
+    },
+    {
+      "path": "apps/web/src/styles.css",
+      "bytes": 69542,
+      "sha256": "98fa5b2064c9f2cb1b3c3e2c75697924df39df4c8f2394bb0009ff419ab78be8"
+    },
+    {
+      "path": "apps/web/src/types.ts",
+      "bytes": 5565,
+      "sha256": "1be78d991d6e913acbf5a67bac47083bdc473a8ee4906f61fda95b04e1d90b65"
+    },
+    {
+      "path": "apps/web/src/views.ts",
+      "bytes": 38235,
+      "sha256": "002dc3a4254a153f50caf14f073adccd5fdc6269ba33ae2b2bfa9db05457fc17"
+    },
+    {
+      "path": "apps/web/src/workflows.css",
+      "bytes": 4759,
+      "sha256": "6c8619755b6f03b04d9f1dce50e57735a809d452c9350d92feca138c972adacc"
+    },
+    {
+      "path": "apps/web/src/workflows.ts",
+      "bytes": 31755,
+      "sha256": "3d2c2095ba517ba3b98cd30d69e294495b97ecc5bd98ad53e19ad4b86217d9f3"
+    },
+    {
+      "path": "apps/web/tests/advanced-visuals.test.mjs",
+      "bytes": 9021,
+      "sha256": "56de06479f418ecd499ae96c8c7ed66cd13da6a1e562738efab6285f707836e3"
+    },
+    {
+      "path": "apps/web/tests/champion.test.mjs",
+      "bytes": 6135,
+      "sha256": "1645326e8df92113bb286ac77810aa870113943d24bb9ea36e428218ba0a8655"
+    },
+    {
+      "path": "apps/web/tests/completion-ui.test.mjs",
+      "bytes": 4566,
+      "sha256": "ca51497b65e7f586eb14d5adbeb661011c1dfa7ced21c2693926810523b4a5d7"
+    },
+    {
+      "path": "apps/web/tests/controller-fixture.test.mjs",
+      "bytes": 597,
+      "sha256": "87d02ae7bbc617206143b695efb9a3b9aa124dae4f64fec8b49fb449a5ca03dd"
+    },
+    {
+      "path": "apps/web/tests/core.test.mjs",
+      "bytes": 4086,
+      "sha256": "4e0123c84d512a3d9ecbf3b6ebfcbe8c5ee0ddc76fb37c4e5ac63a824c1d5199"
+    },
+    {
+      "path": "apps/web/tests/download.test.mjs",
+      "bytes": 1513,
+      "sha256": "27bcfa108c6377a0ed2b1304a80bb43447fb9235539a3e931069168183e8d76f"
+    },
+    {
+      "path": "apps/web/tests/evidence.test.mjs",
+      "bytes": 1409,
+      "sha256": "ed47954682849052ef02d5cbafc79e0071a4a45f2bae2adb7afbbb864e9eaede"
+    },
+    {
+      "path": "apps/web/tests/experiences.test.mjs",
+      "bytes": 3949,
+      "sha256": "87354ce409b022fc1269186342fe536e37d979846a76a078fa5f5e425bcc5366"
+    },
+    {
+      "path": "apps/web/tests/helpers/controller-fixture.mjs",
+      "bytes": 5539,
+      "sha256": "7648bc8f45c754a2ce4ad5fbb7a62fa3edf57ac43612ed06c27908da991fc3ca"
+    },
+    {
+      "path": "apps/web/tests/hybrid-bundle-regressions.test.mjs",
+      "bytes": 6903,
+      "sha256": "313f6100f083cc1137a877102dca4cca91a861685c6a333c20840db3e8d48c53"
+    },
+    {
+      "path": "apps/web/tests/hybrid.test.mjs",
+      "bytes": 3696,
+      "sha256": "a07cc6229e74998243f1ed31dbd45cd060b6845e28c647d57cc2e8118303b614"
+    },
+    {
+      "path": "apps/web/tests/learning-progress-regressions.test.mjs",
+      "bytes": 994,
+      "sha256": "2ffcb4352a7c9454923268bc50dd5ac9c47594b22bc01058b8ac40f04f348be9"
+    },
+    {
+      "path": "apps/web/tests/learning-storage-regressions.test.mjs",
+      "bytes": 2408,
+      "sha256": "b960542fa4745dc7fe65345902197a3eeb2bfbecb0ee2965c962df173d5cbb5e"
+    },
+    {
+      "path": "apps/web/tests/mobile-export-name.test.mjs",
+      "bytes": 1199,
+      "sha256": "1b91549277d57d7d12ce32913cd433a22dbeb8fba19e1d4ed5f557d38861db1c"
+    },
+    {
+      "path": "apps/web/tests/release-provenance.test.mjs",
+      "bytes": 2764,
+      "sha256": "6d709dfa1f34039e39260192be587f586d4be4786fc9805d8b5fd633c0a2c85e"
+    },
+    {
+      "path": "apps/web/tests/roadmap.test.mjs",
+      "bytes": 1635,
+      "sha256": "615b58e4389cc9f68fecd16ccbf2c28b68630c748dc14aa7ed50a84dc080585a"
+    },
+    {
+      "path": "apps/web/tests/scene.test.mjs",
+      "bytes": 2835,
+      "sha256": "93b81bedffd0678b33a8a06378377f3efc66d1f33649e960ea8f96354c6361d0"
+    },
+    {
+      "path": "apps/web/tests/storage-timeline.test.mjs",
+      "bytes": 1668,
+      "sha256": "30e252b8aeed2e65e576da559a8042720c9e1365d10013a39b52c19fe41f7ee1"
+    },
+    {
+      "path": "apps/web/tests/study-dial-regressions.test.mjs",
+      "bytes": 1886,
+      "sha256": "8c90517b5ad84fffedd235ab1b0aba59764eed61b30fe015b9ddc89e61fc2324"
+    },
+    {
+      "path": "apps/web/tests/study-pin-regressions.test.mjs",
+      "bytes": 3237,
+      "sha256": "f9e4442390a383c04e5e260076d13d3cb8cf5b1db1efd6f19e398c61df700582"
+    },
+    {
+      "path": "apps/web/tests/study-visuals.test.mjs",
+      "bytes": 8580,
+      "sha256": "e6b64b55e74f89a7d5a1a8502c46ba0410d9383f32216e25c6c662d7b9fc373c"
+    },
+    {
+      "path": "apps/web/tests/workflows.test.mjs",
+      "bytes": 2829,
+      "sha256": "3ce208003bc0eb16d00b5ec166b26cf4fd29b691a06dfed07421e0e728466767"
+    },
+    {
+      "path": "apps/web/tsconfig.json",
+      "bytes": 1164,
+      "sha256": "a3f8c74ae83ebac4239765b4d487c320b7e945555fc19eae79a8ca9c0c04f950"
+    },
+    {
+      "path": "docs/METHODOLOGY.md",
+      "bytes": 9017,
+      "sha256": "7f11a70415530612e59fa0a11e412e22729b1d45293c0779ed682a4c21fa2958"
+    },
+    {
+      "path": "docs/VALIDATION.md",
+      "bytes": 4348,
+      "sha256": "8868e4c1f708284c8a953aaa11bb42b6632011eecc75b4308400eee288446ea5"
+    },
+    {
+      "path": "scripts/build-web.mjs",
+      "bytes": 1800,
+      "sha256": "3177ae0167b5803f7abc7924d8ac0e8c4fa5f5b3b0ae67e1994b4aef7c519ef6"
+    },
+    {
+      "path": "scripts/generate-hybrid-assets.py",
+      "bytes": 3519,
+      "sha256": "449a0e4f4a0d1aa7da95c40e6c94e8340a9e2f09e37d79a4bea9bab5cb013f12"
+    },
+    {
+      "path": "scripts/generate-studies.py",
+      "bytes": 771,
+      "sha256": "a3fdce6e5732d980063c38583838255f11d5baca7571d968df7d0f42873660b5"
+    },
+    {
+      "path": "scripts/preview-demo.mjs",
+      "bytes": 1213,
+      "sha256": "3531b166731f46662ca53ca071157a0867b5266f969cd2c17962a15be498810e"
+    }
+  ]
+}

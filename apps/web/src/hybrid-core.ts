@@ -1,7 +1,7 @@
 namespace HF {
   export const systemById=(id:string):HybridSystem=>{const s=HYBRID_CATALOG.systems.find(s=>s.id===id);if(!s)throw new Error('Unknown architecture.');return s;};
   export const scenarioById=(id:string):HybridScenario=>{const s=HYBRID_CATALOG.scenarios.find(s=>s.id===id);if(!s)throw new Error('Unknown scenario.');return s;};
-  export const techById=(id:string):HybridTechnology=>HYBRID_CATALOG.technologies.find(t=>t.id===id)??{id,name:id==='load'?'Site demand':'Grid connection',icon:'grid',color:'#bcc9d9',boundary:id==='load'?'Synthetic site demand; not a measured load profile.':'Utility connection; no power flow, fault or protection model.'};
+  export const techById=(id:string):HybridTechnology=>{const t=HYBRID_CATALOG.technologies.find(t=>t.id===id);return t?{...t,color:'var(--color-accent)'}:{id,name:id==='load'?'Site demand':'Grid connection',icon:'grid',color:'var(--color-ink-2)',boundary:id==='load'?'Synthetic site demand; not a measured load profile.':'Utility connection; no power flow, fault or protection model.'};};
   export function applicable(s:HybridSystem,c:HybridScenario):boolean {
     const required:Record<string,string>={'cloud-cover':'solar','wind-lull':'wind','low-river':'hydro','generator-outage':'generator','battery-trip':'battery','aged-battery':'battery','reserve-floor':'battery'};
     const asset=required[c.id];if(asset&&!s.technologies.includes(asset))return false;
