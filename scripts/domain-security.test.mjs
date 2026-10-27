@@ -19,3 +19,11 @@ test('shared policy deduplicates scripts and covers static structured data', () 
   assert.equal(domainSecurityPolicy([script, script]), domainSecurityPolicy([script]));
   assert.equal((domainSecurityPolicy([script]).match(/sha256-/g) || []).length, 2);
 });
+
+test('hash extraction follows browser script end-tag boundaries', () => {
+  const body = 'window.example = "</script-like>";';
+  const expected = domainSecurityPolicy([`<script>${body}</script>`]);
+  for (const ending of ['</script >', '</ScRiPt\t>', '</script foo="bar">', '</script/>']) {
+    assert.equal(domainSecurityPolicy([`<script>${body}${ending}`]), expected);
+  }
+});

@@ -2,7 +2,7 @@
   "application": "HelioForge Terminal",
   "version": "2.0.0",
   "build_id": "responsive-audit-20261027",
-  "prepared_utc": "2026-10-27T10:07:20.324667+00:00",
+  "prepared_utc": "2026-10-27T10:13:13.686676+00:00",
   "intended_use": "bounded synthetic research and education; see deployment receipt for publication",
   "catalog_version": "0.2.0",
   "catalogue_counts": {
@@ -22,7 +22,7 @@
     "frontend_tests_passed": 190,
     "frontend_tests_failed": 0,
     "frontend_tests_skipped": 0,
-    "build_helper_tests_passed": 5,
+    "build_helper_tests_passed": 6,
     "browser": {
       "passed": 654,
       "failed": 0,
@@ -118,7 +118,7 @@
   },
   "upstream_revision": "7a5560303f77c8e6118c2dfce0b3c03e5de6c5a2",
   "hash_semantics": "SHA-256; LF-normalized UTF-8 where text_mode=lf, exact bytes otherwise; not signatures",
-  "file_list_sha256": "f67b0947d4effe3683c6920fdc5119ce1c69678e58e1349b6cb5c46faa328ffa",
+  "file_list_sha256": "7b45ce65e0f34db876bc804ca6c86e069823a13ca61f3848403ba77d068d85e5",
   "files": [
     {
       "path": ".dockerignore",
@@ -1414,9 +1414,9 @@
     },
     {
       "path": "docs/FULL_AUDIT_REPORT.md",
-      "bytes": 12579,
+      "bytes": 12977,
       "text_mode": "lf",
-      "sha256": "f73da9fecafdc17b4b11396203ef937d33347de7b344a07642888ffdec720e32"
+      "sha256": "4f85513748f243223a102478f35d76f7218e64fdfb37121691c19915e92f69b5"
     },
     {
       "path": "docs/HYBRID_COVERAGE.md",
@@ -1754,7 +1754,7 @@
       "path": "docs/full-audit/verification.json",
       "bytes": 2952,
       "text_mode": "lf",
-      "sha256": "4527721cbb67386dd21a941c71124ec90e37c9d2670abf004104938b4cd0f29e"
+      "sha256": "f02adb655b6f9c28d990d768e9dab4ad5eaa8e95e32f6be8b1c4dabc38d14b4b"
     },
     {
       "path": "docs/hybrid-browser-tests.txt",
@@ -2463,15 +2463,15 @@
     },
     {
       "path": "scripts/domain-security.mjs",
-      "bytes": 889,
+      "bytes": 1007,
       "text_mode": "lf",
-      "sha256": "c7c7a10687f9876e474e1ed979e0246c4bef336382a5a3fe43517e2f200ee4f3"
+      "sha256": "9a657c3b0436aff48ecb8e659cb7771aeeabc379875ede81ccd6a62ae2468579"
     },
     {
       "path": "scripts/domain-security.test.mjs",
-      "bytes": 1139,
+      "bytes": 1519,
       "text_mode": "lf",
-      "sha256": "1c2600f5e5aaa7fd40a944f52d9ba0c4cc4df9da41fb3ac0f137c2d83937868a"
+      "sha256": "3d4ea48593acaba5e2ce91c9325ea5471c03bfde823487aa048b39b8c1dd5070"
     },
     {
       "path": "scripts/engineering-hero.mjs",

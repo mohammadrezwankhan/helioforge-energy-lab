@@ -7,7 +7,7 @@
   "frontend_tests_passed": 190,
   "frontend_tests_failed": 0,
   "frontend_tests_skipped": 0,
-  "build_helper_tests_passed": 5,
+  "build_helper_tests_passed": 6,
   "browser": {
     "passed": 654,
     "failed": 0,

@@ -74,7 +74,7 @@ vulnerabilities. Runtime dependency pins did not change.
 |---|---|
 | Baseline Python / frontend | 653 / 186 passed |
 | Final Python / frontend | 655 / 190 passed; zero failed or skipped; one upstream TestClient deprecation warning retained |
-| Build helpers | 5 passed (engineering media and CSP) |
+| Build helpers | 6 passed (engineering media and CSP) |
 | Existing API browser journeys | Smoke 18, hybrid 14, Champion 18, roadmap 24, completion 10 passed |
 | Terminal standalone suite | 251 passed, 0 failed; 24 axe scans, 0 violations or execution errors |
 | Full matrix | 12 views × 13 widths × 3 engines, plus keyboard, zoom-equivalent, label and accessibility assertions; see current verification JSON |
@@ -115,6 +115,11 @@ python scripts/verify-release.py
 
 The CI browser job now installs Chromium, Firefox and WebKit and runs the full
 matrix. Remote CI must succeed on the integrated PR before merge/publication.
+The first CI run caught an unstaged launcher fix and a CodeQL finding in the new
+CSP extractor's closing-tag handling. The launcher source is now included, and
+a failing-then-passing regression covers whitespace, mixed case, ignored end-tag
+attributes and script-like text. This extractor processes generated HTML only;
+it is not an HTML sanitizer. Neither failed candidate was merged or deployed.
 
 ## Performance and limits
 
