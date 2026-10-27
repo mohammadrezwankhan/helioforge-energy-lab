@@ -15,12 +15,15 @@ import subprocess
 import sys
 import threading
 import time
+import tomllib
 from urllib.error import URLError
 from urllib.request import urlopen
 import webbrowser
 
 ROOT = Path(__file__).resolve().parent
-REQUIRED = {'fastapi':'0.142.0','starlette':'1.3.1','uvicorn':'0.48.0','pydantic':'2.13.4','numpy':'2.3.5','scipy':'1.17.0'}
+# Keep preflight identical to the documented installer when dependency pins change.
+REQUIRED = dict(dependency.split('==', 1) for dependency in
+                tomllib.loads((ROOT / 'apps/api/pyproject.toml').read_text(encoding='utf-8'))['project']['dependencies'])
 
 def check() -> list[str]:
     problems=[]

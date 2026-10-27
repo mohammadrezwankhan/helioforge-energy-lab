@@ -67,7 +67,7 @@ The detailed project guide below remains the source for installation, supported 
 
 Interactive hybrid-energy research and learning workbench with auditable numerical screens and a local Python API.
 
-The full-spectrum roadmap now includes **59 executable studies across all 12 views**, advanced model visuals, local evidence imports and optional provider/device connectors. See the [per-view completion and external-dependency ledger](docs/roadmap/COMPLETION.md), [current verification](docs/roadmap/VERIFICATION.md), and [connector setup](docs/roadmap/CONNECTORS.md). The public preview bundles examples; new calculations require the local Python API.
+The full-spectrum roadmap now includes **59 executable studies across all 12 views**, advanced model visuals, local evidence imports and optional provider/device connectors. See the [per-view completion and external-dependency ledger](docs/roadmap/COMPLETION.md), [current verification](docs/roadmap/VERIFICATION.md), and [connector setup](docs/roadmap/CONNECTORS.md). The public preview bundles Python-generated examples and calculates bounded 24-hour Terminal energy-balance cases in-browser. New advanced studies and optimization require the local Python API.
 
 If HelioForge Energy Lab helps you study this workflow, a star helps other energy researchers and engineering educators find it.
 
@@ -89,7 +89,7 @@ Open **<http://127.0.0.1:4173>**. Stop the server with Ctrl+C. The first screen 
 
 ## Why inspect this project?
 
-HelioForge connects a browsable energy-learning interface to an optional local Python calculation API. The standalone preview preserves a reproducible starting point; new numerical runs use the backend and its explicit scenario assumptions.
+HelioForge connects a browsable energy-learning interface to an optional local Python calculation API. The standalone preview preserves a reproducible starting point and includes the separate deterministic Terminal calculator. Advanced numerical runs use the backend and its explicit scenario assumptions.
 
 Read the [engineering walkthrough](docs/engineering/CASE_STUDY.md) and [adjacent-tool comparison](docs/ALTERNATIVES.md), or follow the [source map](PROJECT_ANALYSIS.md).
 
@@ -167,7 +167,7 @@ This is an educational and research release. It is **not** a plant controller, a
 
 Original low-poly 3D geometry is transformed by a real orthographic camera and rendered in Canvas2D. Drag to orbit, use keyboard or camera buttons, and select assets for text descriptions. This is **software 3D, not WebGL**. Solar, wind, battery, water, hydrogen and other asset categories have distinct colors and named labels. Links animate conceptually; they are not solved branch flows.
 
-The interface includes responsive containers, searchable technology synonyms (`PV`, `BESS`, `H2`), explained tags, smooth view transitions, a reduced-motion switch and system-preference support. A small achievement animation follows a newly passed self-check only; it never implies an engineering approval. New calculations remain disabled in disconnected preview mode.
+The interface includes responsive containers, searchable technology synonyms (`PV`, `BESS`, `H2`), explained tags, smooth view transitions, a reduced-motion switch and system-preference support. A small achievement animation follows a newly passed self-check only; it never implies an engineering approval. New Python calculations remain disabled in disconnected preview mode; the separate Terminal calculator remains available in-browser.
 
 <table><tr><td><img src="docs/learning-studio.png" alt="Learning studio with original lessons and self-checks"></td><td><img src="docs/hybrid-compare.png" alt="Two real synthetic runs compared with energy endpoint context"></td></tr></table>
 
@@ -236,7 +236,7 @@ External execution is disabled by default and requires server-side credentials, 
 
 ## Current verification
 
-The historical v0.3.0 results, failed-attempt history and coverage limitations are in [docs/champion/VERIFICATION.md](docs/champion/VERIFICATION.md). The source changes, local launcher, human-UAT script, recovery notes and file hashes are included. Current release evidence is in [docs/terminal-audit/VERIFICATION.md](docs/terminal-audit/VERIFICATION.md).
+The historical v0.3.0 results, failed-attempt history and coverage limitations are in [docs/champion/VERIFICATION.md](docs/champion/VERIFICATION.md). The source changes, local launcher, human-UAT script, recovery notes and file hashes are included. Current responsive release evidence is in [docs/FULL_AUDIT_REPORT.md](docs/FULL_AUDIT_REPORT.md); the [Terminal verification](docs/terminal-audit/VERIFICATION.md) records the earlier release.
 
 ## Historical v0.2.0 verification (baseline only)
 
@@ -256,7 +256,7 @@ A good contribution adds a reproducible experiment, not just another attractive 
 
 ## Full-spectrum research studies
 
-The local workbench now contains 39 distinct experimental studies across all twelve views, with source-backed limits, result exports, visual editors and signed local evidence. See [delivery and audit](docs/roadmap/DELIVERY.md), the [experiment index](docs/roadmap/INDEX.md), and [verification](docs/roadmap/VERIFICATION.md). The standalone edition contains generated examples; edited numerical runs require Python.
+The local workbench now contains 59 distinct experimental studies across all twelve views, with source-backed limits, result exports, visual editors and signed local evidence. See [delivery and audit](docs/roadmap/DELIVERY.md), the [experiment index](docs/roadmap/INDEX.md), and [verification](docs/roadmap/VERIFICATION.md). The standalone edition contains generated examples; edited numerical runs require Python.
 
 </details>
 

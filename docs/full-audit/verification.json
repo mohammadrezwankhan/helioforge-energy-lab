@@ -1,0 +1,103 @@
+{
+  "base_revision": "7a5560303f77c8e6118c2dfce0b3c03e5de6c5a2",
+  "scope": "Local integrated candidate; deployment and required remote CI are recorded in the release receipt.",
+  "backend_tests_passed": 655,
+  "backend_tests_failed": 0,
+  "backend_tests_skipped": 0,
+  "frontend_tests_passed": 190,
+  "frontend_tests_failed": 0,
+  "frontend_tests_skipped": 0,
+  "build_helper_tests_passed": 6,
+  "browser": {
+    "passed": 654,
+    "failed": 0,
+    "unavailable": 0
+  },
+  "terminal_browser": {
+    "passed": 251,
+    "failed": 0,
+    "axeViewRuns": 24,
+    "axeViolations": 0,
+    "axeExecutionErrors": 0
+  },
+  "api_browser_checks": {
+    "smoke": 18,
+    "hybrid": 14,
+    "champion": 18,
+    "roadmap": 24,
+    "completion": 10
+  },
+  "axe_full_matrix": {
+    "scans": 108,
+    "violations": 0
+  },
+  "browsers": [
+    {
+      "name": "chromium",
+      "version": "156.0.8078.4",
+      "profile": "Headless desktop CPU; unthrottled network; DPR 1; reduced motion; emulated viewports, not physical devices",
+      "load": {
+        "lcp": 748,
+        "cls": 0,
+        "navigation": [
+          {
+            "duration": 738.6000000014901,
+            "transferSize": 13605144,
+            "decodedBodySize": 13604844
+          }
+        ]
+      }
+    },
+    {
+      "name": "firefox",
+      "version": "157.0",
+      "profile": "Headless desktop CPU; unthrottled network; DPR 1; reduced motion; emulated viewports, not physical devices",
+      "load": {
+        "lcp": 909,
+        "cls": 0,
+        "navigation": [
+          {
+            "duration": 903,
+            "transferSize": 13605130,
+            "decodedBodySize": 13604830
+          }
+        ]
+      }
+    },
+    {
+      "name": "webkit",
+      "version": "27.2",
+      "profile": "Headless desktop CPU; unthrottled network; DPR 1; reduced motion; emulated viewports, not physical devices",
+      "load": {
+        "lcp": 1308,
+        "cls": 0,
+        "navigation": [
+          {
+            "duration": 1315,
+            "transferSize": 13605143,
+            "decodedBodySize": 13604843
+          }
+        ]
+      }
+    }
+  ],
+  "scientific": {
+    "bundled_cases": 285,
+    "dataset_sha256": "ff5d1074a5805800a417a73977499c201747e7332153eaac9bf332141d8f443a",
+    "unchanged_original_model_contract_files": 16
+  },
+  "security": {
+    "npm_known_vulnerabilities": 0,
+    "python_known_vulnerabilities_after_environment_pip_upgrade": 0,
+    "history_high_confidence_pattern_findings": 0
+  },
+  "runtime_bytes": 13604323,
+  "runtime_sha256": "a12384067a75ab7a3449c9b49936e923058bd7e92585f5a08f9c00ae735b203e",
+  "backend_warnings": "One upstream Starlette TestClient deprecation; not suppressed.",
+  "limits": [
+    "Physical devices and assistive-technology speech not tested",
+    "200%/400% viewport reflow equivalents, not native browser zoom/text settings",
+    "No paid provider calls or hardware connector execution",
+    "Unthrottled lab metrics, not field INP/CWV"
+  ]
+}

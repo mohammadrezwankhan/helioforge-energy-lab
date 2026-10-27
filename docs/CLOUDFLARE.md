@@ -58,3 +58,24 @@ The source runtime and numerical models retain their existing boundaries. Hostin
 `cloudflare.json` contains the reviewed public facts and explicit input paths. The builder emits source revision and the final runtime SHA-256 in `app.json`, copies only allowlisted assets, rejects input symlinks and includes available notices. Its output is ignored by Git. Public text was prepared on 2026-09-30.
 
 References: [Cloudflare direct upload](https://developers.cloudflare.com/pages/get-started/direct-upload/), [Google AI search guidance](https://developers.google.com/search/docs/appearance/ai-features), [structured-data policies](https://developers.google.com/search/docs/appearance/structured-data/sd-policies).
+
+## Exact release security policy
+
+The dedicated-domain build now emits its global Content-Security-Policy in
+`.cloudflare/site/_headers`. Its inline-script SHA-256 permissions are derived
+from the exact generated overview, methodology, About and runtime HTML. The
+runtime uses the installed monospace font stack and makes no Google Fonts request.
+`node scripts/check-domain.mjs` checks policy and artifact agreement. The engineering
+film retains its separate same-origin frame policy and unchanged media checksums.
+
+The existing Cloudflare response-header transform also sets CSP on the custom
+domain. During a release, preserve that rule's other headers and the separate film
+rule. Temporarily allow the old and new exact script hashes, upload the entire
+verified `.cloudflare/site` to `mkgrid-helioforge`, wait for deployment success,
+then set the main rule to the exact generated global policy. Verify effective
+headers and `/app.json` source revision/runtime digest on the live domain. Do not
+add wildcard script origins, unsafe-eval, or unsafe-inline script permissions.
+
+For rollback, retain the previous successful Pages deployment ID and its matching
+header-rule snapshot. Restore both together and repeat the live identity and CSP
+checks. A successful GitHub Pages dashboard workflow is not an MKGrid deployment.

@@ -3,6 +3,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
+import {domainSecurityPolicy} from './domain-security.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),outputRoot=process.env.CLOUDFLARE_OUTPUT_ROOT===undefined?path.join(root,'.cloudflare'):path.resolve(root,process.env.CLOUDFLARE_OUTPUT_ROOT),out=path.join(outputRoot,'site');
 const site=JSON.parse(fs.readFileSync(path.join(root,'cloudflare-domain.json'),'utf8'));
 const origin=new URL(site.canonical).origin,read=p=>fs.readFileSync(path.join(out,p),'utf8');
@@ -14,6 +15,8 @@ for(const [file,url] of [['index.html',site.canonical],['methodology/index.html'
  for(const m of html.matchAll(/(?:href|src)="(\/[^"#?]*)"/g)){const ref=m[1].endsWith('/')?m[1]+'index.html':m[1];assert.ok(fs.existsSync(path.join(out,ref)),`${file}: missing ${ref}`);}
 }
 const overview=read('index.html'),headers=read('_headers'),heroDirectory='assets/engineering-hero/v1';
+const expectedPolicy=domainSecurityPolicy(['index.html','methodology/index.html','about/index.html','run/index.html'].map(read));
+assert.ok(headers.includes(`/*\n  Content-Security-Policy: ${expectedPolicy}\n`),'Global CSP must match this exact release');
 if(site.engineeringHero===true){
  assert.ok(overview.includes('<h1>Explore the system.<br>Understand its limits.</h1>'));
  assert.ok(overview.includes('href="/run/">Open HelioForge preview'));
@@ -37,7 +40,7 @@ if(site.engineeringHero===true){
  }
  const globalHeaders=headers.slice(0,headers.indexOf('/assets/engineering-hero/v1/index.html'));
  assert.ok(globalHeaders.includes('X-Frame-Options: DENY'));
- assert.ok(!globalHeaders.includes('Content-Security-Policy:'));
+ assert.ok(globalHeaders.includes('Content-Security-Policy: '+expectedPolicy));
 }else{
  assert.ok(!overview.includes('khan-grid-hero'));
  assert.ok(!overview.includes('/assets/engineering-hero/v1/'));

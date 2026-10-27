@@ -1,8 +1,8 @@
 {
   "application": "HelioForge Terminal",
   "version": "2.0.0",
-  "build_id": "terminal-2.0.0",
-  "prepared_utc": "2026-10-26T10:05:48.308467+00:00",
+  "build_id": "responsive-audit-20261027",
+  "prepared_utc": "2026-10-27T10:13:13.686676+00:00",
   "intended_use": "bounded synthetic research and education; see deployment receipt for publication",
   "catalog_version": "0.2.0",
   "catalogue_counts": {
@@ -14,20 +14,111 @@
     "runnable_combinations": 285
   },
   "verification": {
-    "backend_tests_passed": 653,
-    "frontend_tests_passed": 186,
+    "base_revision": "7a5560303f77c8e6118c2dfce0b3c03e5de6c5a2",
+    "scope": "Local integrated candidate; deployment and required remote CI are recorded in the release receipt.",
+    "backend_tests_passed": 655,
+    "backend_tests_failed": 0,
+    "backend_tests_skipped": 0,
+    "frontend_tests_passed": 190,
+    "frontend_tests_failed": 0,
+    "frontend_tests_skipped": 0,
+    "build_helper_tests_passed": 6,
     "browser": {
+      "passed": 654,
+      "failed": 0,
+      "unavailable": 0
+    },
+    "terminal_browser": {
       "passed": 251,
       "failed": 0,
       "axeViewRuns": 24,
       "axeViolations": 0,
       "axeExecutionErrors": 0
     },
-    "backend_warnings": "Two upstream TestClient deprecations; no product warning suppressed."
+    "api_browser_checks": {
+      "smoke": 18,
+      "hybrid": 14,
+      "champion": 18,
+      "roadmap": 24,
+      "completion": 10
+    },
+    "axe_full_matrix": {
+      "scans": 108,
+      "violations": 0
+    },
+    "browsers": [
+      {
+        "name": "chromium",
+        "version": "156.0.8078.4",
+        "profile": "Headless desktop CPU; unthrottled network; DPR 1; reduced motion; emulated viewports, not physical devices",
+        "load": {
+          "lcp": 748,
+          "cls": 0,
+          "navigation": [
+            {
+              "duration": 738.6000000014901,
+              "transferSize": 13605144,
+              "decodedBodySize": 13604844
+            }
+          ]
+        }
+      },
+      {
+        "name": "firefox",
+        "version": "157.0",
+        "profile": "Headless desktop CPU; unthrottled network; DPR 1; reduced motion; emulated viewports, not physical devices",
+        "load": {
+          "lcp": 909,
+          "cls": 0,
+          "navigation": [
+            {
+              "duration": 903,
+              "transferSize": 13605130,
+              "decodedBodySize": 13604830
+            }
+          ]
+        }
+      },
+      {
+        "name": "webkit",
+        "version": "27.2",
+        "profile": "Headless desktop CPU; unthrottled network; DPR 1; reduced motion; emulated viewports, not physical devices",
+        "load": {
+          "lcp": 1308,
+          "cls": 0,
+          "navigation": [
+            {
+              "duration": 1315,
+              "transferSize": 13605143,
+              "decodedBodySize": 13604843
+            }
+          ]
+        }
+      }
+    ],
+    "scientific": {
+      "bundled_cases": 285,
+      "dataset_sha256": "ff5d1074a5805800a417a73977499c201747e7332153eaac9bf332141d8f443a",
+      "unchanged_original_model_contract_files": 16
+    },
+    "security": {
+      "npm_known_vulnerabilities": 0,
+      "python_known_vulnerabilities_after_environment_pip_upgrade": 0,
+      "history_high_confidence_pattern_findings": 0
+    },
+    "runtime_bytes": 13604323,
+    "runtime_sha256": "a12384067a75ab7a3449c9b49936e923058bd7e92585f5a08f9c00ae735b203e",
+    "backend_warnings": "One upstream Starlette TestClient deprecation; not suppressed.",
+    "limits": [
+      "Physical devices and assistive-technology speech not tested",
+      "200%/400% viewport reflow equivalents, not native browser zoom/text settings",
+      "No paid provider calls or hardware connector execution",
+      "Unthrottled lab metrics, not field INP/CWV"
+    ]
   },
-  "upstream_revision": "d14b71f50ef400a50d3ccd4792dcd59238c64f56",
+  "upstream_revision": "7a5560303f77c8e6118c2dfce0b3c03e5de6c5a2",
   "hash_semantics": "SHA-256; LF-normalized UTF-8 where text_mode=lf, exact bytes otherwise; not signatures",
-  "file_list_sha256": "03b8fc7b40018cd9eba4df6ef7c38499a2ee5ddced5152031c43ff588a58091a",
+  "file_list_sha256": "7b45ce65e0f34db876bc804ca6c86e069823a13ca61f3848403ba77d068d85e5",
   "files": [
     {
       "path": ".dockerignore",
@@ -91,9 +182,9 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 3770,
+      "bytes": 4034,
       "text_mode": "lf",
-      "sha256": "7c5c78365a5ef4c7eb9f8c86320a6d1e68c54f4d7422ff238f944957f1cc517b"
+      "sha256": "f39b709311a2de3af544c59d4040f5077e29488f2ae2b6b230221d9a33622125"
     },
     {
       "path": ".github/workflows/cloudflare.yml",
@@ -106,6 +197,12 @@
       "bytes": 3006,
       "text_mode": "lf",
       "sha256": "da4d18ce0277d9d6e90c255fe920868cacf371fe52d46fa8f91f87977559c9e4"
+    },
+    {
+      "path": ".github/workflows/mklab-traceability-sync.yml",
+      "bytes": 5564,
+      "text_mode": "lf",
+      "sha256": "45229a9df5c924cd2bd443156768ccf6a5334edb518ea493400efcf637280e20"
     },
     {
       "path": ".github/workflows/portfolio-dashboard-check.yml",
@@ -169,9 +266,9 @@
     },
     {
       "path": "HelioForge-Preview.html",
-      "bytes": 13601162,
+      "bytes": 13604263,
       "text_mode": "lf",
-      "sha256": "c279a02366bc8bcb93898f9f2a10e342559dd9f409ae83d6b264a9db595c1581"
+      "sha256": "64211fa58efdd6994cb605cd90690b75bd78de2dd789404c9c6ae4a814882fa6"
     },
     {
       "path": "LICENSE",
@@ -199,9 +296,9 @@
     },
     {
       "path": "README.md",
-      "bytes": 19271,
+      "bytes": 19930,
       "text_mode": "lf",
-      "sha256": "9bba50344ae41d23bcaf7275d9789f75ac320f2e9f527950ff9b9029428df27e"
+      "sha256": "01b5b6cf9a0cf84bef3d5667133815c98d40d23ce3c31a6baf4abd80c5267bf4"
     },
     {
       "path": "ROADMAP.md",
@@ -466,6 +563,12 @@
       "sha256": "5a78fba5eb8bfee65e23bbe473392c0c7f7b12716645fc5c94b63460b3db5163"
     },
     {
+      "path": "apps/api/tests/test_launcher.py",
+      "bytes": 1137,
+      "text_mode": "lf",
+      "sha256": "13b977bc13ee73f6cb8003e9f50c608ac9e2e595aee9224dc55ddf7ea8e3ae00"
+    },
+    {
       "path": "apps/api/tests/test_physical_studies.py",
       "bytes": 13806,
       "text_mode": "lf",
@@ -527,9 +630,9 @@
     },
     {
       "path": "apps/web/dist/app.js",
-      "bytes": 13384722,
+      "bytes": 13386473,
       "text_mode": "lf",
-      "sha256": "04aa0279b698306c13798173c62f29a197519a4944a6119641bfbc5748b4ff4f"
+      "sha256": "1b2e5a6780776b62ef91a5bccc3cd31eac3925af50c2e712cdc20eceff72dfb5"
     },
     {
       "path": "apps/web/dist/favicon.svg",
@@ -539,21 +642,21 @@
     },
     {
       "path": "apps/web/dist/index.html",
-      "bytes": 1160,
+      "bytes": 898,
       "text_mode": "lf",
-      "sha256": "77c41d44501f626013111f6a942f5b1fa28943b6afa489f5b63182dbe81d5647"
+      "sha256": "71dd7524d835a746d9b2518515f1bde2eb10294e567cf3a6e0a649e03dc35261"
     },
     {
       "path": "apps/web/dist/styles.css",
-      "bytes": 215004,
+      "bytes": 216616,
       "text_mode": "lf",
-      "sha256": "a40ac50f65266b8d2e80e229a6e855a2097ceca9e68bdd6f9730e6a7893f3eb7"
+      "sha256": "cb3b5d5a37d4aad7b2488d2000d7828bf548410540561025e0da0a91f6ff06d4"
     },
     {
       "path": "apps/web/index.html",
-      "bytes": 1160,
+      "bytes": 898,
       "text_mode": "lf",
-      "sha256": "77c41d44501f626013111f6a942f5b1fa28943b6afa489f5b63182dbe81d5647"
+      "sha256": "71dd7524d835a746d9b2518515f1bde2eb10294e567cf3a6e0a649e03dc35261"
     },
     {
       "path": "apps/web/package-lock.json",
@@ -587,9 +690,9 @@
     },
     {
       "path": "apps/web/src/app.ts",
-      "bytes": 26852,
+      "bytes": 27561,
       "text_mode": "lf",
-      "sha256": "4fa607a58029e582c37cab6f9ee75dd56a84fc3dc7ef247be9164a287fce3461"
+      "sha256": "452c148f467106d7983e0ae04a61d99176a6eb6bf8fb6e12a087defd5f533989"
     },
     {
       "path": "apps/web/src/champion-controller.ts",
@@ -653,9 +756,9 @@
     },
     {
       "path": "apps/web/src/experiences.ts",
-      "bytes": 39620,
+      "bytes": 39807,
       "text_mode": "lf",
-      "sha256": "dec2592ffff277eaff50d0e53faee07b7f18d7ee111a5bc55505474c97f49fd0"
+      "sha256": "6c983d70182ef86786e860bf405abb71d277355040cfd51cbef3413e1bdee401"
     },
     {
       "path": "apps/web/src/hybrid-controller.ts",
@@ -731,9 +834,9 @@
     },
     {
       "path": "apps/web/src/scene.ts",
-      "bytes": 14427,
+      "bytes": 14975,
       "text_mode": "lf",
-      "sha256": "bc86a7855f085de2cc071ba2f9c1f0b58952fca16e4491f57d1f5bd3884bb9b2"
+      "sha256": "b909bc904b45f31610bcc056215b40994200b636815787d91098ee2def527c34"
     },
     {
       "path": "apps/web/src/snapshot.ts",
@@ -779,9 +882,9 @@
     },
     {
       "path": "apps/web/src/terminal.css",
-      "bytes": 79551,
+      "bytes": 81163,
       "text_mode": "lf",
-      "sha256": "c5337bb17e0071535080918c95bb5df723906e2b120b15b40572e8b08781ed5e"
+      "sha256": "7622f7e64928ae5e8320c70f4ca08c1e9744360fb07a3e443c9d66339589842f"
     },
     {
       "path": "apps/web/src/tokens.css",
@@ -898,6 +1001,12 @@
       "sha256": "1b91549277d57d7d12ce32913cd433a22dbeb8fba19e1d4ed5f557d38861db1c"
     },
     {
+      "path": "apps/web/tests/offline-shell.test.mjs",
+      "bytes": 460,
+      "text_mode": "lf",
+      "sha256": "b781f5f9fda303097418efd3d511bed9ad30d0684a8a95551700de6cfe09d2a5"
+    },
+    {
       "path": "apps/web/tests/release-provenance.test.mjs",
       "bytes": 2764,
       "text_mode": "lf",
@@ -908,6 +1017,12 @@
       "bytes": 1635,
       "text_mode": "lf",
       "sha256": "615b58e4389cc9f68fecd16ccbf2c28b68630c748dc14aa7ed50a84dc080585a"
+    },
+    {
+      "path": "apps/web/tests/scene-lifecycle.test.mjs",
+      "bytes": 3321,
+      "text_mode": "lf",
+      "sha256": "b0f9ec0f74ce01bc655c92cb04f36c541c1fe4a47992419514a7c6814a5826bd"
     },
     {
       "path": "apps/web/tests/scene.test.mjs",
@@ -1287,15 +1402,21 @@
     },
     {
       "path": "docs/CLOUDFLARE.md",
-      "bytes": 5829,
+      "bytes": 7152,
       "text_mode": "lf",
-      "sha256": "772e23a22c9df135459c5cfb2e7452c8439018dc395c07068086a8caf6fa133e"
+      "sha256": "0001a3184ae168d2b412f01dbb5f3b534c6966d0d48bd215d292e9cfdd75820f"
     },
     {
       "path": "docs/FINAL_AUDIT.md",
       "bytes": 11142,
       "text_mode": "lf",
       "sha256": "6ba3ce32a02ee8ded4fd2d833177c902df46d636b1663ff9f4fc1e090ca54552"
+    },
+    {
+      "path": "docs/FULL_AUDIT_REPORT.md",
+      "bytes": 12977,
+      "text_mode": "lf",
+      "sha256": "4f85513748f243223a102478f35d76f7218e64fdfb37121691c19915e92f69b5"
     },
     {
       "path": "docs/HYBRID_COVERAGE.md",
@@ -1320,6 +1441,12 @@
       "bytes": 9017,
       "text_mode": "lf",
       "sha256": "7f11a70415530612e59fa0a11e412e22729b1d45293c0779ed682a4c21fa2958"
+    },
+    {
+      "path": "docs/MKLAB_TRACEABILITY.md",
+      "bytes": 2077,
+      "text_mode": "lf",
+      "sha256": "c3928bbf6eabbcf918a54a1fb97f79cc6f211b82ee26cc32e59ad2975318b450"
     },
     {
       "path": "docs/OPEN_SOURCE_LAUNCH.md",
@@ -1592,6 +1719,42 @@
       "bytes": 10091,
       "text_mode": "lf",
       "sha256": "dc0c5bbac6741c43fd342497b251213ccac9c4ccd6fbea87220dc60b1c337505"
+    },
+    {
+      "path": "docs/full-audit/after-1440.png",
+      "bytes": 103360,
+      "sha256": "3802796d307001ff0cc7a220b102786aec3f14e07fe4b6d5ecc5206df309a4a2"
+    },
+    {
+      "path": "docs/full-audit/after-390.png",
+      "bytes": 36869,
+      "sha256": "e7906ade3d7e9074230274e265b072d65f9c62dee2cd6b00b058a7979f064359"
+    },
+    {
+      "path": "docs/full-audit/after-820.png",
+      "bytes": 84405,
+      "sha256": "e14aec7f659c366d2f88ac38b3fecf31c7dfaef97f882174b1cc8a3dc5d8bb81"
+    },
+    {
+      "path": "docs/full-audit/before-1440.png",
+      "bytes": 173095,
+      "sha256": "8dcf3a143b048bf43216b8b471352409ed56ce9b4165887bf3de47a13c7c2adf"
+    },
+    {
+      "path": "docs/full-audit/before-390.png",
+      "bytes": 66852,
+      "sha256": "15c932a71ac67f5f3bcfbfcbb6c21760d1ad82e382956c2e6691f6fffd158d98"
+    },
+    {
+      "path": "docs/full-audit/before-820.png",
+      "bytes": 141179,
+      "sha256": "763b2476dc658898ecd4644e1674244c212553f6aeada3aac57fe6cee9e8ca4d"
+    },
+    {
+      "path": "docs/full-audit/verification.json",
+      "bytes": 2952,
+      "text_mode": "lf",
+      "sha256": "f02adb655b6f9c28d990d768e9dab4ad5eaa8e95e32f6be8b1c4dabc38d14b4b"
     },
     {
       "path": "docs/hybrid-browser-tests.txt",
@@ -2012,9 +2175,9 @@
     },
     {
       "path": "docs/terminal-audit/VERIFICATION.md",
-      "bytes": 6714,
+      "bytes": 6998,
       "text_mode": "lf",
-      "sha256": "1b03a908decd46b4dc57e837b007a9009b84f0134b126586eada6c920f1eabf9"
+      "sha256": "cef91fe3e5d730898291882745fc97e96dfeb9d98130847ab138f35a9d3f9ee8"
     },
     {
       "path": "docs/terminal-audit/before-lint.json",
@@ -2150,9 +2313,9 @@
     },
     {
       "path": "launch.py",
-      "bytes": 4732,
+      "bytes": 4888,
       "text_mode": "lf",
-      "sha256": "9ec0981bf3c646b9260a41385aae72b94dcda22f3abc8ffa75563e2a12e40a3b"
+      "sha256": "4942bc8e06cfaf0f12a9e32b6e497c23a013b7b5d91fed1c27a96d1caf55932e"
     },
     {
       "path": "prompts/ASTRA_MULTIAGENT_BETTERMENT.md",
@@ -2191,6 +2354,12 @@
       "sha256": "2448836805aaf69b0515bee6acfa7630eef0c54e307120ccc8fd3a4190032242"
     },
     {
+      "path": "scripts/browser-full-audit.py",
+      "bytes": 9631,
+      "text_mode": "lf",
+      "sha256": "8f49f56e0f862dd0cbbf53c002db4ccf746243e5971af5ea9f5d4cb42aae7035"
+    },
+    {
       "path": "scripts/browser-hybrid.py",
       "bytes": 14863,
       "text_mode": "lf",
@@ -2222,9 +2391,9 @@
     },
     {
       "path": "scripts/build-domain.mjs",
-      "bytes": 23058,
+      "bytes": 23339,
       "text_mode": "lf",
-      "sha256": "bffa35a93c09ba6f250f897ac88f22e2c5de1f25965c1649b4d195503746ef53"
+      "sha256": "735bf9b9d542cfc0ae289e4b7c5ff80e1958c55bacdcd385c953f225690fe184"
     },
     {
       "path": "scripts/build-web.mjs",
@@ -2240,9 +2409,9 @@
     },
     {
       "path": "scripts/check-domain.mjs",
-      "bytes": 7735,
+      "bytes": 8066,
       "text_mode": "lf",
-      "sha256": "48685944ac481164d343e9f778bd6225cbb363ce5fcc50012484879c06dd4251"
+      "sha256": "748267c804793b57e3679ff7c251c92199624b130f1299f019f4b89e0331af76"
     },
     {
       "path": "scripts/check-hybrid-assets.py",
@@ -2269,6 +2438,12 @@
       "sha256": "d8c4496ff19c883e7186ff4dbdfa88eaf2e22ece3a989040f0afd12276e9497d"
     },
     {
+      "path": "scripts/check-traceability.py",
+      "bytes": 18726,
+      "text_mode": "lf",
+      "sha256": "c94370d735f82a7a9b19a7698b92275b5d70a9098d43236d5f0567f28a806343"
+    },
+    {
       "path": "scripts/cloudflare-site.css",
       "bytes": 8385,
       "text_mode": "lf",
@@ -2285,6 +2460,18 @@
       "bytes": 656,
       "text_mode": "lf",
       "sha256": "ef78a88019bb45d3be7d9c25494033a738ac108635cc90f9a1eb32ebd3f6c114"
+    },
+    {
+      "path": "scripts/domain-security.mjs",
+      "bytes": 1007,
+      "text_mode": "lf",
+      "sha256": "9a657c3b0436aff48ecb8e659cb7771aeeabc379875ede81ccd6a62ae2468579"
+    },
+    {
+      "path": "scripts/domain-security.test.mjs",
+      "bytes": 1519,
+      "text_mode": "lf",
+      "sha256": "3d4ea48593acaba5e2ce91c9325ea5471c03bfde823487aa048b39b8c1dd5070"
     },
     {
       "path": "scripts/engineering-hero.mjs",
@@ -2306,9 +2493,9 @@
     },
     {
       "path": "scripts/generate-release-manifest.py",
-      "bytes": 2434,
+      "bytes": 2998,
       "text_mode": "lf",
-      "sha256": "d25ba5b34b36bb4b4f025028ca1721eebd00230c73049c6024daa41a8482794a"
+      "sha256": "1adda68e6ae0b1f7fdd3f8ba8f5c6cc65211fc96098b26fd3e4628b457bbf71d"
     },
     {
       "path": "scripts/generate-snapshot.py",
@@ -2398,6 +2585,18 @@
       "bytes": 742,
       "text_mode": "lf",
       "sha256": "d24405c24b68cc40385f22f88b8896fe536e15b348ed7a47af5efc3bd77e16c3"
+    },
+    {
+      "path": "tests/test_traceability_checker.py",
+      "bytes": 12277,
+      "text_mode": "lf",
+      "sha256": "ee64928fbf76fb7fa855fde03568f99cc7bdaf8709e2faafe47a1e23a86aba2b"
+    },
+    {
+      "path": "traceability.json",
+      "bytes": 321,
+      "text_mode": "lf",
+      "sha256": "1d44719fb85f632d23fdbceb2454faf78de84e3d613ad1d0d4e6b2d5901b00ea"
     }
   ]
 }

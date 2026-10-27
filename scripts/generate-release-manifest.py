@@ -1,6 +1,7 @@
 """Record versioned release inputs; text hashes use explicit LF normalization."""
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import subprocess
@@ -8,6 +9,9 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--verification', type=Path, help='Current measured verification JSON; overrides historical Terminal counts.')
+args = parser.parse_args()
 names = subprocess.check_output(
     ['git', 'ls-files', '-z', '--cached', '--others', '--exclude-standard'], cwd=ROOT,
 ).decode().split('\0')
@@ -48,5 +52,12 @@ manifest = {
     'file_list_sha256': hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest(),
     'files': files,
 }
+if args.verification:
+    current = json.loads(args.verification.read_text(encoding='utf-8'))
+    manifest['build_id'] = 'responsive-audit-20261027'
+    manifest['verification'] = current
+    manifest['upstream_revision'] = subprocess.check_output(
+        ['git', 'merge-base', 'HEAD', 'origin/main'], cwd=ROOT,
+    ).decode().strip()
 (ROOT / 'RELEASE_MANIFEST.json').write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8', newline='\n')
 print(f'Recorded {len(files)} release inputs.')
