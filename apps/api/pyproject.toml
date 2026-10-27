@@ -22,7 +22,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<10", "httpx>=0.28,<1", "ruff>=0.12,<1", "pytest-cov>=6,<8"]
-ai = ["openai-agents==0.22.3"]
+ai = ["openai-agents==0.24.0"]
 
 [tool.setuptools.packages.find]
 include = ["helioforge*"]
