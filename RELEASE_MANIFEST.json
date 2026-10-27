@@ -2,7 +2,7 @@
   "application": "HelioForge Terminal",
   "version": "2.0.0",
   "build_id": "responsive-audit-20261027",
-  "prepared_utc": "2026-10-27T10:13:13.686676+00:00",
+  "prepared_utc": "2026-10-27T10:41:32.638443+00:00",
   "intended_use": "bounded synthetic research and education; see deployment receipt for publication",
   "catalog_version": "0.2.0",
   "catalogue_counts": {
@@ -116,9 +116,9 @@
       "Unthrottled lab metrics, not field INP/CWV"
     ]
   },
-  "upstream_revision": "7a5560303f77c8e6118c2dfce0b3c03e5de6c5a2",
+  "upstream_revision": "acb062158b28ee93a02a15aec3a67653651d2e0d",
   "hash_semantics": "SHA-256; LF-normalized UTF-8 where text_mode=lf, exact bytes otherwise; not signatures",
-  "file_list_sha256": "7b45ce65e0f34db876bc804ca6c86e069823a13ca61f3848403ba77d068d85e5",
+  "file_list_sha256": "f7d8a1f338f4cf44d709c7ca021d1a8cbb884c837189ca0761d89198b40e33ae",
   "files": [
     {
       "path": ".dockerignore",
@@ -1414,9 +1414,9 @@
     },
     {
       "path": "docs/FULL_AUDIT_REPORT.md",
-      "bytes": 12977,
+      "bytes": 14132,
       "text_mode": "lf",
-      "sha256": "4f85513748f243223a102478f35d76f7218e64fdfb37121691c19915e92f69b5"
+      "sha256": "71fb74d39261bd1874ca225aec477b1235cdd0434cdfdd7cb31244e616de0060"
     },
     {
       "path": "docs/HYBRID_COVERAGE.md",
@@ -2379,9 +2379,9 @@
     },
     {
       "path": "scripts/browser-terminal.py",
-      "bytes": 33617,
+      "bytes": 33785,
       "text_mode": "lf",
-      "sha256": "ffdc363ef0a4c43fe92aaa065192f7fc4f748743c44fdc9b9efe61d324ec473e"
+      "sha256": "e4ef2e03c500ec485f9371a67eba3243860152c38a7dec96db27b9e6b1ee0c36"
     },
     {
       "path": "scripts/build-cloudflare.mjs",
