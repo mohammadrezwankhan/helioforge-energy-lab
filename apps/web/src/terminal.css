@@ -1319,7 +1319,7 @@ main {
   border-left: 1px solid var(--color-rule);
 }
 
-.forge-counts div:first-child { border-left: 0; }
+.forge-counts div:first-child { padding-left:0; padding-right:0; border-left:0; }
 
 .forge-counts strong {
   display: block;
@@ -4363,3 +4363,63 @@ details:not([open]) > :not(summary) { display: none; }
 .hf-heat-button-grid { grid-template-columns: repeat(9, minmax(48px, 1fr)); overflow-x: auto; margin-inline: 0; padding: 4px; }
 .hf-heat-button { min-height: 44px; background: color-mix(in oklch, var(--color-paper-2) 75%, var(--cell-color, var(--color-accent-wash)) 25%); border-color: var(--color-muted); }
 .hf-heat-button[aria-pressed="true"], .hf-heat-button:focus-visible { outline-color: var(--color-focus); }
+
+/* Let the hybrid heading and its three counts use the available tablet width. */
+@media (max-width: 1120px) {
+  .forge-heading {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap:16px;
+  }
+
+  .forge-heading h2 { max-width: none; }
+  .forge-counts { grid-column: 1; width: 100%; }
+  .forge-counts div { padding-inline:8px; }
+
+  .section-heading { flex-wrap: wrap; }
+  .section-heading > div { min-width: 0; max-width: 100%; }
+  .section-heading > .tag {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .market-meta > div { flex-wrap: wrap; min-width: 0; }
+  .market-meta > div > span,
+  .market-meta > div > strong {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 900px) {
+  .two-columns { grid-template-columns: minmax(0, 1fr); }
+
+  .hf-experience-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hf-experience-heading > div { min-width: 0; max-width: 100%; }
+  .hf-experience-heading > .btn { align-self: flex-start; max-width: 100%; }
+}
+
+@media (max-width: 600px) {
+  .forge-counts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .forge-counts div:nth-child(3) {
+    grid-column: 1 / -1;
+    border-left: 0;
+    border-top: 1px solid var(--color-rule);
+  }
+
+  .forge-counts span { overflow-wrap: anywhere; }
+
+  .section-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .section-heading > div { width: 100%; min-width: 0; }
+  .section-heading > .tag { align-self: flex-start; }
+  .section-heading > svg { align-self: flex-start; }
+}
