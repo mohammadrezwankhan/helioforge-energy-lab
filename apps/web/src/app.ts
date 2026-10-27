@@ -75,7 +75,15 @@ namespace HF {
       if(!form.querySelector('.draft-note')){const note=document.createElement('p');note.className='draft-note';note.setAttribute('role','status');note.textContent='Unsaved input edits. Displayed results still belong to the last completed calculation.';form.append(note);}
     }
     document.addEventListener('input',rememberDraft);document.addEventListener('change',rememberDraft);
-    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!(document.getElementById('modal') as HTMLDialogElement|null)?.open)setMobileMenu(false);});
+    document.addEventListener('keydown',e=>{
+      const dialog=document.querySelector<HTMLDialogElement>('dialog[open]');
+      if(e.key==='Tab'&&dialog?.open){
+        const controls=[...dialog.querySelectorAll<HTMLElement>('button:not([disabled]),input:not([disabled]):not([type="hidden"]),select:not([disabled]),textarea:not([disabled]),a[href],[tabindex]:not([tabindex="-1"])')].filter(el=>el.getClientRects().length>0&&!el.closest('[inert]'));
+        const first=controls[0],last=controls.at(-1);
+        if(first&&last&&(!dialog.contains(document.activeElement)||(e.shiftKey&&document.activeElement===first)||(!e.shiftKey&&document.activeElement===last))){e.preventDefault();(e.shiftKey?last:first).focus();}
+      }
+      if(e.key==='Escape'&&document.getElementById('sidebar')?.classList.contains('mobile-open')&&!dialog?.open)setMobileMenu(false);
+    });
     window.matchMedia('(max-width:800px)').addEventListener('change',()=>setMobileMenu(false));
     function toast(message:string,error=false):void {
       const el=document.getElementById('toast'); if(!el)return;

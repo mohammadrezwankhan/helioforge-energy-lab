@@ -39,6 +39,11 @@ namespace HF {
     };
     function draw():void {
       if(!ctx||width===0)return;
+      const theme=getComputedStyle(canvas);
+      const resolveThemeColor=(value:string):string=>{
+        const match=/^var\((--[a-z0-9-]+)\)$/.exec(value);
+        return match?theme.getPropertyValue(match[1]!).trim():value;
+      };
       ctx.clearRect(0,0,width,height);
       ctx.fillStyle=resolveThemeColor('var(--color-paper-2)');ctx.fillRect(0,0,width,height);
       const faces:Face[]=[];
@@ -120,13 +125,13 @@ namespace HF {
         }
         ctx.restore();
       }
-      hit=[];ctx.font='500 12px '+getComputedStyle(canvas).fontFamily;ctx.textAlign='center';
+      hit=[];ctx.font='500 12px '+theme.fontFamily;ctx.textAlign='center';
       for(const a of [...assets].sort((a,b)=>projection([a.x,0,a.z])[2]-projection([b.x,0,b.z])[2])){const power=sceneAssetPower(telemetry,a.id),label=a.label+(power===null?'':` · ${fmt(power,0)} kW`)+(a.id==='battery'&&telemetry?` · ${fmt(telemetry.soc_pct,0)}%`:''),p=projection([a.x,.08,a.z+.75]),w=ctx.measureText(label).width+19;
         ctx.fillStyle=resolveThemeColor('var(--color-paper-2)');ctx.beginPath();ctx.roundRect(p[0]-w/2,p[1]-9,w,24,0);ctx.fill();ctx.fillStyle=resolveThemeColor(techById(a.id).color);ctx.fillText(label,p[0],p[1]+5);hit.push({id:a.id,x:p[0],y:p[1]-20});}
     }
     const resize=():void=>{const rect=canvas.getBoundingClientRect();width=rect.width;height=rect.height;const dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);dirty=true;draw();};
     const observer=new ResizeObserver(resize);observer.observe(canvas);
-    const intersection=new IntersectionObserver(e=>{visible=e[0]?.isIntersecting??true;dirty=true;});intersection.observe(canvas);
+    const intersection=new IntersectionObserver(e=>{visible=e[0]?.isIntersecting??true;dirty=true;syncAnimation();});intersection.observe(canvas);
     const down=(e:PointerEvent):void=>{drag=true;moved=false;lastX=e.clientX;lastY=e.clientY;canvas.setPointerCapture(e.pointerId);};
     const syncPresetButtons=(preset:ScenePreset|null):void=>{canvas.parentElement?.querySelectorAll<HTMLButtonElement>('[data-camera-preset]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.cameraPreset===preset)));};
     const applyPreset=(preset:ScenePreset):void=>{const state=scenePresetState(preset)!;yaw=state.yaw;pitch=state.pitch;zoom=state.zoom;wireframe=state.wireframe;activePreset=preset;syncPresetButtons(activePreset);dirty=true;draw();};
@@ -138,8 +143,13 @@ namespace HF {
     canvas.addEventListener('pointerdown',down);canvas.addEventListener('pointermove',move);canvas.addEventListener('pointerup',up);canvas.addEventListener('pointercancel',up);canvas.addEventListener('keydown',key);canvas.addEventListener('scene-command',command);
     syncPresetButtons(activePreset);
     const telemetryChanged=():void=>{dirty=true;draw();};canvas.addEventListener('scene-telemetry',telemetryChanged);
-    function tick(time:number):void{if(disposed)return;if(visible&&!document.hidden&&(dirty||!reduced)){phase+=reduced?0:Math.min(50,time-lastTime)*.000625;draw();lastTime=time;dirty=false;}frame=requestAnimationFrame(tick);}
-    resize();frame=requestAnimationFrame(tick);
-    return ()=>{disposed=true;cancelAnimationFrame(frame);observer.disconnect();intersection.disconnect();canvas.removeEventListener('pointerdown',down);canvas.removeEventListener('pointermove',move);canvas.removeEventListener('pointerup',up);canvas.removeEventListener('pointercancel',up);canvas.removeEventListener('keydown',key);canvas.removeEventListener('scene-command',command);canvas.removeEventListener('scene-telemetry',telemetryChanged);};
+    function syncAnimation():void {
+      if(disposed||reduced||!visible||document.hidden){cancelAnimationFrame(frame);frame=0;lastTime=0;return;}
+      if(!frame)frame=requestAnimationFrame(tick);
+    }
+    function tick(time:number):void{frame=0;if(disposed)return;if(visible&&!document.hidden&&(dirty||!reduced)){phase+=reduced?0:Math.min(50,lastTime?time-lastTime:0)*.000625;draw();lastTime=time;dirty=false;}syncAnimation();}
+    document.addEventListener('visibilitychange',syncAnimation);
+    resize();syncAnimation();
+    return ()=>{disposed=true;cancelAnimationFrame(frame);observer.disconnect();intersection.disconnect();document.removeEventListener('visibilitychange',syncAnimation);canvas.removeEventListener('pointerdown',down);canvas.removeEventListener('pointermove',move);canvas.removeEventListener('pointerup',up);canvas.removeEventListener('pointercancel',up);canvas.removeEventListener('keydown',key);canvas.removeEventListener('scene-command',command);canvas.removeEventListener('scene-telemetry',telemetryChanged);};
   }
 }

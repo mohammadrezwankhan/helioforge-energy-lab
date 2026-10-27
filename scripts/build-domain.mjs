@@ -5,6 +5,7 @@ import {fileURLToPath} from 'node:url';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {addEngineeringHeroFramePolicy, insertEngineeringHeroSection, prepareEngineeringHero} from './engineering-hero.mjs';
+import {domainSecurityPolicy} from './domain-security.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const config=JSON.parse(fs.readFileSync(path.join(root,'cloudflare.json'),'utf8'));
 const site=JSON.parse(fs.readFileSync(path.join(root,'cloudflare-domain.json'),'utf8'));
@@ -133,6 +134,7 @@ const indexNowToken=fs.readFileSync(path.join(root,'static',indexNowFile),'utf8'
 if(!/^[a-f0-9]{32}$/.test(indexNowToken))throw Error('Invalid IndexNow verification token');
 write(indexNowFile,indexNowToken);
 write('404.html',`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="robots" content="noindex"><title>Page not found | HelioForge</title><h1>Page not found</h1><p><a href="/">Return to HelioForge</a></p></html>`);
-write('_headers',addEngineeringHeroFramePolicy(`/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: DENY\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n/run/*\n  X-Robots-Tag: noindex, follow\nhttps://${site.project}.pages.dev/*\n  X-Robots-Tag: noindex, follow\nhttps://:preview.${site.project}.pages.dev/*\n  X-Robots-Tag: noindex, follow\n`,engineeringHero.contentSecurityPolicy));
+const securityPolicy=domainSecurityPolicy(['index.html','methodology/index.html','about/index.html','run/index.html'].map(file=>fs.readFileSync(path.join(out,file),'utf8')));
+write('_headers',addEngineeringHeroFramePolicy(`/*\n  Content-Security-Policy: ${securityPolicy}\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: DENY\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n/run/*\n  X-Robots-Tag: noindex, follow\nhttps://${site.project}.pages.dev/*\n  X-Robots-Tag: noindex, follow\nhttps://:preview.${site.project}.pages.dev/*\n  X-Robots-Tag: noindex, follow\n`,engineeringHero.contentSecurityPolicy));
 write('_redirects','# Domain aliases use Cloudflare zone Redirect Rules.\n/index.html / 301\n/run /run/ 301\n/methodology /methodology/ 301\n/about /about/ 301\n/apps/helioforge-energy-lab/ / 301\n/apps/helioforge-energy-lab/run/ /run/ 301\n');
 console.log(JSON.stringify({project:site.project,output:out,canonical:site.canonical,sourceRevision:facts.sourceRevision,runtimeSha256:facts.runtimeSha256}));

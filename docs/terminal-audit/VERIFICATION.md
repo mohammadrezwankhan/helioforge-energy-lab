@@ -4,7 +4,8 @@
 
 ## Build and environment
 
-- Source revision: `f0dc0bc3bfcf7e08936acacc8fd7d27b0d25e9e3`
+- Recorded audit base: `f0dc0bc3bfcf7e08936acacc8fd7d27b0d25e9e3`. This is not the exact published source identity. A passive verification on 27 October 2026 matched the runtime SHA below to the publication manifest at source revision `c1c67652e0b27c807ddfbcaaa9f987d37ca0f992`.
+- Current audit: [Full responsive audit](../FULL_AUDIT_REPORT.md).
 - Export runtime SHA-256: `fa69fa49e6d97ca75713334aefffd31ead1ec0861e5a39f2aee98bf5c1527d71`
 - Browser: Chromium `156.0.8078.4`
 - axe-core: `4.14.0`

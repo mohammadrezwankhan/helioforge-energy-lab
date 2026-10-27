@@ -603,8 +603,13 @@ var HF;
         function draw() {
             if (!ctx || width === 0)
                 return;
+            const theme = getComputedStyle(canvas);
+            const resolveThemeColor = (value) => {
+                const match = /^var\((--[a-z0-9-]+)\)$/.exec(value);
+                return match ? theme.getPropertyValue(match[1]).trim() : value;
+            };
             ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = HF.resolveThemeColor('var(--color-paper-2)');
+            ctx.fillStyle = resolveThemeColor('var(--color-paper-2)');
             ctx.fillRect(0, 0, width, height);
             const faces = [];
             const telemetry = getPoint();
@@ -703,10 +708,10 @@ var HF;
                 else
                     ctx.lineTo(x, y); });
                 ctx.closePath();
-                ctx.fillStyle = HF.resolveThemeColor(f.fill);
+                ctx.fillStyle = resolveThemeColor(f.fill);
                 ctx.fill();
                 if (f.stroke || wireframe && f.wireframe !== false) {
-                    ctx.strokeStyle = HF.resolveThemeColor(wireframe && f.wireframe !== false ? 'var(--color-accent)' : f.stroke);
+                    ctx.strokeStyle = resolveThemeColor(wireframe && f.wireframe !== false ? 'var(--color-accent)' : f.stroke);
                     ctx.lineWidth = wireframe ? 1 : .7;
                     ctx.stroke();
                 }
@@ -716,13 +721,13 @@ var HF;
             for (const a of assets) {
                 const b = projection([a.x, .11, a.z]), color = HF.techById(a.id).color;
                 ctx.save();
-                ctx.strokeStyle = HF.resolveThemeColor(color);
+                ctx.strokeStyle = resolveThemeColor(color);
                 ctx.lineWidth = 2;
                 ctx.beginPath();
                 ctx.moveTo(b[0], b[1]);
                 ctx.lineTo(hub[0], hub[1]);
                 ctx.stroke();
-                ctx.strokeStyle = HF.resolveThemeColor(color);
+                ctx.strokeStyle = resolveThemeColor(color);
                 ctx.lineWidth = .9;
                 ctx.setLineDash([4, 4]);
                 ctx.beginPath();
@@ -735,7 +740,7 @@ var HF;
                 if (!reduced)
                     for (let i = 0; i < count; i++) {
                         const progress = (phase * (.12 + ratio * .5) + i / count) % 1, k = power !== null && power < 0 ? 1 - progress : progress, x = b[0] + (hub[0] - b[0]) * k, y = b[1] + (hub[1] - b[1]) * k;
-                        ctx.fillStyle = HF.resolveThemeColor(color);
+                        ctx.fillStyle = resolveThemeColor(color);
                         ctx.beginPath();
                         ctx.arc(x, y, 2, 0, Math.PI * 2);
                         ctx.fill();
@@ -743,15 +748,15 @@ var HF;
                 ctx.restore();
             }
             hit = [];
-            ctx.font = '500 12px ' + getComputedStyle(canvas).fontFamily;
+            ctx.font = '500 12px ' + theme.fontFamily;
             ctx.textAlign = 'center';
             for (const a of [...assets].sort((a, b) => projection([a.x, 0, a.z])[2] - projection([b.x, 0, b.z])[2])) {
                 const power = sceneAssetPower(telemetry, a.id), label = a.label + (power === null ? '' : ` · ${HF.fmt(power, 0)} kW`) + (a.id === 'battery' && telemetry ? ` · ${HF.fmt(telemetry.soc_pct, 0)}%` : ''), p = projection([a.x, .08, a.z + .75]), w = ctx.measureText(label).width + 19;
-                ctx.fillStyle = HF.resolveThemeColor('var(--color-paper-2)');
+                ctx.fillStyle = resolveThemeColor('var(--color-paper-2)');
                 ctx.beginPath();
                 ctx.roundRect(p[0] - w / 2, p[1] - 9, w, 24, 0);
                 ctx.fill();
-                ctx.fillStyle = HF.resolveThemeColor(HF.techById(a.id).color);
+                ctx.fillStyle = resolveThemeColor(HF.techById(a.id).color);
                 ctx.fillText(label, p[0], p[1] + 5);
                 hit.push({ id: a.id, x: p[0], y: p[1] - 20 });
             }
@@ -759,7 +764,7 @@ var HF;
         const resize = () => { const rect = canvas.getBoundingClientRect(); width = rect.width; height = rect.height; const dpr = Math.min(devicePixelRatio || 1, 2); canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); dirty = true; draw(); };
         const observer = new ResizeObserver(resize);
         observer.observe(canvas);
-        const intersection = new IntersectionObserver(e => { visible = e[0]?.isIntersecting ?? true; dirty = true; });
+        const intersection = new IntersectionObserver(e => { visible = e[0]?.isIntersecting ?? true; dirty = true; syncAnimation(); });
         intersection.observe(canvas);
         const down = (e) => { drag = true; moved = false; lastX = e.clientX; lastY = e.clientY; canvas.setPointerCapture(e.pointerId); };
         const syncPresetButtons = (preset) => { canvas.parentElement?.querySelectorAll('[data-camera-preset]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.cameraPreset === preset))); };
@@ -813,16 +818,27 @@ var HF;
         syncPresetButtons(activePreset);
         const telemetryChanged = () => { dirty = true; draw(); };
         canvas.addEventListener('scene-telemetry', telemetryChanged);
-        function tick(time) { if (disposed)
+        function syncAnimation() {
+            if (disposed || reduced || !visible || document.hidden) {
+                cancelAnimationFrame(frame);
+                frame = 0;
+                lastTime = 0;
+                return;
+            }
+            if (!frame)
+                frame = requestAnimationFrame(tick);
+        }
+        function tick(time) { frame = 0; if (disposed)
             return; if (visible && !document.hidden && (dirty || !reduced)) {
-            phase += reduced ? 0 : Math.min(50, time - lastTime) * .000625;
+            phase += reduced ? 0 : Math.min(50, lastTime ? time - lastTime : 0) * .000625;
             draw();
             lastTime = time;
             dirty = false;
-        } frame = requestAnimationFrame(tick); }
+        } syncAnimation(); }
+        document.addEventListener('visibilitychange', syncAnimation);
         resize();
-        frame = requestAnimationFrame(tick);
-        return () => { disposed = true; cancelAnimationFrame(frame); observer.disconnect(); intersection.disconnect(); canvas.removeEventListener('pointerdown', down); canvas.removeEventListener('pointermove', move); canvas.removeEventListener('pointerup', up); canvas.removeEventListener('pointercancel', up); canvas.removeEventListener('keydown', key); canvas.removeEventListener('scene-command', command); canvas.removeEventListener('scene-telemetry', telemetryChanged); };
+        syncAnimation();
+        return () => { disposed = true; cancelAnimationFrame(frame); observer.disconnect(); intersection.disconnect(); document.removeEventListener('visibilitychange', syncAnimation); canvas.removeEventListener('pointerdown', down); canvas.removeEventListener('pointermove', move); canvas.removeEventListener('pointerup', up); canvas.removeEventListener('pointercancel', up); canvas.removeEventListener('keydown', key); canvas.removeEventListener('scene-command', command); canvas.removeEventListener('scene-telemetry', telemetryChanged); };
     }
     HF.mountEnergyScene = mountEnergyScene;
 })(HF || (HF = {}));
@@ -4739,8 +4755,11 @@ var HF;
             const action = target.closest('[data-experience-action]')?.dataset.experienceAction;
             if (action === 'compare-tariffs') {
                 const dialog = document.querySelector('[data-tariff-dialog]');
-                if (dialog && !dialog.open)
+                if (dialog && !dialog.open) {
+                    const trigger = target.closest('[data-experience-action]');
+                    dialog.addEventListener('close', () => trigger?.focus(), { once: true });
                     dialog.showModal();
+                }
             }
             else if (action === 'close-tariffs') {
                 document.querySelector('[data-tariff-dialog]')?.close();
@@ -5861,8 +5880,19 @@ var HF;
         }
         document.addEventListener('input', rememberDraft);
         document.addEventListener('change', rememberDraft);
-        document.addEventListener('keydown', e => { if (e.key === 'Escape' && !document.getElementById('modal')?.open)
-            setMobileMenu(false); });
+        document.addEventListener('keydown', e => {
+            const dialog = document.querySelector('dialog[open]');
+            if (e.key === 'Tab' && dialog?.open) {
+                const controls = [...dialog.querySelectorAll('button:not([disabled]),input:not([disabled]):not([type="hidden"]),select:not([disabled]),textarea:not([disabled]),a[href],[tabindex]:not([tabindex="-1"])')].filter(el => el.getClientRects().length > 0 && !el.closest('[inert]'));
+                const first = controls[0], last = controls.at(-1);
+                if (first && last && (!dialog.contains(document.activeElement) || (e.shiftKey && document.activeElement === first) || (!e.shiftKey && document.activeElement === last))) {
+                    e.preventDefault();
+                    (e.shiftKey ? last : first).focus();
+                }
+            }
+            if (e.key === 'Escape' && document.getElementById('sidebar')?.classList.contains('mobile-open') && !dialog?.open)
+                setMobileMenu(false);
+        });
         window.matchMedia('(max-width:800px)').addEventListener('change', () => setMobileMenu(false));
         function toast(message, error = false) {
             const el = document.getElementById('toast');

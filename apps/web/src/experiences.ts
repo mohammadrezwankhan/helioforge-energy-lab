@@ -393,7 +393,11 @@ namespace HF {
       const action = target.closest<HTMLElement>('[data-experience-action]')?.dataset.experienceAction;
       if (action === 'compare-tariffs') {
         const dialog = document.querySelector<HTMLDialogElement>('[data-tariff-dialog]');
-        if (dialog && !dialog.open) dialog.showModal();
+        if (dialog && !dialog.open) {
+          const trigger = target.closest<HTMLElement>('[data-experience-action]');
+          dialog.addEventListener('close', () => trigger?.focus(), {once: true});
+          dialog.showModal();
+        }
       } else if (action === 'close-tariffs') {
         document.querySelector<HTMLDialogElement>('[data-tariff-dialog]')?.close();
       }
