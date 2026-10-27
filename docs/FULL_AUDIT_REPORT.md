@@ -26,7 +26,7 @@ Terminal model is preserved. No numerical engines or catalogue contracts changed
 
 ## Findings and repairs
 
-Twelve reproducible findings: **0 P0, 3 P1, 9 P2, 0 P3**. All twelve are repaired.
+Thirteen reproducible findings: **0 P0, 3 P1, 10 P2, 0 P3**. All thirteen are repaired.
 The rows below describe expected behavior, the observed failure, its cause,
 implementation and regression evidence. Repeated failures at multiple widths
 are counted as one defect per root cause, not as separate bugs.
@@ -45,6 +45,7 @@ are counted as one defect per root cause, not as separate bugs.
 | HF-AUD-010 / P2 | Build dedicated Pages export: release security should be reproducible; global CSP existed only in Cloudflare control-plane state and the checker expected none. | Generate exact inline-script hashes from all four HTML routes into `_headers`; check the generated policy and document host-rule transition/rollback. | Old export fails the new CSP assertion; rebuilt export passes; two policy unit tests pass. Live effective headers remain a separate publication gate. |
 | HF-AUD-011 / P2 | Read current README: hosted capability should agree with `/methodology/`, `app.json` and runtime; it said all new calculations required Python and retained an old study count. | Stale overview copy. Describe the bounded browser Terminal separately from advanced Python studies and use the current 59-study count. | Cross-check against executable study catalogue and public metadata; unchanged 19/17 boundary. |
 | HF-AUD-012 / P2 | Read earlier Terminal verification: exact artifact identity should be clear; it named a base revision differing from live `app.json`. | Clarify historical recorded base versus verified published identity; current verification is separate and the release manifest accepts actual current counts. | Passive runtime SHA matched the earlier live manifest; new release hashes cover current sources/assets/report. |
+| HF-AUD-013 / P2 | Run the existing standalone audit against the CSP-protected public URL: 24 axe scans should execute; inline script-tag injection was blocked, while 227 other checks passed. | The test harness assumed permissive script injection. Load axe through Playwright evaluation, as the three-engine harness already does; retain the site's exact CSP and every assertion. | Failure captured on production; corrected standalone suite executes all 24 axe scans with no violations or execution errors. |
 
 ## Visual evidence
 
@@ -131,6 +132,15 @@ Current comparable local measurements and bytes are in the verification JSON.
 Removing the webfont removes its requests and font-swap dependency; canvas
 callbacks/theme lookups are separately measured improvements. The full offline
 dataset remains bundled rather than replacing scientific results for a score.
+
+After initial publication, the three-engine live matrix passed all 654 checks
+and 108 axe scans without uncaught errors or failed requests. Its first Chromium
+LCP sample was 3552ms, with CLS 0. Three subsequent fresh Chromium contexts measured
+1164, 904 and 1032ms (median 1032ms), all with CLS 0; the slower first sample is
+retained, not discarded. The repeat timings include 451–655ms time to first byte
+and 111–150ms download time. This is observed run-to-run variability, not a claim
+that every load meets the target. Live compressed transfer was 1,514,976 bytes;
+the full scientific dataset remains in the 13,604,323-byte runtime.
 
 Unavailable/unverified: physical phones/tablets, iOS Safari itself (WebKit engine
 was tested), assistive-technology speech output, OS/native 200% text settings,

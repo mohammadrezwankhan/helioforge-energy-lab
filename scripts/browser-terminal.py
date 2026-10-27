@@ -168,7 +168,9 @@ def select_command(page: Page, command: str) -> None:
 def audit_accessibility(page: Page, axe_path: Path, route: str, width: int, state: dict) -> None:
     try:
         if not page.evaluate("Boolean(window.axe)"):
-            page.add_script_tag(path=str(axe_path))
+            # Run audit instrumentation through automation, without adding an
+            # inline script element that the production CSP correctly blocks.
+            page.evaluate(axe_path.read_text(encoding="utf-8"))
         result = page.evaluate("""async () => {
           const report = await axe.run(document, {runOnly: {type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']}});
           return {violations: report.violations.map(v => ({id: v.id, impact: v.impact,
