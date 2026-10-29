@@ -63,3 +63,4 @@ def test_study_acceptance_artifact_has_per_id_oracles_and_actual_outcomes():
             if check["status"] == "NOT_APPLICABLE":
                 assert check["reason"]
         assert record["uncovered_conditions"], "state the scientific/operational limit for each study"
+

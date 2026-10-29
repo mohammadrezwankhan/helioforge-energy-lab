@@ -1,12 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {
   CAPABILITY_COPY,
   TASK_STARTS,
   WORKSPACES,
   buildModelRegistry,
+  sourceEvidenceMismatches,
   validateCloudflareCopy,
 } from './capability-contract.mjs';
 
@@ -15,8 +17,27 @@ const read=relative=>fs.readFileSync(path.join(root,relative),'utf8');
 const cloudflare=JSON.parse(read('cloudflare.json'));
 validateCloudflareCopy(cloudflare);
 
+const boundFile='apps/api/helioforge/studies.py';
+const boundSha256=createHash('sha256').update(fs.readFileSync(path.join(root,boundFile))).digest('hex');
+const validSourceRecord={source_hashes:{catalogue_file:boundFile,catalogue_sha256:boundSha256}};
+assert.deepEqual(sourceEvidenceMismatches(undefined,root),[],'absent optional evidence has no source mismatch');
+assert.deepEqual(sourceEvidenceMismatches(validSourceRecord,root),[],'valid source bindings match exact file bytes');
+assert.equal(sourceEvidenceMismatches({status:'PASS'},root)[0].reason,'source_hashes_not_object','PASS evidence without a hash map must fail closed');
+assert.equal(sourceEvidenceMismatches({source_hashes:[]},root)[0].reason,'source_hashes_not_object','non-object hash maps must fail closed');
+assert.equal(sourceEvidenceMismatches({source_hashes:{}},root)[0].reason,'no_source_file_bindings','empty hash maps must fail closed');
+assert.equal(sourceEvidenceMismatches({source_hashes:{catalogue_file:boundFile}},root)[0].reason,'expected_sha256_missing_or_invalid','file bindings without expected hashes must fail closed');
+assert.equal(sourceEvidenceMismatches({source_hashes:{catalogue_file:boundFile,catalogue_sha256:'invalid'}},root)[0].reason,'expected_sha256_missing_or_invalid','malformed digests must fail closed');
+const deliberatelyWrong=sourceEvidenceMismatches({source_hashes:{catalogue_file:boundFile,catalogue_sha256:'0'.repeat(64)}},root);
+assert.equal(deliberatelyWrong.length,1);
+assert.equal(deliberatelyWrong[0].reason,'sha256_mismatch');
+assert.equal(deliberatelyWrong[0].actual,boundSha256);
+const missingFile=sourceEvidenceMismatches({source_hashes:{missing_file:'apps/api/helioforge/does-not-exist.py',missing_sha256:'0'.repeat(64)}},root);
+assert.equal(missingFile[0].reason,'source_file_missing');
+
 const registry=buildModelRegistry(root);
 const committed=JSON.parse(read('docs/MODEL_REGISTRY.json'));
+const staleSourceEvidence=registry.studies.flatMap(study=>sourceEvidenceMismatches(study.acceptance.executionEvidence?.record,root).map(mismatch=>({study_id:study.id,...mismatch})));
+assert.equal(staleSourceEvidence.length,0,`source-bound study evidence does not match the committed Python files: ${JSON.stringify(staleSourceEvidence)}`);
 assert.deepEqual(committed,registry,'committed model registry must be regenerated from Python-backed study bundle');
 assert.equal(registry.registryVersion,'1.0.0');
 assert.equal(registry.workspaces.length,12);

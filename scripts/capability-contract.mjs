@@ -76,6 +76,36 @@ function findStudySource(repoRoot, id) {
   return {module:`apps/api/helioforge/engines/${module}`, tests:[testFile, 'apps/api/tests/test_studies_api.py']};
 }
 
+export function sourceEvidenceMismatches(evidence, repoRoot=root) {
+  if (evidence===undefined||evidence===null) return [];
+  const invalid=(reason,actual)=>[{file:null,expected:'non-empty source_hashes object with paired file/SHA-256 fields',actual,reason}];
+  if (typeof evidence!=='object'||Array.isArray(evidence)) return invalid('evidence_record_not_object',typeof evidence);
+  const sourceHashes=evidence.source_hashes;
+  if (!sourceHashes||typeof sourceHashes!=='object'||Array.isArray(sourceHashes)) return invalid('source_hashes_not_object',sourceHashes??null);
+  const entries=Object.entries(sourceHashes),fileEntries=entries.filter(([key])=>key.endsWith('_file'));
+  if (!fileEntries.length) return invalid('no_source_file_bindings',Object.keys(sourceHashes));
+  const hashKeys=new Set(entries.filter(([key])=>key.endsWith('_sha256')).map(([key])=>key));
+  const fileKeys=new Set(fileEntries.map(([key])=>key.replace(/_file$/,'_sha256')));
+  const unpaired=[...hashKeys].filter(key=>!fileKeys.has(key));
+  const mismatches=unpaired.map(key=>({file:sourceHashes[key.replace(/_sha256$/,'_file')]??null,
+    expected:sourceHashes[key]??null,actual:null,reason:'unpaired_file_or_hash_field'}));
+  for (const [key,file] of fileEntries) {
+    const expectedKey=key.replace(/_file$/,'_sha256'),expected=sourceHashes[expectedKey];
+    if (typeof file!=='string'||!file.trim()) {
+      mismatches.push({file:file??null,expected:expected??null,actual:null,reason:'source_file_path_missing_or_invalid'});
+      continue;
+    }
+    if (typeof expected!=='string'||!/^[a-f0-9]{64}$/.test(expected)) {
+      mismatches.push({file,expected:expected??null,actual:null,reason:'expected_sha256_missing_or_invalid'});
+      continue;
+    }
+    const source=path.join(repoRoot,file);
+    const actual=fs.existsSync(source)?createHash('sha256').update(fs.readFileSync(source)).digest('hex'):null;
+    if (actual===null||actual!==expected) mismatches.push({file,expected,actual,reason:actual===null?'source_file_missing':'sha256_mismatch'});
+  }
+  return mismatches;
+}
+
 const summarizeDefault = value => {
   if (Array.isArray(value)) return {type:'array',items:value.length,itemTypes:[...new Set(value.map(item => item === null ? 'null' : Array.isArray(item) ? 'array' : typeof item))].sort(),sha256:digest(value)};
   if (value && typeof value === 'object') return {type:'object',keys:Object.keys(value).sort(),sha256:digest(value)};
@@ -135,10 +165,7 @@ function acceptanceCard(study, example, code, repoRoot, evidence) {
     modelReferences:{code:code.module,tests:code.tests,sharedContract:'docs/roadmap/CONTRACT.md'},
   };
   if(evidence){
-    const bound=Object.entries(evidence.source_hashes).filter(([key])=>key.endsWith('_file')).every(([key,file])=>{
-      const expected=evidence.source_hashes[key.replace(/_file$/,'_sha256')],source=path.join(repoRoot,file);
-      return fs.existsSync(source)&&createHash('sha256').update(fs.readFileSync(source)).digest('hex')===expected;
-    });
+    const bound=sourceEvidenceMismatches(evidence,repoRoot).length===0;
     card.executionEvidence={reference:'docs/remediation-20261029/study-contracts.json',sourceMatches:bound,record:evidence};
     if(bound&&evidence.status==='PASS'){
       card.status='SOFTWARE_CHECKS_PASS';

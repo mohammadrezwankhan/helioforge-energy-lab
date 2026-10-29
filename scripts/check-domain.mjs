@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import {domainSecurityPolicy} from './domain-security.mjs';
-import {buildModelRegistry,buildPublicCapabilityFacts,CAPABILITY_COPY,TASK_STARTS,validateCloudflareCopy} from './capability-contract.mjs';
+import {buildModelRegistry,buildPublicCapabilityFacts,CAPABILITY_COPY,TASK_STARTS,validateCloudflareCopy,sourceEvidenceMismatches} from './capability-contract.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),outputRoot=process.env.CLOUDFLARE_OUTPUT_ROOT===undefined?path.join(root,'.cloudflare'):path.resolve(root,process.env.CLOUDFLARE_OUTPUT_ROOT),out=path.join(outputRoot,'site');
 const site=JSON.parse(fs.readFileSync(path.join(root,'cloudflare-domain.json'),'utf8'));
 const cloudflare=JSON.parse(fs.readFileSync(path.join(root,'cloudflare.json'),'utf8'));
@@ -58,6 +58,8 @@ if(site.engineeringHero===true){
 const facts=JSON.parse(read('app.json')),runtime=read('run/index.html');assert.equal(facts.url,site.canonical);assert.equal(facts.applicationUrl,origin+'/run/');assert.equal(facts.runtimeSha256,createHash('sha256').update(runtime).digest('hex'));assert.match(runtime,/name="robots" content="noindex,follow"/);assert.ok(runtime.includes(`rel="canonical" href="${facts.applicationUrl}"`));assert.ok(!runtime.includes("location.protocol === 'file:'"));
 assert.ok(!/<script\b[^>]*\bsrc=/i.test(runtime),'Hosted runtime must embed its compiled script');
 assert.ok(!runtime.includes('location.protocol==="file:"'),'Hosted API mode patch must be applied');
+const staleStudyEvidence=modelRegistry.studies.flatMap(study=>sourceEvidenceMismatches(study.acceptance.executionEvidence?.record,root).map(mismatch=>({study_id:study.id,...mismatch})));
+if(staleStudyEvidence.length)throw new Error(`Refusing to compare/publish a model registry with stale source-bound study evidence: ${JSON.stringify(staleStudyEvidence)}. Refresh the bounded acceptance record and regenerate its registry artifact; do not treat a stale PASS as current.`);
 assert.deepEqual(facts.capabilityContract,capabilityFacts);assert.equal(facts.helpUrl,origin+'/help/');assert.equal(facts.modelRegistryUrl,origin+'/models/');assert.equal(facts.capabilitiesUrl,origin+'/learning/capability-modes/');assert.equal(facts.capabilities.workspaceCount,12);assert.equal(facts.capabilities.studyCount,59);
 assert.deepEqual(facts.capabilityContract.modes.map(mode=>mode.description),Object.values(CAPABILITY_COPY));
 assert.ok(facts.sourceTreeDirty===null||typeof facts.sourceTreeDirty==='boolean');assert.equal(typeof facts.sourceIdentityStatus,'string');
