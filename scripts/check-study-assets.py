@@ -1,18 +1,37 @@
 """Verify frozen study examples without changing the artifact tested by CI.
 
 Use the same 1e-12 absolute/relative cross-platform tolerance as the hybrid
-asset checker, only for numerical values. Inputs, metadata and stored digests
-remain exact. A difference beyond tolerance fails rather than regenerating it.
+asset checker, only for numerical results. Replay inputs, metadata and stored
+digests remain exact. Generated bearing-fixture signals alone allow one binary64
+ULP for observed cross-platform math.sin roundoff. Frozen bytes are never rewritten.
 """
 import hashlib
 import json
 import math
 import runpy
+import struct
 import sys
+from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def _exact_json_equal(expected: Any, actual: Any) -> bool:
+    """Compare JSON structures without Python's `1 == 1.0` type coercion."""
+    if type(expected) is not type(actual):
+        return False
+    if isinstance(expected, float):
+        return struct.pack(">d", expected) == struct.pack(">d", actual)
+    if isinstance(expected, dict):
+        return (expected.keys() == actual.keys()
+                and all(_exact_json_equal(expected[key], actual[key]) for key in expected))
+    if isinstance(expected, list):
+        return (len(expected) == len(actual)
+                and all(_exact_json_equal(left, right) for left, right in zip(expected, actual, strict=True)))
+    return expected == actual
+
 
 def _display_value(value: Any, limit: int = 180) -> Any:
     """Keep failure output readable when a mismatched value is a long default series."""
@@ -49,7 +68,7 @@ def catalogue_differences(expected: Any, actual: Any, *, limit: int = 12) -> tup
         return f"{path}.{key}" if key.isidentifier() else f"{path}[{json.dumps(key)}]"
 
     def visit(want: Any, got: Any, path: str) -> None:
-        if truncated or want == got:
+        if truncated or _exact_json_equal(want, got):
             return
         if isinstance(want, dict) and isinstance(got, dict):
             for key in sorted(want.keys() - got.keys()):
@@ -81,6 +100,110 @@ def catalogue_differences(expected: Any, actual: Any, *, limit: int = 12) -> tup
     return differences, truncated
 
 
+def float_ulp_distance(left: float, right: float) -> int:
+    """Count representable binary64 steps between finite values."""
+    if not math.isfinite(left) or not math.isfinite(right):
+        raise ValueError("ULP distance is defined here only for finite values.")
+    if left == right:
+        return 0
+
+    sign_bit = 1 << 63
+    mask = (1 << 64) - 1
+
+    def ordered(value: float) -> int:
+        bits = struct.unpack(">Q", struct.pack(">d", value))[0]
+        return (~bits & mask) if bits & sign_bit else bits | sign_bit
+
+    return abs(ordered(left) - ordered(right))
+
+
+_BEARING_FIXTURE_FIELDS = {"training_records", "heldout_records"}
+
+
+def _normalize_bearing_fixture_roundoff(expected: list, actual: list) -> tuple[list, int]:
+    """Copy only 1-ULP `math.sin` differences in the named generated bearing signals."""
+    normalized = deepcopy(actual)
+    tolerated = 0
+    if len(expected) != len(normalized):
+        return normalized, tolerated
+
+    for expected_study, actual_study in zip(expected, normalized, strict=True):
+        if not isinstance(expected_study, dict) or not isinstance(actual_study, dict):
+            continue
+        if expected_study.get("id") != "research-bearing" or actual_study.get("id") != "research-bearing":
+            continue
+
+        for field_name in _BEARING_FIXTURE_FIELDS:
+            expected_fields = [field for field in expected_study.get("data_fields", [])
+                               if isinstance(field, dict) and field.get("name") == field_name]
+            actual_fields = [field for field in actual_study.get("data_fields", [])
+                             if isinstance(field, dict) and field.get("name") == field_name]
+            if len(expected_fields) != 1 or len(actual_fields) != 1:
+                continue
+            expected_records = expected_fields[0].get("default")
+            actual_records = actual_fields[0].get("default")
+            if not isinstance(expected_records, list) or not isinstance(actual_records, list):
+                continue
+            if len(expected_records) != len(actual_records):
+                continue
+
+            for expected_record, actual_record in zip(expected_records, actual_records, strict=True):
+                if not isinstance(expected_record, dict) or not isinstance(actual_record, dict):
+                    continue
+                if expected_record.get("record_id") != actual_record.get("record_id"):
+                    continue
+                expected_signal = expected_record.get("signal")
+                actual_signal = actual_record.get("signal")
+                if not isinstance(expected_signal, list) or not isinstance(actual_signal, list):
+                    continue
+                if len(expected_signal) != len(actual_signal):
+                    continue
+
+                for index, (expected_value, actual_value) in enumerate(zip(expected_signal, actual_signal, strict=True)):
+                    if type(expected_value) is type(actual_value) and expected_value == actual_value:
+                        continue
+                    if type(expected_value) is not float or type(actual_value) is not float:
+                        continue
+                    if not math.isfinite(expected_value) or not math.isfinite(actual_value):
+                        continue
+                    if float_ulp_distance(expected_value, actual_value) == 1:
+                        actual_signal[index] = expected_value
+                        tolerated += 1
+
+    return normalized, tolerated
+
+
+def compare_catalogues(expected: list, actual: list, *, limit: int = 12) -> tuple[list[dict[str, Any]], bool, int]:
+    """Compare catalogue metadata exactly, allowing only 1 ULP in bearing fixture samples."""
+    normalized, tolerated = _normalize_bearing_fixture_roundoff(expected, actual)
+    differences, omitted = catalogue_differences(expected, normalized, limit=limit)
+    return differences, omitted, tolerated
+
+
+def catalogue_default_inputs(study: dict) -> dict[str, Any]:
+    """Materialize the same declared defaults as `studies.evaluate` for one frozen entry."""
+    return {
+        field["name"]: field["default"]
+        for field in [*study.get("fields", []), *study.get("data_fields", [])]
+    }
+
+
+def validate_frozen_inputs(study_id: str, stored_inputs: Any, frozen_study: dict) -> None:
+    """Require the replay record to use exactly the frozen catalogue defaults."""
+    expected_inputs = catalogue_default_inputs(frozen_study)
+    if not _exact_json_equal(stored_inputs, expected_inputs):
+        differences, omitted = catalogue_differences(expected_inputs, stored_inputs)
+        raise AssertionError(
+            f"{study_id}: stored inputs differ from frozen catalogue defaults: "
+            + json.dumps({"mismatch_paths": differences, "additional_differences_omitted": omitted}, ensure_ascii=True)
+        )
+
+
+def canonical_input_sha256(study_id: str, inputs: dict[str, Any]) -> str:
+    payload = json.dumps({"study": study_id, "inputs": inputs}, sort_keys=True, separators=(",", ":"), allow_nan=False)
+    return hashlib.sha256(payload.encode()).hexdigest()
+
+
 def main() -> int:
     from helioforge.studies import StudyRequest, catalogue, evaluate
 
@@ -88,15 +211,17 @@ def main() -> int:
     source = (ROOT / "apps/web/src/roadmap-data.ts").read_text(encoding="utf-8")
     bundle = json.loads(source.split("STUDY_BUNDLE: StudyBundle = ", 1)[1].rsplit("; }", 1)[0])
     current_catalogue = json.loads(json.dumps(catalogue()))
-    if bundle["catalogue"] != current_catalogue:
-        mismatch_paths, omitted = catalogue_differences(bundle["catalogue"], current_catalogue)
+    mismatch_paths, omitted, tolerated_fixture_values = compare_catalogues(bundle["catalogue"], current_catalogue)
+    if mismatch_paths:
         print(json.dumps({
             "status": "FAIL",
             "check": "study_catalogue_exact_match",
             "mismatch_paths": mismatch_paths,
             "additional_differences_omitted": omitted,
+            "one_ulp_bearing_fixture_values": tolerated_fixture_values,
         }, ensure_ascii=True), file=sys.stderr)
         raise AssertionError("Study catalogue is stale; see bounded mismatch paths above.")
+    frozen_catalogue_by_id = {study["id"]: study for study in bundle["catalogue"]}
     assert set(bundle["results"]) == {s["id"] for s in catalogue()}
     differences = []
     timing_observations = []
@@ -104,9 +229,12 @@ def main() -> int:
         stored = dict(original)
         digest = stored.pop("evidence_sha256")
         assert hashlib.sha256(json.dumps(stored, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest() == digest, sid
-        fresh = json.loads(json.dumps(evaluate(StudyRequest(study=sid)), allow_nan=False))
+        validate_frozen_inputs(sid, stored["inputs"], frozen_catalogue_by_id[sid])
+        assert stored["input_sha256"] == canonical_input_sha256(sid, stored["inputs"]), sid + ": input digest differs from frozen inputs"
+        fresh = json.loads(json.dumps(evaluate(StudyRequest(study=sid, inputs=stored["inputs"])), allow_nan=False))
         fresh.pop("evidence_sha256")
         assert stored["inputs"] == fresh["inputs"], sid + ": inputs changed"
+        assert stored["input_sha256"] == fresh["input_sha256"], sid + ": input digest changed during replay"
         # Measured wall time is execution telemetry, not a deterministic model output.
         # Validate and retain both timings; compare all other output fields unchanged.
         if sid == "storage-annualopt":
@@ -117,7 +245,7 @@ def main() -> int:
         compare(stored, fresh, sid, differences)
     print(json.dumps({"status": "PASS", "studies": len(bundle["results"]), "numeric_roundoff_differences": len(differences),
                       "max_roundoff": max(differences, default=0), "execution_timing_observations": timing_observations,
-                      "artifact_rewritten": False}))
+                      "one_ulp_bearing_fixture_values": tolerated_fixture_values, "artifact_rewritten": False}))
     return 0
 
 
