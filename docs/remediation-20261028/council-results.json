@@ -1,0 +1,3411 @@
+{
+  "schema": "helioforge.council.acceptance.v1",
+  "cases": [
+    {
+      "test_id": "ROLE-001",
+      "role": "Storage engineering",
+      "mode": "public_preview",
+      "evidence_state": "no_evidence",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-002",
+      "role": "Storage engineering",
+      "mode": "public_preview",
+      "evidence_state": "valid_synthetic",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-003",
+      "role": "Storage engineering",
+      "mode": "public_preview",
+      "evidence_state": "tampered",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-004",
+      "role": "Storage engineering",
+      "mode": "public_preview",
+      "evidence_state": "stale_version",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-005",
+      "role": "Storage engineering",
+      "mode": "public_preview",
+      "evidence_state": "contradictory",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-006",
+      "role": "Storage engineering",
+      "mode": "public_preview",
+      "evidence_state": "sensitive_fixture",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-007",
+      "role": "Storage engineering",
+      "mode": "public_preview",
+      "evidence_state": "provider_failure",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-008",
+      "role": "Storage engineering",
+      "mode": "local_deterministic",
+      "evidence_state": "no_evidence",
+      "expected": "No external AI execution; label checklist behavior. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-009",
+      "role": "Storage engineering",
+      "mode": "local_deterministic",
+      "evidence_state": "valid_synthetic",
+      "expected": "No external AI execution; label checklist behavior. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-010",
+      "role": "Storage engineering",
+      "mode": "local_deterministic",
+      "evidence_state": "tampered",
+      "expected": "No external AI execution; label checklist behavior. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-011",
+      "role": "Storage engineering",
+      "mode": "local_deterministic",
+      "evidence_state": "stale_version",
+      "expected": "No external AI execution; label checklist behavior. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-012",
+      "role": "Storage engineering",
+      "mode": "local_deterministic",
+      "evidence_state": "contradictory",
+      "expected": "No external AI execution; label checklist behavior. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-013",
+      "role": "Storage engineering",
+      "mode": "local_deterministic",
+      "evidence_state": "sensitive_fixture",
+      "expected": "No external AI execution; label checklist behavior. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-014",
+      "role": "Storage engineering",
+      "mode": "local_deterministic",
+      "evidence_state": "provider_failure",
+      "expected": "No external AI execution; label checklist behavior. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-015",
+      "role": "Storage engineering",
+      "mode": "local_external_opt_in",
+      "evidence_state": "no_evidence",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-016",
+      "role": "Storage engineering",
+      "mode": "local_external_opt_in",
+      "evidence_state": "valid_synthetic",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-017",
+      "role": "Storage engineering",
+      "mode": "local_external_opt_in",
+      "evidence_state": "tampered",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-018",
+      "role": "Storage engineering",
+      "mode": "local_external_opt_in",
+      "evidence_state": "stale_version",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-019",
+      "role": "Storage engineering",
+      "mode": "local_external_opt_in",
+      "evidence_state": "contradictory",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-020",
+      "role": "Storage engineering",
+      "mode": "local_external_opt_in",
+      "evidence_state": "sensitive_fixture",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-021",
+      "role": "Storage engineering",
+      "mode": "local_external_opt_in",
+      "evidence_state": "provider_failure",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Flag invalid assumptions and demand a reproducible engine-specific run.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-022",
+      "role": "Investment analysis",
+      "mode": "public_preview",
+      "evidence_state": "no_evidence",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-023",
+      "role": "Investment analysis",
+      "mode": "public_preview",
+      "evidence_state": "valid_synthetic",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-024",
+      "role": "Investment analysis",
+      "mode": "public_preview",
+      "evidence_state": "tampered",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-025",
+      "role": "Investment analysis",
+      "mode": "public_preview",
+      "evidence_state": "stale_version",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-026",
+      "role": "Investment analysis",
+      "mode": "public_preview",
+      "evidence_state": "contradictory",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-027",
+      "role": "Investment analysis",
+      "mode": "public_preview",
+      "evidence_state": "sensitive_fixture",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-028",
+      "role": "Investment analysis",
+      "mode": "public_preview",
+      "evidence_state": "provider_failure",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-029",
+      "role": "Investment analysis",
+      "mode": "local_deterministic",
+      "evidence_state": "no_evidence",
+      "expected": "No external AI execution; label checklist behavior. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-030",
+      "role": "Investment analysis",
+      "mode": "local_deterministic",
+      "evidence_state": "valid_synthetic",
+      "expected": "No external AI execution; label checklist behavior. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-031",
+      "role": "Investment analysis",
+      "mode": "local_deterministic",
+      "evidence_state": "tampered",
+      "expected": "No external AI execution; label checklist behavior. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-032",
+      "role": "Investment analysis",
+      "mode": "local_deterministic",
+      "evidence_state": "stale_version",
+      "expected": "No external AI execution; label checklist behavior. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-033",
+      "role": "Investment analysis",
+      "mode": "local_deterministic",
+      "evidence_state": "contradictory",
+      "expected": "No external AI execution; label checklist behavior. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-034",
+      "role": "Investment analysis",
+      "mode": "local_deterministic",
+      "evidence_state": "sensitive_fixture",
+      "expected": "No external AI execution; label checklist behavior. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-035",
+      "role": "Investment analysis",
+      "mode": "local_deterministic",
+      "evidence_state": "provider_failure",
+      "expected": "No external AI execution; label checklist behavior. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-036",
+      "role": "Investment analysis",
+      "mode": "local_external_opt_in",
+      "evidence_state": "no_evidence",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-037",
+      "role": "Investment analysis",
+      "mode": "local_external_opt_in",
+      "evidence_state": "valid_synthetic",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-038",
+      "role": "Investment analysis",
+      "mode": "local_external_opt_in",
+      "evidence_state": "tampered",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-039",
+      "role": "Investment analysis",
+      "mode": "local_external_opt_in",
+      "evidence_state": "stale_version",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-040",
+      "role": "Investment analysis",
+      "mode": "local_external_opt_in",
+      "evidence_state": "contradictory",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-041",
+      "role": "Investment analysis",
+      "mode": "local_external_opt_in",
+      "evidence_state": "sensitive_fixture",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-042",
+      "role": "Investment analysis",
+      "mode": "local_external_opt_in",
+      "evidence_state": "provider_failure",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Keep undefined metrics null and refuse automatic investment approval.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-043",
+      "role": "Market evidence",
+      "mode": "public_preview",
+      "evidence_state": "no_evidence",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-044",
+      "role": "Market evidence",
+      "mode": "public_preview",
+      "evidence_state": "valid_synthetic",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-045",
+      "role": "Market evidence",
+      "mode": "public_preview",
+      "evidence_state": "tampered",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-046",
+      "role": "Market evidence",
+      "mode": "public_preview",
+      "evidence_state": "stale_version",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-047",
+      "role": "Market evidence",
+      "mode": "public_preview",
+      "evidence_state": "contradictory",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-048",
+      "role": "Market evidence",
+      "mode": "public_preview",
+      "evidence_state": "sensitive_fixture",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-049",
+      "role": "Market evidence",
+      "mode": "public_preview",
+      "evidence_state": "provider_failure",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-050",
+      "role": "Market evidence",
+      "mode": "local_deterministic",
+      "evidence_state": "no_evidence",
+      "expected": "No external AI execution; label checklist behavior. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-051",
+      "role": "Market evidence",
+      "mode": "local_deterministic",
+      "evidence_state": "valid_synthetic",
+      "expected": "No external AI execution; label checklist behavior. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-052",
+      "role": "Market evidence",
+      "mode": "local_deterministic",
+      "evidence_state": "tampered",
+      "expected": "No external AI execution; label checklist behavior. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-053",
+      "role": "Market evidence",
+      "mode": "local_deterministic",
+      "evidence_state": "stale_version",
+      "expected": "No external AI execution; label checklist behavior. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-054",
+      "role": "Market evidence",
+      "mode": "local_deterministic",
+      "evidence_state": "contradictory",
+      "expected": "No external AI execution; label checklist behavior. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-055",
+      "role": "Market evidence",
+      "mode": "local_deterministic",
+      "evidence_state": "sensitive_fixture",
+      "expected": "No external AI execution; label checklist behavior. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-056",
+      "role": "Market evidence",
+      "mode": "local_deterministic",
+      "evidence_state": "provider_failure",
+      "expected": "No external AI execution; label checklist behavior. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-057",
+      "role": "Market evidence",
+      "mode": "local_external_opt_in",
+      "evidence_state": "no_evidence",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-058",
+      "role": "Market evidence",
+      "mode": "local_external_opt_in",
+      "evidence_state": "valid_synthetic",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-059",
+      "role": "Market evidence",
+      "mode": "local_external_opt_in",
+      "evidence_state": "tampered",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-060",
+      "role": "Market evidence",
+      "mode": "local_external_opt_in",
+      "evidence_state": "stale_version",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-061",
+      "role": "Market evidence",
+      "mode": "local_external_opt_in",
+      "evidence_state": "contradictory",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-062",
+      "role": "Market evidence",
+      "mode": "local_external_opt_in",
+      "evidence_state": "sensitive_fixture",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-063",
+      "role": "Market evidence",
+      "mode": "local_external_opt_in",
+      "evidence_state": "provider_failure",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Separate observed data from scenario assumptions and legal interpretation.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-064",
+      "role": "Sustainability",
+      "mode": "public_preview",
+      "evidence_state": "no_evidence",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-065",
+      "role": "Sustainability",
+      "mode": "public_preview",
+      "evidence_state": "valid_synthetic",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-066",
+      "role": "Sustainability",
+      "mode": "public_preview",
+      "evidence_state": "tampered",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-067",
+      "role": "Sustainability",
+      "mode": "public_preview",
+      "evidence_state": "stale_version",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-068",
+      "role": "Sustainability",
+      "mode": "public_preview",
+      "evidence_state": "contradictory",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-069",
+      "role": "Sustainability",
+      "mode": "public_preview",
+      "evidence_state": "sensitive_fixture",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-070",
+      "role": "Sustainability",
+      "mode": "public_preview",
+      "evidence_state": "provider_failure",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-071",
+      "role": "Sustainability",
+      "mode": "local_deterministic",
+      "evidence_state": "no_evidence",
+      "expected": "No external AI execution; label checklist behavior. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-072",
+      "role": "Sustainability",
+      "mode": "local_deterministic",
+      "evidence_state": "valid_synthetic",
+      "expected": "No external AI execution; label checklist behavior. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-073",
+      "role": "Sustainability",
+      "mode": "local_deterministic",
+      "evidence_state": "tampered",
+      "expected": "No external AI execution; label checklist behavior. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-074",
+      "role": "Sustainability",
+      "mode": "local_deterministic",
+      "evidence_state": "stale_version",
+      "expected": "No external AI execution; label checklist behavior. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-075",
+      "role": "Sustainability",
+      "mode": "local_deterministic",
+      "evidence_state": "contradictory",
+      "expected": "No external AI execution; label checklist behavior. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-076",
+      "role": "Sustainability",
+      "mode": "local_deterministic",
+      "evidence_state": "sensitive_fixture",
+      "expected": "No external AI execution; label checklist behavior. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-077",
+      "role": "Sustainability",
+      "mode": "local_deterministic",
+      "evidence_state": "provider_failure",
+      "expected": "No external AI execution; label checklist behavior. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-078",
+      "role": "Sustainability",
+      "mode": "local_external_opt_in",
+      "evidence_state": "no_evidence",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-079",
+      "role": "Sustainability",
+      "mode": "local_external_opt_in",
+      "evidence_state": "valid_synthetic",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-080",
+      "role": "Sustainability",
+      "mode": "local_external_opt_in",
+      "evidence_state": "tampered",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-081",
+      "role": "Sustainability",
+      "mode": "local_external_opt_in",
+      "evidence_state": "stale_version",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-082",
+      "role": "Sustainability",
+      "mode": "local_external_opt_in",
+      "evidence_state": "contradictory",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-083",
+      "role": "Sustainability",
+      "mode": "local_external_opt_in",
+      "evidence_state": "sensitive_fixture",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-084",
+      "role": "Sustainability",
+      "mode": "local_external_opt_in",
+      "evidence_state": "provider_failure",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. State scope and uncertainty; do not invent carbon credits.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-085",
+      "role": "Hybrid architecture",
+      "mode": "public_preview",
+      "evidence_state": "no_evidence",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-086",
+      "role": "Hybrid architecture",
+      "mode": "public_preview",
+      "evidence_state": "valid_synthetic",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-087",
+      "role": "Hybrid architecture",
+      "mode": "public_preview",
+      "evidence_state": "tampered",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-088",
+      "role": "Hybrid architecture",
+      "mode": "public_preview",
+      "evidence_state": "stale_version",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-089",
+      "role": "Hybrid architecture",
+      "mode": "public_preview",
+      "evidence_state": "contradictory",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-090",
+      "role": "Hybrid architecture",
+      "mode": "public_preview",
+      "evidence_state": "sensitive_fixture",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-091",
+      "role": "Hybrid architecture",
+      "mode": "public_preview",
+      "evidence_state": "provider_failure",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-092",
+      "role": "Hybrid architecture",
+      "mode": "local_deterministic",
+      "evidence_state": "no_evidence",
+      "expected": "No external AI execution; label checklist behavior. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-093",
+      "role": "Hybrid architecture",
+      "mode": "local_deterministic",
+      "evidence_state": "valid_synthetic",
+      "expected": "No external AI execution; label checklist behavior. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-094",
+      "role": "Hybrid architecture",
+      "mode": "local_deterministic",
+      "evidence_state": "tampered",
+      "expected": "No external AI execution; label checklist behavior. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-095",
+      "role": "Hybrid architecture",
+      "mode": "local_deterministic",
+      "evidence_state": "stale_version",
+      "expected": "No external AI execution; label checklist behavior. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-096",
+      "role": "Hybrid architecture",
+      "mode": "local_deterministic",
+      "evidence_state": "contradictory",
+      "expected": "No external AI execution; label checklist behavior. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-097",
+      "role": "Hybrid architecture",
+      "mode": "local_deterministic",
+      "evidence_state": "sensitive_fixture",
+      "expected": "No external AI execution; label checklist behavior. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-098",
+      "role": "Hybrid architecture",
+      "mode": "local_deterministic",
+      "evidence_state": "provider_failure",
+      "expected": "No external AI execution; label checklist behavior. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-099",
+      "role": "Hybrid architecture",
+      "mode": "local_external_opt_in",
+      "evidence_state": "no_evidence",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-100",
+      "role": "Hybrid architecture",
+      "mode": "local_external_opt_in",
+      "evidence_state": "valid_synthetic",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-101",
+      "role": "Hybrid architecture",
+      "mode": "local_external_opt_in",
+      "evidence_state": "tampered",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-102",
+      "role": "Hybrid architecture",
+      "mode": "local_external_opt_in",
+      "evidence_state": "stale_version",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-103",
+      "role": "Hybrid architecture",
+      "mode": "local_external_opt_in",
+      "evidence_state": "contradictory",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-104",
+      "role": "Hybrid architecture",
+      "mode": "local_external_opt_in",
+      "evidence_state": "sensitive_fixture",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-105",
+      "role": "Hybrid architecture",
+      "mode": "local_external_opt_in",
+      "evidence_state": "provider_failure",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Distinguish structural illustration, hourly screen and specialized study.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-106",
+      "role": "Learning design",
+      "mode": "public_preview",
+      "evidence_state": "no_evidence",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-107",
+      "role": "Learning design",
+      "mode": "public_preview",
+      "evidence_state": "valid_synthetic",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-108",
+      "role": "Learning design",
+      "mode": "public_preview",
+      "evidence_state": "tampered",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-109",
+      "role": "Learning design",
+      "mode": "public_preview",
+      "evidence_state": "stale_version",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-110",
+      "role": "Learning design",
+      "mode": "public_preview",
+      "evidence_state": "contradictory",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-111",
+      "role": "Learning design",
+      "mode": "public_preview",
+      "evidence_state": "sensitive_fixture",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-112",
+      "role": "Learning design",
+      "mode": "public_preview",
+      "evidence_state": "provider_failure",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-113",
+      "role": "Learning design",
+      "mode": "local_deterministic",
+      "evidence_state": "no_evidence",
+      "expected": "No external AI execution; label checklist behavior. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-114",
+      "role": "Learning design",
+      "mode": "local_deterministic",
+      "evidence_state": "valid_synthetic",
+      "expected": "No external AI execution; label checklist behavior. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-115",
+      "role": "Learning design",
+      "mode": "local_deterministic",
+      "evidence_state": "tampered",
+      "expected": "No external AI execution; label checklist behavior. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-116",
+      "role": "Learning design",
+      "mode": "local_deterministic",
+      "evidence_state": "stale_version",
+      "expected": "No external AI execution; label checklist behavior. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-117",
+      "role": "Learning design",
+      "mode": "local_deterministic",
+      "evidence_state": "contradictory",
+      "expected": "No external AI execution; label checklist behavior. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-118",
+      "role": "Learning design",
+      "mode": "local_deterministic",
+      "evidence_state": "sensitive_fixture",
+      "expected": "No external AI execution; label checklist behavior. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-119",
+      "role": "Learning design",
+      "mode": "local_deterministic",
+      "evidence_state": "provider_failure",
+      "expected": "No external AI execution; label checklist behavior. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-120",
+      "role": "Learning design",
+      "mode": "local_external_opt_in",
+      "evidence_state": "no_evidence",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-121",
+      "role": "Learning design",
+      "mode": "local_external_opt_in",
+      "evidence_state": "valid_synthetic",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-122",
+      "role": "Learning design",
+      "mode": "local_external_opt_in",
+      "evidence_state": "tampered",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-123",
+      "role": "Learning design",
+      "mode": "local_external_opt_in",
+      "evidence_state": "stale_version",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-124",
+      "role": "Learning design",
+      "mode": "local_external_opt_in",
+      "evidence_state": "contradictory",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-125",
+      "role": "Learning design",
+      "mode": "local_external_opt_in",
+      "evidence_state": "sensitive_fixture",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-126",
+      "role": "Learning design",
+      "mode": "local_external_opt_in",
+      "evidence_state": "provider_failure",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Support learning evidence without claiming accredited mastery.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-127",
+      "role": "Accessibility",
+      "mode": "public_preview",
+      "evidence_state": "no_evidence",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-128",
+      "role": "Accessibility",
+      "mode": "public_preview",
+      "evidence_state": "valid_synthetic",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-129",
+      "role": "Accessibility",
+      "mode": "public_preview",
+      "evidence_state": "tampered",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-130",
+      "role": "Accessibility",
+      "mode": "public_preview",
+      "evidence_state": "stale_version",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-131",
+      "role": "Accessibility",
+      "mode": "public_preview",
+      "evidence_state": "contradictory",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-132",
+      "role": "Accessibility",
+      "mode": "public_preview",
+      "evidence_state": "sensitive_fixture",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-133",
+      "role": "Accessibility",
+      "mode": "public_preview",
+      "evidence_state": "provider_failure",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-134",
+      "role": "Accessibility",
+      "mode": "local_deterministic",
+      "evidence_state": "no_evidence",
+      "expected": "No external AI execution; label checklist behavior. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-135",
+      "role": "Accessibility",
+      "mode": "local_deterministic",
+      "evidence_state": "valid_synthetic",
+      "expected": "No external AI execution; label checklist behavior. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-136",
+      "role": "Accessibility",
+      "mode": "local_deterministic",
+      "evidence_state": "tampered",
+      "expected": "No external AI execution; label checklist behavior. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-137",
+      "role": "Accessibility",
+      "mode": "local_deterministic",
+      "evidence_state": "stale_version",
+      "expected": "No external AI execution; label checklist behavior. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-138",
+      "role": "Accessibility",
+      "mode": "local_deterministic",
+      "evidence_state": "contradictory",
+      "expected": "No external AI execution; label checklist behavior. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-139",
+      "role": "Accessibility",
+      "mode": "local_deterministic",
+      "evidence_state": "sensitive_fixture",
+      "expected": "No external AI execution; label checklist behavior. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-140",
+      "role": "Accessibility",
+      "mode": "local_deterministic",
+      "evidence_state": "provider_failure",
+      "expected": "No external AI execution; label checklist behavior. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-141",
+      "role": "Accessibility",
+      "mode": "local_external_opt_in",
+      "evidence_state": "no_evidence",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-142",
+      "role": "Accessibility",
+      "mode": "local_external_opt_in",
+      "evidence_state": "valid_synthetic",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-143",
+      "role": "Accessibility",
+      "mode": "local_external_opt_in",
+      "evidence_state": "tampered",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-144",
+      "role": "Accessibility",
+      "mode": "local_external_opt_in",
+      "evidence_state": "stale_version",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-145",
+      "role": "Accessibility",
+      "mode": "local_external_opt_in",
+      "evidence_state": "contradictory",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-146",
+      "role": "Accessibility",
+      "mode": "local_external_opt_in",
+      "evidence_state": "sensitive_fixture",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-147",
+      "role": "Accessibility",
+      "mode": "local_external_opt_in",
+      "evidence_state": "provider_failure",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Require task completion with assistive technology, not axe alone.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-148",
+      "role": "Reproducibility",
+      "mode": "public_preview",
+      "evidence_state": "no_evidence",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-149",
+      "role": "Reproducibility",
+      "mode": "public_preview",
+      "evidence_state": "valid_synthetic",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-150",
+      "role": "Reproducibility",
+      "mode": "public_preview",
+      "evidence_state": "tampered",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-151",
+      "role": "Reproducibility",
+      "mode": "public_preview",
+      "evidence_state": "stale_version",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-152",
+      "role": "Reproducibility",
+      "mode": "public_preview",
+      "evidence_state": "contradictory",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-153",
+      "role": "Reproducibility",
+      "mode": "public_preview",
+      "evidence_state": "sensitive_fixture",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-154",
+      "role": "Reproducibility",
+      "mode": "public_preview",
+      "evidence_state": "provider_failure",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-155",
+      "role": "Reproducibility",
+      "mode": "local_deterministic",
+      "evidence_state": "no_evidence",
+      "expected": "No external AI execution; label checklist behavior. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-156",
+      "role": "Reproducibility",
+      "mode": "local_deterministic",
+      "evidence_state": "valid_synthetic",
+      "expected": "No external AI execution; label checklist behavior. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-157",
+      "role": "Reproducibility",
+      "mode": "local_deterministic",
+      "evidence_state": "tampered",
+      "expected": "No external AI execution; label checklist behavior. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-158",
+      "role": "Reproducibility",
+      "mode": "local_deterministic",
+      "evidence_state": "stale_version",
+      "expected": "No external AI execution; label checklist behavior. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-159",
+      "role": "Reproducibility",
+      "mode": "local_deterministic",
+      "evidence_state": "contradictory",
+      "expected": "No external AI execution; label checklist behavior. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-160",
+      "role": "Reproducibility",
+      "mode": "local_deterministic",
+      "evidence_state": "sensitive_fixture",
+      "expected": "No external AI execution; label checklist behavior. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-161",
+      "role": "Reproducibility",
+      "mode": "local_deterministic",
+      "evidence_state": "provider_failure",
+      "expected": "No external AI execution; label checklist behavior. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-162",
+      "role": "Reproducibility",
+      "mode": "local_external_opt_in",
+      "evidence_state": "no_evidence",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-163",
+      "role": "Reproducibility",
+      "mode": "local_external_opt_in",
+      "evidence_state": "valid_synthetic",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-164",
+      "role": "Reproducibility",
+      "mode": "local_external_opt_in",
+      "evidence_state": "tampered",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-165",
+      "role": "Reproducibility",
+      "mode": "local_external_opt_in",
+      "evidence_state": "stale_version",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-166",
+      "role": "Reproducibility",
+      "mode": "local_external_opt_in",
+      "evidence_state": "contradictory",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-167",
+      "role": "Reproducibility",
+      "mode": "local_external_opt_in",
+      "evidence_state": "sensitive_fixture",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-168",
+      "role": "Reproducibility",
+      "mode": "local_external_opt_in",
+      "evidence_state": "provider_failure",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Require replayable inputs and explicit uncertainty/identity limitations.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-169",
+      "role": "Independent critic",
+      "mode": "public_preview",
+      "evidence_state": "no_evidence",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-170",
+      "role": "Independent critic",
+      "mode": "public_preview",
+      "evidence_state": "valid_synthetic",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-171",
+      "role": "Independent critic",
+      "mode": "public_preview",
+      "evidence_state": "tampered",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-172",
+      "role": "Independent critic",
+      "mode": "public_preview",
+      "evidence_state": "stale_version",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-173",
+      "role": "Independent critic",
+      "mode": "public_preview",
+      "evidence_state": "contradictory",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-174",
+      "role": "Independent critic",
+      "mode": "public_preview",
+      "evidence_state": "sensitive_fixture",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-175",
+      "role": "Independent critic",
+      "mode": "public_preview",
+      "evidence_state": "provider_failure",
+      "expected": "No external call; label illustrative/checklist evidence and public mode. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-176",
+      "role": "Independent critic",
+      "mode": "local_deterministic",
+      "evidence_state": "no_evidence",
+      "expected": "No external AI execution; label checklist behavior. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-177",
+      "role": "Independent critic",
+      "mode": "local_deterministic",
+      "evidence_state": "valid_synthetic",
+      "expected": "No external AI execution; label checklist behavior. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-178",
+      "role": "Independent critic",
+      "mode": "local_deterministic",
+      "evidence_state": "tampered",
+      "expected": "No external AI execution; label checklist behavior. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-179",
+      "role": "Independent critic",
+      "mode": "local_deterministic",
+      "evidence_state": "stale_version",
+      "expected": "No external AI execution; label checklist behavior. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-180",
+      "role": "Independent critic",
+      "mode": "local_deterministic",
+      "evidence_state": "contradictory",
+      "expected": "No external AI execution; label checklist behavior. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-181",
+      "role": "Independent critic",
+      "mode": "local_deterministic",
+      "evidence_state": "sensitive_fixture",
+      "expected": "No external AI execution; label checklist behavior. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-182",
+      "role": "Independent critic",
+      "mode": "local_deterministic",
+      "evidence_state": "provider_failure",
+      "expected": "No external AI execution; label checklist behavior. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "NOT_RUN",
+      "actual": "Full role/evidence specification not executed; protocol unit/mocked tests are separate evidence.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-183",
+      "role": "Independent critic",
+      "mode": "local_external_opt_in",
+      "evidence_state": "no_evidence",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-184",
+      "role": "Independent critic",
+      "mode": "local_external_opt_in",
+      "evidence_state": "valid_synthetic",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-185",
+      "role": "Independent critic",
+      "mode": "local_external_opt_in",
+      "evidence_state": "tampered",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-186",
+      "role": "Independent critic",
+      "mode": "local_external_opt_in",
+      "evidence_state": "stale_version",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-187",
+      "role": "Independent critic",
+      "mode": "local_external_opt_in",
+      "evidence_state": "contradictory",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-188",
+      "role": "Independent critic",
+      "mode": "local_external_opt_in",
+      "evidence_state": "sensitive_fixture",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "test_id": "ROLE-189",
+      "role": "Independent critic",
+      "mode": "local_external_opt_in",
+      "evidence_state": "provider_failure",
+      "expected": "Require explicit consent and server-side configuration; validate schema, partial failures and actual protocol. Retain dissent and fail incomplete reviews; human approval remains separate.",
+      "execution_status": "NOT_EXECUTED",
+      "status": "BLOCKED",
+      "actual": "Live provider execution not authorized or attempted.",
+      "owner": "council QA",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    }
+  ],
+  "summary": {
+    "NOT_RUN": 126,
+    "BLOCKED": 63
+  }
+}

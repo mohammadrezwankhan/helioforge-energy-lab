@@ -49,7 +49,7 @@ def main() -> int:
                 print("UNAVAILABLE", engine_name, str(exc).splitlines()[0], flush=True)
                 continue
             engine["version"] = browser.version
-            context = browser.new_context(viewport={"width": 1440, "height": 1000}, reduced_motion="reduce")
+            context = browser.new_context(ignore_https_errors=args.url.startswith('https://127.0.0.1:'), viewport={"width": 1440, "height": 1000}, reduced_motion="reduce")
             page = context.new_page()
             page.on("pageerror", lambda exc, target=engine: target["errors"].append(str(exc)))
             page.on("requestfailed", lambda req, target=engine: target["networkFailures"].append({"url": req.url, "error": req.failure}))

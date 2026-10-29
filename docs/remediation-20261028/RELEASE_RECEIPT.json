@@ -1,0 +1,6 @@
+{
+  "immutable_receipt": "receipts/release-f0bd3cbc8ce01f34c782ae2ff53d752294856b529136d91d666ed86f4b713038.json",
+  "sha256": "f0bd3cbc8ce01f34c782ae2ff53d752294856b529136d91d666ed86f4b713038",
+  "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+  "decision": "NOT_ACCEPTED_FOR_FULL_APPRAISAL_CLOSURE"
+}

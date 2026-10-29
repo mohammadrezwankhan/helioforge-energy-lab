@@ -1,0 +1,6 @@
+{
+  "receipt": "docs/remediation-20261029/receipts/release-f900fd996baf5e71d3905df5fdb2b0adf4dd13356ca1db531c47dd4f1e144018.json",
+  "sha256": "f900fd996baf5e71d3905df5fdb2b0adf4dd13356ca1db531c47dd4f1e144018",
+  "runtime_sha256": "8ef56f4df539590392696552c2b10651faf953790d8018c982a949b21e0ccb00",
+  "production_changed": false
+}

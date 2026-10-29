@@ -473,8 +473,10 @@ STUDIES: list[dict] = [
                    _field("sponsor_promote_share", "Sponsor promote share", 0.2, 0, 0.99, 0.05, "fraction")],
         "data_fields": [],
         "equations": ["preferred return due = capital × ((1 + preferred_rate)^years − 1)", "catch-up total = promote_share × LP_pref_paid / (catch-up_share − promote_share)", "remaining pool split LP/sponsor = (1 − promote_share)/promote_share"],
-        "limitations": ["Explicit single-LP, time-zero contribution and single-exit convention; no interim distributions, taxes, return-of-capital priority to sponsor, clawback, IRR hurdle or legal partnership terms."],
-        "sources": [],
+        "limitations": ["Explicit single-LP, time-zero contribution and single-exit convention; no interim distributions, taxes, return-of-capital priority to sponsor, clawback, IRR hurdle or legal partnership terms.",
+                        "First-party algebraic convention; the source reference is not independent validation or a legal partnership agreement."],
+        "sources": [{"title": "First-party HelioForge waterfall implementation and declared equations",
+                     "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/74d6730e38323b69c180d7f4b4945d11010203f3/apps/api/helioforge/engines/decision_studies.py"}],
     },
 ]
 

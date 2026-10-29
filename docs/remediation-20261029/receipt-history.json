@@ -1,0 +1,10 @@
+{
+  "latest_pointer": "RELEASE_RECEIPT.json",
+  "superseded": [
+    {
+      "receipt": "receipts/release-048b9eb769c21a2baed6280b9f6aae8cb1ead6238e0c8fd6cc53e574eba5e515.json",
+      "status": "SUPERSEDED_INVALID_ACTIVE_LOG_BINDING",
+      "reason": "The first sealing pass included its own still-open finalize.log. That log changed after hashing. The finalizer excludes its active output and the replacement receipt is independently verified."
+    }
+  ]
+}

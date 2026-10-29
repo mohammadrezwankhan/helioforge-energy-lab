@@ -1,0 +1,16 @@
+{
+  "passed": 10,
+  "checks": [
+    "Every view exposes its specific real-data and external-validation requirements without navigation starvation",
+    "Solved voltage/branch flows, six-zone flows, ray geometry and aligned point clouds render actual study data",
+    "Keyboard tariff edit changes the actual input, hides stale output, and recalculates successfully",
+    "Measured CSV import retains observations, unit and provenance and invalidates edited study results",
+    "Geographic assets use supplied WGS84 coordinates and export the same GeoJSON",
+    "Document extraction is auditable and its saved run can be attached to a council review",
+    "Supplied telemetry shows threshold severity while retaining the external safety-validation boundary",
+    "All nine actual Foundation quizzes unlock Applied while Advanced stays gated; exact local scores persist",
+    "Two real saved runs drive synchronized scenes, independent camera controls and clean remounts",
+    "New evidence panels and comparison scenes fit every view at 390px"
+  ],
+  "errors": []
+}

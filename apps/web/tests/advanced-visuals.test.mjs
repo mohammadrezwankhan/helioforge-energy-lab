@@ -13,6 +13,7 @@ const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'hf-advanced-visuals-'));
 const out = path.join(temp, 'advanced-visuals.js');
 try {
   compileScripts([
+    path.join(root, 'src/provenance-types.ts'),
     path.join(root, 'src/roadmap-types.ts'),
     path.join(root, 'src/roadmap-data.ts'),
     path.join(root, 'src/advanced-visuals.ts'),

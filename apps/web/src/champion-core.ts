@@ -1,14 +1,24 @@
 namespace HF {
   export const WORKSPACE_KEY = 'hf-workspace-v3';
+  export const WORKSPACE_BACKUP_KEY = 'hf-workspace-import-backup-v1';
+  export const WORKSPACE_SCHEMA_V1='helioforge.workspace.v1' as const;
+  export const WORKSPACE_SCHEMA_V2='helioforge.workspace.v2' as const;
+  export const WORKSPACE_MIGRATION_SCHEMA='helioforge.workspace-migration.v1' as const;
   export interface SavedSetup { id:string; name:string; created_at:string; inputs:HybridInputs }
-  export interface WorkspaceCache {
-    schema:'helioforge.workspace.v1'; saved_at:string; inputs:HybridInputs; lesson_id:string;
-    last_run_id:string|null; pinned_run_ids:string[]; saved_setups:SavedSetup[];
+  export type WorkspaceSchema=typeof WORKSPACE_SCHEMA_V1|typeof WORKSPACE_SCHEMA_V2;
+  export interface WorkspaceMigrationReceipt {
+    schema:typeof WORKSPACE_MIGRATION_SCHEMA; source_schema:WorkspaceSchema; target_schema:typeof WORKSPACE_SCHEMA_V2;
+    migrated_at:string; changes:string[]; losses:string[];
   }
+  export interface WorkspaceCache {
+    schema:typeof WORKSPACE_SCHEMA_V2; saved_at:string; inputs:HybridInputs; lesson_id:string;
+    last_run_id:string|null; pinned_run_ids:string[]; saved_setups:SavedSetup[]; migration:WorkspaceMigrationReceipt|null;
+  }
+  export interface PreparedWorkspaceImport {record:WorkspaceCache; receipt:WorkspaceMigrationReceipt}
   export interface ChampionState {
     saved:SavedSetup[]; storage:'available'|'unavailable'; notice:string;
     lastRunId:string|null; pendingPins:string[]; restored:boolean; lastSavedAt:string|null;
-    recoveryRaw:string|null;
+    recoveryRaw:string|null; importBackupRaw:string|null; migrationReceipt:WorkspaceMigrationReceipt|null; lastMigrationReceipt:WorkspaceMigrationReceipt|null; migrationPendingRaw:string|null;
   }
   export interface SavedHybrid { run_id:string; kind:'hybrid'; created_at:string; input_sha256:string; inputs:HybridInputs; result:HybridResult }
   export interface CommandEntry { id:string; label:string; detail:string; icon:string; kind:'page'|'system'|'lesson'|'action'; target:string }
@@ -18,10 +28,22 @@ namespace HF {
     if(typeof x!=='string'||x.length>40||!Number.isFinite(Date.parse(x)))throw new Error('Invalid saved timestamp.');
     return x;
   }
+  function migrationReceipt(source:WorkspaceSchema,changes:string[]=[]):WorkspaceMigrationReceipt {
+    return {schema:WORKSPACE_MIGRATION_SCHEMA,source_schema:source,target_schema:WORKSPACE_SCHEMA_V2,migrated_at:new Date().toISOString(),changes:[...changes],losses:[]};
+  }
+  function parseMigrationReceipt(raw:unknown):WorkspaceMigrationReceipt|null {
+    if(raw===null)return null;
+    if(!isRecord(raw)||raw.schema!==WORKSPACE_MIGRATION_SCHEMA||(raw.source_schema!==WORKSPACE_SCHEMA_V1&&raw.source_schema!==WORKSPACE_SCHEMA_V2)||raw.target_schema!==WORKSPACE_SCHEMA_V2)throw new Error('Invalid workspace migration receipt.');
+    const allowed=['schema','source_schema','target_schema','migrated_at','changes','losses'];
+    if(Object.keys(raw).some(k=>!allowed.includes(k))||!Array.isArray(raw.changes)||raw.changes.length>10||!raw.changes.every(x=>typeof x==='string'&&x.length<=240)||!Array.isArray(raw.losses)||raw.losses.length>10||!raw.losses.every(x=>typeof x==='string'&&x.length<=240))throw new Error('Invalid workspace migration receipt.');
+    return {schema:WORKSPACE_MIGRATION_SCHEMA,source_schema:raw.source_schema,target_schema:WORKSPACE_SCHEMA_V2,migrated_at:timestamp(raw.migrated_at),changes:[...raw.changes],losses:[...raw.losses]};
+  }
   /** Read only the documented schema, bound resource use, and validate every configuration. */
   export function parseWorkspace(raw:unknown):WorkspaceCache {
-    if(!isRecord(raw)||raw.schema!=='helioforge.workspace.v1')throw new Error('Unsupported workspace record.');
-    const allowed=['schema','saved_at','inputs','lesson_id','last_run_id','pinned_run_ids','saved_setups'];
+    if(!isRecord(raw)||(raw.schema!==WORKSPACE_SCHEMA_V1&&raw.schema!==WORKSPACE_SCHEMA_V2))throw new Error('Unsupported workspace record.');
+    const sourceSchema=raw.schema;
+    const fields=['schema','saved_at','inputs','lesson_id','last_run_id','pinned_run_ids','saved_setups'];
+    const allowed=sourceSchema===WORKSPACE_SCHEMA_V1?fields:[...fields,'migration'];
     if(Object.keys(raw).some(k=>!allowed.includes(k)))throw new Error('Unknown workspace field.');
     const inputs=parseConfiguration(raw.inputs);
     if(typeof raw.lesson_id!=='string'||!HYBRID_CATALOG.lessons.some(l=>l.id===raw.lesson_id))throw new Error('Unknown saved lesson.');
@@ -31,17 +53,28 @@ namespace HF {
     if(!Array.isArray(raw.saved_setups)||raw.saved_setups.length>20)throw new Error('A workspace supports up to 20 saved setups.');
     const saved=raw.saved_setups.map((s:unknown):SavedSetup=>{
       if(!isRecord(s)||typeof s.id!=='string'||!/^setup-[a-f0-9-]{36}$/i.test(s.id))throw new Error('Invalid setup identifier.');
+      if(Object.keys(s).some(k=>!['id','name','created_at','inputs'].includes(k)))throw new Error('Unknown saved setup field.');
       if(typeof s.name!=='string'||!s.name.trim()||s.name.length>80)throw new Error('A setup name must contain 1–80 characters.');
       return {id:s.id,name:s.name.trim(),created_at:timestamp(s.created_at),inputs:parseConfiguration(s.inputs)};
     });
     if(new Set(saved.map(s=>s.id)).size!==saved.length)throw new Error('Duplicate setup identifiers.');
-    return {schema:'helioforge.workspace.v1',saved_at:timestamp(raw.saved_at),inputs,lesson_id:raw.lesson_id,
-      last_run_id:raw.last_run_id,pinned_run_ids:[...raw.pinned_run_ids],saved_setups:saved};
+    if(sourceSchema===WORKSPACE_SCHEMA_V2&&!Object.hasOwn(raw,'migration'))throw new Error('Current workspace record is missing migration metadata.');
+    const migration=sourceSchema===WORKSPACE_SCHEMA_V1
+      ?migrationReceipt(WORKSPACE_SCHEMA_V1,['Changed the envelope from workspace v1 to v2.','Added a versioned migration receipt; all existing workspace fields were retained.'])
+      :parseMigrationReceipt(raw.migration);
+    return {schema:WORKSPACE_SCHEMA_V2,saved_at:timestamp(raw.saved_at),inputs,lesson_id:raw.lesson_id,
+      last_run_id:raw.last_run_id,pinned_run_ids:[...raw.pinned_run_ids],saved_setups:saved,migration};
+  }
+  export function prepareWorkspaceImport(raw:unknown):PreparedWorkspaceImport {
+    if(!isRecord(raw)||(raw.schema!==WORKSPACE_SCHEMA_V1&&raw.schema!==WORKSPACE_SCHEMA_V2))throw new Error('Unsupported workspace record.');
+    const sourceSchema=raw.schema,record=parseWorkspace(raw);
+    const receipt=sourceSchema===WORKSPACE_SCHEMA_V1?record.migration!:migrationReceipt(sourceSchema);
+    return {record,receipt};
   }
   export function initialChampionState(h:HybridState):ChampionState {
-    const c:ChampionState={saved:[],storage:'available',notice:'',lastRunId:null,pendingPins:[],restored:false,lastSavedAt:null,recoveryRaw:null};
+    const c:ChampionState={saved:[],storage:'available',notice:'',lastRunId:null,pendingPins:[],restored:false,lastSavedAt:null,recoveryRaw:null,importBackupRaw:null,migrationReceipt:null,lastMigrationReceipt:null,migrationPendingRaw:null};
     let raw:string|null=null;
-    try { raw=localStorage.getItem(WORKSPACE_KEY); }
+    try { c.importBackupRaw=localStorage.getItem(WORKSPACE_BACKUP_KEY);raw=localStorage.getItem(WORKSPACE_KEY); }
     catch { c.storage='unavailable';c.notice='Browser storage is unavailable. Keep this tab open and export your work.';return c; }
     if(!raw)return c;
     try {
@@ -50,8 +83,9 @@ namespace HF {
       h.inputs=saved.inputs;h.result=null;h.resultInputs=null;h.lessonId=saved.lesson_id;
       const bundled=attachBundledHybridResult(h);
       h.objectId=systemById(h.inputs.system_id).technologies[0]!;
-      c.saved=saved.saved_setups;c.lastRunId=saved.last_run_id;c.pendingPins=saved.pinned_run_ids;c.lastSavedAt=saved.saved_at;
-      c.notice=bundled?'Your exact preset is restored with its bundled Python result. Saved API runs require local reconnection.':'Your last valid setup is restored. Edited inputs require the local Python API for a new calculation.';
+      c.saved=saved.saved_setups;c.lastRunId=saved.last_run_id;c.pendingPins=saved.pinned_run_ids;c.lastSavedAt=saved.saved_at;c.migrationReceipt=saved.migration;
+      if(JSON.parse(raw).schema===WORKSPACE_SCHEMA_V1){c.migrationPendingRaw=raw;c.notice='A v1 workspace was loaded. Preview and confirm its migration to v2 before saving changes; the original cache remains untouched.';}
+      else c.notice=bundled?'Your exact preset is restored with its bundled Python result. Saved API runs require local reconnection.':'Your last valid setup is restored. Edited inputs require the local Python API for a new calculation.';
     } catch {
       c.recoveryRaw=raw;c.notice='The saved workspace could not be read. It has not been overwritten. Open Saved setups to download or reset it.';
     }
@@ -59,14 +93,15 @@ namespace HF {
   }
   export function workspaceCache(state:ViewState):WorkspaceCache {
     const h=state.hybrid,c=state.champion;
-    return {schema:'helioforge.workspace.v1',saved_at:new Date().toISOString(),inputs:parseConfiguration(h.inputs),
+    return {schema:WORKSPACE_SCHEMA_V2,saved_at:new Date().toISOString(),inputs:parseConfiguration(h.inputs),
       lesson_id:h.lessonId,last_run_id:!hybridDirty(h)?h.result?.run_id??c?.lastRunId??null:null,
       pinned_run_ids:[...new Set([...h.compare.flatMap(r=>r.result.run_id?[r.result.run_id]:[]),...(c?.pendingPins??[])])].slice(0,3),
-      saved_setups:c?.saved??[]};
+      saved_setups:c?.saved??[],migration:c?.migrationReceipt??null};
   }
   /** A browser cache stores configurations and server IDs, never manufactured result objects or keys. */
   export function persistWorkspace(state:ViewState):boolean {
     const c=state.champion;if(!c||c.recoveryRaw||state.hybrid.inputError)return false;
+    if(c.migrationPendingRaw){c.notice='Workspace changes are in memory only until the v1 to v2 migration is previewed and confirmed.';return false;}
     try {
       const record=workspaceCache(state),serialized=JSON.stringify(record);
       if(serialized.length>100_000)throw new Error('Workspace is too large. Export a setup and remove it from the shelf.');

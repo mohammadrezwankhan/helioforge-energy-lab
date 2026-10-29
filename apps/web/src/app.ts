@@ -19,10 +19,22 @@ namespace HF {
     const experiences=createExperienceController(()=>state);
     const completion=createCompletionController(()=>state,toast);
     const integrations=createIntegrationController(()=>state);
+    const exampleLoads=new Set<string>(),exampleErrors=new Map<string,string>();
+    document.addEventListener('hf:examples-loaded',event=>{
+      if((event as CustomEvent<{page:string}>).detail.page===state.page){workflows.refresh();experiences.refresh();completion.refresh();integrations.refresh();applyBusyState();}
+    });
+    document.addEventListener('click',event=>{
+      if((event.target as Element).closest('[data-example-retry]')){exampleErrors.delete(configurationKey(state.hybrid.inputs));render();}
+    });
     window.addEventListener('pagehide',event=>{if(!event.persisted)completion.destroy();});
     function render(): void {
       sceneCleanup?.();
       root!.innerHTML=shell(state);
+      if(state.page==='council'&&!hasConnected){
+        const form=document.querySelector<HTMLFormElement>('form[data-model="council"]');
+        form?.insertAdjacentHTML('afterbegin','<p class="notice" data-frozen-council role="status"><strong>Frozen synthetic council example.</strong> Eight fixed checklist sections; no specialist or critic is executed. Evidence-state submissions, evidence uploads and external providers are unavailable in this browser preview. Use the local Python application to review new evidence. A digest does not verify source authenticity or human approval.</p>');
+        form?.querySelectorAll<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>('input,select,textarea').forEach(field=>field.disabled=true);
+      }
       document.documentElement.dataset.motion=state.motionOff?'off':'on';
       for(const form of document.querySelectorAll<HTMLFormElement>('form[data-model]')){
         const draft=modelDrafts.get(form.dataset.model!);
@@ -38,7 +50,7 @@ namespace HF {
         if(state.hybrid.draft[field.name]!==undefined)field.value=state.hybrid.draft[field.name]!;
       }
       applyBusyState();
-      const sidebar=document.getElementById('sidebar');if(sidebar)sidebar.inert=window.matchMedia('(max-width:800px)').matches;
+      const sidebar=document.getElementById('sidebar');if(sidebar)sidebar.inert=window.matchMedia('(max-width:1100px)').matches;
       const canvas=document.getElementById('energy-scene') as HTMLCanvasElement|null;
       if(canvas)sceneCleanup=mountEnergyScene(canvas,systemById(state.hybrid.inputs.system_id),state.motionOff,id=>{state.hybrid.objectId=id;const el=document.getElementById('asset-inspector');if(el)el.innerHTML=assetInspector(state.hybrid);document.querySelectorAll<HTMLButtonElement>('[data-asset]').forEach(b=>{b.classList.toggle('selected',b.dataset.asset===id);b.setAttribute('aria-pressed',String(b.dataset.asset===id));});},()=>hybridDirty(state.hybrid)?null:state.hybrid.result?.schedule[state.hybrid.hour]??null);
       document.title=`${PAGES.find(p=>p.id===state.page)!.title} · HelioForge`;
@@ -47,17 +59,32 @@ namespace HF {
       experiences.refresh();
       completion.refresh();
       integrations.refresh();
+      applyBusyState();
+      const contracts:Partial<Record<Page,BaseResult[]>>={overview:[state.data.dispatch,state.data.finance,state.data.pv,state.data.forecast],storage:[state.data.dispatch],pv:[state.data.pv],research:[state.data.drift,state.data.reliability,state.data.sustainability],forecast:[state.data.forecast],investment:[state.data.finance,state.data.acquisition]};
+      const records=contracts[state.page];
+      if(records?.length)document.getElementById('page-content')?.insertAdjacentHTML('beforeend',`<section class="panel" aria-label="Result model contracts"><h2>Result model contracts</h2>${records.map(resultProvenanceView).join('')}</section>`);
       void refreshReleaseProvenance();
+      const h=state.hybrid,key=configurationKey(h.inputs);
+      if(!h.result&&!h.busy&&!h.draft&&!h.inputError&&deferredHybridAvailable(h.inputs)){
+        const host=document.getElementById('page-content');
+        if(state.page==='hybrid')host?.insertAdjacentHTML('afterbegin',`<p class="notice" role="status">${escapeHTML(exampleErrors.get(key)??'Loading verified example records…')}${exampleErrors.has(key)?' <button class="btn secondary small" data-example-retry>Retry example download</button>':''}</p>`);
+        if(!exampleLoads.has(key)&&!exampleErrors.has(key)){
+          exampleLoads.add(key);const revision=hybridStateRevision(h),inputs={...h.inputs};
+          void loadHybridExample(inputs).then(()=>{
+            if(revision===hybridStateRevision(h)&&key===configurationKey(h.inputs)&&!h.busy&&!h.draft&&!h.inputError&&!h.result){attachBundledHybridResult(h);render();}
+          }).catch(e=>{exampleErrors.set(key,e instanceof Error?e.message:'Example download failed.');if(key===configurationKey(h.inputs))render();}).finally(()=>exampleLoads.delete(key));
+        }
+      }
     }
     function applyBusyState():void {
       document.querySelector('.council-topology')?.classList.toggle('working',state.busy&&state.page==='council');
-      document.querySelectorAll<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>('form[data-model] input,form[data-model] select,form[data-model] textarea').forEach(e=>e.disabled=state.busy);
+      document.querySelectorAll<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>('form[data-model] input,form[data-model] select,form[data-model] textarea').forEach(e=>e.disabled=state.busy||(!hasConnected&&Boolean(e.closest('form[data-model="council"]'))));
       document.querySelectorAll<HTMLInputElement|HTMLSelectElement>('#hybrid-config input,#hybrid-config select').forEach(e=>e.disabled=state.hybrid.busy);
       document.querySelectorAll<HTMLButtonElement>('[data-system],[data-scenario],[data-hybrid-action="reset"],[data-hybrid-action="import"],[data-hybrid-action="launch-lesson"]').forEach(e=>e.disabled=state.hybrid.busy);
     }
     function setMobileMenu(open:boolean):void {
       const sidebar=document.getElementById('sidebar'),main=document.querySelector<HTMLElement>('.app-main'),toggle=document.querySelector<HTMLElement>('[data-action="menu"]');
-      const mobile=window.matchMedia('(max-width:800px)').matches;
+      const mobile=window.matchMedia('(max-width:1100px)').matches;
       if(!sidebar||!main)return;
       sidebar.classList.toggle('mobile-open',open&&mobile);sidebar.inert=mobile&&!open;main.inert=mobile&&open;
       toggle?.setAttribute('aria-expanded',String(mobile&&open));document.getElementById('nav-backdrop')?.remove();
@@ -84,7 +111,7 @@ namespace HF {
       }
       if(e.key==='Escape'&&document.getElementById('sidebar')?.classList.contains('mobile-open')&&!dialog?.open)setMobileMenu(false);
     });
-    window.matchMedia('(max-width:800px)').addEventListener('change',()=>setMobileMenu(false));
+    window.matchMedia('(max-width:1100px)').addEventListener('change',()=>setMobileMenu(false));
     function toast(message:string,error=false):void {
       const el=document.getElementById('toast'); if(!el)return;
       clearTimeout(toastTimer); el.textContent=message; el.className=`toast show ${error?'toast-error':''}`;
@@ -102,7 +129,14 @@ namespace HF {
       catch { throw new Error(body===undefined?'The local API returned an unreadable response. Reconnect and try again.':'The API response could not be read. Check Analysis history before retrying; the operation may already be saved.'); }
       if(!response.ok){
         const detail=(data as {detail?:unknown}).detail;
-        const message=typeof detail==='string'?detail:Array.isArray(detail)?detail.map((x:{msg?:string;loc?:unknown[]})=>`${x.loc?.slice(1).join('.')??'Input'}: ${x.msg??'Invalid input'}`).join('; '):`Request failed (${response.status}).`;
+        const detailObject=detail&&typeof detail==='object'&&!Array.isArray(detail)?detail as Record<string,unknown>:undefined;
+        const detailMessage=detailObject?.message;
+        const protocol=detailObject?.protocol&&typeof detailObject.protocol==='object'?detailObject.protocol as Record<string,unknown>:undefined;
+        const limits=protocol?.limits&&typeof protocol.limits==='object'?protocol.limits as Record<string,unknown>:undefined;
+        const cost=protocol?.cost&&typeof protocol.cost==='object'?protocol.cost as Record<string,unknown>:undefined;
+        const cancellation=protocol?.cancellation&&typeof protocol.cancellation==='object'?protocol.cancellation as Record<string,unknown>:undefined;
+        const councilStatus=protocol?` Protocol ${String(protocol.id)} · status ${String(protocol.external_execution_status)} · consent ${protocol.consent_to_external_processing?'given':'not given'} · Runner.run invocations ${limits?.completed_runner_invocations??'unknown'} / ${limits?.expected_runner_invocations??'unknown'} · cancellation ${String(cancellation?.status??'unknown')} (provider stop confirmed ${cancellation?.provider_stop_confirmed===true?'yes':cancellation?.provider_stop_confirmed===false?'no':'unknown'}) · charges may remain: ${cost?.failure_may_still_be_billable?'yes':'no'}.`:'';
+        const message=typeof detail==='string'?detail:typeof detailMessage==='string'?`${detailMessage}${councilStatus}`:Array.isArray(detail)?detail.map((x:{msg?:string;loc?:unknown[]})=>`${x.loc?.slice(1).join('.')??'Input'}: ${x.msg??'Invalid input'}`).join('; '):`Request failed (${response.status}).`;
         throw new Error(message);
       }
       return data as T;
@@ -145,12 +179,16 @@ namespace HF {
     const evidence=():Record<string,unknown>=>({exported_at:new Date().toISOString(),data_kind:'synthetic',view:state.page,hybrid:{inputs:state.hybrid.inputs,result:hybridDirty(state.hybrid)?null:state.hybrid.result,result_is_current:!hybridDirty(state.hybrid),comparisons:state.hybrid.compare},learning:{passed_self_checks:state.hybrid.progress,notice:'Browser-local practice, not verified credentials'},assumptions:state.data.defaults,results:{drift:state.data.drift,dispatch:state.data.dispatch,finance:state.data.finance,pv:state.data.pv,forecast:state.data.forecast,acquisition:state.data.acquisition,reliability:state.data.reliability,sustainability:state.data.sustainability},council:state.data.council,pilots:state.data.pilots,sources:state.data.sources,market_registry:state.data.markets,notice:'Screening scenarios only. No live market feeds. No investment, legal, safety or plant-control approval.'});
     function councilMarkdown():string {
       const c=state.data.council;
-      return `# HelioForge council review\n\nMode: ${c.mode} (${c.execution})\nMarket: ${c.market}\n\n## Brief\n${c.reviewed_brief}\n\n## Recommendation\n${c.decision.recommendation}\n\n${c.reviews.map(r=>`## ${r.agent}\n${r.summary}\n\nRisks:\n${r.risks.map(x=>`- ${x}`).join('\n')}\n\nRequired evidence:\n${r.required_evidence.map(x=>`- ${x}`).join('\n')}\n`).join('\n')}\n## Boundaries\n${c.warnings.join('\n')}\n`;
+      const previewDisclosure=!hasConnected?'Frozen synthetic council example. Eight fixed checklist sections. No specialist or critic is executed. Evidence-state submissions, evidence uploads and external providers are unavailable in this browser preview.\n\n':'';
+      const p=c.protocol_metadata;
+      const limits=p?.limits;
+      const integrity=p?.integrity;
+      return `# HelioForge council review\n\n${previewDisclosure}Protocol: ${p?.id??'unavailable'}\nMode: ${c.mode} (${c.execution})\nExternal execution status: ${p?.external_execution_status??'unavailable'}\nExternal processing consent: ${p?.consent_to_external_processing?'given':'not given'}\nRunner.run invocations: ${limits?.completed_runner_invocations??'unknown'} completed of ${limits?.expected_runner_invocations??'unknown'} expected\nRunner invocation meaning: ${limits?.runner_invocation_semantics??'unknown; do not infer provider requests, token use, or cost'}\nWorkflow timeout: ${limits?.workflow_timeout_seconds??'not applicable'} seconds\nProvider cost: ${p?.cost?.potentially_billable?'potentially billable; estimate unavailable; provider budget is not enforced by the application':'not applicable'}\nCancellation: ${p?.cancellation?.status??'unavailable'}; provider stop confirmed: ${p?.cancellation?.provider_stop_confirmed===true?'yes':p?.cancellation?.provider_stop_confirmed===false?'no':'not applicable'}\n\n## Integrity and authority\nInput SHA-256: ${c.input_sha256??'not attached'} (content identifier only; does not verify source, signer, scientific validity, or approval)\nReviewer identity verified: ${integrity?.reviewer_identity_verified?'yes':'no'}\nEvidence authenticity verified: ${integrity?.evidence_authenticity_verified?'yes':'no'}\nSignature verified: ${integrity?.signature_verified?'yes':'no'}\nCritic signoff: ${integrity?.critic_signoff?'yes':'no'}\nHuman approval recorded: ${integrity?.human_approval_recorded?'yes':'no'}\nTask ID: ${integrity?.task_id??'not applicable'} (${integrity?.task_id_semantics??'not a signature or authority claim'})\n\nMarket: ${c.market}\n\n## Brief\n${c.reviewed_brief}\n\n## Recommendation\n${c.decision.recommendation}\n\n${c.reviews.map(r=>`## ${r.agent}\n${r.summary}\n\nRisks:\n${r.risks.map(x=>`- ${x}`).join('\n')}\n\nRequired evidence:\n${r.required_evidence.map(x=>`- ${x}`).join('\n')}\n`).join('\n')}\n## Boundaries\n${c.warnings.join('\n')}\n`;
     }
     async function action(name:string):Promise<void> {
       if(name==='export-evidence')download('helioforge-evidence.json',stringify(evidence()));
       else if(name==='export-portfolio')download('helioforge-fictional-portfolio.csv',toCSV(filterProjects(state.data.portfolio,state.marketFilter,state.search).map(p=>({...p}))), 'text/csv');
-      else if(name==='export-dispatch')download('helioforge-dispatch.csv',toCSV(state.data.dispatch.schedule.map(p=>({...p}))),'text/csv');
+      else if(name==='export-dispatch')download('helioforge-dispatch.csv',toCSV(resultExportRows({...state.data.dispatch,inputs:state.data.defaults.storage},state.data.dispatch.schedule.map(p=>({...p})))),'text/csv');
       else if(name==='export-pilots')download('helioforge-pilot-register.json',stringify(state.data.pilots));
       else if(name==='export-council')download('helioforge-council-review.md',councilMarkdown(),'text/markdown');
       else if(name==='export-checklist')download('helioforge-regulatory-review-checklist.md',`# Regulatory evidence checklist\n\nNo current rules have been approved in this demo.\n\n${state.data.markets.map(m=>`## ${m.name}\nSource: ${m.url}\nCustomer segment: ${m.segment}\nValue hypothesis: ${m.hypothesis}\n\n- [ ] Site meter and tariff evidence\n- [ ] Exact legal instrument and provision\n- [ ] Publication and effective dates\n- [ ] Geography, voltage and customer eligibility\n- [ ] Import/export charges, taxes and exemptions\n- [ ] Metering, aggregator and settlement rules\n- [ ] Stacking compatibility and availability obligations\n- [ ] Local currency and explicit FX basis\n- [ ] Independent reviewer, review date and expiry date\n`).join('\n')}`,'text/markdown');

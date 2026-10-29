@@ -1,0 +1,61 @@
+{
+  "schema": "helioforge.build-receipt.v1",
+  "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+  "working_tree_dirty": true,
+  "environment": "local",
+  "created_at": "2026-10-28T21:53:06.298Z",
+  "hash_representation": "SHA-256 of exact file bytes; UTF-8 as generated, no newline normalization; HTTP content encodings are decoded before comparison.",
+  "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+  "dataset": {
+    "schema": "helioforge.hybrid-bundle.v1",
+    "version": "hybrid-presets-v1",
+    "catalogueVersion": "0.2.0",
+    "cases": 285,
+    "datasetSha256": "ff5d1074a5805800a417a73977499c201747e7332153eaac9bf332141d8f443a"
+  },
+  "capabilities": {
+    "architectures": 36,
+    "lessons": 36,
+    "localApiRunnableArchitectures": 19,
+    "studyOnlyArchitectures": 17,
+    "workspaceCount": 12,
+    "studyCount": 59,
+    "browserMode": "bundled synthetic examples plus a separate bounded browser Terminal",
+    "terminalModel": "terminal-greedy-hourly-v1",
+    "advancedStudyModel": "roadmap-screen-v1",
+    "externalProviderMode": "opt-in local only; provider execution not verified",
+    "contractVersion": "1.0.0"
+  },
+  "ci_run_id": null,
+  "ci_attempt": null,
+  "deployment_id": null,
+  "deployment_status": "UNVERIFIED",
+  "test_status": "Consult attached execution reports; this receipt proves build byte identity only.",
+  "files": [
+    {
+      "path": "run/index.html",
+      "bytes": 13630124,
+      "sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52"
+    },
+    {
+      "path": "app.json",
+      "bytes": 9856,
+      "sha256": "53f562d278dff5dbede39e05f211d4889c0b6abdf0fd40f36ee462cb882f9ebd"
+    },
+    {
+      "path": "_headers",
+      "bytes": 2485,
+      "sha256": "d1021cc7342529c48a53e5c23befb9ad1dafe150621c5da481882240119d7337"
+    },
+    {
+      "path": "robots.txt",
+      "bytes": 357,
+      "sha256": "5ab0232ce2a6639433a04b8bd44b8b2ab03bca701c8e30f3095692eb95a4c835"
+    },
+    {
+      "path": "sitemap.xml",
+      "bytes": 944,
+      "sha256": "d7168ea3dbe9fb8df7a9145a78de4f3f183ee385ddb1124ae3289ad93941bfbd"
+    }
+  ]
+}

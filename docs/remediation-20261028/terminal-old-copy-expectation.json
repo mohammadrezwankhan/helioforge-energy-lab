@@ -1,0 +1,2351 @@
+{
+  "startedAt": "2026-10-28T21:56:28Z",
+  "site": "https://127.0.0.1:4191",
+  "routes": [
+    "hybrid",
+    "lessons",
+    "compare",
+    "overview",
+    "storage",
+    "pv",
+    "research",
+    "markets",
+    "forecast",
+    "investment",
+    "pilots",
+    "council"
+  ],
+  "viewports": [
+    320,
+    375,
+    414,
+    768,
+    1024,
+    1280,
+    1440,
+    1920
+  ],
+  "checks": [
+    {
+      "name": "export route loads the browser app and integrated workbench",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "toolbar count readouts clear 4.5:1 rendered contrast",
+      "status": "passed",
+      "detail": "[14.286044424045123, 14.286044424045123]"
+    },
+    {
+      "name": "all 81 original PV matrix values clear 4.5:1 rendered contrast",
+      "status": "passed",
+      "detail": "cells=81; min=9.816998330506369"
+    },
+    {
+      "name": "hybrid has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "hybrid has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "lessons has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "compare has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "overview has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "storage has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pv has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "research has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "markets has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "forecast has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "investment has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pilots has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council has no page-level horizontal overflow at 320px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "council has no clipped interactive controls at 320px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "hybrid has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "hybrid has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "lessons has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "compare has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "overview has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "storage has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pv has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "research has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "markets has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "forecast has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "investment has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pilots has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council has no page-level horizontal overflow at 375px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "council has no clipped interactive controls at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "hybrid axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council axe-core check at 375px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "hybrid has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "hybrid has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "lessons has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "compare has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "overview has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "storage has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pv has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "research has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "markets has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "forecast has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "investment has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pilots has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council has no page-level horizontal overflow at 414px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "council has no clipped interactive controls at 414px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "hybrid has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "hybrid has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "lessons has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "compare has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "overview has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "storage has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pv has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "research has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "markets has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "forecast has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "investment has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pilots has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council has no page-level horizontal overflow at 768px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "council has no clipped interactive controls at 768px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "hybrid has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "hybrid has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "lessons has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "compare has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "overview has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "storage has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pv has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "research has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "markets has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "forecast has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "investment has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pilots has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council has no page-level horizontal overflow at 1024px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "council has no clipped interactive controls at 1024px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "hybrid has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "hybrid has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "lessons has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "compare has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "overview has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "storage has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pv has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "research has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "markets has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "forecast has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "investment has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pilots has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council has no page-level horizontal overflow at 1280px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "council has no clipped interactive controls at 1280px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "hybrid has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "hybrid has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "lessons has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "compare has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "overview has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "storage has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pv has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "research has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "markets has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "forecast has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "investment has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pilots has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council has no page-level horizontal overflow at 1440px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "council has no clipped interactive controls at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "hybrid axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council axe-core check at 1440px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "hybrid has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "hybrid has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "lessons has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "lessons has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "compare has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "compare has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "overview has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "overview has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "storage has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "storage has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pv has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pv has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "research has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "research has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "markets has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "markets has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "forecast has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "forecast has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "investment has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "investment has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "pilots has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "pilots has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "council has no page-level horizontal overflow at 1920px",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "council has no clipped interactive controls at 1920px",
+      "status": "passed",
+      "detail": "[]"
+    },
+    {
+      "name": "architecture card and preset selector restore the bundled baseline",
+      "status": "passed",
+      "detail": "{\"pressed\": \"true\", \"height\": 44, \"presetSelectorChanged\": true}"
+    },
+    {
+      "name": "original hybrid comparison still pins and shows two bundled cases",
+      "status": "passed",
+      "detail": "2 pinned runs\nExport comparison\nClear all\nAssumption / outcome\t\nA\nHospital islanding microgrid / Reference day\nhybrid-greedy-hourly-v1 · synthetic_educational · Bundled example\n\t\nB\nHospital islanding microgrid / Four-hour outage\nhybrid-greedy-hourly-v1 · synthetic_educational · Bundled example\n\nComparison contract\tDescriptive only; direct period co"
+    },
+    {
+      "name": "terminal workbench is integrated into Scenario compare",
+      "status": "passed",
+      "detail": "new workbench and original comparison view coexist"
+    },
+    {
+      "name": "default 24-step browser calculation is finite and conservative",
+      "status": "passed",
+      "detail": "{\"finite\": true, \"rows\": 24, \"busResidual\": 0, \"socResidual\": 0}"
+    },
+    {
+      "name": "completed reference can be pinned as run A",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "input edits mark the displayed result stale and disable pin/export/sweep",
+      "status": "passed",
+      "detail": "{\"status\": \"IDLE / inputs changed\", \"pinDisabled\": true, \"exportDisabled\": true, \"sweepDisabled\": true}"
+    },
+    {
+      "name": "candidate B reruns against changed import tariff",
+      "status": "passed",
+      "detail": "A=15.61; B=21.85"
+    },
+    {
+      "name": "run A versus B diff includes the changed period cost",
+      "status": "passed",
+      "detail": "15.606 | 21.849 | 6.243 | 40.000%"
+    },
+    {
+      "name": "default two-axis sweep renders all 49 selectable matrix points",
+      "status": "passed",
+      "detail": "points=49"
+    },
+    {
+      "name": "all 49 Terminal matrix values clear 4.5:1 rendered contrast",
+      "status": "passed",
+      "detail": "cells=49; min=14.112237147881267"
+    },
+    {
+      "name": "matrix point selection exposes exact coordinates and metrics",
+      "status": "passed",
+      "detail": "Selected case 1: {\"pvKw\":2,\"batteryKwh\":5}. Cost 39.379 EUR; unserved 0.000 kWh; terminal SOC 0.500 kWh."
+    },
+    {
+      "name": "invalid lower-greater-than-upper sweep clears the previous valid matrix",
+      "status": "passed",
+      "detail": "before=1 matrix/49 points; after=0 matrix/0 points"
+    },
+    {
+      "name": "out-of-range sweep bounds are rejected visibly",
+      "status": "passed",
+      "detail": "pvKw sweep bounds must stay within at least 0 and at most 100000."
+    },
+    {
+      "name": "invalid logarithmic sweep reports positive-bound constraint",
+      "status": "passed",
+      "detail": "Log sweeps require positive lower and upper bounds."
+    },
+    {
+      "name": "JSON run export contains a SHA-256 manifest and 24 rows",
+      "status": "passed",
+      "detail": "hash=249f526ece9a714b56a4c881b9d330ed6f75c4de7bf92a954a1898a2e4d961c2; rows=24"
+    },
+    {
+      "name": "CSV run export contains inputs, residuals, and 24 hourly records",
+      "status": "passed",
+      "detail": "bytes=48997; lines=25; metadata=['dataKind', 'flags', 'status', 'warnings']"
+    },
+    {
+      "name": "Markdown run export includes model limits, metrics, and integrity payload",
+      "status": "passed",
+      "detail": "bytes=12703"
+    },
+    {
+      "name": "manifest import rejects output tampering",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "browser harness completed all independent journeys",
+      "status": "failed",
+      "detail": "TimeoutError: Locator.wait_for: Timeout 5000ms exceeded.\nCall log:\n  - waiting for locator(\"#terminal-notice\").get_by_text(\"hash verified\") to be visible\n"
+    }
+  ],
+  "accessibility": [
+    {
+      "route": "hybrid",
+      "width": 375,
+      "violations": [],
+      "passes": 30,
+      "incomplete": 3
+    },
+    {
+      "route": "lessons",
+      "width": 375,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 2
+    },
+    {
+      "route": "compare",
+      "width": 375,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 2
+    },
+    {
+      "route": "overview",
+      "width": 375,
+      "violations": [],
+      "passes": 30,
+      "incomplete": 2
+    },
+    {
+      "route": "storage",
+      "width": 375,
+      "violations": [],
+      "passes": 28,
+      "incomplete": 2
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "violations": [],
+      "passes": 30,
+      "incomplete": 2
+    },
+    {
+      "route": "research",
+      "width": 375,
+      "violations": [],
+      "passes": 28,
+      "incomplete": 3
+    },
+    {
+      "route": "markets",
+      "width": 375,
+      "violations": [],
+      "passes": 27,
+      "incomplete": 2
+    },
+    {
+      "route": "forecast",
+      "width": 375,
+      "violations": [],
+      "passes": 28,
+      "incomplete": 2
+    },
+    {
+      "route": "investment",
+      "width": 375,
+      "violations": [],
+      "passes": 28,
+      "incomplete": 3
+    },
+    {
+      "route": "pilots",
+      "width": 375,
+      "violations": [],
+      "passes": 28,
+      "incomplete": 2
+    },
+    {
+      "route": "council",
+      "width": 375,
+      "violations": [],
+      "passes": 27,
+      "incomplete": 2
+    },
+    {
+      "route": "hybrid",
+      "width": 1440,
+      "violations": [],
+      "passes": 31,
+      "incomplete": 3
+    },
+    {
+      "route": "lessons",
+      "width": 1440,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 2
+    },
+    {
+      "route": "compare",
+      "width": 1440,
+      "violations": [],
+      "passes": 31,
+      "incomplete": 2
+    },
+    {
+      "route": "overview",
+      "width": 1440,
+      "violations": [],
+      "passes": 31,
+      "incomplete": 2
+    },
+    {
+      "route": "storage",
+      "width": 1440,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 2
+    },
+    {
+      "route": "pv",
+      "width": 1440,
+      "violations": [],
+      "passes": 30,
+      "incomplete": 2
+    },
+    {
+      "route": "research",
+      "width": 1440,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 3
+    },
+    {
+      "route": "markets",
+      "width": 1440,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 2
+    },
+    {
+      "route": "forecast",
+      "width": 1440,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 2
+    },
+    {
+      "route": "investment",
+      "width": 1440,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 3
+    },
+    {
+      "route": "pilots",
+      "width": 1440,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 2
+    },
+    {
+      "route": "council",
+      "width": 1440,
+      "violations": [],
+      "passes": 29,
+      "incomplete": 2
+    }
+  ],
+  "accessibilityErrors": [],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "sameOriginConsoleErrors": [],
+  "externalConsoleErrors": [],
+  "failedRequests": [],
+  "sameOriginFailedRequests": [],
+  "externalFailedRequests": [],
+  "badResponses": [],
+  "bodyContentOverhangs": [],
+  "clippedControls": [],
+  "scrollAreaControls": [
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "37.6 EUR/MWh, CAPEX 455 euros per kWp, yield 1,400.62 kilowatt-hours per kWp, LCOE 37.624 euros per ",
+      "left": 280,
+      "right": 328,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "36.3 EUR/MWh, CAPEX 455 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 36.312 euros per ",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "35.1 EUR/MWh, CAPEX 455 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 35.088 euros per ",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "33.9 EUR/MWh, CAPEX 455 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 33.944 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "40.6 EUR/MWh, CAPEX 503.75 euros per kWp, yield 1,400.62 kilowatt-hours per kWp, LCOE 40.599 euros p",
+      "left": 280,
+      "right": 328,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "39.2 EUR/MWh, CAPEX 503.75 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 39.183 euros p",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "37.9 EUR/MWh, CAPEX 503.75 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 37.862 euros p",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "36.6 EUR/MWh, CAPEX 503.75 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 36.627 euros pe",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "43.6 EUR/MWh, CAPEX 552.5 euros per kWp, yield 1,400.62 kilowatt-hours per kWp, LCOE 43.574 euros pe",
+      "left": 280,
+      "right": 328,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "42.1 EUR/MWh, CAPEX 552.5 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 42.054 euros pe",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "40.6 EUR/MWh, CAPEX 552.5 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 40.636 euros pe",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "39.3 EUR/MWh, CAPEX 552.5 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 39.311 euros per",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "46.5 EUR/MWh, CAPEX 601.25 euros per kWp, yield 1,400.62 kilowatt-hours per kWp, LCOE 46.548 euros p",
+      "left": 280,
+      "right": 328,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "44.9 EUR/MWh, CAPEX 601.25 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 44.925 euros p",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "43.4 EUR/MWh, CAPEX 601.25 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 43.41 euros pe",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "42 EUR/MWh, CAPEX 601.25 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 41.995 euros per ",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "49.5 EUR/MWh, CAPEX 650 euros per kWp, yield 1,400.62 kilowatt-hours per kWp, LCOE 49.523 euros per ",
+      "left": 280,
+      "right": 328,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "47.8 EUR/MWh, CAPEX 650 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 47.796 euros per ",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "46.2 EUR/MWh, CAPEX 650 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 46.185 euros per ",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "44.7 EUR/MWh, CAPEX 650 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 44.678 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "52.5 EUR/MWh, CAPEX 698.75 euros per kWp, yield 1,400.62 kilowatt-hours per kWp, LCOE 52.498 euros p",
+      "left": 280,
+      "right": 328,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "50.7 EUR/MWh, CAPEX 698.75 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 50.667 euros p",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "49 EUR/MWh, CAPEX 698.75 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 48.959 euros per",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "47.4 EUR/MWh, CAPEX 698.75 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 47.362 euros pe",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "55.5 EUR/MWh, CAPEX 747.5 euros per kWp, yield 1,400.62 kilowatt-hours per kWp, LCOE 55.473 euros pe",
+      "left": 280,
+      "right": 328,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "53.5 EUR/MWh, CAPEX 747.5 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 53.537 euros pe",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "51.7 EUR/MWh, CAPEX 747.5 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 51.733 euros pe",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "50 EUR/MWh, CAPEX 747.5 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 50.046 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "58.4 EUR/MWh, CAPEX 796.25 euros per kWp, yield 1,400.62 kilowatt-hours per kWp, LCOE 58.447 euros p",
+      "left": 280,
+      "right": 328,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "56.4 EUR/MWh, CAPEX 796.25 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 56.408 euros p",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "54.5 EUR/MWh, CAPEX 796.25 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 54.507 euros p",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "52.7 EUR/MWh, CAPEX 796.25 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 52.73 euros per",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "61.4 EUR/MWh, CAPEX 845 euros per kWp, yield 1,400.62 kilowatt-hours per kWp, LCOE 61.422 euros per ",
+      "left": 280,
+      "right": 328,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "59.3 EUR/MWh, CAPEX 845 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 59.279 euros per ",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "57.3 EUR/MWh, CAPEX 845 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 57.281 euros per ",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "55.4 EUR/MWh, CAPEX 845 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 55.413 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pilots",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 275,
+      "right": 480,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pilots",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 521,
+      "right": 726,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pilots",
+      "width": 320,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 767,
+      "right": 972,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "36.3 EUR/MWh, CAPEX 455 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 36.312 euros per ",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "35.1 EUR/MWh, CAPEX 455 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 35.088 euros per ",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "33.9 EUR/MWh, CAPEX 455 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 33.944 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "39.2 EUR/MWh, CAPEX 503.75 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 39.183 euros p",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "37.9 EUR/MWh, CAPEX 503.75 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 37.862 euros p",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "36.6 EUR/MWh, CAPEX 503.75 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 36.627 euros pe",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "42.1 EUR/MWh, CAPEX 552.5 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 42.054 euros pe",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "40.6 EUR/MWh, CAPEX 552.5 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 40.636 euros pe",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "39.3 EUR/MWh, CAPEX 552.5 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 39.311 euros per",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "44.9 EUR/MWh, CAPEX 601.25 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 44.925 euros p",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "43.4 EUR/MWh, CAPEX 601.25 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 43.41 euros pe",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "42 EUR/MWh, CAPEX 601.25 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 41.995 euros per ",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "47.8 EUR/MWh, CAPEX 650 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 47.796 euros per ",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "46.2 EUR/MWh, CAPEX 650 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 46.185 euros per ",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "44.7 EUR/MWh, CAPEX 650 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 44.678 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "50.7 EUR/MWh, CAPEX 698.75 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 50.667 euros p",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "49 EUR/MWh, CAPEX 698.75 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 48.959 euros per",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "47.4 EUR/MWh, CAPEX 698.75 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 47.362 euros pe",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "53.5 EUR/MWh, CAPEX 747.5 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 53.537 euros pe",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "51.7 EUR/MWh, CAPEX 747.5 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 51.733 euros pe",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "50 EUR/MWh, CAPEX 747.5 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 50.046 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "56.4 EUR/MWh, CAPEX 796.25 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 56.408 euros p",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "54.5 EUR/MWh, CAPEX 796.25 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 54.507 euros p",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "52.7 EUR/MWh, CAPEX 796.25 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 52.73 euros per",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "59.3 EUR/MWh, CAPEX 845 euros per kWp, yield 1,451.25 kilowatt-hours per kWp, LCOE 59.279 euros per ",
+      "left": 332,
+      "right": 380,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "57.3 EUR/MWh, CAPEX 845 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 57.281 euros per ",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "55.4 EUR/MWh, CAPEX 845 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 55.413 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pilots",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 275,
+      "right": 480,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pilots",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 521,
+      "right": 726,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pilots",
+      "width": 375,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 767,
+      "right": 972,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "35.1 EUR/MWh, CAPEX 455 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 35.088 euros per ",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "33.9 EUR/MWh, CAPEX 455 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 33.944 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "37.9 EUR/MWh, CAPEX 503.75 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 37.862 euros p",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "36.6 EUR/MWh, CAPEX 503.75 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 36.627 euros pe",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "40.6 EUR/MWh, CAPEX 552.5 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 40.636 euros pe",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "39.3 EUR/MWh, CAPEX 552.5 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 39.311 euros per",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "43.4 EUR/MWh, CAPEX 601.25 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 43.41 euros pe",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "42 EUR/MWh, CAPEX 601.25 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 41.995 euros per ",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "46.2 EUR/MWh, CAPEX 650 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 46.185 euros per ",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "44.7 EUR/MWh, CAPEX 650 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 44.678 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "49 EUR/MWh, CAPEX 698.75 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 48.959 euros per",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "47.4 EUR/MWh, CAPEX 698.75 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 47.362 euros pe",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "51.7 EUR/MWh, CAPEX 747.5 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 51.733 euros pe",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "50 EUR/MWh, CAPEX 747.5 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 50.046 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "54.5 EUR/MWh, CAPEX 796.25 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 54.507 euros p",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "52.7 EUR/MWh, CAPEX 796.25 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 52.73 euros per",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "57.3 EUR/MWh, CAPEX 845 euros per kWp, yield 1,501.87 kilowatt-hours per kWp, LCOE 57.281 euros per ",
+      "left": 384,
+      "right": 432,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pv",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "55.4 EUR/MWh, CAPEX 845 euros per kWp, yield 1,552.5 kilowatt-hours per kWp, LCOE 55.413 euros per m",
+      "left": 436,
+      "right": 484,
+      "scrollHost": ".hf-heat-button-grid"
+    },
+    {
+      "route": "pilots",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 275,
+      "right": 480,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pilots",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 521,
+      "right": 726,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pilots",
+      "width": 414,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 767,
+      "right": 972,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pilots",
+      "width": 768,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 767,
+      "right": 972,
+      "scrollHost": ".pilot-board"
+    },
+    {
+      "route": "pilots",
+      "width": 1024,
+      "tag": "button",
+      "id": null,
+      "label": "Review evidence",
+      "left": 1031,
+      "right": 1236,
+      "scrollHost": ".pilot-board"
+    }
+  ],
+  "screenshots": [],
+  "limits": [
+    "Accessibility results are automated axe-core findings, not WCAG certification or a screen-reader audit.",
+    "The export is a static snapshot: new API calculations and native hosting/CSP behavior are not exercised.",
+    "Only the Chromium build supplied by the audit environment is exercised."
+  ],
+  "exports": {
+    "json": {
+      "filename": "helioforge-2026-10-28T21-57-05-966Z.json",
+      "bytes": 12227
+    },
+    "csv": {
+      "filename": "helioforge-2026-10-28T21-57-06-717Z.csv",
+      "bytes": 48997
+    },
+    "md": {
+      "filename": "helioforge-2026-10-28T21-57-06-978Z.md",
+      "bytes": 12703
+    }
+  },
+  "finishedAt": "2026-10-28T21:57:12Z",
+  "summary": {
+    "passed": 237,
+    "failed": 1,
+    "axeViewRuns": 24,
+    "axeViolations": 0,
+    "axeExecutionErrors": 0
+  }
+}
