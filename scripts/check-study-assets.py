@@ -9,7 +9,6 @@ Frozen bytes are never rewritten.
 import hashlib
 import json
 import math
-import runpy
 import struct
 import sys
 from copy import deepcopy
@@ -238,10 +237,105 @@ def canonical_input_sha256(study_id: str, inputs: dict[str, Any]) -> str:
     return hashlib.sha256(payload.encode()).hexdigest()
 
 
+def _annual_storage_objective_change(result: Any) -> tuple[float, float] | None:
+    """Return (exact formula value, reported value) for the annual objective delta."""
+    labels = (
+        "Optimal annual objective",
+        "No-battery baseline objective",
+        "Objective change versus baseline",
+    )
+    if not isinstance(result, dict) or not isinstance(result.get("metrics"), list):
+        return None
+    metrics = result["metrics"]
+    if len(metrics) < 3:
+        return None
+    if any(not isinstance(metric, dict) or metric.get("label") != label or metric.get("unit") != "EUR"
+           for metric, label in zip(metrics[:3], labels, strict=True)):
+        return None
+    values = [metric.get("value") for metric in metrics[:3]]
+    if any(type(value) is not float or not math.isfinite(value) for value in values):
+        return None
+    return values[1] - values[0], values[2]
+
+
+def _same_binary64(left: float, right: float) -> bool:
+    return struct.pack(">d", left) == struct.pack(">d", right)
+
+
+def _result_mismatches(actual: Any, expected: Any, path: str, skip_paths: set[str],
+                       mismatches: list[dict[str, Any]], roundoff: list[dict[str, Any]]) -> None:
+    """Collect every mismatch while retaining the established result tolerance."""
+    if path in skip_paths:
+        return
+    if isinstance(expected, dict) and isinstance(actual, dict):
+        for key in sorted(expected.keys() - actual.keys()):
+            child = f"{path}.{key}" if str(key).isidentifier() else f"{path}[{json.dumps(key)}]"
+            mismatches.append({"path": child, "expected": _display_value(expected[key]), "actual": "<missing>"})
+        for key in sorted(actual.keys() - expected.keys()):
+            child = f"{path}.{key}" if str(key).isidentifier() else f"{path}[{json.dumps(key)}]"
+            mismatches.append({"path": child, "expected": "<missing>", "actual": _display_value(actual[key])})
+        for key in sorted(expected.keys() & actual.keys()):
+            child = f"{path}.{key}" if str(key).isidentifier() else f"{path}[{json.dumps(key)}]"
+            _result_mismatches(actual[key], expected[key], child, skip_paths, mismatches, roundoff)
+    elif isinstance(expected, list) and isinstance(actual, list):
+        if len(actual) != len(expected):
+            mismatches.append({"path": path + ".length", "expected": len(expected), "actual": len(actual)})
+        common_length = min(len(actual), len(expected))
+        for index, (actual_item, expected_item) in enumerate(zip(actual[:common_length], expected[:common_length])):
+            _result_mismatches(actual_item, expected_item, f"{path}[{index}]", skip_paths, mismatches, roundoff)
+        for index in range(common_length, len(expected)):
+            mismatches.append({"path": f"{path}[{index}]", "expected": _display_value(expected[index]),
+                               "actual": "<missing>"})
+        for index in range(common_length, len(actual)):
+            mismatches.append({"path": f"{path}[{index}]", "expected": "<missing>",
+                               "actual": _display_value(actual[index])})
+    elif type(expected) in (int, float) and type(actual) in (int, float):
+        if not math.isfinite(actual) or not math.isfinite(expected):
+            mismatches.append({"path": path, "expected": expected, "actual": actual, "reason": "nonfinite numeric result"})
+        elif math.isclose(actual, expected, rel_tol=1e-12, abs_tol=1e-12):
+            if actual != expected:
+                roundoff.append({"path": path, "absolute": abs(actual - expected)})
+        else:
+            mismatches.append({"path": path, "expected": expected, "actual": actual,
+                               "reason": "numeric result exceeds existing 1e-12 relative/absolute tolerance"})
+    elif type(actual) is not type(expected) or actual != expected:
+        mismatches.append({"path": path, "expected": _display_value(expected), "actual": _display_value(actual),
+                           "reason": "metadata differs"})
+
+
+def compare_replayed_results(study_id: str, stored: Any, fresh: Any) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Compare a replay, treating a derived annual objective difference through its operands."""
+    mismatches: list[dict[str, Any]] = []
+    roundoff: list[dict[str, Any]] = []
+    skip_paths: set[str] = set()
+    if study_id == "storage-annualopt":
+        path = study_id + ".metrics[2].value"
+        stored_values = _annual_storage_objective_change(stored)
+        fresh_values = _annual_storage_objective_change(fresh)
+        for role, values in (("stored", stored_values), ("replayed", fresh_values)):
+            if values is None or not _same_binary64(*values):
+                expected_value = values[0] if values is not None else "<valid objective operands required>"
+                actual_value = values[1] if values is not None else "<missing or malformed objective metrics>"
+                mismatches.append({
+                    "path": path,
+                    "expected": expected_value,
+                    "actual": actual_value,
+                    "reason": f"{role} derived value is not exactly baseline minus optimized objective",
+                })
+        if stored_values is not None and fresh_values is not None \
+                and _same_binary64(*stored_values) and _same_binary64(*fresh_values):
+            # The delta is mathematically derived from metrics[0:2]. Comparing it
+            # independently near zero magnifies harmless differences in those
+            # large operands. Their existing tolerance implies the delta bound:
+            # |Δ(baseline - objective)| <= |Δbaseline| + |Δobjective|.
+            skip_paths.add(path)
+    _result_mismatches(stored, fresh, study_id, skip_paths, mismatches, roundoff)
+    return mismatches, roundoff
+
+
 def main() -> int:
     from helioforge.studies import StudyRequest, catalogue, evaluate
 
-    compare = runpy.run_path(str(ROOT / "scripts/check-hybrid-assets.py"))["compare_results"]
     source = (ROOT / "apps/web/src/roadmap-data.ts").read_text(encoding="utf-8")
     bundle = json.loads(source.split("STUDY_BUNDLE: StudyBundle = ", 1)[1].rsplit("; }", 1)[0])
     current_catalogue = json.loads(json.dumps(catalogue()))
@@ -258,7 +352,9 @@ def main() -> int:
     frozen_catalogue_by_id = {study["id"]: study for study in bundle["catalogue"]}
     assert set(bundle["results"]) == {s["id"] for s in catalogue()}
     differences = []
+    result_mismatches = []
     timing_observations = []
+    derived_observations = []
     for sid, original in bundle["results"].items():
         stored = dict(original)
         digest = stored.pop("evidence_sha256")
@@ -276,9 +372,21 @@ def main() -> int:
                        "fresh_seconds": fresh["details"].pop("solver_runtime_seconds")}
             assert all(isinstance(v, (int, float)) and math.isfinite(v) and v >= 0 for v in timings.values())
             timing_observations.append({"path": sid + ".details.solver_runtime_seconds", **timings})
-        compare(stored, fresh, sid, differences)
+            derived_observations.append({"path": sid + ".metrics[2].value",
+                                         "policy": "Exact baseline-minus-objective identity in both records; original tolerance on both operands.",
+                                         "stored_objective_metrics": stored["metrics"][:3],
+                                         "replayed_objective_metrics": fresh["metrics"][:3]})
+        mismatches, roundoff = compare_replayed_results(sid, stored, fresh)
+        result_mismatches.extend(mismatches)
+        differences.extend(item["absolute"] for item in roundoff)
+    if result_mismatches:
+        print(json.dumps({"status": "FAIL", "check": "study_result_replay",
+                          "mismatch_count": len(result_mismatches), "mismatches": result_mismatches},
+                         ensure_ascii=True), file=sys.stderr)
+        raise AssertionError(f"Study replay results differ at {len(result_mismatches)} paths; see diagnostics above.")
     print(json.dumps({"status": "PASS", "studies": len(bundle["results"]), "numeric_roundoff_differences": len(differences),
                       "max_roundoff": max(differences, default=0), "execution_timing_observations": timing_observations,
+                      "derived_metric_observations": derived_observations,
                       "roundoff_bearing_fixture_samples": tolerated_fixture_values, "artifact_rewritten": False}))
     return 0
 

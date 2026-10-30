@@ -42,3 +42,31 @@ The attempted `python -m pip install -e "apps/api[dev]"` failed because its buil
 The absolute exception is tied to the known generated `math.sin` fixture and does not apply to study inputs or replayed results. Source revision checks still bind the engine bytes, input digests are exact, and result metadata/source fingerprints retain exact comparison; the pre-existing `1e-12` tolerance for numerical replay outputs is unchanged. No data bytes were rewritten.
 
 Independent review matched the coefficient table to the source formula and found no blocking defect. Python does not promise one-ULP `math.sin` variation across every possible library or platform. The derived allowance covers the stated component-roundoff premise and observed environments; a platform exceeding it fails the checker rather than receiving an unsupported pass.
+
+## Annual storage objective cancellation replay
+
+The later CI replay at `db533e4` exposed a different issue from the bearing fixture. For `storage-annualopt`, it reported `metrics[2].value` as `-1.2514647096395493e-09` in the frozen record and `-1.1932570487260818e-09` on replay, an absolute delta of `5.820766091346741e-11`. This is `Objective change versus baseline`, computed by the engine as `baseline - float(solved.fun)`. The other two metric operands are approximately EUR 247,361.86. In the matching Windows replay, the default schedule has zero battery charge, discharge and PV curtailment; the optimal objective and analytical no-battery baseline differ only at the scale of floating-point reduction residue.
+
+This is cancellation in a derived near-zero metric, not a power/SOC residual. The annual MILP requires status 0, a reported relative MIP gap no greater than `1e-10` (requested `0.0`), and rejects power or SOC balance residuals above `1e-5`. Those checks remain unchanged and do not define an allowance for subtraction of two large objective operands.
+
+The checker now verifies independently that, in each record, the reported third metric is the exact binary64 result `baseline_objective - optimized_objective`. It then compares the two objective operands under the pre-existing numerical policy (`rel_tol=1e-12`, `abs_tol=1e-12`) and does not compare their derived difference a second time. This has a direct bound: if the frozen and replayed operands are `b, o` and `b', o'`, then `|(b-o)-(b'-o')| <= |b-b'| + |o-o'|`. Each operand must still independently pass the original comparison. The check adds no general tolerance and does not infer approval from the solver feasibility tolerances.
+
+Study result comparison now collects every mismatching JSON path and its frozen/replayed values across all studies before failing, rather than stopping on the first result leaf. Structural, metadata, input, input digest, source/provenance and evidence digest checks remain exact; the objective identity is exact too. No engine, solver option, numerical asset, frozen digest or accepted model tolerance changed.
+
+### Verification for this follow-up
+
+- The CI report's EUR objective-change pair differs by `5.820766091346741e-11`; it is represented as a subtraction of the two approximately EUR 247k objectives.
+- On the local Windows runtime, the default annual replay returned objectives `247361.86152000123` and `247361.86151999998`, and the exact derived value `-1.2514647096395493e-09`; default charge, discharge and curtailment are all zero.
+- Regression tests cover the observed cancellation pattern, exact derived identity, rejection when either objective operand changes beyond its existing tolerance, and collection of multiple mismatch paths and values.
+- The full checker replay in the focused test passed and confirmed frozen `roadmap-data.ts` bytes remain unchanged.
+- Focused checker suite: 11 passed; standalone full replay: 59 studies passed, zero numeric roundoff differences; Ruff: passed.
+- Independent review matched the exact identity and metric labels to the engine and confirmed all other comparisons remain in place. Successful checker output retains both objective operands and the derived metric from each record.
+
+Commands run from the repository root:
+
+```powershell
+$env:PYTHONPATH='apps/api'
+C:\Users\MRK\Downloads\misC\helioforge-audit-20261027\repo\.venv\Scripts\python.exe -m pytest scripts/test_check_study_assets.py -q
+C:\Users\MRK\Downloads\misC\helioforge-audit-20261027\repo\.venv\Scripts\python.exe scripts/check-study-assets.py
+C:\Users\MRK\Downloads\misC\helioforge-audit-20261027\repo\.venv\Scripts\python.exe -m ruff check --no-cache scripts/check-study-assets.py scripts/test_check_study_assets.py
+```

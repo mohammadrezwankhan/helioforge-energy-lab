@@ -179,3 +179,66 @@ def test_catalogue_diagnostic_caps_mismatch_count_and_long_values():
     assert differences[0]["expected"].endswith("...")
     assert differences[0]["actual"].endswith("...")
     assert omitted is True
+
+
+def _annual_result(optimal: float, baseline: float) -> dict:
+    return {"metrics": [
+        {"label": "Optimal annual objective", "value": optimal, "unit": "EUR"},
+        {"label": "No-battery baseline objective", "value": baseline, "unit": "EUR"},
+        {"label": "Objective change versus baseline", "value": baseline - optimal, "unit": "EUR"},
+    ]}
+
+
+def test_annual_objective_change_uses_exact_identity_and_primitive_tolerance():
+    baseline = 247361.86151999998
+    stored = _annual_result(247361.86152000123, baseline)
+    replay = _annual_result(247361.86152000117, baseline)
+
+    mismatches, roundoff = CHECKER.compare_replayed_results("storage-annualopt", stored, replay)
+
+    assert mismatches == []
+    assert any(item["path"] == "storage-annualopt.metrics[0].value" for item in roundoff)
+    assert abs(stored["metrics"][2]["value"] - replay["metrics"][2]["value"]) > 1e-12
+
+
+def test_annual_objective_change_identity_and_primitive_result_mismatches_fail():
+    baseline = 247361.86151999998
+    stored = _annual_result(247361.86152000123, baseline)
+    invalid_identity = deepcopy(stored)
+    invalid_identity["metrics"][2]["value"] += 1e-8
+
+    identity_mismatches, _ = CHECKER.compare_replayed_results(
+        "storage-annualopt", stored, invalid_identity
+    )
+    assert any("derived value is not exactly baseline minus optimized objective" in item["reason"]
+               for item in identity_mismatches)
+
+    materially_changed_operand = _annual_result(247362.0, baseline)
+    operand_mismatches, _ = CHECKER.compare_replayed_results(
+        "storage-annualopt", stored, materially_changed_operand
+    )
+    assert any(item["path"] == "storage-annualopt.metrics[0].value" for item in operand_mismatches)
+
+
+def test_result_comparison_collects_all_mismatch_paths_and_values():
+    stored = {"metrics": [{"value": 1.0}, {"value": 2.0}, {"value": 3.0}]}
+    replay = {"metrics": [{"value": 1.0}, {"value": 20.0}, {"value": 30.0}]}
+
+    mismatches, _ = CHECKER.compare_replayed_results("other-study", stored, replay)
+
+    assert [item["path"] for item in mismatches] == [
+        "other-study.metrics[1].value", "other-study.metrics[2].value",
+    ]
+    assert [(item["expected"], item["actual"]) for item in mismatches] == [(20.0, 2.0), (30.0, 3.0)]
+
+
+def test_result_comparison_reports_missing_list_values_with_their_paths():
+    stored = {"series": [1.0, 2.0]}
+    replay = {"series": [1.0, 2.0, 3.0]}
+
+    mismatches, _ = CHECKER.compare_replayed_results("study", stored, replay)
+
+    assert {item["path"]: (item["expected"], item["actual"]) for item in mismatches} == {
+        "study.series.length": (3, 2),
+        "study.series[2]": (3.0, "<missing>"),
+    }
