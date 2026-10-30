@@ -274,14 +274,18 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
 
         last_export_at = 0.0
 
-        def click_export(kind: str) -> None:
-            nonlocal last_export_at, stage
+        def paced_download_click(selector: str) -> None:
+            nonlocal last_export_at
             # Respect Chromium's ten-downloads-per-second burst limit while retaining
             # real clicks and downloaded bytes. This is a correctness check, not a burst benchmark.
             time.sleep(max(0.0, 0.25 - (time.monotonic() - last_export_at)))
-            stage = f"study {study_id}: {kind} export"
-            page.locator(f'[data-study-export="{kind}"]').click()
+            page.locator(selector).click()
             last_export_at = time.monotonic()
+
+        def click_export(kind: str) -> None:
+            nonlocal stage
+            stage = f"study {study_id}: {kind} export"
+            paced_download_click(f'[data-study-export="{kind}"]')
 
         actual["export_minimum_interval_seconds"] = 0.25
 
@@ -935,7 +939,7 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
                 # Fixture rejection is what this public edition can prove; no evidence payload is injected.
                 fields_still_disabled = page.locator('form[data-model="council"] input,form[data-model="council"] select,form[data-model="council"] textarea').evaluate_all("xs => xs.length > 0 && xs.every(x => x.disabled)")
                 with page.expect_download(timeout=30000) as download_info:
-                    page.locator('[data-action="export-council"]').click()
+                    paced_download_click('[data-action="export-council"]')
                 download = download_info.value
                 target = Path(download_dir.name) / f"council-{row.get('test_id','row')}.md"
                 download.save_as(str(target))
