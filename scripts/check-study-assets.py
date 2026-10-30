@@ -15,6 +15,8 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
+import numpy as np
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -262,6 +264,64 @@ def _same_binary64(left: float, right: float) -> bool:
     return struct.pack(">d", left) == struct.pack(">d", right)
 
 
+def registration_angle_observation(result: Any) -> tuple[dict[str, Any] | None, dict[str, Any] | None]:
+    """Validate and report the stored registration angle from its own 3x3 matrix."""
+    prefix = "pilots-registration"
+
+    def invalid(path: str, expected: Any, actual: Any, reason: str) -> tuple[None, dict[str, Any]]:
+        return None, {"path": path, "expected": expected, "actual": _display_value(actual), "reason": reason}
+
+    if not isinstance(result, dict):
+        return invalid(prefix, "study result object", result, "registration result must be an object")
+    metrics = result.get("metrics")
+    if not isinstance(metrics, list) or len(metrics) != 4:
+        actual_count = len(metrics) if isinstance(metrics, list) else type(metrics).__name__
+        return invalid(prefix + ".metrics.length", 4, actual_count, "registration result must contain exactly four metrics")
+    metric = metrics[3]
+    if not isinstance(metric, dict) or metric.get("label") != "Rigid rotation" or metric.get("unit") != "degrees":
+        return invalid(prefix + ".metrics[3]", {"label": "Rigid rotation", "unit": "degrees"}, metric,
+                       "registration rotation metric label and unit must match the model contract")
+    reported_angle = metric.get("value")
+    if type(reported_angle) is not float or not math.isfinite(reported_angle):
+        return invalid(prefix + ".metrics[3].value", "finite float degrees", reported_angle,
+                       "reported registration angle must be a finite float")
+
+    details = result.get("details")
+    matrix = details.get("rotation_matrix") if isinstance(details, dict) else None
+    if (not isinstance(matrix, list) or len(matrix) != 3
+            or any(not isinstance(row, list) or len(row) != 3 for row in matrix)):
+        return invalid(prefix + ".details.rotation_matrix", "3x3 list of finite float values", matrix,
+                       "registration rotation matrix has invalid shape")
+    for row_index, row in enumerate(matrix):
+        for column_index, value in enumerate(row):
+            if type(value) is not float or not math.isfinite(value):
+                return invalid(f"{prefix}.details.rotation_matrix[{row_index}][{column_index}]",
+                               "finite float", value, "registration rotation matrix entries must be finite floats")
+
+    rotation = np.asarray(matrix, dtype=float)
+    trace = np.trace(rotation)
+    if not math.isfinite(float(trace)):
+        return invalid(prefix + ".details.rotation_matrix", "finite matrix trace", float(trace),
+                       "registration rotation matrix trace must be finite")
+    angle_cos = min(1.0, max(-1.0, (trace - 1) / 2))
+    computed_angle = math.degrees(math.acos(angle_cos))
+    observation = {
+        "rotation_matrix": matrix,
+        "trace": float(trace),
+        "clamped_cosine": float(angle_cos),
+        "reported_angle_degrees": reported_angle,
+        "computed_angle_degrees": computed_angle,
+    }
+    if not math.isfinite(computed_angle):
+        return observation, {"path": prefix + ".metrics[3].value", "expected": "finite angle from matrix",
+                             "actual": computed_angle, "reason": "matrix-derived registration angle is nonfinite"}
+    if not math.isclose(reported_angle, computed_angle, rel_tol=1e-12, abs_tol=1e-12):
+        return observation, {"path": prefix + ".metrics[3].value", "expected": computed_angle,
+                             "actual": reported_angle,
+                             "reason": "reported angle does not match the angle computed from its own matrix"}
+    return observation, None
+
+
 def _result_mismatches(actual: Any, expected: Any, path: str, skip_paths: set[str],
                        mismatches: list[dict[str, Any]], roundoff: list[dict[str, Any]]) -> None:
     """Collect every mismatch while retaining the established result tolerance."""
@@ -304,7 +364,7 @@ def _result_mismatches(actual: Any, expected: Any, path: str, skip_paths: set[st
 
 
 def compare_replayed_results(study_id: str, stored: Any, fresh: Any) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    """Compare a replay, treating a derived annual objective difference through its operands."""
+    """Compare replay output while validating ill-conditioned derived metrics from their own sources."""
     mismatches: list[dict[str, Any]] = []
     roundoff: list[dict[str, Any]] = []
     skip_paths: set[str] = set()
@@ -328,6 +388,21 @@ def compare_replayed_results(study_id: str, stored: Any, fresh: Any) -> tuple[li
             # independently near zero magnifies harmless differences in those
             # large operands. Their existing tolerance implies the delta bound:
             # |Δ(baseline - objective)| <= |Δbaseline| + |Δobjective|.
+            skip_paths.add(path)
+    elif study_id == "pilots-registration":
+        path = study_id + ".metrics[3].value"
+        observations = []
+        valid = True
+        for role, result in (("stored", stored), ("replayed", fresh)):
+            observation, error = registration_angle_observation(result)
+            observations.append(observation)
+            if error is not None:
+                valid = False
+                error["reason"] = f"{role} registration angle validation failed: {error['reason']}"
+                mismatches.append(error)
+        if valid and all(observation is not None for observation in observations):
+            # Near identity, acos(trace) is ill-conditioned. Validate each angle
+            # from its own matrix and compare every matrix entry normally.
             skip_paths.add(path)
     _result_mismatches(stored, fresh, study_id, skip_paths, mismatches, roundoff)
     return mismatches, roundoff
@@ -376,6 +451,13 @@ def main() -> int:
                                          "policy": "Exact baseline-minus-objective identity in both records; original tolerance on both operands.",
                                          "stored_objective_metrics": stored["metrics"][:3],
                                          "replayed_objective_metrics": fresh["metrics"][:3]})
+        elif sid == "pilots-registration":
+            stored_rotation, stored_error = registration_angle_observation(stored)
+            fresh_rotation, fresh_error = registration_angle_observation(fresh)
+            derived_observations.append({"path": sid + ".metrics[3].value",
+                                         "policy": "Each rigid rotation angle is checked against its own finite 3x3 matrix; matrix entries retain the original result tolerance.",
+                                         "stored": stored_rotation if stored_rotation is not None else {"error": stored_error},
+                                         "replayed": fresh_rotation if fresh_rotation is not None else {"error": fresh_error}})
         mismatches, roundoff = compare_replayed_results(sid, stored, fresh)
         result_mismatches.extend(mismatches)
         differences.extend(item["absolute"] for item in roundoff)

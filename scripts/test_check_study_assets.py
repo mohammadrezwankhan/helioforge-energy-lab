@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import math
 from copy import deepcopy
 from pathlib import Path
@@ -242,3 +243,132 @@ def test_result_comparison_reports_missing_list_values_with_their_paths():
         "study.series.length": (3, 2),
         "study.series[2]": (3.0, "<missing>"),
     }
+
+
+def _frozen_registration_result() -> dict:
+    source = (CHECKER.ROOT / "apps/web/src/roadmap-data.ts").read_text(encoding="utf-8")
+    bundle = json.loads(source.split("STUDY_BUNDLE: StudyBundle = ", 1)[1].rsplit("; }", 1)[0])
+    return deepcopy(bundle["results"]["pilots-registration"])
+
+
+def _registration_result_with_matrix(matrix: list[list[float]]) -> dict:
+    result = _frozen_registration_result()
+    result["details"]["rotation_matrix"] = deepcopy(matrix)
+    observation, _ = CHECKER.registration_angle_observation(result)
+    assert observation is not None
+    result["metrics"][3]["value"] = observation["computed_angle_degrees"]
+    return result
+
+
+def test_frozen_registration_angle_reconstructs_from_its_saved_matrix():
+    result = _frozen_registration_result()
+
+    observation, error = CHECKER.registration_angle_observation(result)
+
+    assert error is None
+    assert observation is not None
+    assert observation["rotation_matrix"] == result["details"]["rotation_matrix"]
+    assert observation["reported_angle_degrees"] == result["metrics"][3]["value"]
+    assert result["metrics"][3]["value"] == 1.2074182697257333e-06
+    assert math.isclose(observation["computed_angle_degrees"], 1.2074182697257333e-06,
+                        rel_tol=1e-12, abs_tol=1e-12)
+
+
+def test_near_identity_registration_matrices_allow_only_their_own_derived_angles():
+    frozen = _frozen_registration_result()
+    stored_matrix = frozen["details"]["rotation_matrix"]
+    replayed = _registration_result_with_matrix([
+        [1.0, 0.0, 0.0],
+        [0.0, 1.0, 0.0],
+        [0.0, 0.0, 0.999999999999996],
+    ])
+    stored_observation, stored_error = CHECKER.registration_angle_observation(frozen)
+    replayed_observation, replayed_error = CHECKER.registration_angle_observation(replayed)
+
+    assert stored_error is None and replayed_error is None
+    assert stored_observation is not None and replayed_observation is not None
+    assert math.isclose(replayed_observation["computed_angle_degrees"], 3.6222548091772e-06,
+                        rel_tol=1e-12, abs_tol=1e-12)
+    assert abs(stored_observation["computed_angle_degrees"] - replayed_observation["computed_angle_degrees"]) > 1e-12
+    assert max(abs(stored_matrix[row][column] - replayed_observation["rotation_matrix"][row][column])
+               for row in range(3) for column in range(3)) < 1e-12
+
+    mismatches, _ = CHECKER.compare_replayed_results("pilots-registration", frozen, replayed)
+
+    assert mismatches == []
+
+
+def test_registration_angle_and_matrix_changes_fail_independently():
+    frozen = _frozen_registration_result()
+    altered_angle = deepcopy(frozen)
+    altered_angle["metrics"][3]["value"] += 1e-7
+    angle_mismatches, _ = CHECKER.compare_replayed_results("pilots-registration", frozen, altered_angle)
+    assert any(item["path"] == "pilots-registration.metrics[3].value"
+               and "own matrix" in item["reason"] for item in angle_mismatches)
+
+    altered_matrix = deepcopy(frozen)
+    altered_matrix["details"]["rotation_matrix"][0][1] += 1e-6
+    matrix_observation, matrix_error = CHECKER.registration_angle_observation(altered_matrix)
+    assert matrix_error is None and matrix_observation is not None
+    altered_matrix["metrics"][3]["value"] = matrix_observation["computed_angle_degrees"]
+    matrix_mismatches, _ = CHECKER.compare_replayed_results("pilots-registration", frozen, altered_matrix)
+    assert any(item["path"] == "pilots-registration.details.rotation_matrix[0][1]"
+               for item in matrix_mismatches)
+
+
+def test_registration_angle_rejects_malformed_labels_shapes_types_and_nonfinite_values():
+    frozen = _frozen_registration_result()
+    cases = []
+
+    wrong_label = deepcopy(frozen)
+    wrong_label["metrics"][3]["label"] = "Rotation"
+    cases.append((wrong_label, "pilots-registration.metrics[3]"))
+
+    wrong_unit = deepcopy(frozen)
+    wrong_unit["metrics"][3]["unit"] = "rad"
+    cases.append((wrong_unit, "pilots-registration.metrics[3]"))
+
+    missing_metric = deepcopy(frozen)
+    missing_metric["metrics"].pop()
+    cases.append((missing_metric, "pilots-registration.metrics.length"))
+
+    bad_shape = deepcopy(frozen)
+    bad_shape["details"]["rotation_matrix"][2].pop()
+    cases.append((bad_shape, "pilots-registration.details.rotation_matrix"))
+
+    bad_type = deepcopy(frozen)
+    bad_type["details"]["rotation_matrix"][0][0] = 1
+    cases.append((bad_type, "pilots-registration.details.rotation_matrix[0][0]"))
+
+    nonfinite = deepcopy(frozen)
+    nonfinite["details"]["rotation_matrix"][0][0] = math.inf
+    cases.append((nonfinite, "pilots-registration.details.rotation_matrix[0][0]"))
+
+    bad_angle_type = deepcopy(frozen)
+    bad_angle_type["metrics"][3]["value"] = 0
+    cases.append((bad_angle_type, "pilots-registration.metrics[3].value"))
+
+    nonfinite_angle = deepcopy(frozen)
+    nonfinite_angle["metrics"][3]["value"] = math.nan
+    cases.append((nonfinite_angle, "pilots-registration.metrics[3].value"))
+
+    for malformed, path in cases:
+        mismatches, _ = CHECKER.compare_replayed_results("pilots-registration", frozen, malformed)
+        assert any(item["path"] == path for item in mismatches), (path, mismatches)
+
+
+def test_regular_nonzero_registration_rotation_replays_normally():
+    theta = math.radians(37.0)
+    result = _registration_result_with_matrix([
+        [math.cos(theta), -math.sin(theta), 0.0],
+        [math.sin(theta), math.cos(theta), 0.0],
+        [0.0, 0.0, 1.0],
+    ])
+
+    observation, error = CHECKER.registration_angle_observation(result)
+    mismatches, _ = CHECKER.compare_replayed_results("pilots-registration", result, deepcopy(result))
+
+    assert error is None
+    assert observation is not None
+    assert math.isclose(observation["computed_angle_degrees"], 37.0, rel_tol=1e-12, abs_tol=1e-12)
+    assert mismatches == []

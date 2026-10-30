@@ -59,7 +59,7 @@ Study result comparison now collects every mismatching JSON path and its frozen/
 - On the local Windows runtime, the default annual replay returned objectives `247361.86152000123` and `247361.86151999998`, and the exact derived value `-1.2514647096395493e-09`; default charge, discharge and curtailment are all zero.
 - Regression tests cover the observed cancellation pattern, exact derived identity, rejection when either objective operand changes beyond its existing tolerance, and collection of multiple mismatch paths and values.
 - The full checker replay in the focused test passed and confirmed frozen `roadmap-data.ts` bytes remain unchanged.
-- Focused checker suite: 11 passed; standalone full replay: 59 studies passed, zero numeric roundoff differences; Ruff: passed.
+- Focused checker suite before the registration-angle follow-up: 11 passed; standalone full replay: 59 studies passed, zero numeric roundoff differences; Ruff: passed.
 - Independent review matched the exact identity and metric labels to the engine and confirmed all other comparisons remain in place. Successful checker output retains both objective operands and the derived metric from each record.
 
 Commands run from the repository root:
@@ -67,6 +67,32 @@ Commands run from the repository root:
 ```powershell
 $env:PYTHONPATH='apps/api'
 C:\Users\MRK\Downloads\misC\helioforge-audit-20261027\repo\.venv\Scripts\python.exe -m pytest scripts/test_check_study_assets.py -q
+C:\Users\MRK\Downloads\misC\helioforge-audit-20261027\repo\.venv\Scripts\python.exe scripts/check-study-assets.py
+C:\Users\MRK\Downloads\misC\helioforge-audit-20261027\repo\.venv\Scripts\python.exe -m ruff check --no-cache scripts/check-study-assets.py scripts/test_check_study_assets.py
+```
+
+## Registration-angle replay near identity
+
+The later CI replay at `b2ae376` reported a single result mismatch: frozen `pilots-registration.metrics[3].value` was `1.2074182697257333e-06` degrees and replay was `3.6222548091772e-06` degrees. The metric is the engine's `degrees(acos(clamp((trace(rotation) - 1) / 2, -1, 1)))`; the full 3×3 matrix is also stored in `details.rotation_matrix`.
+
+Near identity, the input to `acos` is close to 1 and `d acos(c)/dc = -1/sqrt(1-c²)` grows without bound as `c` approaches 1. A few binary64 steps in the sum of diagonal entries can therefore change the computed angle by several microdegrees even when the two matrices remain within the existing elementwise result tolerance. This explains the failure without treating the matrix itself as unverified.
+
+The checker now reconstructs the angle independently from each record's own matrix using NumPy `trace` and the same clamp and `math` operations as the model. Each matrix must have exactly three rows and columns, every entry must be a finite Python float, and the metric must have the exact `Rigid rotation` label, `degrees` unit, and a finite float value. The reported angle must match that matrix-derived value under the existing `1e-12` relative/absolute comparison. Only when both records pass that validation is the redundant cross-platform angle-to-angle comparison omitted. Every matrix entry, all other metrics and all other result fields continue through the unchanged result comparator, so a modified matrix remains a failure.
+
+The successful replay diagnostics retain both original matrices, their traces and clamped cosine values, and both reported and reconstructed angles. Frozen inputs, canonical input digests, provenance, evidence hashes and frozen bytes remain unchanged.
+
+### Verification for the registration follow-up
+
+- Regression coverage reconstructs the frozen baseline angle from its exact matrix; checks an independent near-identity matrix yielding `3.6222548091772e-06` degrees while each entry differs from the frozen matrix by less than `1e-12`; and rejects a wrong angle, material matrix changes, malformed labels/units, incorrect shapes, non-float or nonfinite entries and angles. A regular 37-degree rotation remains accepted.
+- Focused study checker plus published-release verifier suite: 24 passed (16 checker tests and 8 verifier tests).
+- Standalone study replay: 59 studies passed; `roadmap-data.ts` bytes unchanged. Local replay had no cross-platform delta, so the nonzero derived-angle case is exercised by the focused independent-matrix regression; no remote CI rerun is claimed.
+- Ruff and `git diff --check`: passed.
+
+Commands run from the repository root:
+
+```powershell
+$env:PYTHONPATH='apps/api'
+C:\Users\MRK\Downloads\misC\helioforge-audit-20261027\repo\.venv\Scripts\python.exe -m pytest scripts/test_check_study_assets.py scripts/test_verify_published_release.py -q
 C:\Users\MRK\Downloads\misC\helioforge-audit-20261027\repo\.venv\Scripts\python.exe scripts/check-study-assets.py
 C:\Users\MRK\Downloads\misC\helioforge-audit-20261027\repo\.venv\Scripts\python.exe -m ruff check --no-cache scripts/check-study-assets.py scripts/test_check_study_assets.py
 ```
