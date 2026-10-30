@@ -228,7 +228,12 @@ class HttpClient:
 
     def get(self, url: str, label: str) -> dict[str, Any]:
         self.count += 1
-        request = Request(url, method="GET", headers={"Accept-Encoding": "identity"})
+        # Cloudflare Pages rejects urllib's library-default identifier with 1010.
+        # Identify this application honestly; never impersonate a browser.
+        request = Request(url, method="GET", headers={
+            "Accept-Encoding": "identity",
+            "User-Agent": "HelioForge-Release-Verification/1.0 (+https://github.com/mohammadrezwankhan/helioforge-energy-lab)",
+        })
         try:
             response = self.opener.open(request, timeout=self.timeout)
         except HTTPError as exc:

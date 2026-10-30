@@ -73,6 +73,23 @@ jobs:
           python scripts/browser-terminal.py --report docs/terminal-audit/browser-terminal-ci.json
           python scripts/browser-full-audit.py --url http://127.0.0.1:8000 --report docs/full-audit/browser-ci.json
           node --test scripts/domain-security.test.mjs scripts/engineering-hero.test.mjs scripts/capability-contract.test.mjs scripts/hosted-data.test.mjs scripts/inline-html.test.mjs
+      - name: Hosted data, exports and deferred-response acceptance
+        run: |
+          python -m http.server 4190 --bind 127.0.0.1 --directory .cloudflare/site > /tmp/helioforge-hosted.log 2>&1 &
+          HOSTED_PID=$!
+          trap 'kill "$HOSTED_PID"' EXIT
+          python - <<'PY'
+          import time, urllib.request
+          for _ in range(60):
+              try:
+                  urllib.request.urlopen('http://127.0.0.1:4190/app.json', timeout=1)
+                  break
+              except Exception:
+                  time.sleep(1)
+          else:
+              raise SystemExit('Hosted artifact server did not become ready')
+          PY
+          python scripts/acceptance-hosted.py --url http://127.0.0.1:4190/run/ --site .cloudflare/site --offline-file .cloudflare/site/downloads/HelioForge-Offline.html --evidence-dir docs/remediation-20261030/hosted-ci
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
@@ -92,5 +109,6 @@ jobs:
             docs/roadmap/accessibility-report.json
             docs/full-audit/browser-ci.json
             docs/terminal-audit/browser-terminal-ci.json
+            docs/remediation-20261030/hosted-ci/
             docs/remediation-*/receipts/
             .cloudflare/site/

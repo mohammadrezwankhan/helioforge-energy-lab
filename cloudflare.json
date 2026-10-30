@@ -45,7 +45,7 @@
   ],
   "category": "Energy",
   "canonical": "https://mklab.co.technology/apps/helioforge-energy-lab/",
-  "updated": "2026-10-29",
+  "updated": "2026-10-30",
   "publicSource": "https://github.com/mohammadrezwankhan/helioforge-energy-lab",
   "demoArtifact": "HelioForge-Preview.html",
   "runtimeDirectory": "apps/web/dist/hosted",

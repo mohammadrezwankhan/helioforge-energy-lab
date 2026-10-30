@@ -101,9 +101,11 @@ class HttpBoundaryTests(unittest.TestCase):
     def test_public_403_is_saved_and_raises_blocked(self) -> None:
         class DenyHandler(BaseHTTPRequestHandler):
             requests = 0
+            user_agent = ""
 
             def do_GET(self) -> None:
                 type(self).requests += 1
+                type(self).user_agent = self.headers.get("User-Agent", "")
                 self.send_response(403)
                 self.send_header("Content-Type", "text/plain")
                 self.end_headers()
@@ -121,6 +123,8 @@ class HttpBoundaryTests(unittest.TestCase):
                 with self.assertRaises(VERIFY.Blocked) as caught:
                     client.get(client.origin + "/", "403-fixture")
                 self.assertEqual(DenyHandler.requests, 1)
+                self.assertEqual(DenyHandler.user_agent,
+                                 "HelioForge-Release-Verification/1.0 (+https://github.com/mohammadrezwankhan/helioforge-energy-lab)")
                 self.assertEqual(caught.exception.records[0]["status"], 403)
                 self.assertEqual((Path(temp) / caught.exception.records[0]["body_file"]).read_bytes(), b"ordinary access denied")
         finally:
