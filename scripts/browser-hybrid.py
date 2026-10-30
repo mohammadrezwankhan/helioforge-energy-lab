@@ -143,7 +143,7 @@ with sync_playwright() as pw, httpx.Client(base_url=a.url, timeout=40) as client
     expect(page.locator('#toast')).to_contain_text('complete',timeout=30000)
     expect(page.locator('.review-card')).to_have_count(8)
     expect(page.locator('.review-card').filter(has_text='Hybrid architect')).to_contain_text(outage['run_id'])
-    passed('Eight local specialists review the exact selected saved hybrid run, not an invented or default substitute')
+    passed('Eight deterministic local checklist sections are tied to the exact saved hybrid run; no agents or critic execute')
 
     nav('hybrid')
     page.locator('#hybrid-system').select_option('solar-hydrogen')
