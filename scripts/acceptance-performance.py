@@ -9,6 +9,7 @@ import platform
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from playwright.sync_api import sync_playwright
 
@@ -17,10 +18,12 @@ OUT = Path(os.environ.get("HELIOFORGE_EVIDENCE_DIR", ROOT / "docs/remediation-20
 OUT.mkdir(parents=True, exist_ok=True)
 URL = os.environ.get("HELIOFORGE_ACCEPTANCE_URL", "http://127.0.0.1:4189/run/")
 SITE = Path(os.environ.get("HELIOFORGE_ACCEPTANCE_SITE", ROOT / ".cloudflare/site"))
+LOCAL_TARGET = urlsplit(URL).hostname in {"127.0.0.1", "localhost", "::1"}
 report = {"schema": "helioforge.performance.lab.v1", "started_at": datetime.now(timezone.utc).isoformat(),
           "environment": platform.platform(), "artifact_sha256": hashlib.sha256((SITE / "run/index.html").read_bytes()).hexdigest(),
           "physical_device": False, "field_p75": None, "field_INP": None,
-          "scope": "Local gzip server, desktop CPU; new browser context for cold, same-context reload for warm. Other host workloads were not controlled. No field metrics or real-device claim.",
+          "target_url": URL,
+          "scope": ("Local gzip server" if LOCAL_TARGET else "Public HTTPS target over the host's network") + ", desktop CPU; new browser context for cold, same-context reload for warm. Other host workloads were not controlled. No field metrics or real-device claim.",
           "runs": []}
 init = """window.audit={lcp:null,cls:0,longTasks:[],frames:0};
 for(const type of ['largest-contentful-paint','layout-shift','longtask'])try{
@@ -50,7 +53,7 @@ with sync_playwright() as pw:
                     "downloadThroughput": 1_600_000 / 8, "uploadThroughput": 750_000 / 8})
             for cache in ["cold", "warm"]:
                 run = {"profile": profile, "cache": cache, "repetition": repetition, "status": "FAIL",
-                       "cpu_multiplier": 1 if profile == "desktop" else 4, "network": "loopback" if profile == "desktop" else "CDP 150 ms latency, 1.6 Mbps down, 0.75 Mbps up"}
+                       "cpu_multiplier": 1 if profile == "desktop" else 4, "network": ("loopback" if LOCAL_TARGET else "unthrottled host network") if profile == "desktop" else "CDP 150 ms latency, 1.6 Mbps down, 0.75 Mbps up"}
                 try:
                     before_metrics = {m['name']: m['value'] for m in cdp.send('Performance.getMetrics')['metrics']}
                     if cache == "cold":

@@ -259,7 +259,8 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
 
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=True)
-        context = browser.new_context(ignore_https_errors=True, accept_downloads=True, viewport={"width": 1440, "height": 1000})
+        local_tls_fixture = urllib.parse.urlsplit(url).hostname in {"127.0.0.1", "localhost", "::1"}
+        context = browser.new_context(ignore_https_errors=local_tls_fixture, accept_downloads=True, viewport={"width": 1440, "height": 1000})
         page = context.new_page()
         page.on("pageerror", lambda exc: page_errors.append(str(exc)))
         page.on("request", lambda req: api_requests.append(req.url) if "/api/" in req.url else None)

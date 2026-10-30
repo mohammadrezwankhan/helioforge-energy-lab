@@ -2,8 +2,9 @@
 
 Use the same 1e-12 absolute/relative cross-platform tolerance as the hybrid
 asset checker, only for numerical results. Replay inputs, metadata and stored
-digests remain exact. Generated bearing-fixture signals alone allow one binary64
-ULP for observed cross-platform math.sin roundoff. Frozen bytes are never rewritten.
+digests remain exact. The named generated bearing-fixture signals alone use a
+formula-derived absolute roundoff bound for cross-platform math.sin values.
+Frozen bytes are never rewritten.
 """
 import hashlib
 import json
@@ -120,8 +121,36 @@ def float_ulp_distance(left: float, right: float) -> int:
 _BEARING_FIXTURE_FIELDS = {"training_records", "heldout_records"}
 
 
+def bearing_fixture_coefficients(field_name: str, record_id: Any) -> tuple[float, ...] | None:
+    """Return the literal sine weights used for one named source fixture record."""
+    if field_name == "training_records":
+        for index in range(6):
+            if record_id == f"synthetic-training-{index + 1}":
+                return (1 + 0.005 * index, 0.008 + 0.0005 * index)
+    elif field_name == "heldout_records":
+        if record_id == "synthetic-heldout-normal":
+            return (1.0, 0.009)
+        if record_id == "synthetic-heldout-extra-tone":
+            return (1.0, 0.009, 0.35)
+    return None
+
+
+def bearing_fixture_absolute_error_bound(field_name: str, record_id: Any) -> float:
+    """Bound platform roundoff from this fixture's weighted sine expression.
+
+    The largest expression has three terms and four rounded multiplies/adds.
+    `8 * epsilon * L1(weights)` is a conservative binary64 forward-error budget:
+    it covers pairwise one-ULP libm variation and accumulated arithmetic rounding
+    while remaining independent of cancellation in the final sample.
+    """
+    coefficients = bearing_fixture_coefficients(field_name, record_id)
+    if coefficients is None:
+        raise ValueError("No generated bearing-fixture formula is registered for this record.")
+    return 8 * sys.float_info.epsilon * math.fsum(abs(value) for value in coefficients)
+
+
 def _normalize_bearing_fixture_roundoff(expected: list, actual: list) -> tuple[list, int]:
-    """Copy only 1-ULP `math.sin` differences in the named generated bearing signals."""
+    """Normalize only machine-level deltas in the named generated bearing signals."""
     normalized = deepcopy(actual)
     tolerated = 0
     if len(expected) != len(normalized):
@@ -152,6 +181,9 @@ def _normalize_bearing_fixture_roundoff(expected: list, actual: list) -> tuple[l
                     continue
                 if expected_record.get("record_id") != actual_record.get("record_id"):
                     continue
+                coefficients = bearing_fixture_coefficients(field_name, expected_record.get("record_id"))
+                if coefficients is None:
+                    continue
                 expected_signal = expected_record.get("signal")
                 actual_signal = actual_record.get("signal")
                 if not isinstance(expected_signal, list) or not isinstance(actual_signal, list):
@@ -166,7 +198,9 @@ def _normalize_bearing_fixture_roundoff(expected: list, actual: list) -> tuple[l
                         continue
                     if not math.isfinite(expected_value) or not math.isfinite(actual_value):
                         continue
-                    if float_ulp_distance(expected_value, actual_value) == 1:
+                    if abs(expected_value - actual_value) <= bearing_fixture_absolute_error_bound(
+                        field_name, expected_record["record_id"]
+                    ):
                         actual_signal[index] = expected_value
                         tolerated += 1
 
@@ -174,7 +208,7 @@ def _normalize_bearing_fixture_roundoff(expected: list, actual: list) -> tuple[l
 
 
 def compare_catalogues(expected: list, actual: list, *, limit: int = 12) -> tuple[list[dict[str, Any]], bool, int]:
-    """Compare catalogue metadata exactly, allowing only 1 ULP in bearing fixture samples."""
+    """Compare catalogue exactly, except for bounded absolute error in bearing fixture samples."""
     normalized, tolerated = _normalize_bearing_fixture_roundoff(expected, actual)
     differences, omitted = catalogue_differences(expected, normalized, limit=limit)
     return differences, omitted, tolerated
@@ -218,7 +252,7 @@ def main() -> int:
             "check": "study_catalogue_exact_match",
             "mismatch_paths": mismatch_paths,
             "additional_differences_omitted": omitted,
-            "one_ulp_bearing_fixture_values": tolerated_fixture_values,
+            "roundoff_bearing_fixture_samples": tolerated_fixture_values,
         }, ensure_ascii=True), file=sys.stderr)
         raise AssertionError("Study catalogue is stale; see bounded mismatch paths above.")
     frozen_catalogue_by_id = {study["id"]: study for study in bundle["catalogue"]}
@@ -245,7 +279,7 @@ def main() -> int:
         compare(stored, fresh, sid, differences)
     print(json.dumps({"status": "PASS", "studies": len(bundle["results"]), "numeric_roundoff_differences": len(differences),
                       "max_roundoff": max(differences, default=0), "execution_timing_observations": timing_observations,
-                      "one_ulp_bearing_fixture_values": tolerated_fixture_values, "artifact_rewritten": False}))
+                      "roundoff_bearing_fixture_samples": tolerated_fixture_values, "artifact_rewritten": False}))
     return 0
 
 

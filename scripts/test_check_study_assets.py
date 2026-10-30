@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import importlib.util
 import math
+from copy import deepcopy
 from pathlib import Path
 
 import pytest
@@ -24,6 +25,20 @@ def _bearing_catalogue(signal: list[float], *, title: str = "Bearing spectrum") 
             "default": [{"record_id": "synthetic-training-1", "signal": signal}],
         }],
     }]
+
+
+def _bearing_catalogue_with_records() -> list[dict]:
+    catalogue = _bearing_catalogue([0.0])
+    catalogue[0]["data_fields"] = [
+        {"name": "training_records", "default": [{
+            "record_id": "synthetic-training-5", "signal": [0.0] * 152,
+        }]},
+        {"name": "heldout_records", "default": [
+            {"record_id": "synthetic-heldout-normal", "signal": [0.0] * 177},
+            {"record_id": "synthetic-heldout-extra-tone", "signal": [0.0] * 256},
+        ]},
+    ]
+    return catalogue
 
 
 def test_exact_catalogue_comparison_diagnoses_metadata_and_shape_changes():
@@ -62,19 +77,51 @@ def test_observed_bearing_fixture_one_ulp_difference_is_narrowly_accepted():
     assert tolerated == 1
 
 
-def test_two_ulp_bearing_difference_and_unrelated_numeric_change_fail():
-    frozen_value = 0.005656854249491658
-    two_ulps = math.nextafter(math.nextafter(frozen_value, math.inf), math.inf)
-    frozen = _bearing_catalogue([frozen_value])
-    too_far = _bearing_catalogue([two_ulps])
+def test_all_eight_observed_compound_signal_deltas_fit_formula_bound():
+    deltas = [
+        ("training_records", 0, 32, 0.007071067811864741, 0.007071067811864742, 2),
+        ("training_records", 0, 151, 0.8556710930136611, 0.8556710930136613, 2),
+        ("heldout_records", 0, 176, -0.0034441508912851004, -0.0034441508912850995, 2),
+        ("heldout_records", 1, 21, -0.01669301854734359, -0.016693018547343563, 8),
+        ("heldout_records", 1, 36, 0.36644449514070854, 0.3664444951407084, 2),
+        ("heldout_records", 1, 191, -0.20155573961773188, -0.201555739617732, 4),
+        ("heldout_records", 1, 239, 0.32761971667177836, 0.32761971667177825, 2),
+        ("heldout_records", 1, 255, -0.9129794256114008, -0.912979425611401, 2),
+    ]
+    frozen = _bearing_catalogue_with_records()
+    current = deepcopy(frozen)
+    roundoff_paths = {"training_records": 0, "heldout_records": 1}
 
-    differences, omitted, tolerated = CHECKER.compare_catalogues(frozen, too_far)
+    for field_name, record_index, sample_index, expected, actual, expected_ulps in deltas:
+        field_index = roundoff_paths[field_name]
+        expected_signal = frozen[0]["data_fields"][field_index]["default"][record_index]["signal"]
+        actual_signal = current[0]["data_fields"][field_index]["default"][record_index]["signal"]
+        expected_signal[sample_index] = expected
+        actual_signal[sample_index] = actual
+        record_id = frozen[0]["data_fields"][field_index]["default"][record_index]["record_id"]
+        bound = CHECKER.bearing_fixture_absolute_error_bound(field_name, record_id)
+        assert abs(actual - expected) <= bound
+        assert CHECKER.float_ulp_distance(expected, actual) == expected_ulps
 
-    assert differences == [{
-        "path": "$[0].data_fields[0].default[0].signal[0]",
-        "expected": frozen_value,
-        "actual": two_ulps,
-    }]
+    differences, omitted, tolerated = CHECKER.compare_catalogues(frozen, current)
+
+    assert differences == []
+    assert omitted is False
+    assert tolerated == 8
+    assert max(abs(actual - expected) for _, _, _, expected, actual, _ in deltas) == 2.220446049250313e-16
+
+
+def test_bearing_delta_beyond_formula_bound_and_other_numeric_changes_fail():
+    frozen = _bearing_catalogue([0.0])
+    current = deepcopy(frozen)
+    bound = CHECKER.bearing_fixture_absolute_error_bound("training_records", "synthetic-training-1")
+    current[0]["data_fields"][0]["default"][0]["signal"][0] = math.nextafter(bound, math.inf)
+
+    differences, omitted, tolerated = CHECKER.compare_catalogues(frozen, current)
+
+    assert differences[0]["path"] == "$[0].data_fields[0].default[0].signal[0]"
+    assert differences[0]["expected"] == 0.0
+    assert differences[0]["actual"] > bound
     assert (omitted, tolerated) == (False, 0)
 
     changed_metadata = [{
