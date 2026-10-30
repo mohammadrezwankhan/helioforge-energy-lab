@@ -19,7 +19,7 @@ namespace HF {
     const experiences=createExperienceController(()=>state);
     const completion=createCompletionController(()=>state,toast);
     const integrations=createIntegrationController(()=>state);
-    const exampleLoads=new Set<string>(),exampleErrors=new Map<string,string>();
+    const exampleLoads=new Set<string>(),exampleErrors=new Map<string,string>(),exampleOwners=new Map<string,number>();
     document.addEventListener('hf:examples-loaded',event=>{
       if((event as CustomEvent<{page:string}>).detail.page===state.page){workflows.refresh();experiences.refresh();completion.refresh();integrations.refresh();applyBusyState();}
     });
@@ -65,14 +65,17 @@ namespace HF {
       if(records?.length)document.getElementById('page-content')?.insertAdjacentHTML('beforeend',`<section class="panel" aria-label="Result model contracts"><h2>Result model contracts</h2>${records.map(resultProvenanceView).join('')}</section>`);
       void refreshReleaseProvenance();
       const h=state.hybrid,key=configurationKey(h.inputs);
-      if(!h.result&&!h.busy&&!h.draft&&!h.inputError&&deferredHybridAvailable(h.inputs)){
+      const eligibleExample=!h.result&&!h.busy&&!h.draft&&!h.inputError&&deferredHybridAvailable(h.inputs);
+      if(state.page==='hybrid'&&eligibleExample&&exampleLoads.has(key)&&hybridExampleSelectionRevision(h)===hybridStateRevision(h))
+        exampleOwners.set(key,hybridStateRevision(h));
+      if(eligibleExample){
         const host=document.getElementById('page-content');
         if(state.page==='hybrid')host?.insertAdjacentHTML('afterbegin',`<p class="notice" role="status">${escapeHTML(exampleErrors.get(key)??'Loading verified example records…')}${exampleErrors.has(key)?' <button class="btn secondary small" data-example-retry>Retry example download</button>':''}</p>`);
-        if(!exampleLoads.has(key)&&!exampleErrors.has(key)){
-          exampleLoads.add(key);const revision=hybridStateRevision(h),inputs={...h.inputs};
+        if(!exampleLoads.has(key)&&!exampleErrors.has(key)&&hybridExampleSelectionRevision(h)===hybridStateRevision(h)){
+          exampleLoads.add(key);exampleOwners.set(key,hybridStateRevision(h));const inputs={...h.inputs};
           void loadHybridExample(inputs).then(()=>{
-            if(revision===hybridStateRevision(h)&&key===configurationKey(h.inputs)&&!h.busy&&!h.draft&&!h.inputError&&!h.result){attachBundledHybridResult(h);render();}
-          }).catch(e=>{exampleErrors.set(key,e instanceof Error?e.message:'Example download failed.');if(key===configurationKey(h.inputs))render();}).finally(()=>exampleLoads.delete(key));
+            if(exampleOwners.get(key)===hybridStateRevision(h)&&key===configurationKey(h.inputs)&&!h.busy&&!h.draft&&!h.inputError&&!h.result){attachBundledHybridResult(h);render();}
+          }).catch(e=>{exampleErrors.set(key,e instanceof Error?e.message:'Example download failed.');if(key===configurationKey(h.inputs))render();}).finally(()=>{exampleLoads.delete(key);exampleOwners.delete(key);});
         }
       }
     }

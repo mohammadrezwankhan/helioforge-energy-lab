@@ -16,6 +16,7 @@ import os
 import re
 import sys
 import tempfile
+import time
 import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
@@ -246,6 +247,7 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
     checks: list[dict[str, Any]] = []
     actual: dict[str, Any] = {"url": url, "offline_file": str(offline_file)}
     page_errors: list[str] = []
+    browser_console: list[dict[str, str]] = []
     api_requests: list[str] = []
     remote_origin_requests: list[str] = []
     data_responses: list[dict[str, Any]] = []
@@ -263,11 +265,78 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
         context = browser.new_context(ignore_https_errors=local_tls_fixture, accept_downloads=True, viewport={"width": 1440, "height": 1000})
         page = context.new_page()
         page.on("pageerror", lambda exc: page_errors.append(str(exc)))
+        page.on("console", lambda msg: browser_console.append({"type": msg.type, "text": msg.text}) if msg.type in {"error", "warning"} else None)
         page.on("request", lambda req: api_requests.append(req.url) if "/api/" in req.url else None)
         local_origin = urllib.parse.urlparse(url).scheme + "://" + urllib.parse.urlparse(url).netloc
         page.on("request", lambda req: remote_origin_requests.append(req.url) if req.url.startswith(("http://", "https://")) and urllib.parse.urlparse(req.url).scheme + "://" + urllib.parse.urlparse(req.url).netloc != local_origin else None)
         page.on("response", lambda response: data_responses.append({"url": response.url, "status": response.status}) if "/run/data/" in response.url else None)
         page.on("response", lambda response: script_responses.append({"url": response.url, "status": response.status}) if response.request.resource_type == "script" else None)
+
+        last_export_at = 0.0
+
+        def paced_download_click(selector: str) -> None:
+            nonlocal last_export_at
+            # Respect Chromium's ten-downloads-per-second burst limit while retaining
+            # real clicks and downloaded bytes. This is a correctness check, not a burst benchmark.
+            time.sleep(max(0.0, 0.25 - (time.monotonic() - last_export_at)))
+            page.locator(selector).click()
+            last_export_at = time.monotonic()
+
+        def click_export(kind: str) -> None:
+            nonlocal stage
+            stage = f"study {study_id}: {kind} export"
+            paced_download_click(f'[data-study-export="{kind}"]')
+
+        actual["export_minimum_interval_seconds"] = 0.25
+
+        def result_labels(key: str) -> dict[str, str | None]:
+            return page.evaluate("""key => ({
+              system:window.HF.HYBRID_CATALOG.systems.find(x=>x.id===key.split('/')[0])?.name,
+              scenario:window.HF.HYBRID_CATALOG.scenarios.find(x=>x.id===key.split('/')[1])?.name
+            })""", key)
+
+        def wait_for_exact_example(labels: dict[str, str | None], timeout: int = 60000) -> None:
+            page.wait_for_function("""expected => {
+              const output=document.querySelector('#hybrid-output')?.innerText||'';
+              const loading=[...document.querySelectorAll('.notice')].some(n=>n.innerText.includes('Loading verified example records'));
+              return Boolean(expected.system&&expected.scenario&&output.includes(expected.system)&&output.includes(expected.scenario)&&
+                !loading&&!document.querySelector('[data-example-retry]'));
+            }""", arg=labels, timeout=timeout)
+
+        def hold_example_fetch(path: str) -> None:
+            page.evaluate("""path => {
+              const original=window.fetch.bind(window);
+              const state={started:false,finished:false,response:null,release:null,original};
+              window.__hfAcceptanceHeldAsset=state;
+              window.fetch=(input,init)=>{
+                const raw=typeof input==='string'?input:(input instanceof URL?input.href:input.url);
+                const requestUrl=new URL(raw,location.href);
+                if(requestUrl.pathname.endsWith(path)&&!state.started){
+                  state.started=true;
+                  return new Promise((resolve,reject)=>{state.release=()=>original(input,init).then(async response=>{
+                    try{
+                      const bytes=await response.clone().arrayBuffer();
+                      const sha256=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');
+                      state.response={status:response.status,bytes:bytes.byteLength,sha256};state.finished=true;resolve(response);
+                    }catch(error){reject(error);}
+                  },reject);});
+                }
+                return original(input,init);
+              };
+            }""", path)
+
+        def release_example_fetch() -> dict[str, Any] | None:
+            page.evaluate("() => window.__hfAcceptanceHeldAsset?.release?.()")
+            page.wait_for_function("() => window.__hfAcceptanceHeldAsset?.finished===true", timeout=30000)
+            return page.evaluate("() => window.__hfAcceptanceHeldAsset?.response??null")
+
+        def restore_example_fetch() -> None:
+            page.evaluate("""() => {
+              const state=window.__hfAcceptanceHeldAsset;
+              if(state?.original)window.fetch=state.original;
+              delete window.__hfAcceptanceHeldAsset;
+            }""")
+
         try:
             response = page.goto(url, wait_until="domcontentloaded", timeout=120000)
             stage = "hosted startup"
@@ -309,6 +378,7 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
                 ref_a = page.evaluate("key => window.__HF_DATA_INDEX__.hybrid[key]", target_a)
                 failed = {"count": 0}
                 target_a_url = urllib.parse.urljoin(url, ref_a["path"])
+                expected_a = result_labels(target_a)
                 def fail_first(route: Any) -> None:
                     failed["count"] += 1
                     if failed["count"] == 1:
@@ -324,27 +394,138 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
                 stage = "controlled fetch failure visible"
                 retry_before = failed["count"]
                 page.locator("[data-example-retry]").click()
-                page.wait_for_function("() => document.querySelector('[data-example-retry]') === null && document.querySelector('#hybrid-output')?.innerText.length > 80", timeout=60000)
+                wait_for_exact_example(expected_a)
                 stage = "retry recovered"
+                target_a_statuses = [response["status"] for response in data_responses if response["url"] == target_a_url]
+                target_a_visible = page.locator("#hybrid-output").inner_text()
                 checks.append(outcome("controlled_data_failure_retries_and_recovers", {"first_attempt": 503, "retry": 200, "retry_button_removed": True},
-                                      {"intercepted_requests": failed["count"], "retry_count_after_first": retry_before,
+                                      {"pair": target_a, "intercepted_requests": failed["count"], "retry_count_after_first": retry_before,
+                                       "responses": target_a_statuses, "expected": expected_a,
+                                       "result_matches": bool(expected_a["system"] and expected_a["scenario"] and
+                                           expected_a["system"] in target_a_visible and expected_a["scenario"] in target_a_visible),
                                        "retry_button_removed": page.locator("[data-example-retry]").count() == 0},
-                                      failed["count"] >= 2 and retry_before == 1 and page.locator("[data-example-retry]").count() == 0))
+                                      failed["count"] >= 2 and retry_before == 1 and 503 in target_a_statuses and 200 in target_a_statuses and
+                                      bool(expected_a["system"] and expected_a["scenario"] and expected_a["system"] in target_a_visible and
+                                           expected_a["scenario"] in target_a_visible) and page.locator("[data-example-retry]").count() == 0))
                 page.unroute(target_a_url)
 
-                # Exercise a different architecture/scenario and then hold another fetch while the selection changes.
+                # Delay a second architecture's immutable example across both visible clicks. The scenario is already
+                # baseline, so this proves that a same-configuration selection revision cannot strand hydration.
                 if target_b and target_c and target_d:
+                    ref_b = page.evaluate("key => window.__HF_DATA_INDEX__.hybrid[key]", target_b)
+                    expected_b = result_labels(target_b)
+                    hold_example_fetch(ref_b["path"])
                     for system, scenario in [target_b.split("/", 1)]:
                         if page.locator(f'[data-system="{system}"]').count():
                             page.locator(f'[data-system="{system}"]').first.click()
                         page.locator(f'[data-scenario="{scenario}"]').first.click()
-                    expected_b = page.evaluate("key => window.HF.HYBRID_CATALOG.systems.find(x=>x.id===key.split('/')[0])?.name", target_b)
-                    page.wait_for_function("expected => document.querySelector('#hybrid-output')?.innerText.includes(expected)", arg=expected_b, timeout=60000)
+                    stage = "waiting for delayed same-configuration example"
+                    page.wait_for_function("() => window.__hfAcceptanceHeldAsset?.started===true", timeout=30000)
+                    selected_before_release = page.evaluate("""() => ({
+                      system:document.querySelector('[data-system][aria-pressed="true"]')?.dataset.system,
+                      scenario:document.querySelector('[data-scenario][aria-pressed="true"]')?.dataset.scenario
+                    })""")
+                    held_started = selected_before_release == {"system": target_b.split("/", 1)[0], "scenario": target_b.split("/", 1)[1]}
+                    checks.append(outcome("delayed_example_is_held_after_same_configuration_clicks",
+                                          {"pair": target_b, "system": target_b.split("/", 1)[0], "scenario": target_b.split("/", 1)[1]},
+                                          {"selected_before_release": selected_before_release, "held_started": True}, held_started))
+                    stage = "releasing delayed same-configuration example"
+                    held_b = release_example_fetch()
+                    stage = "waiting for delayed same-configuration result"
+                    wait_for_exact_example(expected_b)
+                    restore_example_fetch()
                     stage = "nonbootstrap sample loaded"
-                    checks.append(outcome("nonbootstrap_architecture_and_scenario_result", {"pair": target_b, "architecture_name": expected_b},
-                                          {"pair": page.evaluate("() => `${window.HF.initialHybridState().inputs.system_id}`"),
-                                           "visible_expected_name": expected_b in page.locator("#hybrid-output").inner_text()},
-                                          bool(expected_b and expected_b in page.locator("#hybrid-output").inner_text())))
+                    visible_b = page.locator("#hybrid-output").inner_text()
+                    checks.append(outcome("nonbootstrap_architecture_and_scenario_result",
+                                          {"pair": target_b, "expected": expected_b,
+                                           "asset_bytes": ref_b["bytes"], "asset_sha256": ref_b["sha256"]},
+                                          {"selected": selected_before_release, "response": held_b,
+                                           "result_matches": bool(expected_b["system"] and expected_b["scenario"] and
+                                               expected_b["system"] in visible_b and expected_b["scenario"] in visible_b),
+                                           "retry_removed": page.locator("[data-example-retry]").count() == 0},
+                                          bool(held_b and held_b.get("status") == 200 and held_b.get("bytes") == ref_b["bytes"] and
+                                               held_b.get("sha256") == ref_b["sha256"] and expected_b["system"] and expected_b["scenario"] and
+                                               expected_b["system"] in visible_b and expected_b["scenario"] in visible_b and
+                                               page.locator("[data-example-retry]").count() == 0)))
+
+                    # Reselect the same architecture while a different, exact preset load is held.
+                    target_same = page.evaluate("""() => {
+                      const bundled=new Set((window.HF.HYBRID_BUNDLE.cases||[]).map(c=>`${c.inputs.system_id}/${c.inputs.scenario_id}`));
+                      return Object.keys(window.__HF_DATA_INDEX__.hybrid).find(k=>k.split('/')[1]==='baseline'&&
+                        !['remote-triad','utility-pv-ac','utility-pv-dc'].includes(k.split('/')[0])&&!bundled.has(k))||null;
+                    }""")
+                    if not target_same:
+                        checks.append(outcome("same_architecture_reselection_keeps_pending_hydration", "an unbundled baseline case", target_same, False))
+                    else:
+                        system_same, scenario_same = target_same.split("/", 1)
+                        ref_same = page.evaluate("key => window.__HF_DATA_INDEX__.hybrid[key]", target_same)
+                        expected_same = result_labels(target_same)
+                        hold_example_fetch(ref_same["path"])
+                        stage = "selecting same architecture for delayed hydration"
+                        if page.locator(f'[data-system="{system_same}"]').count():
+                            page.locator(f'[data-system="{system_same}"]').first.click()
+                        page.wait_for_function("() => window.__hfAcceptanceHeldAsset?.started===true", timeout=30000)
+                        page.locator(f'[data-system="{system_same}"]').first.click()
+                        selected_same = page.evaluate("""() => ({
+                          system:document.querySelector('[data-system][aria-pressed="true"]')?.dataset.system,
+                          scenario:document.querySelector('[data-scenario][aria-pressed="true"]')?.dataset.scenario
+                        })""")
+                        held_same = release_example_fetch()
+                        stage = "waiting for same-architecture delayed result"
+                        wait_for_exact_example(expected_same)
+                        restore_example_fetch()
+                        visible_same = page.locator("#hybrid-output").inner_text()
+                        same_visible = bool(expected_same["system"] and expected_same["scenario"] and
+                                            expected_same["system"] in visible_same and expected_same["scenario"] in visible_same)
+                        checks.append(outcome("same_architecture_reselection_keeps_pending_hydration",
+                                              {"pair": target_same, "result": expected_same,
+                                               "asset_bytes": ref_same["bytes"], "asset_sha256": ref_same["sha256"]},
+                                              {"selected_after_reselection": selected_same, "response": held_same,
+                                               "result_matches": same_visible},
+                                              bool(held_same and held_same.get("status") == 200 and held_same.get("bytes") == ref_same["bytes"] and
+                                                   held_same.get("sha256") == ref_same["sha256"] and same_visible)))
+
+                    # A real number-field edit while a verified example is held must still prevent stale attachment.
+                    target_edit = page.evaluate("""same => {
+                      const bundled=new Set((window.HF.HYBRID_BUNDLE.cases||[]).map(c=>`${c.inputs.system_id}/${c.inputs.scenario_id}`));
+                      return Object.keys(window.__HF_DATA_INDEX__.hybrid).find(k=>k.split('/')[1]==='baseline'&&
+                        !['remote-triad','utility-pv-ac','utility-pv-dc'].includes(k.split('/')[0])&&
+                        !bundled.has(k)&&k!==same)||null;
+                    }""", target_same)
+                    if not target_edit:
+                        checks.append(outcome("edited_inputs_reject_pending_example", "a second unbundled baseline case", target_edit, False))
+                    else:
+                        system_edit, scenario_edit = target_edit.split("/", 1)
+                        ref_edit = page.evaluate("key => window.__HF_DATA_INDEX__.hybrid[key]", target_edit)
+                        expected_edit = result_labels(target_edit)
+                        hold_example_fetch(ref_edit["path"])
+                        stage = "selecting architecture before real input edit"
+                        if page.locator(f'[data-system="{system_edit}"]').count():
+                            page.locator(f'[data-system="{system_edit}"]').first.click()
+                        page.wait_for_function("() => window.__hfAcceptanceHeldAsset?.started===true", timeout=30000)
+                        field = page.locator('#hybrid-config input[type="number"]').first
+                        field_before = field.input_value()
+                        field_after = str(float(field_before) + 1.0)
+                        field.fill(field_after)
+                        stage = "releasing example after real input edit"
+                        held_edit = release_example_fetch()
+                        page.wait_for_function("""key => {
+                          const [system,scenario]=key.split('/');
+                          return Boolean(window.HF.bundledHybridCase(window.HF.presetInputs(system,scenario)));
+                        }""", arg=target_edit, timeout=30000)
+                        restore_example_fetch()
+                        edited_output = page.locator("#hybrid-output").inner_text()
+                        input_retained = field.input_value() == field_after
+                        stale_result_visible = bool(expected_edit["system"] and expected_edit["system"] in edited_output)
+                        checks.append(outcome("edited_inputs_reject_pending_example",
+                                              {"pair": target_edit, "edited_input_value": field_after,
+                                               "asset_bytes": ref_edit["bytes"], "asset_sha256": ref_edit["sha256"]},
+                                              {"input_value_retained": input_retained, "response": held_edit,
+                                               "stale_result_visible": stale_result_visible,
+                                               "output_length": len(edited_output)},
+                                              bool(input_retained and not stale_result_visible and held_edit and
+                                                   held_edit.get("status") == 200 and held_edit.get("bytes") == ref_edit["bytes"] and
+                                                   held_edit.get("sha256") == ref_edit["sha256"])))
 
                     # Hold a fourth, previously unrequested pair so browser cache cannot satisfy it early.
                     ref_d = page.evaluate("key => window.__HF_DATA_INDEX__.hybrid[key]", target_d)
@@ -470,9 +651,10 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
                                                    "table_metadata_only_expected": expected["tableCount"] == 0,
                                                    "selected_series_index": expected["selectedSeriesIndex"], "selected_series_expected": expected["seriesLength"]}
 
+                    stage = f"study {study_id}: JSON export"
                     # Full JSON must be byte-for-byte the current workspace result object.
                     with page.expect_download(timeout=30000) as download_info:
-                        page.locator('[data-study-export="json"]').click()
+                        click_export("json")
                     json_download = download_info.value
                     json_target = Path(download_dir.name) / f"{study_id}.json"
                     json_download.save_as(str(json_target))
@@ -485,9 +667,10 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
                                              "sha256_expected": expected["jsonSha256"], "sha256_actual": sha256(json_bytes),
                                              "study_id": json_value.get("study") if isinstance(json_value, dict) else None}
 
+                    stage = f"study {study_id}: table CSV export"
                     # Table CSV is lossless with respect to row count and carries provenance on row one.
                     with page.expect_download(timeout=30000) as download_info:
-                        page.locator('[data-study-export="csv"]').click()
+                        click_export("csv")
                     table_download = download_info.value
                     table_target = Path(download_dir.name) / f"{study_id}-table.csv"
                     table_download.save_as(str(table_target))
@@ -529,7 +712,7 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
                                                        "download_emitted": False, "detail": "No selected series exists; series export is disabled."}
                     else:
                         with page.expect_download(timeout=30000) as download_info:
-                            page.locator('[data-study-export="series"]').click()
+                            click_export("series")
                         series_download = download_info.value
                         series_target = Path(download_dir.name) / f"{study_id}-series.csv"
                         series_download.save_as(str(series_target))
@@ -561,7 +744,7 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
 
                     # Memo provenance, assumptions, boundaries and non-approval language must match the result.
                     with page.expect_download(timeout=30000) as download_info:
-                        page.locator('[data-study-export="memo"]').click()
+                        click_export("memo")
                     memo_download = download_info.value
                     memo_target = Path(download_dir.name) / f"{study_id}-memo.md"
                     memo_download.save_as(str(memo_target))
@@ -756,7 +939,7 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
                 # Fixture rejection is what this public edition can prove; no evidence payload is injected.
                 fields_still_disabled = page.locator('form[data-model="council"] input,form[data-model="council"] select,form[data-model="council"] textarea').evaluate_all("xs => xs.length > 0 && xs.every(x => x.disabled)")
                 with page.expect_download(timeout=30000) as download_info:
-                    page.locator('[data-action="export-council"]').click()
+                    paced_download_click('[data-action="export-council"]')
                 download = download_info.value
                 target = Path(download_dir.name) / f"council-{row.get('test_id','row')}.md"
                 download.save_as(str(target))
@@ -788,6 +971,8 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
         except HostedAppStartupError as exc:
             actual["browser_error"] = f"{type(exc).__name__}: {exc}"
             actual["browser_stage"] = stage
+            actual["browser_console"] = browser_console
+            actual["study_dom"] = page.locator("#study-workbench").inner_text(timeout=2000)[-3000:] if page.locator("#study-workbench").count() else "absent"
             actual["remote_origin_requests"] = remote_origin_requests
             actual["page_errors"] = page_errors
             actual["api_requests"] = api_requests
@@ -797,6 +982,7 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
             checks.append(outcome("browser_run_completed", "all requested browser checks executed", f"{type(exc).__name__}: {exc}", False))
             actual["browser_error"] = f"{type(exc).__name__}: {exc}"
             actual["browser_stage"] = stage
+            actual["browser_console"] = browser_console
             actual["remote_origin_requests"] = remote_origin_requests
             try:
                 actual["current_page_text_excerpt"] = page.locator("body").inner_text(timeout=2000)[:1800]

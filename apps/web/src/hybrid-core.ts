@@ -66,7 +66,10 @@ namespace HF {
     const entry=hybridPresets.get(`${inputs.system_id}/${inputs.scenario_id}`);
     return HYBRID_BUNDLE.catalogue_version===HYBRID_CATALOG.version&&entry&&configurationKey(entry.inputs)===configurationKey(inputs)?entry:null;
   }
+  const hybridExampleSelectionRevisions=new WeakMap<HybridState,number>();
+  export function hybridExampleSelectionRevision(h:HybridState):number|undefined{return hybridExampleSelectionRevisions.get(h);}
   export function attachBundledHybridResult(h:HybridState):boolean {
+    hybridExampleSelectionRevisions.set(h,hybridStateRevision(h));
     h.result=null;h.resultInputs=null;
     const entry=h.inputError?null:bundledHybridCase(h.inputs);
     if(!entry)return false;

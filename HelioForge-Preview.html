@@ -5653,7 +5653,11 @@ var HF;
         return HF.HYBRID_BUNDLE.catalogue_version === HF.HYBRID_CATALOG.version && entry && configurationKey(entry.inputs) === configurationKey(inputs) ? entry : null;
     }
     HF.bundledHybridCase = bundledHybridCase;
+    const hybridExampleSelectionRevisions = new WeakMap();
+    function hybridExampleSelectionRevision(h) { return hybridExampleSelectionRevisions.get(h); }
+    HF.hybridExampleSelectionRevision = hybridExampleSelectionRevision;
     function attachBundledHybridResult(h) {
+        hybridExampleSelectionRevisions.set(h, hybridStateRevision(h));
         h.result = null;
         h.resultInputs = null;
         const entry = h.inputError ? null : bundledHybridCase(h.inputs);
@@ -11692,7 +11696,7 @@ var HF;
         const experiences = HF.createExperienceController(() => state);
         const completion = HF.createCompletionController(() => state, toast);
         const integrations = HF.createIntegrationController(() => state);
-        const exampleLoads = new Set(), exampleErrors = new Map();
+        const exampleLoads = new Set(), exampleErrors = new Map(), exampleOwners = new Map();
         document.addEventListener('hf:examples-loaded', event => {
             if (event.detail.page === state.page) {
                 workflows.refresh();
@@ -11759,20 +11763,24 @@ var HF;
                 document.getElementById('page-content')?.insertAdjacentHTML('beforeend', `<section class="panel" aria-label="Result model contracts"><h2>Result model contracts</h2>${records.map(HF.resultProvenanceView).join('')}</section>`);
             void HF.refreshReleaseProvenance();
             const h = state.hybrid, key = HF.configurationKey(h.inputs);
-            if (!h.result && !h.busy && !h.draft && !h.inputError && HF.deferredHybridAvailable(h.inputs)) {
+            const eligibleExample = !h.result && !h.busy && !h.draft && !h.inputError && HF.deferredHybridAvailable(h.inputs);
+            if (state.page === 'hybrid' && eligibleExample && exampleLoads.has(key) && HF.hybridExampleSelectionRevision(h) === HF.hybridStateRevision(h))
+                exampleOwners.set(key, HF.hybridStateRevision(h));
+            if (eligibleExample) {
                 const host = document.getElementById('page-content');
                 if (state.page === 'hybrid')
                     host?.insertAdjacentHTML('afterbegin', `<p class="notice" role="status">${HF.escapeHTML(exampleErrors.get(key) ?? 'Loading verified example records…')}${exampleErrors.has(key) ? ' <button class="btn secondary small" data-example-retry>Retry example download</button>' : ''}</p>`);
-                if (!exampleLoads.has(key) && !exampleErrors.has(key)) {
+                if (!exampleLoads.has(key) && !exampleErrors.has(key) && HF.hybridExampleSelectionRevision(h) === HF.hybridStateRevision(h)) {
                     exampleLoads.add(key);
-                    const revision = HF.hybridStateRevision(h), inputs = { ...h.inputs };
+                    exampleOwners.set(key, HF.hybridStateRevision(h));
+                    const inputs = { ...h.inputs };
                     void HF.loadHybridExample(inputs).then(() => {
-                        if (revision === HF.hybridStateRevision(h) && key === HF.configurationKey(h.inputs) && !h.busy && !h.draft && !h.inputError && !h.result) {
+                        if (exampleOwners.get(key) === HF.hybridStateRevision(h) && key === HF.configurationKey(h.inputs) && !h.busy && !h.draft && !h.inputError && !h.result) {
                             HF.attachBundledHybridResult(h);
                             render();
                         }
                     }).catch(e => { exampleErrors.set(key, e instanceof Error ? e.message : 'Example download failed.'); if (key === HF.configurationKey(h.inputs))
-                        render(); }).finally(() => exampleLoads.delete(key));
+                        render(); }).finally(() => { exampleLoads.delete(key); exampleOwners.delete(key); });
                 }
             }
         }
