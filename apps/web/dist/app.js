@@ -996,7 +996,7 @@ var HF;
     function numberField(p, key, label, unit, min = 0, max = 1e6, step = 'any') { return `<label class="field"><span>${hx(label)}</span><div class="input-unit"><input type="number" name="${key}" value="${hx(p[key])}" min="${min}" max="${max}" step="${step}" required><span>${unit}</span></div></label>`; }
     function hybridLibrary(h) {
         const rows = HF.filterSystems(h.search, h.family, h.topology);
-        return `<div class="library-summary" role="status"><span>${rows.length} matching architectures</span><span>19 runnable screens · 17 study-only</span></div><div class="system-grid">${rows.length ? rows.map(s => `<article class="system-card ${h.inputs.system_id === s.id ? 'chosen' : ''}" style="--card-color:${HF.techById(s.technologies[0]).color}"><div class="system-card-top"><span class="system-symbol">${HF.icon(familyIcons[s.family] ?? 'layers', 20)}</span><small>${hx(s.family)}</small><span class="mode-dot ${s.mode}" title="${s.mode === 'screening' ? 'Runnable hourly screen' : 'Study-only architecture'}"></span></div><button type="button" class="system-card-select" data-system="${s.id}" aria-pressed="${h.inputs.system_id === s.id}">${hx(s.name)}</button><p>${hx(s.description)}</p><div class="system-card-meta">${chip(s.topology)}${chip(s.coupling)}${chip(s.mode === 'screening' ? 'Runnable' : 'Study only')}</div></article>`).join('') : '<div class="empty">No architectures match. Try “PV”, “BESS”, “H2” or clear the filters.</div>'}</div>`;
+        return `<div class="library-summary" role="status"><span>${rows.length} matching architectures</span><span>19 runnable screens · 17 study-only</span></div><div class="system-grid">${rows.length ? rows.map(s => `<article class="system-card ${h.inputs.system_id === s.id ? 'chosen' : ''}" style="--card-color:${HF.techById(s.technologies[0]).color}"><div class="system-card-top"><span class="system-symbol">${HF.icon(familyIcons[s.family] ?? 'layers', 20)}</span><small>${hx(s.family)}</small><span class="mode-dot ${s.mode}" title="${s.mode === 'screening' ? 'Runnable hourly screen' : 'Study-only architecture'}"></span></div><button type="button" class="system-card-select" ${h.busy ? 'disabled' : ''} data-system="${s.id}" aria-pressed="${h.inputs.system_id === s.id}">${hx(s.name)}</button><p>${hx(s.description)}</p><div class="system-card-meta">${chip(s.topology)}${chip(s.coupling)}${chip(s.mode === 'screening' ? 'Runnable' : 'Study only')}</div></article>`).join('') : '<div class="empty">No architectures match. Try “PV”, “BESS”, “H2” or clear the filters.</div>'}</div>`;
     }
     HF.hybridLibrary = hybridLibrary;
     function assetInspector(h) {
@@ -1044,7 +1044,7 @@ var HF;
     <div class="configuration-actions"><button type="submit" id="run-hybrid" class="btn primary full" ${!state.connected || h.busy || s.mode === 'study' || c.mode === 'study' ? 'disabled' : ''}>${HF.icon(h.busy ? 'clock' : 'play', 17)}${h.busy ? 'Running energy screen…' : s.mode === 'study' || c.mode === 'study' ? 'Study-only configuration' : 'Run energy screen'}</button><p>${state.connected ? 'Hourly, synthetic, non-optimized. Not operational control.' : 'Preview mode · start the Python API for new calculations.'}</p><div><button type="button" class="text-link" data-hybrid-action="export">${HF.icon('download', 14)} Export setup</button><button type="button" class="text-link" data-hybrid-action="import">${HF.icon('document', 14)} Import</button><button type="button" class="text-link" data-hybrid-action="reset">Reset</button></div></div></form></div>
     <section class="panel scenario-panel">${hTitle('Change the conditions. See the consequence.', `${scenarios.length} applicable presets · numerical and study-only scopes remain distinct.`, `<button class="text-link" data-lesson="lesson-${s.id}">Guided lesson ${HF.icon('arrow', 14)}</button>`)}<div class="scenario-chips">${scenarios.map(x => `<button data-scenario="${x.id}" class="scenario-chip ${x.id === c.id ? 'active' : ''}" aria-pressed="${x.id === c.id}" title="${hx(x.description)}">${HF.icon(x.mode === 'study' ? 'flask' : x.category === 'Weather' ? 'sun' : x.category === 'Resilience' ? 'shield' : 'activity', 14)}${hx(x.name)}${x.mode === 'study' ? '<small>STUDY</small>' : ''}</button>`).join('')}</div><div class="scenario-explainer"><strong>${hx(c.name)}</strong><span>${hx(c.description)}</span></div></section>
     <div id="hybrid-output">${hybridResults(state)}</div>
-    <section class="panel library-panel" id="architecture-library">${hTitle('The hybrid architecture atlas', 'Search technologies, interconnection, use case or control. No claim of exhaustive coverage.')}<div class="library-tools"><label class="search-field">${HF.icon('search', 17)}<input id="hybrid-search" type="search" value="${hx(h.search)}" placeholder="Try solar, off-grid, BESS or H2…" aria-label="Search hybrid architectures"></label><label class="select-wrap"><span class="sr-only">Architecture family</span><select id="hybrid-family">${['All', ...new Set(HF.HYBRID_CATALOG.systems.map(x => x.family))].map(x => `<option ${h.family === x ? 'selected' : ''}>${x}</option>`).join('')}</select></label><label class="select-wrap"><span class="sr-only">Interconnection topology</span><select id="hybrid-topology">${['All', ...new Set(HF.HYBRID_CATALOG.systems.map(x => x.topology))].map(x => `<option ${h.topology === x ? 'selected' : ''}>${x}</option>`).join('')}</select></label><button class="btn secondary small" data-hybrid-action="clear-filters">Clear</button></div><div id="hybrid-library-results">${hybridLibrary(h)}</div></section>`;
+    <section class="panel library-panel" id="architecture-library">${hTitle('The hybrid architecture atlas', 'Search technologies, interconnection, use case or control. No claim of exhaustive coverage.')}<div class="library-tools"><label class="search-field">${HF.icon('search', 17)}<input id="hybrid-search" type="search" value="${hx(h.search)}" placeholder="Try solar, off-grid, BESS or H2…" aria-label="Search hybrid architectures"></label><label class="select-wrap"><span class="sr-only">Architecture family</span><select id="hybrid-family">${['All', ...new Set(HF.HYBRID_CATALOG.systems.map(x => x.family))].map(x => `<option ${h.family === x ? 'selected' : ''}>${x}</option>`).join('')}</select></label><label class="select-wrap"><span class="sr-only">Interconnection topology</span><select id="hybrid-topology">${['All', ...new Set(HF.HYBRID_CATALOG.systems.map(x => x.topology))].map(x => `<option ${h.topology === x ? 'selected' : ''}>${x}</option>`).join('')}</select></label><button class="btn secondary small" data-hybrid-action="clear-filters">Clear</button></div><div id="hybrid-library-results">${h.libraryReady ? hybridLibrary(h) : '<p class="library-deferred" data-library-deferred role="status">Explore architectures using the search and filters above.</p>'}</div></section>`;
     }
     HF.hybridView = hybridView;
     function lessonsView(state) {
@@ -1071,6 +1071,46 @@ var HF;
 (function (HF) {
     function installHybridController(state, cb) {
         const h = state.hybrid;
+        let libraryObserver = null, observedLibrary = null, observerDestroyed = false;
+        function disconnectLibraryObserver() { libraryObserver?.disconnect(); libraryObserver = null; observedLibrary = null; }
+        function renderLibrary() {
+            const el = document.getElementById('hybrid-library-results');
+            if (!el)
+                return;
+            h.libraryReady = true;
+            el.innerHTML = HF.hybridLibrary(h);
+            disconnectLibraryObserver();
+        }
+        function refreshLibraryObserver() {
+            if (observerDestroyed)
+                return;
+            if (h.libraryReady) {
+                disconnectLibraryObserver();
+                return;
+            }
+            const section = document.getElementById('architecture-library');
+            if (!section) {
+                disconnectLibraryObserver();
+                return;
+            }
+            if (section === observedLibrary && libraryObserver)
+                return;
+            disconnectLibraryObserver();
+            observedLibrary = section;
+            if (typeof IntersectionObserver === 'undefined') {
+                renderLibrary();
+                return;
+            }
+            const target = section;
+            const observer = new IntersectionObserver(entries => {
+                if (observerDestroyed || observedLibrary !== target || libraryObserver !== observer)
+                    return;
+                if (entries.some(entry => entry.target === target && entry.isIntersecting))
+                    renderLibrary();
+            }, { rootMargin: '400px 0px' });
+            libraryObserver = observer;
+            observer.observe(target);
+        }
         function selectSystem(id) {
             HF.advanceHybridStateRevision(h);
             const s = HF.systemById(id);
@@ -1114,6 +1154,7 @@ var HF;
                 h.family = 'All';
                 h.topology = 'All';
                 cb.render();
+                renderLibrary();
                 document.getElementById('architecture-library')?.scrollIntoView({ behavior: 'instant' });
             }
             else if (name === 'import') {
@@ -1265,8 +1306,7 @@ var HF;
                 cb.toast(e instanceof Error ? e.message : 'Invalid selection.', true);
             }
         });
-        function updateLibrary() { const el = document.getElementById('hybrid-library-results'); if (el)
-            el.innerHTML = HF.hybridLibrary(h); }
+        function updateLibrary() { renderLibrary(); }
         function syncHybridInput(el) {
             const form = el.closest('#hybrid-config');
             if (!form || h.busy)
@@ -1342,6 +1382,10 @@ var HF;
             if (el.closest('#hybrid-config') && el.name)
                 syncHybridInput(el);
         });
+        document.addEventListener('focusin', event => {
+            if (!h.libraryReady && event.target.closest('#architecture-library'))
+                updateLibrary();
+        });
         document.addEventListener('submit', event => {
             const form = event.target;
             if (form.id === 'hybrid-config') {
@@ -1412,6 +1456,7 @@ var HF;
                 }
             }
         });
+        return { refreshLibraryObserver, destroy() { observerDestroyed = true; disconnectLibraryObserver(); } };
     }
     HF.installHybridController = installHybridController;
 })(HF || (HF = {}));
@@ -6519,6 +6564,7 @@ var HF;
         const completion = HF.createCompletionController(() => state, toast);
         const integrations = HF.createIntegrationController(() => state);
         const exampleLoads = new Set(), exampleErrors = new Map(), exampleOwners = new Map();
+        let hybridController;
         document.addEventListener('hf:examples-loaded', event => {
             if (event.detail.page === state.page) {
                 workflows.refresh();
@@ -6534,11 +6580,14 @@ var HF;
                 render();
             }
         });
-        window.addEventListener('pagehide', event => { if (!event.persisted)
-            completion.destroy(); });
+        window.addEventListener('pagehide', event => { if (!event.persisted) {
+            completion.destroy();
+            hybridController?.destroy();
+        } });
         function render() {
             sceneCleanup?.();
             root.innerHTML = HF.shell(state);
+            hybridController?.refreshLibraryObserver();
             if (state.page === 'council' && !hasConnected) {
                 const form = document.querySelector('form[data-model="council"]');
                 form?.insertAdjacentHTML('afterbegin', '<p class="notice" data-frozen-council role="status"><strong>Frozen synthetic council example.</strong> Eight fixed checklist sections; no specialist or critic is executed. Evidence-state submissions, evidence uploads and external providers are unavailable in this browser preview. Use the local Python application to review new evidence. A digest does not verify source authenticity or human approval.</p>');
@@ -7023,7 +7072,7 @@ var HF;
             render();
         } });
         champion = HF.installChampionController(state, { render, toast, navigate, api, celebrate, openModal });
-        HF.installHybridController(state, { render, toast, navigate, api, celebrate, openModal, persist: champion.persist });
+        hybridController = HF.installHybridController(state, { render, toast, navigate, api, celebrate, openModal, persist: champion.persist });
         HF.installTerminalController({ navigate, toast });
         render();
         void connect();

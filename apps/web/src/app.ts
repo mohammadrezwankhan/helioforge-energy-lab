@@ -20,16 +20,18 @@ namespace HF {
     const completion=createCompletionController(()=>state,toast);
     const integrations=createIntegrationController(()=>state);
     const exampleLoads=new Set<string>(),exampleErrors=new Map<string,string>(),exampleOwners=new Map<string,number>();
+    let hybridController:HybridControllerHandle|undefined;
     document.addEventListener('hf:examples-loaded',event=>{
       if((event as CustomEvent<{page:string}>).detail.page===state.page){workflows.refresh();experiences.refresh();completion.refresh();integrations.refresh();applyBusyState();}
     });
     document.addEventListener('click',event=>{
       if((event.target as Element).closest('[data-example-retry]')){exampleErrors.delete(configurationKey(state.hybrid.inputs));render();}
     });
-    window.addEventListener('pagehide',event=>{if(!event.persisted)completion.destroy();});
+    window.addEventListener('pagehide',event=>{if(!event.persisted){completion.destroy();hybridController?.destroy();}});
     function render(): void {
       sceneCleanup?.();
       root!.innerHTML=shell(state);
+      hybridController?.refreshLibraryObserver();
       if(state.page==='council'&&!hasConnected){
         const form=document.querySelector<HTMLFormElement>('form[data-model="council"]');
         form?.insertAdjacentHTML('afterbegin','<p class="notice" data-frozen-council role="status"><strong>Frozen synthetic council example.</strong> Eight fixed checklist sections; no specialist or critic is executed. Evidence-state submissions, evidence uploads and external providers are unavailable in this browser preview. Use the local Python application to review new evidence. A digest does not verify source authenticity or human approval.</p>');
@@ -297,7 +299,7 @@ namespace HF {
     window.addEventListener('hashchange',syncNavigation);window.addEventListener('popstate',syncNavigation);
     media.addEventListener('change',()=>{if(media.matches){state.motionOff=true;render();}});
     champion=installChampionController(state,{render,toast,navigate,api,celebrate,openModal});
-    installHybridController(state,{render,toast,navigate,api,celebrate,openModal,persist:champion.persist});
+    hybridController=installHybridController(state,{render,toast,navigate,api,celebrate,openModal,persist:champion.persist});
     installTerminalController({navigate,toast});
     render();void connect();
   }

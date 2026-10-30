@@ -1,5 +1,9 @@
 # Additional cold-load headroom and accessibility repair
 
+A subsequent full measurement retained a 2520 ms phone sample. The further
+[atlas startup repair](../cold-load-atlas/README.md) records that entire attempt
+and the next candidate. Measurements below retain their original runtime scope.
+
 The earlier canvas/number-formatting repair passed its paired local run, but the full public run retained two LCP misses. The public record is preserved in [performance-prior-public.json](performance-prior-public.json), bound to runtime bc89a858062e414ab7c5c0e1ca6d3af0714b062c2856af8731704937bf9044d9. It is not relabeled as passing. One desktop sample had a 2705 ms delay before domain lookup; one constrained-phone sample reached 2536 ms.
 
 The next repair removes full study definitions from the initial hosted document. The bootstrap retains each study's id, page and title. Existing content-addressed workspace assets carry the complete definitions and unchanged results. Before exposing results, the loader verifies the asset digest and size, validates the exact definition/result sets, hydrates the existing definition objects, then announces readiness. Prototype-sensitive study IDs are rejected at planning and runtime boundaries. The complete offline edition retains all data. No scientific values or model equations change.

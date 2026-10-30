@@ -373,6 +373,7 @@ def exercise_terminal(page: Page, state: dict, scratch: Path, screenshot_dir: Pa
 def exercise_legacy_compare(page: Page, state: dict) -> None:
     page.goto(page.url.split("?")[0].split("#")[0] + "#hybrid", wait_until="load")
     page.locator("#hybrid-config").wait_for()
+    page.locator("#architecture-library").scroll_into_view_if_needed()
     system_card_selector = '#architecture-library button[data-system="hospital-island"]'
     system_card = page.locator(system_card_selector)
     system_card.wait_for(state="visible", timeout=5_000)
