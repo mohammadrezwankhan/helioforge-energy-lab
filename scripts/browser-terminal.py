@@ -373,9 +373,23 @@ def exercise_terminal(page: Page, state: dict, scratch: Path, screenshot_dir: Pa
 def exercise_legacy_compare(page: Page, state: dict) -> None:
     page.goto(page.url.split("?")[0].split("#")[0] + "#hybrid", wait_until="load")
     page.locator("#hybrid-config").wait_for()
-    page.locator('#architecture-library button[data-system="hospital-island"]').click()
-    page.wait_for_function("document.querySelector('#hybrid-system')?.value === 'hospital-island'", timeout=5_000)
-    system_card = page.locator('#architecture-library button[data-system="hospital-island"]')
+    system_card_selector = '#architecture-library button[data-system="hospital-island"]'
+    system_card = page.locator(system_card_selector)
+    system_card.wait_for(state="visible", timeout=5_000)
+    page.evaluate("selector => { window.__terminalPreviousSystemCard = document.querySelector(selector); }",
+                  system_card_selector)
+    system_card.click()
+    page.wait_for_function("""selector => {
+      const previous = window.__terminalPreviousSystemCard;
+      const current = document.querySelector(selector);
+      return previous && !previous.isConnected && current && current !== previous && current.isConnected &&
+        current.getAttribute('aria-pressed') === 'true' &&
+        document.querySelector('#hybrid-system')?.value === 'hospital-island';
+    }""", arg=system_card_selector, timeout=5_000)
+    # Selecting a system rebuilds the view. Measure the connected, selected
+    # replacement card after it has entered layout, not its detached predecessor.
+    system_card = page.locator(system_card_selector)
+    system_card.wait_for(state="visible", timeout=5_000)
     card_state = system_card.evaluate("el => ({pressed: el.getAttribute('aria-pressed'), height: el.getBoundingClientRect().height})")
     page.locator("#hybrid-system").select_option("remote-triad")
     page.wait_for_function("document.querySelector('#hybrid-system')?.value === 'remote-triad'", timeout=5_000)

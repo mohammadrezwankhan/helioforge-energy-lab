@@ -91,5 +91,6 @@ jobs:
             docs/roadmap/completion-browser/
             docs/roadmap/accessibility-report.json
             docs/full-audit/browser-ci.json
+            docs/terminal-audit/browser-terminal-ci.json
             docs/remediation-*/receipts/
             .cloudflare/site/
