@@ -7,7 +7,7 @@ namespace HF {
   export function installHybridController(state:ViewState,cb:HybridCallbacks):void {
     const h=state.hybrid;
     function selectSystem(id:string):void {
-      const s=systemById(id);h.inputs=presetInputs(id);h.objectId=s.technologies.includes('battery')?'battery':s.technologies[0]!;
+      advanceHybridStateRevision(h);const s=systemById(id);h.inputs=presetInputs(id);h.objectId=s.technologies.includes('battery')?'battery':s.technologies[0]!;
       h.result=null;h.resultInputs=null;h.inputError=null;h.draft=null;h.hour=12;attachBundledHybridResult(h);if(state.champion)state.champion.lastRunId=null;cb.persist?.();cb.navigate('hybrid');
     }
     function collect(form:HTMLFormElement):HybridInputs {
@@ -22,16 +22,23 @@ namespace HF {
       else if(name==='reset')selectSystem(h.inputs.system_id);
       else if(name==='clear-filters'){h.search='';h.family='All';h.topology='All';cb.render();document.getElementById('architecture-library')?.scrollIntoView({behavior:'instant'});}
       else if(name==='import'){
+        const revision=advanceHybridStateRevision(h);
         const file=document.createElement('input');file.type='file';file.accept='.json,application/json';
-        file.onchange=async()=>{try{if(h.busy)throw new Error('Complete the current run before importing a configuration.');const f=file.files?.[0];if(!f)return;if(f.size>100_000)throw new Error('Configuration file must be under 100 KB.');const p=parseConfiguration(JSON.parse(await f.text()));h.inputs=p;h.result=null;h.resultInputs=null;h.inputError=null;h.draft=null;attachBundledHybridResult(h);if(state.champion)state.champion.lastRunId=null;cb.persist?.();h.objectId=systemById(p.system_id).technologies[0]!;cb.render();cb.toast(h.result?'Exact preset imported with its bundled Python result.':'Configuration imported. Start the local Python API to calculate these edited inputs.');}catch(e){cb.toast(e instanceof Error?e.message:'Invalid configuration file.',true);}};file.click();
-      }else if(name==='csv'){if(!h.result||hybridDirty(h))throw new Error('Run this configuration first.');download('helioforge-hybrid-dispatch.csv',toCSV(h.result.schedule.map(x=>({...x}))),'text/csv');}
+        file.onchange=async()=>{try{if(h.busy)throw new Error('Complete the current run before importing a configuration.');const f=file.files?.[0];if(!f)return;if(f.size>100_000)throw new Error('Configuration file must be under 100 KB.');const p=parseConfiguration(JSON.parse(await f.text()));if(revision!==hybridStateRevision(h)||h.busy){cb.toast('Import discarded because newer workspace changes were made while the file was being read.',true);return;}h.inputs=p;h.result=null;h.resultInputs=null;h.inputError=null;h.draft=null;attachBundledHybridResult(h);if(state.champion)state.champion.lastRunId=null;cb.persist?.();h.objectId=systemById(p.system_id).technologies[0]!;cb.render();cb.toast(h.result?'Exact preset imported with its bundled Python result.':'Configuration imported. Start the local Python API to calculate these edited inputs.');}catch(e){cb.toast(e instanceof Error?e.message:'Invalid configuration file.',true);}};file.click();
+      }else if(name==='csv'){
+        if(!h.result||hybridDirty(h))throw new Error('Run this configuration first.');
+        const r=h.result,extra=r as unknown as Record<string,unknown>,system=systemById(r.system_id),scenario=scenarioById(r.scenario_id);
+        const sourceRevision=extra.source_revision,datasetRevision=extra.dataset_revision;
+        const metadata:Record<string,unknown>={export_schema:'helioforge.hybrid-result.v1',result_id:r.run_id??r.bundle_case_id??'bundled-example',engine_id:r.model??'unavailable',engine_version:r.model??'unavailable',data_kind:r.data_kind??'unavailable',applicability:`${system.mode}/${scenario.mode}`,horizon_hours:r.duration_hours,interval_hours:1,units:'power=kW; energy=kWh; cost=EUR',soc_endpoint_policy:'Initial SOC follows the input; terminal SOC is unconstrained.',initial_energy_kwh:r.initial_energy_kwh,terminal_energy_kwh:r.terminal_energy_kwh,input_sha256:r.input_sha256??'unavailable',source_revision:typeof sourceRevision==='string'?sourceRevision:'unavailable in this calculation record',dataset_revision:typeof datasetRevision==='string'?datasetRevision:'unavailable in this calculation record',catalogue_revision:HYBRID_CATALOG.version,bundle_dataset_sha256:r.bundle_case_id?HYBRID_BUNDLE.dataset_sha256:null,limitations:'Greedy hourly energy screen; not a dynamic, protection, thermal, or annual investment model.',warnings_json:JSON.stringify(r.warnings??[])};
+        download('helioforge-hybrid-dispatch.csv',toCSV(resultExportRows({...r,inputs:h.resultInputs},r.schedule.map(x=>({...metadata,...x})))),'text/csv');
+      }
       else if(name==='pin'){
         if(!h.result||hybridDirty(h)||!h.resultInputs)throw new Error('Only a completed, current result can be compared.');
         if(h.compare.length>=3)throw new Error('The comparison holds three runs. Remove a pinned run first.');
         const id=h.result.run_id??h.result.bundle_case_id??'bundled-example';if(h.compare.some(x=>x.id===id))throw new Error('This exact run is already pinned.');
         h.compare.push({id,name:`${systemById(h.result.system_id).name} / ${scenarioById(h.result.scenario_id).name}`,inputs:structuredClone(h.resultInputs),result:structuredClone(h.result)});
         cb.persist?.();cb.toast(`Pinned ${h.compare.length} of 3 runs. Open Scenario compare to inspect them.`);
-      }else if(name==='export-compare')downloadJSON('helioforge-comparison.json',{schema:'helioforge.comparison.v1',note:'Synthetic, different service and SOC endpoints must be reconciled before ranking.',runs:h.compare});
+      }else if(name==='export-compare')downloadJSON('helioforge-comparison.json',{schema:'helioforge.comparison.v1',generated_at:new Date().toISOString(),contract:hybridComparisonContract(h.compare),note:'Synthetic results are shown descriptively. Compare model, data origin, horizon, units and initial/terminal SOC before interpreting period totals; no automatic ranking is performed.',runs:h.compare});
       else if(name==='clear-compare'){h.compare=[];if(state.champion)state.champion.pendingPins=[];cb.persist?.();cb.render();}
       else if(name==='launch-lesson'){
         const l=HYBRID_CATALOG.lessons.find(x=>x.id===h.lessonId)!;
@@ -50,7 +57,7 @@ namespace HF {
       const el=(event.target as Element).closest<HTMLElement>('button');if(!el)return;
       try{
         if(el.dataset.system){if(h.busy)return;selectSystem(el.dataset.system);window.scrollTo({top:0,behavior:'instant'});}
-        if(el.dataset.scenario){if(h.busy)return;if(h.inputError)throw new Error('Correct the input error before changing the scenario.');const wasPreset=configurationKey(h.inputs)===configurationKey(presetInputs(h.inputs.system_id,h.inputs.scenario_id));const c=scenarioById(el.dataset.scenario);if(!applicable(systemById(h.inputs.system_id),c))throw new Error('This scenario does not apply to the selected architecture.');h.draft=null;h.inputs=wasPreset?presetInputs(h.inputs.system_id,c.id):{...h.inputs,scenario_id:c.id,hours:Math.max(h.inputs.hours,Number(c.modifiers.hours??0))};h.hour=Math.min(h.hour,h.inputs.hours-1);attachBundledHybridResult(h);if(state.champion)state.champion.lastRunId=null;cb.persist?.();cb.render();}
+        if(el.dataset.scenario){if(h.busy)return;if(h.inputError)throw new Error('Correct the input error before changing the scenario.');advanceHybridStateRevision(h);const wasPreset=configurationKey(h.inputs)===configurationKey(presetInputs(h.inputs.system_id,h.inputs.scenario_id));const c=scenarioById(el.dataset.scenario);if(!applicable(systemById(h.inputs.system_id),c))throw new Error('This scenario does not apply to the selected architecture.');h.draft=null;h.inputs=wasPreset?presetInputs(h.inputs.system_id,c.id):{...h.inputs,scenario_id:c.id,hours:Math.max(h.inputs.hours,Number(c.modifiers.hours??0))};h.hour=Math.min(h.hour,h.inputs.hours-1);attachBundledHybridResult(h);if(state.champion)state.champion.lastRunId=null;cb.persist?.();cb.render();}
         if(el.dataset.lesson){h.lessonId=el.dataset.lesson;h.quizResult=null;cb.persist?.();cb.navigate('lessons');}
         if(el.dataset.asset){h.objectId=el.dataset.asset;const inspector=document.getElementById('asset-inspector');if(inspector)inspector.innerHTML=assetInspector(h);document.querySelectorAll<HTMLButtonElement>('[data-asset]').forEach(b=>{b.classList.toggle('selected',b.dataset.asset===h.objectId);b.setAttribute('aria-pressed',String(b.dataset.asset===h.objectId));});}
         if(el.dataset.sceneCommand)document.getElementById('energy-scene')?.dispatchEvent(new CustomEvent('scene-command',{detail:el.dataset.sceneCommand}));
@@ -61,12 +68,14 @@ namespace HF {
     function updateLibrary():void{const el=document.getElementById('hybrid-library-results');if(el)el.innerHTML=hybridLibrary(h);}
     function syncHybridInput(el:HTMLInputElement):void {
       const form=el.closest<HTMLFormElement>('#hybrid-config');if(!form||h.busy)return;
+      advanceHybridStateRevision(h);
       const draft:Record<string,string>={};
       for(const field of form.querySelectorAll<HTMLInputElement|HTMLSelectElement>('input[name],select[name]'))draft[field.name]=field.value;
       // A native change event follows input on blur. Replacing the toolbar here
       // would remove a pointer's target between mousedown and click.
       if(h.draft&&JSON.stringify(draft)===JSON.stringify(h.draft))return;
       h.draft=draft;
+      if(state.champion)state.champion.lastRunId=null;
       try{
         h.inputs=collect(form);h.inputError=null;
         const tags=document.getElementById('smart-tags');if(tags)tags.innerHTML=hybridTags(h.inputs).map(t=>`<span class="smart-tag" title="${escapeHTML(t.reason)}">${escapeHTML(t.label)}</span>`).join('');
@@ -94,14 +103,16 @@ namespace HF {
       if(form.id==='hybrid-config'){
         event.preventDefault();if(h.busy||!state.connected)return;
         void (async()=>{
+          const revision=advanceHybridStateRevision(h);
           try{
             const inputs=collect(form);h.inputs=inputs;h.inputError=null;h.busy=true;
             const button=form.querySelector<HTMLButtonElement>('[type=submit]')!;button.disabled=true;button.textContent='Running energy screen…';
             // Snapshot inputs to avoid labeling a pending response with later edits.
             form.querySelectorAll<HTMLInputElement|HTMLSelectElement>('input,select').forEach(e=>e.disabled=true);document.querySelectorAll<HTMLButtonElement>('[data-system],[data-scenario]').forEach(e=>e.disabled=true);
             const result=await cb.api<HybridResult>('hybrid/simulate',inputs);
+            if(revision!==hybridStateRevision(h))return;
             h.result=result;h.resultInputs={...inputs};h.inputs={...inputs};h.inputError=null;h.draft=null;h.busy=false;if(state.champion)state.champion.lastRunId=result.run_id??null;cb.persist?.();h.hour=Math.min(h.hour,result.schedule.length-1);cb.render();cb.toast('Hybrid energy screen complete. Inputs and result saved in the local audit store.');
-          }catch(e){h.busy=false;cb.render();cb.toast(e instanceof Error?e.message:'Simulation failed. Your inputs were retained.',true);}
+          }catch(e){if(hybridStateRevision(h)!==revision)return;h.busy=false;cb.render();cb.toast(e instanceof Error?e.message:'Simulation failed. Your inputs were retained.',true);}
         })();
       }
       if(form.id==='lesson-quiz'){

@@ -24,7 +24,7 @@ def passed(message):
 
 with sync_playwright() as pw:
     browser = pw.chromium.launch(headless=True)
-    page = browser.new_page(viewport={'width': 1600, 'height': 1100}, reduced_motion='reduce')
+    page = browser.new_page(viewport={'width': 1600, 'height': 1100}, reduced_motion='reduce', ignore_https_errors=args.url.startswith('https://127.0.0.1:'))
     page.set_default_timeout(20000)
     page.on('pageerror', lambda error: errors.append(str(error)))
     page.goto(args.url, wait_until='networkidle')
@@ -152,7 +152,13 @@ with sync_playwright() as pw:
         page.locator('[data-study-export="paths"]').click()
     paths=list(csv.DictReader(io.StringIO(Path(download.value.path()).read_text(encoding='utf-8-sig'))))
     expected=page.evaluate("HF.STUDY_BUNDLE.results['forecast-tail'].details.raw_paths.reduce((n,p)=>n+p.prices_eur_mwh.length,0)")
-    assert len(paths)==expected and {'seed','path','year','price_eur_mwh','loss_eur'}==set(paths[0])
+    assert len(paths)==expected
+    assert {'seed','path','year','price_eur_mwh','loss_eur','hf_record_kind','hf_study','hf_model_version',
+            'hf_data_kind','hf_evidence_sha256','hf_provenance_json'}==set(paths[0])
+    provenance=json.loads(paths[0]['hf_provenance_json'])
+    assert provenance['study']=='forecast-tail' and provenance['inputs']['seed']==int(paths[0]['seed'])
+    assert provenance['limitations'] and provenance['sources'] and provenance['warnings'] is not None
+    assert all(row['hf_evidence_sha256']==provenance['evidence_sha256'] for row in paths)
     passed('Forecast raw-path CSV retains every seeded path-year observation')
 
     nav('hybrid')

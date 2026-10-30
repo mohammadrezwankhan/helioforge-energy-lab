@@ -3,14 +3,15 @@
   "slug": "helioforge-energy-lab",
   "title": "HelioForge Energy Lab",
   "shortDescription": "Explore hybrid-energy layouts, learning activities, and bundled example results in an interactive research and education preview.",
-  "summary": "Explore hybrid-system designs and inspect assumptions. The Terminal workbench calculates new bounded 24-hour synthetic energy-balance cases in your browser; advanced models require the local Python application.",
+  "summary": "Explore hybrid-system designs and inspect assumptions. The public browser edition shows bundled synthetic examples and the Terminal calculates new bounded 24-hour energy balances; advanced study models require the separate local Python application.",
   "features": [
     "Browse hybrid-energy architectures and inspect their labeled system layouts.",
     "Read architecture-linked lessons with experiment steps and self-check questions.",
     "Review bundled scenario examples and compare visible energy assumptions and outcomes.",
-    "Explore 59 distinct experimental studies across twelve views, with Python-generated examples and explicit model boundaries.",
+    "The public browser edition shows bundled synthetic examples; all 59 advanced study models run new calculations in the separate local Python application.",
     "Inspect timelines, sensitivity maps, tariff inputs, signed local evidence and complete result exports.",
-    "Calculate browser energy balances, sweeps, local sensitivity and A/B deltas; export verified SHA-256 manifests."
+    "The Terminal runs new deterministic, bounded 24-hour energy-balance cases in the browser; it uses a greedy policy and is not an optimizer.",
+    "Optional local external providers are separate, opt-in integrations; credentials and explicit consent are required where applicable. The public static preview makes no provider calls."
   ],
   "steps": [
     "Choose an architecture and inspect its components and stated assumptions.",
@@ -18,28 +19,41 @@
     "Review a bundled scenario result and compare its energy and cost measures."
   ],
   "limitations": [
-    "The standalone browser preview uses bundled examples and does not run new Python calculations or optimization.",
-    "Advanced numerical studies and optimization require the local Python API. The browser Terminal model is a direct hourly energy balance, not an optimizer.",
+    "Bundled synthetic examples are precomputed outputs; the public browser edition does not calculate new study-model results from edited inputs.",
+    "The Terminal runs new deterministic, bounded 24-hour energy-balance cases in the browser; it uses a greedy policy and is not an optimizer.",
+    "The separate local Python application runs new calculations for the advanced study models and optimization.",
+    "Optional local external providers are separate, opt-in integrations; credentials and explicit consent are required where applicable. The public static preview makes no provider calls.",
     "Models are educational research screens, not calibrated plant controls, forecasts, or investment advice."
   ],
   "faqs": [
     {
-      "question": "Can the standalone preview calculate a new scenario?",
-      "answer": "Yes, the Terminal workbench calculates bounded 24-hour energy-balance cases in the browser. Advanced studies require the separate local Python app."
+      "question": "What is a useful first step?",
+      "answer": "Explore a bundled example. Open the public preview and inspect a labeled synthetic result."
     },
     {
       "question": "Are the model results operational guidance?",
       "answer": "No. They are bounded research and learning examples with explicit assumptions, not a plant controller or calibrated digital twin."
+    },
+    {
+      "question": "How can I calculate a Terminal case?",
+      "answer": "Calculate a bounded Terminal case. Open Scenario compare and use the Parametric energy workbench."
+    },
+    {
+      "question": "How can I run an advanced study?",
+      "answer": "Set up advanced local calculations. Use the source setup guide to run the Python application on your machine."
     }
   ],
   "category": "Energy",
   "canonical": "https://mklab.co.technology/apps/helioforge-energy-lab/",
-  "updated": "2026-10-26",
+  "updated": "2026-10-29",
   "publicSource": "https://github.com/mohammadrezwankhan/helioforge-energy-lab",
   "demoArtifact": "HelioForge-Preview.html",
+  "runtimeDirectory": "apps/web/dist/hosted",
+  "previewArtifact": "docs/remediation-20261029/screenshots/desktop.png",
+  "socialPreviewArtifact": "docs/remediation-20261029/screenshots/social.png",
   "runtimePatches": [
     {
-      "from": "location.protocol === 'file:'",
+      "from": "location.protocol===\"file:\"",
       "to": "true",
       "occurrences": 2,
       "reason": "Cloudflare browser edition always uses the existing snapshot mode; it has no Python API."

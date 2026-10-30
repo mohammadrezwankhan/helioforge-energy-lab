@@ -19,15 +19,18 @@ export function compileScripts(files, outFile) {
     execFileSync(process.execPath, [
       path.join(web, 'node_modules/typescript/bin/tsc'),
       '--target', 'ES2022', '--lib', 'ES2022,DOM,DOM.Iterable', '--strict',
+      '--newLine', 'lf',
       '--noUncheckedIndexedAccess', '--noImplicitOverride', '--noUnusedLocals',
       '--noUnusedParameters', '--module', 'preserve', '--moduleDetection', 'legacy',
       '--rootDir', rootDir, '--outDir', temp, ...files,
     ], {cwd: temp, stdio: 'pipe'});
-    const js = files.map(file => fs.readFileSync(
+    const parts = files.map(file => ({file, script:fs.readFileSync(
       path.join(temp, path.relative(rootDir, file).replace(/\.ts$/, '.js')), 'utf8',
-    )).join('\n;\n');
+    )}));
+    const js = parts.map(part=>part.script).join('\n;\n');
     fs.mkdirSync(path.dirname(outFile), {recursive: true});
     fs.writeFileSync(outFile, js.trimEnd() + '\n');
+    return parts;
   } finally {
     fs.rmSync(temp, {recursive: true, force: true});
   }

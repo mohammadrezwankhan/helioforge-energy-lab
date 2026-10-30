@@ -1,0 +1,1194 @@
+{
+  "schema": "helioforge.performance.lab.v1",
+  "started_at": "2026-10-29T23:04:50.338610+00:00",
+  "environment": "Windows-11-10.0.26300-SP0",
+  "artifact_sha256": "8ef56f4df539590392696552c2b10651faf953790d8018c982a949b21e0ccb00",
+  "physical_device": false,
+  "field_p75": null,
+  "field_INP": null,
+  "scope": "Local gzip server, desktop CPU; new browser context for cold, same-context reload for warm. Other host workloads were not controlled. No field metrics or real-device claim.",
+  "runs": [
+    {
+      "profile": "desktop",
+      "cache": "cold",
+      "repetition": 1,
+      "status": "PASS",
+      "cpu_multiplier": 1,
+      "network": "loopback",
+      "wall_load_ms": 1729.768499993952,
+      "metrics": {
+        "lcp": 480,
+        "cls": 0,
+        "longTasks": [
+          {
+            "start": 163.60000002384186,
+            "duration": 275
+          }
+        ],
+        "frames": 78,
+        "navigation": [
+          {
+            "domInteractive": 163.90000000596046,
+            "domContentLoaded": 427.5,
+            "load": 465.5,
+            "encodedBodySize": 291338,
+            "decodedBodySize": 1102979,
+            "transferSize": 291638
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 11200000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 217.213,
+        "TaskDuration": 593.527,
+        "LayoutDuration": 127.99199999999999,
+        "RecalcStyleDuration": 43.208000000000006,
+        "scope": "CDP cumulative-duration deltas in milliseconds; ScriptDuration is execution, not a separate parser-only or field INP measurement."
+      },
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "idle_animation_callbacks_1s": 61,
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 46.123200008878484,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 58.35609999485314,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 76.14150000154041,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 33.67049997905269,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 82.06489999429323,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 117.0886000036262,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 117.25270000169985,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 565.404099994339,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ]
+    },
+    {
+      "profile": "desktop",
+      "cache": "warm",
+      "repetition": 1,
+      "status": "PASS",
+      "cpu_multiplier": 1,
+      "network": "loopback",
+      "wall_load_ms": 1396.300499996869,
+      "metrics": {
+        "lcp": 164,
+        "cls": 0,
+        "longTasks": [],
+        "frames": 76,
+        "navigation": [
+          {
+            "domInteractive": 112.59999999403954,
+            "domContentLoaded": 137.59999999403954,
+            "load": 150.09999999403954,
+            "encodedBodySize": 291338,
+            "decodedBodySize": 1102979,
+            "transferSize": 291638
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 11200000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 0,
+        "TaskDuration": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "scope": "CDP cumulative-duration deltas in milliseconds; ScriptDuration is execution, not a separate parser-only or field INP measurement."
+      },
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "idle_animation_callbacks_1s": 61,
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 43.568799999775365,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 54.184400010854006,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 72.09319999674335,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 32.905700005358085,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 66.25679999706335,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 122.60329999844544,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 94.54079999704845,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 249.13630000082776,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ]
+    },
+    {
+      "profile": "desktop",
+      "cache": "cold",
+      "repetition": 2,
+      "status": "PASS",
+      "cpu_multiplier": 1,
+      "network": "loopback",
+      "wall_load_ms": 1498.5656999924686,
+      "metrics": {
+        "lcp": 280,
+        "cls": 0,
+        "longTasks": [
+          {
+            "start": 102,
+            "duration": 135
+          }
+        ],
+        "frames": 76,
+        "navigation": [
+          {
+            "domInteractive": 102.19999998807907,
+            "domContentLoaded": 228.90000000596046,
+            "load": 258.09999999403954,
+            "encodedBodySize": 291338,
+            "decodedBodySize": 1102979,
+            "transferSize": 291638
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 11200000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 142.981,
+        "TaskDuration": 398.828,
+        "LayoutDuration": 80.396,
+        "RecalcStyleDuration": 19.705000000000002,
+        "scope": "CDP cumulative-duration deltas in milliseconds; ScriptDuration is execution, not a separate parser-only or field INP measurement."
+      },
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "idle_animation_callbacks_1s": 61,
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 43.153799982974306,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 49.05480000888929,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 69.00299998233095,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 32.86610002396628,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 83.00579999922775,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 116.71400000341237,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 100.25409999070689,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 249.85160000505857,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ]
+    },
+    {
+      "profile": "desktop",
+      "cache": "warm",
+      "repetition": 2,
+      "status": "PASS",
+      "cpu_multiplier": 1,
+      "network": "loopback",
+      "wall_load_ms": 1398.5503999865614,
+      "metrics": {
+        "lcp": 168,
+        "cls": 0,
+        "longTasks": [],
+        "frames": 76,
+        "navigation": [
+          {
+            "domInteractive": 110.5,
+            "domContentLoaded": 132.90000000596046,
+            "load": 148.69999998807907,
+            "encodedBodySize": 291338,
+            "decodedBodySize": 1102979,
+            "transferSize": 291638
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 11200000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 0,
+        "TaskDuration": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "scope": "CDP cumulative-duration deltas in milliseconds; ScriptDuration is execution, not a separate parser-only or field INP measurement."
+      },
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "idle_animation_callbacks_1s": 61,
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 29.770499997539446,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 55.78860000241548,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 86.62409998942167,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 35.28280000318773,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 82.00409999699332,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 98.7213000189513,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 100.53789999801666,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 251.92070001503453,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ]
+    },
+    {
+      "profile": "desktop",
+      "cache": "cold",
+      "repetition": 3,
+      "status": "PASS",
+      "cpu_multiplier": 1,
+      "network": "loopback",
+      "wall_load_ms": 1522.4698999954853,
+      "metrics": {
+        "lcp": 308,
+        "cls": 0,
+        "longTasks": [
+          {
+            "start": 115.39999997615814,
+            "duration": 150
+          }
+        ],
+        "frames": 76,
+        "navigation": [
+          {
+            "domInteractive": 115.59999999403954,
+            "domContentLoaded": 256.19999998807907,
+            "load": 287.39999997615814,
+            "encodedBodySize": 291338,
+            "decodedBodySize": 1102979,
+            "transferSize": 291638
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 11200000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 139.971,
+        "TaskDuration": 415.335,
+        "LayoutDuration": 88.249,
+        "RecalcStyleDuration": 23.734,
+        "scope": "CDP cumulative-duration deltas in milliseconds; ScriptDuration is execution, not a separate parser-only or field INP measurement."
+      },
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "idle_animation_callbacks_1s": 61,
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 46.00040000514127,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 60.02910001552664,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 68.23980002081953,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 33.209399989573285,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 82.52400002675131,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 133.2803999830503,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 117.83010000362992,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 315.67789998371154,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ]
+    },
+    {
+      "profile": "desktop",
+      "cache": "warm",
+      "repetition": 3,
+      "status": "PASS",
+      "cpu_multiplier": 1,
+      "network": "loopback",
+      "wall_load_ms": 1492.0625000086147,
+      "metrics": {
+        "lcp": 200,
+        "cls": 0,
+        "longTasks": [],
+        "frames": 79,
+        "navigation": [
+          {
+            "domInteractive": 129.5,
+            "domContentLoaded": 163.59999999403954,
+            "load": 181.59999999403954,
+            "encodedBodySize": 291338,
+            "decodedBodySize": 1102979,
+            "transferSize": 291638
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 11200000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 0,
+        "TaskDuration": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "scope": "CDP cumulative-duration deltas in milliseconds; ScriptDuration is execution, not a separate parser-only or field INP measurement."
+      },
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "idle_animation_callbacks_1s": 60,
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 28.606499981833622,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 54.70039998181164,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 76.06130000203848,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 34.708799998043105,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 82.53730001160875,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 117.21699999179691,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 116.34400000912137,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 283.56329997768626,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ]
+    },
+    {
+      "profile": "phone_viewport_constrained_emulation",
+      "cache": "cold",
+      "repetition": 1,
+      "status": "PASS",
+      "cpu_multiplier": 4,
+      "network": "CDP 150 ms latency, 1.6 Mbps down, 0.75 Mbps up",
+      "wall_load_ms": 4070.6703000178095,
+      "metrics": {
+        "lcp": 2748,
+        "cls": 0,
+        "longTasks": [
+          {
+            "start": 1669.6000000238419,
+            "duration": 85
+          },
+          {
+            "start": 1781.6000000238419,
+            "duration": 882
+          },
+          {
+            "start": 2670.9000000059605,
+            "duration": 71
+          }
+        ],
+        "frames": 2,
+        "navigation": [
+          {
+            "domInteractive": 1782.9000000059605,
+            "domContentLoaded": 2606.7000000178814,
+            "load": 2747.5,
+            "encodedBodySize": 291338,
+            "decodedBodySize": 1102979,
+            "transferSize": 291638
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 10000000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 300.73299999999995,
+        "TaskDuration": 1400.887,
+        "LayoutDuration": 518.424,
+        "RecalcStyleDuration": 110.54799999999999,
+        "scope": "CDP cumulative-duration deltas in milliseconds; ScriptDuration is execution, not a separate parser-only or field INP measurement."
+      },
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "FAIL",
+      "idle_animation_callbacks_1s": 0,
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 125.04630000330508,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 209.97070000157692,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 246.771300007822,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 82.61310000671074,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 232.77640002197586,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 517.3333999991883,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 315.8943000016734,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 484.17320000589825,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ]
+    },
+    {
+      "profile": "phone_viewport_constrained_emulation",
+      "cache": "warm",
+      "repetition": 1,
+      "status": "PASS",
+      "cpu_multiplier": 4,
+      "network": "CDP 150 ms latency, 1.6 Mbps down, 0.75 Mbps up",
+      "wall_load_ms": 3275.8435000141617,
+      "metrics": {
+        "lcp": 1956,
+        "cls": 0,
+        "longTasks": [
+          {
+            "start": 1692.699999988079,
+            "duration": 194
+          },
+          {
+            "start": 1892.8999999761581,
+            "duration": 58
+          },
+          {
+            "start": 2131.399999976158,
+            "duration": 277
+          },
+          {
+            "start": 2408.5999999940395,
+            "duration": 71
+          }
+        ],
+        "frames": 2,
+        "navigation": [
+          {
+            "domInteractive": 1693.2999999821186,
+            "domContentLoaded": 1873.5,
+            "load": 1955.3999999761581,
+            "encodedBodySize": 291338,
+            "decodedBodySize": 1102979,
+            "transferSize": 291638
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 10000000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 0,
+        "TaskDuration": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "scope": "CDP cumulative-duration deltas in milliseconds; ScriptDuration is execution, not a separate parser-only or field INP measurement."
+      },
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "idle_animation_callbacks_1s": 0,
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 107.41520000738092,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 310.6825000140816,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 208.72560000861995,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 84.47040000464767,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 182.56259997724555,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 533.3936999959406,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 284.694199974183,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 447.84940002136864,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ]
+    },
+    {
+      "profile": "phone_viewport_constrained_emulation",
+      "cache": "cold",
+      "repetition": 2,
+      "status": "PASS",
+      "cpu_multiplier": 4,
+      "network": "CDP 150 ms latency, 1.6 Mbps down, 0.75 Mbps up",
+      "wall_load_ms": 4018.263099977048,
+      "metrics": {
+        "lcp": 2708,
+        "cls": 0,
+        "longTasks": [
+          {
+            "start": 1676.800000011921,
+            "duration": 75
+          },
+          {
+            "start": 1780,
+            "duration": 841
+          },
+          {
+            "start": 2627.9000000059605,
+            "duration": 77
+          }
+        ],
+        "frames": 2,
+        "navigation": [
+          {
+            "domInteractive": 1781.5,
+            "domContentLoaded": 2571.199999988079,
+            "load": 2708.800000011921,
+            "encodedBodySize": 291338,
+            "decodedBodySize": 1102979,
+            "transferSize": 291638
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 10000000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 278.796,
+        "TaskDuration": 1340.442,
+        "LayoutDuration": 483.597,
+        "RecalcStyleDuration": 116.396,
+        "scope": "CDP cumulative-duration deltas in milliseconds; ScriptDuration is execution, not a separate parser-only or field INP measurement."
+      },
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "FAIL",
+      "idle_animation_callbacks_1s": 0,
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 106.514299986884,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 230.43409999809228,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 219.28260001004674,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 65.78730000182986,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 251.00029999157414,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 499.86849998822436,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 349.6150000137277,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 464.81850001146086,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ]
+    },
+    {
+      "profile": "phone_viewport_constrained_emulation",
+      "cache": "warm",
+      "repetition": 2,
+      "status": "PASS",
+      "cpu_multiplier": 4,
+      "network": "CDP 150 ms latency, 1.6 Mbps down, 0.75 Mbps up",
+      "wall_load_ms": 3315.8554999972694,
+      "metrics": {
+        "lcp": 1968,
+        "cls": 0,
+        "longTasks": [
+          {
+            "start": 1717.800000011921,
+            "duration": 177
+          },
+          {
+            "start": 1899.6000000238419,
+            "duration": 65
+          },
+          {
+            "start": 2141.100000023842,
+            "duration": 201
+          },
+          {
+            "start": 2346.9000000059605,
+            "duration": 55
+          }
+        ],
+        "frames": 4,
+        "navigation": [
+          {
+            "domInteractive": 1718.7000000178814,
+            "domContentLoaded": 1884.1000000238419,
+            "load": 1967.9000000059605,
+            "encodedBodySize": 291338,
+            "decodedBodySize": 1102979,
+            "transferSize": 291638
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 10000000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 0,
+        "TaskDuration": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "scope": "CDP cumulative-duration deltas in milliseconds; ScriptDuration is execution, not a separate parser-only or field INP measurement."
+      },
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "idle_animation_callbacks_1s": 0,
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 65.84739999379963,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 242.42750002304092,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 187.58640001760796,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 67.66599998809397,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 214.95650001452304,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 517.4383000121452,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 300.3560999932233,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 432.084300002316,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ]
+    },
+    {
+      "profile": "phone_viewport_constrained_emulation",
+      "cache": "cold",
+      "repetition": 3,
+      "status": "PASS",
+      "cpu_multiplier": 4,
+      "network": "CDP 150 ms latency, 1.6 Mbps down, 0.75 Mbps up",
+      "wall_load_ms": 4060.2927999862004,
+      "metrics": {
+        "lcp": 2744,
+        "cls": 0,
+        "longTasks": [
+          {
+            "start": 1671.5,
+            "duration": 83
+          },
+          {
+            "start": 1780.3999999761581,
+            "duration": 877
+          },
+          {
+            "start": 2664,
+            "duration": 76
+          }
+        ],
+        "frames": 1,
+        "navigation": [
+          {
+            "domInteractive": 1782.5999999940395,
+            "domContentLoaded": 2599.899999976158,
+            "load": 2745,
+            "encodedBodySize": 291338,
+            "decodedBodySize": 1102979,
+            "transferSize": 291638
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 10000000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 301.817,
+        "TaskDuration": 1382.197,
+        "LayoutDuration": 500.49699999999996,
+        "RecalcStyleDuration": 105.47800000000001,
+        "scope": "CDP cumulative-duration deltas in milliseconds; ScriptDuration is execution, not a separate parser-only or field INP measurement."
+      },
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "FAIL",
+      "idle_animation_callbacks_1s": 0,
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 100.61369999311864,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 206.44190002349205,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 248.92070001806132,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 81.44079998601228,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 218.1886000034865,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 498.00009999307804,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 283.5780000023078,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 416.76329998881556,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ]
+    },
+    {
+      "profile": "phone_viewport_constrained_emulation",
+      "cache": "warm",
+      "repetition": 3,
+      "status": "PASS",
+      "cpu_multiplier": 4,
+      "network": "CDP 150 ms latency, 1.6 Mbps down, 0.75 Mbps up",
+      "wall_load_ms": 3318.9038000127766,
+      "metrics": {
+        "lcp": 1992,
+        "cls": 0,
+        "longTasks": [
+          {
+            "start": 1747.699999988079,
+            "duration": 173
+          },
+          {
+            "start": 1926.2999999821186,
+            "duration": 61
+          },
+          {
+            "start": 2155.699999988079,
+            "duration": 205
+          },
+          {
+            "start": 2360.9000000059605,
+            "duration": 59
+          }
+        ],
+        "frames": 4,
+        "navigation": [
+          {
+            "domInteractive": 1748.0999999940395,
+            "domContentLoaded": 1911,
+            "load": 1991.0999999940395,
+            "encodedBodySize": 291338,
+            "decodedBodySize": 1102979,
+            "transferSize": 291638
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 10000000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 0,
+        "TaskDuration": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "scope": "CDP cumulative-duration deltas in milliseconds; ScriptDuration is execution, not a separate parser-only or field INP measurement."
+      },
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "idle_animation_callbacks_1s": 0,
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 91.7833999847062,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 220.05289999651723,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 170.87679999531247,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 69.07649998902343,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 239.90020001656376,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 408.5064999817405,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 283.1391000072472,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 432.6605000242125,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ]
+    }
+  ],
+  "browser_version": "156.0.8078.4",
+  "finished_at": "2026-10-29T23:06:16.989836+00:00",
+  "summary": {
+    "executed": 12,
+    "passed": 12,
+    "failed": 0,
+    "real_device_acceptance": "BLOCKED",
+    "field_metrics": "BLOCKED"
+  }
+}

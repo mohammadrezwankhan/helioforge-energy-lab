@@ -1,0 +1,85 @@
+{
+  "startedAt": "2026-10-28T21:54:53Z",
+  "site": "https://127.0.0.1:4191/run/",
+  "routes": [
+    "hybrid",
+    "lessons",
+    "compare",
+    "overview",
+    "storage",
+    "pv",
+    "research",
+    "markets",
+    "forecast",
+    "investment",
+    "pilots",
+    "council"
+  ],
+  "viewports": [
+    320,
+    375,
+    414,
+    768,
+    1024,
+    1280,
+    1440,
+    1920
+  ],
+  "checks": [
+    {
+      "name": "browser harness completed all independent journeys",
+      "status": "failed",
+      "detail": "TimeoutError: Locator.wait_for: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator(\"#terminal-root\") to be visible\n"
+    }
+  ],
+  "accessibility": [],
+  "accessibilityErrors": [],
+  "pageErrors": [],
+  "consoleErrors": [
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "url": "https://127.0.0.1:4191/run/run/#compare",
+      "origin": "127.0.0.1:4191",
+      "line": 0,
+      "column": 0
+    }
+  ],
+  "sameOriginConsoleErrors": [
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "url": "https://127.0.0.1:4191/run/run/#compare",
+      "origin": "127.0.0.1:4191",
+      "line": 0,
+      "column": 0
+    }
+  ],
+  "externalConsoleErrors": [],
+  "failedRequests": [],
+  "sameOriginFailedRequests": [],
+  "externalFailedRequests": [],
+  "badResponses": [
+    {
+      "url": "https://127.0.0.1:4191/run/run/",
+      "status": 404
+    }
+  ],
+  "bodyContentOverhangs": [],
+  "clippedControls": [],
+  "scrollAreaControls": [],
+  "screenshots": [],
+  "limits": [
+    "Accessibility results are automated axe-core findings, not WCAG certification or a screen-reader audit.",
+    "The export is a static snapshot: new API calculations and native hosting/CSP behavior are not exercised.",
+    "Only the Chromium build supplied by the audit environment is exercised."
+  ],
+  "finishedAt": "2026-10-28T21:55:19Z",
+  "summary": {
+    "passed": 0,
+    "failed": 1,
+    "axeViewRuns": 0,
+    "axeViolations": 0,
+    "axeExecutionErrors": 0
+  }
+}

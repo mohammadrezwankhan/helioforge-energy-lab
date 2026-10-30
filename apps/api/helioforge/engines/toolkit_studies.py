@@ -140,9 +140,11 @@ STUDIES = [
             "Annual deposit = future cost * return / ((1+return)^years - 1); zero return: cost/years",
         ],
         limitations=[
-            "Constant annual assumptions; end-of-year contributions, no tax, fees or investment-return guarantee."
+            "Constant annual assumptions; end-of-year contributions, no tax, fees or investment-return guarantee.",
+            "First-party algebraic convention; the source reference is not independent validation or a forecast of investment returns."
         ],
-        sources=[],
+        sources=[{"title": "First-party HelioForge reserve implementation and declared equations",
+                  "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/74d6730e38323b69c180d7f4b4945d11010203f3/apps/api/helioforge/engines/toolkit_studies.py"}],
     ),
 ]
 

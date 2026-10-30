@@ -9,6 +9,6 @@ from helioforge.dashboard import dashboard  # noqa: E402
 
 snapshot = dashboard("FR")
 text = json.dumps(snapshot, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
-(ROOT / "examples/dashboard-snapshot.json").write_text(json.dumps(snapshot, indent=2, ensure_ascii=False)+"\n")
-(ROOT / "apps/web/src/snapshot.ts").write_text("namespace HF {\n  export const SNAPSHOT: Dashboard = "+text+";\n}\n")
+(ROOT / "examples/dashboard-snapshot.json").write_text(json.dumps(snapshot, indent=2, ensure_ascii=False)+"\n", encoding="utf-8", newline="\n")
+(ROOT / "apps/web/src/snapshot.ts").write_text("namespace HF {\n  export const SNAPSHOT: Dashboard = "+text+";\n}\n", encoding="utf-8", newline="\n")
 print("Updated synthetic snapshot. Rebuild the TypeScript frontend next.")

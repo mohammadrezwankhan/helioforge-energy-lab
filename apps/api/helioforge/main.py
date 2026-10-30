@@ -18,6 +18,7 @@ from starlette.concurrency import run_in_threadpool
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from helioforge.council import local_council, openai_council
+from helioforge.council_protocol import external_failure_detail
 from helioforge.dashboard import dashboard
 from helioforge.engines.finance import calculate_finance, calculate_pv, screen_acquisition
 from helioforge.engines.forecast import forecast_prices
@@ -44,6 +45,7 @@ from helioforge.integrations import (
     regulatory_feed,
     weather,
 )
+from helioforge.provenance import attach_result_provenance, storage_provenance_inputs
 from helioforge.schemas import (
     CouncilRequest,
     DriftRequest,
@@ -193,7 +195,27 @@ def overview(request: Request, market: Market = "FR"):
 
 
 def record(request: Request, kind: str, inputs, result):
-    return request.app.state.store.save(kind, inputs.model_dump(), result)
+    model_id = {
+        "storage": "storage",
+        "finance": "finance",
+        "pv": "pv",
+        "forecast": "forecast",
+        "drift": "drift",
+        "reliability": "reliability",
+        "carbon": "sustainability",
+        "acquisition": "acquisition",
+    }.get(kind)
+    request_inputs = inputs.model_dump()
+    effective_inputs = request_inputs
+    provenance_options = {}
+    if model_id == "storage":
+        effective_inputs, dataset_inputs, data_identity = storage_provenance_inputs(request_inputs)
+        provenance_options = {"dataset_inputs": dataset_inputs, "data_identity": data_identity}
+    # Old saved records are not routed through record(); only newly calculated
+    # numerical results receive the source-bound envelope.
+    if model_id and not result.get("provenance"):
+        result = attach_result_provenance(result, model_id=model_id, inputs=effective_inputs, **provenance_options)
+    return request.app.state.store.save(kind, request_inputs, result)
 
 
 @app.post("/api/storage/optimize")
@@ -245,7 +267,7 @@ async def council(p: CouncilRequest, request: Request, x_api_key: str | None = H
         saved = request.app.state.store.get_run(run_id)
         if saved is None:
             raise HTTPException(404, 'An evidence run was not found.')
-        item = {k:saved[k] for k in ('run_id','kind','created_at','input_sha256','result')}
+        item = {k:saved[k] for k in ('run_id','kind','created_at','input_sha256','inputs','result')}
         if len(json.dumps(item))>30000:
             raise HTTPException(422, 'Each council evidence record must be at most 30 KB. Supply a bounded summary with the source digest.')
         evidence['supplied_records'].append(item)
@@ -259,28 +281,48 @@ async def council(p: CouncilRequest, request: Request, x_api_key: str | None = H
     if p.mode == "local":
         result = local_council(p, evidence)
     else:
+        def external_not_started(status_code: int, message: str) -> HTTPException:
+            return HTTPException(status_code, detail=external_failure_detail(
+                status="not_started", cross_examination_rounds=p.cross_examination_rounds,
+                model=os.getenv("OPENAI_MODEL"),
+                consent_to_external_processing=p.consent_to_external_processing,
+                message=f"{message} No external council execution started."))
+
         if os.getenv("ENABLE_OPENAI", "false").lower() != "true":
-            raise HTTPException(403, "OpenAI mode is disabled; local mode requires no API key.")
+            raise external_not_started(403, "OpenAI mode is disabled; local mode requires no API key.")
         expected = os.getenv("ADMIN_API_KEY", "")
         if not expected or not secrets.compare_digest(x_api_key or "", expected):
-            raise HTTPException(401, "A valid server ADMIN_API_KEY is required in X-API-Key.")
+            raise external_not_started(401, "A valid server ADMIN_API_KEY is required in X-API-Key.")
         if not p.consent_to_external_processing:
-            raise HTTPException(422, "Explicit consent to send the brief and demo evidence to OpenAI is required.")
+            raise external_not_started(422, "Explicit consent to send the brief and evidence to OpenAI is required.")
         if not os.getenv("OPENAI_API_KEY") or not os.getenv("OPENAI_MODEL"):
-            raise HTTPException(503, "Set server-side OPENAI_API_KEY and OPENAI_MODEL.")
+            raise external_not_started(503, "Set server-side OPENAI_API_KEY and OPENAI_MODEL.")
         if request.app.state.ai_lock.locked():
-            raise HTTPException(429, "An external council review is already running. Retry after it completes.")
+            raise external_not_started(429, "An external council review is already running. Retry after it completes.")
         async with request.app.state.ai_lock:
             try:
                 result = await openai_council(p, evidence)
             except ImportError:
-                raise HTTPException(503, "Install the API ai optional dependency.") from None
+                raise HTTPException(503, detail=external_failure_detail(
+                    status="not_started", cross_examination_rounds=p.cross_examination_rounds,
+                    model=os.getenv("OPENAI_MODEL"),
+                    message="Install the API ai optional dependency. No provider execution started.")) from None
             except TimeoutError:
-                raise HTTPException(504, "External review timed out; no approval or result was recorded.") from None
+                raise HTTPException(504, detail=external_failure_detail(
+                    status="timed_out", cross_examination_rounds=p.cross_examination_rounds,
+                    model=os.getenv("OPENAI_MODEL"),
+                    message=("External review timed out under helioforge-council/v1. No result was recorded. "
+                             "Sibling cancellation was requested on a best-effort basis; provider work may continue "
+                             "and charges may remain."))) from None
             except Exception:
                 # Never leak provider payloads or credentials via errors/logs.
                 logger.warning("External council failed; inspect provider diagnostics securely.")
-                raise HTTPException(502, "External review failed. No local result has been substituted.") from None
+                raise HTTPException(502, detail=external_failure_detail(
+                    status="failed", cross_examination_rounds=p.cross_examination_rounds,
+                    model=os.getenv("OPENAI_MODEL"),
+                    message=("External review failed under helioforge-council/v1. No result was recorded or local "
+                             "review substituted. Sibling cancellation was requested on a best-effort basis; "
+                             "provider work may continue and charges may remain."))) from None
     return record(request, "council", p, result)
 
 

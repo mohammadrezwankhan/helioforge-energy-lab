@@ -53,12 +53,25 @@ namespace HF {
     }
     function installCouncil():void {
       const target=document.querySelector<HTMLFormElement>('form[data-model="council"]');
-      if(target&&!target.querySelector('[name="cross_examination_rounds"]'))target.insertAdjacentHTML('beforeend',`<label class="field"><span>Cross-examination rounds (external mode)</span><select name="cross_examination_rounds"><option value="1">1 round · up to 17 model calls</option><option value="2">2 rounds · up to 25 model calls</option></select></label><label class="field"><span>Saved evidence run IDs (comma separated, at most six)</span><input name="evidence_run_ids" placeholder="Import a source below, then attach its run"></label><p>Provider charges apply to external mode. Disagreement is preserved; unanimity does not establish correctness.</p>`);
+      if(target&&!target.querySelector('[name="cross_examination_rounds"]'))target.insertAdjacentHTML('beforeend',`<label class="field"><span>Cross-examination rounds (external mode)</span><select name="cross_examination_rounds"><option value="1">1 round · 17 Runner.run invocations</option><option value="2">2 rounds · 25 Runner.run invocations</option></select></label><label class="field"><span>Saved evidence run IDs (comma separated, at most six)</span><input name="evidence_run_ids" placeholder="Import a source below, then attach its run"></label>`);
+      updateCouncilPreflight();
       document.getElementById('integration-council-rounds')?.remove();
       const council=getState().data.council as Council&{rounds?:{round:number;phase:string;reviews:Review[];consensus:Record<string,unknown>}[]};
-      const rounds=council.rounds;if(!rounds?.length)return;
+      const rounds=council.mode==='openai'&&council.protocol_metadata?.external_execution_status==='completed'?council.rounds:undefined;
+      if(!rounds?.length)return;
       round=clamp(round,0,rounds.length-1);const current=rounds[round]!;
       document.getElementById('integration-panel')?.insertAdjacentHTML('beforeend',`<section id="integration-council-rounds"><h3>Recorded external cross-examination</h3><label class="field"><span>Review round ${round}</span><input type="range" data-integration-round min="0" max="${rounds.length-1}" value="${round}" aria-label="External council replay round"></label><p>${escI(current.phase)} · vote entropy ${escI(current.consensus.entropy_bits)} bits</p>${current.reviews.map(r=>`<article><h4>${escI(r.agent)}</h4><p>${escI(r.summary)}</p><ul>${r.risks.map(x=>`<li>${escI(x)}</li>`).join('')}</ul>${'response_to_challenge' in r?`<p>${escI(r.response_to_challenge)}</p>`:''}</article>`).join('')}</section>`);
+    }
+    function updateCouncilPreflight():void {
+      const mode=(document.getElementById('council-mode') as HTMLSelectElement|null)?.value??'local';
+      const rounds=Number(document.querySelector<HTMLSelectElement>('[name="cross_examination_rounds"]')?.value??1);
+      const summary=document.getElementById('council-preflight');if(!summary)return;
+      if(mode==='local'){
+        summary.textContent='helioforge-council/v1 · Local deterministic checklist · 0 external Runner.run invocations · no brief or evidence is sent to a provider and no provider charge applies.';
+        return;
+      }
+      const invocations=8*(1+rounds)+1;
+      summary.textContent=`helioforge-council/v1 · OpenAI external mode plans ${invocations} Agents SDK Runner.run invocations (8 specialists, ${rounds} cross-examination round${rounds===1?'':'s'}, 1 critic), with a 300-second workflow timeout. Each invocation can use up to 2 turns, so this count does not predict provider requests, tokens, or cost. After explicit consent, the brief, calculated evidence, and selected saved evidence/imports are sent externally; provider usage may be billed, cost is not estimated, and the application enforces no monetary budget. Cancellation is best effort; provider work already accepted may continue and charges may remain after failure.`;
     }
     async function request(op:string,inputs:unknown,key?:string):Promise<void>{
       busy=true;error='';result=null;renderResult();
@@ -94,6 +107,7 @@ namespace HF {
       }catch(e){error=e instanceof Error?e.message:'Could not apply values.';renderResult();}
     });
     document.addEventListener('input',event=>{const el=event.target;if(el instanceof HTMLInputElement&&el.hasAttribute('data-integration-round')){round=Number(el.value);installCouncil();}});
+    document.addEventListener('change',event=>{const el=event.target;if(el instanceof HTMLSelectElement&&(el.id==='council-mode'||el.name==='cross_examination_rounds'))updateCouncilPreflight();});
     return {refresh};
   }
 }

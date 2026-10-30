@@ -1,0 +1,567 @@
+[
+  {
+    "issue_id": "F01",
+    "source": "HelioForge_Critical_Appraisal (2).pdf, 2026-10-28 v1.0",
+    "source_page": 29,
+    "source_title": "Release identity cannot be reconciled from the retrieved evidence",
+    "source_evidence_description": "Observed discrepancy / deployment unknown",
+    "evidence_class": "O",
+    "priority": "P1",
+    "owner": "release/platform",
+    "affected_scope": "See source acceptance and named files; static public, local Python, emulated desktop/tablet/phone. External/native scope explicitly gated.",
+    "reproduction_or_verification": "Execute the named suite scripts/commands recorded in their logs and inspect linked machine-readable observations. Preserve the source-plan rows as plans.",
+    "expected_behavior": "A fresh deployed manifest, independently computed runtime digest and CI receipt agree; historic records are labeled.",
+    "current_observation": "Fresh production runtime and manifest match a1238406; Cloudflare identifies deployment 777ff5d5 at 74d6730e. The successful baseline CI log instead records b0b536f6. A local exact-byte receipt and frozen-data replay check now exist.",
+    "actual_behavior": "Fresh production runtime and manifest match a1238406; Cloudflare identifies deployment 777ff5d5 at 74d6730e. The successful baseline CI log instead records b0b536f6. A local exact-byte receipt and frozen-data replay check now exist.",
+    "established_root_cause_or_evidence_gap": "CI regenerated studies after verifying them; solver wall time is demonstrably nondeterministic. This is one established source of build variance, not proof of the complete historical deployment chain.",
+    "changed_files": [
+      ".github/workflows/ci.yml",
+      "scripts/check-study-assets.py",
+      "scripts/acceptance-build-receipt.mjs"
+    ],
+    "tests_and_evidence_paths": [
+      "deployed/observation.json",
+      "deployed/cloudflare-deployments.json",
+      "deployed/baseline-ci-log.txt",
+      "logs/check-study-assets.log"
+    ],
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    },
+    "implementation_status": "VERIFIED_LOCAL in stated scope; remaining acceptance open",
+    "deployed_status": "Candidate NOT_DEPLOYED",
+    "status": "OPEN",
+    "acceptance_complete": false,
+    "remaining_blocker": "No candidate remote CI run or deployment. Fresh deployed bytes, manifest and matching candidate CI receipt still must agree; multi-edge cache propagation unverified."
+  },
+  {
+    "issue_id": "F02",
+    "source": "HelioForge_Critical_Appraisal (2).pdf, 2026-10-28 v1.0",
+    "source_page": 29,
+    "source_title": "Capability statements differ across surfaced pages and source",
+    "source_evidence_description": "Observed content discrepancy",
+    "evidence_class": "O",
+    "priority": "P1",
+    "owner": "capability/docs",
+    "affected_scope": "See source acceptance and named files; static public, local Python, emulated desktop/tablet/phone. External/native scope explicitly gated.",
+    "reproduction_or_verification": "Execute the named suite scripts/commands recorded in their logs and inspect linked machine-readable observations. Preserve the source-plan rows as plans.",
+    "expected_behavior": "Overview, About, methodology, manifest and README make the same browser-versus-Python distinction.",
+    "current_observation": "The historical About discrepancy was already corrected on the observed deployment. A shared versioned four-mode capability contract now generates local public facts, help and documentation; corrected Terminal entry targets #compare.",
+    "actual_behavior": "The historical About discrepancy was already corrected on the observed deployment. A shared versioned four-mode capability contract now generates local public facts, help and documentation; corrected Terminal entry targets #compare.",
+    "established_root_cause_or_evidence_gap": "Duplicated prose made distribution-mode statements drift; the already-corrected deployed About text was not reverted.",
+    "changed_files": [
+      "scripts/capability-contract.mjs",
+      "scripts/build-domain.mjs",
+      "scripts/build-cloudflare.mjs",
+      "cloudflare.json",
+      "README.md",
+      "docs/CAPABILITIES.md"
+    ],
+    "tests_and_evidence_paths": [
+      "deployed/browser-about.body",
+      "logs/capability-final.log",
+      "logs/domain-final-check.log"
+    ],
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    },
+    "implementation_status": "VERIFIED_LOCAL in stated scope; remaining acceptance open",
+    "deployed_status": "Candidate NOT_DEPLOYED",
+    "status": "OPEN",
+    "acceptance_complete": false,
+    "remaining_blocker": "New shared-contract pages have not been published or cache-checked in production."
+  },
+  {
+    "issue_id": "F03",
+    "source": "HelioForge_Critical_Appraisal (2).pdf, 2026-10-28 v1.0",
+    "source_page": 29,
+    "source_title": "Council protocol documentation needs versioned reconciliation",
+    "source_evidence_description": "Observed documentation discrepancy",
+    "evidence_class": "O",
+    "priority": "P1",
+    "owner": "council/protocol",
+    "affected_scope": "See source acceptance and named files; static public, local Python, emulated desktop/tablet/phone. External/native scope explicitly gated.",
+    "reproduction_or_verification": "Execute the named suite scripts/commands recorded in their logs and inspect linked machine-readable observations. Preserve the source-plan rows as plans.",
+    "expected_behavior": "One protocol ID resolves to the actual orchestration limits and explicit external-call status.",
+    "current_observation": "helioforge-council/v1 exposes local checklist versus external execution, 300-second external workflow and 17/25 SDK Runner.run invocations. Local mode has zero external roles/calls and eight checklist sections. Failure/timeout responses retain structured execution uncertainty.",
+    "actual_behavior": "helioforge-council/v1 exposes local checklist versus external execution, 300-second external workflow and 17/25 SDK Runner.run invocations. Local mode has zero external roles/calls and eight checklist sections. Failure/timeout responses retain structured execution uncertainty.",
+    "established_root_cause_or_evidence_gap": "Older documentation used a 120-second contract and ambiguous model-call terminology; local metadata inherited external terminology before review correction.",
+    "changed_files": [
+      "apps/api/helioforge/council_protocol.py",
+      "apps/api/helioforge/council.py",
+      "apps/api/helioforge/main.py",
+      "apps/web/src/types.ts",
+      "apps/web/src/views.ts",
+      "apps/web/src/integrations-ui.ts",
+      "apps/web/src/app.ts",
+      "docs/COUNCIL_PROTOCOL.md",
+      "docs/AI_SETUP.md",
+      "docs/roadmap/CONNECTORS.md"
+    ],
+    "tests_and_evidence_paths": [
+      "council-agent.md",
+      "INDEPENDENT_REVIEW.md",
+      "final2-python.xml",
+      "logs/final3-frontend.log"
+    ],
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    },
+    "implementation_status": "VERIFIED_LOCAL in stated scope; remaining acceptance open",
+    "deployed_status": "Candidate NOT_DEPLOYED",
+    "status": "OPEN",
+    "acceptance_complete": false,
+    "remaining_blocker": "Real external-provider failure/retry/cancellation and full 189 role/evidence specifications are not executed. No claim that SDK invocation count equals billable provider requests."
+  },
+  {
+    "issue_id": "F04",
+    "source": "HelioForge_Critical_Appraisal (2).pdf, 2026-10-28 v1.0",
+    "source_page": 30,
+    "source_title": "Public visual evidence spans different interface editions",
+    "source_evidence_description": "Observed published images",
+    "evidence_class": "O",
+    "priority": "P2",
+    "owner": "release/UX",
+    "affected_scope": "See source acceptance and named files; static public, local Python, emulated desktop/tablet/phone. External/native scope explicitly gated.",
+    "reproduction_or_verification": "Execute the named suite scripts/commands recorded in their logs and inspect linked machine-readable observations. Preserve the source-plan rows as plans.",
+    "expected_behavior": "Homepage, social image and release gallery match the deployment receipt at desktop and mobile widths.",
+    "current_observation": "Genuine local Chromium desktop, tablet and phone-viewport captures plus social capture are bound to the candidate digest. Local distribution uses the new images and labels them local candidate captures.",
+    "actual_behavior": "Genuine local Chromium desktop, tablet and phone-viewport captures plus social capture are bound to the candidate digest. Local distribution uses the new images and labels them local candidate captures.",
+    "established_root_cause_or_evidence_gap": "Historical images mixed interface editions without release-bound capture metadata.",
+    "changed_files": [
+      "scripts/acceptance-capture.py",
+      "cloudflare.json",
+      "scripts/build-cloudflare.mjs"
+    ],
+    "tests_and_evidence_paths": [
+      "capture-results.json",
+      "screenshots/desktop.png",
+      "screenshots/tablet.png",
+      "screenshots/mobile.png",
+      "screenshots/social.png"
+    ],
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    },
+    "implementation_status": "VERIFIED_LOCAL in stated scope; remaining acceptance open",
+    "deployed_status": "Candidate NOT_DEPLOYED",
+    "status": "OPEN",
+    "acceptance_complete": false,
+    "remaining_blocker": "Images are not published and cannot establish production or physical-device appearance."
+  },
+  {
+    "issue_id": "F05",
+    "source": "HelioForge_Critical_Appraisal (2).pdf, 2026-10-28 v1.0",
+    "source_page": 30,
+    "source_title": "Protect model boundaries at result and export level",
+    "source_evidence_description": "Preventive recommendation",
+    "evidence_class": "P",
+    "priority": "P1",
+    "owner": "numerical/functional/state",
+    "affected_scope": "See source acceptance and named files; static public, local Python, emulated desktop/tablet/phone. External/native scope explicitly gated.",
+    "reproduction_or_verification": "Execute the named suite scripts/commands recorded in their logs and inspect linked machine-readable observations. Preserve the source-plan rows as plans.",
+    "expected_behavior": "No numeric result can be copied, compared or exported without its model and data provenance.",
+    "current_observation": "Study CSV/memo exports now retain original rows, units, full provenance, limitations and original-result digest. Async study, Hybrid and Terminal state guards reject stale completion. Hybrid comparisons explicitly reject missing/mismatched contract metadata.",
+    "actual_behavior": "Study CSV/memo exports now retain original rows, units, full provenance, limitations and original-result digest. Async study, Hybrid and Terminal state guards reject stale completion. Hybrid comparisons explicitly reject missing/mismatched contract metadata.",
+    "established_root_cause_or_evidence_gap": "Study CSV paths dropped metadata; asynchronous continuations lacked current-generation checks. Normal historical Hybrid results still lack an authoritative application source revision.",
+    "changed_files": [
+      "apps/web/src/roadmap.ts",
+      "apps/web/src/hybrid-core.ts",
+      "apps/web/src/hybrid-controller.ts",
+      "apps/web/src/hybrid-views.ts",
+      "apps/web/src/terminal-ui.ts",
+      "apps/web/src/terminal-manifest.ts"
+    ],
+    "tests_and_evidence_paths": [
+      "logs/study-export-red.log",
+      "logs/study-import-red.log",
+      "logs/final3-frontend.log",
+      "api-roadmap-final/report.json",
+      "INDEPENDENT_REVIEW.md"
+    ],
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    },
+    "implementation_status": "VERIFIED_LOCAL in stated scope; remaining acceptance open",
+    "deployed_status": "Candidate NOT_DEPLOYED",
+    "status": "OPEN",
+    "acceptance_complete": false,
+    "remaining_blocker": "Full result-path provenance remains incomplete: normal Hybrid records lack source revision and therefore remain descriptive-only. All legacy exports/transfers and independent hand checks are not comprehensively accepted."
+  },
+  {
+    "issue_id": "F06",
+    "source": "HelioForge_Critical_Appraisal (2).pdf, 2026-10-28 v1.0",
+    "source_page": 30,
+    "source_title": "Make the first useful experiment easier to reach on mobile",
+    "source_evidence_description": "Visual heuristic / user study needed",
+    "evidence_class": "I",
+    "priority": "P2",
+    "owner": "UX/onboarding",
+    "affected_scope": "See source acceptance and named files; static public, local Python, emulated desktop/tablet/phone. External/native scope explicitly gated.",
+    "reproduction_or_verification": "Execute the named suite scripts/commands recorded in their logs and inspect linked machine-readable observations. Preserve the source-plan rows as plans.",
+    "expected_behavior": "Usability sessions show users can identify mode and complete the first valid task without coaching.",
+    "current_observation": "Three starts are present in public content and Quick start. A real browser click dismisses the dialog and reaches the Terminal candidate form. Adjacent CSS breakpoints and draft-preserving viewport changes pass the bounded capture suite.",
+    "actual_behavior": "Three starts are present in public content and Quick start. A real browser click dismisses the dialog and reaches the Terminal candidate form. Adjacent CSS breakpoints and draft-preserving viewport changes pass the bounded capture suite.",
+    "established_root_cause_or_evidence_gap": "The initial entry lacked task-led shortcuts; the appraisal mobile concern was heuristic, not an observed usability defect.",
+    "changed_files": [
+      "apps/web/src/champion-views.ts",
+      "scripts/capability-contract.mjs",
+      "docs/learning-pages/capability-modes.html"
+    ],
+    "tests_and_evidence_paths": [
+      "capture-results.json",
+      "onboarding-resize-trace.zip"
+    ],
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    },
+    "implementation_status": "VERIFIED_LOCAL in stated scope; remaining acceptance open",
+    "deployed_status": "Candidate NOT_DEPLOYED",
+    "status": "OPEN",
+    "acceptance_complete": false,
+    "remaining_blocker": "No uncoached usability sessions, mode-comprehension outcomes, or comparative collapsible-tablet-rail test."
+  },
+  {
+    "issue_id": "F07",
+    "source": "HelioForge_Critical_Appraisal (2).pdf, 2026-10-28 v1.0",
+    "source_page": 31,
+    "source_title": "Collect independent field and constrained-device performance evidence",
+    "source_evidence_description": "Evidence gap",
+    "evidence_class": "U",
+    "priority": "P1",
+    "owner": "performance",
+    "affected_scope": "See source acceptance and named files; static public, local Python, emulated desktop/tablet/phone. External/native scope explicitly gated.",
+    "reproduction_or_verification": "Execute the named suite scripts/commands recorded in their logs and inspect linked machine-readable observations. Preserve the source-plan rows as plans.",
+    "expected_behavior": "Report LCP, INP and CLS at mobile/desktop p75 when field volume permits; preserve raw runs and failures.",
+    "current_observation": "Retained lab cold/warm loading and interaction measurements, including constrained phone viewport/CPU/network emulation. Invalid HTTP/hash-only warm runs are retained separately. No telemetry or field p75 was invented.",
+    "actual_behavior": "Retained lab cold/warm loading and interaction measurements, including constrained phone viewport/CPU/network emulation. Invalid HTTP/hash-only warm runs are retained separately. No telemetry or field p75 was invented.",
+    "established_root_cause_or_evidence_gap": "Independent real-device/field evidence was absent. The self-contained runtime remains about 13.6 MB decoded; splitting datasets has not been implemented without a measured architecture decision.",
+    "changed_files": [
+      "scripts/acceptance-performance.py",
+      "scripts/serve-acceptance.py"
+    ],
+    "tests_and_evidence_paths": [
+      "performance-results.json",
+      "performance-http-harness-invalid.json",
+      "logs/performance-final.log"
+    ],
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    },
+    "implementation_status": "VERIFIED_LOCAL in stated scope; remaining acceptance open",
+    "deployed_status": "Candidate NOT_DEPLOYED",
+    "status": "OPEN",
+    "acceptance_complete": false,
+    "remaining_blocker": "No physical mid-range phone, controlled field volume, field INP or field p75. No measured bundle-size optimization shipped; hosted shell/on-demand data work remains open."
+  },
+  {
+    "issue_id": "F08",
+    "source": "HelioForge_Critical_Appraisal (2).pdf, 2026-10-28 v1.0",
+    "source_page": 31,
+    "source_title": "Complete assistive-technology and native-device acceptance",
+    "source_evidence_description": "Evidence gap",
+    "evidence_class": "U",
+    "priority": "P1",
+    "owner": "accessibility/QA",
+    "affected_scope": "See source acceptance and named files; static public, local Python, emulated desktop/tablet/phone. External/native scope explicitly gated.",
+    "reproduction_or_verification": "Execute the named suite scripts/commands recorded in their logs and inspect linked machine-readable observations. Preserve the source-plan rows as plans.",
+    "expected_behavior": "Core journeys are operable and understandable; focus and announcements verified manually; exceptions documented.",
+    "current_observation": "All 13 requested CSS widths, 12 routes and three desktop engines are covered by the final responsive/axe/keyboard suite. Additional native dialogs, controls and local scrolling are exercised by Terminal checks.",
+    "actual_behavior": "All 13 requested CSS widths, 12 routes and three desktop engines are covered by the final responsive/axe/keyboard suite. Additional native dialogs, controls and local scrolling are exercised by Terminal checks.",
+    "established_root_cause_or_evidence_gap": "Native AT/device acceptance is an evidence gap; an automated scan cannot supply it.",
+    "changed_files": [
+      "scripts/browser-full-audit.py",
+      "scripts/browser-terminal.py",
+      "scripts/acceptance-capture.py"
+    ],
+    "tests_and_evidence_paths": [
+      "final-responsive.json",
+      "final-terminal.json",
+      "capture-results.json"
+    ],
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    },
+    "implementation_status": "VERIFIED_LOCAL in stated scope; remaining acceptance open",
+    "deployed_status": "Candidate NOT_DEPLOYED",
+    "status": "OPEN",
+    "acceptance_complete": false,
+    "remaining_blocker": "NVDA, VoiceOver/Safari on physical Apple devices, TalkBack, native 200%/400% zoom and full manual tasks remain BLOCKED/NOT_RUN."
+  },
+  {
+    "issue_id": "F09",
+    "source": "HelioForge_Critical_Appraisal (2).pdf, 2026-10-28 v1.0",
+    "source_page": 31,
+    "source_title": "Verify deployed SEO and crawler controls without undoing noindex",
+    "source_evidence_description": "Verification gap",
+    "evidence_class": "U",
+    "priority": "P2",
+    "owner": "platform/SEO",
+    "affected_scope": "See source acceptance and named files; static public, local Python, emulated desktop/tablet/phone. External/native scope explicitly gated.",
+    "reproduction_or_verification": "Execute the named suite scripts/commands recorded in their logs and inspect linked machine-readable observations. Preserve the source-plan rows as plans.",
+    "expected_behavior": "Canonical, robots, status, sitemap, structured data and rendered visible text agree for each intended indexable page.",
+    "current_observation": "Saved fresh browser responses verify current three-page production status/canonicals/sitemap/structured data, exact inline CSP coverage, query-preserving redirect, real 404 and runtime noindex with crawl access. Candidate nine-page distribution passes local contract checks.",
+    "actual_behavior": "Saved fresh browser responses verify current three-page production status/canonicals/sitemap/structured data, exact inline CSP coverage, query-preserving redirect, real 404 and runtime noindex with crawl access. Candidate nine-page distribution passes local contract checks.",
+    "established_root_cause_or_evidence_gap": "The appraisal could not retrieve these effective responses. A raw urllib denial was not interpreted as an outage; permitted browser retrieval succeeded.",
+    "changed_files": [
+      "scripts/acceptance-deployed.py",
+      "scripts/acceptance-deployed-contract.py",
+      "scripts/build-domain.mjs",
+      "scripts/check-domain.mjs"
+    ],
+    "tests_and_evidence_paths": [
+      "deployed-contract-results.json",
+      "deployed/observation.json",
+      "logs/domain-final-check.log"
+    ],
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    },
+    "implementation_status": "VERIFIED_LOCAL in stated scope; remaining acceptance open",
+    "deployed_status": "VERIFIED_DEPLOYED for existing three-page crawler contract only",
+    "status": "OPEN",
+    "acceptance_complete": false,
+    "remaining_blocker": "New candidate pages require deployed verification after authorized publication; Search Console and global cache coverage were not available."
+  },
+  {
+    "issue_id": "F10",
+    "source": "HelioForge_Critical_Appraisal (2).pdf, 2026-10-28 v1.0",
+    "source_page": 32,
+    "source_title": "Version the public evidence and model documentation",
+    "source_evidence_description": "Information architecture improvement",
+    "evidence_class": "P",
+    "priority": "P2",
+    "owner": "model/documentation",
+    "affected_scope": "See source acceptance and named files; static public, local Python, emulated desktop/tablet/phone. External/native scope explicitly gated.",
+    "reproduction_or_verification": "Execute the named suite scripts/commands recorded in their logs and inspect linked machine-readable observations. Preserve the source-plan rows as plans.",
+    "expected_behavior": "Each workspace and result links to exactly the applicable contract and validation evidence.",
+    "current_observation": "Versioned registry contains all 12 workspaces and 59 study acceptance cards, equations, schema/units, fixtures, source/test references, limits and explicit unknown validation tiers. Two finance studies now expose first-party source references.",
+    "actual_behavior": "Versioned registry contains all 12 workspaces and 59 study acceptance cards, equations, schema/units, fixtures, source/test references, limits and explicit unknown validation tiers. Two finance studies now expose first-party source references.",
+    "established_root_cause_or_evidence_gap": "Model contracts were scattered; two default study results had empty source lists. Adding implementation citations is not independent numerical validation.",
+    "changed_files": [
+      "scripts/capability-contract.mjs",
+      "docs/MODEL_REGISTRY.json",
+      "docs/MODEL_REGISTRY.md",
+      "apps/api/helioforge/engines/decision_studies.py",
+      "apps/api/helioforge/engines/toolkit_studies.py",
+      "apps/web/src/roadmap-data.ts"
+    ],
+    "tests_and_evidence_paths": [
+      "inventory-before.json",
+      "inventory-results.json",
+      "logs/study-source-red.log",
+      "logs/study-source-green.log",
+      "logs/capability-final.log"
+    ],
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    },
+    "implementation_status": "VERIFIED_LOCAL in stated scope; remaining acceptance open",
+    "deployed_status": "Candidate NOT_DEPLOYED",
+    "status": "OPEN",
+    "acceptance_complete": false,
+    "remaining_blocker": "Not every retained legacy result has a direct applicable-contract link; 59 independent hand-check/complete boundary/export acceptance cards remain open."
+  },
+  {
+    "issue_id": "F11",
+    "source": "HelioForge_Critical_Appraisal (2).pdf, 2026-10-28 v1.0",
+    "source_page": 32,
+    "source_title": "Preserve local state safely across updates and origins",
+    "source_evidence_description": "Preventive recommendation",
+    "evidence_class": "P",
+    "priority": "P2",
+    "owner": "state/security",
+    "affected_scope": "See source acceptance and named files; static public, local Python, emulated desktop/tablet/phone. External/native scope explicitly gated.",
+    "reproduction_or_verification": "Execute the named suite scripts/commands recorded in their logs and inspect linked machine-readable observations. Preserve the source-plan rows as plans.",
+    "expected_behavior": "Old/corrupt imports fail without silent data loss; export/import round trips preserve versioned fields.",
+    "current_observation": "Versioned v1 workspace imports validate bounds, preview replacement, require explicit confirmation and preserve recoverable backups. Corrupt/unsupported storage and quota denial are handled without claiming success; async restores/imports protect newer edits.",
+    "actual_behavior": "Versioned v1 workspace imports validate bounds, preview replacement, require explicit confirmation and preserve recoverable backups. Corrupt/unsupported storage and quota denial are handled without claiming success; async restores/imports protect newer edits.",
+    "established_root_cause_or_evidence_gap": "Imports previously lacked the complete preview/backup transaction and stale-operation protection. Historical migration is a separate unimplemented requirement.",
+    "changed_files": [
+      "apps/web/src/champion-core.ts",
+      "apps/web/src/champion-controller.ts",
+      "apps/web/src/champion-views.ts",
+      "apps/web/tests/result-state-regressions.test.mjs"
+    ],
+    "tests_and_evidence_paths": [
+      "state-agent.md",
+      "logs/final3-frontend.log",
+      "presentation-results.json",
+      "final-terminal.json"
+    ],
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    },
+    "implementation_status": "VERIFIED_LOCAL in stated scope; remaining acceptance open",
+    "deployed_status": "Candidate NOT_DEPLOYED",
+    "status": "OPEN",
+    "acceptance_complete": false,
+    "remaining_blocker": "Unsupported v0 rejection is not a real historical migration. Version-to-version migration receipts and exhaustive interrupted cross-origin/native-file recovery remain NOT_RUN."
+  },
+  {
+    "issue_id": "F12",
+    "source": "HelioForge_Critical_Appraisal (2).pdf, 2026-10-28 v1.0",
+    "source_page": 32,
+    "source_title": "Keep hashes, signatures and approval claims separate",
+    "source_evidence_description": "Preventive recommendation",
+    "evidence_class": "P",
+    "priority": "P2",
+    "owner": "research governance/council",
+    "affected_scope": "See source acceptance and named files; static public, local Python, emulated desktop/tablet/phone. External/native scope explicitly gated.",
+    "reproduction_or_verification": "Execute the named suite scripts/commands recorded in their logs and inspect linked machine-readable observations. Preserve the source-plan rows as plans.",
+    "expected_behavior": "No interface or export uses a hash/signature badge as a proxy for calibration, accreditation or approval.",
+    "current_observation": "Council UI and exports distinguish digest identity, signature state, reviewer identity, scientific validation, critic signoff and human approval. No provider failure is turned into fabricated completion or a silent local fallback.",
+    "actual_behavior": "Council UI and exports distinguish digest identity, signature state, reviewer identity, scientific validation, critic signoff and human approval. No provider failure is turned into fabricated completion or a silent local fallback.",
+    "established_root_cause_or_evidence_gap": "Ambiguous council/integrity phrasing risked conflating local evidence checks with independent execution or approval.",
+    "changed_files": [
+      "apps/api/helioforge/council_protocol.py",
+      "apps/web/src/views.ts",
+      "apps/web/src/integrations-ui.ts",
+      "apps/web/src/app.ts",
+      "docs/COUNCIL_PROTOCOL.md"
+    ],
+    "tests_and_evidence_paths": [
+      "council-agent.md",
+      "INDEPENDENT_REVIEW.md",
+      "final2-python.xml",
+      "logs/final3-frontend.log"
+    ],
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    },
+    "implementation_status": "VERIFIED_LOCAL in stated scope; remaining acceptance open",
+    "deployed_status": "Candidate NOT_DEPLOYED",
+    "status": "OPEN",
+    "acceptance_complete": false,
+    "remaining_blocker": "Complete audit of every legacy interface/export and all role/evidence combinations remains NOT_RUN; no external identity or accreditation validation claimed."
+  },
+  {
+    "issue_id": "F13",
+    "source": "HelioForge_Critical_Appraisal (2).pdf, 2026-10-28 v1.0",
+    "source_page": 33,
+    "source_title": "Build discoverable, original learning and model pages",
+    "source_evidence_description": "Growth opportunity",
+    "evidence_class": "P",
+    "priority": "P2",
+    "owner": "content/SEO",
+    "affected_scope": "See source acceptance and named files; static public, local Python, emulated desktop/tablet/phone. External/native scope explicitly gated.",
+    "reproduction_or_verification": "Execute the named suite scripts/commands recorded in their logs and inspect linked machine-readable observations. Preserve the source-plan rows as plans.",
+    "expected_behavior": "Pages answer genuine questions with unique evidence, internal links, accurate metadata and matching visible/schema facts.",
+    "current_observation": "Local distribution now has nine intended indexable pages, including focused capability/model explanations, worked learning material and glossary with source/revision metadata and internal links. Runtime noindex remains intact.",
+    "actual_behavior": "Local distribution now has nine intended indexable pages, including focused capability/model explanations, worked learning material and glossary with source/revision metadata and internal links. Runtime noindex remains intact.",
+    "established_root_cause_or_evidence_gap": "Existing public site offered limited discoverable learning content; this was an opportunity, not a reproduced defect.",
+    "changed_files": [
+      "docs/learning-pages/",
+      "scripts/build-domain.mjs",
+      "scripts/check-domain.mjs",
+      "docs/MODEL_REGISTRY.md"
+    ],
+    "tests_and_evidence_paths": [
+      "docs-agent.md",
+      "logs/domain-final-check.log",
+      "logs/domain-contract-tests.log"
+    ],
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    },
+    "implementation_status": "VERIFIED_LOCAL in stated scope; remaining acceptance open",
+    "deployed_status": "Candidate NOT_DEPLOYED",
+    "status": "OPEN",
+    "acceptance_complete": false,
+    "remaining_blocker": "Content is locally generated and source reviewed, not published or independently pedagogically/scientifically validated. No rankings or AI-citation outcome claimed."
+  },
+  {
+    "issue_id": "F14",
+    "source": "HelioForge_Critical_Appraisal (2).pdf, 2026-10-28 v1.0",
+    "source_page": 33,
+    "source_title": "Maintain a release-bound, risk-weighted test ledger",
+    "source_evidence_description": "Process improvement",
+    "evidence_class": "P",
+    "priority": "P2",
+    "owner": "orchestrator/independent QA",
+    "affected_scope": "See source acceptance and named files; static public, local Python, emulated desktop/tablet/phone. External/native scope explicitly gated.",
+    "reproduction_or_verification": "Execute the named suite scripts/commands recorded in their logs and inspect linked machine-readable observations. Preserve the source-plan rows as plans.",
+    "expected_behavior": "Every claim has an owner, artifact ID, expected outcome, actual status and screenshot/log; unknown is never counted as pass.",
+    "current_observation": "Separate plan and execution ledgers retain all 864 catalogue, 59 study, 157 presentation and 189 council specifications, exact runtime identities, raw failures and scoped outcomes. Engineering review and baseline/current evidence are separated.",
+    "actual_behavior": "Separate plan and execution ledgers retain all 864 catalogue, 59 study, 157 presentation and 189 council specifications, exact runtime identities, raw failures and scoped outcomes. Engineering review and baseline/current evidence are separated.",
+    "established_root_cause_or_evidence_gap": "Feature/test counts and planned pair coverage cannot prove behavior or deployed identity.",
+    "changed_files": [
+      "scripts/acceptance-inventory.py",
+      "scripts/acceptance-presentation.py",
+      "scripts/finalize-acceptance.py",
+      "docs/remediation-20261028/"
+    ],
+    "tests_and_evidence_paths": [
+      "suite-ledger.json",
+      "issue-ledger.json",
+      "council-results.json",
+      "workspace-results.json",
+      "study-acceptance-results.json",
+      "INDEPENDENT_REVIEW.md"
+    ],
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    },
+    "implementation_status": "VERIFIED_LOCAL in stated scope; remaining acceptance open",
+    "deployed_status": "Candidate NOT_DEPLOYED",
+    "status": "OPEN",
+    "acceptance_complete": false,
+    "remaining_blocker": "Full higher-order/stateful/persona/native/provider acceptance and candidate CI/deployment reconciliation remain open; no promotion of plans to passes."
+  }
+]
