@@ -16,6 +16,7 @@ import os
 import re
 import sys
 import tempfile
+import time
 import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
@@ -270,6 +271,19 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
         page.on("request", lambda req: remote_origin_requests.append(req.url) if req.url.startswith(("http://", "https://")) and urllib.parse.urlparse(req.url).scheme + "://" + urllib.parse.urlparse(req.url).netloc != local_origin else None)
         page.on("response", lambda response: data_responses.append({"url": response.url, "status": response.status}) if "/run/data/" in response.url else None)
         page.on("response", lambda response: script_responses.append({"url": response.url, "status": response.status}) if response.request.resource_type == "script" else None)
+
+        last_export_at = 0.0
+
+        def click_export(kind: str) -> None:
+            nonlocal last_export_at, stage
+            # Respect Chromium's ten-downloads-per-second burst limit while retaining
+            # real clicks and downloaded bytes. This is a correctness check, not a burst benchmark.
+            time.sleep(max(0.0, 0.25 - (time.monotonic() - last_export_at)))
+            stage = f"study {study_id}: {kind} export"
+            page.locator(f'[data-study-export="{kind}"]').click()
+            last_export_at = time.monotonic()
+
+        actual["export_minimum_interval_seconds"] = 0.25
 
         def result_labels(key: str) -> dict[str, str | None]:
             return page.evaluate("""key => ({
@@ -636,7 +650,7 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
                     stage = f"study {study_id}: JSON export"
                     # Full JSON must be byte-for-byte the current workspace result object.
                     with page.expect_download(timeout=30000) as download_info:
-                        page.locator('[data-study-export="json"]').click()
+                        click_export("json")
                     json_download = download_info.value
                     json_target = Path(download_dir.name) / f"{study_id}.json"
                     json_download.save_as(str(json_target))
@@ -652,7 +666,7 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
                     stage = f"study {study_id}: table CSV export"
                     # Table CSV is lossless with respect to row count and carries provenance on row one.
                     with page.expect_download(timeout=30000) as download_info:
-                        page.locator('[data-study-export="csv"]').click()
+                        click_export("csv")
                     table_download = download_info.value
                     table_target = Path(download_dir.name) / f"{study_id}-table.csv"
                     table_download.save_as(str(table_target))
@@ -694,7 +708,7 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
                                                        "download_emitted": False, "detail": "No selected series exists; series export is disabled."}
                     else:
                         with page.expect_download(timeout=30000) as download_info:
-                            page.locator('[data-study-export="series"]').click()
+                            click_export("series")
                         series_download = download_info.value
                         series_target = Path(download_dir.name) / f"{study_id}-series.csv"
                         series_download.save_as(str(series_target))
@@ -726,7 +740,7 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
 
                     # Memo provenance, assumptions, boundaries and non-approval language must match the result.
                     with page.expect_download(timeout=30000) as download_info:
-                        page.locator('[data-study-export="memo"]').click()
+                        click_export("memo")
                     memo_download = download_info.value
                     memo_target = Path(download_dir.name) / f"{study_id}-memo.md"
                     memo_download.save_as(str(memo_target))
@@ -964,6 +978,7 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
             checks.append(outcome("browser_run_completed", "all requested browser checks executed", f"{type(exc).__name__}: {exc}", False))
             actual["browser_error"] = f"{type(exc).__name__}: {exc}"
             actual["browser_stage"] = stage
+            actual["browser_console"] = browser_console
             actual["remote_origin_requests"] = remote_origin_requests
             try:
                 actual["current_page_text_excerpt"] = page.locator("body").inner_text(timeout=2000)[:1800]
