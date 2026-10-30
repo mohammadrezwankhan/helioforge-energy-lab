@@ -246,6 +246,7 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
     checks: list[dict[str, Any]] = []
     actual: dict[str, Any] = {"url": url, "offline_file": str(offline_file)}
     page_errors: list[str] = []
+    browser_console: list[dict[str, str]] = []
     api_requests: list[str] = []
     remote_origin_requests: list[str] = []
     data_responses: list[dict[str, Any]] = []
@@ -263,6 +264,7 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
         context = browser.new_context(ignore_https_errors=local_tls_fixture, accept_downloads=True, viewport={"width": 1440, "height": 1000})
         page = context.new_page()
         page.on("pageerror", lambda exc: page_errors.append(str(exc)))
+        page.on("console", lambda msg: browser_console.append({"type": msg.type, "text": msg.text}) if msg.type in {"error", "warning"} else None)
         page.on("request", lambda req: api_requests.append(req.url) if "/api/" in req.url else None)
         local_origin = urllib.parse.urlparse(url).scheme + "://" + urllib.parse.urlparse(url).netloc
         page.on("request", lambda req: remote_origin_requests.append(req.url) if req.url.startswith(("http://", "https://")) and urllib.parse.urlparse(req.url).scheme + "://" + urllib.parse.urlparse(req.url).netloc != local_origin else None)
@@ -631,6 +633,7 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
                                                    "table_metadata_only_expected": expected["tableCount"] == 0,
                                                    "selected_series_index": expected["selectedSeriesIndex"], "selected_series_expected": expected["seriesLength"]}
 
+                    stage = f"study {study_id}: JSON export"
                     # Full JSON must be byte-for-byte the current workspace result object.
                     with page.expect_download(timeout=30000) as download_info:
                         page.locator('[data-study-export="json"]').click()
@@ -646,6 +649,7 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
                                              "sha256_expected": expected["jsonSha256"], "sha256_actual": sha256(json_bytes),
                                              "study_id": json_value.get("study") if isinstance(json_value, dict) else None}
 
+                    stage = f"study {study_id}: table CSV export"
                     # Table CSV is lossless with respect to row count and carries provenance on row one.
                     with page.expect_download(timeout=30000) as download_info:
                         page.locator('[data-study-export="csv"]').click()
@@ -949,6 +953,8 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
         except HostedAppStartupError as exc:
             actual["browser_error"] = f"{type(exc).__name__}: {exc}"
             actual["browser_stage"] = stage
+            actual["browser_console"] = browser_console
+            actual["study_dom"] = page.locator("#study-workbench").inner_text(timeout=2000)[-3000:] if page.locator("#study-workbench").count() else "absent"
             actual["remote_origin_requests"] = remote_origin_requests
             actual["page_errors"] = page_errors
             actual["api_requests"] = api_requests
