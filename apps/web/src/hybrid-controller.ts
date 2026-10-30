@@ -4,8 +4,30 @@ namespace HF {
     api:<T>(path:string,body?:unknown,method?:string,adminKey?:string)=>Promise<T>;
     celebrate:()=>void; openModal:(title:string,body:string)=>void; persist?:()=>boolean;
   }
-  export function installHybridController(state:ViewState,cb:HybridCallbacks):void {
+  export interface HybridControllerHandle {refreshLibraryObserver:()=>void;destroy:()=>void}
+  export function installHybridController(state:ViewState,cb:HybridCallbacks):HybridControllerHandle {
     const h=state.hybrid;
+    let libraryObserver:IntersectionObserver|null=null,observedLibrary:HTMLElement|null=null,observerDestroyed=false;
+    function disconnectLibraryObserver():void{libraryObserver?.disconnect();libraryObserver=null;observedLibrary=null;}
+    function renderLibrary():void{
+      const el=document.getElementById('hybrid-library-results');if(!el)return;
+      h.libraryReady=true;el.innerHTML=hybridLibrary(h);disconnectLibraryObserver();
+    }
+    function refreshLibraryObserver():void{
+      if(observerDestroyed)return;
+      if(h.libraryReady){disconnectLibraryObserver();return;}
+      const section=document.getElementById('architecture-library') as HTMLElement|null;
+      if(!section){disconnectLibraryObserver();return;}
+      if(section===observedLibrary&&libraryObserver)return;
+      disconnectLibraryObserver();observedLibrary=section;
+      if(typeof IntersectionObserver==='undefined'){renderLibrary();return;}
+      const target=section;
+      const observer=new IntersectionObserver(entries=>{
+        if(observerDestroyed||observedLibrary!==target||libraryObserver!==observer)return;
+        if(entries.some(entry=>entry.target===target&&entry.isIntersecting))renderLibrary();
+      },{rootMargin:'400px 0px'});
+      libraryObserver=observer;observer.observe(target);
+    }
     function selectSystem(id:string):void {
       advanceHybridStateRevision(h);const s=systemById(id);h.inputs=presetInputs(id);h.objectId=s.technologies.includes('battery')?'battery':s.technologies[0]!;
       h.result=null;h.resultInputs=null;h.inputError=null;h.draft=null;h.hour=12;attachBundledHybridResult(h);if(state.champion)state.champion.lastRunId=null;cb.persist?.();cb.navigate('hybrid');
@@ -20,7 +42,7 @@ namespace HF {
       if(h.busy&&['reset','import','launch-lesson'].includes(name))throw new Error('Complete the current run before changing its configuration.');
       if(name==='export'){const form=document.getElementById('hybrid-config') as HTMLFormElement|null;if(form&&!h.busy)h.inputs=collect(form);downloadJSON('helioforge-configuration.json',{schema:'helioforge.hybrid.v1',data_kind:'synthetic_educational',inputs:h.inputs});}
       else if(name==='reset')selectSystem(h.inputs.system_id);
-      else if(name==='clear-filters'){h.search='';h.family='All';h.topology='All';cb.render();document.getElementById('architecture-library')?.scrollIntoView({behavior:'instant'});}
+      else if(name==='clear-filters'){h.search='';h.family='All';h.topology='All';cb.render();renderLibrary();document.getElementById('architecture-library')?.scrollIntoView({behavior:'instant'});}
       else if(name==='import'){
         const revision=advanceHybridStateRevision(h);
         const file=document.createElement('input');file.type='file';file.accept='.json,application/json';
@@ -65,7 +87,7 @@ namespace HF {
         if(el.dataset.removeCompare){h.compare=h.compare.filter(x=>x.id!==el.dataset.removeCompare);if(state.champion)state.champion.pendingPins=state.champion.pendingPins.filter(x=>x!==el.dataset.removeCompare);cb.persist?.();cb.render();}
       }catch(e){cb.toast(e instanceof Error?e.message:'Invalid selection.',true);}
     });
-    function updateLibrary():void{const el=document.getElementById('hybrid-library-results');if(el)el.innerHTML=hybridLibrary(h);}
+    function updateLibrary():void{renderLibrary();}
     function syncHybridInput(el:HTMLInputElement):void {
       const form=el.closest<HTMLFormElement>('#hybrid-config');if(!form||h.busy)return;
       advanceHybridStateRevision(h);
@@ -98,6 +120,9 @@ namespace HF {
       if(el.id==='hybrid-system'){if(!h.busy)selectSystem(el.value);return;}
       if(el.closest('#hybrid-config')&&el.name)syncHybridInput(el);
     });
+    document.addEventListener('focusin',event=>{
+      if(!h.libraryReady&&(event.target as Element).closest('#architecture-library'))updateLibrary();
+    });
     document.addEventListener('submit',event=>{
       const form=event.target as HTMLFormElement;
       if(form.id==='hybrid-config'){
@@ -128,5 +153,6 @@ namespace HF {
         }
       }
     });
+    return {refreshLibraryObserver,destroy(){observerDestroyed=true;disconnectLibraryObserver();}};
   }
 }

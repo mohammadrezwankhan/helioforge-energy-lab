@@ -372,6 +372,17 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
                                bootstrap.get("initialResult") == bootstrap.get("bootstrapResult"))
             checks.append(outcome("bootstrap_remote_triad_matches_initial_inputs_and_result", "remote-triad input and exact bundled result", bootstrap, bootstrap_match))
 
+            initial_cards = page.locator('#hybrid-library-results [data-system]').count()
+            atlas_controls = all(page.locator(selector).is_enabled() for selector in
+                                 ('#hybrid-search', '#hybrid-family', '#hybrid-topology', '#hybrid-system'))
+            page.locator('#architecture-library').scroll_into_view_if_needed()
+            page.locator('#hybrid-library-results [data-system]').first.wait_for(state="attached")
+            loaded_cards = page.locator('#hybrid-library-results [data-system]').count()
+            checks.append(outcome("deferred_architecture_atlas_loads_on_approach",
+                                  {"initial_cards": 0, "loaded_cards": 36, "controls_enabled": True},
+                                  {"initial_cards": initial_cards, "loaded_cards": loaded_cards, "controls_enabled": atlas_controls},
+                                  initial_cards == 0 and loaded_cards == 36 and atlas_controls))
+
             # Retry a deliberately failed non-bootstrap hybrid case. Interception is local to this exact data URL.
             keys = page.evaluate("() => Object.keys(window.__HF_DATA_INDEX__.hybrid)")
             target_a = next((key for key in keys if not key.startswith("remote-triad/")), None)
