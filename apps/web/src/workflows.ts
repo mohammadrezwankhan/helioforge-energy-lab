@@ -100,9 +100,15 @@ namespace HF {
     return workflowPanel('Synthetic pilot telemetry inspector','Three bundled study examples, with their supplied tables and limitations; no sensor is connected.',
       `<div class="workflow-inline"><label class="field"><span>Study example</span><select data-workflow-sensor>${options}</select></label><span class="tag muted">SYNTHETIC · NOT CONNECTED</span></div><div class="telemetry-hud"><strong>Illustrative register mapping</strong><p>${escapeHTML(info.register)}</p><strong>Illustrative sample interval</strong><p>${escapeHTML(info.sampleInterval)}</p><small>These are study metadata only. No Modbus device, live telemetry, alarm or field result is read.</small></div>${result?`<div class="result-stats">${result.metrics.map(metric=>`<div><span>${escapeHTML(metric.label)}</span><strong>${escapeHTML(val(metric.value))} <small>${escapeHTML(metric.unit)}</small></strong></div>`).join('')}</div><details class="method-details"><summary>Supplied synthetic study rows</summary>${studyTable(result.table??[])}</details><details class="method-details"><summary>Study limits</summary>${[...(result.limitations??[]),...(result.warnings??[])].map(line=>`<p>${escapeHTML(line)}</p>`).join('')}</details>`:'<p class="notice">No bundled result is available for this study in the current browser catalogue.</p>'}<p id="workflow-pilot-status" class="workflow-status" role="status" aria-live="polite">Drag a connected pilot card to a stage to open its existing evidence form. Keyboard users can open Review evidence and choose a stage. Add a new human note and submit to save.</p><button class="btn secondary small" data-workflow-action="sign-pilot-registry">Sign local pilot registry</button>`);
   }
+  function researchStudyResultsReady():boolean {
+    const studies=STUDY_BUNDLE.catalogue.filter(def=>def.page==='research');
+    return studies.length>0&&studies.every(def=>STUDY_BUNDLE.results[def.id]!=null);
+  }
   function researchPanel():string {
+    const ready=researchStudyResultsReady();
+    const status=ready?'Research study results are ready to export.':'Research study results are loading. The dossier will be available when all research results have loaded.';
     return workflowPanel('Research dossier','Compile existing research outputs and study evidence without recalculating or changing any values.',
-      `<p>This export reuses the currently loaded drift, reliability, sustainability and source records. Results remain screening evidence with their existing warnings.</p><button class="btn secondary small" data-workflow-action="research-dossier">Download research dossier</button>`);
+      `<p>This export reuses the currently loaded drift, reliability, sustainability and source records. Results remain screening evidence with their existing warnings.</p><p id="workflow-research-status" class="${ready?'workflow-status':'notice'}" role="status" aria-live="polite">${status}</p><button class="btn secondary small" data-workflow-action="research-dossier" ${ready?'':'disabled'}>Download research dossier</button>`);
   }
   function investmentPanel():string {
     return workflowPanel('Investment committee memo','Compile current finance, PV and acquisition screens with their existing assumptions and limits.',
@@ -142,6 +148,11 @@ namespace HF {
     return current?{id:current.run_id,input_sha256:current.input_sha256??null,created_at:current.created_at??null}:null;
   }
   function setStatus(id:string,message:string):void {const el=document.getElementById(id);if(el)el.textContent=message;}
+  function workflowToast(message:string):void {
+    const toast=document.getElementById('toast');if(!toast)return;
+    toast.textContent=message;toast.className='toast show toast-error';
+    setTimeout(()=>{if(toast.textContent===message)toast.classList.remove('show');},6000);
+  }
 
   export function createWorkflowController(getState:()=>ViewState,render:()=>void):{refresh:()=>void} {
     let overlay=false,selectedPilotStudy='pilots-photogrammetry',councilFilter='all',councilRound=1;
@@ -180,7 +191,13 @@ namespace HF {
         await signedDownload('workflow-learning-status','helioforge-local-learning-evidence.json',{schema:'helioforge-learning-evidence-v1',created_at:new Date().toISOString(),passed_self_check_ids:progress.map(lesson=>lesson.id),lesson_evidence:progress.map(lesson=>({id:lesson.id,title:lesson.title,level:lesson.level,objectives:lesson.objectives,source_ids:lesson.source_ids})),notice:'Browser-local self-check progress; not verified mastery, accreditation or a credential.'});
       }else if(action==='toggle-overlay'){overlay=!overlay;render();}
       else if(action==='sign-pilot-registry')await signedDownload('workflow-pilot-status','helioforge-pilot-registry-signed.json',{schema:'helioforge-pilot-registry-v1',created_at:new Date().toISOString(),data_kind:'synthetic',pilots:state.data.pilots,notice:'Fictional workflow records; signature does not establish field evidence or signer identity.'});
-      else if(action==='research-dossier')downloadText('helioforge-research-dossier.md',researchDossier(state),'text/markdown');
+      else if(action==='research-dossier'){
+        if(!researchStudyResultsReady()){
+          const message='Research study results are still loading. The dossier download is unavailable until all research results are ready.';
+          setStatus('workflow-research-status',message);workflowToast(message);return;
+        }
+        downloadText('helioforge-research-dossier.md',researchDossier(state),'text/markdown');
+      }
       else if(action==='investment-memo')downloadText('helioforge-investment-committee-screen.md',investmentMemo(state),'text/markdown');
       else if(action==='sign-council'){
         const c=state.data.council;

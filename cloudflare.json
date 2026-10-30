@@ -49,8 +49,8 @@
   "publicSource": "https://github.com/mohammadrezwankhan/helioforge-energy-lab",
   "demoArtifact": "HelioForge-Preview.html",
   "runtimeDirectory": "apps/web/dist/hosted",
-  "previewArtifact": "docs/remediation-20261030/screenshots/cold-load/desktop.png",
-  "socialPreviewArtifact": "docs/remediation-20261030/screenshots/cold-load/social.png",
+  "previewArtifact": "docs/remediation-20261030/screenshots/headroom/desktop.png",
+  "socialPreviewArtifact": "docs/remediation-20261030/screenshots/headroom/social.png",
   "runtimePatches": [
     {
       "from": "location.protocol===\"file:\"",
