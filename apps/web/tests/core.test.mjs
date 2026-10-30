@@ -8,6 +8,20 @@ const h=context.HF;
 test('escapes HTML attributes and text',()=>assert.equal(h.escapeHTML('<script>"\'&'), '&lt;script&gt;&quot;&#39;&amp;'));
 test('null is displayed as a dash, not a fictitious zero',()=>assert.equal(h.fmt(null),'—'));
 test('zero is a valid number',()=>assert.equal(h.fmt(0),'0'));
+
+test('repeated number formatting reuses each precision without changing numeric output',()=>{
+ let constructions=0;
+ const NumberFormat=new Proxy(Intl.NumberFormat,{construct(target,args){constructions++;return Reflect.construct(target,args);}});
+ const box=vm.createContext({URL,Intl:{NumberFormat},structuredClone});
+ vm.runInContext(fs.readFileSync(new URL('../dist/app.js',import.meta.url),'utf8'),box);
+ constructions=0;
+ const rows=[[1234.5,0,'1,235'],[-1234.5,0,'-1,235'],[12.25,1,'12.3'],[0,1,'0.0'],[0.125,2,'0.13'],[1234,2,'1,234.00']];
+ for(let repeat=0;repeat<10;repeat++)for(const [value,digits,want] of rows)assert.equal(box.HF.fmt(value,digits),want);
+ assert.equal(constructions,3,'formatting table cells must not reconstruct locale formatters');
+ assert.equal(box.HF.fmt(null,2),'—');
+ assert.equal(box.HF.fmt(Infinity,2),'—');
+ assert.throws(()=>box.HF.fmt(1,-1),{name:'RangeError'});
+});
 test('money preserves negative sign',()=>assert.equal(h.money(-1234),'−€1,234'));
 test('blocks javascript source URLs',()=>assert.equal(h.safeURL('javascript:alert(1)'),'#'));
 test('allows HTTPS source URLs',()=>assert.equal(h.safeURL('https://www.cre.fr/'),'https://www.cre.fr/'));
