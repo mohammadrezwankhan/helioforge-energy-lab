@@ -1,0 +1,45 @@
+{
+  "schema": "helioforge.presentation.execution.v1",
+  "started_at": "2026-10-29T23:03:41.574399+00:00",
+  "artifact_sha256": "8ef56f4df539590392696552c2b10651faf953790d8018c982a949b21e0ccb00",
+  "environment": "Windows-11-10.0.26300-SP0",
+  "url": "https://127.0.0.1:4200/run/",
+  "physical_devices": false,
+  "oracle": "Deep link; input-mode navigation away/back; reload or cached offline navigation; draft-cache preservation; root/body overflow; no uncaught errors. Not full task behavior.",
+  "constrained_profile": "150 ms delay per routed request; no bandwidth limit; desktop hardware",
+  "old_schema_scope": "Unsupported v0 synthetic fixture; rejection/recovery, not a claimed historical migration.",
+  "cases": [
+    {
+      "test_id": "PAIR-002",
+      "workspace": "hybrid",
+      "viewport_px": "360",
+      "engine": "Firefox",
+      "interaction": "keyboard",
+      "motion": "reduced",
+      "local_state": "valid_saved",
+      "load_condition": "constrained",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "157.0",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#hybrid"
+      },
+      "duration_ms": 6077.0
+    }
+  ],
+  "summary": {
+    "PASS": 1
+  },
+  "finished_at": "2026-10-29T23:04:04.557686+00:00"
+}

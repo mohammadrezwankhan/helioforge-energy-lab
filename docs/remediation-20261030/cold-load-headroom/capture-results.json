@@ -1,0 +1,396 @@
+{
+  "schema": "helioforge.capture.v1",
+  "captured_at": "2026-10-30T10:47:47.395890+00:00",
+  "artifact_sha256": "2152500db86e3327e4636b24fab7ed460742ecec5e66e94ef631f0a51325322b",
+  "environment": "Windows-11-10.0.26300-SP0",
+  "production": false,
+  "physical_device": false,
+  "zoom": "100% desktop browser; native zoom not tested",
+  "checks": [
+    {
+      "name": "task-led Terminal entry",
+      "status": "PASS",
+      "actual": "Dialog dismissed; real candidate form visible at #compare."
+    },
+    {
+      "name": "Terminal breakpoint 359px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 360px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 361px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 379px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 380px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 381px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 419px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 420px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 421px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 459px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 460px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 461px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 479px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 480px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 481px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 519px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 520px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 521px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 549px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 550px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 551px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 599px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 600px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 601px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 649px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 650px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 651px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 759px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 760px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 761px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 799px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 800px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 801px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 802px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 819px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 820px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 821px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 899px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 900px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 901px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1049px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1050px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1051px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1099px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1100px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1101px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1119px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1120px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1121px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1249px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1250px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1251px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1499px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1500px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1501px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1649px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1650px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1651px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1749px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1750px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "Terminal breakpoint 1751px x 568px",
+      "status": "PASS",
+      "overflow_px": 0
+    },
+    {
+      "name": "portrait/landscape/short/tall draft preservation",
+      "status": "PASS",
+      "actual": "9.5 input retained across three viewport changes; no native rotation claim."
+    }
+  ],
+  "captures": [
+    {
+      "path": "screenshots/desktop.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "DPR": 1,
+      "route": "#compare",
+      "scope": "Desktop Chromium viewport emulation; genuine local candidate screenshot."
+    },
+    {
+      "path": "screenshots/tablet.png",
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "DPR": 1,
+      "route": "#compare",
+      "scope": "Desktop Chromium viewport emulation; genuine local candidate screenshot."
+    },
+    {
+      "path": "screenshots/mobile.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "DPR": 1,
+      "route": "#compare",
+      "scope": "Desktop Chromium viewport emulation; genuine local candidate screenshot."
+    },
+    {
+      "path": "screenshots/social.png",
+      "viewport": {
+        "width": 1200,
+        "height": 630
+      },
+      "DPR": 1,
+      "route": "#compare",
+      "scope": "Desktop Chromium viewport emulation; genuine local candidate screenshot."
+    }
+  ],
+  "browser_version": "156.0.8078.4",
+  "width_breakpoints_px": [
+    360,
+    380,
+    420,
+    460,
+    480,
+    520,
+    550,
+    600,
+    650,
+    760,
+    800,
+    801,
+    820,
+    900,
+    1050,
+    1100,
+    1120,
+    1250,
+    1500,
+    1650,
+    1750
+  ],
+  "summary": {
+    "PASS": 63,
+    "FAIL": 0
+  }
+}

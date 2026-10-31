@@ -2,7 +2,10 @@ namespace HF {
   export type MarketCode = 'FR' | 'DE' | 'ES' | 'IT' | 'NL' | 'GB';
   export type Page = 'hybrid' | 'lessons' | 'compare' | 'overview' | 'storage' | 'pv' | 'research' | 'markets' | 'forecast' | 'investment' | 'pilots' | 'council';
   export type Inputs = Record<string, string | number | boolean | null | number[] | string[]>;
-  export interface BaseResult { model: string; warnings: string[]; run_id?: string; created_at?: string; input_sha256?: string }
+  export interface BaseResult {
+    model: string; warnings: string[]; run_id?: string; created_at?: string; input_sha256?: string;
+    source_revision?: string; dataset_revision?: string | null; provenance?: ResultProvenance;
+  }
   export interface DispatchPoint { hour: number; label: string; load_kw: number; pv_kw: number; charge_kw: number; discharge_kw: number; grid_import_kw: number; grid_export_kw: number; curtailed_kw: number; soc_start_kwh: number; soc_end_kwh: number; soc_pct: number; import_eur_mwh: number }
   export interface Dispatch extends BaseResult { data_kind: string; market: MarketCode; duration_hours: number; capacity_kwh: number; power_kw: number; baseline_cost_eur: number; optimized_cost_eur: number; savings_eur: number; savings_pct: number | null; energy_savings_eur: number; peak_savings_eur: number; wear_cost_eur: number; baseline_peak_kw: number; optimized_peak_kw: number; discharged_kwh: number; equivalent_discharge_cycles: number; terminal_soc_kwh: number; solver: string; solver_status: string; schedule: DispatchPoint[] }
   export interface FinanceRow { year: number; gross_margin_eur: number; opex_eur: number; augmentation_eur: number; cfads_eur: number; debt_service_eur: number; interest_eur: number; debt_balance_eur: number; equity_cashflow_eur: number; dscr: number | null; cumulative_eur: number; contracted_fraction: number }
@@ -18,7 +21,33 @@ namespace HF {
   export interface Project { id: string; name: string; market: MarketCode; technology: string; stage: string; pv_mwp: number; wind_mw?: number; bess_mwh: number; capex_meur: number; progress: number }
   export interface Pilot { id: string; title: string; pillar: string; status: 'planned' | 'instrumenting' | 'running' | 'validated'; site: string; instrument: string; owner: string; evidence_note: string; target: string; updated_at?: string }
   export interface Review { agent: string; summary: string; risks: string[]; required_evidence: string[] }
-  export interface Council { hybrid_run_id?: string | null; mode: 'local' | 'openai'; execution: string; model?: string; market: MarketCode; reviewed_brief: string; reviews: Review[]; decision: { recommendation: string; unresolved_risks: string[]; next_actions: string[] }; warnings: string[]; run_id?: string }
+  export interface CouncilProtocolMetadata {
+    id: string; mode: 'local' | 'openai'; external_execution_status: string; consent_to_external_processing: boolean;
+    provider: string | null; model: string | null;
+    limits: { workflow_timeout_seconds: number | null; specialist_count: number; specialist_max_turns: number | null;
+      specialist_max_output_tokens: number | null; critic_max_turns: number | null; critic_max_output_tokens: number | null;
+      requested_cross_examination_rounds: number; cross_examination_rounds: number; expected_runner_invocations: number;
+      configured_specialist_count?: number;
+      executed_specialist_count?: number; configured_critic_count?: number; executed_critic_count?: number;
+      local_checklist_section_count?: number;
+      completed_runner_invocations: number | null; runner_invocation_semantics: string };
+    cost: { potentially_billable: boolean; attempt_may_have_incurred_provider_usage: boolean; estimate_usd: number | null;
+      actual_cost_usd: number | null; usage_budget_enforced_by_application: boolean; status: string; failure_may_still_be_billable: boolean };
+    cancellation: { status: string; provider_stop_confirmed: boolean | null; scope: string };
+    integrity: { task_id: string | null; task_id_semantics: string | null; input_sha256_semantics: string;
+      reviewer_identity_verified: boolean; evidence_authenticity_verified: boolean; signature_verified: boolean;
+      critic_signoff: boolean; human_approval_recorded: boolean };
+  }
+  export interface CouncilEvidenceReview {
+    status:string; records_checked:number;
+    records:{record_index:number;kind:string|null;digest_status:string;finding_codes:string[]}[];
+    findings:{code:string;scope:string;message:string;required_evidence:string}[];
+    semantics:string; critic_execution:string;
+  }
+  export interface Council { hybrid_run_id?: string | null; mode: 'local' | 'openai'; execution: string; model?: string; market: MarketCode;
+    reviewed_brief: string; reviews: Review[]; decision: { recommendation: string; unresolved_risks: string[]; next_actions: string[] };
+    warnings: string[]; protocol_metadata?: CouncilProtocolMetadata; evidence_review?: CouncilEvidenceReview; model_calls?: number; runner_invocations?: number;
+    run_id?: string; input_sha256?: string }
   export interface RunRecord { id: string; kind: string; created_at: string; input_hash: string }
   export interface Dashboard {
     version: string; data_kind: string; as_of: string; market: MarketCode; portfolio: Project[]; markets: Market[]; sources: Source[]; pilots: Pilot[];

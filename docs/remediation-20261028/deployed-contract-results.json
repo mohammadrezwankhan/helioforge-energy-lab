@@ -1,0 +1,128 @@
+{
+  "schema": "helioforge.deployed-contract.v1",
+  "observed_at": "2026-10-28T21:08:54.174098+00:00",
+  "scope": "Saved fresh permitted-browser responses; one edge/session, not global cache propagation.",
+  "checks": [
+    {
+      "name": "deployed manifest and exact decoded runtime bytes",
+      "status": "PASS",
+      "actual": "a12384067a75ab7a3449c9b49936e923058bd7e92585f5a08f9c00ae735b203e"
+    },
+    {
+      "name": "/ status and body identity",
+      "status": "PASS",
+      "actual": "7d31ffd6fc7113aa024368ab95a95ea79ce1f7c7b2651df768cb1795da94f1a7"
+    },
+    {
+      "name": "/ canonical",
+      "status": "PASS",
+      "actual": "https://mkgrid.co.technology/"
+    },
+    {
+      "name": "/ parseable structured data",
+      "status": "PASS",
+      "actual": {
+        "blocks": 1
+      }
+    },
+    {
+      "name": "/ inline scripts covered by effective CSP",
+      "status": "PASS",
+      "actual": {
+        "script_hashes": [
+          "'sha256-Dtl1jytq4ZYrtdT2bsZXJ/dJoSxsBgVF1lCvdfNEs7Q='"
+        ]
+      }
+    },
+    {
+      "name": "about/ status and body identity",
+      "status": "PASS",
+      "actual": "0937a7e18087f00eaa89f4cdd512ac16f09c4e5e62ba671d60b65cdd009038e0"
+    },
+    {
+      "name": "about/ canonical",
+      "status": "PASS",
+      "actual": "https://mkgrid.co.technology/about/"
+    },
+    {
+      "name": "about/ parseable structured data",
+      "status": "PASS",
+      "actual": {
+        "blocks": 1
+      }
+    },
+    {
+      "name": "about/ inline scripts covered by effective CSP",
+      "status": "PASS",
+      "actual": {
+        "script_hashes": [
+          "'sha256-v+vUXGeWPOl5lTAk1qyRXkFDauECB23lQOjWq3agJ/I='"
+        ]
+      }
+    },
+    {
+      "name": "methodology/ status and body identity",
+      "status": "PASS",
+      "actual": "06847258ce57dd81369073cff4593c657fbda4a8438e22ee8044c2aa2157d4e2"
+    },
+    {
+      "name": "methodology/ canonical",
+      "status": "PASS",
+      "actual": "https://mkgrid.co.technology/methodology/"
+    },
+    {
+      "name": "methodology/ parseable structured data",
+      "status": "PASS",
+      "actual": {
+        "blocks": 1
+      }
+    },
+    {
+      "name": "methodology/ inline scripts covered by effective CSP",
+      "status": "PASS",
+      "actual": {
+        "script_hashes": [
+          "'sha256-Em7kw2PpJzpQgIUxmGqKnY+jhmWc15dC4Hc79fUdsIw='"
+        ]
+      }
+    },
+    {
+      "name": "published three-page sitemap",
+      "status": "PASS",
+      "actual": [
+        "https://mkgrid.co.technology/",
+        "https://mkgrid.co.technology/methodology/",
+        "https://mkgrid.co.technology/about/"
+      ]
+    },
+    {
+      "name": "runtime crawl permitted to observe noindex",
+      "status": "PASS",
+      "actual": {
+        "robots": "User-agent: *\nAllow: /\n\nSitemap: https://mkgrid.co.technology/sitemap.xml\n\n# Explicit public crawler permissions. A crawl rule does not grant reuse rights.\nUser-agent: Googlebot\nAllow: /\n\nUser-agent: Bingbot\nAllow: /\n\nUser-agent: OAI-SearchBot\nAllow: /\n\nUser-agent: GPTBot\nAllow: /\n\nUser-agent: PerplexityBot\nAllow: /\n\nUser-agent: Claude-SearchBot\nAllow: /\n\n# Explicit user-requested retrieval agents\nUser-agent: ChatGPT-User\nAllow: /\n\nUser-agent: Perplexity-User\nAllow: /\n\nUser-agent: ClaudeBot\nAllow: /\n\nUser-agent: Claude-User\nAllow: /\n\nUser-agent: Google-Extended\nAllow: /\n\nUser-agent: Applebot-Extended\nAllow: /\n",
+        "runtime_header": "noindex, follow"
+      }
+    },
+    {
+      "name": "query preserved in redirect",
+      "status": "PASS",
+      "actual": "/about/?acceptance=20261028"
+    },
+    {
+      "name": "real missing-route HTTP 404",
+      "status": "PASS",
+      "actual": 404
+    },
+    {
+      "name": "runtime inline scripts covered by effective CSP",
+      "status": "PASS",
+      "actual": [
+        "'sha256-XiJ9rIoxaNuXMiC2j/5mdZS+YI+OGrRsyZUnGvN6FAg='"
+      ]
+    }
+  ],
+  "summary": {
+    "PASS": 18,
+    "FAIL": 0
+  }
+}

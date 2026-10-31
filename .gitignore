@@ -38,3 +38,10 @@ __pycache__/
 # Generated public browser export
 /.cloudflare/
 /.hallmark/
+
+# Generated hosted partitions are rebuilt from locked sources in CI.
+/apps/web/dist/hosted/
+# Review patches duplicate the Git diff and remain in the delivered archives.
+/docs/remediation-*/review.patch
+# Empty diagnostic redirection artifact, outside the application.
+/x.bytes)))

@@ -13,6 +13,7 @@ const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'hf-study-visuals-'));
 const out = path.join(temp, 'study-visuals.js');
 try {
   compileScripts([
+    path.join(root, 'src/provenance-types.ts'),
     path.join(root, 'src/roadmap-types.ts'),
     path.join(root, 'src/roadmap-data.ts'),
     path.join(root, 'src/advanced-visuals.ts'),
@@ -37,6 +38,27 @@ const result = (study, table = [], extra = {}) => ({
   metrics: [], series: [], table, warnings: [], equations: [], limitations: [], sources: [],
   evidence_sha256: 'abc', ...extra,
 });
+
+function assertNamedSvgsAreUnique(html, expectedCharts) {
+  const svgs = [...html.matchAll(/<svg\b([^>]*)>([\s\S]*?)<\/svg>/g)];
+  assert.equal(svgs.length, expectedCharts.length);
+  const ids = [];
+  const names = [];
+  for (const [, attributes, contents] of svgs) {
+    const labelledBy = attributes.match(/\baria-labelledby="([^"]+)"/);
+    assert.ok(labelledBy, 'each rendered chart exposes title and description references');
+    const references = labelledBy[1].split(/\s+/);
+    const title = contents.match(/<title\s+id="([^"]+)">([\s\S]*?)<\/title>/);
+    const description = contents.match(/<desc\s+id="([^"]+)">([\s\S]*?)<\/desc>/);
+    assert.ok(title, 'each chart has a title element');
+    assert.ok(description, 'each chart has a description element');
+    assert.deepEqual(references, [title[1], description[1]], 'each IDREF resolves to this chart\'s own title and description');
+    ids.push(title[1], description[1]);
+    names.push({title: title[2], description: description[2]});
+  }
+  assert.equal(new Set(ids).size, ids.length, `title and description IDs are unique across simultaneous charts: ${ids.join(', ')}`);
+  assert.deepEqual(names, expectedCharts);
+}
 
 test('PV sensitivity renders all 81 actual Python LCOE cells as titled accessible controls', () => {
   const def = hf.STUDY_BUNDLE.catalogue.find((entry) => entry.id === 'pv-sensitivity');
@@ -81,6 +103,41 @@ test('forecast tunnel and investment covenant use actual table values and keep n
   assert.match(plane, /y="36" width="5" height="102"/);
   assert.match(plane, /y="138" width="5" height="51"/);
   assert.match(plane, /CFADS minus debt service \(derived\) -?50 EUR/);
+});
+
+test('simultaneous research and investment charts have unique IDs and chart-specific accessible names', () => {
+  const researchDef = definition('research-vibration', 'research');
+  researchDef.title = 'Vibration readings';
+  const research = result('research-vibration', [], {
+    series: [{name: 'Bearing vibration', x_label: 'Sample', y_unit: 'mm/s', x: [1, 2], y: [4, 6]}],
+  });
+  assertNamedSvgsAreUnique(hf.studyVisual(researchDef, research, 0), [
+    {
+      title: 'Research pillar tetrahedron',
+      description: 'A navigation diagram for the three current research studies. The fourth conceptual vertex, operational efficiency, has no study selector in the current catalogue.',
+    },
+    {
+      title: 'Vibration readings result series',
+      description: 'Actual supplied result series. The vertical marker shows observation 1; null observations are gaps.',
+    },
+  ]);
+
+  const investmentDef = definition('investment-sculpt', 'investment');
+  const investment = result('investment-sculpt', [
+    {year: 1, cfads_eur: 100, debt_service_eur: 70, dscr: 1.429},
+    {year: 2, cfads_eur: 80, debt_service_eur: 50, dscr: 1.6},
+  ], {metrics: [{label: 'Minimum DSCR', value: 1.3, unit: 'ratio'}]});
+  assertNamedSvgsAreUnique(hf.studyVisual(investmentDef, investment, 0), [
+    {
+      title: 'Actual debt schedule DSCR against the configured covenant',
+      description: 'DSCR values come from the source annual debt schedule. The red horizontal plane is the actual 1.3 target; null DSCR values are shown as missing markers.',
+    },
+    {
+      title: 'Financial cashflow by year',
+      description: 'Bars show actual CFADS, actual scheduled debt service, and CFADS minus scheduled debt service derived from those two table columns. All years share one scale; positive and negative values extend from zero in opposite directions. No revenue or cashflow stages are added.',
+    },
+  ]);
+
 });
 
 test('interconnection price pillars preserve negative prices on a shared zero-baseline scale', () => {

@@ -255,7 +255,7 @@
         "load_kw": 2452.145,
         "pv_kw": 0.0,
         "charge_kw": 0.0,
-        "discharge_kw": 0.0,
+        "discharge_kw": -0.0,
         "grid_import_kw": 2452.145,
         "grid_export_kw": 0.0,
         "curtailed_kw": 0.0,
@@ -347,7 +347,7 @@
         "charge_kw": 0.0,
         "discharge_kw": 2710.588,
         "grid_import_kw": 0.0,
-        "grid_export_kw": 0.0,
+        "grid_export_kw": -0.0,
         "curtailed_kw": 0.0,
         "soc_start_kwh": 5482.475,
         "soc_end_kwh": 2625.264,
@@ -407,7 +407,7 @@
         "charge_kw": 1368.847,
         "discharge_kw": 0.0,
         "grid_import_kw": 0.0,
-        "grid_export_kw": 0.0,
+        "grid_export_kw": -0.0,
         "curtailed_kw": 0.0,
         "soc_start_kwh": 1000.0,
         "soc_end_kwh": 2298.602,
@@ -422,7 +422,7 @@
         "charge_kw": 1672.464,
         "discharge_kw": 0.0,
         "grid_import_kw": 0.0,
-        "grid_export_kw": 0.0,
+        "grid_export_kw": -0.0,
         "curtailed_kw": 0.0,
         "soc_start_kwh": 2298.602,
         "soc_end_kwh": 3885.241,
@@ -437,7 +437,7 @@
         "charge_kw": 1672.185,
         "discharge_kw": 0.0,
         "grid_import_kw": 0.0,
-        "grid_export_kw": 0.0,
+        "grid_export_kw": -0.0,
         "curtailed_kw": 0.0,
         "soc_start_kwh": 3885.241,
         "soc_end_kwh": 5471.615,
@@ -467,7 +467,7 @@
         "charge_kw": 865.605,
         "discharge_kw": 0.0,
         "grid_import_kw": 0.0,
-        "grid_export_kw": 0.0,
+        "grid_export_kw": -0.0,
         "curtailed_kw": 0.0,
         "soc_start_kwh": 8106.819,
         "soc_end_kwh": 8928.005,
@@ -482,7 +482,7 @@
         "charge_kw": 75.89,
         "discharge_kw": 0.0,
         "grid_import_kw": 0.0,
-        "grid_export_kw": 0.0,
+        "grid_export_kw": -0.0,
         "curtailed_kw": 0.0,
         "soc_start_kwh": 8928.005,
         "soc_end_kwh": 9000.0,
@@ -527,7 +527,7 @@
         "charge_kw": 0.0,
         "discharge_kw": 3897.506,
         "grid_import_kw": 0.0,
-        "grid_export_kw": 0.0,
+        "grid_export_kw": -0.0,
         "curtailed_kw": 0.0,
         "soc_start_kwh": 9000.0,
         "soc_end_kwh": 4891.668,
@@ -614,7 +614,79 @@
       "Synthetic daily profile is not an annual revenue forecast.",
       "Peak tariff applies once to this modeled period, not automatically to a month.",
       "Perfect foresight; no ancillary services, taxes, fixed fees or availability reserve."
-    ]
+    ],
+    "provenance": {
+      "schema": "helioforge.result-provenance.v1",
+      "status": "source_bound",
+      "model": {
+        "id": "storage",
+        "version": "btm-milp-v1"
+      },
+      "source_revision": "0fc05c1979383be4fa0d9c353a546949077489214ff5a9e7358f1c77b6fe0dc0",
+      "source_files": [
+        "engines/storage.py",
+        "provenance.py",
+        "schemas.py"
+      ],
+      "input": {
+        "sha256": "cc14e72969b582f4b2825f9516aad5aa8732509b0c6dabdb8b5d634a491bea48",
+        "scope": "effective_model_inputs",
+        "canonicalization": "UTF-8 JSON, sorted keys, compact separators, non-finite numbers rejected."
+      },
+      "data": {
+        "kind": "synthetic",
+        "identity": {
+          "kind": "built_in_demo_profile",
+          "market": "FR",
+          "series_fields": [
+            "load_kw",
+            "pv_kw",
+            "import_eur_per_kwh",
+            "export_eur_per_kwh"
+          ],
+          "source": "helioforge.engines.storage.demo_profile"
+        },
+        "dataset_revision": "3ca4bb425671c1158af016a21ba8f3c0c1a28eed61e993701cf3ccf91041dc04",
+        "dataset_revision_scope": "SHA-256 of canonical effective dataset inputs"
+      },
+      "units": {
+        "power": "kW",
+        "energy": "kWh",
+        "cost": "EUR"
+      },
+      "horizon": {
+        "duration_hours": 24.0
+      },
+      "endpoints": {},
+      "model_contract": {
+        "title": "Storage dispatch methodology",
+        "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/docs/METHODOLOGY.md",
+        "implementation_files": [
+          "helioforge/engines/storage.py",
+          "helioforge/provenance.py",
+          "helioforge/schemas.py"
+        ],
+        "url_scope": "Reference link only; source_revision fingerprints the listed runtime bytes and does not attest that this URL currently contains those bytes."
+      },
+      "equations": [],
+      "sources": [],
+      "limitations": [
+        "Synthetic daily profile is not an annual revenue forecast.",
+        "Peak tariff applies once to this modeled period, not automatically to a month.",
+        "Perfect foresight; no ancillary services, taxes, fixed fees or availability reserve."
+      ],
+      "integrity": {
+        "source_hash_algorithm": "SHA-256",
+        "input_hash_algorithm": "SHA-256",
+        "source_digest_scope": "Labeled bytes of the listed model implementation, schemas, internal dependencies, and provenance envelope helper.",
+        "signature_verified": false,
+        "human_approval_recorded": false,
+        "approval_status": "not_assessed"
+      }
+    },
+    "source_revision": "0fc05c1979383be4fa0d9c353a546949077489214ff5a9e7358f1c77b6fe0dc0",
+    "input_sha256": "cc14e72969b582f4b2825f9516aad5aa8732509b0c6dabdb8b5d634a491bea48",
+    "dataset_revision": "3ca4bb425671c1158af016a21ba8f3c0c1a28eed61e993701cf3ccf91041dc04"
   },
   "finance": {
     "model": "project-finance-v1",
@@ -912,7 +984,67 @@
       "Pre-tax nominal screening; no VAT, working capital, DSRA, inflation-linked revenue or terminal value.",
       "Gross margin is an independent user assumption, not the daily dispatch result annualized.",
       "Augmentation is deducted before debt service; debt is level-payment, not sculpted."
-    ]
+    ],
+    "provenance": {
+      "schema": "helioforge.result-provenance.v1",
+      "status": "source_bound",
+      "model": {
+        "id": "finance",
+        "version": "project-finance-v1"
+      },
+      "source_revision": "71dd0942cf02bac7d3942c15273d0dc19efccb3e40d828fb994884c9a78119d9",
+      "source_files": [
+        "engines/finance.py",
+        "provenance.py",
+        "schemas.py"
+      ],
+      "input": {
+        "sha256": "a158f49ec9d3ec13f21818f6f341e2d412873a5c6c3bced55f363bab73c0a91c",
+        "scope": "effective_model_inputs",
+        "canonicalization": "UTF-8 JSON, sorted keys, compact separators, non-finite numbers rejected."
+      },
+      "data": {
+        "kind": "unknown",
+        "identity": null,
+        "dataset_revision": null,
+        "dataset_revision_scope": null
+      },
+      "units": {
+        "currency": "EUR",
+        "rate": "fraction per year"
+      },
+      "horizon": {
+        "years": 20
+      },
+      "endpoints": {},
+      "model_contract": {
+        "title": "Financial screening methodology",
+        "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/docs/METHODOLOGY.md",
+        "implementation_files": [
+          "helioforge/engines/finance.py",
+          "helioforge/provenance.py",
+          "helioforge/schemas.py"
+        ],
+        "url_scope": "Reference link only; source_revision fingerprints the listed runtime bytes and does not attest that this URL currently contains those bytes."
+      },
+      "equations": [],
+      "sources": [],
+      "limitations": [
+        "Pre-tax nominal screening; no VAT, working capital, DSRA, inflation-linked revenue or terminal value.",
+        "Gross margin is an independent user assumption, not the daily dispatch result annualized.",
+        "Augmentation is deducted before debt service; debt is level-payment, not sculpted."
+      ],
+      "integrity": {
+        "source_hash_algorithm": "SHA-256",
+        "input_hash_algorithm": "SHA-256",
+        "source_digest_scope": "Labeled bytes of the listed model implementation, schemas, internal dependencies, and provenance envelope helper.",
+        "signature_verified": false,
+        "human_approval_recorded": false,
+        "approval_status": "not_assessed"
+      }
+    },
+    "source_revision": "71dd0942cf02bac7d3942c15273d0dc19efccb3e40d828fb994884c9a78119d9",
+    "input_sha256": "a158f49ec9d3ec13f21818f6f341e2d412873a5c6c3bced55f363bab73c0a91c"
   },
   "pv": {
     "model": "discounted-pv-v1",
@@ -1109,7 +1241,67 @@
       "Yield and capture price are user assumptions, not site-specific PVGIS results.",
       "Constant money basis; no escalation. Discount rate must be consistent with that basis.",
       "Land-area estimate excludes setbacks, terrain, roads and interconnection; not a technical layout."
-    ]
+    ],
+    "provenance": {
+      "schema": "helioforge.result-provenance.v1",
+      "status": "source_bound",
+      "model": {
+        "id": "pv",
+        "version": "discounted-pv-v1"
+      },
+      "source_revision": "71dd0942cf02bac7d3942c15273d0dc19efccb3e40d828fb994884c9a78119d9",
+      "source_files": [
+        "engines/finance.py",
+        "provenance.py",
+        "schemas.py"
+      ],
+      "input": {
+        "sha256": "817ebe893103a69285d2e72aa492e036b68fbdb1f87b0d945467f894e98c2de1",
+        "scope": "effective_model_inputs",
+        "canonicalization": "UTF-8 JSON, sorted keys, compact separators, non-finite numbers rejected."
+      },
+      "data": {
+        "kind": "unknown",
+        "identity": null,
+        "dataset_revision": null,
+        "dataset_revision_scope": null
+      },
+      "units": {
+        "energy": "MWh",
+        "currency": "EUR"
+      },
+      "horizon": {
+        "years": 30
+      },
+      "endpoints": {},
+      "model_contract": {
+        "title": "PV screening methodology",
+        "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/docs/METHODOLOGY.md",
+        "implementation_files": [
+          "helioforge/engines/finance.py",
+          "helioforge/provenance.py",
+          "helioforge/schemas.py"
+        ],
+        "url_scope": "Reference link only; source_revision fingerprints the listed runtime bytes and does not attest that this URL currently contains those bytes."
+      },
+      "equations": [],
+      "sources": [],
+      "limitations": [
+        "Yield and capture price are user assumptions, not site-specific PVGIS results.",
+        "Constant money basis; no escalation. Discount rate must be consistent with that basis.",
+        "Land-area estimate excludes setbacks, terrain, roads and interconnection; not a technical layout."
+      ],
+      "integrity": {
+        "source_hash_algorithm": "SHA-256",
+        "input_hash_algorithm": "SHA-256",
+        "source_digest_scope": "Labeled bytes of the listed model implementation, schemas, internal dependencies, and provenance envelope helper.",
+        "signature_verified": false,
+        "human_approval_recorded": false,
+        "approval_status": "not_assessed"
+      }
+    },
+    "source_revision": "71dd0942cf02bac7d3942c15273d0dc19efccb3e40d828fb994884c9a78119d9",
+    "input_sha256": "817ebe893103a69285d2e72aa492e036b68fbdb1f87b0d945467f894e98c2de1"
   },
   "acquisition": {
     "model": "ma-screen-v1",
@@ -1122,7 +1314,67 @@
       "Pre-tax enterprise screening only: EBITDA less maintenance capex is a proxy, not full FCFF.",
       "No tax, working capital, terminal value or technology-specific production model.",
       "Negative implied equity is reported, not silently floored at zero."
-    ]
+    ],
+    "provenance": {
+      "schema": "helioforge.result-provenance.v1",
+      "status": "source_bound",
+      "model": {
+        "id": "acquisition",
+        "version": "ma-screen-v1"
+      },
+      "source_revision": "71dd0942cf02bac7d3942c15273d0dc19efccb3e40d828fb994884c9a78119d9",
+      "source_files": [
+        "engines/finance.py",
+        "provenance.py",
+        "schemas.py"
+      ],
+      "input": {
+        "sha256": "9f1b7d60f68b52f562f5a1ac0d59a6c81dabf1bbc5888e7c7407d5d56e4f7041",
+        "scope": "effective_model_inputs",
+        "canonicalization": "UTF-8 JSON, sorted keys, compact separators, non-finite numbers rejected."
+      },
+      "data": {
+        "kind": "unknown",
+        "identity": null,
+        "dataset_revision": null,
+        "dataset_revision_scope": null
+      },
+      "units": {
+        "currency": "EUR",
+        "multiple": "EV/EBITDA"
+      },
+      "horizon": {
+        "years": 20
+      },
+      "endpoints": {},
+      "model_contract": {
+        "title": "Acquisition screening methodology",
+        "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/docs/METHODOLOGY.md",
+        "implementation_files": [
+          "helioforge/engines/finance.py",
+          "helioforge/provenance.py",
+          "helioforge/schemas.py"
+        ],
+        "url_scope": "Reference link only; source_revision fingerprints the listed runtime bytes and does not attest that this URL currently contains those bytes."
+      },
+      "equations": [],
+      "sources": [],
+      "limitations": [
+        "Pre-tax enterprise screening only: EBITDA less maintenance capex is a proxy, not full FCFF.",
+        "No tax, working capital, terminal value or technology-specific production model.",
+        "Negative implied equity is reported, not silently floored at zero."
+      ],
+      "integrity": {
+        "source_hash_algorithm": "SHA-256",
+        "input_hash_algorithm": "SHA-256",
+        "source_digest_scope": "Labeled bytes of the listed model implementation, schemas, internal dependencies, and provenance envelope helper.",
+        "signature_verified": false,
+        "human_approval_recorded": false,
+        "approval_status": "not_assessed"
+      }
+    },
+    "source_revision": "71dd0942cf02bac7d3942c15273d0dc19efccb3e40d828fb994884c9a78119d9",
+    "input_sha256": "9f1b7d60f68b52f562f5a1ac0d59a6c81dabf1bbc5888e7c7407d5d56e4f7041"
   },
   "forecast": {
     "model": "mean-reverting-scenario-v1",
@@ -1277,7 +1529,69 @@
       "P10/P50/P90 are numerical quantiles, not exceedance-probability energy-yield labels.",
       "Negative annual outcomes are allowed, not clipped. Currency is constant EUR, including GB demo.",
       "Market code is metadata; geography changes require user-specified scenario parameters."
-    ]
+    ],
+    "provenance": {
+      "schema": "helioforge.result-provenance.v1",
+      "status": "source_bound",
+      "model": {
+        "id": "forecast",
+        "version": "mean-reverting-scenario-v1"
+      },
+      "source_revision": "af80714ad216b7744ce22916ff715f7b5ed75488514cbcecbf49588a1997e01d",
+      "source_files": [
+        "engines/forecast.py",
+        "provenance.py",
+        "schemas.py"
+      ],
+      "input": {
+        "sha256": "08e92618d82bdde75e048c864bbf4e3215d26f5ebc42f69ad905c1047f934d9e",
+        "scope": "effective_model_inputs",
+        "canonicalization": "UTF-8 JSON, sorted keys, compact separators, non-finite numbers rejected."
+      },
+      "data": {
+        "kind": "synthetic",
+        "identity": null,
+        "dataset_revision": null,
+        "dataset_revision_scope": null
+      },
+      "units": {
+        "price": "EUR/MWh",
+        "probability": "fraction"
+      },
+      "horizon": {
+        "years": 20,
+        "start_year": 2027
+      },
+      "endpoints": {},
+      "model_contract": {
+        "title": "Price scenario model contract",
+        "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/docs/METHODOLOGY.md",
+        "implementation_files": [
+          "helioforge/engines/forecast.py",
+          "helioforge/provenance.py",
+          "helioforge/schemas.py"
+        ],
+        "url_scope": "Reference link only; source_revision fingerprints the listed runtime bytes and does not attest that this URL currently contains those bytes."
+      },
+      "equations": [],
+      "sources": [],
+      "limitations": [
+        "Uncalibrated annual-price scenarios, not market forecasts or backtested confidence intervals.",
+        "P10/P50/P90 are numerical quantiles, not exceedance-probability energy-yield labels.",
+        "Negative annual outcomes are allowed, not clipped. Currency is constant EUR, including GB demo.",
+        "Market code is metadata; geography changes require user-specified scenario parameters."
+      ],
+      "integrity": {
+        "source_hash_algorithm": "SHA-256",
+        "input_hash_algorithm": "SHA-256",
+        "source_digest_scope": "Labeled bytes of the listed model implementation, schemas, internal dependencies, and provenance envelope helper.",
+        "signature_verified": false,
+        "human_approval_recorded": false,
+        "approval_status": "not_assessed"
+      }
+    },
+    "source_revision": "af80714ad216b7744ce22916ff715f7b5ed75488514cbcecbf49588a1997e01d",
+    "input_sha256": "08e92618d82bdde75e048c864bbf4e3215d26f5ebc42f69ad905c1047f934d9e"
   },
   "drift": {
     "model": "robust-residual-v1",
@@ -1482,7 +1796,65 @@
     "warnings": [
       "The first third must represent healthy operation; thresholds are not validated field alarms.",
       "Pointwise robust residual screening, not causal diagnosis or an RUL model."
-    ]
+    ],
+    "provenance": {
+      "schema": "helioforge.result-provenance.v1",
+      "status": "source_bound",
+      "model": {
+        "id": "drift",
+        "version": "robust-residual-v1"
+      },
+      "source_revision": "f8bb182f7ac05f2aff55fabd0ed7333822f75b3a1b87d1be46f5ff3637573480",
+      "source_files": [
+        "engines/research.py",
+        "provenance.py",
+        "schemas.py"
+      ],
+      "input": {
+        "sha256": "8d018955e9f568e705fd7473655a32837030d151397d2b63fb4b16fdda4b6a5b",
+        "scope": "effective_model_inputs",
+        "canonicalization": "UTF-8 JSON, sorted keys, compact separators, non-finite numbers rejected."
+      },
+      "data": {
+        "kind": "unknown",
+        "identity": null,
+        "dataset_revision": null,
+        "dataset_revision_scope": null
+      },
+      "units": {
+        "residual": "fraction",
+        "drift": "%",
+        "threshold": "standard deviations"
+      },
+      "horizon": null,
+      "endpoints": {},
+      "model_contract": {
+        "title": "Residual drift screening methodology",
+        "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/docs/METHODOLOGY.md",
+        "implementation_files": [
+          "helioforge/engines/research.py",
+          "helioforge/provenance.py",
+          "helioforge/schemas.py"
+        ],
+        "url_scope": "Reference link only; source_revision fingerprints the listed runtime bytes and does not attest that this URL currently contains those bytes."
+      },
+      "equations": [],
+      "sources": [],
+      "limitations": [
+        "The first third must represent healthy operation; thresholds are not validated field alarms.",
+        "Pointwise robust residual screening, not causal diagnosis or an RUL model."
+      ],
+      "integrity": {
+        "source_hash_algorithm": "SHA-256",
+        "input_hash_algorithm": "SHA-256",
+        "source_digest_scope": "Labeled bytes of the listed model implementation, schemas, internal dependencies, and provenance envelope helper.",
+        "signature_verified": false,
+        "human_approval_recorded": false,
+        "approval_status": "not_assessed"
+      }
+    },
+    "source_revision": "f8bb182f7ac05f2aff55fabd0ed7333822f75b3a1b87d1be46f5ff3637573480",
+    "input_sha256": "8d018955e9f568e705fd7473655a32837030d151397d2b63fb4b16fdda4b6a5b"
   },
   "reliability": {
     "model": "conditional-weibull-v1",
@@ -1491,7 +1863,63 @@
     "conditional_median_remaining_hours": 24503.68,
     "warnings": [
       "User-specified Weibull parameters; no fit to censored field data or calibrated prognostics."
-    ]
+    ],
+    "provenance": {
+      "schema": "helioforge.result-provenance.v1",
+      "status": "source_bound",
+      "model": {
+        "id": "reliability",
+        "version": "conditional-weibull-v1"
+      },
+      "source_revision": "f8bb182f7ac05f2aff55fabd0ed7333822f75b3a1b87d1be46f5ff3637573480",
+      "source_files": [
+        "engines/research.py",
+        "provenance.py",
+        "schemas.py"
+      ],
+      "input": {
+        "sha256": "164ae322a4b443f7df1daaa3e3b8dda5f69b91f63c7536fe05b00da87e8640f3",
+        "scope": "effective_model_inputs",
+        "canonicalization": "UTF-8 JSON, sorted keys, compact separators, non-finite numbers rejected."
+      },
+      "data": {
+        "kind": "unknown",
+        "identity": null,
+        "dataset_revision": null,
+        "dataset_revision_scope": null
+      },
+      "units": {
+        "time": "hours",
+        "probability": "%"
+      },
+      "horizon": null,
+      "endpoints": {},
+      "model_contract": {
+        "title": "Conditional reliability screening methodology",
+        "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/docs/METHODOLOGY.md",
+        "implementation_files": [
+          "helioforge/engines/research.py",
+          "helioforge/provenance.py",
+          "helioforge/schemas.py"
+        ],
+        "url_scope": "Reference link only; source_revision fingerprints the listed runtime bytes and does not attest that this URL currently contains those bytes."
+      },
+      "equations": [],
+      "sources": [],
+      "limitations": [
+        "User-specified Weibull parameters; no fit to censored field data or calibrated prognostics."
+      ],
+      "integrity": {
+        "source_hash_algorithm": "SHA-256",
+        "input_hash_algorithm": "SHA-256",
+        "source_digest_scope": "Labeled bytes of the listed model implementation, schemas, internal dependencies, and provenance envelope helper.",
+        "signature_verified": false,
+        "human_approval_recorded": false,
+        "approval_status": "not_assessed"
+      }
+    },
+    "source_revision": "f8bb182f7ac05f2aff55fabd0ed7333822f75b3a1b87d1be46f5ff3637573480",
+    "input_sha256": "164ae322a4b443f7df1daaa3e3b8dda5f69b91f63c7536fe05b00da87e8640f3"
   },
   "sustainability": {
     "model": "carbon-screen-v1",
@@ -1503,7 +1931,68 @@
       "Screening inventory, not an ISO-conformant or independently verified life-cycle assessment.",
       "Avoided emissions depend on the assumed counterfactual; they are not carbon credits.",
       "Biodiversity requires a separate ecological baseline and field survey; no automatic biodiversity score."
-    ]
+    ],
+    "provenance": {
+      "schema": "helioforge.result-provenance.v1",
+      "status": "source_bound",
+      "model": {
+        "id": "sustainability",
+        "version": "carbon-screen-v1"
+      },
+      "source_revision": "f8bb182f7ac05f2aff55fabd0ed7333822f75b3a1b87d1be46f5ff3637573480",
+      "source_files": [
+        "engines/research.py",
+        "provenance.py",
+        "schemas.py"
+      ],
+      "input": {
+        "sha256": "f9558bdb58b7c8831eb1328ef1f9aaede730227578db47bedc5c707209fa1eed",
+        "scope": "effective_model_inputs",
+        "canonicalization": "UTF-8 JSON, sorted keys, compact separators, non-finite numbers rejected."
+      },
+      "data": {
+        "kind": "unknown",
+        "identity": null,
+        "dataset_revision": null,
+        "dataset_revision_scope": null
+      },
+      "units": {
+        "generation": "MWh",
+        "emissions": "tCO2e",
+        "intensity": "gCO2e/kWh"
+      },
+      "horizon": {
+        "years": 30
+      },
+      "endpoints": {},
+      "model_contract": {
+        "title": "Sustainability screening methodology",
+        "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/docs/METHODOLOGY.md",
+        "implementation_files": [
+          "helioforge/engines/research.py",
+          "helioforge/provenance.py",
+          "helioforge/schemas.py"
+        ],
+        "url_scope": "Reference link only; source_revision fingerprints the listed runtime bytes and does not attest that this URL currently contains those bytes."
+      },
+      "equations": [],
+      "sources": [],
+      "limitations": [
+        "Screening inventory, not an ISO-conformant or independently verified life-cycle assessment.",
+        "Avoided emissions depend on the assumed counterfactual; they are not carbon credits.",
+        "Biodiversity requires a separate ecological baseline and field survey; no automatic biodiversity score."
+      ],
+      "integrity": {
+        "source_hash_algorithm": "SHA-256",
+        "input_hash_algorithm": "SHA-256",
+        "source_digest_scope": "Labeled bytes of the listed model implementation, schemas, internal dependencies, and provenance envelope helper.",
+        "signature_verified": false,
+        "human_approval_recorded": false,
+        "approval_status": "not_assessed"
+      }
+    },
+    "source_revision": "f8bb182f7ac05f2aff55fabd0ed7333822f75b3a1b87d1be46f5ff3637573480",
+    "input_sha256": "f9558bdb58b7c8831eb1328ef1f9aaede730227578db47bedc5c707209fa1eed"
   },
   "defaults": {
     "storage": {
@@ -1605,6 +2094,71 @@
     "mode": "local",
     "hybrid_run_id": null,
     "execution": "deterministic_rule_based",
+    "protocol_metadata": {
+      "id": "helioforge-council/v1",
+      "mode": "local",
+      "external_execution_status": "not_requested",
+      "consent_to_external_processing": false,
+      "provider": null,
+      "model": null,
+      "limits": {
+        "workflow_timeout_seconds": null,
+        "specialist_count": 0,
+        "configured_specialist_count": 0,
+        "executed_specialist_count": 0,
+        "configured_critic_count": 0,
+        "executed_critic_count": 0,
+        "local_checklist_section_count": 8,
+        "specialist_max_turns": null,
+        "specialist_max_output_tokens": null,
+        "critic_max_turns": null,
+        "critic_max_output_tokens": null,
+        "requested_cross_examination_rounds": 1,
+        "cross_examination_rounds": 0,
+        "expected_runner_invocations": 0,
+        "completed_runner_invocations": 0,
+        "runner_invocation_semantics": "No Agents SDK or provider invocation; eight fixed checklist sections, deterministic summary, no critic execution."
+      },
+      "cost": {
+        "potentially_billable": false,
+        "attempt_may_have_incurred_provider_usage": false,
+        "estimate_usd": null,
+        "actual_cost_usd": null,
+        "usage_budget_enforced_by_application": false,
+        "status": "not_applicable",
+        "failure_may_still_be_billable": false
+      },
+      "cancellation": {
+        "status": "not_applicable",
+        "provider_stop_confirmed": null,
+        "scope": "No external task was started."
+      },
+      "integrity": {
+        "task_id": null,
+        "task_id_semantics": null,
+        "input_sha256_semantics": "The local persistence layer's digest identifies serialized request inputs. It does not verify the source, signer, scientific validity, or approval.",
+        "reviewer_identity_verified": false,
+        "evidence_authenticity_verified": false,
+        "signature_verified": false,
+        "critic_signoff": false,
+        "human_approval_recorded": false
+      }
+    },
+    "evidence_review": {
+      "status": "checklist_only",
+      "records_checked": 0,
+      "records": [],
+      "findings": [
+        {
+          "code": "no_attached_evidence",
+          "scope": "all",
+          "message": "No saved evidence record was attached to this checklist.",
+          "required_evidence": "Attach a relevant saved run and inspect its original inputs, units and source."
+        }
+      ],
+      "semantics": "Bounded metadata and known result-shape checks only. These checks do not establish scientific validity, source authenticity, signer identity, legal applicability, or human approval.",
+      "critic_execution": "not_configured_in_local_mode"
+    },
     "reviewed_brief": "Review a 5 MW / 10 MWh BTM storage investment for an industrial customer.",
     "market": "FR",
     "reviews": [
@@ -1612,80 +2166,96 @@
         "agent": "Storage engineer",
         "summary": "The synthetic 24-hour optimization is optimal; terminal SOC is preserved.",
         "risks": [
-          "Perfect foresight and one illustrative day do not establish annual value."
+          "Perfect foresight and one illustrative day do not establish annual value.",
+          "No saved evidence record was attached to this checklist."
         ],
         "required_evidence": [
-          "Interval meter data, import/export limits and battery warranty throughput."
+          "Interval meter data, import/export limits and battery warranty throughput.",
+          "Attach a relevant saved run and inspect its original inputs, units and source."
         ]
       },
       {
         "agent": "Investment analyst",
-        "summary": "The independent finance assumptions produce NPV EUR 1,857,087; minimum DSCR is 0.547878.",
+        "summary": "The independent finance assumptions produce NPV EUR 1,857,087; IRR is 16.128%; minimum DSCR is 0.547878.",
         "risks": [
-          "Revenue is an assumed gross margin; validate contract duration, augmentation and downside."
+          "Revenue is an assumed gross margin; validate contract duration, augmentation and downside.",
+          "No saved evidence record was attached to this checklist."
         ],
         "required_evidence": [
-          "Contract terms, cost quotations and a reconciled annual dispatch-to-finance bridge."
+          "Contract terms, cost quotations and a reconciled annual dispatch-to-finance bridge.",
+          "Attach a relevant saved run and inspect its original inputs, units and source."
         ]
       },
       {
         "agent": "Market reviewer",
         "summary": "France has a CRE source link, but no approved tariff or regulatory determination.",
         "risks": [
-          "Market access, network fees, metering and stacking eligibility are unresolved."
+          "Market access, network fees, metering and stacking eligibility are unresolved.",
+          "No saved evidence record was attached to this checklist."
         ],
         "required_evidence": [
-          "Dated primary rules, customer tariff and an accountable local reviewer."
+          "Dated primary rules, customer tariff and an accountable local reviewer.",
+          "Attach a relevant saved run and inspect its original inputs, units and source."
         ]
       },
       {
         "agent": "Sustainability reviewer",
-        "summary": "Carbon screening and biodiversity field work are separate evidence streams.",
+        "summary": "Carbon screening and biodiversity field work are separate evidence streams; no carbon credits are claimed.",
         "risks": [
-          "Illustrative emissions factors are not certified LCA data or biodiversity outcomes."
+          "Illustrative emissions factors are not certified LCA data or biodiversity outcomes.",
+          "No saved evidence record was attached to this checklist."
         ],
         "required_evidence": [
-          "Supplier inventory, system boundary, counterfactual and ecological baseline."
+          "Supplier inventory, system boundary, counterfactual and ecological baseline.",
+          "Attach a relevant saved run and inspect its original inputs, units and source."
         ]
       },
       {
         "agent": "Hybrid architect",
-        "summary": "No saved hybrid run was supplied; architecture-specific adequacy has not been reviewed.",
+        "summary": "No saved hybrid run was supplied; structural illustrations and hourly energy-balance screens are not dynamic specialist studies, and architecture-specific adequacy has not been reviewed.",
         "risks": [
-          "A greedy hourly energy balance does not establish GFM stability, transfer performance or protection."
+          "A greedy hourly energy balance does not establish GFM stability, transfer performance or protection.",
+          "No saved evidence record was attached to this checklist."
         ],
         "required_evidence": [
-          "Reviewed topology, dynamic models, equipment limits and site-specific measurements."
+          "Reviewed topology, dynamic models, equipment limits and site-specific measurements.",
+          "Attach a relevant saved run and inspect its original inputs, units and source."
         ]
       },
       {
         "agent": "Learning designer",
         "summary": "The catalogue contains 36 architecture lessons with local self-checks; none is an accredited qualification.",
         "risks": [
-          "Self-check completion is not independently verified mastery."
+          "Self-check completion is not independently verified mastery.",
+          "No saved evidence record was attached to this checklist."
         ],
         "required_evidence": [
-          "Instructor review, learner feedback and independently checked assessment outcomes."
+          "Instructor review, learner feedback and independently checked assessment outcomes.",
+          "Attach a relevant saved run and inspect its original inputs, units and source."
         ]
       },
       {
         "agent": "Accessibility reviewer",
         "summary": "Documented keyboard, text-alternative and motion controls require real assistive-technology testing.",
         "risks": [
-          "This rule-based reviewer has not inspected a browser or conducted a WCAG audit."
+          "This rule-based reviewer has not inspected a browser or conducted a WCAG audit.",
+          "No saved evidence record was attached to this checklist."
         ],
         "required_evidence": [
-          "Keyboard, screen-reader, contrast, reduced-motion and mobile test evidence."
+          "Keyboard, screen-reader, contrast, reduced-motion and mobile test evidence.",
+          "Attach a relevant saved run and inspect its original inputs, units and source."
         ]
       },
       {
         "agent": "Reproducibility reviewer",
-        "summary": "Synthetic cases and input hashes support reproducibility; no stars, award or public deployment is assumed.",
+        "summary": "Reproducibility is not established: this fixed checklist does not independently replay source inputs, and a matching digest does not authenticate source, signer or scientific validity.",
         "risks": [
-          "Different initial/terminal SOC, demand and horizons can bias run comparisons."
+          "Different initial/terminal SOC, demand and horizons can bias run comparisons.",
+          "No saved evidence record was attached to this checklist."
         ],
         "required_evidence": [
-          "Pinned input files, regression outputs, boundary checks and an independent solver benchmark."
+          "Pinned input files, regression outputs, boundary checks and an independent solver benchmark.",
+          "Attach a relevant saved run and inspect its original inputs, units and source."
         ]
       }
     ],
@@ -1703,7 +2273,8 @@
       ]
     },
     "warnings": [
-      "No LLM was used in local mode. The brief is recorded; this is a fixed-scope checklist, not free-form analysis."
+      "No LLM was used in local mode. The brief is recorded; this is a fixed-scope checklist, not free-form analysis.",
+      "No saved evidence record was attached to this checklist."
     ]
   }
 }

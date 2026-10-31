@@ -1,0 +1,10 @@
+role,review_scope,adversarial_case,acceptance
+Storage engineering,"SOC, power/energy, reserve and terminal-condition assumptions",Incorrect units; depleted initial battery; incompatible annual and hourly models,Flag invalid assumptions and demand a reproducible engine-specific run.
+Investment analysis,"Cash-flow definitions, discount basis and covenant evidence",No debt; negative CFADS; nonconventional cash flows; missing revenue bridge,Keep undefined metrics null and refuse automatic investment approval.
+Market evidence,"Dated market evidence, settlement intervals and jurisdiction",Synthetic price called live; publication date treated as effective date,Separate observed data from scenario assumptions and legal interpretation.
+Sustainability,"System boundary, emissions factors and provenance",Missing EPD; mixed lifecycle boundaries; stored-energy provenance absent,State scope and uncertainty; do not invent carbon credits.
+Hybrid architecture,"Topology, applicability and fidelity limits",Study-only architecture submitted as solved; DC label implies unsupported DC physics,"Distinguish structural illustration, hourly screen and specialized study."
+Learning design,"Prerequisites, explanation and assessment validity",Reload after partial progress; guessed self-check; export without learner identity,Support learning evidence without claiming accredited mastery.
+Accessibility,"Keyboard, semantics, alternate representations and motion",Canvas-only information; focus trap; hidden controls; inaccessible heatmap,"Require task completion with assistive technology, not axe alone."
+Reproducibility,"Versioned inputs, model, seed, source and evidence chain",Tampered input; old schema; missing seed; different engine under same label,Require replayable inputs and explicit uncertainty/identity limitations.
+Independent critic,"Conflicts, missing evidence and unsupported conclusions",All specialists agree despite missing evidence; partial role failure,Retain dissent and fail incomplete reviews; human approval remains separate.

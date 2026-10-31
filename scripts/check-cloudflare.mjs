@@ -4,12 +4,26 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
+import {buildModelRegistry,buildPublicCapabilityFacts,CAPABILITY_COPY,validateCloudflareCopy} from './capability-contract.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const config=JSON.parse(fs.readFileSync(path.join(root,'cloudflare.json'),'utf8'));
+validateCloudflareCopy(config);
+const modelRegistry=buildModelRegistry(root);
+const expectedCapabilityFacts=buildPublicCapabilityFacts(modelRegistry,{
+ origin:new URL(config.canonical).origin,
+ applicationBase:config.canonical,
+ documentation:{
+  help:`${config.publicSource}/blob/main/README.md#capability-contract-and-model-registry`,
+  modelRegistry:`${config.publicSource}/blob/main/docs/MODEL_REGISTRY.md`,
+  capabilities:`${config.publicSource}/blob/main/docs/CAPABILITIES.md`,
+ },
+});
 const outputRoot=process.env.CLOUDFLARE_OUTPUT_ROOT===undefined?path.join(root,'.cloudflare'):path.resolve(root,process.env.CLOUDFLARE_OUTPUT_ROOT);
 const output=path.join(outputRoot,'app');
 const read=file=>fs.readFileSync(path.join(output,file),'utf8');
 const html=read('index.html'),runtime=read('run/index.html'),facts=JSON.parse(read('app.json'));
+const configuredPreview=config.previewArtifact||'docs/repository/demo-desktop.png';
+const configuredSocialPreview=config.socialPreviewArtifact||'docs/repository/social-preview.png';
 assert.equal(facts.url,config.canonical);
 assert.equal(new URL(config.canonical).origin,'https://mklab.co.technology');
 assert.ok(html.includes('MKLab Browser Apps'));
@@ -23,7 +37,19 @@ assert.match(html,/href="\.\/run\/"/);
 const schemas=[...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].map(m=>JSON.parse(m[1]));
 assert.equal(schemas.length,1);assert.equal(schemas[0]['@graph'][0].url,config.canonical);
 assert.equal(schemas[0]['@graph'][0].name,config.title);
+for(const phrase of Object.values(CAPABILITY_COPY))assert.ok(schemas[0]['@graph'][0].featureList.includes(phrase),'structured app facts missing '+phrase);
 assert.deepEqual(facts.features,config.features);assert.deepEqual(facts.steps,config.steps);
+assert.deepEqual(facts.capabilityContract,expectedCapabilityFacts);
+assert.equal(facts.capabilityContract.workspaceCount,12);assert.equal(facts.capabilityContract.studyCount,59);
+assert.ok(facts.capabilityContract.modelRegistryUrl.includes('/docs/MODEL_REGISTRY.md'));
+assert.ok(facts.capabilityContract.taskStarts[0].href.startsWith(config.canonical));
+assert.ok(facts.sourceTreeDirty===null||typeof facts.sourceTreeDirty==='boolean');
+assert.equal(typeof facts.sourceIdentityStatus,'string');
+if(facts.sourceTreeDirty===true)assert.match(facts.sourceIdentityStatus,/base commit/);
+assert.equal(facts.previewArtifact,configuredPreview);assert.equal(facts.socialPreviewArtifact,configuredSocialPreview);
+assert.equal(createHash('sha256').update(fs.readFileSync(path.join(output,'preview.png'))).digest('hex'),createHash('sha256').update(fs.readFileSync(path.join(root,configuredPreview))).digest('hex'));
+assert.equal(createHash('sha256').update(fs.readFileSync(path.join(output,'social-preview.png'))).digest('hex'),createHash('sha256').update(fs.readFileSync(path.join(root,configuredSocialPreview))).digest('hex'));
+if(/^docs[\\/]remediation-\d{8}[\\/]screenshots[\\/]/.test(configuredPreview))assert.ok(html.includes('Release-build capture. Source and runtime identity are listed below.'));
 assert.ok(facts.limitations.length>=2);assert.ok(read('llms.txt').includes(config.canonical));
 assert.ok(fs.statSync(path.join(output,'social-preview.png')).size>100);
 assert.ok(fs.statSync(path.join(output,'preview.png')).size>100);

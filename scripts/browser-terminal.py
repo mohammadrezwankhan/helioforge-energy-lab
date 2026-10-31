@@ -60,7 +60,7 @@ def expect_selector(page: Page, selector: str, timeout: int = 10_000) -> None:
 def navigate(page: Page, route: str, width: int) -> None:
     if page.evaluate("location.hash.slice(1)") == route:
         return
-    if width <= 800:
+    if page.locator('[data-action="menu"]').is_visible():
         toggle = page.locator('[data-action="menu"]')
         if toggle.get_attribute("aria-expanded") != "true":
             toggle.click()
@@ -319,9 +319,13 @@ def exercise_terminal(page: Page, state: dict, scratch: Path, screenshot_dir: Pa
     with page.expect_file_chooser() as chooser_event:
         page.locator('[data-terminal-action="import"]').click()
     chooser_event.value.set_files(str(scratch / "run.json"))
-    page.locator("#terminal-notice").get_by_text("hash verified", exact=False).wait_for(timeout=5_000)
+    page.locator("#terminal-notice").get_by_text("Manifest integrity verified", exact=False).wait_for(timeout=5_000)
+    imported_notice = page.locator("#terminal-notice").inner_text()
+    exported_inputs = json.loads((scratch / "run.json").read_text(encoding="utf-8"))["payload"]["run"]["inputs"]
+    imported_inputs = page.locator('#terminal-run-form [name]').evaluate_all("els=>Object.fromEntries(els.map(e=>[e.name,Number(e.value)]))")
     check(state, "valid JSON manifest imports after digest check and deterministic rerun",
-          "hash verified" in page.locator("#terminal-notice").inner_text())
+          "all 24 steps reproduced locally" in imported_notice and "does not establish authorship or scientific validity" in imported_notice
+          and imported_inputs == exported_inputs, imported_notice)
 
     open_command_palette(page, ":")
     check(state, "Ctrl+K palette lists terminal commands", page.locator('[data-terminal-command=":preset island"]').count() == 1)
@@ -350,6 +354,7 @@ def exercise_terminal(page: Page, state: dict, scratch: Path, screenshot_dir: Pa
 
     share_url = page.locator('[data-terminal-action="share"]')
     share_url.click()
+    page.wait_for_url(re.compile(r'.*[?&]terminal=.*#compare$'), wait_until='commit', timeout=10_000)
     shared = page.url
     parsed = urlparse(shared)
     check(state, "share action writes exact terminal inputs to query state", "terminal=" in parsed.query and parsed.fragment == "compare", shared[:500])
@@ -368,9 +373,24 @@ def exercise_terminal(page: Page, state: dict, scratch: Path, screenshot_dir: Pa
 def exercise_legacy_compare(page: Page, state: dict) -> None:
     page.goto(page.url.split("?")[0].split("#")[0] + "#hybrid", wait_until="load")
     page.locator("#hybrid-config").wait_for()
-    page.locator('#architecture-library button[data-system="hospital-island"]').click()
-    page.wait_for_function("document.querySelector('#hybrid-system')?.value === 'hospital-island'", timeout=5_000)
-    system_card = page.locator('#architecture-library button[data-system="hospital-island"]')
+    page.locator("#architecture-library").scroll_into_view_if_needed()
+    system_card_selector = '#architecture-library button[data-system="hospital-island"]'
+    system_card = page.locator(system_card_selector)
+    system_card.wait_for(state="visible", timeout=5_000)
+    page.evaluate("selector => { window.__terminalPreviousSystemCard = document.querySelector(selector); }",
+                  system_card_selector)
+    system_card.click()
+    page.wait_for_function("""selector => {
+      const previous = window.__terminalPreviousSystemCard;
+      const current = document.querySelector(selector);
+      return previous && !previous.isConnected && current && current !== previous && current.isConnected &&
+        current.getAttribute('aria-pressed') === 'true' &&
+        document.querySelector('#hybrid-system')?.value === 'hospital-island';
+    }""", arg=system_card_selector, timeout=5_000)
+    # Selecting a system rebuilds the view. Measure the connected, selected
+    # replacement card after it has entered layout, not its detached predecessor.
+    system_card = page.locator(system_card_selector)
+    system_card.wait_for(state="visible", timeout=5_000)
     card_state = system_card.evaluate("el => ({pressed: el.getAttribute('aria-pressed'), height: el.getBoundingClientRect().height})")
     page.locator("#hybrid-system").select_option("remote-triad")
     page.wait_for_function("document.querySelector('#hybrid-system')?.value === 'remote-triad'", timeout=5_000)
@@ -429,6 +449,8 @@ def main() -> int:
     server: ThreadingHTTPServer | None = None
     if args.url:
         base_url = args.url.rstrip("/")
+        if base_url.endswith('/run'):
+            base_url = base_url[:-4]
     else:
         site_dir = args.site_dir.resolve()
         if not site_dir.is_dir():
@@ -453,7 +475,7 @@ def main() -> int:
                 headless=True,
                 args=["--no-sandbox"] if args.executable else [],
             )
-            context = browser.new_context(viewport={"width": 1440, "height": 1000}, accept_downloads=True,
+            context = browser.new_context(ignore_https_errors=page_url.startswith('https://127.0.0.1:'), viewport={"width": 1440, "height": 1000}, accept_downloads=True,
                                           reduced_motion="reduce")
             page = context.new_page()
             origin = urlparse(page_url).netloc

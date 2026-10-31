@@ -1,4 +1,6 @@
 import {compileScripts} from './compile-web.mjs';
+import {buildHostedEdition} from './hosted-data.mjs';
+import {inlineDashboard} from './inline-html.mjs';
 import { readFile, writeFile, mkdir, copyFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -6,15 +8,14 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const web=path.join(root,'apps/web'), dist=path.join(web,'dist');
 await mkdir(dist,{recursive:true});
 const config=JSON.parse(await readFile(path.join(web,'tsconfig.json'),'utf8'));
-compileScripts(config.files.map(file=>path.join(web,file)),path.join(dist,'app.js'));
+const parts=compileScripts(config.files.map(file=>path.join(web,file)),path.join(dist,'app.js'));
 for(const [from,to] of [['index.html','index.html'],['src/styles.css','styles.css'],['public/favicon.svg','favicon.svg']])await copyFile(path.join(web,from),path.join(dist,to));
-const html=await readFile(path.join(web,'index.html'),'utf8');
-const css=(await Promise.all(['tokens.css','styles.css','champion.css','study-visuals.css','workflows.css','experiences.css','completion-ui.css','integrations-ui.css','advanced-visuals.css','terminal.css'].map(file=>readFile(path.join(web,'src',file),'utf8')))).join('\n');
+const html=(await readFile(path.join(web,'index.html'),'utf8')).replaceAll('\r\n','\n');
+const css=(await Promise.all(['tokens.css','styles.css','champion.css','study-visuals.css','workflows.css','experiences.css','completion-ui.css','integrations-ui.css','advanced-visuals.css','terminal.css'].map(file=>readFile(path.join(web,'src',file),'utf8')))).map(text=>text.replaceAll('\r\n','\n')).join('\n');
 await writeFile(path.join(dist,'styles.css'),css);
 const js=await readFile(path.join(dist,'app.js'),'utf8');
-const favicon=await readFile(path.join(web,'public/favicon.svg'),'utf8');
-const standalone=html.replace('<link rel="icon" href="favicon.svg" type="image/svg+xml">',`<link rel="icon" href="data:image/svg+xml,${encodeURIComponent(favicon)}" type="image/svg+xml">`)
-  .replace('<link rel="stylesheet" href="styles.css">',`<style>${css}</style>`)
-  .replace('<script src="app.js" defer></script>',`<script>${js.replaceAll('</script','<\\/script')}</script>`);
+const favicon=(await readFile(path.join(web,'public/favicon.svg'),'utf8')).replaceAll('\r\n','\n');
+const standalone=inlineDashboard(html,{css,js,favicon});
 await writeFile(path.join(root,'HelioForge-Preview.html'),standalone);
+await buildHostedEdition({root,parts,html,css,favicon});
 console.log(`Built dashboard and standalone preview (${(Buffer.byteLength(standalone)/1024).toFixed(1)} KiB, no runtime dependencies).`);

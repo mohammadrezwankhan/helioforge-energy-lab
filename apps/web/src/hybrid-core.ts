@@ -57,12 +57,19 @@ namespace HF {
     return {passed:correct===lesson.quiz.length,correct,total:lesson.quiz.length};
   }
   const hybridPresets=new Map(HYBRID_BUNDLE.cases.map(entry=>[`${entry.inputs.system_id}/${entry.inputs.scenario_id}`,entry]));
+  export function registerBundledHybridCase(entry:HybridBundledCase):void {
+    const key=`${entry.inputs.system_id}/${entry.inputs.scenario_id}`;
+    if(!hybridPresets.has(key)){hybridPresets.set(key,entry);HYBRID_BUNDLE.cases.push(entry);}
+  }
   /** Only an exact frozen input record can display a build-time Python result. */
   export function bundledHybridCase(inputs:HybridInputs):HybridBundledCase|null {
     const entry=hybridPresets.get(`${inputs.system_id}/${inputs.scenario_id}`);
     return HYBRID_BUNDLE.catalogue_version===HYBRID_CATALOG.version&&entry&&configurationKey(entry.inputs)===configurationKey(inputs)?entry:null;
   }
+  const hybridExampleSelectionRevisions=new WeakMap<HybridState,number>();
+  export function hybridExampleSelectionRevision(h:HybridState):number|undefined{return hybridExampleSelectionRevisions.get(h);}
   export function attachBundledHybridResult(h:HybridState):boolean {
+    hybridExampleSelectionRevisions.set(h,hybridStateRevision(h));
     h.result=null;h.resultInputs=null;
     const entry=h.inputError?null:bundledHybridCase(h.inputs);
     if(!entry)return false;
@@ -80,4 +87,53 @@ namespace HF {
     return JSON.stringify(Object.keys(inputs).sort().map(k=>[k,inputs[k as keyof HybridInputs]]));
   }
   export const hybridDirty=(h:HybridState):boolean=>Boolean(h.inputError)||configurationKey(h.inputs)!==configurationKey(h.resultInputs);
+
+  const hybridRevisions=new WeakMap<HybridState,number>();
+  export function hybridStateRevision(h:HybridState):number{return hybridRevisions.get(h)??0;}
+  export function advanceHybridStateRevision(h:HybridState):number{
+    const next=hybridStateRevision(h)+1;hybridRevisions.set(h,next);return next;
+  }
+
+  export interface HybridComparisonContract {
+    comparable:boolean; provenance_complete:boolean; engine_id:string|null; data_kind:string|null;
+    horizon_hours:number|null; dataset_revision:string|null; source_revision:string|null;
+    units:'kW, kWh, EUR'; reasons:string[]; provenance_gaps:string[];
+  }
+  /** Describe whether period totals share one model/data/horizon contract before interpreting them. */
+  export function hybridComparisonContract(runs:ComparedRun[]):HybridComparisonContract {
+    const reasons:string[]=[],provenanceGaps:string[]=[];
+    if(runs.length<2)reasons.push('At least two completed runs are needed for comparison.');
+    const models=new Set<string>(),dataKinds=new Set<string>(),horizons=new Set<number>(),datasetRevisions=new Set<string>(),sourceRevisions=new Set<string>();
+    for(const run of runs){
+      const result=run.result as HybridResult&Record<string,unknown>;
+      if(typeof result.model==='string'&&result.model)models.add(result.model);
+      else reasons.push(`${run.name} has no engine identifier.`);
+      if(typeof result.data_kind==='string'&&result.data_kind)dataKinds.add(result.data_kind);
+      else reasons.push(`${run.name} has no data-origin label.`);
+      const datasetRevision=result.dataset_revision;
+      if(typeof datasetRevision==='string'&&datasetRevision)datasetRevisions.add(datasetRevision);
+      else provenanceGaps.push(`${run.name} has no dataset revision.`);
+      const sourceRevision=result.source_revision;
+      if(typeof sourceRevision==='string'&&sourceRevision.trim())sourceRevisions.add(sourceRevision);
+      else provenanceGaps.push(`${run.name} has no application source revision.`);
+      if(Number.isInteger(result.duration_hours)&&result.duration_hours>0){
+        horizons.add(result.duration_hours);
+        if(result.duration_hours!==run.inputs.hours||!Array.isArray(result.schedule)||result.schedule.length!==result.duration_hours)
+          reasons.push(`${run.name} does not match its declared input horizon.`);
+      }else reasons.push(`${run.name} has no valid model horizon.`);
+      if(!/^[a-f0-9]{64}$/i.test(String(result.input_sha256??'')))provenanceGaps.push(`${run.name} has no valid input SHA-256.`);
+      if(systemById(run.inputs.system_id).mode!=='screening'||scenarioById(run.inputs.scenario_id).mode!=='screening')
+        reasons.push(`${run.name} is outside the runnable screening applicability boundary.`);
+    }
+    if(models.size>1)reasons.push(`Engine versions differ (${[...models].join(', ')}).`);
+    if(dataKinds.size>1)reasons.push(`Data origins differ (${[...dataKinds].join(', ')}).`);
+    if(datasetRevisions.size>1)reasons.push(`Dataset revisions differ (${[...datasetRevisions].join(', ')}).`);
+    if(sourceRevisions.size>1)reasons.push('Application source revisions differ.');
+    if(horizons.size>1)reasons.push(`Model horizons differ (${[...horizons].sort((a,b)=>a-b).join(' h, ')} h); period totals are not directly comparable.`);
+    const uniqueReasons=[...new Set(reasons)],uniqueGaps=[...new Set(provenanceGaps)];
+    return {comparable:uniqueReasons.length===0&&uniqueGaps.length===0,provenance_complete:uniqueGaps.length===0,
+      engine_id:models.size===1?[...models][0]!:null,data_kind:dataKinds.size===1?[...dataKinds][0]!:null,
+      horizon_hours:horizons.size===1?[...horizons][0]!:null,dataset_revision:datasetRevisions.size===1?[...datasetRevisions][0]!:null,
+      source_revision:sourceRevisions.size===1?[...sourceRevisions][0]!:null,units:'kW, kWh, EUR',reasons:uniqueReasons,provenance_gaps:uniqueGaps};
+  }
 }
