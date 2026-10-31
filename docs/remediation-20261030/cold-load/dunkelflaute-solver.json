@@ -1,0 +1,178 @@
+{
+  "schema": "helioforge.dunkelflaute-solver-audit.v1",
+  "study_id": "compare-dunkelflaute",
+  "interpretation": "Records the two actual SciPy/HiGHS solve results for this frozen synthetic fixture. Solver-reported optimal termination for this run is not general scientific validation, field calibration, or proof that the model is valid for other inputs.",
+  "environment": {
+    "python": "3.12.14 (main, Aug 14 2026, 15:40:22) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "solver": "scipy.optimize.milp (HiGHS backend)"
+  },
+  "fixture": {
+    "source": "apps/web/src/roadmap-data.ts STUDY_BUNDLE.results.compare-dunkelflaute",
+    "source_file_sha256": "f29d87c98594ab036c697361d2048714edfccc04a467930125abfbf8d9f07af7",
+    "frozen_evidence_sha256": "89a51d19bb519a2ef7d5c85c8930429869efb1fb73aa710bb87f67fe052b5eef",
+    "frozen_input_sha256": "189e71e67cf140a10eafb72c458fa4ed464ad8988251f782ebb9fab4629955d7",
+    "canonical_input_sha256": "189e71e67cf140a10eafb72c458fa4ed464ad8988251f782ebb9fab4629955d7",
+    "input_count": 7,
+    "input_keys": [
+      "charge_efficiency",
+      "discharge_efficiency",
+      "energy_capacity_kwh",
+      "initial_soc_kwh",
+      "load_kw",
+      "power_limit_kw",
+      "renewable_kw"
+    ],
+    "interval_count": 336,
+    "load_series_sha256": "8ae9e9e065776ec09b8b9581c36db83d6b2f475b1c22436161a3f4e0166e009e",
+    "renewable_series_sha256": "7591e40d252a1168119fad73b30ece299aa1c38315c2805ca08277e25cd4f7c3",
+    "frozen_inputs_match_current_catalogue_defaults_byte_for_byte": true
+  },
+  "source_sha256_before": {
+    "apps/api/helioforge/engines/workflow_studies.py": "021597dd1d8b016f15bffa8494fb23a553fb93b26f9ae48c7a17061ec19ca585",
+    "apps/api/helioforge/studies.py": "2e16e60dc96cb430f74605105484e168435ce1dc3054874937943c6ba3989cd2",
+    "apps/api/helioforge/schemas.py": "4c03d0ba4e4b20a7a8e6a869954bd9d0bb2a6fad7fdf9a8ffa5f4ba801152d22",
+    "apps/web/src/roadmap-data.ts": "f29d87c98594ab036c697361d2048714edfccc04a467930125abfbf8d9f07af7",
+    "apps/api/tests/test_workflow_studies.py": "5649c323bcfa2ade89e03a7c12417835938366fbc0444f5b4b2954d65eee0221",
+    "apps/api/tests/test_study_acceptance_contracts.py": "62a64ad856c68d521f0468066f4a1d642e2b5324faa7848c22e0e509fd123f42"
+  },
+  "source_sha256_after": {
+    "apps/api/helioforge/engines/workflow_studies.py": "021597dd1d8b016f15bffa8494fb23a553fb93b26f9ae48c7a17061ec19ca585",
+    "apps/api/helioforge/studies.py": "2e16e60dc96cb430f74605105484e168435ce1dc3054874937943c6ba3989cd2",
+    "apps/api/helioforge/schemas.py": "4c03d0ba4e4b20a7a8e6a869954bd9d0bb2a6fad7fdf9a8ffa5f4ba801152d22",
+    "apps/web/src/roadmap-data.ts": "f29d87c98594ab036c697361d2048714edfccc04a467930125abfbf8d9f07af7",
+    "apps/api/tests/test_workflow_studies.py": "5649c323bcfa2ade89e03a7c12417835938366fbc0444f5b4b2954d65eee0221",
+    "apps/api/tests/test_study_acceptance_contracts.py": "62a64ad856c68d521f0468066f4a1d642e2b5324faa7848c22e0e509fd123f42"
+  },
+  "source_hashes_unchanged": true,
+  "solver_calls": [
+    {
+      "stage": 1,
+      "elapsed_seconds": 0.08090080000692979,
+      "status": 0,
+      "success": true,
+      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+      "objective_fun": 57521.9078188,
+      "mip_gap": 0.0,
+      "mip_dual_bound": 57521.9078188,
+      "mip_node_count": 1,
+      "result_keys": [
+        "fun",
+        "message",
+        "mip_dual_bound",
+        "mip_gap",
+        "mip_node_count",
+        "status",
+        "success",
+        "x"
+      ],
+      "variable_count": 2017,
+      "integer_variable_count": 336,
+      "linear_constraint_count": 1,
+      "options_argument": "<omitted; SciPy defaults apply>",
+      "options_kwarg_present": false
+    },
+    {
+      "stage": 2,
+      "elapsed_seconds": 0.06345709998277016,
+      "status": 0,
+      "success": true,
+      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+      "objective_fun": 2.554481812e-05,
+      "mip_gap": 0.0,
+      "mip_dual_bound": 2.554481812e-05,
+      "mip_node_count": 1,
+      "result_keys": [
+        "fun",
+        "message",
+        "mip_dual_bound",
+        "mip_gap",
+        "mip_node_count",
+        "status",
+        "success",
+        "x"
+      ],
+      "variable_count": 2017,
+      "integer_variable_count": 336,
+      "linear_constraint_count": 2,
+      "options_argument": "<omitted; SciPy defaults apply>",
+      "options_kwarg_present": false
+    }
+  ],
+  "requested_options_and_tolerances": {
+    "solver_options_kwarg": "omitted for both calls; SciPy/HiGHS defaults apply",
+    "explicit_solver_tolerances": "none passed by the engine",
+    "model_stage_two_shortfall_bound": "minimum_unserved_energy + 1e-7 kWh",
+    "existing_acceptance_checks": {
+      "terminal_soc_abs_tolerance_kwh": 1e-06,
+      "electric_balance_abs_tolerance_kwh": 1e-05
+    }
+  },
+  "result_summary": {
+    "model_version": "roadmap-screen-v1",
+    "input_sha256": "189e71e67cf140a10eafb72c458fa4ed464ad8988251f782ebb9fab4629955d7",
+    "details": {
+      "interval_count": 336,
+      "horizon_hours": 336,
+      "initial_soc_kwh": 250.0,
+      "terminal_soc_kwh": 250.0,
+      "soc_min_kwh": 122.52002,
+      "soc_max_kwh": 250.0,
+      "storage_loss_kwh": 15.785818800000007,
+      "minimum_unserved_energy_kwh": 57521.9078188,
+      "electric_balance_residual_kwh": -1.6200374375330284e-11,
+      "optimizer": "scipy.optimize.milp (HiGHS), with binary charge/discharge direction controls",
+      "tie_break": "minimize curtailment and then small throughput cost at fixed minimum shortfall"
+    },
+    "metrics": [
+      {
+        "label": "Total unserved energy",
+        "value": 57521.9078188,
+        "unit": "kWh"
+      },
+      {
+        "label": "Shortfall intervals",
+        "value": 331,
+        "unit": "hours"
+      },
+      {
+        "label": "Renewable energy",
+        "value": 34968.876,
+        "unit": "kWh"
+      },
+      {
+        "label": "Curtailed renewable energy",
+        "value": 0.0,
+        "unit": "kWh"
+      },
+      {
+        "label": "Battery charge energy",
+        "value": 135.61700000000002,
+        "unit": "kWh"
+      },
+      {
+        "label": "Battery discharge energy",
+        "value": 119.8311812,
+        "unit": "kWh"
+      },
+      {
+        "label": "Terminal SOC",
+        "value": 250.0,
+        "unit": "kWh"
+      },
+      {
+        "label": "Electric balance residual",
+        "value": -1.6200374375330284e-11,
+        "unit": "kWh"
+      }
+    ],
+    "warnings": [
+      "One synthetic 336-hour (14-day) weather path; shortfall intervals are not statistical LOLE.",
+      "Reduced mixed-integer dispatch enforces one battery direction per interval with efficiency, power, energy, and cyclic SOC; it omits network, market, reserve, and degradation constraints."
+    ]
+  },
+  "runtime_seconds": 0.1569694000063464,
+  "instrumentation": "The wrapper recorded each result after calling the original imported scipy.optimize.milp function with the original positional and keyword arguments unchanged; the original function was restored in finally."
+}

@@ -1,0 +1,11 @@
+{
+  "schema": "helioforge.artifact-equivalence.v1",
+  "candidate": "G",
+  "runtime_sha256": "8ef56f4df539590392696552c2b10651faf953790d8018c982a949b21e0ccb00",
+  "same_runtime": true,
+  "changed_files": [],
+  "removed_files": [],
+  "files_compared": 364,
+  "run_assets_equal": true,
+  "offline_equal": true
+}

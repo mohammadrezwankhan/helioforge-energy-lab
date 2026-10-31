@@ -61,13 +61,30 @@ The detailed project guide below remains the source for installation, supported 
 
 ## Cloudflare browser edition
 
-[Open the public browser preview](https://mkgrid.co.technology/run/) · [Purpose, usage and limits](https://mkgrid.co.technology/) · [Methodology](https://mkgrid.co.technology/methodology/) · [Build and deployment guide](docs/CLOUDFLARE.md)
+[Open the public browser preview](https://mkgrid.co.technology/run/) · [Purpose, usage and limits](https://mkgrid.co.technology/) · [Methodology](https://mkgrid.co.technology/methodology/) · [Help](https://mkgrid.co.technology/help/) · [Model registry](https://mkgrid.co.technology/models/) · [Build and deployment guide](docs/CLOUDFLARE.md)
 
 [![CI](https://github.com/mohammadrezwankhan/helioforge-energy-lab/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mohammadrezwankhan/helioforge-energy-lab/actions/workflows/ci.yml) · [MIT license](LICENSE) · [Verification and limits](QUALITY_REPORT.md)
 
 Interactive hybrid-energy research and learning workbench with auditable numerical screens and a local Python API.
 
-The full-spectrum roadmap now includes **59 executable studies across all 12 views**, advanced model visuals, local evidence imports and optional provider/device connectors. See the [per-view completion and external-dependency ledger](docs/roadmap/COMPLETION.md), [current verification](docs/roadmap/VERIFICATION.md), and [connector setup](docs/roadmap/CONNECTORS.md). The public preview bundles Python-generated examples and calculates bounded 24-hour Terminal energy-balance cases in-browser. New advanced studies and optimization require the local Python API.
+The full-spectrum roadmap includes **59 named study models across all 12 workspaces**, advanced model visuals, local evidence imports and optional provider/device connectors. See the [per-view completion and external-dependency ledger](docs/roadmap/COMPLETION.md), [historical verification record](docs/roadmap/VERIFICATION.md), and [connector setup](docs/roadmap/CONNECTORS.md). The public preview shows generated examples; its Terminal is a separate browser calculation. New advanced-study runs and optimization require the local Python API.
+
+### Capability contract and model registry
+
+The four delivery modes are shared with the generated overview, About, Methodology, Help, and `app.json` capability facts. The current contract is [CAPABILITIES.md](docs/CAPABILITIES.md); its generated inventory is [MODEL_REGISTRY.md](docs/MODEL_REGISTRY.md) and [MODEL_REGISTRY.json](docs/MODEL_REGISTRY.json).
+
+The hosted dashboard loads content-addressed example JSON on demand and verifies its SHA-256 before display. A failed download retains the configuration and offers retry. The separate `HelioForge-Preview.html` download contains every example for offline use; edited advanced studies still require the local Python API. The hosted build uses pinned esbuild only during compilation, with no added browser runtime package. Publish the shell, data manifest, all referenced chunks and matching CSP together.
+
+New numerical records include a versioned model provenance envelope. Historical records without that envelope remain explicitly unknown. Workspace v1 records are migrated to v2 only after preview and confirmation, with an exact backup and migration receipt. See [the local acceptance evidence](docs/remediation-20261029/) and [publication verification method](docs/remediation-20261030/VERIFICATION_METHOD.md). Remote CI and deployment evidence are recorded separately in immutable release receipts. Provider, native-device, field and participant acceptance remain separate gates.
+
+- **Bundled synthetic examples:** Bundled synthetic examples are precomputed outputs; the public browser edition does not calculate new study-model results from edited inputs.
+- **Bounded browser Terminal:** The Terminal runs new deterministic, bounded 24-hour energy-balance cases in the browser; it uses a greedy policy and is not an optimizer.
+- **Advanced local Python:** The separate local Python application runs new calculations for the advanced study models and optimization.
+- **Opt-in local external providers:** Optional local external providers are separate, opt-in integrations; credentials and explicit consent are required where applicable. The public static preview makes no provider calls.
+
+Start with one task: **Explore a bundled example.** Open the public preview and inspect a labeled synthetic result. **Calculate a bounded Terminal case.** Open Scenario compare and use the Parametric energy workbench. **Set up advanced local calculations.** Use the source setup guide to run the Python application on your machine.
+
+The registry keeps application, catalogue, data and model versions separate. The 59-study catalogue and its current bundled default examples have content digests but no independent named versions; the study result envelope does not declare a separate `schema_version`. Each per-study card lists its current model version, declared numeric units and bounds, input fields, equations, Python implementation, test file, default fixture digests, executed source-bound software checks, remaining untested conditions, and limits. Software checks do not establish scientific validation; deployment identity belongs to the release receipt.
 
 If HelioForge Energy Lab helps you study this workflow, a star helps other energy researchers and engineering educators find it.
 
@@ -85,7 +102,7 @@ cd helioforge-energy-lab
 node scripts/preview-demo.mjs
 ```
 
-Open **<http://127.0.0.1:4173>**. Stop the server with Ctrl+C. The first screen is a demonstration, not verified current information. Keep private or real-world records out of this evaluation. The standalone preview does not run new Python calculations; use the source guide below for the local API.
+Open **<http://127.0.0.1:4173>**. Stop the server with Ctrl+C. The first screen is a demonstration, not verified current information. Keep private or real-world records out of this evaluation. The standalone preview does not run new local-Python study calculations; the Terminal separately calculates bounded cases in the browser. Use the source guide below for advanced local Python calculations.
 
 ## Why inspect this project?
 

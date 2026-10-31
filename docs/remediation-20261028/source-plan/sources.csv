@@ -1,0 +1,36 @@
+id,title,url,scope,accessed
+S01,Public overview,https://mkgrid.co.technology/,Retrieved public text; may be cached,2026-10-28
+S02,Public methodology,https://mkgrid.co.technology/methodology/,Retrieved public text; may be cached,2026-10-28
+S03,Public About,https://mkgrid.co.technology/about/,Retrieved older public text; source now differs,2026-10-28
+S04,Public app facts,https://mkgrid.co.technology/app.json,Retrieved manifest; not independently matched to runtime bytes,2026-10-28
+S05,Public AI-readable guide,https://mkgrid.co.technology/llms.txt,Retrieved text; optional discovery aid,2026-10-28
+S06,Public homepage interface image,https://mkgrid.co.technology/preview.png,"Published screenshot visually reviewed, not independently captured",2026-10-28
+S07,Dedicated-domain build source,https://raw.githubusercontent.com/mohammadrezwankhan/helioforge-energy-lab/main/scripts/build-domain.mjs,"Source inspection on main, not deployed HTML verification",2026-10-28
+S08,Browser-export build source,https://raw.githubusercontent.com/mohammadrezwankhan/helioforge-energy-lab/main/scripts/build-cloudflare.mjs,Source inspection on main,2026-10-28
+S09,Domain security policy source,https://raw.githubusercontent.com/mohammadrezwankhan/helioforge-energy-lab/main/scripts/domain-security.mjs,"Generated policy, not observed response headers",2026-10-28
+S10,Hosting and publication guide,https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/docs/CLOUDFLARE.md,Maintainer documentation,2026-10-28
+S11,Architecture/scenario coverage,https://raw.githubusercontent.com/mohammadrezwankhan/helioforge-energy-lab/main/docs/HYBRID_COVERAGE.md,Published catalogue; not an independent execution record,2026-10-28
+S12,Optional council setup,https://raw.githubusercontent.com/mohammadrezwankhan/helioforge-energy-lab/main/docs/AI_SETUP.md,Earlier protocol description; differs from newer connector guide,2026-10-28
+S13,Connector setup and limits,https://raw.githubusercontent.com/mohammadrezwankhan/helioforge-energy-lab/main/docs/roadmap/CONNECTORS.md,Maintainer documentation; live integration limits stated,2026-10-28
+S14,Roadmap completion and boundaries,https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/docs/roadmap/COMPLETION.md,Maintainer implementation claims; separate external validation,2026-10-28
+S15,59-study experiment index,https://raw.githubusercontent.com/mohammadrezwankhan/helioforge-energy-lab/main/docs/roadmap/INDEX.md,Published study identifiers,2026-10-28
+S16,Terminal verification,https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/docs/terminal-audit/VERIFICATION.md,First-party report; not tests executed for this audit,2026-10-28
+S17,"Full responsive audit, 27 October 2026",https://raw.githubusercontent.com/mohammadrezwankhan/helioforge-energy-lab/main/docs/FULL_AUDIT_REPORT.md,First-party report; candidate and publication evidence distinguished,2026-10-28
+S18,Historical quality report,https://raw.githubusercontent.com/mohammadrezwankhan/helioforge-energy-lab/main/QUALITY_REPORT.md,Historical baseline and source-demo checks,2026-10-28
+S19,Hybrid numerical contract,https://raw.githubusercontent.com/mohammadrezwankhan/helioforge-energy-lab/main/docs/HYBRID_METHODOLOGY.md,Model-specific contract,2026-10-28
+S20,Retained numerical methodology,https://raw.githubusercontent.com/mohammadrezwankhan/helioforge-energy-lab/main/docs/METHODOLOGY.md,"Version 0.2.0 retained models, not all later studies",2026-10-28
+S21,Public content configuration,https://raw.githubusercontent.com/mohammadrezwankhan/helioforge-energy-lab/main/cloudflare.json,Build-time content source,2026-10-28
+S22,Domain configuration,https://raw.githubusercontent.com/mohammadrezwankhan/helioforge-energy-lab/main/cloudflare-domain.json,Build-time domain and metadata configuration,2026-10-28
+S23,Public repository overview,https://github.com/mohammadrezwankhan/helioforge-energy-lab,Retrieved README includes historical sections,2026-10-28
+S24,Google: generative AI search guidance,https://developers.google.com/search/docs/fundamentals/ai-optimization-guide,Official current guidance,2026-10-28
+S25,Google: AI features and websites,https://developers.google.com/search/docs/appearance/ai-features,Official guidance,2026-10-28
+S26,Google: noindex and crawling,https://developers.google.com/search/docs/crawling-indexing/block-indexing,Official technical guidance,2026-10-28
+S27,Google: Search Essentials,https://developers.google.com/search/docs/essentials,Official technical/content guidance,2026-10-28
+S28,Google/web.dev: Core Web Vitals,https://web.dev/articles/vitals,Official metrics and thresholds,2026-10-28
+S29,W3C: WCAG 2.2 additions,https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/,Official accessibility guidance,2026-10-28
+S30,W3C: minimum target size,https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum,"Official interpretation, including exceptions",2026-10-28
+S31,NIST: combinatorial testing FAQ,https://csrc.nist.gov/projects/automated-combinatorial-testing-for-software/faqs,Primary testing methodology,2026-10-28
+S32,Published mobile candidate screenshot,https://raw.githubusercontent.com/mohammadrezwankhan/helioforge-energy-lab/main/docs/full-audit/after-390.png,Visually reviewed remotely; first-party candidate image,2026-10-28
+S33,Published tablet candidate screenshot,https://raw.githubusercontent.com/mohammadrezwankhan/helioforge-energy-lab/main/docs/full-audit/after-820.png,Visually reviewed remotely; first-party candidate image,2026-10-28
+S34,Published desktop candidate screenshot,https://raw.githubusercontent.com/mohammadrezwankhan/helioforge-energy-lab/main/docs/full-audit/after-1440.png,Visually reviewed remotely; first-party candidate image,2026-10-28
+S35,Google: search appearance and structured data,https://developers.google.com/search/docs/appearance,Official structured-data guidance,2026-10-28

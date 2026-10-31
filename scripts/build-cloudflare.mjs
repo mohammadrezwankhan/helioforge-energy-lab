@@ -5,9 +5,22 @@ import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { createServer } from 'node:http';
+import {buildModelRegistry,buildPublicCapabilityFacts,CAPABILITY_COPY,validateCloudflareCopy} from './capability-contract.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const config = JSON.parse(fs.readFileSync(path.join(root, 'cloudflare.json'), 'utf8'));
+const canonical = new URL(config.canonical).href;
+validateCloudflareCopy(config);
+const modelRegistry = buildModelRegistry(root);
+const capabilityFacts = buildPublicCapabilityFacts(modelRegistry,{
+  origin:new URL(config.canonical).origin,
+  applicationBase:canonical,
+  documentation:{
+    help:`${config.publicSource}/blob/main/README.md#capability-contract-and-model-registry`,
+    modelRegistry:`${config.publicSource}/blob/main/docs/MODEL_REGISTRY.md`,
+    capabilities:`${config.publicSource}/blob/main/docs/CAPABILITIES.md`,
+  },
+});
 const publicSourceRevision = process.env.PUBLIC_SOURCE_REVISION;
 if (publicSourceRevision !== undefined && !/^[a-f0-9]{40}$/i.test(publicSourceRevision)) {
   throw Error('PUBLIC_SOURCE_REVISION must be a 40-character hexadecimal commit SHA');
@@ -25,7 +38,6 @@ const out = path.join(outputRoot, 'app');
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const json = value => JSON.stringify(value).replace(/</g, '\\u003c');
 const sha = buffer => createHash('sha256').update(buffer).digest('hex');
-const canonical = new URL(config.canonical).href;
 const siteOrigin = new URL(canonical).origin;
 if (!canonical.startsWith('https://') || !canonical.endsWith('/')) throw Error('Canonical must be an HTTPS directory URL');
 if (!/^[a-z0-9-]+$/.test(config.slug)) throw Error('Invalid app slug');
@@ -56,15 +68,26 @@ if (freshOutput) {
 fs.mkdirSync(path.join(out, 'run'), {recursive:true});
 const runtimeRoot = config.runtimeDirectory ? local(config.runtimeDirectory) : null;
 if (runtimeRoot) {
+  const dataIndex=JSON.parse(fs.readFileSync(path.join(runtimeRoot,'data-index.json'),'utf8'));
+  if(dataIndex.schema!=='helioforge.hosted-data.v1')throw Error('Unknown hosted data manifest');
+  const dataAssets=Object.values({...dataIndex.hybrid,...dataIndex.workspaces});
+  const approved=new Map(dataAssets.map(asset=>[asset.path,asset]));
   const copy = (dir, target) => {
     for (const entry of fs.readdirSync(dir,{withFileTypes:true})) {
       if (entry.isSymbolicLink() || entry.name.startsWith('.') || /(?:\.map|\.sqlite3?|\.env)$/i.test(entry.name)) throw Error('Unsafe runtime export: '+entry.name);
       const source=path.join(dir,entry.name), destination=path.join(target,entry.name);
+      const relative=path.relative(runtimeRoot,source).split(path.sep).join('/');
+      if(relative.startsWith('data/')&&!entry.isDirectory()){
+        const expected=approved.get(relative);if(!expected)continue;
+        const bytes=fs.readFileSync(source);
+        if(relative!==`data/${expected.sha256}.json`||bytes.length!==expected.bytes||sha(bytes)!==expected.sha256)throw Error('Hosted data integrity mismatch: '+relative);
+      }
       if (entry.isDirectory()) { fs.mkdirSync(destination,{recursive:true}); copy(source,destination); }
       else { if (fs.statSync(source).size>25*1024*1024) throw Error('Pages asset exceeds 25 MiB'); fs.copyFileSync(source,destination); }
     }
   };
   copy(runtimeRoot,path.join(out,'run'));
+  for(const name of approved.keys())if(!fs.existsSync(path.join(out,'run',name)))throw Error('Missing hosted example '+name);
 } else {
   fs.copyFileSync(local(config.demoArtifact), path.join(out,'run','index.html'));
 }
@@ -81,30 +104,42 @@ runtime = runtime.replace(/<meta\b[^>]*\bname\s*=\s*["']robots["'][^>]*>/gi, '')
   .replace(/<head\b[^>]*>/i, match => match + `\n<meta name="robots" content="noindex,follow"><link rel="canonical" href="${escape(canonical)}">\n`);
 fs.writeFileSync(path.join(out,'run','index.html'),runtime);
 fs.copyFileSync(local('scripts/cloudflare-site.css'),path.join(out,'site.css'));
-fs.copyFileSync(local('docs/repository/social-preview.png'),path.join(out,'social-preview.png'));
-fs.copyFileSync(local(config.previewArtifact||'docs/repository/demo-desktop.png'),path.join(out,'preview.png'));
+const socialPreviewArtifact=config.socialPreviewArtifact||'docs/repository/social-preview.png';
+const previewArtifact=config.previewArtifact||'docs/repository/demo-desktop.png';
+fs.copyFileSync(local(socialPreviewArtifact),path.join(out,'social-preview.png'));
+fs.copyFileSync(local(previewArtifact),path.join(out,'preview.png'));
+const localCandidateCapture=/^docs[\\/]remediation-\d{8}[\\/]screenshots[\\/]/.test(previewArtifact);
+const previewCaption=localCandidateCapture?'Release-build capture. Source and runtime identity are listed below. Example records are synthetic.':'Actual demo interface. Sample records are fictional.';
+const previewAlt=localCandidateCapture?'HelioForge release-build capture with synthetic example records':'Actual HelioForge demo interface';
 fs.writeFileSync(path.join(out,'favicon.svg'),'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#132923"/><path d="M14 49V15h8l10 17 10-17h8v34h-8V30L32 47 22 30v19z" fill="#c9ee8b"/></svg>');
 let revision = publicSourceRevision?.toLowerCase() ?? 'unversioned';
+let sourceTreeDirty = null;
 if (!publicSourceRevision) {
   try { revision = execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8',windowsHide:true}).trim(); } catch { /* Exported source still builds without Git. */ }
 }
+try { sourceTreeDirty = Boolean(execFileSync('git',['status','--porcelain','--untracked-files=all'],{cwd:root,encoding:'utf8',windowsHide:true}).trim()); } catch { /* Without Git, source cleanliness is unknown. */ }
 const copyright = (config.noticeFiles ?? []).map(name => `===== ${name} =====\n\n${fs.readFileSync(local(name),'utf8')}\n`).join('\n');
 fs.writeFileSync(path.join(out,'NOTICES.txt'),`Browser release: ${config.title}\n\nBundled third-party notices remain applicable. Public browser access does not grant a new license over private source or third-party material.\n\n${copyright}`);
 if(!fs.existsSync(path.join(out,'run','THIRD-PARTY-NOTICES.txt')))fs.copyFileSync(path.join(out,'NOTICES.txt'),path.join(out,'run','THIRD-PARTY-NOTICES.txt'));
 const list = items => items.map(text => `<li>${escape(text)}</li>`).join('');
 const author = {'@type':'Person','@id':'https://mrkhan.co.technology/#person',name:'Mohammad Rezwan Khan',url:'https://mrkhan.co.technology/'};
 const structured = {'@context':'https://schema.org','@graph':[
-  {'@type':'SoftwareApplication','@id':canonical+'#app',name:config.title,description:config.shortDescription,url:canonical,applicationCategory:'EducationalApplication',operatingSystem:'Web browser',isAccessibleForFree:true,author,featureList:config.features,softwareHelp:{'@type':'WebPage',url:canonical+'#how-to-use'}},
+  {'@type':'SoftwareApplication','@id':canonical+'#app',name:config.title,description:config.shortDescription,url:canonical,applicationCategory:'EducationalApplication',operatingSystem:'Web browser',isAccessibleForFree:true,author,featureList:[...config.features,...Object.values(CAPABILITY_COPY)],softwareHelp:{'@type':'WebPage',url:canonical+'#how-to-use'}},
   {'@type':'WebPage','@id':canonical+'#page',url:canonical,name:config.title+' — Browser Demo',description:config.shortDescription,inLanguage:'en',dateModified:config.updated,mainEntity:{'@id':canonical+'#app'},author},
   {'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'MKLab browser apps',item:siteOrigin+'/'},{'@type':'ListItem',position:2,name:config.title,item:canonical}]}
 ]};
 const publicSource = config.publicSource ? `<a href="${escape(config.publicSource)}" rel="noopener">Source &amp; methodology ↗</a>` : '';
 const head = `<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#122824"><title>${escape(config.title)} — Browser Demo | MKLab</title><meta name="description" content="${escape(config.shortDescription)}"><meta name="author" content="Mohammad Rezwan Khan"><meta name="robots" content="index,follow,max-image-preview:large"><link rel="canonical" href="${escape(canonical)}"><link rel="icon" href="./favicon.svg"><link rel="stylesheet" href="./site.css"><meta property="og:type" content="website"><meta property="og:site_name" content="MKLab Browser Apps"><meta property="og:title" content="${escape(config.title)}"><meta property="og:description" content="${escape(config.shortDescription)}"><meta property="og:url" content="${escape(canonical)}"><meta property="og:image" content="${escape(canonical)}social-preview.png"><meta property="og:image:width" content="1280"><meta property="og:image:height" content="640"><meta property="og:image:alt" content="${escape(config.title)} project preview"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escape(config.title)}"><meta name="twitter:description" content="${escape(config.shortDescription)}"><meta name="twitter:image" content="${escape(canonical)}social-preview.png"><script type="application/ld+json">${json(structured)}</script>`;
-const html = `<!doctype html><html lang="en"><head>${head}</head><body><a class="skip" href="#main">Skip to content</a><header class="masthead"><a class="wordmark" href="${siteOrigin}/">M<span>↗</span> MKLab</a><nav aria-label="Main"><a href="${siteOrigin}/">All apps</a><a href="https://khanlab.co.technology/">Datacenter lab</a><a href="${siteOrigin}/about/">About</a></nav></header><main id="main"><section class="app-hero"><div><p class="eyebrow">${escape(config.category)} / BROWSER DEMO</p><h1>${escape(config.title).replace(/([a-z])([A-Z])/g,'$1<wbr>$2')}</h1><p class="lead">${escape(config.summary)}</p><div class="actions"><a class="button primary" href="./run/">Open browser app <span aria-hidden="true">↗</span></a>${publicSource}</div><p class="micro">Free to explore · No sign-in · Demonstration data</p></div><figure class="app-preview"><img src="./preview.png" alt="Actual ${escape(config.title)} demo interface" width="1440" height="1000" fetchpriority="high"><figcaption>Actual demo interface. Sample records are fictional.</figcaption></figure></section><section class="content-grid"><div><p class="eyebrow">EXPLORE</p><h2>What you can try</h2><ul class="feature-list">${list(config.features)}</ul></div><div id="how-to-use"><p class="eyebrow">START HERE</p><h2>Try it in three steps</h2><ol class="steps">${list(config.steps)}</ol></div></section><section class="boundary"><div><p class="eyebrow">CONTEXT &amp; LIMITS</p><h2>Know what the demo shows</h2></div><div><ul>${list(config.limitations)}</ul><p>Use fictional information when trying inputs. The browser edition has no live service, account, payment, dispatch, or external AI integration. Any local saves belong to this browser and device.</p></div></section><section class="faq"><p class="eyebrow">COMMON QUESTIONS</p><h2>Before you explore</h2>${config.faqs.map(item=>`<details><summary>${escape(item.question)}</summary><p>${escape(item.answer)}</p></details>`).join('')}</section><section class="release"><h2>Release information</h2><p>Maintained by <a href="${siteOrigin}/about/">Mohammad Rezwan Khan</a>. Browser release updated <time datetime="${escape(config.updated)}">${escape(config.updated)}</time>. This page describes the shipped browser demo; it is not a claim of professional or production validation.</p><p><a href="./app.json">Machine-readable app facts</a> · <a href="./llms.txt">Plain-text overview</a> · <a href="./NOTICES.txt">Dependency &amp; content notices</a>${publicSource ? ' · '+publicSource : ''}</p><p class="micro">Source revision ${escape(revision.slice(0,12))} · Runtime SHA-256 ${sha(Buffer.from(runtime)).slice(0,16)}</p></section></main><footer><a class="wordmark" href="${siteOrigin}/">MKLab</a><p>Practical experiments, with their assumptions in view.</p><a href="${siteOrigin}/">Explore all browser apps →</a></footer></body></html>`;
+const html = `<!doctype html><html lang="en"><head>${head}</head><body><a class="skip" href="#main">Skip to content</a><header class="masthead"><a class="wordmark" href="${siteOrigin}/">M<span>↗</span> MKLab</a><nav aria-label="Main"><a href="${siteOrigin}/">All apps</a><a href="https://khanlab.co.technology/">Datacenter lab</a><a href="${siteOrigin}/about/">About</a></nav></header><main id="main"><section class="app-hero"><div><p class="eyebrow">${escape(config.category)} / BROWSER DEMO</p><h1>${escape(config.title).replace(/([a-z])([A-Z])/g,'$1<wbr>$2')}</h1><p class="lead">${escape(config.summary)}</p><div class="actions"><a class="button primary" href="./run/">Open browser app <span aria-hidden="true">↗</span></a>${publicSource}</div><p class="micro">Free to explore · No sign-in · Demonstration data</p></div><figure class="app-preview"><img src="./preview.png" alt="${escape(previewAlt)}" width="1440" height="1000" fetchpriority="high"><figcaption>${escape(previewCaption)}</figcaption></figure></section><section class="content-grid"><div><p class="eyebrow">EXPLORE</p><h2>What you can try</h2><ul class="feature-list">${list(config.features)}</ul></div><div id="how-to-use"><p class="eyebrow">START HERE</p><h2>Try it in three steps</h2><ol class="steps">${list(config.steps)}</ol></div></section><section class="boundary"><div><p class="eyebrow">CONTEXT &amp; LIMITS</p><h2>Know what the demo shows</h2></div><div><ul>${list(config.limitations)}</ul><p>Use fictional information when trying inputs. The browser edition has no live service, account, payment, dispatch, or external AI integration. Any local saves belong to this browser and device.</p></div></section><section class="faq"><p class="eyebrow">COMMON QUESTIONS</p><h2>Before you explore</h2>${config.faqs.map(item=>`<details><summary>${escape(item.question)}</summary><p>${escape(item.answer)}</p></details>`).join('')}</section><section class="release"><h2>Release information</h2><p>Maintained by <a href="${siteOrigin}/about/">Mohammad Rezwan Khan</a>. Browser release updated <time datetime="${escape(config.updated)}">${escape(config.updated)}</time>. This page describes the shipped browser demo; it is not a claim of professional or production validation.</p><p><a href="./app.json">Machine-readable app facts</a> · <a href="./llms.txt">Plain-text overview</a> · <a href="./NOTICES.txt">Dependency &amp; content notices</a>${publicSource ? ' · '+publicSource : ''}</p><p class="micro">Source revision ${escape(revision.slice(0,12))} · Source tree ${sourceTreeDirty===null?'unknown':sourceTreeDirty?'dirty; local changes included':'clean'} · Runtime SHA-256 ${sha(Buffer.from(runtime)).slice(0,16)}</p></section></main><footer><a class="wordmark" href="${siteOrigin}/">MKLab</a><p>Practical experiments, with their assumptions in view.</p><a href="${siteOrigin}/">Explore all browser apps →</a></footer></body></html>`;
 fs.writeFileSync(path.join(out,'index.html'),html);
-const facts = {title:config.title,url:canonical,applicationUrl:canonical+'run/',description:config.shortDescription,summary:config.summary,features:config.features,steps:config.steps,limitations:config.limitations,faqs:config.faqs,updated:config.updated,author:author.name,sourceRevision:revision,publicSource:config.publicSource||null,runtimeSha256:sha(Buffer.from(runtime)),dataStatus:'synthetic demonstration',access:'public; no sign-in'};
+const facts = {title:config.title,url:canonical,applicationUrl:canonical+'run/',description:config.shortDescription,summary:config.summary,features:config.features,steps:config.steps,limitations:config.limitations,faqs:config.faqs,updated:config.updated,author:author.name,sourceRevision:revision,sourceTreeDirty,sourceIdentityStatus:sourceTreeDirty===null?'unknown':sourceTreeDirty?'local working-tree changes are included; sourceRevision is the base commit':'clean source tree at build time',previewArtifact,socialPreviewArtifact,previewCaptureStatus:localCandidateCapture?'captured locally from the identified release build; compare runtime identity with the release receipt':'bundled repository screenshot; deployment identity is separate',publicSource:config.publicSource||null,runtimeSha256:sha(Buffer.from(runtime)),dataStatus:'synthetic demonstration',access:'public; no sign-in',capabilityContract:capabilityFacts,modelRegistryUrl:config.publicSource?config.publicSource+'/blob/main/docs/MODEL_REGISTRY.md':null};
 fs.writeFileSync(path.join(out,'app.json'),JSON.stringify(facts,null,2)+'\n');
-fs.writeFileSync(path.join(out,'llms.txt'),`# ${config.title}\n\n${config.summary}\n\n- App overview: ${canonical}\n- Browser application: ${canonical}run/\n- Maintainer: Mohammad Rezwan Khan\n- Updated: ${config.updated}\n\n## Features\n${config.features.map(s=>'- '+s).join('\n')}\n\n## Limits\n${config.limitations.map(s=>'- '+s).join('\n')}\n\nThese facts describe a demonstration, not an operational service. This optional text file supplements the visible HTML; it is not a ranking or citation guarantee.\n`);
+if(runtimeRoot){
+  const dataIndex=JSON.parse(fs.readFileSync(path.join(runtimeRoot,'data-index.json'),'utf8'));
+  facts.runtimeDataManifest={schema:dataIndex.schema,manifestSha256:sha(fs.readFileSync(path.join(runtimeRoot,'data-index.json'))),assets:[...new Map(Object.values({...dataIndex.hybrid,...dataIndex.workspaces}).map(asset=>[asset.path,asset])).values()]};
+  fs.writeFileSync(path.join(out,'app.json'),JSON.stringify(facts,null,2)+'\n');
+}
+fs.writeFileSync(path.join(out,'llms.txt'),`# ${config.title}\n\n${config.summary}\n\n- App overview: ${canonical}\n- Browser application: ${canonical}run/\n- Capability contract: ${config.publicSource?config.publicSource+'/blob/main/docs/CAPABILITIES.md':'not configured'}\n- Model registry: ${config.publicSource?config.publicSource+'/blob/main/docs/MODEL_REGISTRY.md':'not configured'}\n- Maintainer: Mohammad Rezwan Khan\n- Updated: ${config.updated}\n\n## Delivery modes\n${capabilityFacts.modes.map(mode=>'- '+mode.name+': '+mode.description).join('\n')}\n\n## Task-led starts\n${capabilityFacts.taskStarts.map(start=>'- '+start.label+': '+start.description+' '+start.href).join('\n')}\n\n## Features\n${config.features.map(s=>'- '+s).join('\n')}\n\n## Limits\n${config.limitations.map(s=>'- '+s).join('\n')}\n\nThese facts describe a demonstration, not an operational service. This optional text file supplements the visible HTML; it is not a ranking or citation guarantee.\n`);
 // A 404 avoids a static host turning missing assets into successful app responses.
 fs.writeFileSync(path.join(out,'404.html'),'<!doctype html><html lang="en"><meta charset="utf-8"><meta name="robots" content="noindex"><title>Page not found</title><h1>Page not found</h1><p><a href="'+escape(canonical)+'">Return to the app overview</a></p></html>');
 console.log(JSON.stringify({app:config.slug,output:out,canonical,runtimeSha256:facts.runtimeSha256}));

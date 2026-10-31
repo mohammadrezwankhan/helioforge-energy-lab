@@ -12,3 +12,6 @@ docs/champion/BASELINE_RESULTS.csv -text
 docs/champion/ISSUE_REGISTER.csv -text
 docs/champion/SOURCE_CHANGES.patch -text
 start-windows.cmd -text
+
+# Preserve the exact bytes of retained acceptance evidence and receipts.
+docs/remediation-*/** -text

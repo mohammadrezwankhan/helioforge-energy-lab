@@ -1,0 +1,361 @@
+[
+  {
+    "id": "hybrid",
+    "name": "Hybrid systems lab",
+    "appRoute": "#hybrid",
+    "studies": [
+      "hybrid-resonance",
+      "hybrid-clipping",
+      "hybrid-inertia",
+      "hybrid-powerflow",
+      "hybrid-switching",
+      "hybrid-controls"
+    ],
+    "delivery": {
+      "publicBrowser": "bundled synthetic examples",
+      "newCalculations": "local Python application",
+      "boundedTerminal": false
+    },
+    "contractUrl": "/models/#workspace-hybrid",
+    "entry_navigation_reflow": "See final-responsive.json and presentation-results.json per route/engine/width",
+    "local_study_default_execution": "PASS",
+    "bundled_examples": "PASS via browser-roadmap standalone check",
+    "all_loading_empty_partial_invalid_stale_import_export_migration_recovery_states": "NOT_RUN exhaustively for this workspace",
+    "physical_device_and_manual_AT": "BLOCKED",
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    }
+  },
+  {
+    "id": "lessons",
+    "name": "Learning studio",
+    "appRoute": "#lessons",
+    "studies": [
+      "lessons-duck",
+      "lessons-blackstart",
+      "lessons-hydrogen",
+      "lessons-energization",
+      "lessons-hydrogenaux"
+    ],
+    "delivery": {
+      "publicBrowser": "bundled synthetic examples",
+      "newCalculations": "local Python application",
+      "boundedTerminal": false
+    },
+    "contractUrl": "/models/#workspace-lessons",
+    "entry_navigation_reflow": "See final-responsive.json and presentation-results.json per route/engine/width",
+    "local_study_default_execution": "PASS",
+    "bundled_examples": "PASS via browser-roadmap standalone check",
+    "all_loading_empty_partial_invalid_stale_import_export_migration_recovery_states": "NOT_RUN exhaustively for this workspace",
+    "physical_device_and_manual_AT": "BLOCKED",
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    }
+  },
+  {
+    "id": "compare",
+    "name": "Scenario compare",
+    "appRoute": "#compare",
+    "studies": [
+      "compare-pareto",
+      "compare-dunkelflaute",
+      "compare-thermal",
+      "compare-thermalphysics",
+      "compare-reliability"
+    ],
+    "delivery": {
+      "publicBrowser": "bundled synthetic examples",
+      "newCalculations": "local Python application",
+      "boundedTerminal": false
+    },
+    "contractUrl": "/models/#workspace-compare",
+    "entry_navigation_reflow": "See final-responsive.json and presentation-results.json per route/engine/width",
+    "local_study_default_execution": "PASS",
+    "bundled_examples": "PASS via browser-roadmap standalone check",
+    "all_loading_empty_partial_invalid_stale_import_export_migration_recovery_states": "NOT_RUN exhaustively for this workspace",
+    "physical_device_and_manual_AT": "BLOCKED",
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    }
+  },
+  {
+    "id": "overview",
+    "name": "Command centre",
+    "appRoute": "#overview",
+    "studies": [
+      "overview-weather",
+      "overview-merit",
+      "overview-carbon",
+      "overview-risk"
+    ],
+    "delivery": {
+      "publicBrowser": "bundled synthetic examples",
+      "newCalculations": "local Python application",
+      "boundedTerminal": false
+    },
+    "contractUrl": "/models/#workspace-overview",
+    "entry_navigation_reflow": "See final-responsive.json and presentation-results.json per route/engine/width",
+    "local_study_default_execution": "PASS",
+    "bundled_examples": "PASS via browser-roadmap standalone check",
+    "all_loading_empty_partial_invalid_stale_import_export_migration_recovery_states": "NOT_RUN exhaustively for this workspace",
+    "physical_device_and_manual_AT": "BLOCKED",
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    }
+  },
+  {
+    "id": "storage",
+    "name": "Storage & flexibility",
+    "appRoute": "#storage",
+    "studies": [
+      "storage-degradation",
+      "storage-stacking",
+      "storage-synergy",
+      "storage-annual",
+      "storage-response",
+      "storage-agingfit",
+      "storage-annualopt"
+    ],
+    "delivery": {
+      "publicBrowser": "bundled synthetic examples",
+      "newCalculations": "local Python application",
+      "boundedTerminal": false
+    },
+    "contractUrl": "/models/#workspace-storage",
+    "entry_navigation_reflow": "See final-responsive.json and presentation-results.json per route/engine/width",
+    "local_study_default_execution": "PASS",
+    "bundled_examples": "PASS via browser-roadmap standalone check",
+    "all_loading_empty_partial_invalid_stale_import_export_migration_recovery_states": "NOT_RUN exhaustively for this workspace",
+    "physical_device_and_manual_AT": "BLOCKED",
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    }
+  },
+  {
+    "id": "pv",
+    "name": "PV economics",
+    "appRoute": "#pv",
+    "studies": [
+      "pv-backtracking",
+      "pv-agrivoltaic",
+      "pv-albedo",
+      "pv-sensitivity",
+      "pv-reserve",
+      "pv-raytrace",
+      "pv-setbacks"
+    ],
+    "delivery": {
+      "publicBrowser": "bundled synthetic examples",
+      "newCalculations": "local Python application",
+      "boundedTerminal": false
+    },
+    "contractUrl": "/models/#workspace-pv",
+    "entry_navigation_reflow": "See final-responsive.json and presentation-results.json per route/engine/width",
+    "local_study_default_execution": "PASS",
+    "bundled_examples": "PASS via browser-roadmap standalone check",
+    "all_loading_empty_partial_invalid_stale_import_export_migration_recovery_states": "NOT_RUN exhaustively for this workspace",
+    "physical_device_and_manual_AT": "BLOCKED",
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    }
+  },
+  {
+    "id": "research",
+    "name": "Research pillars",
+    "appRoute": "#research",
+    "studies": [
+      "research-vibration",
+      "research-epd",
+      "research-scr",
+      "research-bearing",
+      "research-eigenmodes"
+    ],
+    "delivery": {
+      "publicBrowser": "bundled synthetic examples",
+      "newCalculations": "local Python application",
+      "boundedTerminal": false
+    },
+    "contractUrl": "/models/#workspace-research",
+    "entry_navigation_reflow": "See final-responsive.json and presentation-results.json per route/engine/width",
+    "local_study_default_execution": "PASS",
+    "bundled_examples": "PASS via browser-roadmap standalone check",
+    "all_loading_empty_partial_invalid_stale_import_export_migration_recovery_states": "NOT_RUN exhaustively for this workspace",
+    "physical_device_and_manual_AT": "BLOCKED",
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    }
+  },
+  {
+    "id": "markets",
+    "name": "Market intelligence",
+    "appRoute": "#markets",
+    "studies": [
+      "markets-capture",
+      "markets-negative",
+      "markets-interconnection",
+      "markets-network"
+    ],
+    "delivery": {
+      "publicBrowser": "bundled synthetic examples",
+      "newCalculations": "local Python application",
+      "boundedTerminal": false
+    },
+    "contractUrl": "/models/#workspace-markets",
+    "entry_navigation_reflow": "See final-responsive.json and presentation-results.json per route/engine/width",
+    "local_study_default_execution": "PASS",
+    "bundled_examples": "PASS via browser-roadmap standalone check",
+    "all_loading_empty_partial_invalid_stale_import_export_migration_recovery_states": "NOT_RUN exhaustively for this workspace",
+    "physical_device_and_manual_AT": "BLOCKED",
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    }
+  },
+  {
+    "id": "forecast",
+    "name": "Forecast studio",
+    "appRoute": "#forecast",
+    "studies": [
+      "forecast-regimes",
+      "forecast-commodities",
+      "forecast-tail",
+      "forecast-cointegration",
+      "forecast-backtest"
+    ],
+    "delivery": {
+      "publicBrowser": "bundled synthetic examples",
+      "newCalculations": "local Python application",
+      "boundedTerminal": false
+    },
+    "contractUrl": "/models/#workspace-forecast",
+    "entry_navigation_reflow": "See final-responsive.json and presentation-results.json per route/engine/width",
+    "local_study_default_execution": "PASS",
+    "bundled_examples": "PASS via browser-roadmap standalone check",
+    "all_loading_empty_partial_invalid_stale_import_export_migration_recovery_states": "NOT_RUN exhaustively for this workspace",
+    "physical_device_and_manual_AT": "BLOCKED",
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    }
+  },
+  {
+    "id": "investment",
+    "name": "Investment desk",
+    "appRoute": "#investment",
+    "studies": [
+      "investment-sculpt",
+      "investment-tranches",
+      "investment-waterfall",
+      "investment-contracts"
+    ],
+    "delivery": {
+      "publicBrowser": "bundled synthetic examples",
+      "newCalculations": "local Python application",
+      "boundedTerminal": false
+    },
+    "contractUrl": "/models/#workspace-investment",
+    "entry_navigation_reflow": "See final-responsive.json and presentation-results.json per route/engine/width",
+    "local_study_default_execution": "PASS",
+    "bundled_examples": "PASS via browser-roadmap standalone check",
+    "all_loading_empty_partial_invalid_stale_import_export_migration_recovery_states": "NOT_RUN exhaustively for this workspace",
+    "physical_device_and_manual_AT": "BLOCKED",
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    }
+  },
+  {
+    "id": "pilots",
+    "name": "Construction & pilots",
+    "appRoute": "#pilots",
+    "studies": [
+      "pilots-photogrammetry",
+      "pilots-dts",
+      "pilots-offgas",
+      "pilots-registration"
+    ],
+    "delivery": {
+      "publicBrowser": "bundled synthetic examples",
+      "newCalculations": "local Python application",
+      "boundedTerminal": false
+    },
+    "contractUrl": "/models/#workspace-pilots",
+    "entry_navigation_reflow": "See final-responsive.json and presentation-results.json per route/engine/width",
+    "local_study_default_execution": "PASS",
+    "bundled_examples": "PASS via browser-roadmap standalone check",
+    "all_loading_empty_partial_invalid_stale_import_export_migration_recovery_states": "NOT_RUN exhaustively for this workspace",
+    "physical_device_and_manual_AT": "BLOCKED",
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    }
+  },
+  {
+    "id": "council",
+    "name": "Agent council",
+    "appRoute": "#council",
+    "studies": [
+      "council-debate",
+      "council-evidence",
+      "council-consensus"
+    ],
+    "delivery": {
+      "publicBrowser": "bundled synthetic examples",
+      "newCalculations": "local Python application",
+      "boundedTerminal": false
+    },
+    "contractUrl": "/models/#workspace-council",
+    "entry_navigation_reflow": "See final-responsive.json and presentation-results.json per route/engine/width",
+    "local_study_default_execution": "PASS",
+    "bundled_examples": "PASS via browser-roadmap standalone check",
+    "all_loading_empty_partial_invalid_stale_import_export_migration_recovery_states": "NOT_RUN exhaustively for this workspace",
+    "physical_device_and_manual_AT": "BLOCKED",
+    "artifact_identity": {
+      "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+      "source_dirty": true,
+      "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+      "environment": "VERIFIED_LOCAL",
+      "production_changed": false
+    }
+  }
+]

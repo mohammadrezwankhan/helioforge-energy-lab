@@ -6,7 +6,13 @@ namespace HF {
     return match&&typeof document!=='undefined'?getComputedStyle(document.documentElement).getPropertyValue(match[1]!).trim():value;
   }
   export const escapeHTML = (value: unknown): string => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c] ?? c));
-  export const fmt = (value: number | null | undefined, digits = 0): string => value == null || !Number.isFinite(value) ? '—' : new Intl.NumberFormat('en-GB', {maximumFractionDigits: digits, minimumFractionDigits: digits}).format(value);
+  const numberFormats = new Map<number, Intl.NumberFormat>();
+  export function fmt(value: number | null | undefined, digits = 0): string {
+    if(value == null || !Number.isFinite(value))return '—';
+    let formatter=numberFormats.get(digits);
+    if(!formatter){formatter=new Intl.NumberFormat('en-GB',{maximumFractionDigits:digits,minimumFractionDigits:digits});numberFormats.set(digits,formatter);}
+    return formatter.format(value);
+  }
   export const money = (value: number, digits = 0): string => `${value < 0 ? '−' : ''}€${fmt(Math.abs(value), digits)}`;
   export const millions = (value: number): string => `${value < 0 ? '−' : ''}€${fmt(Math.abs(value)/1e6, 2)}m`;
   export const safeURL = (value: string): string => { try { const u = new URL(value); return u.protocol === 'https:' ? escapeHTML(u.href) : '#'; } catch { return '#'; } };

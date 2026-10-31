@@ -1,0 +1,351 @@
+{
+  "title": "HelioForge v1 workspace migration browser acceptance",
+  "generated_at_utc": "2026-10-29T22:39:07.585463+00:00",
+  "status": "PASS",
+  "site": "C:\\Users\\MRK\\Downloads\\misC\\helioforge-remediation-20261028\\source\\.cloudflare\\acceptance-20261029-f\\site",
+  "browser": {
+    "url": "https://127.0.0.1:4199/run/",
+    "context": "isolated synthetic workspace fixture",
+    "browser": "Playwright Chromium",
+    "chromium_version": "156.0.8078.4",
+    "runtime_sha256": "43d880c5b042fbea578d2e245f76acf8a896af60fb4f2b7c11255dc264b8e5bf",
+    "main_document_status": 200,
+    "origin": "https://127.0.0.1:4199",
+    "requests": [
+      "https://127.0.0.1:4199/run/",
+      "https://127.0.0.1:4199/app.json",
+      "https://127.0.0.1:4199/run/",
+      "https://127.0.0.1:4199/app.json",
+      "https://127.0.0.1:4199/run/",
+      "https://127.0.0.1:4199/app.json",
+      "https://127.0.0.1:4199/run/",
+      "https://127.0.0.1:4199/app.json"
+    ],
+    "api_attempts": [],
+    "remote_attempts": [],
+    "page_errors": [],
+    "console_errors": [],
+    "workspace_raw_bytes": {
+      "v1": 1229,
+      "v2": 1632,
+      "edited_v1": 1229
+    }
+  },
+  "checks": [
+    {
+      "name": "runtime_hash_matches_candidate",
+      "status": "PASS",
+      "expected": "43d880c5b042fbea578d2e245f76acf8a896af60fb4f2b7c11255dc264b8e5bf",
+      "actual": "43d880c5b042fbea578d2e245f76acf8a896af60fb4f2b7c11255dc264b8e5bf",
+      "evidence": "SHA-256 of the actual /run/ main-document response bytes."
+    },
+    {
+      "name": "v1_fixture_loaded_without_edit",
+      "status": "PASS",
+      "expected": {
+        "schema": "helioforge.workspace.v1",
+        "load_kw": 651,
+        "last_run_id": "f6b50c62-95a4-4aa4-a3da-1a4af7709966"
+      },
+      "actual": {
+        "schema": "helioforge.workspace.v1",
+        "load_kw": 651,
+        "last_run_id": "f6b50c62-95a4-4aa4-a3da-1a4af7709966"
+      },
+      "evidence": ""
+    },
+    {
+      "name": "migration_preview_discloses_schemas_and_timestamp_change",
+      "status": "PASS",
+      "expected": [
+        "helioforge.workspace.v1",
+        "helioforge.workspace.v2",
+        "Refreshed the workspace saved_at timestamp during migration."
+      ],
+      "actual": {
+        "source": true,
+        "target": true,
+        "timestamp_change": true
+      },
+      "evidence": ""
+    },
+    {
+      "name": "preview_does_not_replace_raw_local_v1",
+      "status": "PASS",
+      "expected": "{\"schema\":\"helioforge.workspace.v1\",\"saved_at\":\"2026-10-28T12:00:00.000Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":651,\"grid_import_kw\":1200,\"grid_export_kw\":800},\"lesson_id\":\"lesson-remote-triad\",\"last_run_id\":\"f6b50c62-95a4-4aa4-a3da-1a4af7709966\",\"pinned_run_ids\":[\"11111111-2222-4333-8444-555555555555\",\"66666666-7777-4888-8999-aaaaaaaaaaaa\"],\"saved_setups\":[{\"id\":\"setup-d85c1ad4-98b3-46e1-af53-23a202435683\",\"name\":\"Acceptance saved setup\",\"created_at\":\"2026-10-28T12:00:00.000Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":651,\"grid_import_kw\":1200,\"grid_export_kw\":800}}]}",
+      "actual": "{\"schema\":\"helioforge.workspace.v1\",\"saved_at\":\"2026-10-28T12:00:00.000Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":651,\"grid_import_kw\":1200,\"grid_export_kw\":800},\"lesson_id\":\"lesson-remote-triad\",\"last_run_id\":\"f6b50c62-95a4-4aa4-a3da-1a4af7709966\",\"pinned_run_ids\":[\"11111111-2222-4333-8444-555555555555\",\"66666666-7777-4888-8999-aaaaaaaaaaaa\"],\"saved_setups\":[{\"id\":\"setup-d85c1ad4-98b3-46e1-af53-23a202435683\",\"name\":\"Acceptance saved setup\",\"created_at\":\"2026-10-28T12:00:00.000Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":651,\"grid_import_kw\":1200,\"grid_export_kw\":800}}]}",
+      "evidence": ""
+    },
+    {
+      "name": "preview_receipt_is_versioned_and_lossless",
+      "status": "PASS",
+      "expected": {
+        "schema": "helioforge.workspace-migration.v1",
+        "source_schema": "helioforge.workspace.v1",
+        "target_schema": "helioforge.workspace.v2",
+        "losses": []
+      },
+      "actual": {
+        "schema": "helioforge.workspace-migration.v1",
+        "source_schema": "helioforge.workspace.v1",
+        "target_schema": "helioforge.workspace.v2",
+        "losses": []
+      },
+      "evidence": ""
+    },
+    {
+      "name": "confirmed_migration_preserves_exact_v1_backup",
+      "status": "PASS",
+      "expected": "{\"schema\":\"helioforge.workspace.v1\",\"saved_at\":\"2026-10-28T12:00:00.000Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":651,\"grid_import_kw\":1200,\"grid_export_kw\":800},\"lesson_id\":\"lesson-remote-triad\",\"last_run_id\":\"f6b50c62-95a4-4aa4-a3da-1a4af7709966\",\"pinned_run_ids\":[\"11111111-2222-4333-8444-555555555555\",\"66666666-7777-4888-8999-aaaaaaaaaaaa\"],\"saved_setups\":[{\"id\":\"setup-d85c1ad4-98b3-46e1-af53-23a202435683\",\"name\":\"Acceptance saved setup\",\"created_at\":\"2026-10-28T12:00:00.000Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":651,\"grid_import_kw\":1200,\"grid_export_kw\":800}}]}",
+      "actual": "{\"schema\":\"helioforge.workspace.v1\",\"saved_at\":\"2026-10-28T12:00:00.000Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":651,\"grid_import_kw\":1200,\"grid_export_kw\":800},\"lesson_id\":\"lesson-remote-triad\",\"last_run_id\":\"f6b50c62-95a4-4aa4-a3da-1a4af7709966\",\"pinned_run_ids\":[\"11111111-2222-4333-8444-555555555555\",\"66666666-7777-4888-8999-aaaaaaaaaaaa\"],\"saved_setups\":[{\"id\":\"setup-d85c1ad4-98b3-46e1-af53-23a202435683\",\"name\":\"Acceptance saved setup\",\"created_at\":\"2026-10-28T12:00:00.000Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":651,\"grid_import_kw\":1200,\"grid_export_kw\":800}}]}",
+      "evidence": ""
+    },
+    {
+      "name": "confirmed_unchanged_v1_fields_and_run_pointer_preserved",
+      "status": "PASS",
+      "expected": {
+        "schema": "helioforge.workspace.v2",
+        "load_kw": 651,
+        "last_run_id": "f6b50c62-95a4-4aa4-a3da-1a4af7709966",
+        "pinned_run_ids": [
+          "11111111-2222-4333-8444-555555555555",
+          "66666666-7777-4888-8999-aaaaaaaaaaaa"
+        ],
+        "saved_setups": [
+          {
+            "id": "setup-d85c1ad4-98b3-46e1-af53-23a202435683",
+            "name": "Acceptance saved setup",
+            "created_at": "2026-10-28T12:00:00.000Z",
+            "inputs": {
+              "system_id": "hospital-island",
+              "scenario_id": "baseline",
+              "hours": 24,
+              "control": "Dual",
+              "critical_fraction": 0.65,
+              "initial_soc": 0.6,
+              "min_soc": 0.15,
+              "max_soc": 0.9,
+              "round_trip_efficiency": 0.9,
+              "import_eur_kwh": 0.2,
+              "export_eur_kwh": 0.06,
+              "generator_eur_kwh": 0.28,
+              "solar_kw": 1200,
+              "wind_kw": 0,
+              "hydro_kw": 0,
+              "generator_kw": 700,
+              "battery_kwh": 3000,
+              "battery_kw": 750,
+              "load_kw": 651,
+              "grid_import_kw": 1200,
+              "grid_export_kw": 800
+            }
+          }
+        ],
+        "lesson_id": "lesson-remote-triad"
+      },
+      "actual": {
+        "schema": "helioforge.workspace.v2",
+        "load_kw": 651,
+        "last_run_id": "f6b50c62-95a4-4aa4-a3da-1a4af7709966",
+        "pinned_run_ids": [
+          "11111111-2222-4333-8444-555555555555",
+          "66666666-7777-4888-8999-aaaaaaaaaaaa"
+        ],
+        "saved_setups": [
+          {
+            "id": "setup-d85c1ad4-98b3-46e1-af53-23a202435683",
+            "name": "Acceptance saved setup",
+            "created_at": "2026-10-28T12:00:00.000Z",
+            "inputs": {
+              "system_id": "hospital-island",
+              "scenario_id": "baseline",
+              "hours": 24,
+              "control": "Dual",
+              "critical_fraction": 0.65,
+              "initial_soc": 0.6,
+              "min_soc": 0.15,
+              "max_soc": 0.9,
+              "round_trip_efficiency": 0.9,
+              "import_eur_kwh": 0.2,
+              "export_eur_kwh": 0.06,
+              "generator_eur_kwh": 0.28,
+              "solar_kw": 1200,
+              "wind_kw": 0,
+              "hydro_kw": 0,
+              "generator_kw": 700,
+              "battery_kwh": 3000,
+              "battery_kw": 750,
+              "load_kw": 651,
+              "grid_import_kw": 1200,
+              "grid_export_kw": 800
+            }
+          }
+        ],
+        "lesson_id": "lesson-remote-triad"
+      },
+      "evidence": ""
+    },
+    {
+      "name": "persisted_receipt_records_schema_timestamp_and_no_losses",
+      "status": "PASS",
+      "expected": {
+        "schema": "helioforge.workspace-migration.v1",
+        "source_schema": "helioforge.workspace.v1",
+        "target_schema": "helioforge.workspace.v2",
+        "timestamp_change": true,
+        "losses": []
+      },
+      "actual": {
+        "schema": "helioforge.workspace-migration.v1",
+        "source_schema": "helioforge.workspace.v1",
+        "target_schema": "helioforge.workspace.v2",
+        "timestamp_change": true,
+        "losses": []
+      },
+      "evidence": ""
+    },
+    {
+      "name": "v2_workspace_survives_reload_byte_for_byte",
+      "status": "PASS",
+      "expected": "{\"schema\":\"helioforge.workspace.v2\",\"saved_at\":\"2026-10-29T22:39:05.105Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":651,\"grid_import_kw\":1200,\"grid_export_kw\":800},\"lesson_id\":\"lesson-remote-triad\",\"last_run_id\":\"f6b50c62-95a4-4aa4-a3da-1a4af7709966\",\"pinned_run_ids\":[\"11111111-2222-4333-8444-555555555555\",\"66666666-7777-4888-8999-aaaaaaaaaaaa\"],\"saved_setups\":[{\"id\":\"setup-d85c1ad4-98b3-46e1-af53-23a202435683\",\"name\":\"Acceptance saved setup\",\"created_at\":\"2026-10-28T12:00:00.000Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":651,\"grid_import_kw\":1200,\"grid_export_kw\":800}}],\"migration\":{\"schema\":\"helioforge.workspace-migration.v1\",\"source_schema\":\"helioforge.workspace.v1\",\"target_schema\":\"helioforge.workspace.v2\",\"migrated_at\":\"2026-10-29T22:39:05.105Z\",\"changes\":[\"Changed the envelope from workspace v1 to v2.\",\"Added a versioned migration receipt; all existing workspace fields were retained.\",\"Refreshed the workspace saved_at timestamp during migration.\"],\"losses\":[]}}",
+      "actual": "{\"schema\":\"helioforge.workspace.v2\",\"saved_at\":\"2026-10-29T22:39:05.105Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":651,\"grid_import_kw\":1200,\"grid_export_kw\":800},\"lesson_id\":\"lesson-remote-triad\",\"last_run_id\":\"f6b50c62-95a4-4aa4-a3da-1a4af7709966\",\"pinned_run_ids\":[\"11111111-2222-4333-8444-555555555555\",\"66666666-7777-4888-8999-aaaaaaaaaaaa\"],\"saved_setups\":[{\"id\":\"setup-d85c1ad4-98b3-46e1-af53-23a202435683\",\"name\":\"Acceptance saved setup\",\"created_at\":\"2026-10-28T12:00:00.000Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":651,\"grid_import_kw\":1200,\"grid_export_kw\":800}}],\"migration\":{\"schema\":\"helioforge.workspace-migration.v1\",\"source_schema\":\"helioforge.workspace.v1\",\"target_schema\":\"helioforge.workspace.v2\",\"migrated_at\":\"2026-10-29T22:39:05.105Z\",\"changes\":[\"Changed the envelope from workspace v1 to v2.\",\"Added a versioned migration receipt; all existing workspace fields were retained.\",\"Refreshed the workspace saved_at timestamp during migration.\"],\"losses\":[]}}",
+      "evidence": ""
+    },
+    {
+      "name": "migration_receipt_survives_reload",
+      "status": "PASS",
+      "expected": {
+        "schema": "helioforge.workspace-migration.v1",
+        "source_schema": "helioforge.workspace.v1",
+        "target_schema": "helioforge.workspace.v2",
+        "migrated_at": "2026-10-29T22:39:05.105Z",
+        "changes": [
+          "Changed the envelope from workspace v1 to v2.",
+          "Added a versioned migration receipt; all existing workspace fields were retained.",
+          "Refreshed the workspace saved_at timestamp during migration."
+        ],
+        "losses": []
+      },
+      "actual": {
+        "schema": "helioforge.workspace-migration.v1",
+        "source_schema": "helioforge.workspace.v1",
+        "target_schema": "helioforge.workspace.v2",
+        "migrated_at": "2026-10-29T22:39:05.105Z",
+        "changes": [
+          "Changed the envelope from workspace v1 to v2.",
+          "Added a versioned migration receipt; all existing workspace fields were retained.",
+          "Refreshed the workspace saved_at timestamp during migration."
+        ],
+        "losses": []
+      },
+      "evidence": ""
+    },
+    {
+      "name": "editing_custom_v1_input_discloses_run_pointer_loss",
+      "status": "PASS",
+      "expected": "Cleared the saved last-run ID because current inputs differ from the v1 workspace inputs.",
+      "actual": true,
+      "evidence": ""
+    },
+    {
+      "name": "edited_v1_migration_clears_stale_run_id_and_records_loss",
+      "status": "PASS",
+      "expected": {
+        "last_run_id": null,
+        "losses": [
+          "Cleared the saved last-run ID because current inputs differ from the v1 workspace inputs."
+        ]
+      },
+      "actual": {
+        "last_run_id": null,
+        "losses": [
+          "Cleared the saved last-run ID because current inputs differ from the v1 workspace inputs."
+        ]
+      },
+      "evidence": ""
+    },
+    {
+      "name": "edited_migration_preview_receipt_matches_persisted_receipt",
+      "status": "PASS",
+      "expected": {
+        "schema": "helioforge.workspace-migration.v1",
+        "source_schema": "helioforge.workspace.v1",
+        "target_schema": "helioforge.workspace.v2",
+        "migrated_at": "2026-10-29T22:39:06.510Z",
+        "changes": [
+          "Changed the envelope from workspace v1 to v2.",
+          "Added a versioned migration receipt; all existing workspace fields were retained.",
+          "Refreshed the workspace saved_at timestamp during migration.",
+          "Included current in-memory workspace fields after loading the v1 record."
+        ],
+        "losses": [
+          "Cleared the saved last-run ID because current inputs differ from the v1 workspace inputs."
+        ]
+      },
+      "actual": {
+        "schema": "helioforge.workspace-migration.v1",
+        "source_schema": "helioforge.workspace.v1",
+        "target_schema": "helioforge.workspace.v2",
+        "migrated_at": "2026-10-29T22:39:06.510Z",
+        "changes": [
+          "Changed the envelope from workspace v1 to v2.",
+          "Added a versioned migration receipt; all existing workspace fields were retained.",
+          "Refreshed the workspace saved_at timestamp during migration.",
+          "Included current in-memory workspace fields after loading the v1 record."
+        ],
+        "losses": [
+          "Cleared the saved last-run ID because current inputs differ from the v1 workspace inputs."
+        ]
+      },
+      "evidence": ""
+    },
+    {
+      "name": "unsupported-v0.json-rejected-without-replacing-v2-workspace",
+      "status": "PASS",
+      "expected": "{\"schema\":\"helioforge.workspace.v2\",\"saved_at\":\"2026-10-29T22:39:06.510Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":652,\"grid_import_kw\":1200,\"grid_export_kw\":800},\"lesson_id\":\"lesson-remote-triad\",\"last_run_id\":null,\"pinned_run_ids\":[\"11111111-2222-4333-8444-555555555555\",\"66666666-7777-4888-8999-aaaaaaaaaaaa\"],\"saved_setups\":[{\"id\":\"setup-d85c1ad4-98b3-46e1-af53-23a202435683\",\"name\":\"Acceptance saved setup\",\"created_at\":\"2026-10-28T12:00:00.000Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":651,\"grid_import_kw\":1200,\"grid_export_kw\":800}}],\"migration\":{\"schema\":\"helioforge.workspace-migration.v1\",\"source_schema\":\"helioforge.workspace.v1\",\"target_schema\":\"helioforge.workspace.v2\",\"migrated_at\":\"2026-10-29T22:39:06.510Z\",\"changes\":[\"Changed the envelope from workspace v1 to v2.\",\"Added a versioned migration receipt; all existing workspace fields were retained.\",\"Refreshed the workspace saved_at timestamp during migration.\",\"Included current in-memory workspace fields after loading the v1 record.\"],\"losses\":[\"Cleared the saved last-run ID because current inputs differ from the v1 workspace inputs.\"]}}",
+      "actual": "{\"schema\":\"helioforge.workspace.v2\",\"saved_at\":\"2026-10-29T22:39:06.510Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":652,\"grid_import_kw\":1200,\"grid_export_kw\":800},\"lesson_id\":\"lesson-remote-triad\",\"last_run_id\":null,\"pinned_run_ids\":[\"11111111-2222-4333-8444-555555555555\",\"66666666-7777-4888-8999-aaaaaaaaaaaa\"],\"saved_setups\":[{\"id\":\"setup-d85c1ad4-98b3-46e1-af53-23a202435683\",\"name\":\"Acceptance saved setup\",\"created_at\":\"2026-10-28T12:00:00.000Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":651,\"grid_import_kw\":1200,\"grid_export_kw\":800}}],\"migration\":{\"schema\":\"helioforge.workspace-migration.v1\",\"source_schema\":\"helioforge.workspace.v1\",\"target_schema\":\"helioforge.workspace.v2\",\"migrated_at\":\"2026-10-29T22:39:06.510Z\",\"changes\":[\"Changed the envelope from workspace v1 to v2.\",\"Added a versioned migration receipt; all existing workspace fields were retained.\",\"Refreshed the workspace saved_at timestamp during migration.\",\"Included current in-memory workspace fields after loading the v1 record.\"],\"losses\":[\"Cleared the saved last-run ID because current inputs differ from the v1 workspace inputs.\"]}}",
+      "evidence": ""
+    },
+    {
+      "name": "corrupt.json-rejected-without-replacing-v2-workspace",
+      "status": "PASS",
+      "expected": "{\"schema\":\"helioforge.workspace.v2\",\"saved_at\":\"2026-10-29T22:39:06.510Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":652,\"grid_import_kw\":1200,\"grid_export_kw\":800},\"lesson_id\":\"lesson-remote-triad\",\"last_run_id\":null,\"pinned_run_ids\":[\"11111111-2222-4333-8444-555555555555\",\"66666666-7777-4888-8999-aaaaaaaaaaaa\"],\"saved_setups\":[{\"id\":\"setup-d85c1ad4-98b3-46e1-af53-23a202435683\",\"name\":\"Acceptance saved setup\",\"created_at\":\"2026-10-28T12:00:00.000Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":651,\"grid_import_kw\":1200,\"grid_export_kw\":800}}],\"migration\":{\"schema\":\"helioforge.workspace-migration.v1\",\"source_schema\":\"helioforge.workspace.v1\",\"target_schema\":\"helioforge.workspace.v2\",\"migrated_at\":\"2026-10-29T22:39:06.510Z\",\"changes\":[\"Changed the envelope from workspace v1 to v2.\",\"Added a versioned migration receipt; all existing workspace fields were retained.\",\"Refreshed the workspace saved_at timestamp during migration.\",\"Included current in-memory workspace fields after loading the v1 record.\"],\"losses\":[\"Cleared the saved last-run ID because current inputs differ from the v1 workspace inputs.\"]}}",
+      "actual": "{\"schema\":\"helioforge.workspace.v2\",\"saved_at\":\"2026-10-29T22:39:06.510Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":652,\"grid_import_kw\":1200,\"grid_export_kw\":800},\"lesson_id\":\"lesson-remote-triad\",\"last_run_id\":null,\"pinned_run_ids\":[\"11111111-2222-4333-8444-555555555555\",\"66666666-7777-4888-8999-aaaaaaaaaaaa\"],\"saved_setups\":[{\"id\":\"setup-d85c1ad4-98b3-46e1-af53-23a202435683\",\"name\":\"Acceptance saved setup\",\"created_at\":\"2026-10-28T12:00:00.000Z\",\"inputs\":{\"system_id\":\"hospital-island\",\"scenario_id\":\"baseline\",\"hours\":24,\"control\":\"Dual\",\"critical_fraction\":0.65,\"initial_soc\":0.6,\"min_soc\":0.15,\"max_soc\":0.9,\"round_trip_efficiency\":0.9,\"import_eur_kwh\":0.2,\"export_eur_kwh\":0.06,\"generator_eur_kwh\":0.28,\"solar_kw\":1200,\"wind_kw\":0,\"hydro_kw\":0,\"generator_kw\":700,\"battery_kwh\":3000,\"battery_kw\":750,\"load_kw\":651,\"grid_import_kw\":1200,\"grid_export_kw\":800}}],\"migration\":{\"schema\":\"helioforge.workspace-migration.v1\",\"source_schema\":\"helioforge.workspace.v1\",\"target_schema\":\"helioforge.workspace.v2\",\"migrated_at\":\"2026-10-29T22:39:06.510Z\",\"changes\":[\"Changed the envelope from workspace v1 to v2.\",\"Added a versioned migration receipt; all existing workspace fields were retained.\",\"Refreshed the workspace saved_at timestamp during migration.\",\"Included current in-memory workspace fields after loading the v1 record.\"],\"losses\":[\"Cleared the saved last-run ID because current inputs differ from the v1 workspace inputs.\"]}}",
+      "evidence": ""
+    },
+    {
+      "name": "browser_made_no_api_or_remote_requests",
+      "status": "PASS",
+      "expected": {
+        "api_attempts": 0,
+        "remote_attempts": 0
+      },
+      "actual": {
+        "api_attempts": [],
+        "remote_attempts": []
+      },
+      "evidence": ""
+    },
+    {
+      "name": "browser_had_no_page_errors",
+      "status": "PASS",
+      "expected": [],
+      "actual": [],
+      "evidence": ""
+    },
+    {
+      "name": "browser_had_no_console_errors",
+      "status": "PASS",
+      "expected": [],
+      "actual": [],
+      "evidence": ""
+    }
+  ],
+  "summary": {
+    "pass": 18,
+    "fail": 0,
+    "runtime_sha256": "43d880c5b042fbea578d2e245f76acf8a896af60fb4f2b7c11255dc264b8e5bf",
+    "expected_runtime_sha256": "43d880c5b042fbea578d2e245f76acf8a896af60fb4f2b7c11255dc264b8e5bf"
+  },
+  "scope_note": "Isolated Playwright context with synthetic localStorage fixtures. Certificate bypass is limited to HTTPS loopback. Requests to /api/ and non-loopback origins are blocked and recorded. This is not a deployment, security, or scientific validation claim."
+}

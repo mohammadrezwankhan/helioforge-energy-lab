@@ -1,0 +1,27 @@
+<article class="document worked-model">
+  <p class="eyebrow">WORKED MODEL / TERMINAL</p>
+  <h1>Check one synthetic noon balance by hand.</h1>
+  <p class="lead">The browser Terminal uses a 24-step, one-hour, single-bus PV, battery and grid recurrence. This example checks the noon row; it does not claim to hand-validate the whole 24-hour run.</p>
+  <p class="learning-byline">Written by Mohammad Rezwan Khan · Revised 28 October 2026 · Model <code>terminal-greedy-hourly-v1</code></p>
+  <h2>Inputs for the worked row</h2>
+  <p>Set <code>pvKw = 2</code>, <code>loadKw = 1</code>, <code>batteryKwh = 0</code>, <code>batteryKw = 0</code>, and <code>gridKw = 1</code>. Leave the round-trip efficiency and SOC fractions at valid defaults. Set <code>exportPrice = 0.05 EUR/kWh</code>. These are synthetic teaching inputs.</p>
+  <h2>Calculate hour 12</h2>
+  <ol>
+    <li>The Terminal load shape is <code>0.8 + 0.2 × (0.5 + 0.5 × cos((h − 19) × 2π / 24))</code>. At <code>h = 12</code>, <code>cos(−7π/12) ≈ −0.258819</code>, so load is approximately <strong>0.874118 kW</strong>.</li>
+    <li>The PV shape is <code>pvKw × max(0, sin(π × (h − 6) / 12))</code>. At hour 12 it reaches <strong>2 kW</strong>.</li>
+    <li>Direct PV serves the 0.874118 kW load. Surplus is <code>2 − 0.874118 = 1.125882 kW</code>.</li>
+    <li>There is no battery. The 1 kW grid limit exports <strong>1 kW</strong>, and the remainder is curtailed: <code>1.125882 − 1 = 0.125882 kW</code>.</li>
+  </ol>
+  <table><caption>Hour 12 arithmetic, values rounded to 6 decimal places</caption><thead><tr><th scope="col">Quantity</th><th scope="col">Value</th><th scope="col">Unit</th></tr></thead><tbody>
+    <tr><th scope="row">PV</th><td>2.000000</td><td>kW</td></tr>
+    <tr><th scope="row">Served load</th><td>0.874118</td><td>kW</td></tr>
+    <tr><th scope="row">Grid export</th><td>1.000000</td><td>kW</td></tr>
+    <tr><th scope="row">Curtailment</th><td>0.125882</td><td>kW</td></tr>
+    <tr><th scope="row">Unserved load, battery charge and battery discharge</th><td>0</td><td>kW</td></tr>
+    <tr><th scope="row">Bus residual</th><td><code>2 − 0.874118 − 1 − 0.125882 = 0</code></td><td>kW</td></tr>
+  </tbody></table>
+  <h2>Interpret the check carefully</h2>
+  <p>This verifies one row’s arithmetic against the declared shapes and dispatch order. It is not an independent model comparison. The complete run uses all 24 synthetic hours, has no terminal-SOC target, and is not an optimizer. Do not multiply its daily cost by 365 or infer real weather, reliability, voltage, frequency, protection or operational readiness.</p>
+  <p>For the exact formulas, bounds and missing physics, read the <a href="https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/docs/terminal-audit/ANALYTICAL_MODEL.md">Terminal analytical model</a>. The implementation lives in <a href="https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/apps/api/helioforge/engines/terminal.py">Python source</a> and <a href="https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/apps/web/src/terminal-engine.ts">browser source</a>; regression cases are in <a href="https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/apps/api/tests/test_terminal.py">test_terminal.py</a>.</p>
+  <p>Continue with the <a href="/learning/model-glossary/">model and evidence glossary</a>, the <a href="/learning/capability-modes/">delivery-mode guide</a>, or the <a href="/models/#workspace-hybrid">hybrid study registry</a>.</p>
+</article>
