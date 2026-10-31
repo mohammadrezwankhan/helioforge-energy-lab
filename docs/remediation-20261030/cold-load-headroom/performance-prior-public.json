@@ -1,0 +1,1574 @@
+{
+  "schema": "helioforge.performance.lab.v1",
+  "started_at": "2026-10-30T09:45:04.439396+00:00",
+  "environment": "Windows-11-10.0.26300-SP0",
+  "artifact_sha256": "bc89a858062e414ab7c5c0e1ca6d3af0714b062c2856af8731704937bf9044d9",
+  "site_runtime_path": "C:\\Users\\MRK\\Downloads\\misC\\helioforge-remediation-20261028\\source\\.cloudflare\\cold-load-20261030\\ci-main-41034505235\\.cloudflare\\site\\run\\index.html",
+  "physical_device": false,
+  "field_p75": null,
+  "field_INP": null,
+  "target_url": "https://mkgrid.co.technology/run/",
+  "scope": "Public HTTPS target over the host's network, desktop CPU; new browser context for cold, same-context reload for warm. CDP Performance.getMetrics current-value snapshots are taken after each document load; navigation resets these duration counters, so the current document snapshot is converted to milliseconds without subtracting the previous document. Other host workloads were not controlled. No field metrics or real-device claim.",
+  "runs": [
+    {
+      "profile": "desktop",
+      "cache": "cold",
+      "repetition": 1,
+      "status": "PASS",
+      "acceptance_status": "FAIL",
+      "cpu_multiplier": 1,
+      "network": "unthrottled host network",
+      "page_errors": [],
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 38.48590000416152,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 51.772499980870634,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 90.40399998775683,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 32.83500001998618,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 83.87390000279993,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 117.04660000395961,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 99.95589999016374,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 433.20100000710227,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ],
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "FAIL",
+      "runtime_sha256_matches_site": true,
+      "wall_load_ms": 4400.086899986491,
+      "target_http_status": 200,
+      "runtime_response_url": "https://mkgrid.co.technology/run/",
+      "runtime_response_sha256": "bc89a858062e414ab7c5c0e1ca6d3af0714b062c2856af8731704937bf9044d9",
+      "metrics": {
+        "lcp": 3164,
+        "lcp_element": {
+          "tag": "h2",
+          "id": null,
+          "classes": [],
+          "selector": "h2",
+          "url": null,
+          "size": 57720,
+          "renderTime": 3164,
+          "loadTime": 0
+        },
+        "cls": 0,
+        "longTasks": [
+          {
+            "start": 2961.100000023842,
+            "duration": 167
+          }
+        ],
+        "frames": 79,
+        "navigation": [
+          {
+            "type": "navigate",
+            "nextHopProtocol": "h2",
+            "startTime": 0,
+            "duration": 3146.4000000059605,
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 0.30000001192092896,
+            "domainLookupStart": 2705.100000023842,
+            "domainLookupEnd": 2712.9000000059605,
+            "connectStart": 2712.9000000059605,
+            "secureConnectionStart": 2716.7000000178814,
+            "connectEnd": 2738.7000000178814,
+            "requestStart": 2739.100000023842,
+            "responseStart": 2912.300000011921,
+            "responseEnd": 2929.2000000178814,
+            "domInteractive": 2961.300000011921,
+            "domContentLoaded": 3004.300000011921,
+            "domComplete": 3146.300000011921,
+            "load": 3146.4000000059605,
+            "encodedBodySize": 276846,
+            "decodedBodySize": 1103431,
+            "transferSize": 277146
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 10600000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 139.534,
+        "TaskDuration": 466.811,
+        "LayoutDuration": 97.453,
+        "RecalcStyleDuration": 29.000999999999998,
+        "scope": "CDP Performance.getMetrics current-value snapshot in milliseconds after this document's load; the navigation reset means no prior-document subtraction is applied. ScriptDuration is JavaScript execution, not parser-only work or field INP."
+      },
+      "idle_animation_callbacks_1s": 60
+    },
+    {
+      "profile": "desktop",
+      "cache": "warm",
+      "repetition": 1,
+      "status": "PASS",
+      "acceptance_status": "PASS",
+      "cpu_multiplier": 1,
+      "network": "unthrottled host network",
+      "page_errors": [],
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 43.79130000597797,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 44.676999998046085,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 66.50930002797395,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 33.89769999193959,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 65.99960001767613,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 118.36689998744987,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 83.14969998900779,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 198.96339997649193,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ],
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "runtime_sha256_matches_site": true,
+      "wall_load_ms": 1522.300799988443,
+      "target_http_status": 200,
+      "runtime_response_url": "https://mkgrid.co.technology/run/",
+      "runtime_response_sha256": "bc89a858062e414ab7c5c0e1ca6d3af0714b062c2856af8731704937bf9044d9",
+      "metrics": {
+        "lcp": 296,
+        "lcp_element": {
+          "tag": "p",
+          "id": null,
+          "classes": [
+            "scene-disclaimer"
+          ],
+          "selector": "p.scene-disclaimer",
+          "url": null,
+          "size": 20493,
+          "renderTime": 296,
+          "loadTime": 0
+        },
+        "cls": 0,
+        "longTasks": [],
+        "frames": 79,
+        "navigation": [
+          {
+            "type": "reload",
+            "nextHopProtocol": "h2",
+            "startTime": 0,
+            "duration": 240.5,
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 0.09999999403953552,
+            "domainLookupStart": 0.09999999403953552,
+            "domainLookupEnd": 0.09999999403953552,
+            "connectStart": 0.09999999403953552,
+            "secureConnectionStart": 0.09999999403953552,
+            "connectEnd": 0.09999999403953552,
+            "requestStart": 2.5999999940395355,
+            "responseStart": 174,
+            "responseEnd": 179.09999999403954,
+            "domInteractive": 215.40000000596046,
+            "domContentLoaded": 220.7999999821186,
+            "domComplete": 240.2999999821186,
+            "load": 240.5,
+            "encodedBodySize": 276846,
+            "decodedBodySize": 1103431,
+            "transferSize": 277146
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 10600000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 121.242,
+        "TaskDuration": 317.02200000000005,
+        "LayoutDuration": 14.699,
+        "RecalcStyleDuration": 11.004999999999999,
+        "scope": "CDP Performance.getMetrics current-value snapshot in milliseconds after this document's load; the navigation reset means no prior-document subtraction is applied. ScriptDuration is JavaScript execution, not parser-only work or field INP."
+      },
+      "idle_animation_callbacks_1s": 60
+    },
+    {
+      "profile": "desktop",
+      "cache": "cold",
+      "repetition": 2,
+      "status": "PASS",
+      "acceptance_status": "PASS",
+      "cpu_multiplier": 1,
+      "network": "unthrottled host network",
+      "page_errors": [],
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 35.361999995075166,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 50.896599976113066,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 74.46279999567196,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 33.3262000058312,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 68.33409998216666,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 98.84489999967627,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 99.4547999871429,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 200.4552999860607,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ],
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "runtime_sha256_matches_site": true,
+      "wall_load_ms": 1719.6904000011273,
+      "target_http_status": 200,
+      "runtime_response_url": "https://mkgrid.co.technology/run/",
+      "runtime_response_sha256": "bc89a858062e414ab7c5c0e1ca6d3af0714b062c2856af8731704937bf9044d9",
+      "metrics": {
+        "lcp": 472,
+        "lcp_element": {
+          "tag": "h2",
+          "id": null,
+          "classes": [],
+          "selector": "h2",
+          "url": null,
+          "size": 57720,
+          "renderTime": 472,
+          "loadTime": 0
+        },
+        "cls": 0,
+        "longTasks": [
+          {
+            "start": 265.5,
+            "duration": 171
+          }
+        ],
+        "frames": 79,
+        "navigation": [
+          {
+            "type": "navigate",
+            "nextHopProtocol": "h2",
+            "startTime": 0,
+            "duration": 455.7999999821186,
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 0,
+            "domainLookupStart": 2.199999988079071,
+            "domainLookupEnd": 3.399999976158142,
+            "connectStart": 3.399999976158142,
+            "secureConnectionStart": 7.0999999940395355,
+            "connectEnd": 21.69999998807907,
+            "requestStart": 21.69999998807907,
+            "responseStart": 222.2999999821186,
+            "responseEnd": 233,
+            "domInteractive": 265.69999998807907,
+            "domContentLoaded": 302.5,
+            "domComplete": 455.59999999403954,
+            "load": 455.7999999821186,
+            "encodedBodySize": 276846,
+            "decodedBodySize": 1103431,
+            "transferSize": 277146
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 11900000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 123.046,
+        "TaskDuration": 438.475,
+        "LayoutDuration": 103.59400000000001,
+        "RecalcStyleDuration": 32.344,
+        "scope": "CDP Performance.getMetrics current-value snapshot in milliseconds after this document's load; the navigation reset means no prior-document subtraction is applied. ScriptDuration is JavaScript execution, not parser-only work or field INP."
+      },
+      "idle_animation_callbacks_1s": 60
+    },
+    {
+      "profile": "desktop",
+      "cache": "warm",
+      "repetition": 2,
+      "status": "PASS",
+      "acceptance_status": "PASS",
+      "cpu_multiplier": 1,
+      "network": "unthrottled host network",
+      "page_errors": [],
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 35.560599993914366,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 44.037000014213845,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 62.183900008676574,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 34.12009999738075,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 82.62220001779497,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 117.14849999407306,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 82.36199998646043,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 201.380499987863,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ],
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "runtime_sha256_matches_site": true,
+      "wall_load_ms": 1499.451500014402,
+      "target_http_status": 200,
+      "runtime_response_url": "https://mkgrid.co.technology/run/",
+      "runtime_response_sha256": "bc89a858062e414ab7c5c0e1ca6d3af0714b062c2856af8731704937bf9044d9",
+      "metrics": {
+        "lcp": 284,
+        "lcp_element": {
+          "tag": "p",
+          "id": null,
+          "classes": [
+            "scene-disclaimer"
+          ],
+          "selector": "p.scene-disclaimer",
+          "url": null,
+          "size": 20493,
+          "renderTime": 284,
+          "loadTime": 0
+        },
+        "cls": 0,
+        "longTasks": [],
+        "frames": 78,
+        "navigation": [
+          {
+            "type": "reload",
+            "nextHopProtocol": "h2",
+            "startTime": 0,
+            "duration": 234.2999999821186,
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 0.09999999403953552,
+            "domainLookupStart": 0.09999999403953552,
+            "domainLookupEnd": 0.09999999403953552,
+            "connectStart": 0.09999999403953552,
+            "secureConnectionStart": 0.09999999403953552,
+            "connectEnd": 0.09999999403953552,
+            "requestStart": 2.5,
+            "responseStart": 165.5,
+            "responseEnd": 171.39999997615814,
+            "domInteractive": 208.39999997615814,
+            "domContentLoaded": 214.39999997615814,
+            "domComplete": 233.89999997615814,
+            "load": 234.2999999821186,
+            "encodedBodySize": 276846,
+            "decodedBodySize": 1103431,
+            "transferSize": 277146
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 11900000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 104.155,
+        "TaskDuration": 326.37899999999996,
+        "LayoutDuration": 13.547,
+        "RecalcStyleDuration": 11.652,
+        "scope": "CDP Performance.getMetrics current-value snapshot in milliseconds after this document's load; the navigation reset means no prior-document subtraction is applied. ScriptDuration is JavaScript execution, not parser-only work or field INP."
+      },
+      "idle_animation_callbacks_1s": 62
+    },
+    {
+      "profile": "desktop",
+      "cache": "cold",
+      "repetition": 3,
+      "status": "PASS",
+      "acceptance_status": "PASS",
+      "cpu_multiplier": 1,
+      "network": "unthrottled host network",
+      "page_errors": [],
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 28.994599997531623,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 49.20700000366196,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 147.20710000256076,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 34.11259999847971,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 65.74219997855835,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 101.18050000164658,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 82.14499999303371,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 200.87440000497736,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ],
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "runtime_sha256_matches_site": true,
+      "wall_load_ms": 1580.35080000991,
+      "target_http_status": 200,
+      "runtime_response_url": "https://mkgrid.co.technology/run/",
+      "runtime_response_sha256": "bc89a858062e414ab7c5c0e1ca6d3af0714b062c2856af8731704937bf9044d9",
+      "metrics": {
+        "lcp": 336,
+        "lcp_element": {
+          "tag": "h2",
+          "id": null,
+          "classes": [],
+          "selector": "h2",
+          "url": null,
+          "size": 57720,
+          "renderTime": 336,
+          "loadTime": 0
+        },
+        "cls": 0,
+        "longTasks": [
+          {
+            "start": 172.5,
+            "duration": 131
+          }
+        ],
+        "frames": 79,
+        "navigation": [
+          {
+            "type": "navigate",
+            "nextHopProtocol": "h2",
+            "startTime": 0,
+            "duration": 323.69999998807907,
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 0.19999998807907104,
+            "domainLookupStart": 2.9000000059604645,
+            "domainLookupEnd": 4,
+            "connectStart": 4,
+            "secureConnectionStart": 7.9000000059604645,
+            "connectEnd": 22.400000005960464,
+            "requestStart": 22.5,
+            "responseStart": 133.40000000596046,
+            "responseEnd": 142.80000001192093,
+            "domInteractive": 172.69999998807907,
+            "domContentLoaded": 196.5,
+            "domComplete": 323.5,
+            "load": 323.69999998807907,
+            "encodedBodySize": 276846,
+            "decodedBodySize": 1103431,
+            "transferSize": 277146
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 11200000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 124.846,
+        "TaskDuration": 410.685,
+        "LayoutDuration": 91.351,
+        "RecalcStyleDuration": 18.035,
+        "scope": "CDP Performance.getMetrics current-value snapshot in milliseconds after this document's load; the navigation reset means no prior-document subtraction is applied. ScriptDuration is JavaScript execution, not parser-only work or field INP."
+      },
+      "idle_animation_callbacks_1s": 61
+    },
+    {
+      "profile": "desktop",
+      "cache": "warm",
+      "repetition": 3,
+      "status": "PASS",
+      "acceptance_status": "PASS",
+      "cpu_multiplier": 1,
+      "network": "unthrottled host network",
+      "page_errors": [],
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 45.88230000808835,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 48.40289999265224,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 77.48559999163263,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 33.521900011692196,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 65.18910001614131,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 101.42230000928976,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 83.27890001237392,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 199.35420001274906,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ],
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "runtime_sha256_matches_site": true,
+      "wall_load_ms": 1427.6136000116821,
+      "target_http_status": 200,
+      "runtime_response_url": "https://mkgrid.co.technology/run/",
+      "runtime_response_sha256": "bc89a858062e414ab7c5c0e1ca6d3af0714b062c2856af8731704937bf9044d9",
+      "metrics": {
+        "lcp": 220,
+        "lcp_element": {
+          "tag": "p",
+          "id": null,
+          "classes": [
+            "scene-disclaimer"
+          ],
+          "selector": "p.scene-disclaimer",
+          "url": null,
+          "size": 20493,
+          "renderTime": 220,
+          "loadTime": 0
+        },
+        "cls": 0,
+        "longTasks": [],
+        "frames": 76,
+        "navigation": [
+          {
+            "type": "reload",
+            "nextHopProtocol": "h2",
+            "startTime": 0,
+            "duration": 174.90000000596046,
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 0.20000001788139343,
+            "domainLookupStart": 0.20000001788139343,
+            "domainLookupEnd": 0.20000001788139343,
+            "connectStart": 0.20000001788139343,
+            "secureConnectionStart": 0.20000001788139343,
+            "connectEnd": 0.20000001788139343,
+            "requestStart": 3.800000011920929,
+            "responseStart": 115.80000001192093,
+            "responseEnd": 122.10000002384186,
+            "domInteractive": 151.80000001192093,
+            "domContentLoaded": 156.7000000178814,
+            "domComplete": 174.60000002384186,
+            "load": 174.90000000596046,
+            "encodedBodySize": 276846,
+            "decodedBodySize": 1103431,
+            "transferSize": 277146
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 11200000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 98.54,
+        "TaskDuration": 276.33299999999997,
+        "LayoutDuration": 11.914,
+        "RecalcStyleDuration": 12.014999999999999,
+        "scope": "CDP Performance.getMetrics current-value snapshot in milliseconds after this document's load; the navigation reset means no prior-document subtraction is applied. ScriptDuration is JavaScript execution, not parser-only work or field INP."
+      },
+      "idle_animation_callbacks_1s": 61
+    },
+    {
+      "profile": "phone_viewport_constrained_emulation",
+      "cache": "cold",
+      "repetition": 1,
+      "status": "PASS",
+      "acceptance_status": "PASS",
+      "cpu_multiplier": 4,
+      "network": "CDP 150 ms latency, 1.6 Mbps down, 0.75 Mbps up",
+      "page_errors": [],
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 125.05319999763742,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 199.04439998208545,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 194.53999999677762,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 65.70710000232793,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 183.24890002259053,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 315.869100013515,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 200.62369998777285,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 332.91369999642484,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ],
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "runtime_sha256_matches_site": true,
+      "wall_load_ms": 3772.0316000049934,
+      "target_http_status": 200,
+      "runtime_response_url": "https://mkgrid.co.technology/run/",
+      "runtime_response_sha256": "bc89a858062e414ab7c5c0e1ca6d3af0714b062c2856af8731704937bf9044d9",
+      "metrics": {
+        "lcp": 2444,
+        "lcp_element": {
+          "tag": "h2",
+          "id": null,
+          "classes": [],
+          "selector": "h2",
+          "url": null,
+          "size": 18676,
+          "renderTime": 2444,
+          "loadTime": 0
+        },
+        "cls": 0,
+        "longTasks": [
+          {
+            "start": 1609,
+            "duration": 74
+          },
+          {
+            "start": 1694.5999999940395,
+            "duration": 690
+          },
+          {
+            "start": 2385.399999976158,
+            "duration": 53
+          }
+        ],
+        "frames": 0,
+        "navigation": [
+          {
+            "type": "navigate",
+            "nextHopProtocol": "h2",
+            "startTime": 0,
+            "duration": 2443.399999976158,
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 0.19999998807907104,
+            "domainLookupStart": 2.2999999821186066,
+            "domainLookupEnd": 3.2999999821186066,
+            "connectStart": 3.2999999821186066,
+            "secureConnectionStart": 6.899999976158142,
+            "connectEnd": 25.399999976158142,
+            "requestStart": 25.5,
+            "responseStart": 201.09999999403954,
+            "responseEnd": 1597.0999999940395,
+            "domInteractive": 1695.7999999821186,
+            "domContentLoaded": 1832.199999988079,
+            "domComplete": 2441,
+            "load": 2443.399999976158,
+            "encodedBodySize": 276846,
+            "decodedBodySize": 1103431,
+            "transferSize": 277146
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 10000000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 151.76799999999997,
+        "TaskDuration": 1165.547,
+        "LayoutDuration": 465.567,
+        "RecalcStyleDuration": 103.078,
+        "scope": "CDP Performance.getMetrics current-value snapshot in milliseconds after this document's load; the navigation reset means no prior-document subtraction is applied. ScriptDuration is JavaScript execution, not parser-only work or field INP."
+      },
+      "idle_animation_callbacks_1s": 0
+    },
+    {
+      "profile": "phone_viewport_constrained_emulation",
+      "cache": "warm",
+      "repetition": 1,
+      "status": "PASS",
+      "acceptance_status": "PASS",
+      "cpu_multiplier": 4,
+      "network": "CDP 150 ms latency, 1.6 Mbps down, 0.75 Mbps up",
+      "page_errors": [],
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 150.26409999700263,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 198.1902999978047,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 141.6779000137467,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 66.23070000205189,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 183.316200011177,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 349.905300012324,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 250.69250000524335,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 382.1728999901097,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ],
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "runtime_sha256_matches_site": true,
+      "wall_load_ms": 3344.2260999872815,
+      "target_http_status": 200,
+      "runtime_response_url": "https://mkgrid.co.technology/run/",
+      "runtime_response_sha256": "bc89a858062e414ab7c5c0e1ca6d3af0714b062c2856af8731704937bf9044d9",
+      "metrics": {
+        "lcp": 2072,
+        "lcp_element": {
+          "tag": "h2",
+          "id": null,
+          "classes": [],
+          "selector": "h2",
+          "url": null,
+          "size": 15555,
+          "renderTime": 2072,
+          "loadTime": 0
+        },
+        "cls": 0,
+        "longTasks": [
+          {
+            "start": 1599.1000000238419,
+            "duration": 186
+          },
+          {
+            "start": 1913.6000000238419,
+            "duration": 153
+          }
+        ],
+        "frames": 0,
+        "navigation": [
+          {
+            "type": "reload",
+            "nextHopProtocol": "h2",
+            "startTime": 0,
+            "duration": 1819.7000000178814,
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 0.20000001788139343,
+            "domainLookupStart": 0.20000001788139343,
+            "domainLookupEnd": 0.20000001788139343,
+            "connectStart": 0.20000001788139343,
+            "secureConnectionStart": 0.20000001788139343,
+            "connectEnd": 0.20000001788139343,
+            "requestStart": 2.7000000178813934,
+            "responseStart": 194,
+            "responseEnd": 1575.9000000059605,
+            "domInteractive": 1599.300000011921,
+            "domContentLoaded": 1643.1000000238419,
+            "domComplete": 1817.300000011921,
+            "load": 1819.7000000178814,
+            "encodedBodySize": 276846,
+            "decodedBodySize": 1103431,
+            "transferSize": 277146
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 10000000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 53.66,
+        "TaskDuration": 770.2059999999999,
+        "LayoutDuration": 148.553,
+        "RecalcStyleDuration": 111.68599999999999,
+        "scope": "CDP Performance.getMetrics current-value snapshot in milliseconds after this document's load; the navigation reset means no prior-document subtraction is applied. ScriptDuration is JavaScript execution, not parser-only work or field INP."
+      },
+      "idle_animation_callbacks_1s": 0
+    },
+    {
+      "profile": "phone_viewport_constrained_emulation",
+      "cache": "cold",
+      "repetition": 2,
+      "status": "PASS",
+      "acceptance_status": "FAIL",
+      "cpu_multiplier": 4,
+      "network": "CDP 150 ms latency, 1.6 Mbps down, 0.75 Mbps up",
+      "page_errors": [],
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 83.39769998565316,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 150.0336999888532,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 158.8519999932032,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 67.36640000599436,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 148.91310001257807,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 349.3686000001617,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 198.86849998147227,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 301.561899977969,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ],
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "FAIL",
+      "runtime_sha256_matches_site": true,
+      "wall_load_ms": 3866.9169999775477,
+      "target_http_status": 200,
+      "runtime_response_url": "https://mkgrid.co.technology/run/",
+      "runtime_response_sha256": "bc89a858062e414ab7c5c0e1ca6d3af0714b062c2856af8731704937bf9044d9",
+      "metrics": {
+        "lcp": 2536,
+        "lcp_element": {
+          "tag": "h2",
+          "id": null,
+          "classes": [],
+          "selector": "h2",
+          "url": null,
+          "size": 18676,
+          "renderTime": 2536,
+          "loadTime": 0
+        },
+        "cls": 0,
+        "longTasks": [
+          {
+            "start": 1637.699999988079,
+            "duration": 76
+          },
+          {
+            "start": 1724.0999999940395,
+            "duration": 746
+          },
+          {
+            "start": 2471,
+            "duration": 59
+          }
+        ],
+        "frames": 0,
+        "navigation": [
+          {
+            "type": "navigate",
+            "nextHopProtocol": "h2",
+            "startTime": 0,
+            "duration": 2536.699999988079,
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 0.09999999403953552,
+            "domainLookupStart": 2.9000000059604645,
+            "domainLookupEnd": 4.0999999940395355,
+            "connectStart": 4.0999999940395355,
+            "secureConnectionStart": 8,
+            "connectEnd": 27.30000001192093,
+            "requestStart": 27.400000005960464,
+            "responseStart": 221.30000001192093,
+            "responseEnd": 1625.4000000059605,
+            "domInteractive": 1725.199999988079,
+            "domContentLoaded": 1879.0999999940395,
+            "domComplete": 2533.9000000059605,
+            "load": 2536.699999988079,
+            "encodedBodySize": 276846,
+            "decodedBodySize": 1103431,
+            "transferSize": 277146
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 10000000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 169.04,
+        "TaskDuration": 1241.7,
+        "LayoutDuration": 499.993,
+        "RecalcStyleDuration": 110.67299999999999,
+        "scope": "CDP Performance.getMetrics current-value snapshot in milliseconds after this document's load; the navigation reset means no prior-document subtraction is applied. ScriptDuration is JavaScript execution, not parser-only work or field INP."
+      },
+      "idle_animation_callbacks_1s": 0
+    },
+    {
+      "profile": "phone_viewport_constrained_emulation",
+      "cache": "warm",
+      "repetition": 2,
+      "status": "PASS",
+      "acceptance_status": "PASS",
+      "cpu_multiplier": 4,
+      "network": "CDP 150 ms latency, 1.6 Mbps down, 0.75 Mbps up",
+      "page_errors": [],
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 157.23280000383966,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 175.93570001190528,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 128.92420002026483,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 85.24580000084825,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 165.1463000162039,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 282.5287999876309,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 183.88850000337698,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 300.9225999994669,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ],
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "runtime_sha256_matches_site": true,
+      "wall_load_ms": 3171.5823000122327,
+      "target_http_status": 200,
+      "runtime_response_url": "https://mkgrid.co.technology/run/",
+      "runtime_response_sha256": "bc89a858062e414ab7c5c0e1ca6d3af0714b062c2856af8731704937bf9044d9",
+      "metrics": {
+        "lcp": 1936,
+        "lcp_element": {
+          "tag": "h2",
+          "id": null,
+          "classes": [],
+          "selector": "h2",
+          "url": null,
+          "size": 15555,
+          "renderTime": 1936,
+          "loadTime": 0
+        },
+        "cls": 0,
+        "longTasks": [
+          {
+            "start": 1564.0999999940395,
+            "duration": 150
+          },
+          {
+            "start": 1823.5999999940395,
+            "duration": 109
+          }
+        ],
+        "frames": 0,
+        "navigation": [
+          {
+            "type": "reload",
+            "nextHopProtocol": "h2",
+            "startTime": 0,
+            "duration": 1745.0999999940395,
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 0.20000001788139343,
+            "domainLookupStart": 0.20000001788139343,
+            "domainLookupEnd": 0.20000001788139343,
+            "connectStart": 0.20000001788139343,
+            "secureConnectionStart": 0.20000001788139343,
+            "connectEnd": 0.20000001788139343,
+            "requestStart": 3.800000011920929,
+            "responseStart": 158.2000000178814,
+            "responseEnd": 1547,
+            "domInteractive": 1578.9000000059605,
+            "domContentLoaded": 1621.9000000059605,
+            "domComplete": 1742.2000000178814,
+            "load": 1745.0999999940395,
+            "encodedBodySize": 276846,
+            "decodedBodySize": 1103431,
+            "transferSize": 277146
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 10000000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 48.172,
+        "TaskDuration": 648.864,
+        "LayoutDuration": 94.851,
+        "RecalcStyleDuration": 82.42399999999999,
+        "scope": "CDP Performance.getMetrics current-value snapshot in milliseconds after this document's load; the navigation reset means no prior-document subtraction is applied. ScriptDuration is JavaScript execution, not parser-only work or field INP."
+      },
+      "idle_animation_callbacks_1s": 0
+    },
+    {
+      "profile": "phone_viewport_constrained_emulation",
+      "cache": "cold",
+      "repetition": 3,
+      "status": "PASS",
+      "acceptance_status": "PASS",
+      "cpu_multiplier": 4,
+      "network": "CDP 150 ms latency, 1.6 Mbps down, 0.75 Mbps up",
+      "page_errors": [],
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 120.46950001968071,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 209.97309999074787,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 273.5564000031445,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 83.9014999801293,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 249.55999999656342,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 551.1824999994133,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 332.44959998410195,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 467.2392999927979,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ],
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "runtime_sha256_matches_site": true,
+      "wall_load_ms": 3692.682499997318,
+      "target_http_status": 200,
+      "runtime_response_url": "https://mkgrid.co.technology/run/",
+      "runtime_response_sha256": "bc89a858062e414ab7c5c0e1ca6d3af0714b062c2856af8731704937bf9044d9",
+      "metrics": {
+        "lcp": 2360,
+        "lcp_element": {
+          "tag": "h2",
+          "id": null,
+          "classes": [],
+          "selector": "h2",
+          "url": null,
+          "size": 18676,
+          "renderTime": 2360,
+          "loadTime": 0
+        },
+        "cls": 0,
+        "longTasks": [
+          {
+            "start": 1618.2000000178814,
+            "duration": 72
+          },
+          {
+            "start": 1698.0999999940395,
+            "duration": 602
+          },
+          {
+            "start": 2301.0999999940395,
+            "duration": 55
+          }
+        ],
+        "frames": 0,
+        "navigation": [
+          {
+            "type": "navigate",
+            "nextHopProtocol": "h2",
+            "startTime": 0,
+            "duration": 2361.5999999940395,
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 0.20000001788139343,
+            "domainLookupStart": 1.800000011920929,
+            "domainLookupEnd": 2.7000000178813934,
+            "connectStart": 2.7000000178813934,
+            "secureConnectionStart": 6.700000017881393,
+            "connectEnd": 30.200000017881393,
+            "requestStart": 30.30000001192093,
+            "responseStart": 167.2000000178814,
+            "responseEnd": 1607.7000000178814,
+            "domInteractive": 1699.0999999940395,
+            "domContentLoaded": 1818.7000000178814,
+            "domComplete": 2359.0999999940395,
+            "load": 2361.5999999940395,
+            "encodedBodySize": 276846,
+            "decodedBodySize": 1103431,
+            "transferSize": 277146
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 10000000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 131.402,
+        "TaskDuration": 1107.402,
+        "LayoutDuration": 417.215,
+        "RecalcStyleDuration": 82.966,
+        "scope": "CDP Performance.getMetrics current-value snapshot in milliseconds after this document's load; the navigation reset means no prior-document subtraction is applied. ScriptDuration is JavaScript execution, not parser-only work or field INP."
+      },
+      "idle_animation_callbacks_1s": 0
+    },
+    {
+      "profile": "phone_viewport_constrained_emulation",
+      "cache": "warm",
+      "repetition": 3,
+      "status": "PASS",
+      "acceptance_status": "PASS",
+      "cpu_multiplier": 4,
+      "network": "CDP 150 ms latency, 1.6 Mbps down, 0.75 Mbps up",
+      "page_errors": [],
+      "interactions": [
+        {
+          "name": "architecture search",
+          "status": "PASS",
+          "automation_wall_ms": 157.1276000177022,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "architecture change",
+          "status": "PASS",
+          "automation_wall_ms": 159.50929999235086,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "pin baseline",
+          "status": "PASS",
+          "automation_wall_ms": 132.9351000022143,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "Terminal input edit",
+          "status": "PASS",
+          "automation_wall_ms": 66.60200000624172,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "candidate calculation",
+          "status": "PASS",
+          "automation_wall_ms": 150.07340000011027,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "49-case sweep",
+          "status": "PASS",
+          "automation_wall_ms": 282.1721000073012,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "comparison",
+          "status": "PASS",
+          "automation_wall_ms": 187.49069998739287,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        },
+        {
+          "name": "manifest export",
+          "status": "PASS",
+          "automation_wall_ms": 312.47229999280535,
+          "scope": "automation-to-two-frames latency; includes scrolling and Playwright waits, not INP"
+        }
+      ],
+      "lab_lcp_budget_ms": 2500,
+      "lab_lcp_budget_status": "PASS",
+      "runtime_sha256_matches_site": true,
+      "wall_load_ms": 3451.4572999905795,
+      "target_http_status": 200,
+      "runtime_response_url": "https://mkgrid.co.technology/run/",
+      "runtime_response_sha256": "bc89a858062e414ab7c5c0e1ca6d3af0714b062c2856af8731704937bf9044d9",
+      "metrics": {
+        "lcp": 2188,
+        "lcp_element": {
+          "tag": "h2",
+          "id": null,
+          "classes": [],
+          "selector": "h2",
+          "url": null,
+          "size": 15555,
+          "renderTime": 2188,
+          "loadTime": 0
+        },
+        "cls": 0,
+        "longTasks": [
+          {
+            "start": 1608.7999999821186,
+            "duration": 178
+          },
+          {
+            "start": 1920.0999999940395,
+            "duration": 68
+          },
+          {
+            "start": 1988.2999999821186,
+            "duration": 194
+          }
+        ],
+        "frames": 0,
+        "navigation": [
+          {
+            "type": "reload",
+            "nextHopProtocol": "h2",
+            "startTime": 0,
+            "duration": 1844.5,
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 0.19999998807907104,
+            "domainLookupStart": 0.19999998807907104,
+            "domainLookupEnd": 0.19999998807907104,
+            "connectStart": 0.19999998807907104,
+            "secureConnectionStart": 0.19999998807907104,
+            "connectEnd": 0.19999998807907104,
+            "requestStart": 3,
+            "responseStart": 155.5,
+            "responseEnd": 1563.5999999940395,
+            "domInteractive": 1609.199999988079,
+            "domContentLoaded": 1663.5,
+            "domComplete": 1838.5,
+            "load": 1844.5,
+            "encodedBodySize": 276846,
+            "decodedBodySize": 1103431,
+            "transferSize": 277146
+          }
+        ],
+        "heap": {
+          "used": 10000000,
+          "total": 10000000
+        }
+      },
+      "main_thread": {
+        "ScriptDuration": 65.719,
+        "TaskDuration": 900.032,
+        "LayoutDuration": 140.629,
+        "RecalcStyleDuration": 143.066,
+        "scope": "CDP Performance.getMetrics current-value snapshot in milliseconds after this document's load; the navigation reset means no prior-document subtraction is applied. ScriptDuration is JavaScript execution, not parser-only work or field INP."
+      },
+      "idle_animation_callbacks_1s": 0
+    }
+  ],
+  "browser_version": "156.0.8078.4",
+  "summary": {
+    "executed": 12,
+    "expected_runs": 12,
+    "run_count_complete": true,
+    "interactions_executed": 96,
+    "expected_interactions": 96,
+    "interaction_count_complete": true,
+    "passed": 10,
+    "failed": 2,
+    "functional_failures": 0,
+    "lcp_budget_failures": 2,
+    "acceptance_status": "FAIL",
+    "real_device_acceptance": "BLOCKED",
+    "field_metrics": "BLOCKED"
+  },
+  "finished_at": "2026-10-30T09:46:23.284632+00:00"
+}
