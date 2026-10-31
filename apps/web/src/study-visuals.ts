@@ -38,7 +38,7 @@ namespace HF {
   }
 
   function svgImage(def: StudyDefinition, label: string, description: string, content: string, viewBox = '0 0 640 250'): string {
-    const id = visualId(def.id);
+    const id = visualId(`${def.id}-${label}`);
     return `<svg class="hf-visual-svg" viewBox="${viewBox}" role="img" aria-labelledby="${id}-visual-title ${id}-visual-desc"><title id="${id}-visual-title">${visualEscape(label)}</title><desc id="${id}-visual-desc">${visualEscape(description)}</desc>${content}</svg>`;
   }
 

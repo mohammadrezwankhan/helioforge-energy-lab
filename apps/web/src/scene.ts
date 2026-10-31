@@ -26,7 +26,7 @@ namespace HF {
     const ctx=canvas.getContext('2d');if(!ctx)return ()=>{};
     const initial=scenePresetState('isometric')!;
     let yaw=initial.yaw,pitch=initial.pitch,zoom=initial.zoom,wireframe=initial.wireframe,activePreset:ScenePreset|null=initial.preset;
-    let frame=0,disposed=false,visible=true,drag=false,moved=false,lastX=0,lastY=0,lastTime=0;
+    let frame=0,disposed=false,visible=false,drag=false,moved=false,lastX=0,lastY=0,lastTime=0;
     let width=0,height=0,phase=0,dirty=true;
     const pos:Vec3[]=[[-1.7,0,1.0],[-1.9,0,-1.15],[.45,0,1.25],[.5,0,-1.15],[2.3,0,.8],[2.2,0,-1.35],[-.45,0,.1]];
     const ids=[...system.technologies,'load',...(system.topology==='Off-grid'?[]:['grid'])];
@@ -38,6 +38,7 @@ namespace HF {
       return [width*.5+rx*scale,height*.62+(-v[1]*Math.cos(pitch)+rz*Math.sin(pitch))*scale,v[1]*Math.sin(pitch)+rz*Math.cos(pitch)];
     };
     function draw():void {
+      if(disposed||!visible||!width||!height){dirty=true;return;}
       if(!ctx||width===0)return;
       const theme=getComputedStyle(canvas);
       const resolveThemeColor=(value:string):string=>{
@@ -129,9 +130,11 @@ namespace HF {
       for(const a of [...assets].sort((a,b)=>projection([a.x,0,a.z])[2]-projection([b.x,0,b.z])[2])){const power=sceneAssetPower(telemetry,a.id),label=a.label+(power===null?'':` · ${fmt(power,0)} kW`)+(a.id==='battery'&&telemetry?` · ${fmt(telemetry.soc_pct,0)}%`:''),p=projection([a.x,.08,a.z+.75]),w=ctx.measureText(label).width+19;
         ctx.fillStyle=resolveThemeColor('var(--color-paper-2)');ctx.beginPath();ctx.roundRect(p[0]-w/2,p[1]-9,w,24,0);ctx.fill();ctx.fillStyle=resolveThemeColor(techById(a.id).color);ctx.fillText(label,p[0],p[1]+5);hit.push({id:a.id,x:p[0],y:p[1]-20});}
     }
-    const resize=():void=>{const rect=canvas.getBoundingClientRect();width=rect.width;height=rect.height;const dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);dirty=true;draw();};
-    const observer=new ResizeObserver(resize);observer.observe(canvas);
-    const intersection=new IntersectionObserver(e=>{visible=e[0]?.isIntersecting??true;dirty=true;syncAnimation();});intersection.observe(canvas);
+    // Observer dimensions are available after layout; a synchronous bounds read
+    // here would force the entire newly rendered page to lay out during boot.
+    const resize=(rect:DOMRectReadOnly):void=>{if(disposed)return;width=rect.width;height=rect.height;const dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);dirty=true;draw();};
+    const observer=new ResizeObserver(entries=>{const entry=entries.find(item=>item.target===canvas);if(entry)resize(entry.contentRect);});observer.observe(canvas);
+    const intersection=new IntersectionObserver(e=>{if(disposed)return;visible=e[0]?.isIntersecting??false;dirty=true;draw();syncAnimation();});intersection.observe(canvas);
     const down=(e:PointerEvent):void=>{drag=true;moved=false;lastX=e.clientX;lastY=e.clientY;canvas.setPointerCapture(e.pointerId);};
     const syncPresetButtons=(preset:ScenePreset|null):void=>{canvas.parentElement?.querySelectorAll<HTMLButtonElement>('[data-camera-preset]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.cameraPreset===preset)));};
     const applyPreset=(preset:ScenePreset):void=>{const state=scenePresetState(preset)!;yaw=state.yaw;pitch=state.pitch;zoom=state.zoom;wireframe=state.wireframe;activePreset=preset;syncPresetButtons(activePreset);dirty=true;draw();};
@@ -149,7 +152,6 @@ namespace HF {
     }
     function tick(time:number):void{frame=0;if(disposed)return;if(visible&&!document.hidden&&(dirty||!reduced)){phase+=reduced?0:Math.min(50,lastTime?time-lastTime:0)*.000625;draw();lastTime=time;dirty=false;}syncAnimation();}
     document.addEventListener('visibilitychange',syncAnimation);
-    resize();syncAnimation();
     return ()=>{disposed=true;cancelAnimationFrame(frame);observer.disconnect();intersection.disconnect();document.removeEventListener('visibilitychange',syncAnimation);canvas.removeEventListener('pointerdown',down);canvas.removeEventListener('pointermove',move);canvas.removeEventListener('pointerup',up);canvas.removeEventListener('pointercancel',up);canvas.removeEventListener('keydown',key);canvas.removeEventListener('scene-command',command);canvas.removeEventListener('scene-telemetry',telemetryChanged);};
   }
 }

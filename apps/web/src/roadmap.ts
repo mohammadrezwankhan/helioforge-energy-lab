@@ -1,6 +1,17 @@
 namespace HF {
   const esc=escapeHTML;
   const textValue=(v:unknown):string=>typeof v==='number'?fmt(v,3):v==null?'—':typeof v==='object'?JSON.stringify(v):String(v);
+  /** Keep full provenance once in a CSV; repeat its digest on every observation. */
+  export function studyExportRows(r:StudyResult,rows:Record<string,unknown>[]):Record<string,unknown>[] {
+    const provenance={schema:'helioforge.study-export.v1',study:r.study,model_version:r.model_version,
+      data_kind:r.data_kind,inputs:r.inputs,provenance:r.provenance,equations:r.equations,limitations:r.limitations,warnings:r.warnings,
+      sources:r.sources,evidence_sha256:r.evidence_sha256,
+      units:{metrics:r.metrics.map(m=>({label:m.label,unit:m.unit})),series:r.series.map(s=>({name:s.name,x_label:s.x_label,y_unit:s.y_unit}))},
+      integrity_scope:'Evidence digest identifies the original result JSON, not this CSV encoding; no scientific or human approval.'};
+    return (rows.length?rows:[{}]).map((row,i)=>({...row,hf_record_kind:rows.length?'observation':'metadata_only',
+      hf_study:r.study,hf_model_version:r.model_version,hf_data_kind:r.data_kind,hf_evidence_sha256:r.evidence_sha256,
+      hf_provenance_json:i===0?JSON.stringify(provenance):''}));
+  }
   export function studyChart(s:StudyResult['series'][number],slice=0):string {
     const values=s.y.filter((v):v is number=>typeof v==='number'&&Number.isFinite(v));
     if(!values.length)return '<p class="notice">No finite observations in this series.</p>';
@@ -18,11 +29,11 @@ namespace HF {
   }
   function studySchematic(def:StudyDefinition):string {
     const peers=STUDY_BUNDLE.catalogue.filter(s=>s.page===def.page),icons:Record<string,string>={overview:'globe',hybrid:'bolt',lessons:'document',compare:'activity',storage:'battery',pv:'sun',research:'atom',markets:'globe',forecast:'chart',investment:'briefcase',pilots:'layers',council:'sparkles'};
-    return `<div class="study-schematic schematic-${esc(def.page)}" aria-label="${esc(def.page)} study navigation"><div class="study-orbit" aria-hidden="true"><i></i><i></i><i></i><span>${icon(icons[def.page]??'atom',40)}</span></div><div class="study-nodes">${peers.map((s,i)=>`<button type="button" data-study-select="${esc(s.id)}" aria-pressed="${s.id===def.id}"><span>0${i+1}</span><strong>${esc(s.title)}</strong></button>`).join('')}</div></div>`;
+    return `<nav class="study-schematic schematic-${esc(def.page)}" aria-label="${esc(def.page)} study navigation"><div class="study-orbit" aria-hidden="true"><i></i><i></i><i></i><span>${icon(icons[def.page]??'atom',40)}</span></div><div class="study-nodes">${peers.map((s,i)=>`<button type="button" data-study-select="${esc(s.id)}" aria-pressed="${s.id===def.id}"><span>0${i+1}</span><strong>${esc(s.title)}</strong></button>`).join('')}</div></nav>`;
   }
   export function studyResultView(def:StudyDefinition,r:StudyResult,slice=0,seriesIndex=0):string {
     const series=r.series??[],si=clamp(seriesIndex,0,Math.max(0,series.length-1)),selected=series[si];
-    return `<div class="study-results"><div class="result-stats">${r.metrics.map(m=>`<div><span>${esc(m.label)}</span><strong>${esc(textValue(m.value))} <small>${esc(m.unit)}</small></strong></div>`).join('')}</div>${selected?`<label class="field"><span>Inspect a result series</span><select data-study-series>${series.map((s,i)=>`<option value="${i}" ${i===si?'selected':''}>${esc(s.name)} · ${esc(s.y_unit)}</option>`).join('')}</select></label><div id="study-chart">${studyChart(selected,slice)}</div><label class="field"><span>Scrub ${esc(selected.x_label)} · ${selected.x.length} observations</span><input data-study-slice type="range" min="0" max="${Math.max(0,selected.x.length-1)}" step="1" value="${clamp(slice,0,Math.max(0,selected.x.length-1))}" aria-label="Result observation" aria-controls="study-chart"></label>`:''}<details class="method-details"><summary>Result records and accessible data table</summary>${studyTable(r.table??[])}</details><details class="method-details"><summary>Equations, sources and model boundaries</summary><div>${(def.equations??[]).map(e=>`<p class="formula"><code>${esc(e)}</code></p>`).join('')}${[...(def.limitations??[]),...(r.warnings??[])].map(e=>`<p>${esc(e)}</p>`).join('')}<ul>${(def.sources??[]).map(s=>`<li><a href="${safeURL(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.title)}</a></li>`).join('')}</ul><p class="mono">Evidence SHA-256: ${esc(r.evidence_sha256??'Not available')}</p><p>A digest detects content changes; it does not establish factual accuracy, signer identity or approval.</p></div></details></div>`;
+    return `<div class="study-results">${resultProvenanceView(r)}<div class="result-stats">${r.metrics.map(m=>`<div><span>${esc(m.label)}</span><strong>${esc(textValue(m.value))} <small>${esc(m.unit)}</small></strong></div>`).join('')}</div>${selected?`<label class="field"><span>Inspect a result series</span><select data-study-series>${series.map((s,i)=>`<option value="${i}" ${i===si?'selected':''}>${esc(s.name)} · ${esc(s.y_unit)}</option>`).join('')}</select></label><div id="study-chart">${studyChart(selected,slice)}</div><label class="field"><span>Scrub ${esc(selected.x_label)} · ${selected.x.length} observations</span><input data-study-slice type="range" min="0" max="${Math.max(0,selected.x.length-1)}" step="1" value="${clamp(slice,0,Math.max(0,selected.x.length-1))}" aria-label="Result observation" aria-controls="study-chart"></label>`:''}<details class="method-details"><summary>Result records and accessible data table</summary>${studyTable(r.table??[])}</details><details class="method-details"><summary>Equations, sources and model boundaries</summary><div>${(def.equations??[]).map(e=>`<p class="formula"><code>${esc(e)}</code></p>`).join('')}${[...(def.limitations??[]),...(r.warnings??[])].map(e=>`<p>${esc(e)}</p>`).join('')}<ul>${(def.sources??[]).map(s=>`<li><a href="${safeURL(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.title)}</a></li>`).join('')}</ul><p class="mono">Evidence SHA-256: ${esc(r.evidence_sha256??'Not available')}</p><p>A digest detects content changes; it does not establish factual accuracy, signer identity or approval.</p></div></details></div>`;
   }
   export function studyDialNextValue(value:number,min:number,max:number,step:number,key:string):number|null {
     if(![value,min,max,step].every(Number.isFinite)||step<=0||min>max)return null;
@@ -36,13 +47,16 @@ namespace HF {
   }
   export function createStudyController(getState:()=>ViewState):{refresh:()=>void} {
     const drafts=new Map<string,StudyDraft>(),chosen=new Map<string,string>(),pins:StudyResult[]=[];
+    let importGeneration=0;
+    const loadingPages=new Set<string>(),loadErrors=new Map<string,string>();
+    let exampleObserver:IntersectionObserver|undefined;
     let visualCleanup:(()=>void)|undefined;
     function renderVisual():void {
       visualCleanup?.();visualCleanup=undefined;
       const c=current(),host=document.getElementById('study-visual');if(!c||!host)return;
       host.innerHTML=studyVisual(c.def,c.draft.result,c.draft.slice);
       visualCleanup=bindStudyVisuals(host,c.def,c.draft,(name,value)=>{
-        c.draft.values[name]=value;c.draft.dirty=true;c.draft.error='';
+        importGeneration++;c.draft.values[name]=value;c.draft.dirty=true;c.draft.error='';
         const input=document.querySelector<HTMLInputElement|HTMLTextAreaElement>(`#study-form [name="${CSS.escape(name)}"]`);
         if(input)input.value=value;
         status();
@@ -50,7 +64,7 @@ namespace HF {
     }
     function current():{def:StudyDefinition;draft:StudyDraft}|null {
       const page=getState().page,def=STUDY_BUNDLE.catalogue.find(s=>s.id===chosen.get(page))??STUDY_BUNDLE.catalogue.find(s=>s.page===page);
-      if(!def)return null;
+      if(!def||!STUDY_BUNDLE.results[def.id])return null;
       if(!drafts.has(def.id))drafts.set(def.id,{id:def.id,values:{},result:structuredClone(STUDY_BUNDLE.results[def.id]!),dirty:false,busy:false,error:'',slice:0,selectedSeries:0});
       return {def,draft:drafts.get(def.id)!};
     }
@@ -65,11 +79,24 @@ namespace HF {
         if(editable){const name=c.def.id==='storage-annual'?'tariff':'land_polygon_m',raw=c.draft.values[name];if(raw!==undefined)try{const value:unknown=JSON.parse(raw);editable=Array.isArray(value)&&(name==='tariff'?value.length===24&&value.every(v=>typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<=3):value.length>=3&&value.every(v=>Array.isArray(v)&&v.length===2&&v.every(n=>typeof n==='number'&&Number.isFinite(n))));}catch{editable=false;}}
         visual.hidden=c.draft.dirty&&!editable;visual.classList.toggle('inputs-dirty',c.draft.dirty);
       }
-      document.querySelectorAll<HTMLButtonElement>('[data-study-export],[data-study-action="pin"]').forEach(b=>b.disabled=c.draft.dirty||c.draft.busy);
+      document.querySelectorAll<HTMLButtonElement>('[data-study-export],[data-study-action="pin"]').forEach(b=>b.disabled=c.draft.dirty||c.draft.busy||(b.dataset.studyExport==='series'&&!c.draft.result.series.length));
     }
     function refresh():void {
+      exampleObserver?.disconnect();exampleObserver=undefined;
       visualCleanup?.();visualCleanup=undefined;
-      const c=current(),host=document.getElementById('page-content');if(!c||!host)return;
+      const c=current(),host=document.getElementById('page-content');if(!host)return;
+      if(!c){
+        const page=getState().page,def=STUDY_BUNDLE.catalogue.find(s=>s.id===chosen.get(page))??STUDY_BUNDLE.catalogue.find(s=>s.page===page);if(!def)return;
+        let panel=document.getElementById('study-workbench');if(!panel){panel=document.createElement('section');panel.id='study-workbench';host.append(panel);}panel.className='panel study-workbench';
+        panel.innerHTML=`<h2>${esc(def.title)}</h2>${studySchematic(def)}<p role="status">${esc(loadErrors.get(page)??'Loading verified example records…')}</p>${loadErrors.has(page)?'<button class="btn secondary" data-study-retry>Retry example download</button>':''}`;
+        if(!loadingPages.has(page)&&!loadErrors.has(page)){
+          const load=():void=>{exampleObserver?.disconnect();exampleObserver=undefined;if(loadingPages.has(page))return;
+            loadingPages.add(page);void loadStudyExamples(page).catch(e=>loadErrors.set(page,e instanceof Error?e.message:'Example download failed.')).finally(()=>{loadingPages.delete(page);if(getState().page===page)refresh();});};
+          if(typeof IntersectionObserver==='undefined')load();
+          else {exampleObserver=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting))load();},{rootMargin:'400px'});exampleObserver.observe(panel);}
+        }
+        return;
+      }
       const {def,draft}=c;
       let panel=document.getElementById('study-workbench');if(!panel){panel=document.createElement('section');panel.id='study-workbench';host.append(panel);}
       panel.className='panel study-workbench';
@@ -80,7 +107,7 @@ namespace HF {
       if(Array.isArray(draft.result.details?.raw_paths))panel.querySelector('.study-actions:last-of-type')?.insertAdjacentHTML('beforeend','<button type="button" class="btn secondary small" data-study-export="paths">Raw seeded paths · CSV</button>');
       status();
     }
-    const mark=(el:HTMLInputElement|HTMLTextAreaElement):void=>{const c=current();if(!c||c.draft.busy)return;c.draft.values[el.name]=el.value;c.draft.dirty=true;c.draft.error='';status();};
+    const mark=(el:HTMLInputElement|HTMLTextAreaElement):void=>{const c=current();if(!c||c.draft.busy)return;importGeneration++;c.draft.values[el.name]=el.value;c.draft.dirty=true;c.draft.error='';status();};
     document.addEventListener('keydown',event=>{
       const el=event.target as HTMLInputElement;
       if(!el.closest('#study-workbench')||!el.dataset.studyDial||el.disabled)return;
@@ -98,11 +125,23 @@ namespace HF {
     document.addEventListener('change',event=>{
       const el=event.target as HTMLInputElement,c=current();if(!c||!el.closest('#study-workbench'))return;
       if(el.hasAttribute('data-study-series')){c.draft.selectedSeries=Number(el.value);c.draft.slice=0;refresh();return;}
-      if(el.dataset.studyFile){void(async()=>{try{const file=el.files?.[0];if(!file)return;if(file.size>800000)throw Error('JSON file must be smaller than 800 KB.');const parsed=JSON.parse(await file.text());const name=el.dataset.studyFile!;c.draft.values[name]=JSON.stringify(parsed,null,2);c.draft.dirty=true;c.draft.error='';refresh();}catch(e){c.draft.error=e instanceof Error?e.message:'JSON import failed.';status();}})();}
+      if(el.dataset.studyFile){
+        if(c.draft.busy)return;
+        const file=el.files?.[0];if(!file)return;
+        const generation=++importGeneration,name=el.dataset.studyFile;
+        const currentImport=()=>generation===importGeneration&&current()?.draft===c.draft;
+        c.draft.dirty=true;status();
+        void(async()=>{try{
+          if(file.size>800000)throw Error('JSON file must be smaller than 800 KB.');
+          const text=await file.text();if(!currentImport())return;
+          const parsed=JSON.parse(text);c.draft.values[name]=JSON.stringify(parsed,null,2);c.draft.error='';refresh();
+        }catch(e){if(currentImport()){c.draft.error=e instanceof Error?e.message:'JSON import failed.';status();}}})();
+      }
     });
     document.addEventListener('submit',event=>{
       const form=event.target as HTMLFormElement;if(form.id!=='study-form')return;event.preventDefault();
       const c=current();if(!c||c.draft.busy||!getState().connected)return;
+      importGeneration++;
       void(async()=>{
         try{
           const inputs:Record<string,unknown>={},data=new FormData(form);
@@ -120,20 +159,21 @@ namespace HF {
       const el=(event.target as Element).closest<HTMLElement>('button');
       if(el?.hasAttribute('data-study-jump')){const panel=document.getElementById('study-workbench');if(panel){panel.tabIndex=-1;panel.focus();panel.scrollIntoView({behavior:'instant'});}return;}
       if(!el?.closest('#study-workbench'))return;
+      if(el.hasAttribute('data-study-retry')){loadErrors.delete(getState().page);refresh();return;}
+      if(el.dataset.studySelect){importGeneration++;chosen.set(getState().page,el.dataset.studySelect);refresh();return;}
       const c=current();if(!c)return;
-      if(el.dataset.studySelect){chosen.set(getState().page,el.dataset.studySelect);refresh();return;}
       if(el.dataset.studyUnpin){const i=pins.findIndex(r=>r.study===el.dataset.studyUnpin);if(i>=0)pins.splice(i,1);refresh();return;}
-      if(el.dataset.studyAction==='reset'){drafts.delete(c.def.id);refresh();return;}
+      if(el.dataset.studyAction==='reset'){importGeneration++;drafts.delete(c.def.id);refresh();return;}
       if(el.dataset.studyAction==='pin'&&!c.draft.dirty&&!c.draft.busy){const old=pins.findIndex(r=>r.study===c.def.id);if(old>=0)pins.splice(old,1);pins.push(structuredClone(c.draft.result));if(pins.length>3)pins.shift();refresh();return;}
       const kind=el.dataset.studyExport;if(!kind||c.draft.dirty||c.draft.busy)return;
       const r=c.draft.result;
-      if(kind==='csv')download(`${c.def.id}.csv`,toCSV(r.table),'text/csv');
+      if(kind==='csv')download(`${c.def.id}.csv`,toCSV(studyExportRows(r,r.table)),'text/csv');
       else if(kind==='paths'){
         const paths=r.details?.raw_paths;
-        if(Array.isArray(paths))download(`${c.def.id}-raw-paths.csv`,toCSV(paths.flatMap(p=>(p.prices_eur_mwh as number[]).map((price,i)=>({seed:r.inputs.seed,path:p.path,year:i+1,price_eur_mwh:price,loss_eur:p.losses_eur[i]})))),'text/csv');
+        if(Array.isArray(paths))download(`${c.def.id}-raw-paths.csv`,toCSV(studyExportRows(r,paths.flatMap(p=>(p.prices_eur_mwh as number[]).map((price,i)=>({seed:r.inputs.seed,path:p.path,year:i+1,price_eur_mwh:price,loss_eur:p.losses_eur[i]}))))),'text/csv');
       }
-      else if(kind==='series'){const s=r.series[c.draft.selectedSeries];if(s)download(`${c.def.id}-series.csv`,toCSV(s.x.map((x,i)=>({observation:x,value:s.y[i],unit:s.y_unit}))),'text/csv');}
-      else if(kind==='memo'){const lines=[`# ${c.def.title}`,'',c.def.summary,'','## Results',...r.metrics.map(m=>`- ${m.label}: ${textValue(m.value)} ${m.unit}`),'','## Assumptions','```json',JSON.stringify(r.inputs,null,2),'```','','## Boundaries',...c.def.limitations.map(l=>'- '+l),...r.warnings.map(l=>'- '+l),'','Evidence SHA-256: '+r.evidence_sha256,'No investment, engineering, regulatory or operational approval is implied.'];download(`${c.def.id}-memorandum.md`,lines.join('\n'),'text/markdown');}
+      else if(kind==='series'){const s=r.series[c.draft.selectedSeries];if(s)download(`${c.def.id}-series.csv`,toCSV(studyExportRows(r,s.x.map((x,i)=>({observation:x,value:s.y[i],unit:s.y_unit})))),'text/csv');}
+      else if(kind==='memo'){const lines=[`# ${c.def.title}`,'',c.def.summary,'','## Result provenance','```json',String(studyExportRows(r,[])[0]!.hf_provenance_json),'```','','## Results',...r.metrics.map(m=>`- ${m.label}: ${textValue(m.value)} ${m.unit}`),'','## Assumptions','```json',JSON.stringify(r.inputs,null,2),'```','','## Boundaries',...c.def.limitations.map(l=>'- '+l),...r.warnings.map(l=>'- '+l),'','Evidence SHA-256: '+r.evidence_sha256,'No investment, engineering, regulatory or operational approval is implied.'];download(`${c.def.id}-memorandum.md`,lines.join('\n'),'text/markdown');}
       else download(`${c.def.id}.json`,JSON.stringify(r,null,2));
     });
     return {refresh};

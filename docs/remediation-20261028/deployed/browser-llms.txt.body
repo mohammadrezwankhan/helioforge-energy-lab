@@ -1,0 +1,23 @@
+# HelioForge Energy Lab
+
+A free hybrid-energy research and learning preview maintained by Mohammad Rezwan Khan. MKGrid serves bundled examples and bounded Terminal energy-balance calculations. Advanced studies require the separate local Python app.
+
+- [Overview](https://mkgrid.co.technology/)
+- [Browser preview](https://mkgrid.co.technology/run/)
+- [Methodology and model limits](https://mkgrid.co.technology/methodology/)
+- [Author, source and privacy](https://mkgrid.co.technology/about/)
+- [Maintainer profile](https://mrkhan.co.technology/)
+- [Full static page text](https://mkgrid.co.technology/llms-full.txt)
+- [Machine-readable app facts](https://mkgrid.co.technology/app.json)
+- [Public source](https://github.com/mohammadrezwankhan/helioforge-energy-lab)
+
+## Scope
+36 architectures and 36 linked lessons. In the local Python app, 19 architectures have electricity-balance screens and 17 are study-only. The Terminal workbench runs new bounded hourly energy balances, sweeps and local sensitivities. Advanced studies and optimization require the local Python app.
+
+## Boundaries
+Educational research examples, not calibrated forecasts, plant controls, investment advice or operational approval. External AI is not used by this website. Browser storage is origin-specific and does not automatically transfer from another domain.
+
+## Separate project
+[MKTrade methodology](https://mktrade.co.business/methodology/) describes a separate synthetic wind-market model. It is not a HelioForge model or validation source.
+
+This optional text supplements the visible pages; it does not guarantee search rankings or AI citations.

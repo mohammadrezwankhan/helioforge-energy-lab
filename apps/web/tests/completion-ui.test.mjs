@@ -13,6 +13,7 @@ const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'hf-completion-ui-'));
 const out = path.join(temp, 'completion-ui.js');
 try {
   compileScripts([
+    path.join(root, 'src/provenance-types.ts'),
     path.join(root, 'src/types.ts'),
     path.join(root, 'src/hybrid-types.ts'),
     path.join(root, 'src/core.ts'),

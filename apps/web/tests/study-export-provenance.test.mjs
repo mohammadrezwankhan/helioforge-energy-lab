@@ -1,0 +1,33 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+const box=vm.createContext({URL,Intl,structuredClone});
+vm.runInContext(fs.readFileSync(new URL('../dist/app.js',import.meta.url),'utf8'),box);
+const hf=box.HF;
+test('each study CSV retains data rows plus a complete provenance record without repeating large input arrays',()=>{
+  const r=hf.STUDY_BUNDLE.results['storage-annual'];
+  const rows=hf.studyExportRows(r,r.table);
+  assert.equal(rows.length,8760);
+  assert.equal(new Set(rows.map(x=>x.timestamp)).size,8760);
+  const metadata=JSON.parse(rows[0].hf_provenance_json);
+  assert.deepEqual(metadata.inputs,JSON.parse(JSON.stringify(r.inputs)));
+  assert.deepEqual(metadata.limitations,JSON.parse(JSON.stringify(r.limitations)));
+  assert.deepEqual(metadata.warnings,JSON.parse(JSON.stringify(r.warnings)));
+  assert.deepEqual(metadata.sources,JSON.parse(JSON.stringify(r.sources)));
+  assert.equal(metadata.model_version,r.model_version);
+  assert.equal(metadata.data_kind,r.data_kind);
+  assert.equal(metadata.evidence_sha256,r.evidence_sha256);
+  assert.equal(rows[1].hf_provenance_json,'');
+  assert.ok(rows.every(row=>row.hf_evidence_sha256===r.evidence_sha256));
+  assert.ok(rows.every((row,i)=>Object.entries(r.table[i]).every(([key,value])=>row[key]===value)));
+});
+test('empty and selected-series CSV exports still carry provenance and no invented observations',()=>{
+  const r=hf.STUDY_BUNDLE.results['pv-reserve'];
+  const empty=hf.studyExportRows(r,[]);
+  assert.equal(empty.length,1);
+  assert.equal(empty[0].hf_record_kind,'metadata_only');
+  const rows=hf.studyExportRows(r,[{observation:0,value:-2,unit:'EUR'}]);
+  assert.equal(rows[0].value,-2);
+  assert.equal(JSON.parse(rows[0].hf_provenance_json).study,'pv-reserve');
+});

@@ -1,0 +1,4413 @@
+{
+  "schema": "helioforge.presentation.execution.v1",
+  "started_at": "2026-10-29T22:33:47.870342+00:00",
+  "artifact_sha256": "43d880c5b042fbea578d2e245f76acf8a896af60fb4f2b7c11255dc264b8e5bf",
+  "environment": "Windows-11-10.0.26300-SP0",
+  "url": "https://127.0.0.1:4199/run/",
+  "physical_devices": false,
+  "oracle": "Deep link; input-mode navigation away/back; reload or cached offline navigation; draft-cache preservation; root/body overflow; no uncaught errors. Not full task behavior.",
+  "constrained_profile": "150 ms delay per routed request; no bandwidth limit; desktop hardware",
+  "old_schema_scope": "Unsupported v0 synthetic fixture; rejection/recovery, not a claimed historical migration.",
+  "cases": [
+    {
+      "test_id": "PAIR-001",
+      "workspace": "hybrid",
+      "viewport_px": "320",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#hybrid"
+      },
+      "duration_ms": 7330.5
+    },
+    {
+      "test_id": "PAIR-004",
+      "workspace": "compare",
+      "viewport_px": "375",
+      "engine": "Chromium",
+      "interaction": "keyboard",
+      "motion": "normal",
+      "local_state": "corrupt",
+      "load_condition": "offline_after_cached_load",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#compare"
+      },
+      "duration_ms": 2701.1
+    },
+    {
+      "test_id": "PAIR-005",
+      "workspace": "overview",
+      "viewport_px": "390",
+      "engine": "Chromium",
+      "interaction": "touch",
+      "motion": "normal",
+      "local_state": "valid_saved",
+      "load_condition": "constrained",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#overview"
+      },
+      "duration_ms": 3683.0
+    },
+    {
+      "test_id": "PAIR-011",
+      "workspace": "research",
+      "viewport_px": "768",
+      "engine": "Chromium",
+      "interaction": "keyboard",
+      "motion": "reduced",
+      "local_state": "old_schema",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#research"
+      },
+      "duration_ms": 2398.8
+    },
+    {
+      "test_id": "PAIR-014",
+      "workspace": "lessons",
+      "viewport_px": "414",
+      "engine": "Chromium",
+      "interaction": "keyboard",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "constrained",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#lessons"
+      },
+      "duration_ms": 4050.1
+    },
+    {
+      "test_id": "PAIR-016",
+      "workspace": "markets",
+      "viewport_px": "360",
+      "engine": "Chromium",
+      "interaction": "touch",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "offline_after_cached_load",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#markets"
+      },
+      "duration_ms": 3285.4
+    },
+    {
+      "test_id": "PAIR-017",
+      "workspace": "forecast",
+      "viewport_px": "640",
+      "engine": "Chromium",
+      "interaction": "keyboard",
+      "motion": "reduced",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#forecast"
+      },
+      "duration_ms": 2840.4
+    },
+    {
+      "test_id": "PAIR-019",
+      "workspace": "investment",
+      "viewport_px": "820",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "constrained",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#investment"
+      },
+      "duration_ms": 4793.3
+    },
+    {
+      "test_id": "PAIR-021",
+      "workspace": "pilots",
+      "viewport_px": "1280",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pilots"
+      },
+      "duration_ms": 3330.3
+    },
+    {
+      "test_id": "PAIR-029",
+      "workspace": "storage",
+      "viewport_px": "700",
+      "engine": "Chromium",
+      "interaction": "keyboard",
+      "motion": "normal",
+      "local_state": "corrupt",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#storage"
+      },
+      "duration_ms": 2433.2
+    },
+    {
+      "test_id": "PAIR-030",
+      "workspace": "pv",
+      "viewport_px": "1920",
+      "engine": "Chromium",
+      "interaction": "keyboard",
+      "motion": "normal",
+      "local_state": "corrupt",
+      "load_condition": "constrained",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pv"
+      },
+      "duration_ms": 2882.4
+    },
+    {
+      "test_id": "PAIR-037",
+      "workspace": "pilots",
+      "viewport_px": "1024",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "old_schema",
+      "load_condition": "offline_after_cached_load",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pilots"
+      },
+      "duration_ms": 2826.2
+    },
+    {
+      "test_id": "PAIR-040",
+      "workspace": "hybrid",
+      "viewport_px": "640",
+      "engine": "Chromium",
+      "interaction": "touch",
+      "motion": "normal",
+      "local_state": "corrupt",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#hybrid"
+      },
+      "duration_ms": 4489.1
+    },
+    {
+      "test_id": "PAIR-041",
+      "workspace": "pv",
+      "viewport_px": "360",
+      "engine": "Chromium",
+      "interaction": "touch",
+      "motion": "normal",
+      "local_state": "old_schema",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pv"
+      },
+      "duration_ms": 5266.1
+    },
+    {
+      "test_id": "PAIR-043",
+      "workspace": "compare",
+      "viewport_px": "768",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#compare"
+      },
+      "duration_ms": 5233.6
+    },
+    {
+      "test_id": "PAIR-044",
+      "workspace": "storage",
+      "viewport_px": "375",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "valid_saved",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#storage"
+      },
+      "duration_ms": 5599.8
+    },
+    {
+      "test_id": "PAIR-045",
+      "workspace": "research",
+      "viewport_px": "1920",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#research"
+      },
+      "duration_ms": 4398.7
+    },
+    {
+      "test_id": "PAIR-046",
+      "workspace": "forecast",
+      "viewport_px": "320",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "corrupt",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#forecast"
+      },
+      "duration_ms": 5027.1
+    },
+    {
+      "test_id": "PAIR-047",
+      "workspace": "council",
+      "viewport_px": "820",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "corrupt",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#council"
+      },
+      "duration_ms": 4345.0
+    },
+    {
+      "test_id": "PAIR-048",
+      "workspace": "hybrid",
+      "viewport_px": "414",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "valid_saved",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#hybrid"
+      },
+      "duration_ms": 4110.6
+    },
+    {
+      "test_id": "PAIR-049",
+      "workspace": "hybrid",
+      "viewport_px": "700",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "old_schema",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#hybrid"
+      },
+      "duration_ms": 5578.9
+    },
+    {
+      "test_id": "PAIR-050",
+      "workspace": "hybrid",
+      "viewport_px": "1024",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#hybrid"
+      },
+      "duration_ms": 3558.5
+    },
+    {
+      "test_id": "PAIR-051",
+      "workspace": "hybrid",
+      "viewport_px": "1440",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "corrupt",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#hybrid"
+      },
+      "duration_ms": 3102.0
+    },
+    {
+      "test_id": "PAIR-052",
+      "workspace": "hybrid",
+      "viewport_px": "375",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#hybrid"
+      },
+      "duration_ms": 4118.7
+    },
+    {
+      "test_id": "PAIR-053",
+      "workspace": "hybrid",
+      "viewport_px": "390",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#hybrid"
+      },
+      "duration_ms": 3611.8
+    },
+    {
+      "test_id": "PAIR-054",
+      "workspace": "hybrid",
+      "viewport_px": "768",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#hybrid"
+      },
+      "duration_ms": 3513.9
+    },
+    {
+      "test_id": "PAIR-055",
+      "workspace": "hybrid",
+      "viewport_px": "820",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#hybrid"
+      },
+      "duration_ms": 3651.1
+    },
+    {
+      "test_id": "PAIR-056",
+      "workspace": "hybrid",
+      "viewport_px": "1280",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#hybrid"
+      },
+      "duration_ms": 3147.4
+    },
+    {
+      "test_id": "PAIR-057",
+      "workspace": "lessons",
+      "viewport_px": "375",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#lessons"
+      },
+      "duration_ms": 4435.6
+    },
+    {
+      "test_id": "PAIR-058",
+      "workspace": "lessons",
+      "viewport_px": "390",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#lessons"
+      },
+      "duration_ms": 2976.7
+    },
+    {
+      "test_id": "PAIR-059",
+      "workspace": "lessons",
+      "viewport_px": "640",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#lessons"
+      },
+      "duration_ms": 2828.8
+    },
+    {
+      "test_id": "PAIR-060",
+      "workspace": "lessons",
+      "viewport_px": "700",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#lessons"
+      },
+      "duration_ms": 3619.5
+    },
+    {
+      "test_id": "PAIR-061",
+      "workspace": "lessons",
+      "viewport_px": "768",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#lessons"
+      },
+      "duration_ms": 3643.4
+    },
+    {
+      "test_id": "PAIR-062",
+      "workspace": "lessons",
+      "viewport_px": "820",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#lessons"
+      },
+      "duration_ms": 4040.3
+    },
+    {
+      "test_id": "PAIR-063",
+      "workspace": "lessons",
+      "viewport_px": "1024",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#lessons"
+      },
+      "duration_ms": 4530.0
+    },
+    {
+      "test_id": "PAIR-064",
+      "workspace": "lessons",
+      "viewport_px": "1280",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#lessons"
+      },
+      "duration_ms": 4100.5
+    },
+    {
+      "test_id": "PAIR-065",
+      "workspace": "lessons",
+      "viewport_px": "1440",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#lessons"
+      },
+      "duration_ms": 5413.6
+    },
+    {
+      "test_id": "PAIR-066",
+      "workspace": "compare",
+      "viewport_px": "320",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#compare"
+      },
+      "duration_ms": 4057.7
+    },
+    {
+      "test_id": "PAIR-067",
+      "workspace": "compare",
+      "viewport_px": "360",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#compare"
+      },
+      "duration_ms": 3543.6
+    },
+    {
+      "test_id": "PAIR-068",
+      "workspace": "compare",
+      "viewport_px": "414",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#compare"
+      },
+      "duration_ms": 3531.0
+    },
+    {
+      "test_id": "PAIR-069",
+      "workspace": "compare",
+      "viewport_px": "640",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#compare"
+      },
+      "duration_ms": 5111.6
+    },
+    {
+      "test_id": "PAIR-070",
+      "workspace": "compare",
+      "viewport_px": "700",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#compare"
+      },
+      "duration_ms": 5138.3
+    },
+    {
+      "test_id": "PAIR-071",
+      "workspace": "compare",
+      "viewport_px": "1024",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#compare"
+      },
+      "duration_ms": 4959.7
+    },
+    {
+      "test_id": "PAIR-072",
+      "workspace": "compare",
+      "viewport_px": "1280",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#compare"
+      },
+      "duration_ms": 4769.0
+    },
+    {
+      "test_id": "PAIR-073",
+      "workspace": "compare",
+      "viewport_px": "1440",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#compare"
+      },
+      "duration_ms": 5523.1
+    },
+    {
+      "test_id": "PAIR-074",
+      "workspace": "compare",
+      "viewport_px": "1920",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#compare"
+      },
+      "duration_ms": 3649.1
+    },
+    {
+      "test_id": "PAIR-075",
+      "workspace": "overview",
+      "viewport_px": "320",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#overview"
+      },
+      "duration_ms": 4340.3
+    },
+    {
+      "test_id": "PAIR-076",
+      "workspace": "overview",
+      "viewport_px": "360",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#overview"
+      },
+      "duration_ms": 3835.1
+    },
+    {
+      "test_id": "PAIR-077",
+      "workspace": "overview",
+      "viewport_px": "640",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#overview"
+      },
+      "duration_ms": 3820.3
+    },
+    {
+      "test_id": "PAIR-078",
+      "workspace": "overview",
+      "viewport_px": "700",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#overview"
+      },
+      "duration_ms": 3806.1
+    },
+    {
+      "test_id": "PAIR-079",
+      "workspace": "overview",
+      "viewport_px": "768",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#overview"
+      },
+      "duration_ms": 4024.3
+    },
+    {
+      "test_id": "PAIR-080",
+      "workspace": "overview",
+      "viewport_px": "1024",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#overview"
+      },
+      "duration_ms": 3238.5
+    },
+    {
+      "test_id": "PAIR-081",
+      "workspace": "overview",
+      "viewport_px": "1280",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#overview"
+      },
+      "duration_ms": 2772.4
+    },
+    {
+      "test_id": "PAIR-082",
+      "workspace": "overview",
+      "viewport_px": "1440",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#overview"
+      },
+      "duration_ms": 4882.6
+    },
+    {
+      "test_id": "PAIR-083",
+      "workspace": "overview",
+      "viewport_px": "1920",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#overview"
+      },
+      "duration_ms": 5329.8
+    },
+    {
+      "test_id": "PAIR-084",
+      "workspace": "storage",
+      "viewport_px": "320",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#storage"
+      },
+      "duration_ms": 5849.5
+    },
+    {
+      "test_id": "PAIR-085",
+      "workspace": "storage",
+      "viewport_px": "360",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#storage"
+      },
+      "duration_ms": 3731.3
+    },
+    {
+      "test_id": "PAIR-086",
+      "workspace": "storage",
+      "viewport_px": "390",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#storage"
+      },
+      "duration_ms": 4456.1
+    },
+    {
+      "test_id": "PAIR-087",
+      "workspace": "storage",
+      "viewport_px": "414",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#storage"
+      },
+      "duration_ms": 5763.3
+    },
+    {
+      "test_id": "PAIR-088",
+      "workspace": "storage",
+      "viewport_px": "768",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#storage"
+      },
+      "duration_ms": 3923.6
+    },
+    {
+      "test_id": "PAIR-089",
+      "workspace": "storage",
+      "viewport_px": "820",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#storage"
+      },
+      "duration_ms": 4160.0
+    },
+    {
+      "test_id": "PAIR-090",
+      "workspace": "storage",
+      "viewport_px": "1024",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#storage"
+      },
+      "duration_ms": 4155.0
+    },
+    {
+      "test_id": "PAIR-091",
+      "workspace": "storage",
+      "viewport_px": "1280",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#storage"
+      },
+      "duration_ms": 3232.3
+    },
+    {
+      "test_id": "PAIR-092",
+      "workspace": "storage",
+      "viewport_px": "1440",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#storage"
+      },
+      "duration_ms": 5088.6
+    },
+    {
+      "test_id": "PAIR-093",
+      "workspace": "storage",
+      "viewport_px": "1920",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#storage"
+      },
+      "duration_ms": 5650.9
+    },
+    {
+      "test_id": "PAIR-094",
+      "workspace": "pv",
+      "viewport_px": "320",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pv"
+      },
+      "duration_ms": 4391.3
+    },
+    {
+      "test_id": "PAIR-095",
+      "workspace": "pv",
+      "viewport_px": "375",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pv"
+      },
+      "duration_ms": 4103.1
+    },
+    {
+      "test_id": "PAIR-096",
+      "workspace": "pv",
+      "viewport_px": "414",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pv"
+      },
+      "duration_ms": 3991.6
+    },
+    {
+      "test_id": "PAIR-097",
+      "workspace": "pv",
+      "viewport_px": "640",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pv"
+      },
+      "duration_ms": 3790.4
+    },
+    {
+      "test_id": "PAIR-098",
+      "workspace": "pv",
+      "viewport_px": "700",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pv"
+      },
+      "duration_ms": 3892.0
+    },
+    {
+      "test_id": "PAIR-099",
+      "workspace": "pv",
+      "viewport_px": "820",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pv"
+      },
+      "duration_ms": 4252.0
+    },
+    {
+      "test_id": "PAIR-100",
+      "workspace": "pv",
+      "viewport_px": "1024",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pv"
+      },
+      "duration_ms": 3705.3
+    },
+    {
+      "test_id": "PAIR-101",
+      "workspace": "pv",
+      "viewport_px": "1280",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pv"
+      },
+      "duration_ms": 4296.3
+    },
+    {
+      "test_id": "PAIR-102",
+      "workspace": "pv",
+      "viewport_px": "1440",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pv"
+      },
+      "duration_ms": 7073.0
+    },
+    {
+      "test_id": "PAIR-103",
+      "workspace": "research",
+      "viewport_px": "320",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#research"
+      },
+      "duration_ms": 4377.0
+    },
+    {
+      "test_id": "PAIR-104",
+      "workspace": "research",
+      "viewport_px": "360",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#research"
+      },
+      "duration_ms": 4264.0
+    },
+    {
+      "test_id": "PAIR-105",
+      "workspace": "research",
+      "viewport_px": "375",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#research"
+      },
+      "duration_ms": 4562.8
+    },
+    {
+      "test_id": "PAIR-106",
+      "workspace": "research",
+      "viewport_px": "390",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#research"
+      },
+      "duration_ms": 3776.6
+    },
+    {
+      "test_id": "PAIR-107",
+      "workspace": "research",
+      "viewport_px": "414",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#research"
+      },
+      "duration_ms": 3364.5
+    },
+    {
+      "test_id": "PAIR-108",
+      "workspace": "research",
+      "viewport_px": "700",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#research"
+      },
+      "duration_ms": 3381.4
+    },
+    {
+      "test_id": "PAIR-109",
+      "workspace": "research",
+      "viewport_px": "820",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#research"
+      },
+      "duration_ms": 3648.0
+    },
+    {
+      "test_id": "PAIR-110",
+      "workspace": "research",
+      "viewport_px": "1280",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#research"
+      },
+      "duration_ms": 2216.3
+    },
+    {
+      "test_id": "PAIR-111",
+      "workspace": "research",
+      "viewport_px": "1440",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#research"
+      },
+      "duration_ms": 2210.3
+    },
+    {
+      "test_id": "PAIR-112",
+      "workspace": "markets",
+      "viewport_px": "414",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#markets"
+      },
+      "duration_ms": 2805.5
+    },
+    {
+      "test_id": "PAIR-113",
+      "workspace": "markets",
+      "viewport_px": "640",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#markets"
+      },
+      "duration_ms": 2790.8
+    },
+    {
+      "test_id": "PAIR-114",
+      "workspace": "markets",
+      "viewport_px": "700",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#markets"
+      },
+      "duration_ms": 2837.7
+    },
+    {
+      "test_id": "PAIR-115",
+      "workspace": "markets",
+      "viewport_px": "768",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#markets"
+      },
+      "duration_ms": 4856.4
+    },
+    {
+      "test_id": "PAIR-116",
+      "workspace": "markets",
+      "viewport_px": "820",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#markets"
+      },
+      "duration_ms": 2844.3
+    },
+    {
+      "test_id": "PAIR-117",
+      "workspace": "markets",
+      "viewport_px": "1024",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#markets"
+      },
+      "duration_ms": 2975.4
+    },
+    {
+      "test_id": "PAIR-118",
+      "workspace": "markets",
+      "viewport_px": "1280",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#markets"
+      },
+      "duration_ms": 2687.0
+    },
+    {
+      "test_id": "PAIR-119",
+      "workspace": "markets",
+      "viewport_px": "1440",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#markets"
+      },
+      "duration_ms": 2953.4
+    },
+    {
+      "test_id": "PAIR-120",
+      "workspace": "markets",
+      "viewport_px": "1920",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#markets"
+      },
+      "duration_ms": 3688.7
+    },
+    {
+      "test_id": "PAIR-121",
+      "workspace": "forecast",
+      "viewport_px": "360",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#forecast"
+      },
+      "duration_ms": 4614.1
+    },
+    {
+      "test_id": "PAIR-122",
+      "workspace": "forecast",
+      "viewport_px": "375",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#forecast"
+      },
+      "duration_ms": 3544.4
+    },
+    {
+      "test_id": "PAIR-123",
+      "workspace": "forecast",
+      "viewport_px": "390",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#forecast"
+      },
+      "duration_ms": 3716.3
+    },
+    {
+      "test_id": "PAIR-124",
+      "workspace": "forecast",
+      "viewport_px": "414",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#forecast"
+      },
+      "duration_ms": 3889.7
+    },
+    {
+      "test_id": "PAIR-125",
+      "workspace": "forecast",
+      "viewport_px": "768",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#forecast"
+      },
+      "duration_ms": 3273.7
+    },
+    {
+      "test_id": "PAIR-126",
+      "workspace": "forecast",
+      "viewport_px": "820",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#forecast"
+      },
+      "duration_ms": 3112.9
+    },
+    {
+      "test_id": "PAIR-127",
+      "workspace": "forecast",
+      "viewport_px": "1024",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#forecast"
+      },
+      "duration_ms": 3065.6
+    },
+    {
+      "test_id": "PAIR-128",
+      "workspace": "forecast",
+      "viewport_px": "1440",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#forecast"
+      },
+      "duration_ms": 2289.6
+    },
+    {
+      "test_id": "PAIR-129",
+      "workspace": "forecast",
+      "viewport_px": "1920",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#forecast"
+      },
+      "duration_ms": 2168.1
+    },
+    {
+      "test_id": "PAIR-130",
+      "workspace": "investment",
+      "viewport_px": "320",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#investment"
+      },
+      "duration_ms": 2704.0
+    },
+    {
+      "test_id": "PAIR-131",
+      "workspace": "investment",
+      "viewport_px": "360",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#investment"
+      },
+      "duration_ms": 3395.3
+    },
+    {
+      "test_id": "PAIR-132",
+      "workspace": "investment",
+      "viewport_px": "375",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#investment"
+      },
+      "duration_ms": 6261.2
+    },
+    {
+      "test_id": "PAIR-133",
+      "workspace": "investment",
+      "viewport_px": "390",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#investment"
+      },
+      "duration_ms": 3333.2
+    },
+    {
+      "test_id": "PAIR-134",
+      "workspace": "investment",
+      "viewport_px": "640",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#investment"
+      },
+      "duration_ms": 3185.4
+    },
+    {
+      "test_id": "PAIR-135",
+      "workspace": "investment",
+      "viewport_px": "700",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#investment"
+      },
+      "duration_ms": 3573.4
+    },
+    {
+      "test_id": "PAIR-136",
+      "workspace": "investment",
+      "viewport_px": "768",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#investment"
+      },
+      "duration_ms": 3058.4
+    },
+    {
+      "test_id": "PAIR-137",
+      "workspace": "investment",
+      "viewport_px": "1440",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#investment"
+      },
+      "duration_ms": 2915.5
+    },
+    {
+      "test_id": "PAIR-138",
+      "workspace": "investment",
+      "viewport_px": "1920",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#investment"
+      },
+      "duration_ms": 2503.9
+    },
+    {
+      "test_id": "PAIR-139",
+      "workspace": "pilots",
+      "viewport_px": "320",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pilots"
+      },
+      "duration_ms": 2801.2
+    },
+    {
+      "test_id": "PAIR-140",
+      "workspace": "pilots",
+      "viewport_px": "360",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pilots"
+      },
+      "duration_ms": 2566.3
+    },
+    {
+      "test_id": "PAIR-141",
+      "workspace": "pilots",
+      "viewport_px": "375",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pilots"
+      },
+      "duration_ms": 2577.2
+    },
+    {
+      "test_id": "PAIR-142",
+      "workspace": "pilots",
+      "viewport_px": "390",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pilots"
+      },
+      "duration_ms": 2634.9
+    },
+    {
+      "test_id": "PAIR-143",
+      "workspace": "pilots",
+      "viewport_px": "414",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pilots"
+      },
+      "duration_ms": 2615.1
+    },
+    {
+      "test_id": "PAIR-144",
+      "workspace": "pilots",
+      "viewport_px": "640",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pilots"
+      },
+      "duration_ms": 2722.0
+    },
+    {
+      "test_id": "PAIR-145",
+      "workspace": "pilots",
+      "viewport_px": "700",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pilots"
+      },
+      "duration_ms": 2911.7
+    },
+    {
+      "test_id": "PAIR-146",
+      "workspace": "pilots",
+      "viewport_px": "820",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pilots"
+      },
+      "duration_ms": 2849.2
+    },
+    {
+      "test_id": "PAIR-147",
+      "workspace": "pilots",
+      "viewport_px": "1920",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pilots"
+      },
+      "duration_ms": 2110.5
+    },
+    {
+      "test_id": "PAIR-148",
+      "workspace": "council",
+      "viewport_px": "320",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#council"
+      },
+      "duration_ms": 2635.7
+    },
+    {
+      "test_id": "PAIR-149",
+      "workspace": "council",
+      "viewport_px": "360",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#council"
+      },
+      "duration_ms": 2562.9
+    },
+    {
+      "test_id": "PAIR-150",
+      "workspace": "council",
+      "viewport_px": "375",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#council"
+      },
+      "duration_ms": 2557.8
+    },
+    {
+      "test_id": "PAIR-151",
+      "workspace": "council",
+      "viewport_px": "390",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#council"
+      },
+      "duration_ms": 2604.5
+    },
+    {
+      "test_id": "PAIR-152",
+      "workspace": "council",
+      "viewport_px": "414",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#council"
+      },
+      "duration_ms": 2614.4
+    },
+    {
+      "test_id": "PAIR-153",
+      "workspace": "council",
+      "viewport_px": "640",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#council"
+      },
+      "duration_ms": 2624.7
+    },
+    {
+      "test_id": "PAIR-154",
+      "workspace": "council",
+      "viewport_px": "700",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#council"
+      },
+      "duration_ms": 2606.3
+    },
+    {
+      "test_id": "PAIR-155",
+      "workspace": "council",
+      "viewport_px": "768",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#council"
+      },
+      "duration_ms": 2740.6
+    },
+    {
+      "test_id": "PAIR-156",
+      "workspace": "council",
+      "viewport_px": "1024",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#council"
+      },
+      "duration_ms": 2685.3
+    },
+    {
+      "test_id": "PAIR-157",
+      "workspace": "council",
+      "viewport_px": "1920",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#council"
+      },
+      "duration_ms": 2317.4
+    },
+    {
+      "test_id": "PAIR-002",
+      "workspace": "hybrid",
+      "viewport_px": "360",
+      "engine": "Firefox",
+      "interaction": "keyboard",
+      "motion": "reduced",
+      "local_state": "valid_saved",
+      "load_condition": "constrained",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "157.0",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#hybrid"
+      },
+      "duration_ms": 2824.2
+    },
+    {
+      "test_id": "PAIR-006",
+      "workspace": "overview",
+      "viewport_px": "414",
+      "engine": "Firefox",
+      "interaction": "pointer",
+      "motion": "reduced",
+      "local_state": "corrupt",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "157.0",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#overview"
+      },
+      "duration_ms": 1205.3
+    },
+    {
+      "test_id": "PAIR-008",
+      "workspace": "storage",
+      "viewport_px": "700",
+      "engine": "Firefox",
+      "interaction": "touch",
+      "motion": "reduced",
+      "local_state": "fresh",
+      "load_condition": "offline_after_cached_load",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "157.0",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#storage"
+      },
+      "duration_ms": 800.4
+    },
+    {
+      "test_id": "PAIR-010",
+      "workspace": "pv",
+      "viewport_px": "768",
+      "engine": "Firefox",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "valid_saved",
+      "load_condition": "offline_after_cached_load",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "157.0",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pv"
+      },
+      "duration_ms": 3843.0
+    },
+    {
+      "test_id": "PAIR-015",
+      "workspace": "markets",
+      "viewport_px": "375",
+      "engine": "Firefox",
+      "interaction": "pointer",
+      "motion": "reduced",
+      "local_state": "old_schema",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "157.0",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#markets"
+      },
+      "duration_ms": 5176.4
+    },
+    {
+      "test_id": "PAIR-020",
+      "workspace": "investment",
+      "viewport_px": "1024",
+      "engine": "Firefox",
+      "interaction": "keyboard",
+      "motion": "reduced",
+      "local_state": "valid_saved",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "157.0",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#investment"
+      },
+      "duration_ms": 892.1
+    },
+    {
+      "test_id": "PAIR-022",
+      "workspace": "pilots",
+      "viewport_px": "1440",
+      "engine": "Firefox",
+      "interaction": "keyboard",
+      "motion": "reduced",
+      "local_state": "valid_saved",
+      "load_condition": "constrained",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "157.0",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pilots"
+      },
+      "duration_ms": 1592.2
+    },
+    {
+      "test_id": "PAIR-023",
+      "workspace": "council",
+      "viewport_px": "1280",
+      "engine": "Firefox",
+      "interaction": "keyboard",
+      "motion": "reduced",
+      "local_state": "valid_saved",
+      "load_condition": "constrained",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "157.0",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#council"
+      },
+      "duration_ms": 1358.7
+    },
+    {
+      "test_id": "PAIR-025",
+      "workspace": "lessons",
+      "viewport_px": "1920",
+      "engine": "Firefox",
+      "interaction": "pointer",
+      "motion": "reduced",
+      "local_state": "valid_saved",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "157.0",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#lessons"
+      },
+      "duration_ms": 875.1
+    },
+    {
+      "test_id": "PAIR-027",
+      "workspace": "compare",
+      "viewport_px": "390",
+      "engine": "Firefox",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "old_schema",
+      "load_condition": "constrained",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "157.0",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#compare"
+      },
+      "duration_ms": 2630.8
+    },
+    {
+      "test_id": "PAIR-028",
+      "workspace": "overview",
+      "viewport_px": "820",
+      "engine": "Firefox",
+      "interaction": "keyboard",
+      "motion": "normal",
+      "local_state": "old_schema",
+      "load_condition": "offline_after_cached_load",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "157.0",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#overview"
+      },
+      "duration_ms": 713.3
+    },
+    {
+      "test_id": "PAIR-031",
+      "workspace": "research",
+      "viewport_px": "640",
+      "engine": "Firefox",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "valid_saved",
+      "load_condition": "offline_after_cached_load",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "157.0",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#research"
+      },
+      "duration_ms": 1161.5
+    },
+    {
+      "test_id": "PAIR-032",
+      "workspace": "markets",
+      "viewport_px": "320",
+      "engine": "Firefox",
+      "interaction": "keyboard",
+      "motion": "normal",
+      "local_state": "valid_saved",
+      "load_condition": "constrained",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "157.0",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#markets"
+      },
+      "duration_ms": 1599.4
+    },
+    {
+      "test_id": "PAIR-033",
+      "workspace": "forecast",
+      "viewport_px": "1280",
+      "engine": "Firefox",
+      "interaction": "touch",
+      "motion": "normal",
+      "local_state": "old_schema",
+      "load_condition": "offline_after_cached_load",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "157.0",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#forecast"
+      },
+      "duration_ms": 856.2
+    },
+    {
+      "test_id": "PAIR-003",
+      "workspace": "lessons",
+      "viewport_px": "320",
+      "engine": "WebKit",
+      "interaction": "touch",
+      "motion": "reduced",
+      "local_state": "old_schema",
+      "load_condition": "offline_after_cached_load",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "27.2",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#lessons"
+      },
+      "duration_ms": 1721.3
+    },
+    {
+      "test_id": "PAIR-007",
+      "workspace": "storage",
+      "viewport_px": "640",
+      "engine": "WebKit",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "old_schema",
+      "load_condition": "constrained",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "27.2",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#storage"
+      },
+      "duration_ms": 1999.1
+    },
+    {
+      "test_id": "PAIR-009",
+      "workspace": "pv",
+      "viewport_px": "390",
+      "engine": "WebKit",
+      "interaction": "keyboard",
+      "motion": "reduced",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "27.2",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pv"
+      },
+      "duration_ms": 865.2
+    },
+    {
+      "test_id": "PAIR-012",
+      "workspace": "compare",
+      "viewport_px": "820",
+      "engine": "WebKit",
+      "interaction": "touch",
+      "motion": "reduced",
+      "local_state": "valid_saved",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "27.2",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#compare"
+      },
+      "duration_ms": 1246.6
+    },
+    {
+      "test_id": "PAIR-013",
+      "workspace": "research",
+      "viewport_px": "1024",
+      "engine": "WebKit",
+      "interaction": "touch",
+      "motion": "normal",
+      "local_state": "corrupt",
+      "load_condition": "constrained",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "27.2",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#research"
+      },
+      "duration_ms": 2299.3
+    },
+    {
+      "test_id": "PAIR-018",
+      "workspace": "forecast",
+      "viewport_px": "700",
+      "engine": "WebKit",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "valid_saved",
+      "load_condition": "constrained",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "27.2",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#forecast"
+      },
+      "duration_ms": 1937.2
+    },
+    {
+      "test_id": "PAIR-024",
+      "workspace": "hybrid",
+      "viewport_px": "1920",
+      "engine": "WebKit",
+      "interaction": "touch",
+      "motion": "normal",
+      "local_state": "old_schema",
+      "load_condition": "offline_after_cached_load",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "27.2",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#hybrid"
+      },
+      "duration_ms": 858.5
+    },
+    {
+      "test_id": "PAIR-026",
+      "workspace": "investment",
+      "viewport_px": "414",
+      "engine": "WebKit",
+      "interaction": "touch",
+      "motion": "normal",
+      "local_state": "old_schema",
+      "load_condition": "offline_after_cached_load",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "27.2",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#investment"
+      },
+      "duration_ms": 1314.1
+    },
+    {
+      "test_id": "PAIR-034",
+      "workspace": "pilots",
+      "viewport_px": "768",
+      "engine": "WebKit",
+      "interaction": "touch",
+      "motion": "normal",
+      "local_state": "corrupt",
+      "load_condition": "constrained",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "27.2",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pilots"
+      },
+      "duration_ms": 1919.9
+    },
+    {
+      "test_id": "PAIR-035",
+      "workspace": "council",
+      "viewport_px": "1440",
+      "engine": "WebKit",
+      "interaction": "touch",
+      "motion": "normal",
+      "local_state": "old_schema",
+      "load_condition": "offline_after_cached_load",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "27.2",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 1000,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#council"
+      },
+      "duration_ms": 6028.7
+    },
+    {
+      "test_id": "PAIR-036",
+      "workspace": "overview",
+      "viewport_px": "375",
+      "engine": "WebKit",
+      "interaction": "touch",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "constrained",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "27.2",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#overview"
+      },
+      "duration_ms": 3063.6
+    },
+    {
+      "test_id": "PAIR-038",
+      "workspace": "lessons",
+      "viewport_px": "360",
+      "engine": "WebKit",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "corrupt",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "27.2",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 844,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#lessons"
+      },
+      "duration_ms": 3711.6
+    },
+    {
+      "test_id": "PAIR-039",
+      "workspace": "markets",
+      "viewport_px": "390",
+      "engine": "WebKit",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "corrupt",
+      "load_condition": "offline_after_cached_load",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "27.2",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#markets"
+      },
+      "duration_ms": 3974.8
+    },
+    {
+      "test_id": "PAIR-042",
+      "workspace": "investment",
+      "viewport_px": "1280",
+      "engine": "WebKit",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "corrupt",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "27.2",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#investment"
+      },
+      "duration_ms": 4482.3
+    }
+  ],
+  "summary": {
+    "PASS": 157
+  },
+  "finished_at": "2026-10-29T22:42:55.245467+00:00"
+}

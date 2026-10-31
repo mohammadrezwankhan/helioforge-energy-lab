@@ -204,6 +204,7 @@ namespace HF {
           path = document.createElement('div');
           path.className = 'hf-completion-path';
           path.dataset.hfCompletionPath = 'true';
+          path.setAttribute('role', 'group');
           path.setAttribute('aria-label', 'Mastery unlock requirements');
           const firstLesson = list.querySelector('[data-lesson]');
           const firstRow = firstLesson?.closest('.lesson-choice') ?? firstLesson;

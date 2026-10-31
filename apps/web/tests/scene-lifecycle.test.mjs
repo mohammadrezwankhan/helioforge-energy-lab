@@ -4,9 +4,9 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 
 const code = fs.readFileSync(new URL('../dist/app.js', import.meta.url), 'utf8');
-function mount(reduced = false) {
+function mount(reduced = false, deliverObservers = true) {
   const frames = new Map(), events = new Map(), canvasEvents = new Map();
-  let nextFrame = 0, intersections, styleReads = 0, draws = 0;
+  let nextFrame = 0, intersections, resize, styleReads = 0, draws = 0, layoutReads = 0;
   const ctx = new Proxy({measureText: text => ({width: text.length * 7}), clearRect: () => draws++}, {
     get: (target, name) => target[name] ?? (() => {}),
   });
@@ -15,17 +15,38 @@ function mount(reduced = false) {
     getComputedStyle: () => {styleReads++; return {getPropertyValue: () => '#bbffbb'};},
     requestAnimationFrame: callback => {frames.set(++nextFrame, callback); return nextFrame;},
     cancelAnimationFrame: id => frames.delete(id),
-    ResizeObserver: class {observe() {} disconnect() {}},
+    ResizeObserver: class {constructor(callback) {resize = callback;} observe() {} disconnect() {}},
     IntersectionObserver: class {constructor(callback) {intersections = callback;} observe() {} disconnect() {}},
   });
   vm.runInContext(code, box);
   box.document = document;
-  const canvas = {getContext: () => ctx, getBoundingClientRect: () => ({width: 600, height: 400}), parentElement: {querySelectorAll: () => []},
+  const canvas = {getContext: () => ctx, getBoundingClientRect: () => {layoutReads++; return {width: 600, height: 400};}, parentElement: {querySelectorAll: () => []},
     addEventListener: (name, fn) => canvasEvents.set(name, fn), removeEventListener: name => canvasEvents.delete(name)};
   const dispose = box.HF.mountEnergyScene(canvas, box.HF.systemById('remote-triad'), reduced, () => {});
-  return {frames, events, canvasEvents, document, dispose, setVisible: value => intersections([{isIntersecting: value}]),
-    stats: () => ({styleReads, draws}), tick: () => {const [id, callback] = frames.entries().next().value; frames.delete(id); callback(16);}};
+  const setSize = (width, height) => resize([{target: canvas, contentRect: {width, height}}]);
+  const setVisible = value => intersections([{isIntersecting: value}]);
+  if (deliverObservers) {setSize(600, 400); setVisible(true);}
+  return {frames, events, canvasEvents, document, canvas, dispose, setVisible, setSize,
+    stats: () => ({styleReads, draws, layoutReads}), tick: () => {const [id, callback] = frames.entries().next().value; frames.delete(id); callback(16);}};
 }
+
+test('offscreen canvas startup waits for observed size and visibility without forcing layout', () => {
+  const scene = mount(false, false);
+  assert.equal(scene.stats().layoutReads, 0, 'mount must not synchronously lay out the whole page');
+  assert.equal(scene.stats().draws, 0);
+  assert.equal(scene.frames.size, 0);
+  scene.setSize(600, 400);
+  scene.setVisible(false);
+  assert.equal(scene.stats().draws, 0, 'an offscreen canvas stays idle');
+  scene.setVisible(true);
+  assert.ok(scene.stats().draws > 0, 'the diagram renders when it becomes visible');
+  assert.equal(scene.frames.size, 1);
+  scene.setSize(420, 330);
+  assert.equal(scene.canvas.width, 420);
+  assert.equal(scene.canvas.height, 330);
+  assert.equal(scene.stats().layoutReads, 0, 'resize uses observer dimensions');
+  scene.dispose();
+});
 
 test('reduced motion renders on demand without a permanent animation callback', () => {
   const scene = mount(true);

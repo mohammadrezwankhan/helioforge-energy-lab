@@ -1,0 +1,623 @@
+{
+  "schema": "helioforge.parser-cost-trace.v1",
+  "started_at_utc": "2026-10-29T23:02:07.152786+00:00",
+  "command": {
+    "argv": [
+      "scripts/acceptance-parse-cost.py",
+      "--site",
+      "C:\\Users\\MRK\\Downloads\\misC\\helioforge-remediation-20261028\\source\\.cloudflare\\acceptance-20261029-g\\site",
+      "--url",
+      "https://127.0.0.1:4200/run/",
+      "--output",
+      "C:\\Users\\MRK\\Downloads\\misC\\helioforge-remediation-20261028\\source\\docs\\remediation-20261029\\parse-cost"
+    ],
+    "python_executable": "C:\\Users\\MRK\\Downloads\\misC\\helioforge-audit-20261027\\repo\\.venv\\Scripts\\python.exe"
+  },
+  "candidate": {
+    "site": "C:\\Users\\MRK\\Downloads\\misC\\helioforge-remediation-20261028\\source\\.cloudflare\\acceptance-20261029-g\\site",
+    "url": "https://127.0.0.1:4200/run/",
+    "runtime_sha256": "8ef56f4df539590392696552c2b10651faf953790d8018c982a949b21e0ccb00"
+  },
+  "host": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.14",
+    "load_control": "Host load and background processes were not controlled; one instrumented cold run was captured per profile."
+  },
+  "instrumentation": {
+    "protocol": "Chrome DevTools Protocol Tracing domain via Playwright CDPSession",
+    "transfer_mode": "ReturnAsStream; JSON, uncompressed; original bytes retained as trace files",
+    "requested_categories": [
+      "devtools.timeline",
+      "v8",
+      "v8.compile",
+      "disabled-by-default-v8.compile",
+      "blink.user_timing"
+    ],
+    "duration_units": "Trace event timestamps and durations are microseconds; reported intervals are milliseconds.",
+    "aggregation": "Union of overlapping/nested intervals; parse/compile overlap is reported and not added twice in combined union.",
+    "ScriptDuration_policy": "Not used as parser cost; it includes JavaScript execution.",
+    "profiles": "One instrumented cold navigation per profile; trace overhead makes this supplemental diagnostic, not the primary load benchmark.",
+    "categories_observed": [
+      "devtools.timeline",
+      "v8,devtools.timeline",
+      "disabled-by-default-v8.compile"
+    ],
+    "trace_note": "Browser tracing overhead is present; this is supplemental diagnostic data, separate from untraced load measurements."
+  },
+  "runs": [
+    {
+      "profile": "desktop",
+      "viewport_css_px": {
+        "width": 1440,
+        "height": 1000
+      },
+      "cpu_throttling_rate": 1,
+      "network_emulation": null,
+      "navigation_status": 200,
+      "app_ready_wall_ms_diagnostic_only": 1126.163,
+      "page_errors": [],
+      "trace_started_at_utc": "2026-10-29T23:02:19.128984+00:00",
+      "trace_data_loss_occurred": false,
+      "trace_categories_requested": [
+        "devtools.timeline",
+        "v8",
+        "v8.compile",
+        "disabled-by-default-v8.compile",
+        "blink.user_timing"
+      ],
+      "trace_categories_observed": [
+        "__metadata",
+        "blink,devtools.timeline",
+        "blink.user_timing",
+        "blink.user_timing,rail",
+        "devtools.timeline",
+        "devtools.timeline,disabled-by-default-v8.gc",
+        "devtools.timeline,v8",
+        "disabled-by-default-v8.compile",
+        "loading,rail,devtools.timeline",
+        "v8",
+        "v8,devtools.timeline"
+      ],
+      "trace_file": "desktop.trace.json",
+      "trace_bytes": 824176,
+      "trace_sha256": "3208f0ee4df0ec3fcb4361ca4f41abd9709b839b4b84d8a87bc865de8807d976",
+      "trace_event_count": 4537,
+      "renderer_main_thread": {
+        "pid": 37848,
+        "tid": 52368,
+        "name": "CrRendererMain",
+        "identification": "RendererMain metadata and events tagged with the navigated page's main frame",
+        "target_frame_id": "4EA2042B37A0893CBC0F379E3E0F3D05",
+        "target_frame_event_count_on_selected_thread": 177,
+        "trace_target_frames_seen": {
+          "4EA2042B37A0893CBC0F379E3E0F3D05": 47
+        },
+        "page_frame_count": null
+      },
+      "other_renderer_main_candidates": [],
+      "main_thread_union_metrics": {
+        "javascript_parse": {
+          "union_ms": 30.861,
+          "event_count": 1664,
+          "event_types": [
+            {
+              "name": "V8.ParseFunction",
+              "category": "disabled-by-default-v8.compile",
+              "phase": "X",
+              "event_count": 336,
+              "duration_sum_ms": 6.973,
+              "union_ms": 6.973
+            },
+            {
+              "name": "V8.ParseProgram",
+              "category": "disabled-by-default-v8.compile",
+              "phase": "X",
+              "event_count": 28,
+              "duration_sum_ms": 23.888,
+              "union_ms": 23.888
+            },
+            {
+              "name": "V8.PreParse",
+              "category": "disabled-by-default-v8.compile",
+              "phase": "X",
+              "event_count": 1300,
+              "duration_sum_ms": 14.041,
+              "union_ms": 14.041
+            }
+          ]
+        },
+        "javascript_compile": {
+          "union_ms": 41.512,
+          "event_count": 1178,
+          "event_types": [
+            {
+              "name": "V8.Compile",
+              "category": "disabled-by-default-v8.compile",
+              "phase": "X",
+              "event_count": 20,
+              "duration_sum_ms": 3.559,
+              "union_ms": 3.559
+            },
+            {
+              "name": "V8.CompileCode",
+              "category": "disabled-by-default-v8.compile",
+              "phase": "X",
+              "event_count": 361,
+              "duration_sum_ms": 40.617,
+              "union_ms": 40.617
+            },
+            {
+              "name": "V8.CompileEval",
+              "category": "disabled-by-default-v8.compile",
+              "phase": "X",
+              "event_count": 8,
+              "duration_sum_ms": 0.082,
+              "union_ms": 0.082
+            },
+            {
+              "name": "V8.CompileIgnition",
+              "category": "disabled-by-default-v8.compile",
+              "phase": "X",
+              "event_count": 401,
+              "duration_sum_ms": 5.641,
+              "union_ms": 5.641
+            },
+            {
+              "name": "V8.CompileIgnitionFinalization",
+              "category": "disabled-by-default-v8.compile",
+              "phase": "X",
+              "event_count": 379,
+              "duration_sum_ms": 1.957,
+              "union_ms": 1.957
+            },
+            {
+              "name": "V8.CompileScript",
+              "category": "disabled-by-default-v8.compile",
+              "phase": "X",
+              "event_count": 8,
+              "duration_sum_ms": 14.629,
+              "union_ms": 14.629
+            },
+            {
+              "name": "v8.compile",
+              "category": "v8,devtools.timeline",
+              "phase": "X",
+              "event_count": 1,
+              "duration_sum_ms": 14.618,
+              "union_ms": 14.618
+            }
+          ]
+        },
+        "javascript_execution": {
+          "union_ms": 513.28,
+          "event_count": 32,
+          "event_types": [
+            {
+              "name": "EvaluateScript",
+              "category": "devtools.timeline",
+              "phase": "X",
+              "event_count": 1,
+              "duration_sum_ms": 17.762,
+              "union_ms": 17.762
+            },
+            {
+              "name": "FunctionCall",
+              "category": "devtools.timeline",
+              "phase": "X",
+              "event_count": 31,
+              "duration_sum_ms": 495.518,
+              "union_ms": 495.518
+            }
+          ]
+        },
+        "html_parse": {
+          "union_ms": 35.526,
+          "event_count": 14,
+          "event_types": [
+            {
+              "name": "ParseHTML",
+              "category": "devtools.timeline",
+              "phase": "X",
+              "event_count": 14,
+              "duration_sum_ms": 35.526,
+              "union_ms": 35.526
+            }
+          ]
+        },
+        "javascript_parse_compile_union": {
+          "union_ms": 42.181,
+          "event_count": 2842
+        }
+      },
+      "all_thread_union_metrics": {
+        "javascript_parse": {
+          "sum_of_per_thread_unions_ms": 30.861,
+          "thread_count": 1,
+          "includes_main_thread": true
+        },
+        "javascript_compile": {
+          "sum_of_per_thread_unions_ms": 41.512,
+          "thread_count": 1,
+          "includes_main_thread": true
+        },
+        "javascript_parse_compile": {
+          "sum_of_per_thread_unions_ms": 42.181,
+          "thread_count": 1,
+          "includes_main_thread": true
+        },
+        "javascript_execution": {
+          "sum_of_per_thread_unions_ms": 513.28,
+          "thread_count": 1,
+          "includes_main_thread": true
+        },
+        "html_parse": {
+          "sum_of_per_thread_unions_ms": 35.526,
+          "thread_count": 1,
+          "includes_main_thread": true
+        }
+      },
+      "parser_only_separation": "Only explicit V8 parse-named event intervals count as JavaScript parser cost. Compile-named events may include parse work; do not add the groups. javascript_parse_compile_union_ms deduplicates overlapping intervals.",
+      "observed_event_names": [
+        [
+          "EvaluateScript",
+          "devtools.timeline"
+        ],
+        [
+          "FunctionCall",
+          "devtools.timeline"
+        ],
+        [
+          "ParseHTML",
+          "devtools.timeline"
+        ],
+        [
+          "V8.Compile",
+          "disabled-by-default-v8.compile"
+        ],
+        [
+          "V8.CompileCode",
+          "disabled-by-default-v8.compile"
+        ],
+        [
+          "V8.CompileEval",
+          "disabled-by-default-v8.compile"
+        ],
+        [
+          "V8.CompileIgnition",
+          "disabled-by-default-v8.compile"
+        ],
+        [
+          "V8.CompileIgnitionFinalization",
+          "disabled-by-default-v8.compile"
+        ],
+        [
+          "V8.CompileScript",
+          "disabled-by-default-v8.compile"
+        ],
+        [
+          "V8.ParseFunction",
+          "disabled-by-default-v8.compile"
+        ],
+        [
+          "V8.ParseProgram",
+          "disabled-by-default-v8.compile"
+        ],
+        [
+          "V8.PreParse",
+          "disabled-by-default-v8.compile"
+        ],
+        [
+          "v8.compile",
+          "v8,devtools.timeline"
+        ]
+      ],
+      "events_on_main_thread": 2888,
+      "status": "PASS",
+      "javascript_event_scope": "V8 parse/compile requires a v8 trace category and a parse/compile event name. ParseHTML in devtools.timeline is reported separately and excluded from JavaScript parse cost. Execution is reported separately from parser/compiler intervals.",
+      "target_main_frame": {
+        "id": "4EA2042B37A0893CBC0F379E3E0F3D05",
+        "frame_count": null,
+        "frame_count_note": "Not included in the raw Chrome trace; main-thread attribution uses events tagged with the requested navigation URL."
+      }
+    },
+    {
+      "profile": "constrained_phone",
+      "viewport_css_px": {
+        "width": 390,
+        "height": 844
+      },
+      "cpu_throttling_rate": 4,
+      "network_emulation": {
+        "latency_ms": 150,
+        "download_mbps": 1.6,
+        "upload_mbps": 0.75,
+        "offline": false
+      },
+      "navigation_status": 200,
+      "app_ready_wall_ms_diagnostic_only": 3711.72,
+      "page_errors": [],
+      "trace_started_at_utc": "2026-10-29T23:02:24.877955+00:00",
+      "trace_data_loss_occurred": false,
+      "trace_categories_requested": [
+        "devtools.timeline",
+        "v8",
+        "v8.compile",
+        "disabled-by-default-v8.compile",
+        "blink.user_timing"
+      ],
+      "trace_categories_observed": [
+        "__metadata",
+        "blink,devtools.timeline",
+        "blink.user_timing",
+        "blink.user_timing,rail",
+        "devtools.timeline",
+        "devtools.timeline,disabled-by-default-v8.gc",
+        "devtools.timeline,v8",
+        "disabled-by-default-v8.compile",
+        "loading,rail,devtools.timeline",
+        "v8",
+        "v8,devtools.timeline"
+      ],
+      "trace_file": "constrained_phone.trace.json",
+      "trace_bytes": 806833,
+      "trace_sha256": "8fc63af4ddf372af774ea3ea71cd6218a96dac691e7b1992abb08294365d8b6e",
+      "trace_event_count": 4306,
+      "renderer_main_thread": {
+        "pid": 22648,
+        "tid": 23732,
+        "name": "CrRendererMain",
+        "identification": "RendererMain metadata and events tagged with the navigated page's main frame",
+        "target_frame_id": "CE548B311D6747E595C7F4D37FA84729",
+        "target_frame_event_count_on_selected_thread": 354,
+        "trace_target_frames_seen": {
+          "CE548B311D6747E595C7F4D37FA84729": 208
+        },
+        "page_frame_count": null
+      },
+      "other_renderer_main_candidates": [],
+      "main_thread_union_metrics": {
+        "javascript_parse": {
+          "union_ms": 245.192,
+          "event_count": 1669,
+          "event_types": [
+            {
+              "name": "V8.ParseFunction",
+              "category": "disabled-by-default-v8.compile",
+              "phase": "X",
+              "event_count": 337,
+              "duration_sum_ms": 51.919,
+              "union_ms": 51.919
+            },
+            {
+              "name": "V8.ParseProgram",
+              "category": "disabled-by-default-v8.compile",
+              "phase": "X",
+              "event_count": 28,
+              "duration_sum_ms": 193.273,
+              "union_ms": 193.273
+            },
+            {
+              "name": "V8.PreParse",
+              "category": "disabled-by-default-v8.compile",
+              "phase": "X",
+              "event_count": 1304,
+              "duration_sum_ms": 114.037,
+              "union_ms": 114.037
+            }
+          ]
+        },
+        "javascript_compile": {
+          "union_ms": 349.144,
+          "event_count": 1199,
+          "event_types": [
+            {
+              "name": "V8.Compile",
+              "category": "disabled-by-default-v8.compile",
+              "phase": "X",
+              "event_count": 20,
+              "duration_sum_ms": 36.597,
+              "union_ms": 36.597
+            },
+            {
+              "name": "V8.CompileCode",
+              "category": "disabled-by-default-v8.compile",
+              "phase": "X",
+              "event_count": 361,
+              "duration_sum_ms": 343.76,
+              "union_ms": 343.76
+            },
+            {
+              "name": "V8.CompileEval",
+              "category": "disabled-by-default-v8.compile",
+              "phase": "X",
+              "event_count": 8,
+              "duration_sum_ms": 0.49,
+              "union_ms": 0.49
+            },
+            {
+              "name": "V8.CompileIgnition",
+              "category": "disabled-by-default-v8.compile",
+              "phase": "X",
+              "event_count": 401,
+              "duration_sum_ms": 53.112,
+              "union_ms": 53.112
+            },
+            {
+              "name": "V8.CompileIgnitionFinalization",
+              "category": "disabled-by-default-v8.compile",
+              "phase": "X",
+              "event_count": 400,
+              "duration_sum_ms": 14.509,
+              "union_ms": 14.509
+            },
+            {
+              "name": "V8.CompileScript",
+              "category": "disabled-by-default-v8.compile",
+              "phase": "X",
+              "event_count": 8,
+              "duration_sum_ms": 133.688,
+              "union_ms": 133.688
+            },
+            {
+              "name": "v8.compile",
+              "category": "v8,devtools.timeline",
+              "phase": "X",
+              "event_count": 1,
+              "duration_sum_ms": 133.249,
+              "union_ms": 133.249
+            }
+          ]
+        },
+        "javascript_execution": {
+          "union_ms": 1486.959,
+          "event_count": 9,
+          "event_types": [
+            {
+              "name": "EvaluateScript",
+              "category": "devtools.timeline",
+              "phase": "X",
+              "event_count": 1,
+              "duration_sum_ms": 169.822,
+              "union_ms": 169.822
+            },
+            {
+              "name": "FunctionCall",
+              "category": "devtools.timeline",
+              "phase": "X",
+              "event_count": 8,
+              "duration_sum_ms": 1317.137,
+              "union_ms": 1317.137
+            }
+          ]
+        },
+        "html_parse": {
+          "union_ms": 306.176,
+          "event_count": 198,
+          "event_types": [
+            {
+              "name": "ParseHTML",
+              "category": "devtools.timeline",
+              "phase": "X",
+              "event_count": 198,
+              "duration_sum_ms": 306.176,
+              "union_ms": 306.176
+            }
+          ]
+        },
+        "javascript_parse_compile_union": {
+          "union_ms": 353.856,
+          "event_count": 2868
+        }
+      },
+      "all_thread_union_metrics": {
+        "javascript_parse": {
+          "sum_of_per_thread_unions_ms": 245.192,
+          "thread_count": 1,
+          "includes_main_thread": true
+        },
+        "javascript_compile": {
+          "sum_of_per_thread_unions_ms": 349.144,
+          "thread_count": 1,
+          "includes_main_thread": true
+        },
+        "javascript_parse_compile": {
+          "sum_of_per_thread_unions_ms": 353.856,
+          "thread_count": 1,
+          "includes_main_thread": true
+        },
+        "javascript_execution": {
+          "sum_of_per_thread_unions_ms": 1486.959,
+          "thread_count": 1,
+          "includes_main_thread": true
+        },
+        "html_parse": {
+          "sum_of_per_thread_unions_ms": 306.176,
+          "thread_count": 1,
+          "includes_main_thread": true
+        }
+      },
+      "parser_only_separation": "Only explicit V8 parse-named event intervals count as JavaScript parser cost. Compile-named events may include parse work; do not add the groups. javascript_parse_compile_union_ms deduplicates overlapping intervals.",
+      "observed_event_names": [
+        [
+          "EvaluateScript",
+          "devtools.timeline"
+        ],
+        [
+          "FunctionCall",
+          "devtools.timeline"
+        ],
+        [
+          "ParseHTML",
+          "devtools.timeline"
+        ],
+        [
+          "V8.Compile",
+          "disabled-by-default-v8.compile"
+        ],
+        [
+          "V8.CompileCode",
+          "disabled-by-default-v8.compile"
+        ],
+        [
+          "V8.CompileEval",
+          "disabled-by-default-v8.compile"
+        ],
+        [
+          "V8.CompileIgnition",
+          "disabled-by-default-v8.compile"
+        ],
+        [
+          "V8.CompileIgnitionFinalization",
+          "disabled-by-default-v8.compile"
+        ],
+        [
+          "V8.CompileScript",
+          "disabled-by-default-v8.compile"
+        ],
+        [
+          "V8.ParseFunction",
+          "disabled-by-default-v8.compile"
+        ],
+        [
+          "V8.ParseProgram",
+          "disabled-by-default-v8.compile"
+        ],
+        [
+          "V8.PreParse",
+          "disabled-by-default-v8.compile"
+        ],
+        [
+          "v8.compile",
+          "v8,devtools.timeline"
+        ]
+      ],
+      "events_on_main_thread": 3075,
+      "status": "PASS",
+      "javascript_event_scope": "V8 parse/compile requires a v8 trace category and a parse/compile event name. ParseHTML in devtools.timeline is reported separately and excluded from JavaScript parse cost. Execution is reported separately from parser/compiler intervals.",
+      "target_main_frame": {
+        "id": "CE548B311D6747E595C7F4D37FA84729",
+        "frame_count": null,
+        "frame_count_note": "Not included in the raw Chrome trace; main-thread attribution uses events tagged with the requested navigation URL."
+      }
+    }
+  ],
+  "browser": {
+    "name": "Chromium",
+    "version": "156.0.8078.4"
+  },
+  "finished_at_utc": "2026-10-29T23:02:29.150675+00:00",
+  "summary": {
+    "runs": 2,
+    "passed": 2,
+    "failed": 0,
+    "parser_only_measurable_runs": 2,
+    "limits": "V8 parse events measure explicit parse/preparse intervals; compile-labeled events may overlap parser work; use deduplicated union. HTML parsing is separate. No ScriptDuration proxy or inferred split is used."
+  },
+  "analysis": {
+    "revision": "2",
+    "javascript_parse_source": "Only V8-category events with parse/preparse names; devtools.timeline ParseHTML is separate.",
+    "javascript_compile_source": "Only V8-category events with compile/compiler names.",
+    "main_thread_attribution": "RendererMain metadata matched to trace event frame IDs carrying the requested loopback URL. Raw first-pass traces identify one target frame ID per profile; Page.getFrameTree was not captured during that first pass, so total frame count is unknown.",
+    "note": "Classifier refinement was performed offline against the retained raw trace bytes; no additional browser trace was run. ParseHTML was moved out of JavaScript parser cost and is reported separately."
+  }
+}

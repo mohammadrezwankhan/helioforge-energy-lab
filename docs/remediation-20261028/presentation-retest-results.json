@@ -1,0 +1,45 @@
+{
+  "schema": "helioforge.presentation.execution.v1",
+  "started_at": "2026-10-28T22:05:30.943843+00:00",
+  "artifact_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+  "environment": "Windows-11-10.0.26300-SP0",
+  "url": "https://127.0.0.1:4191/run/",
+  "physical_devices": false,
+  "oracle": "Deep link; input-mode navigation away/back; reload or cached offline navigation; draft-cache preservation; root/body overflow; no uncaught errors. Not full task behavior.",
+  "constrained_profile": "150 ms delay per routed request; no bandwidth limit; desktop hardware",
+  "old_schema_scope": "Unsupported v0 synthetic fixture; rejection/recovery, not a claimed historical migration.",
+  "cases": [
+    {
+      "test_id": "PAIR-141",
+      "workspace": "pilots",
+      "viewport_px": "375",
+      "engine": "Chromium",
+      "interaction": "pointer",
+      "motion": "normal",
+      "local_state": "fresh",
+      "load_condition": "normal",
+      "execution_status": "NOT_EXECUTED",
+      "design": "All two-factor level pairs covered; not a behavioral pass",
+      "status": "PASS",
+      "owner": "integration",
+      "browser_version": "156.0.8078.4",
+      "expected": "Workspace navigation and reflow remain usable and recovery fixtures are preserved.",
+      "height": 568,
+      "zoom": 1,
+      "device": "desktop engine with emulated viewport/input",
+      "actual": {
+        "overflow": {
+          "root": 0,
+          "body": 0
+        },
+        "uncaught_errors": [],
+        "hash": "#pilots"
+      },
+      "duration_ms": 13865.3
+    }
+  ],
+  "summary": {
+    "PASS": 1
+  },
+  "finished_at": "2026-10-28T22:05:58.301054+00:00"
+}

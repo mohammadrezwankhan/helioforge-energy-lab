@@ -1,0 +1,23 @@
+<article class="document model-glossary">
+  <p class="eyebrow">GLOSSARY / SOURCE AND EVIDENCE</p>
+  <h1>Use version words precisely.</h1>
+  <p class="lead">A version number, data digest or test report identifies one part of a research artifact. It does not certify all the other parts.</p>
+  <p class="learning-byline">Written by Mohammad Rezwan Khan · Revised 28 October 2026 · Contract <code>1.0.0</code></p>
+  <dl>
+    <dt>Application release</dt><dd>The version of the packaged software and its interface. It can change while equations or sample data remain the same.</dd>
+    <dt>Catalogue</dt><dd>The architecture, scenario, lesson or study definitions and their input descriptions. The 59-study catalogue has no declared semantic version in this source; its registry records a content SHA-256 separately.</dd>
+    <dt>Data kind</dt><dd>A label such as synthetic, observed or user-supplied-unverified that describes where inputs came from. User-supplied does not mean independently checked.</dd>
+    <dt>Dataset version</dt><dd>An identity for a bundled set of example records. The hybrid preset bundle declares its own schema, data version and digest. Study examples currently have a digest, not a named dataset version.</dd>
+    <dt>Model version</dt><dd>An identifier for a particular equation and implementation family, such as <code>terminal-greedy-hourly-v1</code> or the shared advanced study version <code>roadmap-screen-v1</code>.</dd>
+    <dt>Input/result schema</dt><dd>The allowed fields, units, bounds and output shape. The 59-study definitions publish numeric input bounds and units where supplied. A separate result <code>schema_version</code> is not declared in the current study envelope and is marked U in the registry.</dd>
+    <dt>Fixture</dt><dd>A reproducible example input and output used by software. A generated default fixture is useful for regression; it is not automatically a hand calculation, measured dataset or independent scientific benchmark.</dd>
+    <dt>Seed</dt><dd>A specified starting value for a stochastic experiment’s random generator. A seeded simulation is reproducible under its stated software/model conditions; it is not calibrated by being repeatable.</dd>
+    <dt>Convergence</dt><dd>A solver-specific numerical stopping or feasibility condition. The common study result format does not require a shared convergence field, so each model card records what its default output exposes and marks unreviewed evidence unknown.</dd>
+    <dt>Evidence digest</dt><dd>A SHA-256 fingerprint that can detect content changes. It does not establish who created a file, whether its inputs are true, or whether the model is correct.</dd>
+    <dt>Validation tier</dt><dd>The kind of evidence available, from schema/software checks through independent reference cases and field comparison. Software tests in this repository are not independent scientific validation.</dd>
+    <dt>U / NOT RUN</dt><dd>U means the source inspected here does not establish that fact. NOT RUN means the named acceptance action was not executed in this documentation change.</dd>
+  </dl>
+  <h2>Keep the layers separate</h2>
+  <p>Before comparing two results, identify the application release, catalogue digest, data identity, model version, schema and time/unit basis. Then read the actual inputs and limitations. A matching label or digest alone cannot make unlike runs comparable.</p>
+  <p>See <a href="/models/">all 59 model cards</a>, the <a href="/learning/capability-modes/">capability guide</a>, and the repository’s <a href="https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/docs/roadmap/CONTRACT.md">shared study input/result contract</a>.</p>
+</article>

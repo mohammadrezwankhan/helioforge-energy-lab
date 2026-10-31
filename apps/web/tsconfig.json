@@ -19,6 +19,7 @@
     "outDir": "dist/js"
   },
   "files": [
+    "src/provenance-types.ts",
     "src/types.ts",
     "src/hybrid-types.ts",
     "src/core.ts",
@@ -39,7 +40,9 @@
     "src/champion-views.ts",
     "src/champion-controller.ts",
     "src/roadmap-types.ts",
+    "src/result-provenance.ts",
     "src/roadmap-data.ts",
+    "src/deferred-data.ts",
     "src/advanced-visuals.ts",
     "src/study-visuals.ts",
     "src/roadmap.ts",

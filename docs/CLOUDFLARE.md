@@ -12,7 +12,9 @@ node scripts/build-domain.mjs
 node scripts/check-domain.mjs
 ```
 
-Upload the entire `.cloudflare/site` directory to `mkgrid-helioforge`. `cloudflare-domain.json` defines its canonical address and project. The site includes an overview, methodology and About page, the browser preview, a three-page sitemap, robots directives, structured data and matching app facts. The runtime and Pages aliases use noindex. No paid Worker, database, storage or provider integration is required. The Terminal workbench calculates bounded 24-hour energy balances in-browser. Advanced studies require the local Python application; its API is not deployed publicly.
+Install the locked web development dependencies and run `npm run build` from `apps/web` before packaging. Upload the entire `.cloudflare/site` directory to `mkgrid-helioforge`. `cloudflare-domain.json` defines its canonical address and project. The site includes nine indexable pages, the browser preview, versioned on-demand data, a complete offline download, robots directives, structured data and matching app facts. The runtime and Pages aliases use noindex. No paid Worker, database, storage or provider integration is required. The Terminal workbench calculates bounded 24-hour energy balances in-browser. Advanced studies require the local Python application; its API is not deployed publicly.
+
+Pull-request CI checks out the exact head commit, builds with the locked dependencies, and retains the complete generated site and immutable build receipt in `browser-evidence`. Deploy only a successful run's verified site; do not regenerate numerical assets between CI and publication. `apps/web/dist/hosted` is generated output and is intentionally ignored by Git. The retained full dashboard and standalone HTML remain committed.
 
 ## Engineering film integration and rollback
 
