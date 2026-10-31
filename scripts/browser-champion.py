@@ -172,7 +172,7 @@ with sync_playwright() as pw,httpx.Client(base_url=a.url,timeout=40) as client:
     with bad.expect_download() as dl:bad.locator('[data-champion-action="recovery-export"]').click()
     assert Path(dl.value.path()).read_text(encoding="utf-8")=='{broken-workspace'
     bad.locator('[data-champion-action="recovery-reset"]').click();bad.locator('[data-champion-action="confirm-recovery-reset"]').click()
-    assert json.loads(bad.evaluate('localStorage.getItem(HF.WORKSPACE_KEY)'))['schema']=='helioforge.workspace.v1'
+    assert json.loads(bad.evaluate('localStorage.getItem(HF.WORKSPACE_KEY)'))['schema']=='helioforge.workspace.v2'
     passed('Damaged workspace is retained, downloadable, and reset only after explicit confirmation')
     bad.close()
     if a.bridge:
@@ -182,7 +182,7 @@ with sync_playwright() as pw,httpx.Client(base_url=a.url,timeout=40) as client:
         expect(page.locator('.workspace-dialog')).to_contain_text('in memory only');close()
         passed('Storage write failure retains setup in memory and never claims it was durably saved')
     offline=new_page(offline=True);expect(offline.locator('#run-hybrid')).to_be_disabled()
-    offline.locator('[data-champion-action="guide"]').click();expect(offline.locator('.quick-start')).to_contain_text('local API')
+    offline.locator('[data-champion-action="guide"]').click();expect(offline.locator('.quick-start')).to_contain_text('local Python API')
     passed('Offline preview keeps new calculations disabled and states the local API prerequisite')
     assert not errors,errors;passed('No uncaught JavaScript exceptions in the checked journeys')
     browser.close()

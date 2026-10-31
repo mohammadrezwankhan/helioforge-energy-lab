@@ -76,18 +76,38 @@ def test_local_council_honest_mode(client):
     assert r.json()['execution'] == 'deterministic_rule_based'
     assert len(r.json()['reviews']) == 8
     assert 'No LLM' in r.json()['warnings'][0]
+    protocol=r.json()['protocol_metadata']
+    assert protocol['id'] == 'helioforge-council/v1'
+    assert protocol['external_execution_status'] == 'not_requested'
+    assert protocol['limits']['expected_runner_invocations'] == 0
+    assert protocol['cost']['potentially_billable'] is False
+    assert len(r.json()['input_sha256']) == 64
+    assert 'does not verify the source' in protocol['integrity']['input_sha256_semantics']
+    assert protocol['integrity']['reviewer_identity_verified'] is False
+    assert protocol['integrity']['signature_verified'] is False
+    assert protocol['integrity']['critic_signoff'] is False
 
 
 def test_external_mode_disabled_by_default(client):
     r=client.post('/api/council/review',json={'mode':'openai','consent_to_external_processing':True})
     assert r.status_code == 403
+    assert r.json()['detail']['protocol']['external_execution_status'] == 'not_started'
+    assert r.json()['detail']['protocol']['consent_to_external_processing'] is True
+    assert r.json()['detail']['protocol']['limits']['completed_runner_invocations'] == 0
+    assert r.json()['detail']['result_recorded'] is False
 
 
 def test_external_mode_requires_admin_and_consent(client,monkeypatch):
     monkeypatch.setenv('ENABLE_OPENAI','true')
     monkeypatch.setenv('ADMIN_API_KEY','test-admin-key')
-    assert client.post('/api/council/review',json={'mode':'openai'}).status_code == 401
-    assert client.post('/api/council/review',json={'mode':'openai'},headers={'X-API-Key':'test-admin-key'}).status_code == 422
+    no_key=client.post('/api/council/review',json={'mode':'openai'})
+    assert no_key.status_code == 401
+    assert no_key.json()['detail']['protocol']['external_execution_status'] == 'not_started'
+    assert no_key.json()['detail']['protocol']['consent_to_external_processing'] is False
+    no_consent=client.post('/api/council/review',json={'mode':'openai'},headers={'X-API-Key':'test-admin-key'})
+    assert no_consent.status_code == 422
+    assert no_consent.json()['detail']['protocol']['external_execution_status'] == 'not_started'
+    assert no_consent.json()['detail']['protocol']['consent_to_external_processing'] is False
 
 
 def test_external_mode_requires_server_credentials(client,monkeypatch):
@@ -96,6 +116,8 @@ def test_external_mode_requires_server_credentials(client,monkeypatch):
     monkeypatch.delenv('OPENAI_API_KEY',raising=False)
     r=client.post('/api/council/review',json={'mode':'openai','consent_to_external_processing':True},headers={'X-API-Key':'test-admin-key'})
     assert r.status_code == 503
+    assert r.json()['detail']['protocol']['external_execution_status'] == 'not_started'
+    assert r.json()['detail']['protocol']['cost']['attempt_may_have_incurred_provider_usage'] is False
 
 
 def test_external_provider_error_is_not_a_fake_local_success(client,monkeypatch):
@@ -109,6 +131,39 @@ def test_external_provider_error_is_not_a_fake_local_success(client,monkeypatch)
     r=client.post('/api/council/review',json={'mode':'openai','consent_to_external_processing':True},headers={'X-API-Key':'test-admin-key'})
     assert r.status_code == 502
     assert 'provider payload' not in r.text
+    failure=r.json()['detail']
+    assert failure['protocol']['id'] == 'helioforge-council/v1'
+    assert failure['protocol']['external_execution_status'] == 'failed'
+    assert failure['protocol']['consent_to_external_processing'] is True
+    assert failure['protocol']['limits']['completed_runner_invocations'] is None
+    assert failure['protocol']['cancellation']['status'] == 'best_effort_requested'
+    assert failure['protocol']['cancellation']['provider_stop_confirmed'] is False
+    assert failure['protocol']['cost']['potentially_billable'] is True
+    assert failure['result_recorded'] is False
+    assert client.get('/api/runs').json() == []
+
+
+def test_external_timeout_is_marked_with_protocol_and_no_record(client,monkeypatch):
+    monkeypatch.setenv('ENABLE_OPENAI','true')
+    monkeypatch.setenv('ADMIN_API_KEY','test-admin-key')
+    monkeypatch.setenv('OPENAI_API_KEY','fake-not-a-real-secret')
+    monkeypatch.setenv('OPENAI_MODEL','configured-model')
+    async def timeout(*args):
+        raise TimeoutError()
+    monkeypatch.setattr('helioforge.main.openai_council',timeout)
+    r=client.post('/api/council/review',json={'mode':'openai','consent_to_external_processing':True,
+                                              'cross_examination_rounds':2},
+                  headers={'X-API-Key':'test-admin-key'})
+    assert r.status_code == 504
+    failure=r.json()['detail']
+    assert failure['protocol']['id'] == 'helioforge-council/v1'
+    assert failure['protocol']['external_execution_status'] == 'timed_out'
+    assert failure['protocol']['limits']['workflow_timeout_seconds'] == 300
+    assert failure['protocol']['limits']['expected_runner_invocations'] == 25
+    assert failure['protocol']['limits']['completed_runner_invocations'] is None
+    assert failure['protocol']['cancellation']['status'] == 'best_effort_requested'
+    assert failure['protocol']['cancellation']['provider_stop_confirmed'] is False
+    assert failure['result_recorded'] is False
     assert client.get('/api/runs').json() == []
 
 

@@ -9,7 +9,8 @@ from __future__ import annotations
 
 import math
 
-from helioforge.hybrid import HybridRequest, get_scenario, get_system, validate_configuration
+from helioforge.hybrid import HybridRequest, catalog, get_scenario, get_system, validate_configuration
+from helioforge.provenance import attach_result_provenance
 
 
 def simulate_hybrid(p: HybridRequest) -> dict:
@@ -102,7 +103,7 @@ def simulate_hybrid(p: HybridRequest) -> dict:
         warnings.append('DC architecture shown conceptually; calculations are AC-equivalent. No DC-bus dynamics, shared-inverter clipping or DC cable losses.')
     if p.hydro_kw:
         warnings.append('Hydro is a fixed electrical availability proxy; water balance, head and environmental releases are excluded.')
-    return dict(model='hybrid-greedy-hourly-v1', data_kind='synthetic_educational',
+    result = dict(model='hybrid-greedy-hourly-v1', data_kind='synthetic_educational',
                 system_id=p.system_id, scenario_id=p.scenario_id, duration_hours=p.hours,
                 policy='renewables_then_battery_then_grid_then_backup',
                 total_load_kwh=demand, served_kwh=total('served_kw'),
@@ -119,3 +120,25 @@ def simulate_hybrid(p: HybridRequest) -> dict:
                 variable_cost_eur=total('variable_cost_eur'),
                 max_balance_residual_kw=max(abs(r['balance_residual_kw']) for r in rows),
                 tags=validation['tags'], warnings=warnings, schedule=rows)
+    provenance_result = attach_result_provenance(
+        result,
+        model_id='hybrid',
+        inputs=p.model_dump(),
+        dataset_file='data/hybrid_catalog.json',
+        data_identity={
+            'catalogue_version': catalog()['version'],
+            'system_id': p.system_id,
+            'scenario_id': p.scenario_id,
+        },
+        horizon={'duration_hours': p.hours},
+        endpoints={
+            'initial_energy_kwh': initial,
+            'terminal_energy_kwh': energy,
+            'terminal_soc_policy': 'Unconstrained; both energy endpoints are reported.',
+        },
+    )
+    # The API store adds its request input hash when returning a saved run, and
+    # the existing bundle generator adds that field in its bundle contract.
+    # Keep the direct engine result free of bundle/store wrapper fields.
+    provenance_result.pop('input_sha256', None)
+    return provenance_result

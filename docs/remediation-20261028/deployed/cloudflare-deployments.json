@@ -1,0 +1,31 @@
+{
+  "observed_date": "2026-10-28",
+  "method": "Read-only Cloudflare Pages API; no mutation",
+  "project": "mkgrid-helioforge",
+  "deployments": [
+    {
+      "id": "777ff5d5-be6d-4018-a0a4-392167601a7e",
+      "url": "https://777ff5d5.mkgrid-helioforge.pages.dev",
+      "environment": "production",
+      "created_on": "2026-10-27T10:47:55.334103Z",
+      "status": "success",
+      "commit": "74d6730e38323b69c180d7f4b4945d11010203f3"
+    },
+    {
+      "id": "662d8a2b-9c03-4a20-b7e8-e43ed19d4ae7",
+      "url": "https://662d8a2b.mkgrid-helioforge.pages.dev",
+      "environment": "production",
+      "created_on": "2026-10-27T10:33:46.554517Z",
+      "status": "success",
+      "commit": "acb062158b28ee93a02a15aec3a67653651d2e0d"
+    },
+    {
+      "id": "3033cc46-70b6-4860-9a29-807a26103e19",
+      "url": "https://3033cc46.mkgrid-helioforge.pages.dev",
+      "environment": "production",
+      "created_on": "2026-10-26T10:07:59.145509Z",
+      "status": "success",
+      "commit": "c1c67652e0b27c807ddfbcaaa9f987d37ca0f992"
+    }
+  ]
+}

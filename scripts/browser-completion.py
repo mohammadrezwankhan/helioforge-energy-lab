@@ -122,6 +122,7 @@ with sync_playwright() as pw:
     page.locator('#run-hybrid').click();expect(page.locator('#toast')).to_contain_text('Hybrid energy screen complete',timeout=30000)
     page.locator('[data-hybrid-action="pin"]').click()
     other=page.evaluate('HF.HYBRID_CATALOG.systems.find(s=>s.mode==="screening"&&s.id!==HF.HYBRID_CATALOG.systems[0].id).id')
+    page.locator('#architecture-library').scroll_into_view_if_needed()
     page.locator(f'[data-system="{other}"]').first.click()
     page.locator('#run-hybrid').click();expect(page.locator('#toast')).to_contain_text('Hybrid energy screen complete',timeout=30000)
     page.locator('[data-hybrid-action="pin"]').click();nav('compare')

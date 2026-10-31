@@ -44,17 +44,17 @@ def main() -> None:
               "namespace HF {\n export const HYBRID_CATALOG:HybridCatalogue = " + text(c)
               + ";\n export const HYBRID_BUNDLE:HybridBundle = " + text(bundle)
               + ";\n export const HYBRID_EXAMPLE:HybridResult = HYBRID_BUNDLE.cases[0]!.result;\n}\n")
-    (ROOT / "apps/web/src/hybrid-data.ts").write_text(source, encoding="utf-8")
-    (ROOT / "examples/hybrid-default.json").write_text(json.dumps(c["systems"][0]["preset"], indent=2) + "\n")
-    (ROOT / "examples/hybrid-catalog.json").write_text(json.dumps(c, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    (ROOT / "examples/hybrid-bundle.json").write_text(text(bundle) + "\n", encoding="utf-8")
+    (ROOT / "apps/web/src/hybrid-data.ts").write_text(source, encoding="utf-8", newline="\n")
+    (ROOT / "examples/hybrid-default.json").write_text(json.dumps(c["systems"][0]["preset"], indent=2) + "\n", newline="\n")
+    (ROOT / "examples/hybrid-catalog.json").write_text(json.dumps(c, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
+    (ROOT / "examples/hybrid-bundle.json").write_text(text(bundle) + "\n", encoding="utf-8", newline="\n")
     matrix = []
     for system in c["systems"]:
         for scenario in c["scenarios"]:
             mode = ("inapplicable" if not applicability(system, scenario) else
                     "runnable" if system["mode"] == scenario["mode"] == "screening" else "study")
             matrix.append({"system_id": system["id"], "scenario_id": scenario["id"], "capability": mode})
-    (ROOT / "examples/hybrid-matrix.json").write_text(json.dumps({"catalogue_version": c["version"], "matrix": matrix}, indent=2) + "\n")
+    (ROOT / "examples/hybrid-matrix.json").write_text(json.dumps({"catalogue_version": c["version"], "matrix": matrix}, indent=2) + "\n", newline="\n")
     print(json.dumps({"architectures": len(c["systems"]), "scenarios": len(c["scenarios"]),
                       "lessons": len(c["lessons"]), "bundled_cases": len(bundle["cases"]),
                       "dataset_sha256": bundle["dataset_sha256"]}))

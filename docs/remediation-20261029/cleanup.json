@@ -1,0 +1,14 @@
+{
+  "temporary_directory": "C:\\Users\\MRK\\AppData\\Local\\Temp\\helioforge-acceptance-20261029",
+  "removed": [
+    "api-final.sqlite3",
+    "cert.pem",
+    "key.pem"
+  ],
+  "failed": [],
+  "owned_test_servers_stopped": true,
+  "production_changed": false,
+  "directory_removed": true,
+  "empty_shell_artifact_removed": false,
+  "empty_shell_artifact_error": "EPERM"
+}

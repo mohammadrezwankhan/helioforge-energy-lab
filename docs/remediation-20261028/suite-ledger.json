@@ -1,0 +1,328 @@
+{
+  "schema": "helioforge.suites.v1",
+  "created_at": "2026-10-28T22:14:44.446229+00:00",
+  "suites": [
+    {
+      "suite": "Python final",
+      "executed": 659,
+      "PASS": 659,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT_RUN": 0,
+      "NOT_APPLICABLE": 0,
+      "evidence": "final2-python.xml",
+      "scope": "Current backend source; one upstream Starlette/httpx deprecation warning. Python 3.12.14 Windows.",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "suite": "Frontend final",
+      "executed": 212,
+      "PASS": 212,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT_RUN": 0,
+      "NOT_APPLICABLE": 0,
+      "evidence": "logs/final3-frontend.log",
+      "scope": "Node 24.22.1; includes source-compiled state and import regressions.",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "suite": "Catalogue gates/invariants",
+      "executed": 864,
+      "PASS": 864,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT_RUN": 0,
+      "NOT_APPLICABLE": 0,
+      "evidence": "inventory-results.json",
+      "scope": "Local Python execution. Catalogue gates/invariants and study default finite/digest checks only; no browser/hand-benchmark/provider acceptance implied.",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "suite": "Study defaults/digests",
+      "executed": 59,
+      "PASS": 59,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT_RUN": 0,
+      "NOT_APPLICABLE": 0,
+      "evidence": "inventory-results.json",
+      "scope": "Local Python execution. Catalogue gates/invariants and study default finite/digest checks only; no browser/hand-benchmark/provider acceptance implied.",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "suite": "Responsive/axe/keyboard",
+      "executed": 654,
+      "PASS": 654,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT_RUN": 0,
+      "NOT_APPLICABLE": 0,
+      "evidence": "final-responsive.json",
+      "scope": "Desktop automation on exact-byte HTTPS loopback runtime; not native AT or physical device evidence.",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "suite": "Terminal journeys",
+      "executed": 251,
+      "PASS": 251,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT_RUN": 0,
+      "NOT_APPLICABLE": 0,
+      "evidence": "final-terminal.json",
+      "scope": "Desktop automation on exact-byte HTTPS loopback runtime; not native AT or physical device evidence.",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "suite": "Presentation contexts",
+      "executed": 157,
+      "PASS": 156,
+      "FAIL": 1,
+      "BLOCKED": 0,
+      "NOT_RUN": 0,
+      "NOT_APPLICABLE": 0,
+      "evidence": "presentation-results.json",
+      "scope": "Deep link; input-mode navigation away/back; reload or cached offline navigation; draft-cache preservation; root/body overflow; no uncaught errors. Not full task behavior.",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "suite": "Presentation targeted retest",
+      "executed": 1,
+      "PASS": 1,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT_RUN": 0,
+      "NOT_APPLICABLE": 0,
+      "evidence": "presentation-retest-results.json",
+      "scope": "PAIR-141 initially failed before app load with loopback TLS protocol error; original 156 PASS / 1 FAIL retained. Retest is a separate executed attempt.",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "suite": "Capture/onboarding/breakpoint",
+      "executed": 63,
+      "PASS": 63,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT_RUN": 0,
+      "NOT_APPLICABLE": 0,
+      "evidence": "capture-results.json",
+      "scope": "Genuine local captures and bounded checks",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "suite": "Deployed crawler contract",
+      "executed": 18,
+      "PASS": 18,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT_RUN": 0,
+      "NOT_APPLICABLE": 0,
+      "evidence": "deployed-contract-results.json",
+      "scope": "Saved fresh permitted-browser responses; one edge/session, not global cache propagation.",
+      "artifact_identity": {
+        "runtime_sha256": "a12384067a75ab7a3449c9b49936e923058bd7e92585f5a08f9c00ae735b203e",
+        "environment": "VERIFIED_DEPLOYED"
+      }
+    },
+    {
+      "suite": "API study/browser journeys",
+      "executed": 24,
+      "PASS": 24,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT_RUN": 0,
+      "NOT_APPLICABLE": 0,
+      "evidence": "api-roadmap-final/report.json",
+      "scope": "Current local API source and web distribution; isolated fixture database. HTTP transport may include host AdGuard injection; not exact static-response proof.",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "suite": "API integration journeys",
+      "executed": 10,
+      "PASS": 10,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT_RUN": 0,
+      "NOT_APPLICABLE": 0,
+      "evidence": "api-completion-final/report.json",
+      "scope": "Current local API source and web distribution; isolated fixture database. HTTP transport may include host AdGuard injection; not exact static-response proof.",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "suite": "Performance lab loads",
+      "executed": 12,
+      "PASS": 12,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT_RUN": 0,
+      "NOT_APPLICABLE": 0,
+      "evidence": "performance-results.json",
+      "scope": "Measurement execution success is not a performance-target pass. Desktop and phone-viewport emulation; field INP/p75 absent.",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "suite": "Performance interaction measurements",
+      "executed": 96,
+      "PASS": 96,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT_RUN": 0,
+      "NOT_APPLICABLE": 0,
+      "evidence": "performance-results.json",
+      "scope": "Automation-to-two-frame wall latency including scrolling/waits; not INP.",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "suite": "Council role/evidence specifications",
+      "executed": 0,
+      "PASS": 0,
+      "FAIL": 0,
+      "BLOCKED": 63,
+      "NOT_RUN": 126,
+      "NOT_APPLICABLE": 0,
+      "evidence": "council-results.json",
+      "scope": "No specification case promoted from mocks or plans.",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "suite": "Independent per-study hand checks",
+      "executed": 0,
+      "PASS": 0,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT_RUN": 59,
+      "NOT_APPLICABLE": 0,
+      "evidence": "study-acceptance-results.json",
+      "scope": "Default execution is not independent scientific validation.",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "suite": "Persona usability sessions",
+      "executed": 0,
+      "PASS": 0,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT_RUN": 8,
+      "NOT_APPLICABLE": 0,
+      "evidence": "MANUAL_ACCEPTANCE.md",
+      "scope": "No human participant sessions.",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    },
+    {
+      "suite": "Build/domain/security contract tests",
+      "executed": 7,
+      "PASS": 7,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT_RUN": 0,
+      "NOT_APPLICABLE": 0,
+      "evidence": "logs/domain-contract-tests.log",
+      "scope": "Capability contract and existing security/hero tests; build checks separately verify 9 pages, 12 workspaces, 59 studies and 65 files.",
+      "artifact_identity": {
+        "source_base_commit": "74d6730e38323b69c180d7f4b4945d11010203f3",
+        "source_dirty": true,
+        "runtime_sha256": "9f54ad506e6dcfa6ae2534c39531bcf7847549398f9e72a4db5f9a797f718d52",
+        "environment": "VERIFIED_LOCAL",
+        "production_changed": false
+      }
+    }
+  ],
+  "non_additive_note": "Counts have different units and overlapping checks; never add them into a coverage percentage."
+}
