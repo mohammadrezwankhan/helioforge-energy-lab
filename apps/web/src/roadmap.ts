@@ -29,7 +29,7 @@ namespace HF {
   }
   function studySchematic(def:StudyDefinition):string {
     const peers=STUDY_BUNDLE.catalogue.filter(s=>s.page===def.page),icons:Record<string,string>={overview:'globe',hybrid:'bolt',lessons:'document',compare:'activity',storage:'battery',pv:'sun',research:'atom',markets:'globe',forecast:'chart',investment:'briefcase',pilots:'layers',council:'sparkles'};
-    return `<div class="study-schematic schematic-${esc(def.page)}" aria-label="${esc(def.page)} study navigation"><div class="study-orbit" aria-hidden="true"><i></i><i></i><i></i><span>${icon(icons[def.page]??'atom',40)}</span></div><div class="study-nodes">${peers.map((s,i)=>`<button type="button" data-study-select="${esc(s.id)}" aria-pressed="${s.id===def.id}"><span>0${i+1}</span><strong>${esc(s.title)}</strong></button>`).join('')}</div></div>`;
+    return `<nav class="study-schematic schematic-${esc(def.page)}" aria-label="${esc(def.page)} study navigation"><div class="study-orbit" aria-hidden="true"><i></i><i></i><i></i><span>${icon(icons[def.page]??'atom',40)}</span></div><div class="study-nodes">${peers.map((s,i)=>`<button type="button" data-study-select="${esc(s.id)}" aria-pressed="${s.id===def.id}"><span>0${i+1}</span><strong>${esc(s.title)}</strong></button>`).join('')}</div></nav>`;
   }
   export function studyResultView(def:StudyDefinition,r:StudyResult,slice=0,seriesIndex=0):string {
     const series=r.series??[],si=clamp(seriesIndex,0,Math.max(0,series.length-1)),selected=series[si];
