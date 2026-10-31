@@ -122,6 +122,8 @@ def check_site(site: Path) -> tuple[list[dict[str, Any]], dict[str, Any], dict[s
         if not target.exists():
             missing_runtime_scripts.append({"src": src, "expected_path": str(target)})
     source_studies = load_csv(STUDY_LEDGER)
+    frozen_source = (ROOT / "apps/web/src/roadmap-data.ts").read_text(encoding="utf-8")
+    frozen_studies = read_json_bytes(frozen_source.split("STUDY_BUNDLE: StudyBundle = ", 1)[1].rsplit("; }", 1)[0].encode("utf-8"))
     studies_by_page: dict[str, set[str]] = {}
     for row in source_studies:
         studies_by_page.setdefault(row["workspace"], set()).add(row["study_id"])
@@ -170,8 +172,12 @@ def check_site(site: Path) -> tuple[list[dict[str, Any]], dict[str, Any], dict[s
                 else:
                     expected_result_ids = studies_by_page.get(key, set())
                     results = value.get("results") if isinstance(value, dict) else None
-                    valid = valid and isinstance(value, dict) and set(value) == {"results"}
+                    catalogue = value.get("catalogue") if isinstance(value, dict) else None
+                    expected_catalogue = [study for study in frozen_studies["catalogue"] if study["page"] == key]
+                    expected_results = {study_id: frozen_studies["results"][study_id] for study_id in expected_result_ids}
+                    valid = valid and isinstance(value, dict) and set(value) == {"catalogue", "results"}
                     valid = valid and isinstance(results, dict) and set(results) == expected_result_ids
+                    valid = valid and catalogue == expected_catalogue and results == expected_results
                     result_shape_errors = []
                     for study_id, result in (results or {}).items() if isinstance(results, dict) else []:
                         if not isinstance(result, dict) or not REQUIRED_STUDY_KEYS.issubset(result) or result.get("study") != study_id:
@@ -183,6 +189,8 @@ def check_site(site: Path) -> tuple[list[dict[str, Any]], dict[str, Any], dict[s
                     valid = valid and not result_shape_errors
                     row["expected_result_ids"] = len(expected_result_ids)
                     row["actual_result_ids"] = len(results) if isinstance(results, dict) else None
+                    row["catalogue_exactly_matches_frozen_source"] = catalogue == expected_catalogue
+                    row["results_exactly_match_frozen_source"] = results == expected_results
                     row["result_shape_errors"] = result_shape_errors
                 if not valid:
                     row["error"] = "integrity or expected JSON structure mismatch"
@@ -363,6 +371,17 @@ def run_browser(url: str, offline_file: Path, public_rows: list[dict[str, str]],
                                bootstrap.get("initialInputs", {}).get("system_id") == "remote-triad" and
                                bootstrap.get("initialResult") == bootstrap.get("bootstrapResult"))
             checks.append(outcome("bootstrap_remote_triad_matches_initial_inputs_and_result", "remote-triad input and exact bundled result", bootstrap, bootstrap_match))
+
+            initial_cards = page.locator('#hybrid-library-results [data-system]').count()
+            atlas_controls = all(page.locator(selector).is_enabled() for selector in
+                                 ('#hybrid-search', '#hybrid-family', '#hybrid-topology', '#hybrid-system'))
+            page.locator('#architecture-library').scroll_into_view_if_needed()
+            page.locator('#hybrid-library-results [data-system]').first.wait_for(state="attached")
+            loaded_cards = page.locator('#hybrid-library-results [data-system]').count()
+            checks.append(outcome("deferred_architecture_atlas_loads_on_approach",
+                                  {"initial_cards": 0, "loaded_cards": 36, "controls_enabled": True},
+                                  {"initial_cards": initial_cards, "loaded_cards": loaded_cards, "controls_enabled": atlas_controls},
+                                  initial_cards == 0 and loaded_cards == 36 and atlas_controls))
 
             # Retry a deliberately failed non-bootstrap hybrid case. Interception is local to this exact data URL.
             keys = page.evaluate("() => Object.keys(window.__HF_DATA_INDEX__.hybrid)")

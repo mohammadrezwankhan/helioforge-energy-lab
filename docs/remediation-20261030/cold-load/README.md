@@ -1,5 +1,10 @@
 # Cold-load repair and remaining acceptance
 
+Subsequent public validation found two LCP misses. The additional payload repair,
+complete retained public run and new local measurements are recorded in
+[cold-load headroom](../cold-load-headroom/README.md). The results below retain
+their original artifact identity and laboratory scope.
+
 The constrained-phone laboratory miss was reproduced on the published runtime
 `07f2411611c2efd1ea9a3e7290391d3b80728d76a5b25a1820ef1630c371d8d6`.
 The corrected runtime is

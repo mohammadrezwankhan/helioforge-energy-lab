@@ -43,5 +43,7 @@ namespace HF {
     lessonId:string;progress:string[];quizResult:{passed:boolean;correct:number;total:number}|null;
     objectId:string;hour:number;compare:ComparedRun[];busy:boolean;
     inputError:string|null; draft:Record<string,string>|null;
+    /** Session-only: the full architecture card grid has been requested or observed. */
+    libraryReady?:boolean;
   }
 }

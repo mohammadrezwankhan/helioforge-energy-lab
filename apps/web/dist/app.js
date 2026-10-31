@@ -261,7 +261,7 @@ var HF;
         const mode = p.charge_kw > 0.01 ? 'Charge' : p.discharge_kw > 0.01 ? 'Discharge' : 'Idle';
         const node = (name, ico, value, detail, center = false) => `<div class="flow-node-card ${center ? 'storage-center-node' : ''}"><div class="flow-icon-wrap">${center ? `<div class="soc-vessel" aria-hidden="true"><i style="height:${HF.clamp(p.soc_pct, 0, 100)}%"></i></div>` : HF.icon(ico, 28)}</div><div class="flow-node-meta"><span>${HF.escapeHTML(name)}</span><strong>${HF.escapeHTML(value)}</strong><small>${HF.escapeHTML(detail)}</small></div></div>`;
         const beam = `<div class="flow-conduit" aria-hidden="true"><span class="flux-beam ${mode === 'Discharge' ? 'reverse' : ''}" ${mode === 'Idle' ? 'style="animation:none;opacity:.25"' : ''}></span></div>`;
-        return `<div class="flow-diagram-25d" aria-label="Selected dispatch interval; schematic connections"><div class="flow-stage-25d">${node('Solar PV', 'sun', HF.fmt(p.pv_kw, 1) + ' kW', 'Available generation')}${beam}${node('Battery · ' + mode, 'battery', HF.fmt(d.power_kw / 1000, 3) + ' MW / ' + HF.fmt(d.capacity_kwh / 1000, 3) + ' MWh', HF.fmt(mode === 'Charge' ? p.charge_kw : p.discharge_kw, 1) + ' kW · ' + HF.fmt(p.soc_pct, 1) + '% end SOC', true)}${beam}${node('Site demand', 'layers', HF.fmt(p.load_kw, 1) + ' kW', 'Load in this interval')}</div><div class="flow-legend-ribbon"><span class="flow-pill">Grid import ${HF.fmt(p.grid_import_kw, 1)} kW</span><span class="flow-pill">Grid export ${HF.fmt(p.grid_export_kw, 1)} kW</span><span class="flow-pill">Curtailed PV ${HF.fmt(p.curtailed_kw, 1)} kW</span><span class="flow-pill">SOC ${HF.fmt(p.soc_start_kwh, 1)} → ${HF.fmt(p.soc_end_kwh, 1)} kWh</span><span class="flow-pill">Import tariff €${HF.fmt(p.import_eur_mwh, 1)}/MWh</span></div></div>`;
+        return `<div class="flow-diagram-25d" role="group" aria-label="Selected dispatch interval; schematic connections"><div class="flow-stage-25d">${node('Solar PV', 'sun', HF.fmt(p.pv_kw, 1) + ' kW', 'Available generation')}${beam}${node('Battery · ' + mode, 'battery', HF.fmt(d.power_kw / 1000, 3) + ' MW / ' + HF.fmt(d.capacity_kwh / 1000, 3) + ' MWh', HF.fmt(mode === 'Charge' ? p.charge_kw : p.discharge_kw, 1) + ' kW · ' + HF.fmt(p.soc_pct, 1) + '% end SOC', true)}${beam}${node('Site demand', 'layers', HF.fmt(p.load_kw, 1) + ' kW', 'Load in this interval')}</div><div class="flow-legend-ribbon"><span class="flow-pill">Grid import ${HF.fmt(p.grid_import_kw, 1)} kW</span><span class="flow-pill">Grid export ${HF.fmt(p.grid_export_kw, 1)} kW</span><span class="flow-pill">Curtailed PV ${HF.fmt(p.curtailed_kw, 1)} kW</span><span class="flow-pill">SOC ${HF.fmt(p.soc_start_kwh, 1)} → ${HF.fmt(p.soc_end_kwh, 1)} kWh</span><span class="flow-pill">Import tariff €${HF.fmt(p.import_eur_mwh, 1)}/MWh</span></div></div>`;
     }
     HF.energyFlow = energyFlow;
     function storageTimeline(d, index = 0) {
@@ -996,7 +996,7 @@ var HF;
     function numberField(p, key, label, unit, min = 0, max = 1e6, step = 'any') { return `<label class="field"><span>${hx(label)}</span><div class="input-unit"><input type="number" name="${key}" value="${hx(p[key])}" min="${min}" max="${max}" step="${step}" required><span>${unit}</span></div></label>`; }
     function hybridLibrary(h) {
         const rows = HF.filterSystems(h.search, h.family, h.topology);
-        return `<div class="library-summary" role="status"><span>${rows.length} matching architectures</span><span>19 runnable screens · 17 study-only</span></div><div class="system-grid">${rows.length ? rows.map(s => `<article class="system-card ${h.inputs.system_id === s.id ? 'chosen' : ''}" style="--card-color:${HF.techById(s.technologies[0]).color}"><div class="system-card-top"><span class="system-symbol">${HF.icon(familyIcons[s.family] ?? 'layers', 20)}</span><small>${hx(s.family)}</small><span class="mode-dot ${s.mode}" title="${s.mode === 'screening' ? 'Runnable hourly screen' : 'Study-only architecture'}"></span></div><button type="button" class="system-card-select" data-system="${s.id}" aria-pressed="${h.inputs.system_id === s.id}">${hx(s.name)}</button><p>${hx(s.description)}</p><div class="system-card-meta">${chip(s.topology)}${chip(s.coupling)}${chip(s.mode === 'screening' ? 'Runnable' : 'Study only')}</div></article>`).join('') : '<div class="empty">No architectures match. Try “PV”, “BESS”, “H2” or clear the filters.</div>'}</div>`;
+        return `<div class="library-summary" role="status"><span>${rows.length} matching architectures</span><span>19 runnable screens · 17 study-only</span></div><div class="system-grid">${rows.length ? rows.map(s => `<article class="system-card ${h.inputs.system_id === s.id ? 'chosen' : ''}" style="--card-color:${HF.techById(s.technologies[0]).color}"><div class="system-card-top"><span class="system-symbol">${HF.icon(familyIcons[s.family] ?? 'layers', 20)}</span><small>${hx(s.family)}</small><span class="mode-dot ${s.mode}" title="${s.mode === 'screening' ? 'Runnable hourly screen' : 'Study-only architecture'}"></span></div><button type="button" class="system-card-select" ${h.busy ? 'disabled' : ''} data-system="${s.id}" aria-pressed="${h.inputs.system_id === s.id}">${hx(s.name)}</button><p>${hx(s.description)}</p><div class="system-card-meta">${chip(s.topology)}${chip(s.coupling)}${chip(s.mode === 'screening' ? 'Runnable' : 'Study only')}</div></article>`).join('') : '<div class="empty">No architectures match. Try “PV”, “BESS”, “H2” or clear the filters.</div>'}</div>`;
     }
     HF.hybridLibrary = hybridLibrary;
     function assetInspector(h) {
@@ -1036,7 +1036,7 @@ var HF;
         const scenarios = HF.HYBRID_CATALOG.scenarios.filter(x => HF.applicable(s, x));
         const advanced = numberField(p, 'initial_soc', 'Initial SOC', 'fraction', 0, 1) + numberField(p, 'min_soc', 'Minimum SOC', 'fraction', 0, 1) + numberField(p, 'max_soc', 'Maximum SOC', 'fraction', 0, 1) + numberField(p, 'round_trip_efficiency', 'Round-trip efficiency', 'fraction', .01, 1) + numberField(p, 'import_eur_kwh', 'Import tariff', '€/kWh', -2, 5) + numberField(p, 'export_eur_kwh', 'Export tariff', '€/kWh', -2, 5) + numberField(p, 'generator_eur_kwh', 'Generator variable cost', '€/kWh', 0, 5);
         return `<section class="forge-heading"><div><span class="eyebrow">HYBRID SYSTEMS / INTERACTIVE ENERGY LAB</span><h2>Many technologies.<br><em>One connected perspective.</em></h2><p>Build intuition. Stress the assumptions. Make every energy path visible.</p></div><div class="forge-counts"><div><strong>36</strong><span>architectures</span></div><div><strong>24</strong><span>scenarios</span></div><div><strong>36</strong><span>guided lessons</span></div></div></section>
-    <div class="hybrid-workbench"><section class="panel scene-panel"><div class="scene-heading"><div><span class="eyebrow">CONFIGURATION ${String(HF.HYBRID_CATALOG.systems.indexOf(s) + 1).padStart(2, '0')}</span><h3>${hx(s.name)}</h3></div><span class="scene-live">${HF.icon('layers', 13)} SOFTWARE 3D</span></div><div class="scene-tags" id="smart-tags">${HF.hybridTags(p).map(t => chip(t.label, t.reason)).join('')}</div><canvas id="energy-scene" tabindex="0" role="img" aria-label="Interactive conceptual 3D ${hx(s.name)}. Drag to orbit; arrow keys change camera, plus/minus zoom, Home resets. Use camera presets or asset buttons below for alternatives.">Conceptual energy architecture. Use the accessible asset selector below.</canvas><div class="scene-controls"><span>Drag to orbit · select an asset</span><div class="scene-preset-controls" role="group" aria-label="Camera presets">${[['isometric', 'Isometric', 'Isometric'], ['top-down', 'Top-down', 'Top-down'], ['oblique', 'Oblique', 'Oblique'], ['wireframe', 'Wireframe', 'Wireframe']].map(([cmd, label, txt]) => `<button data-scene-command="${cmd}" data-camera-preset="${cmd}" aria-label="${label} camera preset" aria-pressed="${cmd === 'isometric'}" title="${label}">${txt}</button>`).join('')}</div><div class="scene-camera-controls" role="group" aria-label="Manual camera controls">${[['ArrowLeft', 'Rotate left', '↶'], ['ArrowRight', 'Rotate right', '↷'], ['+', 'Zoom in', '+'], ['-', 'Zoom out', '−'], ['Home', 'Reset camera', '⌂']].map(([cmd, label, txt]) => `<button data-scene-command="${cmd}" aria-label="${label}">${txt}</button>`).join('')}</div></div><div class="asset-selectors" aria-label="Select an energy asset">${[...s.technologies, 'load', ...(s.topology === 'Off-grid' ? [] : ['grid'])].map(id => `<button data-asset="${id}" class="${h.objectId === id ? 'selected' : ''}" style="--asset-color:${HF.techById(id).color}" aria-pressed="${h.objectId === id}">${HF.icon(HF.techById(id).icon, 15)}${hx(HF.techById(id).name)}</button>`).join('')}</div><div id="asset-inspector">${assetInspector(h)}</div><p class="scene-disclaimer">Conceptual layout and connections. Objects are not to scale; animated links are not calculated branch flows.</p></section>
+    <div class="hybrid-workbench"><section class="panel scene-panel"><div class="scene-heading"><div><span class="eyebrow">CONFIGURATION ${String(HF.HYBRID_CATALOG.systems.indexOf(s) + 1).padStart(2, '0')}</span><h3>${hx(s.name)}</h3></div><span class="scene-live">${HF.icon('layers', 13)} SOFTWARE 3D</span></div><div class="scene-tags" id="smart-tags">${HF.hybridTags(p).map(t => chip(t.label, t.reason)).join('')}</div><canvas id="energy-scene" tabindex="0" role="img" aria-label="Interactive conceptual 3D ${hx(s.name)}. Drag to orbit; arrow keys change camera, plus/minus zoom, Home resets. Use camera presets or asset buttons below for alternatives.">Conceptual energy architecture. Use the accessible asset selector below.</canvas><div class="scene-controls"><span>Drag to orbit · select an asset</span><div class="scene-preset-controls" role="group" aria-label="Camera presets">${[['isometric', 'Isometric', 'Isometric'], ['top-down', 'Top-down', 'Top-down'], ['oblique', 'Oblique', 'Oblique'], ['wireframe', 'Wireframe', 'Wireframe']].map(([cmd, label, txt]) => `<button data-scene-command="${cmd}" data-camera-preset="${cmd}" aria-label="${label} camera preset" aria-pressed="${cmd === 'isometric'}" title="${label}">${txt}</button>`).join('')}</div><div class="scene-camera-controls" role="group" aria-label="Manual camera controls">${[['ArrowLeft', 'Rotate left', '↶'], ['ArrowRight', 'Rotate right', '↷'], ['+', 'Zoom in', '+'], ['-', 'Zoom out', '−'], ['Home', 'Reset camera', '⌂']].map(([cmd, label, txt]) => `<button data-scene-command="${cmd}" aria-label="${label}">${txt}</button>`).join('')}</div></div><div class="asset-selectors" role="group" aria-label="Select an energy asset">${[...s.technologies, 'load', ...(s.topology === 'Off-grid' ? [] : ['grid'])].map(id => `<button data-asset="${id}" class="${h.objectId === id ? 'selected' : ''}" style="--asset-color:${HF.techById(id).color}" aria-pressed="${h.objectId === id}">${HF.icon(HF.techById(id).icon, 15)}${hx(HF.techById(id).name)}</button>`).join('')}</div><div id="asset-inspector">${assetInspector(h)}</div><p class="scene-disclaimer">Conceptual layout and connections. Objects are not to scale; animated links are not calculated branch flows.</p></section>
     <form class="panel configuration-panel" id="hybrid-config"><div class="section-heading"><div><h2>Make it your scenario</h2><p>Explicit assumptions. Reproducible inputs.</p></div>${HF.icon('sliders', 20)}</div>
     <label class="field"><span>Architecture preset</span><select id="hybrid-system">${HF.HYBRID_CATALOG.systems.map(x => `<option value="${x.id}" ${s.id === x.id ? 'selected' : ''}>${hx(x.name)}${x.mode === 'study' ? ' · study' : ''}</option>`).join('')}</select></label>
     <div class="form-grid">${s.technologies.includes('solar') ? numberField(p, 'solar_kw', 'Solar PV', 'kW') : ''}${s.technologies.includes('wind') ? numberField(p, 'wind_kw', 'Wind rating', 'kW') : ''}${s.technologies.includes('hydro') ? numberField(p, 'hydro_kw', 'Hydro rating', 'kW') : ''}${s.technologies.includes('generator') ? numberField(p, 'generator_kw', 'Backup generator', 'kW') : ''}${s.technologies.includes('battery') ? numberField(p, 'battery_kwh', 'Battery energy', 'kWh', 0, 1e7) + numberField(p, 'battery_kw', 'Battery power', 'kW') : ''}${numberField(p, 'load_kw', 'Base site demand', 'kW', .01)}${numberField(p, 'hours', 'Model horizon', 'hours', 2, 168, '1')}</div>
@@ -1044,7 +1044,7 @@ var HF;
     <div class="configuration-actions"><button type="submit" id="run-hybrid" class="btn primary full" ${!state.connected || h.busy || s.mode === 'study' || c.mode === 'study' ? 'disabled' : ''}>${HF.icon(h.busy ? 'clock' : 'play', 17)}${h.busy ? 'Running energy screen…' : s.mode === 'study' || c.mode === 'study' ? 'Study-only configuration' : 'Run energy screen'}</button><p>${state.connected ? 'Hourly, synthetic, non-optimized. Not operational control.' : 'Preview mode · start the Python API for new calculations.'}</p><div><button type="button" class="text-link" data-hybrid-action="export">${HF.icon('download', 14)} Export setup</button><button type="button" class="text-link" data-hybrid-action="import">${HF.icon('document', 14)} Import</button><button type="button" class="text-link" data-hybrid-action="reset">Reset</button></div></div></form></div>
     <section class="panel scenario-panel">${hTitle('Change the conditions. See the consequence.', `${scenarios.length} applicable presets · numerical and study-only scopes remain distinct.`, `<button class="text-link" data-lesson="lesson-${s.id}">Guided lesson ${HF.icon('arrow', 14)}</button>`)}<div class="scenario-chips">${scenarios.map(x => `<button data-scenario="${x.id}" class="scenario-chip ${x.id === c.id ? 'active' : ''}" aria-pressed="${x.id === c.id}" title="${hx(x.description)}">${HF.icon(x.mode === 'study' ? 'flask' : x.category === 'Weather' ? 'sun' : x.category === 'Resilience' ? 'shield' : 'activity', 14)}${hx(x.name)}${x.mode === 'study' ? '<small>STUDY</small>' : ''}</button>`).join('')}</div><div class="scenario-explainer"><strong>${hx(c.name)}</strong><span>${hx(c.description)}</span></div></section>
     <div id="hybrid-output">${hybridResults(state)}</div>
-    <section class="panel library-panel" id="architecture-library">${hTitle('The hybrid architecture atlas', 'Search technologies, interconnection, use case or control. No claim of exhaustive coverage.')}<div class="library-tools"><label class="search-field">${HF.icon('search', 17)}<input id="hybrid-search" type="search" value="${hx(h.search)}" placeholder="Try solar, off-grid, BESS or H2…" aria-label="Search hybrid architectures"></label><label class="select-wrap"><span class="sr-only">Architecture family</span><select id="hybrid-family">${['All', ...new Set(HF.HYBRID_CATALOG.systems.map(x => x.family))].map(x => `<option ${h.family === x ? 'selected' : ''}>${x}</option>`).join('')}</select></label><label class="select-wrap"><span class="sr-only">Interconnection topology</span><select id="hybrid-topology">${['All', ...new Set(HF.HYBRID_CATALOG.systems.map(x => x.topology))].map(x => `<option ${h.topology === x ? 'selected' : ''}>${x}</option>`).join('')}</select></label><button class="btn secondary small" data-hybrid-action="clear-filters">Clear</button></div><div id="hybrid-library-results">${hybridLibrary(h)}</div></section>`;
+    <section class="panel library-panel" id="architecture-library">${hTitle('The hybrid architecture atlas', 'Search technologies, interconnection, use case or control. No claim of exhaustive coverage.')}<div class="library-tools"><label class="search-field">${HF.icon('search', 17)}<input id="hybrid-search" type="search" value="${hx(h.search)}" placeholder="Try solar, off-grid, BESS or H2…" aria-label="Search hybrid architectures"></label><label class="select-wrap"><span class="sr-only">Architecture family</span><select id="hybrid-family">${['All', ...new Set(HF.HYBRID_CATALOG.systems.map(x => x.family))].map(x => `<option ${h.family === x ? 'selected' : ''}>${x}</option>`).join('')}</select></label><label class="select-wrap"><span class="sr-only">Interconnection topology</span><select id="hybrid-topology">${['All', ...new Set(HF.HYBRID_CATALOG.systems.map(x => x.topology))].map(x => `<option ${h.topology === x ? 'selected' : ''}>${x}</option>`).join('')}</select></label><button class="btn secondary small" data-hybrid-action="clear-filters">Clear</button></div><div id="hybrid-library-results">${h.libraryReady ? hybridLibrary(h) : '<p class="library-deferred" data-library-deferred role="status">Explore architectures using the search and filters above.</p>'}</div></section>`;
     }
     HF.hybridView = hybridView;
     function lessonsView(state) {
@@ -1071,6 +1071,46 @@ var HF;
 (function (HF) {
     function installHybridController(state, cb) {
         const h = state.hybrid;
+        let libraryObserver = null, observedLibrary = null, observerDestroyed = false;
+        function disconnectLibraryObserver() { libraryObserver?.disconnect(); libraryObserver = null; observedLibrary = null; }
+        function renderLibrary() {
+            const el = document.getElementById('hybrid-library-results');
+            if (!el)
+                return;
+            h.libraryReady = true;
+            el.innerHTML = HF.hybridLibrary(h);
+            disconnectLibraryObserver();
+        }
+        function refreshLibraryObserver() {
+            if (observerDestroyed)
+                return;
+            if (h.libraryReady) {
+                disconnectLibraryObserver();
+                return;
+            }
+            const section = document.getElementById('architecture-library');
+            if (!section) {
+                disconnectLibraryObserver();
+                return;
+            }
+            if (section === observedLibrary && libraryObserver)
+                return;
+            disconnectLibraryObserver();
+            observedLibrary = section;
+            if (typeof IntersectionObserver === 'undefined') {
+                renderLibrary();
+                return;
+            }
+            const target = section;
+            const observer = new IntersectionObserver(entries => {
+                if (observerDestroyed || observedLibrary !== target || libraryObserver !== observer)
+                    return;
+                if (entries.some(entry => entry.target === target && entry.isIntersecting))
+                    renderLibrary();
+            }, { rootMargin: '400px 0px' });
+            libraryObserver = observer;
+            observer.observe(target);
+        }
         function selectSystem(id) {
             HF.advanceHybridStateRevision(h);
             const s = HF.systemById(id);
@@ -1114,6 +1154,7 @@ var HF;
                 h.family = 'All';
                 h.topology = 'All';
                 cb.render();
+                renderLibrary();
                 document.getElementById('architecture-library')?.scrollIntoView({ behavior: 'instant' });
             }
             else if (name === 'import') {
@@ -1265,8 +1306,7 @@ var HF;
                 cb.toast(e instanceof Error ? e.message : 'Invalid selection.', true);
             }
         });
-        function updateLibrary() { const el = document.getElementById('hybrid-library-results'); if (el)
-            el.innerHTML = HF.hybridLibrary(h); }
+        function updateLibrary() { renderLibrary(); }
         function syncHybridInput(el) {
             const form = el.closest('#hybrid-config');
             if (!form || h.busy)
@@ -1342,6 +1382,10 @@ var HF;
             if (el.closest('#hybrid-config') && el.name)
                 syncHybridInput(el);
         });
+        document.addEventListener('focusin', event => {
+            if (!h.libraryReady && event.target.closest('#architecture-library'))
+                updateLibrary();
+        });
         document.addEventListener('submit', event => {
             const form = event.target;
             if (form.id === 'hybrid-config') {
@@ -1412,6 +1456,7 @@ var HF;
                 }
             }
         });
+        return { refreshLibraryObserver, destroy() { observerDestroyed = true; disconnectLibraryObserver(); } };
     }
     HF.installHybridController = installHybridController;
 })(HF || (HF = {}));
@@ -2222,7 +2267,7 @@ var HF;
     ${metric('Discounted solar LCOE', `€${HF.fmt(pv.lcoe_eur_mwh, 2)}`, '/ MWh', `${HF.fmt(Number(d.defaults.pv.capacity_kwp) / 1000, 0)} MWp · independent PV scenario`, 'sun', [], gold)}
     ${metric('Life-cycle carbon intensity', HF.fmt(d.sustainability.intensity_gco2e_kwh, 1), 'gCO₂e/kWh', 'Screening inventory · not certified', 'leaf', [], blue)}
     </section>
-    <div class="overview-grid"><section class="panel plot-panel">${heading('Every interval tells a story', `${d.markets.find(m => m.code === d.market)?.name ?? d.market} · synthetic dispatch · ${HF.fmt(s.power_kw / 1000, 1)} MW / ${HF.fmt(s.capacity_kwh / 1000, 1)} MWh`, `<div class="segmented" aria-label="Chart view"><button data-chart="dispatch" class="${state.chartMode === 'dispatch' ? 'active' : ''}" aria-pressed="${state.chartMode === 'dispatch'}">Dispatch</button><button data-chart="prices" class="${state.chartMode === 'prices' ? 'active' : ''}" aria-pressed="${state.chartMode === 'prices'}">Tariff</button></div>`)}${dispatchPlot(s, state.chartMode === 'prices')}</section>
+    <div class="overview-grid"><section class="panel plot-panel">${heading('Every interval tells a story', `${d.markets.find(m => m.code === d.market)?.name ?? d.market} · synthetic dispatch · ${HF.fmt(s.power_kw / 1000, 1)} MW / ${HF.fmt(s.capacity_kwh / 1000, 1)} MWh`, `<div class="segmented" role="group" aria-label="Chart view"><button data-chart="dispatch" class="${state.chartMode === 'dispatch' ? 'active' : ''}" aria-pressed="${state.chartMode === 'dispatch'}">Dispatch</button><button data-chart="prices" class="${state.chartMode === 'prices' ? 'active' : ''}" aria-pressed="${state.chartMode === 'prices'}">Tariff</button></div>`)}${dispatchPlot(s, state.chartMode === 'prices')}</section>
     <section class="panel focus-panel">${heading('The decision signal', 'A return is not a credit decision.', HF.icon('target', 21))}<div class="decision-numbers"><div><span>PROJECT IRR</span><strong>${HF.fmt(f.irr_pct, 1)}<small>%</small></strong></div><span class="versus">≠</span><div><span>MINIMUM DSCR</span><strong class="amber">${HF.fmt(f.minimum_dscr, 2)}<small>×</small></strong></div></div><div class="risk-callout">${HF.icon('alert', 18)}<div><strong>${f.minimum_dscr === null ? 'Unlevered screening case' : f.covenant_pass ? 'Modeled covenant clears the threshold' : 'Modeled debt-service covenant breach'}</strong><p>${f.minimum_dscr === null ? 'No debt service is modeled. Validate the operating case and all investment assumptions.' : `NPV is ${f.npv_eur >= 0 ? 'positive' : 'negative'}; minimum DSCR ${f.covenant_pass ? 'meets' : 'falls below'} the ${HF.fmt(f.dscr_covenant, 2)}× covenant. Review every year, including augmentation.`}</p></div></div><div class="focus-bottom"><span>Level-payment debt capacity</span><strong>${HF.millions(f.level_payment_debt_capacity_eur)}</strong></div><button class="text-link" data-nav="investment">Challenge the investment case ${HF.icon('arrow', 16)}</button></section></div>
     <section class="panel portfolio-panel">${heading('Opportunity workspace', 'Fictional projects for exploration. Not a live company pipeline.', `<button class="btn secondary small" data-action="export-portfolio">${HF.icon('download', 15)} Export</button>`)}<div class="table-tools"><label class="search-field">${HF.icon('search', 16)}<input id="project-search" type="search" placeholder="Search projects, technology or stage…" aria-label="Search projects" value="${E(state.search)}"></label><label class="select-wrap"><span class="sr-only">Filter portfolio by market</span><select id="portfolio-market"><option value="ALL">All markets</option>${d.markets.map(m => `<option value="${m.code}" ${state.marketFilter === m.code ? 'selected' : ''}>${m.name}</option>`).join('')}</select></label></div><div id="project-table">${projectTable(state)}</div></section>
     <div class="pillar-strip">${[{ name: 'Operational efficiency', icon: 'activity', desc: 'See the signal.' }, { name: 'Predictive reliability', icon: 'shield', desc: 'Understand the risk.' }, { name: 'Sustainability', icon: 'leaf', desc: 'Measure the impact.' }, { name: 'Construction & pilots', icon: 'flask', desc: 'Test in the field.' }].map((p, i) => `<article class="pillar-row"><span class="pillar-number">0${i + 1}</span><div><strong>${p.name}</strong><p>${p.desc}</p></div><button class="btn secondary" data-nav="${i === 3 ? 'pilots' : 'research'}">Open ${i === 3 ? 'pilots' : 'research'} ${HF.icon('diagonal', 15)}</button></article>`).join('')}</div>`;
@@ -2964,6 +3009,9 @@ var HF;
 (function (HF) {
     const hostedIndex = globalThis.__HF_DATA_INDEX__;
     const pendingExamples = new Map();
+    const prototypeSensitiveStudyIds = new Set([...Object.getOwnPropertyNames(Object.prototype), 'prototype']);
+    function isRecord(value) { return typeof value === 'object' && value !== null && !Array.isArray(value); }
+    function isSafeStudyId(value) { return typeof value === 'string' && value.length > 0 && !prototypeSensitiveStudyIds.has(value); }
     /** Only the exact build-manifest bytes may become a displayed example. Failed loads can retry. */
     async function loadExampleAsset(ref) {
         if (!/^data\/[a-f0-9]{64}\.json$/.test(ref.path) || ref.path !== `data/${ref.sha256}.json` || !Number.isSafeInteger(ref.bytes) || ref.bytes < 1 || ref.bytes > 12_000_000)
@@ -3003,11 +3051,53 @@ var HF;
         if (!ref)
             throw Error('Examples are unavailable in this edition.');
         const value = await loadExampleAsset(ref);
-        const definitions = HF.STUDY_BUNDLE.catalogue.filter(s => s.page === page);
-        if (!value.results || definitions.some(d => value.results[d.id]?.study !== d.id))
+        if (!isRecord(value) || !Array.isArray(value.catalogue) || !isRecord(value.results))
             throw Error('Example workspace does not match this release.');
-        for (const def of definitions)
-            HF.STUDY_BUNDLE.results[def.id] = value.results[def.id];
+        const index = HF.STUDY_BUNDLE.catalogue;
+        const expected = [];
+        const allIds = new Set();
+        for (const candidate of index) {
+            if (!isRecord(candidate) || typeof candidate.page !== 'string' || !candidate.page || typeof candidate.title !== 'string' || !candidate.title)
+                throw Error('Example workspace index does not match this release.');
+            if (!isSafeStudyId(candidate.id))
+                throw Error('Prototype-sensitive or invalid study id in workspace index.');
+            if (allIds.has(candidate.id))
+                throw Error('Duplicate study id in the workspace index.');
+            allIds.add(candidate.id);
+            if (candidate.page === page)
+                expected.push(candidate);
+        }
+        if (expected.length === 0)
+            throw Error('Example workspace does not match this release.');
+        const expectedById = new Map(expected.map(definition => [definition.id, definition]));
+        if (value.catalogue.length !== expected.length)
+            throw Error('Example workspace definitions do not match this release.');
+        const definitionsById = new Map();
+        for (const candidate of value.catalogue) {
+            if (!isRecord(candidate) || typeof candidate.page !== 'string' || typeof candidate.title !== 'string' || typeof candidate.summary !== 'string' || !Array.isArray(candidate.fields) || !Array.isArray(candidate.equations) || !Array.isArray(candidate.limitations) || !Array.isArray(candidate.sources) || (candidate.kind !== undefined && typeof candidate.kind !== 'string') || (candidate.data_fields !== undefined && !Array.isArray(candidate.data_fields)) || Object.keys(candidate).some(key => key === '__proto__' || key === 'constructor' || key === 'prototype'))
+                throw Error('Example workspace definition is invalid.');
+            if (!isSafeStudyId(candidate.id))
+                throw Error('Prototype-sensitive or invalid study id in workspace definition.');
+            const stub = expectedById.get(candidate.id);
+            if (!stub || stub.page !== candidate.page || stub.title !== candidate.title || definitionsById.has(candidate.id))
+                throw Error('Example workspace definitions do not match this release.');
+            definitionsById.set(candidate.id, candidate);
+        }
+        const resultIds = Object.keys(value.results);
+        if (resultIds.length !== expected.length || resultIds.some(id => !expectedById.has(id)))
+            throw Error('Example workspace results do not match this release.');
+        for (const id of expectedById.keys()) {
+            const result = value.results[id];
+            if (!isRecord(result) || result.study !== id)
+                throw Error('Example workspace result does not match this release.');
+        }
+        if (!isRecord(HF.STUDY_BUNDLE.results))
+            throw Error('Example workspace results cannot be loaded in this edition.');
+        // Validate the complete payload before mutating these bootstrap objects: callers may hold references to them.
+        for (const stub of expected)
+            Object.assign(stub, definitionsById.get(stub.id));
+        for (const id of expectedById.keys())
+            HF.STUDY_BUNDLE.results[id] = value.results[id];
         document.dispatchEvent(new CustomEvent('hf:examples-loaded', { detail: { page } }));
     }
     HF.loadStudyExamples = loadStudyExamples;
@@ -3436,7 +3526,7 @@ var HF;
         return result.details && typeof result.details === 'object' ? result.details : {};
     }
     function svgImage(def, label, description, content, viewBox = '0 0 640 250') {
-        const id = visualId(def.id);
+        const id = visualId(`${def.id}-${label}`);
         return `<svg class="hf-visual-svg" viewBox="${viewBox}" role="img" aria-labelledby="${id}-visual-title ${id}-visual-desc"><title id="${id}-visual-title">${visualEscape(label)}</title><desc id="${id}-visual-desc">${visualEscape(description)}</desc>${content}</svg>`;
     }
     function noData(def, reason) {
@@ -4189,7 +4279,7 @@ var HF;
     HF.studyTable = studyTable;
     function studySchematic(def) {
         const peers = HF.STUDY_BUNDLE.catalogue.filter(s => s.page === def.page), icons = { overview: 'globe', hybrid: 'bolt', lessons: 'document', compare: 'activity', storage: 'battery', pv: 'sun', research: 'atom', markets: 'globe', forecast: 'chart', investment: 'briefcase', pilots: 'layers', council: 'sparkles' };
-        return `<div class="study-schematic schematic-${esc(def.page)}" aria-label="${esc(def.page)} study navigation"><div class="study-orbit" aria-hidden="true"><i></i><i></i><i></i><span>${HF.icon(icons[def.page] ?? 'atom', 40)}</span></div><div class="study-nodes">${peers.map((s, i) => `<button type="button" data-study-select="${esc(s.id)}" aria-pressed="${s.id === def.id}"><span>0${i + 1}</span><strong>${esc(s.title)}</strong></button>`).join('')}</div></div>`;
+        return `<nav class="study-schematic schematic-${esc(def.page)}" aria-label="${esc(def.page)} study navigation"><div class="study-orbit" aria-hidden="true"><i></i><i></i><i></i><span>${HF.icon(icons[def.page] ?? 'atom', 40)}</span></div><div class="study-nodes">${peers.map((s, i) => `<button type="button" data-study-select="${esc(s.id)}" aria-pressed="${s.id === def.id}"><span>0${i + 1}</span><strong>${esc(s.title)}</strong></button>`).join('')}</div></nav>`;
     }
     function studyResultView(def, r, slice = 0, seriesIndex = 0) {
         const series = r.series ?? [], si = HF.clamp(seriesIndex, 0, Math.max(0, series.length - 1)), selected = series[si];
@@ -4712,8 +4802,14 @@ var HF;
         const result = study(info.id);
         return workflowPanel('Synthetic pilot telemetry inspector', 'Three bundled study examples, with their supplied tables and limitations; no sensor is connected.', `<div class="workflow-inline"><label class="field"><span>Study example</span><select data-workflow-sensor>${options}</select></label><span class="tag muted">SYNTHETIC · NOT CONNECTED</span></div><div class="telemetry-hud"><strong>Illustrative register mapping</strong><p>${HF.escapeHTML(info.register)}</p><strong>Illustrative sample interval</strong><p>${HF.escapeHTML(info.sampleInterval)}</p><small>These are study metadata only. No Modbus device, live telemetry, alarm or field result is read.</small></div>${result ? `<div class="result-stats">${result.metrics.map(metric => `<div><span>${HF.escapeHTML(metric.label)}</span><strong>${HF.escapeHTML(val(metric.value))} <small>${HF.escapeHTML(metric.unit)}</small></strong></div>`).join('')}</div><details class="method-details"><summary>Supplied synthetic study rows</summary>${HF.studyTable(result.table ?? [])}</details><details class="method-details"><summary>Study limits</summary>${[...(result.limitations ?? []), ...(result.warnings ?? [])].map(line => `<p>${HF.escapeHTML(line)}</p>`).join('')}</details>` : '<p class="notice">No bundled result is available for this study in the current browser catalogue.</p>'}<p id="workflow-pilot-status" class="workflow-status" role="status" aria-live="polite">Drag a connected pilot card to a stage to open its existing evidence form. Keyboard users can open Review evidence and choose a stage. Add a new human note and submit to save.</p><button class="btn secondary small" data-workflow-action="sign-pilot-registry">Sign local pilot registry</button>`);
     }
+    function researchStudyResultsReady() {
+        const studies = HF.STUDY_BUNDLE.catalogue.filter(def => def.page === 'research');
+        return studies.length > 0 && studies.every(def => HF.STUDY_BUNDLE.results[def.id] != null);
+    }
     function researchPanel() {
-        return workflowPanel('Research dossier', 'Compile existing research outputs and study evidence without recalculating or changing any values.', `<p>This export reuses the currently loaded drift, reliability, sustainability and source records. Results remain screening evidence with their existing warnings.</p><button class="btn secondary small" data-workflow-action="research-dossier">Download research dossier</button>`);
+        const ready = researchStudyResultsReady();
+        const status = ready ? 'Research study results are ready to export.' : 'Research study results are loading. The dossier will be available when all research results have loaded.';
+        return workflowPanel('Research dossier', 'Compile existing research outputs and study evidence without recalculating or changing any values.', `<p>This export reuses the currently loaded drift, reliability, sustainability and source records. Results remain screening evidence with their existing warnings.</p><p id="workflow-research-status" class="${ready ? 'workflow-status' : 'notice'}" role="status" aria-live="polite">${status}</p><button class="btn secondary small" data-workflow-action="research-dossier" ${ready ? '' : 'disabled'}>Download research dossier</button>`);
     }
     function investmentPanel() {
         return workflowPanel('Investment committee memo', 'Compile current finance, PV and acquisition screens with their existing assumptions and limits.', `<p>The memo preserves current state values and does not add a recommendation, recompute a cash flow or imply approval. The experimental study memo remains available in its study panel.</p><button class="btn secondary small" data-workflow-action="investment-memo">Download current-state IC memo</button>`);
@@ -4756,6 +4852,15 @@ var HF;
     }
     function setStatus(id, message) { const el = document.getElementById(id); if (el)
         el.textContent = message; }
+    function workflowToast(message) {
+        const toast = document.getElementById('toast');
+        if (!toast)
+            return;
+        toast.textContent = message;
+        toast.className = 'toast show toast-error';
+        setTimeout(() => { if (toast.textContent === message)
+            toast.classList.remove('show'); }, 6000);
+    }
     function createWorkflowController(getState, render) {
         let overlay = false, selectedPilotStudy = 'pilots-photogrammetry', councilFilter = 'all', councilRound = 1;
         let importedEnvelope = null;
@@ -4813,8 +4918,15 @@ var HF;
             }
             else if (action === 'sign-pilot-registry')
                 await signedDownload('workflow-pilot-status', 'helioforge-pilot-registry-signed.json', { schema: 'helioforge-pilot-registry-v1', created_at: new Date().toISOString(), data_kind: 'synthetic', pilots: state.data.pilots, notice: 'Fictional workflow records; signature does not establish field evidence or signer identity.' });
-            else if (action === 'research-dossier')
+            else if (action === 'research-dossier') {
+                if (!researchStudyResultsReady()) {
+                    const message = 'Research study results are still loading. The dossier download is unavailable until all research results are ready.';
+                    setStatus('workflow-research-status', message);
+                    workflowToast(message);
+                    return;
+                }
                 downloadText('helioforge-research-dossier.md', researchDossier(state), 'text/markdown');
+            }
             else if (action === 'investment-memo')
                 downloadText('helioforge-investment-committee-screen.md', investmentMemo(state), 'text/markdown');
             else if (action === 'sign-council') {
@@ -5646,6 +5758,7 @@ var HF;
                     path = document.createElement('div');
                     path.className = 'hf-completion-path';
                     path.dataset.hfCompletionPath = 'true';
+                    path.setAttribute('role', 'group');
                     path.setAttribute('aria-label', 'Mastery unlock requirements');
                     const firstLesson = list.querySelector('[data-lesson]');
                     const firstRow = firstLesson?.closest('.lesson-choice') ?? firstLesson;
@@ -6451,6 +6564,7 @@ var HF;
         const completion = HF.createCompletionController(() => state, toast);
         const integrations = HF.createIntegrationController(() => state);
         const exampleLoads = new Set(), exampleErrors = new Map(), exampleOwners = new Map();
+        let hybridController;
         document.addEventListener('hf:examples-loaded', event => {
             if (event.detail.page === state.page) {
                 workflows.refresh();
@@ -6466,11 +6580,14 @@ var HF;
                 render();
             }
         });
-        window.addEventListener('pagehide', event => { if (!event.persisted)
-            completion.destroy(); });
+        window.addEventListener('pagehide', event => { if (!event.persisted) {
+            completion.destroy();
+            hybridController?.destroy();
+        } });
         function render() {
             sceneCleanup?.();
             root.innerHTML = HF.shell(state);
+            hybridController?.refreshLibraryObserver();
             if (state.page === 'council' && !hasConnected) {
                 const form = document.querySelector('form[data-model="council"]');
                 form?.insertAdjacentHTML('afterbegin', '<p class="notice" data-frozen-council role="status"><strong>Frozen synthetic council example.</strong> Eight fixed checklist sections; no specialist or critic is executed. Evidence-state submissions, evidence uploads and external providers are unavailable in this browser preview. Use the local Python application to review new evidence. A digest does not verify source authenticity or human approval.</p>');
@@ -6955,7 +7072,7 @@ var HF;
             render();
         } });
         champion = HF.installChampionController(state, { render, toast, navigate, api, celebrate, openModal });
-        HF.installHybridController(state, { render, toast, navigate, api, celebrate, openModal, persist: champion.persist });
+        hybridController = HF.installHybridController(state, { render, toast, navigate, api, celebrate, openModal, persist: champion.persist });
         HF.installTerminalController({ navigate, toast });
         render();
         void connect();
