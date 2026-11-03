@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
-import {decodeHtmlEntities} from './html-entities.mjs';
 import {inlineDashboard} from './inline-html.mjs';
+import {extractStaticPageText} from './static-page-text.mjs';
 test('inline scripts preserve dollar replacement tokens and closing-tag strings literally',()=>{
   const value="$& $` $' </script><SCRIPT> </SCRIPT>";
   const html=inlineDashboard('<head><link rel="stylesheet" href="styles.css"></head><body><script src="app.js" defer></script></body>',{css:'p::before{content:"$&"}',js:'globalThis.example='+JSON.stringify(value)+';',favicon:''});
@@ -12,7 +12,8 @@ test('inline scripts preserve dollar replacement tokens and closing-tag strings 
   assert.equal(box.example,value);assert.ok(html.includes('content:"$&"'));
 });
 
-test('HTML text decoding does not decode nested entities twice', () => {
-  assert.equal(decodeHtmlEntities('&lt;script&gt; &amp; &#39; &#x3c;'), "<script> & ' <");
-  assert.equal(decodeHtmlEntities('&amp;lt;script&amp;gt;'), '&lt;script&gt;');
+test('static page extraction decodes nested anchor labels once', () => {
+  const text = extractStaticPageText('<main><p>&lt;script&gt; &amp; &#39; &#x3c; <a href="/methodology/">&amp;lt;script&amp;gt;</a></p></main>',
+    'https://example.test', '/', 'index.html');
+  assert.equal(text, "<script> & ' < &lt;script&gt; (https://example.test/methodology/)");
 });
