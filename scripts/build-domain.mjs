@@ -6,6 +6,7 @@ import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {addEngineeringHeroFramePolicy, insertEngineeringHeroSection, prepareEngineeringHero} from './engineering-hero.mjs';
 import {domainSecurityPolicy} from './domain-security.mjs';
+import {decodeHtmlEntities} from './html-entities.mjs';
 import {buildModelRegistry,buildPublicCapabilityFacts,CAPABILITY_COPY,CONTENT_REVISION_DATE,TASK_STARTS,WORKSPACES} from './capability-contract.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const config=JSON.parse(fs.readFileSync(path.join(root,'cloudflare.json'),'utf8'));
@@ -122,15 +123,14 @@ write('robots.txt',[
 
 const publicRoutes=['/','/methodology/','/about/','/help/','/learning/','/learning/terminal-balance/','/learning/model-glossary/','/learning/capability-modes/','/models/'];
 write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+publicRoutes.map(route=>`<url><loc>${origin+route}</loc><lastmod>${CONTENT_REVISION_DATE}</lastmod></url>`).join('')+'</urlset>\n');
-const decodeEntities=value=>value.replace(/&#x([a-f0-9]+);/gi,(_,code)=>String.fromCodePoint(parseInt(code,16))).replace(/&#(\d+);/g,(_,code)=>String.fromCodePoint(Number(code))).replace(/&nbsp;/gi,' ').replace(/&amp;/gi,'&').replace(/&lt;/gi,'<').replace(/&gt;/gi,'>').replace(/&quot;/gi,'"').replace(/&#39;|&apos;/gi,"'");
 const staticPageText=(file,route)=>{
  const html=fs.readFileSync(path.join(out,file),'utf8');
  const main=html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i);
  if(!main)throw Error('Static text page has no main element: '+file);
- return decodeEntities(main[1]
+ return decodeHtmlEntities(main[1]
   .replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/gi,' ')
   .replace(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi,(_,href,label)=>{
-   const text=decodeEntities(label.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim());
+   const text=decodeHtmlEntities(label.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim());
    return text?text+' ('+new URL(href,origin+route).href+') ':'';
   })
   .replace(/<img\b[^>]*\balt="([^"]*)"[^>]*>/gi,(_,alt)=>alt+'\n')
