@@ -72,7 +72,7 @@ function findStudySource(repoRoot, id) {
   const matches = files.filter(name => definition.test(fs.readFileSync(path.join(engines, name), 'utf8')));
   if (matches.length !== 1) throw new Error(`Expected one Python study implementation for ${id}; found ${matches.join(', ') || 'none'}`);
   const module = matches[0];
-  const testFile = `apps/api/tests/test_${module.replace(/_studies\.py$/, '_studies.py')}`;
+  const testFile = `apps/api/tests/test_${module}`;
   return {module:`apps/api/helioforge/engines/${module}`, tests:[testFile, 'apps/api/tests/test_studies_api.py']};
 }
 
