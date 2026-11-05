@@ -33,6 +33,147 @@ COUNCIL_LEDGER = ROOT / "docs" / "remediation-20261028" / "source-plan" / "counc
 REQUIRED_STUDY_KEYS = {"study", "model_version", "inputs", "metrics", "series", "table", "data_kind"}
 LOGGER = logging.getLogger(__name__)
 
+# Independent browser-side oracle: consume study data, never the export implementation.
+STUDY_EXPORT_ORACLE = r"""
+async (id) => {
+  const r = window.HF.STUDY_BUNDLE.results[id];
+  const def = window.HF.STUDY_BUNDLE.catalogue.find((x) => x.id === id);
+  const selected = Number(
+    document.querySelector('#study-workbench [data-study-series]')?.value ?? 0,
+  );
+  const series = Array.isArray(r?.series) ? r.series : [];
+  const s = series[selected];
+  // The data model permits structured cells. Preserve their JSON fields;
+  // JavaScript's default object stringification loses the recorded evidence.
+  // Arrays retain their established recursive comma-joined representation.
+  const valueText = (value) => {
+    if (value == null) return '';
+    if (Array.isArray(value)) return value.map(valueText).join(',');
+    return typeof value === 'object' ? JSON.stringify(value) : String(value);
+  };
+  const csvText = (value) => {
+    let text = valueText(value);
+    if (typeof value !== 'number' && /^[=+\-@\t\r]/.test(text)) text = "'" + text;
+    return text;
+  };
+  const provenance = {
+    schema: 'helioforge.study-export.v1',
+    study: r.study,
+    model_version: r.model_version,
+    data_kind: r.data_kind,
+    inputs: r.inputs,
+    provenance: r.provenance,
+    equations: r.equations,
+    limitations: r.limitations,
+    warnings: r.warnings,
+    sources: r.sources,
+    evidence_sha256: r.evidence_sha256,
+    units: {
+      metrics: (r.metrics || []).map((m) => ({ label: m.label, unit: m.unit })),
+      series: series.map((x) => ({ name: x.name, x_label: x.x_label, y_unit: x.y_unit })),
+    },
+    integrity_scope:
+      'Evidence digest identifies the original result JSON, not this CSV encoding; ' +
+      'no scientific or human approval.',
+  };
+  const provenanceText = JSON.stringify(provenance);
+  const csvCell = (value) => '"' + csvText(value).replace(/"/g, '""') + '"';
+  const addMetadata = (rows) =>
+    (rows.length ? rows : [{}]).map((row, i) => ({
+      ...row,
+      hf_record_kind: rows.length ? 'observation' : 'metadata_only',
+      hf_study: r.study,
+      hf_model_version: r.model_version,
+      hf_data_kind: r.data_kind,
+      hf_evidence_sha256: r.evidence_sha256,
+      hf_provenance_json: i === 0 ? provenanceText : '',
+    }));
+  const toCsv = (rows) => {
+    const keys = Object.keys(rows[0] || {});
+    return [
+      keys.map((k) => csvCell(k)).join(','),
+      ...rows.map((row) => keys.map((k) => csvCell(row[k])).join(',')),
+    ].join('\r\n');
+  };
+  const digestText = async (text) =>
+    Array.from(
+      new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text))),
+      (x) => x.toString(16).padStart(2, '0'),
+    ).join('');
+  const tableCsvSha256 = await digestText(
+    toCsv(addMetadata(Array.isArray(r.table) ? r.table : [])),
+  );
+  const seriesRows = s
+    ? s.x.map((x, i) => ({ observation: x, value: s.y[i], unit: s.y_unit }))
+    : [];
+  const seriesCsvSha256 = s ? await digestText(toCsv(addMetadata(seriesRows))) : null;
+  const textValue = (v) =>
+    typeof v === 'number'
+      ? window.HF.fmt(v, 3)
+      : v == null
+        ? '—'
+        : typeof v === 'object'
+          ? JSON.stringify(v)
+          : String(v);
+  const memoLines = [
+    `# ${def?.title ?? id}`,
+    '',
+    def?.summary ?? '',
+    '',
+    '## Result provenance',
+    '```json',
+    String(provenanceText),
+    '```',
+    '',
+    '## Results',
+    ...(r.metrics || []).map((m) => `- ${m.label}: ${textValue(m.value)} ${m.unit}`),
+    '',
+    '## Assumptions',
+    '```json',
+    JSON.stringify(r.inputs, null, 2),
+    '```',
+    '',
+    '## Boundaries',
+    ...(def?.limitations || []).map((x) => '- ' + x),
+    ...(r.warnings || []).map((x) => '- ' + x),
+    '',
+    'Evidence SHA-256: ' + r.evidence_sha256,
+    'No investment, engineering, regulatory or operational approval is implied.',
+  ];
+  const memoSha256 = await digestText(memoLines.join('\n'));
+  const jsonText = JSON.stringify(r, null, 2);
+  const jsonSha256 = await digestText(jsonText);
+  return {
+    jsonSha256,
+    tableCsvSha256,
+    seriesCsvSha256,
+    memoSha256,
+    tableCount: Array.isArray(r.table) ? r.table.length : 0,
+    tablePresent: Array.isArray(r.table),
+    seriesCount: series.length,
+    selectedSeriesIndex: s ? selected : null,
+    selectedSeriesName: s?.name ?? null,
+    seriesXText: s?.x?.map(csvText) ?? [],
+    seriesYText: s?.y?.map(csvText) ?? [],
+    seriesUnit: s?.y_unit ?? null,
+    seriesLength: s?.x?.length ?? 0,
+    seriesYLength: s?.y?.length ?? 0,
+    provenance: JSON.parse(JSON.stringify(provenance)),
+    studyTitle: def?.title ?? id,
+    studySummary: def?.summary ?? '',
+    definitionLimitations: def?.limitations ?? [],
+    limitations: r.limitations || [],
+    warnings: r.warnings || [],
+    metrics: r.metrics || [],
+    inputs: r.inputs,
+    study: r.study,
+    modelVersion: r.model_version,
+    dataKind: r.data_kind,
+    evidenceSha256: r.evidence_sha256 ?? '',
+  };
+}
+"""
+
 
 class ScriptSourceCollector(HTMLParser):
     def __init__(self) -> None:
@@ -1099,67 +1240,7 @@ def run_browser(
                     )
                     study_seen.append(study_id)
                     expected = page.evaluate(
-                        (
-                            "async id => {\n                      const r=window.HF.STUDY_BUNDLE.results["
-                            "id];\n                      const def=window.HF.STUDY_BUNDLE.catalogue.find("
-                            "x=>x.id===id);\n                      const selected=Number(document.querySe"
-                            "lector('#study-workbench [data-study-series]')?.value ?? 0);\n              "
-                            "        const series=Array.isArray(r?.series)?r.series:[];\n                "
-                            "      const s=series[selected];\n                      const csvText=v=>{let"
-                            " text=String(v??'');if(typeof v!=='number'&&/^[=+\\-@\\t\\r]/.test(text))tex"
-                            't="\'"+text;return text;};\n                      const provenance={schema:'
-                            "'helioforge.study-export.v1',study:r.study,model_version:r.model_version,\n "
-                            "                       data_kind:r.data_kind,inputs:r.inputs,provenance:r.pr"
-                            "ovenance,equations:r.equations,limitations:r.limitations,warnings:r.warnings"
-                            ",\n                        sources:r.sources,evidence_sha256:r.evidence_sha2"
-                            "56,\n                        units:{metrics:(r.metrics||[]).map(m=>({label:m"
-                            ".label,unit:m.unit})),series:series.map(x=>({name:x.name,x_label:x.x_label,y"
-                            "_unit:x.y_unit}))},\n                        integrity_scope:'Evidence diges"
-                            "t identifies the original result JSON, not this CSV encoding; no scientific "
-                            "or human approval.'};\n                      const provenanceText=JSON.strin"
-                            "gify(provenance);\n                      const csvCell=value=>{let text=Stri"
-                            "ng(value??'');if(typeof value!=='number'&&/^[=+\\-@\\t\\r]/.test(text))text="
-                            "\"'\"+text;return '\"'+text.replace(/\"/g,'\"\"')+'\"';};\n                 "
-                            "     const addMetadata=rows=>(rows.length?rows:[{}]).map((row,i)=>({...row,h"
-                            "f_record_kind:rows.length?'observation':'metadata_only',\n                  "
-                            "      hf_study:r.study,hf_model_version:r.model_version,hf_data_kind:r.data_"
-                            "kind,hf_evidence_sha256:r.evidence_sha256,\n                        hf_prove"
-                            "nance_json:i===0?provenanceText:''}));\n                      const toCsv=ro"
-                            "ws=>{const keys=Object.keys(rows[0]||{});return [keys.map(k=>csvCell(k)).joi"
-                            "n(','),...rows.map(row=>keys.map(k=>csvCell(row[k])).join(','))].join('\\r\\"
-                            "n');};\n                      const digestText=async text=>Array.from(new Ui"
-                            "nt8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)"
-                            ")),x=>x.toString(16).padStart(2,'0')).join('');\n                      const"
-                            " tableCsvSha256=await digestText(toCsv(addMetadata(Array.isArray(r.table)?r."
-                            "table:[])));\n                      const seriesRows=s?s.x.map((x,i)=>({obse"
-                            "rvation:x,value:s.y[i],unit:s.y_unit})):[];\n                      const ser"
-                            "iesCsvSha256=s?await digestText(toCsv(addMetadata(seriesRows))):null;\n     "
-                            "                 const textValue=v=>typeof v==='number'?window.HF.fmt(v,3):v"
-                            "==null?'\u2014':typeof v==='object'?JSON.stringify(v):String(v);\n          "
-                            "            const memoLines=[`# ${def?.title??id}`,'',def?.summary??'','','#"
-                            "# Result provenance','```json',String(provenanceText),'```','','## Results',"
-                            "...(r.metrics||[]).map(m=>`- ${m.label}: ${textValue(m.value)} ${m.unit}`),'"
-                            "','## Assumptions','```json',JSON.stringify(r.inputs,null,2),'```','','## Bo"
-                            "undaries',...(def?.limitations||[]).map(x=>'- '+x),...(r.warnings||[]).map(x"
-                            "=>'- '+x),'','Evidence SHA-256: '+r.evidence_sha256,'No investment, engineer"
-                            "ing, regulatory or operational approval is implied.'];\n                    "
-                            "  const memoSha256=await digestText(memoLines.join('\\n'));\n               "
-                            "       const jsonText=JSON.stringify(r,null,2);\n                      const"
-                            " jsonSha256=await digestText(jsonText);\n                      return {jsonS"
-                            "ha256,tableCsvSha256,seriesCsvSha256,memoSha256,tableCount:Array.isArray(r.t"
-                            "able)?r.table.length:0,tablePresent:Array.isArray(r.table),\n               "
-                            "         seriesCount:series.length,selectedSeriesIndex:s?selected:null,selec"
-                            "tedSeriesName:s?.name??null,\n                        seriesXText:s?.x?.map("
-                            "csvText)??[],seriesYText:s?.y?.map(csvText)??[],\n                        se"
-                            "riesUnit:s?.y_unit??null,seriesLength:s?.x?.length??0,seriesYLength:s?.y?.le"
-                            "ngth??0,\n                        provenance:JSON.parse(JSON.stringify(prove"
-                            "nance)),studyTitle:def?.title??id,studySummary:def?.summary??'',\n          "
-                            "              definitionLimitations:def?.limitations??[],\n                 "
-                            "       limitations:r.limitations||[],warnings:r.warnings||[],metrics:r.metri"
-                            "cs||[],inputs:r.inputs,\n                        study:r.study,modelVersion:"
-                            "r.model_version,dataKind:r.data_kind,evidenceSha256:r.evidence_sha256??''};"
-                            "\n                    }"
-                        ),
+                        (STUDY_EXPORT_ORACLE),
                         study_id,
                     )
                     actual_heading = page.locator("#study-workbench .section-heading h2").inner_text()
