@@ -3,38 +3,40 @@
 import importlib.util
 import sys
 import unittest
+from collections.abc import Callable
 from pathlib import Path
-
 
 HARNESS_PATH = Path(__file__).with_name("acceptance-performance.py")
 sys.dont_write_bytecode = True
 SPEC = importlib.util.spec_from_file_location("acceptance_performance", HARNESS_PATH)
+if SPEC is None or SPEC.loader is None:
+    raise ImportError("Cannot load the repository performance acceptance harness")
 HARNESS = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = HARNESS
 SPEC.loader.exec_module(HARNESS)
 
 
 class FakePage:
-    def __init__(self):
-        self.page_error_listeners = []
+    def __init__(self) -> None:
+        self.page_error_listeners: list[Callable[[BaseException], None]] = []
 
-    def on(self, event_name, handler):
+    def on(self, event_name: str, handler: Callable[[BaseException], None]) -> None:
         if event_name != "pageerror":
             raise AssertionError(f"unexpected event: {event_name}")
         self.page_error_listeners.append(handler)
 
-    def remove_listener(self, event_name, handler):
+    def remove_listener(self, event_name: str, handler: Callable[[BaseException], None]) -> None:
         if event_name != "pageerror":
             raise AssertionError(f"unexpected event: {event_name}")
         self.page_error_listeners.remove(handler)
 
-    def emit_page_error(self, error):
+    def emit_page_error(self, error: BaseException) -> None:
         for handler in tuple(self.page_error_listeners):
             handler(error)
 
 
 class AcceptancePerformanceTests(unittest.TestCase):
-    def test_lcp_budget_failure_rejects_overall_acceptance(self):
+    def test_lcp_budget_failure_rejects_overall_acceptance(self) -> None:
         summary = HARNESS.summarize_runs(
             [
                 {
@@ -56,7 +58,7 @@ class AcceptancePerformanceTests(unittest.TestCase):
         self.assertEqual(summary["failed"], 1)
         self.assertEqual(HARNESS.acceptance_exit_code(summary), 1)
 
-    def test_failed_interaction_rejects_an_otherwise_successful_load(self):
+    def test_failed_interaction_rejects_an_otherwise_successful_load(self) -> None:
         summary = HARNESS.summarize_runs(
             [
                 {
@@ -77,7 +79,7 @@ class AcceptancePerformanceTests(unittest.TestCase):
         self.assertEqual(summary["acceptance_status"], "FAIL")
         self.assertEqual(summary["failed"], 1)
 
-    def test_non_200_target_response_cannot_pass_functional_acceptance(self):
+    def test_non_200_target_response_cannot_pass_functional_acceptance(self) -> None:
         run = {
             "status": "PASS",
             "target_http_status": 201,
@@ -89,7 +91,7 @@ class AcceptancePerformanceTests(unittest.TestCase):
         self.assertFalse(HARNESS.is_http_200(201))
         self.assertFalse(HARNESS.functional_evidence_passes(run))
 
-    def test_page_errors_are_functional_failures(self):
+    def test_page_errors_are_functional_failures(self) -> None:
         run = {
             "status": "PASS",
             "target_http_status": 200,
@@ -100,10 +102,10 @@ class AcceptancePerformanceTests(unittest.TestCase):
 
         self.assertFalse(HARNESS.functional_evidence_passes(run))
 
-    def test_page_error_listener_is_removed_between_cold_and_warm_runs(self):
+    def test_page_error_listener_is_removed_between_cold_and_warm_runs(self) -> None:
         page = FakePage()
-        cold_run = {"page_errors": []}
-        warm_run = {"page_errors": []}
+        cold_run: dict[str, list[str]] = {"page_errors": []}
+        warm_run: dict[str, list[str]] = {"page_errors": []}
 
         cold_handler = HARNESS.register_page_error_listener(page, cold_run)
         try:
@@ -125,7 +127,7 @@ class AcceptancePerformanceTests(unittest.TestCase):
         self.assertEqual(warm_run["page_errors"], ["RuntimeError('warm failure')"])
         self.assertEqual(page.page_error_listeners, [])
 
-    def test_full_acceptance_set_requires_twelve_loads_and_ninety_six_interactions(self):
+    def test_full_acceptance_set_requires_twelve_loads_and_ninety_six_interactions(self) -> None:
         runs = [
             {
                 "status": "PASS",
@@ -146,7 +148,7 @@ class AcceptancePerformanceTests(unittest.TestCase):
         self.assertTrue(summary["interaction_count_complete"])
         self.assertEqual(summary["acceptance_status"], "PASS")
 
-    def test_main_thread_metrics_use_the_current_document_snapshot(self):
+    def test_main_thread_metrics_use_the_current_document_snapshot(self) -> None:
         # Performance.getMetrics reports seconds; a page navigation resets these
         # counters, so the new document's own snapshot is already its load total.
         snapshot = [
@@ -163,7 +165,7 @@ class AcceptancePerformanceTests(unittest.TestCase):
         self.assertEqual(metrics["LayoutDuration"], 10.0)
         self.assertEqual(metrics["RecalcStyleDuration"], 20.0)
 
-    def test_runtime_response_hash_is_compared_with_the_site_artifact(self):
+    def test_runtime_response_hash_is_compared_with_the_site_artifact(self) -> None:
         expected_sha256 = "071f995fa49078621a7a97c7de20f7a3c5e57642896e97b80d25d8eea2ba4cb4"
         evidence = HARNESS.runtime_response_evidence(
             200, "http://localhost/run/", b"site artifact", expected_sha256

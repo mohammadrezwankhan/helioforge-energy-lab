@@ -1,21 +1,37 @@
 """Focused acceptance regressions for deterministic council evidence checks."""
+
 from __future__ import annotations
 
 import hashlib
 import importlib.util
 import json
+from collections.abc import Mapping
 from pathlib import Path
+from typing import NotRequired, TypedDict
 
 from helioforge.council import local_council
+from helioforge.council_types import LocalCouncilResult
 from helioforge.schemas import CouncilRequest
 
 
-def _digest(value: dict) -> str:
+class FixtureRecord(TypedDict):
+    run_id: str
+    kind: str
+    created_at: str
+    input_sha256: str
+    inputs: NotRequired[dict[str, object]]
+    result: dict[str, object]
+    metadata: dict[str, object]
+
+
+def _digest(value: Mapping[str, object]) -> str:
     raw = json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
     return hashlib.sha256(raw.encode()).hexdigest()
 
 
-def _record(*, result: dict | None = None, metadata: dict | None = None) -> dict:
+def _record(
+    *, result: Mapping[str, object] | None = None, metadata: Mapping[str, object] | None = None
+) -> FixtureRecord:
     inputs = {"market": "FR", "capacity_kwh": 10000.0}
     return {
         "run_id": "synthetic-run-01",
@@ -35,7 +51,7 @@ def _record(*, result: dict | None = None, metadata: dict | None = None) -> dict
     }
 
 
-def _review(record: dict | None = None) -> dict:
+def _review(record: Mapping[str, object] | None = None) -> LocalCouncilResult:
     evidence = {
         "dispatch": {
             "duration_hours": 24.0,
@@ -53,7 +69,7 @@ def _review(record: dict | None = None) -> dict:
     return local_council(CouncilRequest(), evidence)
 
 
-def test_local_council_marks_no_evidence_and_does_not_claim_a_critic():
+def test_local_council_marks_no_evidence_and_does_not_claim_a_critic() -> None:
     result = _review()
 
     assert result["protocol_metadata"]["limits"]["executed_specialist_count"] == 0
@@ -65,7 +81,7 @@ def test_local_council_marks_no_evidence_and_does_not_claim_a_critic():
     assert "not investment approval" in result["decision"]["recommendation"].lower()
 
 
-def test_digest_mismatch_is_reported_as_integrity_warning_not_authenticity_judgment():
+def test_digest_mismatch_is_reported_as_integrity_warning_not_authenticity_judgment() -> None:
     record = _record()
     record["inputs"]["capacity_kwh"] = 12000.0
     result = _review(record)
@@ -78,7 +94,7 @@ def test_digest_mismatch_is_reported_as_integrity_warning_not_authenticity_judgm
     assert any("sha-256" in item.lower() for item in reproducibility["risks"])
 
 
-def test_missing_schema_fields_and_declared_invalid_units_are_role_scoped():
+def test_missing_schema_fields_and_declared_invalid_units_are_role_scoped() -> None:
     record = _record(
         result={"duration_hours": None, "capacity_kwh": None, "power_kw": None},
         metadata={"units": {"capacity_kwh": "MWh", "power_kw": "kW"}},
@@ -92,19 +108,21 @@ def test_missing_schema_fields_and_declared_invalid_units_are_role_scoped():
     assert any("unit labels" in item.lower() for item in storage["required_evidence"])
 
 
-def test_explicit_version_expiry_and_horizon_conflicts_are_reported():
-    record = _record(metadata={
-        "expected_model": "btm-milp-v2",
-        "valid_until": "2026-10-01T00:00:00+00:00",
-        "expected_horizon_hours": 48.0,
-    })
+def test_explicit_version_expiry_and_horizon_conflicts_are_reported() -> None:
+    record = _record(
+        metadata={
+            "expected_model": "btm-milp-v2",
+            "valid_until": "2026-10-01T00:00:00+00:00",
+            "expected_horizon_hours": 48.0,
+        }
+    )
     result = _review(record)
 
     codes = set(result["evidence_review"]["records"][0]["finding_codes"])
     assert {"model_version_mismatch", "expired_validity", "horizon_mismatch"} <= codes
 
 
-def test_old_timestamp_is_not_called_stale_without_an_explicit_expiry():
+def test_old_timestamp_is_not_called_stale_without_an_explicit_expiry() -> None:
     record = _record(metadata={"as_of": "2026-10-29T12:00:00+00:00"})
     record["created_at"] = "2000-01-01T00:00:00+00:00"
     result = _review(record)
@@ -114,12 +132,19 @@ def test_old_timestamp_is_not_called_stale_without_an_explicit_expiry():
     assert "model_version_mismatch" not in codes
 
 
-def test_malformed_record_and_unavailable_raw_inputs_are_not_called_verified():
-    malformed = {"run_id": "synthetic-malformed", "kind": "storage", "input_sha256": "bad", "result": "not-an-object"}
+def test_malformed_record_and_unavailable_raw_inputs_are_not_called_verified() -> None:
+    malformed = {
+        "run_id": "synthetic-malformed",
+        "kind": "storage",
+        "input_sha256": "bad",
+        "result": "not-an-object",
+    }
     result = _review(malformed)
 
     checked = result["evidence_review"]["records"][0]
-    assert {"malformed_result", "missing_or_invalid_result_fields", "malformed_input_digest"} <= set(checked["finding_codes"])
+    assert {"malformed_result", "missing_or_invalid_result_fields", "malformed_input_digest"} <= set(
+        checked["finding_codes"]
+    )
     ordinary_route_record = _record()
     ordinary_route_record.pop("inputs")
     route_result = _review(ordinary_route_record)
@@ -128,12 +153,15 @@ def test_malformed_record_and_unavailable_raw_inputs_are_not_called_verified():
     assert "digest_unverifiable_without_inputs" in route_checked["finding_codes"]
 
 
-def test_sensitive_label_and_provider_failure_are_not_echoed_or_promoted():
+def test_sensitive_label_and_provider_failure_are_not_echoed_or_promoted() -> None:
     marker = "SYNTHETIC_SENSITIVE_MARKER_DO_NOT_ECHO"
-    record = _record(result={"notes": marker}, metadata={
-        "classification": "sensitive_fixture",
-        "provider_status": "failed",
-    })
+    record = _record(
+        result={"notes": marker},
+        metadata={
+            "classification": "sensitive_fixture",
+            "provider_status": "failed",
+        },
+    )
     result = _review(record)
     serialized = json.dumps(result)
 
@@ -145,7 +173,7 @@ def test_sensitive_label_and_provider_failure_are_not_echoed_or_promoted():
     assert "critic" not in " ".join(x["agent"].lower() for x in result["reviews"])
 
 
-def test_reproducibility_and_undefined_metrics_are_stated_without_overclaim():
+def test_reproducibility_and_undefined_metrics_are_stated_without_overclaim() -> None:
     result = _review()
     investment = next(x for x in result["reviews"] if x["agent"] == "Investment analyst")
     reproducibility = next(x for x in result["reviews"] if x["agent"] == "Reproducibility reviewer")
@@ -156,7 +184,7 @@ def test_reproducibility_and_undefined_metrics_are_stated_without_overclaim():
     assert "does not authenticate" in reproducibility["summary"].lower()
 
 
-def test_acceptance_runner_accounts_for_all_126_requested_and_63_external_rows():
+def test_acceptance_runner_accounts_for_all_126_requested_and_63_external_rows() -> None:
     repo_root = Path(__file__).resolve().parents[3]
     runner_path = repo_root / "scripts" / "acceptance-council-cases.py"
     spec = importlib.util.spec_from_file_location("acceptance_council_cases", runner_path)
@@ -184,7 +212,9 @@ def test_acceptance_runner_accounts_for_all_126_requested_and_63_external_rows()
     assert local_tampered["evidence_class"] == "O"
     assert local_tampered["actual"]["evidence_state_check_ok"] is True
     assert local_tampered["actual"]["evidence_state_codes"] == ["digest_mismatch"]
-    local_critic = next(x for x in report["cases"] if x["role"] == "Independent critic" and x["mode"] == "local_deterministic")
+    local_critic = next(
+        x for x in report["cases"] if x["role"] == "Independent critic" and x["mode"] == "local_deterministic"
+    )
     assert local_critic["status"] == "NOT_APPLICABLE_ABSENT_CRITIC"
     external = next(x for x in report["cases"] if x["mode"] == "local_external_opt_in")
     assert external["actual"]["live_provider_call"] is False

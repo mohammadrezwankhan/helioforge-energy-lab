@@ -19,10 +19,19 @@ from helioforge.engines import (
     toolkit_studies,
     workflow_studies,
 )
+from helioforge.engines.study_types import StudyDefinition, StudyModule
 from helioforge.provenance import PACKAGE_ROOT, REPOSITORY, attach_result_provenance
 from helioforge.schemas import StrictModel
 
-MODULES = (engineering_studies, decision_studies, workflow_studies, toolkit_studies, physical_studies, planning_studies, control_studies)
+MODULES: tuple[StudyModule, ...] = (
+    engineering_studies,
+    decision_studies,
+    workflow_studies,
+    toolkit_studies,
+    physical_studies,
+    planning_studies,
+    control_studies,
+)
 
 
 class StudyRequest(StrictModel):
@@ -30,21 +39,23 @@ class StudyRequest(StrictModel):
     inputs: dict[str, Any] = Field(default_factory=dict, max_length=40)
 
 
-def catalogue() -> list[dict]:
+def catalogue() -> list[StudyDefinition]:
     return deepcopy([study for module in MODULES for study in module.STUDIES])
 
 
-def evaluate(p: StudyRequest) -> dict:
+def evaluate(p: StudyRequest) -> dict[str, Any]:
     for module in MODULES:
         study = next((s for s in module.STUDIES if s["id"] == p.study), None)
         if study is None:
             continue
-        inputs = {
+        inputs: dict[str, object] = {
             f["name"]: deepcopy(f["default"])
             for f in [*study.get("fields", []), *study.get("data_fields", [])]
         }
         inputs.update(p.inputs)
-        result = module.run(p.study, inputs)
+        # The numerical engines have a concrete StudyResult contract. The
+        # provenance/API envelope is the existing heterogeneous JSON boundary.
+        result: dict[str, Any] = dict(module.run(p.study, inputs))
         result.update(
             {
                 "study": p.study,
@@ -56,15 +67,20 @@ def evaluate(p: StudyRequest) -> dict:
                 "sources": study.get("sources", []),
             }
         )
+        if module.__file__ is None:
+            raise ValueError(f"Study module has no source file: {module.__name__}")
         module_path = Path(module.__file__).resolve().relative_to(PACKAGE_ROOT).as_posix()
-        source_files = ["studies.py", "schemas.py", module_path]
+        source_files = ["studies.py", "schemas.py", "engines/study_types.py", module_path]
         # These study modules call the shared finance engine directly; include
         # that numerical dependency in the same source digest.
         if module.__name__.endswith((".decision_studies", ".toolkit_studies")):
             source_files.append("engines/finance.py")
         model_inputs = {"study": p.study, "inputs": inputs}
-        horizon = {key: inputs[key] for key in ("duration_hours", "hours", "years", "start_year", "interval_hours")
-                   if key in inputs}
+        horizon: dict[str, object] = {
+            key: inputs[key]
+            for key in ("duration_hours", "hours", "years", "start_year", "interval_hours")
+            if key in inputs
+        }
         result = attach_result_provenance(
             result,
             model_id=f"study:{p.study}",

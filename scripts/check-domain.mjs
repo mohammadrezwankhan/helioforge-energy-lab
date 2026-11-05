@@ -5,6 +5,7 @@ import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import {domainSecurityPolicy} from './domain-security.mjs';
 import {buildModelRegistry,buildPublicCapabilityFacts,CAPABILITY_COPY,TASK_STARTS,validateCloudflareCopy,sourceEvidenceMismatches} from './capability-contract.mjs';
+import {hasExactAnchor,hasGuideLink} from './html-document.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),outputRoot=process.env.CLOUDFLARE_OUTPUT_ROOT===undefined?path.join(root,'.cloudflare'):path.resolve(root,process.env.CLOUDFLARE_OUTPUT_ROOT),out=path.join(outputRoot,'site');
 const site=JSON.parse(fs.readFileSync(path.join(root,'cloudflare-domain.json'),'utf8'));
 const cloudflare=JSON.parse(fs.readFileSync(path.join(root,'cloudflare.json'),'utf8'));
@@ -105,15 +106,15 @@ for(const [file] of indexablePages){
  for(const person of people){assert.equal(person['@id'],personUrl);assert.equal(person.url,profileUrl);}
  assert.ok(html.includes('<meta name="google-site-verification" content="wZk3bMiBHxDWxN4EmERLH9sBza2QlvsTaxbOSBncrvw">'));
 }
-assert.ok(read('index.html').includes('href="'+profileUrl+'">Mohammad Rezwan Khan</a>'));
-assert.ok(read('about/index.html').includes('href="'+profileUrl+'">Mohammad Rezwan Khan’s profile</a>'));
-assert.ok(read('methodology/index.html').includes('https://mktrade.co.business/methodology/'));
+assert.ok(hasExactAnchor(read('index.html'),profileUrl,'Mohammad Rezwan Khan'));
+assert.ok(hasExactAnchor(read('about/index.html'),profileUrl,'Mohammad Rezwan Khan’s profile'));
+assert.ok(hasExactAnchor(read('methodology/index.html'),'https://mktrade.co.business/methodology/'));
 assert.ok(read('methodology/index.html').includes('separate synthetic wind-market model'));
 const robots=read('robots.txt');
 for(const bot of ['Googlebot','Bingbot','OAI-SearchBot','GPTBot','PerplexityBot','Claude-SearchBot'])assert.ok(robots.includes(['User-agent: '+bot,'Allow: /'].join(String.fromCharCode(10))));
 const full=read('llms-full.txt');
 for(const phrase of ['Explore the system.','Privacy and local state','Catalogue coverage','https://mktrade.co.business/methodology/','Check one synthetic noon balance by hand.','Use version words precisely.','One contract for each named study.'])assert.ok(full.includes(phrase),'llms-full.txt missing '+phrase);
-assert.ok(read('llms.txt').includes('https://mrkhan.co.technology/'));
+assert.ok(hasGuideLink(read('llms.txt'),'Maintainer profile',profileUrl));
 const tokenFile='d73dcd8fd6c59242d9d6f9998bf756f5.txt';
 assert.ok(tokenFile.endsWith('.txt')); assert.match(tokenFile.slice(0,-4),/^[a-f0-9]{32}$/);
 assert.match(read(tokenFile),/^[a-f0-9]{32}$/);

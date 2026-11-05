@@ -1,66 +1,228 @@
-namespace HF {
-  const hx=escapeHTML;
-  const familyIcons:Record<string,string>={Solar:'sun',Wind:'wind',Microgrids:'grid',Hydro:'activity',Thermal:'activity',Hydrogen:'flask',Mobility:'bolt',Advanced:'atom',Networks:'layers'};
-  function chip(label:string,reason='',color=''):string{return `<span class="smart-tag" ${reason?`title="${hx(reason)}"`:''} ${color?`style="--tag-color:${color}"`:''}>${hx(label)}</span>`;}
-  function hTitle(title:string,copy:string,extra=''):string{return `<div class="section-heading"><div><h2>${hx(title)}</h2><p>${hx(copy)}</p></div>${extra}</div>`;}
-  function numberField(p:HybridInputs,key:keyof HybridInputs,label:string,unit:string,min=0,max=1e6,step='any'):string{return `<label class="field"><span>${hx(label)}</span><div class="input-unit"><input type="number" name="${key}" value="${hx(p[key])}" min="${min}" max="${max}" step="${step}" required><span>${unit}</span></div></label>`;}
-  export function hybridLibrary(h:HybridState):string {
-    const rows=filterSystems(h.search,h.family,h.topology);
-    return `<div class="library-summary" role="status"><span>${rows.length} matching architectures</span><span>19 runnable screens · 17 study-only</span></div><div class="system-grid">${rows.length?rows.map(s=>`<article class="system-card ${h.inputs.system_id===s.id?'chosen':''}" style="--card-color:${techById(s.technologies[0]!).color}"><div class="system-card-top"><span class="system-symbol">${icon(familyIcons[s.family]??'layers',20)}</span><small>${hx(s.family)}</small><span class="mode-dot ${s.mode}" title="${s.mode==='screening'?'Runnable hourly screen':'Study-only architecture'}"></span></div><button type="button" class="system-card-select" ${h.busy?'disabled':''} data-system="${s.id}" aria-pressed="${h.inputs.system_id===s.id}">${hx(s.name)}</button><p>${hx(s.description)}</p><div class="system-card-meta">${chip(s.topology)}${chip(s.coupling)}${chip(s.mode==='screening'?'Runnable':'Study only')}</div></article>`).join(''):'<div class="empty">No architectures match. Try “PV”, “BESS”, “H2” or clear the filters.</div>'}</div>`;
+namespace HF { // eslint-disable-line @typescript-eslint/no-namespace, @typescript-eslint/no-unused-vars -- HF is the ordered global-script bundle namespace; modules change its shared runtime contract.
+  const hx = escapeHTML;
+  const familyIcons: Record<string, string> = {
+    Solar: 'sun',
+    Wind: 'wind',
+    Microgrids: 'grid',
+    Hydro: 'activity',
+    Thermal: 'activity',
+    Hydrogen: 'flask',
+    Mobility: 'bolt',
+    Advanced: 'atom',
+    Networks: 'layers',
+  };
+  function chip(label: string, reason = '', color = ''): string {
+    return `<span class="smart-tag" ${reason ? `title="${hx(reason)}"` : ''} ${color ? `style="--tag-color:${color}"` : ''}>${hx(label)}</span>`;
   }
-  export function assetInspector(h:HybridState):string {
-    const t=techById(h.objectId),p=h.inputs;
-    const key:Record<string,keyof HybridInputs>={solar:'solar_kw',wind:'wind_kw',battery:'battery_kwh',hydro:'hydro_kw',generator:'generator_kw',load:'load_kw',grid:'grid_import_kw'};
-    const field=key[t.id];
-    return `<div class="asset-inspect" style="--asset-color:${t.color}"><span class="asset-symbol">${icon(t.icon,22)}</span><div><small>SELECTED OBJECT</small><strong>${hx(t.name)}</strong></div>${field?`<b>${fmt(Number(p[field]))}<small>${t.id==='battery'?'kWh':'kW'}</small></b>`:''}</div><p class="asset-boundary">${hx(t.boundary)}</p>`;
+  function hTitle(title: string, copy: string, extra = ''): string {
+    return `<div class="section-heading"><div><h2>${hx(title)}</h2><p>${hx(copy)}</p></div>${extra}</div>`;
   }
-  export function hybridResults(state:ViewState):string {
-    const h=state.hybrid,r=h.result,s=systemById(h.inputs.system_id),c=scenarioById(h.inputs.scenario_id);
-    if(h.inputError)return `<section class="panel empty-result input-error-result"><span>${icon('alert',30)}</span><div><h2>Check your configuration.</h2><p>${hx(h.inputError)}</p><p>Earlier results are hidden until these inputs are valid and a matching run is available.</p></div></section>`;
-    if(s.mode==='study'||c.mode==='study')return `<section class="panel study-boundary"><span class="study-icon">${icon('flask',32)}</span><div><span class="eyebrow">STUDY-ONLY / NO FABRICATED OUTPUT</span><h2>A richer system needs a richer model.</h2><p>${hx(s.learning_focus)} ${hx(c.mode==='study'?c.description:'')}</p><p><strong>Evidence to collect:</strong> ${hx(s.evidence)}</p><button class="btn secondary" data-lesson="lesson-${s.id}">Open this architecture’s lesson ${icon('arrow',16)}</button></div></section>`;
-    if(!r||hybridDirty(h))return `<section class="panel empty-result"><span>${icon('activity',30)}</span><div><h2>${r?'Configuration changed. Results need a new run.':'Your next result starts here.'}</h2><p>Run the hourly energy screen to calculate this configuration. No old result is presented as a new calculation.</p>${!state.connected?'<p>Start the Python application for new runs. Reset inputs to restore this architecture’s bundled baseline, or select an unchanged scenario preset to inspect its bundled result.</p>':''}</div></section>`;
-    const point=r.schedule[clamp(h.hour,0,r.schedule.length-1)]!;
-    return `${resultProvenanceView(r)}${r.bundle_case_id?`<p class="notice">Bundled Python preset · ${hx(r.bundle_version)}. Results match the displayed preset exactly. Edited inputs require the local Python API.</p>`:''}<div class="hybrid-metrics">
-      ${[{title:'Critical load served',value:`${fmt(r.critical_served_pct,1)}%`,sub:`${fmt(r.critical_unserved_kwh,1)} kWh critical shortfall`,tone:'var(--color-accent)',ico:'shield'},
-      {title:'Total load served',value:`${fmt(r.load_served_pct,1)}%`,sub:`${fmt(r.unserved_kwh,1)} kWh incl. planned shedding`,tone:'var(--color-accent)',ico:'activity'},
-      {title:'Grid energy imported',value:`${fmt(r.grid_import_kwh/1000,2)} MWh`,sub:`${r.duration_hours} modeled hours · not annual`,tone:'var(--color-accent)',ico:'grid'},
-      {title:'Terminal battery energy',value:`${fmt(r.terminal_energy_kwh/1000,2)} MWh`,sub:`${fmt(r.initial_energy_kwh/1000,2)} MWh initial · non-cyclic`,tone:'var(--color-accent)',ico:'battery'}].map(m=>`<article class="panel hybrid-metric" style="--metric-tone:${m.tone}"><div><span>${m.title}</span>${icon(m.ico,17)}</div><strong>${m.value}</strong><small>${m.sub}</small></article>`).join('')}
-    </div><section class="panel hybrid-dispatch">${hTitle('The energy story, hour by hour',`${systemById(r.system_id).name} · ${scenarioById(r.scenario_id).name} · synthetic greedy policy`,`<div class="h-actions"><button class="btn secondary small" data-hybrid-action="pin">${icon('layers',15)} Pin to compare</button><button class="btn secondary small" data-hybrid-action="csv">${icon('download',15)} CSV</button></div>`)}
+  function numberField(
+    p: HybridInputs,
+    key: keyof HybridInputs,
+    label: string,
+    unit: string,
+    min = 0,
+    max = 1e6,
+    step = 'any',
+  ): string {
+    return `<label class="field"><span>${hx(label)}</span><div class="input-unit"><input type="number" name="${key}" value="${hx(p[key])}" min="${String(min)}" max="${String(max)}" step="${step}" required><span>${unit}</span></div></label>`;
+  }
+  export function hybridLibrary(h: HybridState): string {
+    const rows = filterSystems(h.search, h.family, h.topology);
+    return `<div class="library-summary" role="status"><span>${String(rows.length)} matching architectures</span><span>19 runnable screens · 17 study-only</span></div><div class="system-grid">${rows.length ? rows.map((s) => `<article class="system-card ${h.inputs.system_id === s.id ? 'chosen' : ''}" style="--card-color:${techById(HF.requiredPresent(s.technologies[0], 's.technologies[0]')).color}"><div class="system-card-top"><span class="system-symbol">${icon(familyIcons[s.family] ?? 'layers', 20)}</span><small>${hx(s.family)}</small><span class="mode-dot ${s.mode}" title="${s.mode === 'screening' ? 'Runnable hourly screen' : 'Study-only architecture'}"></span></div><button type="button" class="system-card-select" ${h.busy ? 'disabled' : ''} data-system="${s.id}" aria-pressed="${String(h.inputs.system_id === s.id)}">${hx(s.name)}</button><p>${hx(s.description)}</p><div class="system-card-meta">${chip(s.topology)}${chip(s.coupling)}${chip(s.mode === 'screening' ? 'Runnable' : 'Study only')}</div></article>`).join('') : '<div class="empty">No architectures match. Try “PV”, “BESS”, “H2” or clear the filters.</div>'}</div>`;
+  }
+  export function assetInspector(h: HybridState): string {
+    const t = techById(h.objectId),
+      p = h.inputs;
+    const key: Record<string, keyof HybridInputs> = {
+      solar: 'solar_kw',
+      wind: 'wind_kw',
+      battery: 'battery_kwh',
+      hydro: 'hydro_kw',
+      generator: 'generator_kw',
+      load: 'load_kw',
+      grid: 'grid_import_kw',
+    };
+    const field = key[t.id];
+    return `<div class="asset-inspect" style="--asset-color:${t.color}"><span class="asset-symbol">${icon(t.icon, 22)}</span><div><small>SELECTED OBJECT</small><strong>${hx(t.name)}</strong></div>${field ? `<b>${fmt(Number(p[field]))}<small>${t.id === 'battery' ? 'kWh' : 'kW'}</small></b>` : ''}</div><p class="asset-boundary">${hx(t.boundary)}</p>`;
+  }
+  export function hybridResults(state: ViewState): string {
+    const h = state.hybrid,
+      r = h.result,
+      s = systemById(h.inputs.system_id),
+      c = scenarioById(h.inputs.scenario_id);
+    if (h.inputError)
+      return `<section class="panel empty-result input-error-result"><span>${icon('alert', 30)}</span><div><h2>Check your configuration.</h2><p>${hx(h.inputError)}</p><p>Earlier results are hidden until these inputs are valid and a matching run is available.</p></div></section>`;
+    if (s.mode === 'study' || c.mode === 'study')
+      return `<section class="panel study-boundary"><span class="study-icon">${icon('flask', 32)}</span><div><span class="eyebrow">STUDY-ONLY / NO FABRICATED OUTPUT</span><h2>A richer system needs a richer model.</h2><p>${hx(s.learning_focus)} ${hx(c.mode === 'study' ? c.description : '')}</p><p><strong>Evidence to collect:</strong> ${hx(s.evidence)}</p><button class="btn secondary" data-lesson="lesson-${s.id}">Open this architecture’s lesson ${icon('arrow', 16)}</button></div></section>`;
+    if (!r || hybridDirty(h))
+      return `<section class="panel empty-result"><span>${icon('activity', 30)}</span><div><h2>${r ? 'Configuration changed. Results need a new run.' : 'Your next result starts here.'}</h2><p>Run the hourly energy screen to calculate this configuration. No old result is presented as a new calculation.</p>${!state.connected ? '<p>Start the Python application for new runs. Reset inputs to restore this architecture’s bundled baseline, or select an unchanged scenario preset to inspect its bundled result.</p>' : ''}</div></section>`;
+    const point = HF.requiredPresent(
+      r.schedule[clamp(h.hour, 0, r.schedule.length - 1)],
+      'r.schedule[clamp(h.hour,0,r.schedule.length-1)]',
+    );
+    return `${resultProvenanceView(r)}${r.bundle_case_id ? `<p class="notice">Bundled Python preset · ${hx(r.bundle_version)}. Results match the displayed preset exactly. Edited inputs require the local Python API.</p>` : ''}<div class="hybrid-metrics">
+      ${[
+        {
+          title: 'Critical load served',
+          value: `${fmt(r.critical_served_pct, 1)}%`,
+          sub: `${fmt(r.critical_unserved_kwh, 1)} kWh critical shortfall`,
+          tone: 'var(--color-accent)',
+          ico: 'shield',
+        },
+        {
+          title: 'Total load served',
+          value: `${fmt(r.load_served_pct, 1)}%`,
+          sub: `${fmt(r.unserved_kwh, 1)} kWh incl. planned shedding`,
+          tone: 'var(--color-accent)',
+          ico: 'activity',
+        },
+        {
+          title: 'Grid energy imported',
+          value: `${fmt(r.grid_import_kwh / 1000, 2)} MWh`,
+          sub: `${String(r.duration_hours)} modeled hours · not annual`,
+          tone: 'var(--color-accent)',
+          ico: 'grid',
+        },
+        {
+          title: 'Terminal battery energy',
+          value: `${fmt(r.terminal_energy_kwh / 1000, 2)} MWh`,
+          sub: `${fmt(r.initial_energy_kwh / 1000, 2)} MWh initial · non-cyclic`,
+          tone: 'var(--color-accent)',
+          ico: 'battery',
+        },
+      ]
+        .map(
+          (m) =>
+            `<article class="panel hybrid-metric" style="--metric-tone:${m.tone}"><div><span>${m.title}</span>${icon(m.ico, 17)}</div><strong>${m.value}</strong><small>${m.sub}</small></article>`,
+        )
+        .join('')}
+    </div><section class="panel hybrid-dispatch">${hTitle('The energy story, hour by hour', `${systemById(r.system_id).name} · ${scenarioById(r.scenario_id).name} · synthetic greedy policy`, `<div class="h-actions"><button class="btn secondary small" data-hybrid-action="pin">${icon('layers', 15)} Pin to compare</button><button class="btn secondary small" data-hybrid-action="csv">${icon('download', 15)} CSV</button></div>`)}
     <div class="legend"><span><i style="background:var(--color-accent)"></i>Demand</span><span><i style="background:var(--color-accent)"></i>Solar</span><span><i style="background:var(--color-accent)"></i>Wind</span><span><i style="background:var(--color-accent)"></i>Battery discharge</span><span><i style="background:var(--color-accent)"></i>Grid import</span></div>
-    ${lineChart(r.schedule.map(x=>x.label),[{name:'Demand',values:r.schedule.map(x=>x.load_kw),color:'var(--color-accent)',dashed:true},{name:'Solar',values:r.schedule.map(x=>x.pv_kw),color:'var(--color-accent)',area:true},{name:'Wind',values:r.schedule.map(x=>x.wind_kw),color:'var(--color-accent)'},{name:'Battery discharge',values:r.schedule.map(x=>x.discharge_kw),color:'var(--color-accent)'},{name:'Grid import',values:r.schedule.map(x=>x.grid_import_kw),color:'var(--color-accent)'}],{height:228,unit:'kW'})}
-    <label class="hour-scrubber"><span>Inspect interval</span><input id="hybrid-hour" type="range" min="0" max="${r.schedule.length-1}" value="${h.hour}" aria-label="Inspect simulation interval"><output id="hour-label">${hx(point.label)}</output></label><div id="interval-readout">${intervalReadout(point)}</div>
-    <div class="run-bottom"><span>${r.run_id?'Saved API run':'Bundled example'} · max. balance residual ${r.max_balance_residual_kw.toExponential(1)} kW</span><span>Variable energy cost ${money(r.variable_cost_eur)} <b>≠</b> project economics</span></div>
-    <details class="method-details"><summary>${icon('shield',15)} Read assumptions, provenance & model limits</summary><div>${r.warnings.map(w=>`<p>${hx(w)}</p>`).join('')}<p>Run ID: ${hx(r.run_id??r.bundle_case_id??'bundled-example')}. ${r.bundle_case_id?`Input SHA-256: ${hx(r.input_sha256)}. Bundle dataset SHA-256: ${hx(HYBRID_BUNDLE.dataset_sha256)}.`:''} Modeled cost excludes unserved-load penalties; compare service outcomes before cost.</p></div></details>
-    <details class="method-details"><summary>Accessible interval data table</summary><div class="table-scroll"><table class="h-data-table"><thead><tr>${['Interval','Demand kW','Served kW','Import kW','SOC kWh','Critical shortfall kW','State'].map(t=>`<th>${t}</th>`).join('')}</tr></thead><tbody>${r.schedule.map(x=>`<tr><td>${hx(x.label)}</td><td>${fmt(x.load_kw,1)}</td><td>${fmt(x.served_kw,1)}</td><td>${fmt(x.grid_import_kw,1)}</td><td>${fmt(x.soc_end_kwh,1)}</td><td>${fmt(x.critical_unserved_kw,1)}</td><td>${hx(x.state)}</td></tr>`).join('')}</tbody></table></div></details></section>`;
+    ${lineChart(
+      r.schedule.map((x) => x.label),
+      [
+        {
+          name: 'Demand',
+          values: r.schedule.map((x) => x.load_kw),
+          color: 'var(--color-accent)',
+          dashed: true,
+        },
+        {
+          name: 'Solar',
+          values: r.schedule.map((x) => x.pv_kw),
+          color: 'var(--color-accent)',
+          area: true,
+        },
+        { name: 'Wind', values: r.schedule.map((x) => x.wind_kw), color: 'var(--color-accent)' },
+        {
+          name: 'Battery discharge',
+          values: r.schedule.map((x) => x.discharge_kw),
+          color: 'var(--color-accent)',
+        },
+        {
+          name: 'Grid import',
+          values: r.schedule.map((x) => x.grid_import_kw),
+          color: 'var(--color-accent)',
+        },
+      ],
+      { height: 228, unit: 'kW' },
+    )}
+    <label class="hour-scrubber"><span>Inspect interval</span><input id="hybrid-hour" type="range" min="0" max="${String(r.schedule.length - 1)}" value="${String(h.hour)}" aria-label="Inspect simulation interval"><output id="hour-label">${hx(point.label)}</output></label><div id="interval-readout">${intervalReadout(point)}</div>
+    <div class="run-bottom"><span>${r.run_id ? 'Saved API run' : 'Bundled example'} · max. balance residual ${r.max_balance_residual_kw.toExponential(1)} kW</span><span>Variable energy cost ${money(r.variable_cost_eur)} <b>≠</b> project economics</span></div>
+    <details class="method-details"><summary>${icon('shield', 15)} Read assumptions, provenance & model limits</summary><div>${r.warnings.map((w) => `<p>${hx(w)}</p>`).join('')}<p>Run ID: ${hx(r.run_id ?? r.bundle_case_id ?? 'bundled-example')}. ${r.bundle_case_id ? `Input SHA-256: ${hx(r.input_sha256)}. Bundle dataset SHA-256: ${hx(HYBRID_BUNDLE.dataset_sha256)}.` : ''} Modeled cost excludes unserved-load penalties; compare service outcomes before cost.</p></div></details>
+    <details class="method-details"><summary>Accessible interval data table</summary><div class="table-scroll"><table class="h-data-table"><thead><tr>${['Interval', 'Demand kW', 'Served kW', 'Import kW', 'SOC kWh', 'Critical shortfall kW', 'State'].map((t) => `<th>${t}</th>`).join('')}</tr></thead><tbody>${r.schedule.map((x) => `<tr><td>${hx(x.label)}</td><td>${fmt(x.load_kw, 1)}</td><td>${fmt(x.served_kw, 1)}</td><td>${fmt(x.grid_import_kw, 1)}</td><td>${fmt(x.soc_end_kwh, 1)}</td><td>${fmt(x.critical_unserved_kw, 1)}</td><td>${hx(x.state)}</td></tr>`).join('')}</tbody></table></div></details></section>`;
   }
-  export function intervalReadout(p:HybridPoint):string{return `<div class="interval-readout"><span><small>OPERATING STATE</small><b>${hx(p.state)}</b></span><span><small>LOAD SERVED</small><b>${fmt(p.served_kw,1)} kW</b></span><span><small>BATTERY SOC</small><b>${fmt(p.soc_pct,1)}%</b></span><span><small>CRITICAL SHORTFALL</small><b>${fmt(p.critical_unserved_kw,1)} kW</b></span></div>`;}
-  export function hybridView(state:ViewState):string {
-    const h=state.hybrid,p=h.inputs,s=systemById(p.system_id),c=scenarioById(p.scenario_id);
-    const scenarios=HYBRID_CATALOG.scenarios.filter(x=>applicable(s,x));
-    const advanced=numberField(p,'initial_soc','Initial SOC','fraction',0,1)+numberField(p,'min_soc','Minimum SOC','fraction',0,1)+numberField(p,'max_soc','Maximum SOC','fraction',0,1)+numberField(p,'round_trip_efficiency','Round-trip efficiency','fraction',.01,1)+numberField(p,'import_eur_kwh','Import tariff','€/kWh',-2,5)+numberField(p,'export_eur_kwh','Export tariff','€/kWh',-2,5)+numberField(p,'generator_eur_kwh','Generator variable cost','€/kWh',0,5);
+  export function intervalReadout(p: HybridPoint): string {
+    return `<div class="interval-readout"><span><small>OPERATING STATE</small><b>${hx(p.state)}</b></span><span><small>LOAD SERVED</small><b>${fmt(p.served_kw, 1)} kW</b></span><span><small>BATTERY SOC</small><b>${fmt(p.soc_pct, 1)}%</b></span><span><small>CRITICAL SHORTFALL</small><b>${fmt(p.critical_unserved_kw, 1)} kW</b></span></div>`;
+  }
+  export function hybridView(state: ViewState): string {
+    const h = state.hybrid,
+      p = h.inputs,
+      s = systemById(p.system_id),
+      c = scenarioById(p.scenario_id);
+    const scenarios = HYBRID_CATALOG.scenarios.filter((x) => applicable(s, x));
+    const advanced =
+      numberField(p, 'initial_soc', 'Initial SOC', 'fraction', 0, 1) +
+      numberField(p, 'min_soc', 'Minimum SOC', 'fraction', 0, 1) +
+      numberField(p, 'max_soc', 'Maximum SOC', 'fraction', 0, 1) +
+      numberField(p, 'round_trip_efficiency', 'Round-trip efficiency', 'fraction', 0.01, 1) +
+      numberField(p, 'import_eur_kwh', 'Import tariff', '€/kWh', -2, 5) +
+      numberField(p, 'export_eur_kwh', 'Export tariff', '€/kWh', -2, 5) +
+      numberField(p, 'generator_eur_kwh', 'Generator variable cost', '€/kWh', 0, 5);
     return `<section class="forge-heading"><div><span class="eyebrow">HYBRID SYSTEMS / INTERACTIVE ENERGY LAB</span><h2>Many technologies.<br><em>One connected perspective.</em></h2><p>Build intuition. Stress the assumptions. Make every energy path visible.</p></div><div class="forge-counts"><div><strong>36</strong><span>architectures</span></div><div><strong>24</strong><span>scenarios</span></div><div><strong>36</strong><span>guided lessons</span></div></div></section>
-    <div class="hybrid-workbench"><section class="panel scene-panel"><div class="scene-heading"><div><span class="eyebrow">CONFIGURATION ${String(HYBRID_CATALOG.systems.indexOf(s)+1).padStart(2,'0')}</span><h3>${hx(s.name)}</h3></div><span class="scene-live">${icon('layers',13)} SOFTWARE 3D</span></div><div class="scene-tags" id="smart-tags">${hybridTags(p).map(t=>chip(t.label,t.reason)).join('')}</div><canvas id="energy-scene" tabindex="0" role="img" aria-label="Interactive conceptual 3D ${hx(s.name)}. Drag to orbit; arrow keys change camera, plus/minus zoom, Home resets. Use camera presets or asset buttons below for alternatives.">Conceptual energy architecture. Use the accessible asset selector below.</canvas><div class="scene-controls"><span>Drag to orbit · select an asset</span><div class="scene-preset-controls" role="group" aria-label="Camera presets">${[['isometric','Isometric','Isometric'],['top-down','Top-down','Top-down'],['oblique','Oblique','Oblique'],['wireframe','Wireframe','Wireframe']].map(([cmd,label,txt])=>`<button data-scene-command="${cmd}" data-camera-preset="${cmd}" aria-label="${label} camera preset" aria-pressed="${cmd==='isometric'}" title="${label}">${txt}</button>`).join('')}</div><div class="scene-camera-controls" role="group" aria-label="Manual camera controls">${[['ArrowLeft','Rotate left','↶'],['ArrowRight','Rotate right','↷'],['+','Zoom in','+'],['-','Zoom out','−'],['Home','Reset camera','⌂']].map(([cmd,label,txt])=>`<button data-scene-command="${cmd}" aria-label="${label}">${txt}</button>`).join('')}</div></div><div class="asset-selectors" role="group" aria-label="Select an energy asset">${[...s.technologies,'load',...(s.topology==='Off-grid'?[]:['grid'])].map(id=>`<button data-asset="${id}" class="${h.objectId===id?'selected':''}" style="--asset-color:${techById(id).color}" aria-pressed="${h.objectId===id}">${icon(techById(id).icon,15)}${hx(techById(id).name)}</button>`).join('')}</div><div id="asset-inspector">${assetInspector(h)}</div><p class="scene-disclaimer">Conceptual layout and connections. Objects are not to scale; animated links are not calculated branch flows.</p></section>
-    <form class="panel configuration-panel" id="hybrid-config"><div class="section-heading"><div><h2>Make it your scenario</h2><p>Explicit assumptions. Reproducible inputs.</p></div>${icon('sliders',20)}</div>
-    <label class="field"><span>Architecture preset</span><select id="hybrid-system">${HYBRID_CATALOG.systems.map(x=>`<option value="${x.id}" ${s.id===x.id?'selected':''}>${hx(x.name)}${x.mode==='study'?' · study':''}</option>`).join('')}</select></label>
-    <div class="form-grid">${s.technologies.includes('solar')?numberField(p,'solar_kw','Solar PV','kW'):''}${s.technologies.includes('wind')?numberField(p,'wind_kw','Wind rating','kW'):''}${s.technologies.includes('hydro')?numberField(p,'hydro_kw','Hydro rating','kW'):''}${s.technologies.includes('generator')?numberField(p,'generator_kw','Backup generator','kW'):''}${s.technologies.includes('battery')?numberField(p,'battery_kwh','Battery energy','kWh',0,1e7)+numberField(p,'battery_kw','Battery power','kW'):''}${numberField(p,'load_kw','Base site demand','kW',.01)}${numberField(p,'hours','Model horizon','hours',2,168,'1')}</div>
-    <details class="config-advanced"><summary>Control, grid & operating assumptions ${icon('down',13)}</summary><label class="field"><span>Reference/control assumption</span><select name="control">${['GFL','GFM','Dual','Synchronous'].map(x=>`<option ${p.control===x?'selected':''}>${x}</option>`).join('')}</select></label><div class="form-grid">${s.topology!=='Off-grid'?numberField(p,'grid_import_kw','Import limit','kW')+numberField(p,'grid_export_kw','Export limit','kW'):''}${numberField(p,'critical_fraction','Critical demand share','fraction',.01,1)}${advanced}</div></details>
-    <div class="configuration-actions"><button type="submit" id="run-hybrid" class="btn primary full" ${!state.connected||h.busy||s.mode==='study'||c.mode==='study'?'disabled':''}>${icon(h.busy?'clock':'play',17)}${h.busy?'Running energy screen…':s.mode==='study'||c.mode==='study'?'Study-only configuration':'Run energy screen'}</button><p>${state.connected?'Hourly, synthetic, non-optimized. Not operational control.':'Preview mode · start the Python API for new calculations.'}</p><div><button type="button" class="text-link" data-hybrid-action="export">${icon('download',14)} Export setup</button><button type="button" class="text-link" data-hybrid-action="import">${icon('document',14)} Import</button><button type="button" class="text-link" data-hybrid-action="reset">Reset</button></div></div></form></div>
-    <section class="panel scenario-panel">${hTitle('Change the conditions. See the consequence.',`${scenarios.length} applicable presets · numerical and study-only scopes remain distinct.`,`<button class="text-link" data-lesson="lesson-${s.id}">Guided lesson ${icon('arrow',14)}</button>`)}<div class="scenario-chips">${scenarios.map(x=>`<button data-scenario="${x.id}" class="scenario-chip ${x.id===c.id?'active':''}" aria-pressed="${x.id===c.id}" title="${hx(x.description)}">${icon(x.mode==='study'?'flask':x.category==='Weather'?'sun':x.category==='Resilience'?'shield':'activity',14)}${hx(x.name)}${x.mode==='study'?'<small>STUDY</small>':''}</button>`).join('')}</div><div class="scenario-explainer"><strong>${hx(c.name)}</strong><span>${hx(c.description)}</span></div></section>
+    <div class="hybrid-workbench"><section class="panel scene-panel"><div class="scene-heading"><div><span class="eyebrow">CONFIGURATION ${String(HYBRID_CATALOG.systems.indexOf(s) + 1).padStart(2, '0')}</span><h3>${hx(s.name)}</h3></div><span class="scene-live">${icon('layers', 13)} SOFTWARE 3D</span></div><div class="scene-tags" id="smart-tags">${hybridTags(
+      p,
+    )
+      .map((t) => chip(t.label, t.reason))
+      .join(
+        '',
+      )}</div><canvas id="energy-scene" tabindex="0" role="img" aria-label="Interactive conceptual 3D ${hx(s.name)}. Drag to orbit; arrow keys change camera, plus/minus zoom, Home resets. Use camera presets or asset buttons below for alternatives.">Conceptual energy architecture. Use the accessible asset selector below.</canvas><div class="scene-controls"><span>Drag to orbit · select an asset</span><div class="scene-preset-controls" role="group" aria-label="Camera presets">${[
+      ['isometric', 'Isometric', 'Isometric'],
+      ['top-down', 'Top-down', 'Top-down'],
+      ['oblique', 'Oblique', 'Oblique'],
+      ['wireframe', 'Wireframe', 'Wireframe'],
+    ]
+      .map(
+        ([cmd, label, txt]) =>
+          `<button data-scene-command="${String(cmd)}" data-camera-preset="${String(cmd)}" aria-label="${String(label)} camera preset" aria-pressed="${String(cmd === 'isometric')}" title="${String(label)}">${String(txt)}</button>`,
+      )
+      .join(
+        '',
+      )}</div><div class="scene-camera-controls" role="group" aria-label="Manual camera controls">${[
+      ['ArrowLeft', 'Rotate left', '↶'],
+      ['ArrowRight', 'Rotate right', '↷'],
+      ['+', 'Zoom in', '+'],
+      ['-', 'Zoom out', '−'],
+      ['Home', 'Reset camera', '⌂'],
+    ]
+      .map(
+        ([cmd, label, txt]) =>
+          `<button data-scene-command="${String(cmd)}" aria-label="${String(label)}">${String(txt)}</button>`,
+      )
+      .join(
+        '',
+      )}</div></div><div class="asset-selectors" role="group" aria-label="Select an energy asset">${[...s.technologies, 'load', ...(s.topology === 'Off-grid' ? [] : ['grid'])].map((id) => `<button data-asset="${id}" class="${h.objectId === id ? 'selected' : ''}" style="--asset-color:${techById(id).color}" aria-pressed="${String(h.objectId === id)}">${icon(techById(id).icon, 15)}${hx(techById(id).name)}</button>`).join('')}</div><div id="asset-inspector">${assetInspector(h)}</div><p class="scene-disclaimer">Conceptual layout and connections. Objects are not to scale; animated links are not calculated branch flows.</p></section>
+    <form class="panel configuration-panel" id="hybrid-config"><div class="section-heading"><div><h2>Make it your scenario</h2><p>Explicit assumptions. Reproducible inputs.</p></div>${icon('sliders', 20)}</div>
+    <label class="field"><span>Architecture preset</span><select id="hybrid-system">${HYBRID_CATALOG.systems.map((x) => `<option value="${x.id}" ${s.id === x.id ? 'selected' : ''}>${hx(x.name)}${x.mode === 'study' ? ' · study' : ''}</option>`).join('')}</select></label>
+    <div class="form-grid">${s.technologies.includes('solar') ? numberField(p, 'solar_kw', 'Solar PV', 'kW') : ''}${s.technologies.includes('wind') ? numberField(p, 'wind_kw', 'Wind rating', 'kW') : ''}${s.technologies.includes('hydro') ? numberField(p, 'hydro_kw', 'Hydro rating', 'kW') : ''}${s.technologies.includes('generator') ? numberField(p, 'generator_kw', 'Backup generator', 'kW') : ''}${s.technologies.includes('battery') ? numberField(p, 'battery_kwh', 'Battery energy', 'kWh', 0, 1e7) + numberField(p, 'battery_kw', 'Battery power', 'kW') : ''}${numberField(p, 'load_kw', 'Base site demand', 'kW', 0.01)}${numberField(p, 'hours', 'Model horizon', 'hours', 2, 168, '1')}</div>
+    <details class="config-advanced"><summary>Control, grid & operating assumptions ${icon('down', 13)}</summary><label class="field"><span>Reference/control assumption</span><select name="control">${['GFL', 'GFM', 'Dual', 'Synchronous'].map((x) => `<option ${p.control === x ? 'selected' : ''}>${x}</option>`).join('')}</select></label><div class="form-grid">${s.topology !== 'Off-grid' ? numberField(p, 'grid_import_kw', 'Import limit', 'kW') + numberField(p, 'grid_export_kw', 'Export limit', 'kW') : ''}${numberField(p, 'critical_fraction', 'Critical demand share', 'fraction', 0.01, 1)}${advanced}</div></details>
+    <div class="configuration-actions"><button type="submit" id="run-hybrid" class="btn primary full" ${!state.connected || h.busy || s.mode === 'study' || c.mode === 'study' ? 'disabled' : ''}>${icon(h.busy ? 'clock' : 'play', 17)}${h.busy ? 'Running energy screen…' : s.mode === 'study' || c.mode === 'study' ? 'Study-only configuration' : 'Run energy screen'}</button><p>${state.connected ? 'Hourly, synthetic, non-optimized. Not operational control.' : 'Preview mode · start the Python API for new calculations.'}</p><div><button type="button" class="text-link" data-hybrid-action="export">${icon('download', 14)} Export setup</button><button type="button" class="text-link" data-hybrid-action="import">${icon('document', 14)} Import</button><button type="button" class="text-link" data-hybrid-action="reset">Reset</button></div></div></form></div>
+    <section class="panel scenario-panel">${hTitle('Change the conditions. See the consequence.', `${String(scenarios.length)} applicable presets · numerical and study-only scopes remain distinct.`, `<button class="text-link" data-lesson="lesson-${s.id}">Guided lesson ${icon('arrow', 14)}</button>`)}<div class="scenario-chips">${scenarios.map((x) => `<button data-scenario="${x.id}" class="scenario-chip ${x.id === c.id ? 'active' : ''}" aria-pressed="${String(x.id === c.id)}" title="${hx(x.description)}">${icon(x.mode === 'study' ? 'flask' : x.category === 'Weather' ? 'sun' : x.category === 'Resilience' ? 'shield' : 'activity', 14)}${hx(x.name)}${x.mode === 'study' ? '<small>STUDY</small>' : ''}</button>`).join('')}</div><div class="scenario-explainer"><strong>${hx(c.name)}</strong><span>${hx(c.description)}</span></div></section>
     <div id="hybrid-output">${hybridResults(state)}</div>
-    <section class="panel library-panel" id="architecture-library">${hTitle('The hybrid architecture atlas','Search technologies, interconnection, use case or control. No claim of exhaustive coverage.')}<div class="library-tools"><label class="search-field">${icon('search',17)}<input id="hybrid-search" type="search" value="${hx(h.search)}" placeholder="Try solar, off-grid, BESS or H2…" aria-label="Search hybrid architectures"></label><label class="select-wrap"><span class="sr-only">Architecture family</span><select id="hybrid-family">${['All',...new Set(HYBRID_CATALOG.systems.map(x=>x.family))].map(x=>`<option ${h.family===x?'selected':''}>${x}</option>`).join('')}</select></label><label class="select-wrap"><span class="sr-only">Interconnection topology</span><select id="hybrid-topology">${['All',...new Set(HYBRID_CATALOG.systems.map(x=>x.topology))].map(x=>`<option ${h.topology===x?'selected':''}>${x}</option>`).join('')}</select></label><button class="btn secondary small" data-hybrid-action="clear-filters">Clear</button></div><div id="hybrid-library-results">${h.libraryReady?hybridLibrary(h):'<p class="library-deferred" data-library-deferred role="status">Explore architectures using the search and filters above.</p>'}</div></section>`;
+    <section class="panel library-panel" id="architecture-library">${hTitle('The hybrid architecture atlas', 'Search technologies, interconnection, use case or control. No claim of exhaustive coverage.')}<div class="library-tools"><label class="search-field">${icon('search', 17)}<input id="hybrid-search" type="search" value="${hx(h.search)}" placeholder="Try solar, off-grid, BESS or H2…" aria-label="Search hybrid architectures"></label><label class="select-wrap"><span class="sr-only">Architecture family</span><select id="hybrid-family">${['All', ...new Set(HYBRID_CATALOG.systems.map((x) => x.family))].map((x) => `<option ${h.family === x ? 'selected' : ''}>${x}</option>`).join('')}</select></label><label class="select-wrap"><span class="sr-only">Interconnection topology</span><select id="hybrid-topology">${['All', ...new Set(HYBRID_CATALOG.systems.map((x) => x.topology))].map((x) => `<option ${h.topology === x ? 'selected' : ''}>${x}</option>`).join('')}</select></label><button class="btn secondary small" data-hybrid-action="clear-filters">Clear</button></div><div id="hybrid-library-results">${h.libraryReady ? hybridLibrary(h) : '<p class="library-deferred" data-library-deferred role="status">Explore architectures using the search and filters above.</p>'}</div></section>`;
   }
-  export function lessonsView(state:ViewState):string {
-    const h=state.hybrid,l=HYBRID_CATALOG.lessons.find(x=>x.id===h.lessonId)??HYBRID_CATALOG.lessons[0]!,s=systemById(l.system_id);
-    return `<section class="lesson-hero panel"><div><span class="eyebrow">LEARNING STUDIO / UNDERSTAND BEFORE YOU OPTIMIZE</span><h2>Small experiments.<br><em>Stronger energy intuition.</em></h2><p>Each architecture has a guided lesson, a scenario experiment and an explained self-check.</p></div><div class="achievement-orb">${icon('trophy',48)}<strong>${h.progress.length}<small> / 36</small></strong><span>self-checks passed</span></div></section><div class="lesson-layout"><aside class="panel lesson-list"><div><h2>Your learning path</h2><p>Foundation → Applied → Advanced</p></div>${HYBRID_CATALOG.lessons.map((x,i)=>`<article class="lesson-choice"><p id="lesson-label-${x.id}">${hx(x.title)}</p><small>${x.level} · ${x.minutes} min activity</small><button data-lesson="${x.id}" class="${l.id===x.id?'selected':''}" aria-describedby="lesson-label-${x.id}"><span class="lesson-number ${h.progress.includes(x.id)?'done':''}">${h.progress.includes(x.id)?icon('check',14):String(i+1).padStart(2,'0')}</span><span>Open lesson</span></button></article>`).join('')}</aside><section class="panel lesson-content"><div class="lesson-meta">${chip(l.level)}${chip(s.topology)}${chip(s.mode==='screening'?'Hands-on energy screen':'Advanced model-design study')}</div><h2>${hx(l.title)}</h2><p class="lesson-description">${hx(s.description)}</p><div class="lesson-objectives"><h3>By the end, you should be able to…</h3>${l.objectives.map(x=>`<p>${icon('target',15)} ${hx(x)}</p>`).join('')}</div><div class="lesson-steps">${l.steps.map((x,i)=>`<article><span>0${i+1}</span><div><h3>${hx(x.title)}</h3><p>${hx(x.body)}</p></div></article>`).join('')}</div><div class="h-actions"><button class="btn primary" data-hybrid-action="launch-lesson">${icon('play',16)} Load lesson configuration</button><button class="btn secondary" data-hybrid-action="export-lesson">${icon('download',16)} Export lesson plan</button></div><form id="lesson-quiz"><div class="section-heading"><div><h2>Check your understanding</h2><p>Local practice only. Not a qualification or verified assessment.</p></div>${icon('trophy',22)}</div>${l.quiz.map((q,i)=>`<fieldset><legend>${i+1}. ${hx(q.question)}</legend>${q.options.map((o,j)=>`<label class="quiz-option"><input type="radio" name="q${i}" value="${j}" required><span>${String.fromCharCode(65+j)}</span>${hx(o)}</label>`).join('')}</fieldset>`).join('')}<button type="submit" class="btn primary">Check answers ${icon('arrow',15)}</button><div id="quiz-feedback" role="status"></div></form><div class="lesson-source"><h3>Evidence and reading</h3>${HYBRID_CATALOG.sources.map(src=>`<div class="lesson-source-item"><span class="lesson-source-title">${hx(src.name)}</span><a class="lesson-source-link" aria-label="Read source: ${hx(src.name)}" href="${safeURL(src.url)}" target="_blank" rel="noopener noreferrer">Read source ${icon('diagonal',13)}</a></div>`).join('')}<small>General primary context, not validation of the synthetic configuration.</small></div></section></div><div class="learning-footer"><p>Progress is stored in this browser only. Export a progress record before clearing browser data.</p><button class="text-link" data-hybrid-action="export-progress">Export progress</button><button class="text-link" data-hybrid-action="reset-progress">Reset progress</button></div>`;
+  export function lessonsView(state: ViewState): string {
+    const h = state.hybrid,
+      l =
+        HYBRID_CATALOG.lessons.find((x) => x.id === h.lessonId) ??
+        HF.requiredPresent(HYBRID_CATALOG.lessons[0], 'HYBRID_CATALOG.lessons[0]'),
+      s = systemById(l.system_id);
+    return `<section class="lesson-hero panel"><div><span class="eyebrow">LEARNING STUDIO / UNDERSTAND BEFORE YOU OPTIMIZE</span><h2>Small experiments.<br><em>Stronger energy intuition.</em></h2><p>Each architecture has a guided lesson, a scenario experiment and an explained self-check.</p></div><div class="achievement-orb">${icon('trophy', 48)}<strong>${String(h.progress.length)}<small> / 36</small></strong><span>self-checks passed</span></div></section><div class="lesson-layout"><aside class="panel lesson-list"><div><h2>Your learning path</h2><p>Foundation → Applied → Advanced</p></div>${HYBRID_CATALOG.lessons.map((x, i) => `<article class="lesson-choice"><p id="lesson-label-${x.id}">${hx(x.title)}</p><small>${x.level} · ${String(x.minutes)} min activity</small><button data-lesson="${x.id}" class="${l.id === x.id ? 'selected' : ''}" aria-describedby="lesson-label-${x.id}"><span class="lesson-number ${h.progress.includes(x.id) ? 'done' : ''}">${h.progress.includes(x.id) ? icon('check', 14) : String(i + 1).padStart(2, '0')}</span><span>Open lesson</span></button></article>`).join('')}</aside><section class="panel lesson-content"><div class="lesson-meta">${chip(l.level)}${chip(s.topology)}${chip(s.mode === 'screening' ? 'Hands-on energy screen' : 'Advanced model-design study')}</div><h2>${hx(l.title)}</h2><p class="lesson-description">${hx(s.description)}</p><div class="lesson-objectives"><h3>By the end, you should be able to…</h3>${l.objectives.map((x) => `<p>${icon('target', 15)} ${hx(x)}</p>`).join('')}</div><div class="lesson-steps">${l.steps.map((x, i) => `<article><span>0${String(i + 1)}</span><div><h3>${hx(x.title)}</h3><p>${hx(x.body)}</p></div></article>`).join('')}</div><div class="h-actions"><button class="btn primary" data-hybrid-action="launch-lesson">${icon('play', 16)} Load lesson configuration</button><button class="btn secondary" data-hybrid-action="export-lesson">${icon('download', 16)} Export lesson plan</button></div><form id="lesson-quiz"><div class="section-heading"><div><h2>Check your understanding</h2><p>Local practice only. Not a qualification or verified assessment.</p></div>${icon('trophy', 22)}</div>${l.quiz.map((q, i) => `<fieldset><legend>${String(i + 1)}. ${hx(q.question)}</legend>${q.options.map((o, j) => `<label class="quiz-option"><input type="radio" name="q${String(i)}" value="${String(j)}" required><span>${String.fromCharCode(65 + j)}</span>${hx(o)}</label>`).join('')}</fieldset>`).join('')}<button type="submit" class="btn primary">Check answers ${icon('arrow', 15)}</button><div id="quiz-feedback" role="status"></div></form><div class="lesson-source"><h3>Evidence and reading</h3>${HYBRID_CATALOG.sources.map((src) => `<div class="lesson-source-item"><span class="lesson-source-title">${hx(src.name)}</span><a class="lesson-source-link" aria-label="Read source: ${hx(src.name)}" href="${safeURL(src.url)}" target="_blank" rel="noopener noreferrer">Read source ${icon('diagonal', 13)}</a></div>`).join('')}<small>General primary context, not validation of the synthetic configuration.</small></div></section></div><div class="learning-footer"><p>Progress is stored in this browser only. Export a progress record before clearing browser data.</p><button class="text-link" data-hybrid-action="export-progress">Export progress</button><button class="text-link" data-hybrid-action="reset-progress">Reset progress</button></div>`;
   }
-  export function compareView(state:ViewState):string {
-    const runs=state.hybrid.compare;
-    const metrics:{label:string;key:keyof HybridResult;unit:string;digits:number}[]=[{label:'Model horizon',key:'duration_hours',unit:'h',digits:0},{label:'Total load served',key:'load_served_pct',unit:'%',digits:1},{label:'Critical shortfall',key:'critical_unserved_kwh',unit:'kWh',digits:1},{label:'Grid imports',key:'grid_import_kwh',unit:'kWh',digits:1},{label:'Renewable curtailment',key:'curtailed_kwh',unit:'kWh',digits:1},{label:'Backup generation',key:'generator_kwh',unit:'kWh',digits:1},{label:'Initial battery energy',key:'initial_energy_kwh',unit:'kWh',digits:1},{label:'Terminal battery energy',key:'terminal_energy_kwh',unit:'kWh',digits:1},{label:'Variable energy cost',key:'variable_cost_eur',unit:'EUR',digits:2}];
-    const contract=hybridComparisonContract(runs);
-    const compatibility=contract.comparable
-      ?`Compatible model/data/horizon contract: ${contract.engine_id}; ${contract.data_kind}; ${contract.horizon_hours} h; ${contract.units}.`
-      :`Not directly comparable. ${[...contract.reasons,...contract.provenance_gaps].join(' ')}`;
-    const revision=(run:ComparedRun):string=>{const raw=run.result as HybridResult&Record<string,unknown>,value=raw.source_revision??raw.application_revision??raw.applicationRevision;return typeof value==='string'?value:'unavailable';};
-    return `<div class="page-intro"><span class="eyebrow">SCENARIO COMPARISON / CONTEXT BEFORE RANKING</span><h2>Better is a question.<br>Not a single score.</h2><p>Pin up to three bundled presets or completed API runs in the hybrid lab. Compare service adequacy, energy flows and stored-energy endpoints.</p></div>${runs.length?`<div class="notice warn">${icon('alert',18)}<span>${hx(compatibility)} Raw period totals remain visible for inspection; reconcile model, data origin, horizon, units, initial and terminal battery energy before interpreting them. Costs exclude unserved-load penalties; no automatic winner is selected.</span></div><section class="panel compare-panel"><div class="compare-controls"><h2>${runs.length} pinned runs</h2><div class="h-actions"><button class="btn secondary" data-hybrid-action="export-compare">${icon('download',15)} Export comparison</button><button class="btn quiet" data-hybrid-action="clear-compare">Clear all</button></div></div><div class="table-scroll"><table class="comparison-table"><thead><tr><th>Assumption / outcome</th>${runs.map((r,i)=>`<th><span class="compare-letter">${String.fromCharCode(65+i)}</span><strong>${hx(r.name)}</strong><small>${hx(r.result.model)} · ${hx(r.result.data_kind)} · ${r.result.run_id?'Calculated API run':'Bundled example'}</small><button data-remove-compare="${hx(r.id)}" aria-label="Remove ${hx(r.name)}">${icon('close',14)}</button></th>`).join('')}</tr></thead><tbody><tr><th>Comparison contract</th><td colspan="${runs.length}">${contract.comparable?'Compatible for descriptive period comparison':'Descriptive only; direct period comparison is not supported'}</td></tr>${metrics.map(m=>`<tr><th>${m.label}</th>${runs.map(r=>`<td>${fmt(Number(r.result[m.key]),m.digits)} <small>${m.unit}</small></td>`).join('')}</tr>`).join('')}<tr><th>Input SHA-256</th>${runs.map(r=>`<td class="mono">${hx(r.result.input_sha256??'unavailable')}</td>`).join('')}</tr><tr><th>Application source revision</th>${runs.map(r=>`<td class="mono">${hx(revision(r))}</td>`).join('')}</tr><tr><th>Dataset revision</th>${runs.map(r=>`<td class="mono">${hx((r.result as HybridResult&Record<string,unknown>).dataset_revision??r.result.bundle_version??'unavailable')}${r.result.bundle_case_id?` · ${hx(HYBRID_BUNDLE.dataset_sha256)}`:''}</td>`).join('')}</tr></tbody></table></div></section>`:`<section class="panel comparison-empty"><div class="empty-stack">${icon('layers',52)}</div><h2>Give your next decision a reference point.</h2><p>Select an architecture’s bundled baseline, pin it, then select a numerical scenario preset and pin its bundled result. New calculations for edited inputs require the local Python API.</p><button class="btn primary" data-nav="hybrid">Open the hybrid lab ${icon('arrow',16)}</button></section>`}`;
+  export function compareView(state: ViewState): string {
+    const runs = state.hybrid.compare;
+    const metrics: { label: string; key: keyof HybridResult; unit: string; digits: number }[] = [
+      { label: 'Model horizon', key: 'duration_hours', unit: 'h', digits: 0 },
+      { label: 'Total load served', key: 'load_served_pct', unit: '%', digits: 1 },
+      { label: 'Critical shortfall', key: 'critical_unserved_kwh', unit: 'kWh', digits: 1 },
+      { label: 'Grid imports', key: 'grid_import_kwh', unit: 'kWh', digits: 1 },
+      { label: 'Renewable curtailment', key: 'curtailed_kwh', unit: 'kWh', digits: 1 },
+      { label: 'Backup generation', key: 'generator_kwh', unit: 'kWh', digits: 1 },
+      { label: 'Initial battery energy', key: 'initial_energy_kwh', unit: 'kWh', digits: 1 },
+      { label: 'Terminal battery energy', key: 'terminal_energy_kwh', unit: 'kWh', digits: 1 },
+      { label: 'Variable energy cost', key: 'variable_cost_eur', unit: 'EUR', digits: 2 },
+    ];
+    const contract = hybridComparisonContract(runs);
+    const compatibility = contract.comparable
+      ? `Compatible model/data/horizon contract: ${String(contract.engine_id)}; ${String(contract.data_kind)}; ${String(contract.horizon_hours)} h; ${contract.units}.`
+      : `Not directly comparable. ${[...contract.reasons, ...contract.provenance_gaps].join(' ')}`;
+    const revision = (run: ComparedRun): string => {
+      const raw = run.result as HybridResult & Record<string, unknown>,
+        value = raw.source_revision ?? raw.application_revision ?? raw.applicationRevision;
+      return typeof value === 'string' ? value : 'unavailable';
+    };
+    return `<div class="page-intro"><span class="eyebrow">SCENARIO COMPARISON / CONTEXT BEFORE RANKING</span><h2>Better is a question.<br>Not a single score.</h2><p>Pin up to three bundled presets or completed API runs in the hybrid lab. Compare service adequacy, energy flows and stored-energy endpoints.</p></div>${runs.length ? `<div class="notice warn">${icon('alert', 18)}<span>${hx(compatibility)} Raw period totals remain visible for inspection; reconcile model, data origin, horizon, units, initial and terminal battery energy before interpreting them. Costs exclude unserved-load penalties; no automatic winner is selected.</span></div><section class="panel compare-panel"><div class="compare-controls"><h2>${String(runs.length)} pinned runs</h2><div class="h-actions"><button class="btn secondary" data-hybrid-action="export-compare">${icon('download', 15)} Export comparison</button><button class="btn quiet" data-hybrid-action="clear-compare">Clear all</button></div></div><div class="table-scroll"><table class="comparison-table"><thead><tr><th>Assumption / outcome</th>${runs.map((r, i) => `<th><span class="compare-letter">${String.fromCharCode(65 + i)}</span><strong>${hx(r.name)}</strong><small>${hx(r.result.model)} · ${hx(r.result.data_kind)} · ${r.result.run_id ? 'Calculated API run' : 'Bundled example'}</small><button data-remove-compare="${hx(r.id)}" aria-label="Remove ${hx(r.name)}">${icon('close', 14)}</button></th>`).join('')}</tr></thead><tbody><tr><th>Comparison contract</th><td colspan="${String(runs.length)}">${contract.comparable ? 'Compatible for descriptive period comparison' : 'Descriptive only; direct period comparison is not supported'}</td></tr>${metrics.map((m) => `<tr><th>${m.label}</th>${runs.map((r) => `<td>${fmt(Number(r.result[m.key]), m.digits)} <small>${m.unit}</small></td>`).join('')}</tr>`).join('')}<tr><th>Input SHA-256</th>${runs.map((r) => `<td class="mono">${hx(r.result.input_sha256 ?? 'unavailable')}</td>`).join('')}</tr><tr><th>Application source revision</th>${runs.map((r) => `<td class="mono">${hx(revision(r))}</td>`).join('')}</tr><tr><th>Dataset revision</th>${runs.map((r) => `<td class="mono">${hx((r.result as HybridResult & Record<string, unknown>).dataset_revision ?? r.result.bundle_version ?? 'unavailable')}${r.result.bundle_case_id ? ` · ${hx(HYBRID_BUNDLE.dataset_sha256)}` : ''}</td>`).join('')}</tr></tbody></table></div></section>` : `<section class="panel comparison-empty"><div class="empty-stack">${icon('layers', 52)}</div><h2>Give your next decision a reference point.</h2><p>Select an architecture’s bundled baseline, pin it, then select a numerical scenario preset and pin its bundled result. New calculations for edited inputs require the local Python API.</p><button class="btn primary" data-nav="hybrid">Open the hybrid lab ${icon('arrow', 16)}</button></section>`}`;
   }
 }

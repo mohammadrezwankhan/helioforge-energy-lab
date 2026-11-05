@@ -3,14 +3,34 @@
 from __future__ import annotations
 
 import math
-from datetime import datetime, timedelta
-from typing import Annotated
+from datetime import date, timedelta
+from typing import Annotated, TypedDict
 
 import numpy as np
 from pydantic import Field, model_validator
 
 from helioforge.engines.finance import calculate_pv
+from helioforge.engines.study_types import (
+    NumericField,
+    StudyDefinition,
+    StudyResult,
+)
 from helioforge.schemas import PVRequest, StrictModel
+
+
+class AnnualInterval(TypedDict):
+    timestamp: str
+    load_kw: float
+    pv_kw: float
+    charge_kw: float
+    discharge_kw: float
+    grid_import_kw: float
+    grid_export_kw: float
+    soc_start_kwh: float
+    soc_end_kwh: float
+    tariff_eur_kwh: float
+    cost_eur: float
+
 
 PRICE = [0.10] * 6 + [0.18] * 3 + [0.12] * 7 + [0.30] * 5 + [0.14] * 3
 Power = Annotated[float, Field(ge=0, le=1e6, allow_inf_nan=False)]
@@ -32,7 +52,7 @@ class Annual(StrictModel):
     hourly_pv_kw: list[Power] = Field(default_factory=list, max_length=8760)
 
     @model_validator(mode="after")
-    def consistent(self):
+    def consistent(self) -> Annual:
         if self.export_price > min(self.tariff):
             raise ValueError("This rule policy requires import prices at least as high as export prices.")
         if any((self.hourly_load_kw, self.hourly_pv_kw)) and not (
@@ -56,18 +76,31 @@ class Reserve(StrictModel):
     years: int = Field(default=15, ge=1, le=50)
 
 
-def f(name, label, default, lo, hi, step=1, unit=""):
-    return dict(name=name, label=label, default=default, min=lo, max=hi, step=step, unit=unit)
+def f(
+    name: str, label: str, default: float, lo: float, hi: float, step: float = 1, unit: str = ""
+) -> NumericField:
+    return {
+        "name": name,
+        "label": label,
+        "default": default,
+        "min": lo,
+        "max": hi,
+        "step": step,
+        "unit": unit,
+    }
 
 
-STUDIES = [
-    dict(
-        id="storage-annual",
-        page="storage",
-        title="8760-hour dispatch and tariff builder",
-        kind="annual",
-        summary="A complete seasonal year or supplied hourly series, with a transparent tariff policy and monthly billing.",
-        fields=[
+STUDIES: list[StudyDefinition] = [
+    {
+        "id": "storage-annual",
+        "page": "storage",
+        "title": "8760-hour dispatch and tariff builder",
+        "kind": "annual",
+        "summary": (
+            "A complete seasonal year or supplied hourly series, with a"
+            " transparent tariff policy and monthly billing."
+        ),
+        "fields": [
             f("capacity_kwh", "Battery energy", 10000, 1, 1e6, 100, "kWh"),
             f("power_kw", "Battery power", 5000, 1, 1e6, 100, "kW"),
             f("pv_kwp", "Synthetic PV capacity", 5900, 0, 1e6, 100, "kWp"),
@@ -78,90 +111,118 @@ STUDIES = [
             f("export_price", "Export tariff", 0.04, 0, 3, 0.01, "EUR/kWh"),
             f("seed", "Weather seed", 42, 0, 2**32 - 1),
         ],
-        data_fields=[
-            dict(name="tariff", label="24 hourly import tariffs (EUR/kWh)", default=PRICE),
-            dict(name="hourly_load_kw", label="Optional full-year load (8760 kW values)", default=[]),
-            dict(name="hourly_pv_kw", label="Optional full-year PV (8760 kW values)", default=[]),
+        "data_fields": [
+            {"name": "tariff", "label": "24 hourly import tariffs (EUR/kWh)", "default": PRICE},
+            {"name": "hourly_load_kw", "label": "Optional full-year load (8760 kW values)", "default": []},
+            {"name": "hourly_pv_kw", "label": "Optional full-year PV (8760 kW values)", "default": []},
         ],
-        equations=[
+        "equations": [
             "SOC[t+1] = SOC[t] + sqrt(efficiency)*charge - discharge/sqrt(efficiency)",
             "Monthly demand cost = sum(monthly maximum import kW * monthly tariff)",
-            "Both initial and terminal SOC = 50%; usable range = 10–90%.",
+            "Both initial and terminal SOC = 50%; usable range = 10\N{EN DASH}90%.",
         ],
-        limitations=[
-            "Explicit non-leap 8760-hour calendar; no DST. Synthetic seasonal weather is not site-calibrated.",
-            "Transparent tariff-threshold policy, NOT the short-horizon MILP or a globally optimal annual solution.",
-            "Unconstrained grid connection; no reserve services, outages, demand ratchets, taxes or fixed fees.",
+        "limitations": [
+            (
+                "Explicit non-leap 8760-hour calendar; no DST. Synthetic"
+                " seasonal weather is not site-calibrated."
+            ),
+            (
+                "Transparent tariff-threshold policy, NOT the short-horizon"
+                " MILP or a globally optimal annual solution."
+            ),
+            (
+                "Unconstrained grid connection; no reserve services, outages,"
+                " demand ratchets, taxes or fixed fees."
+            ),
             "No daily result is multiplied by 365. Annual totals sum every generated or supplied hour.",
         ],
-        sources=[
-            dict(title="NREL REopt documentation and model boundary", url="https://reopt.nrel.gov/tool")
+        "sources": [
+            {"title": "NREL REopt documentation and model boundary", "url": "https://reopt.nrel.gov/tool"}
         ],
-    ),
-    dict(
-        id="pv-sensitivity",
-        page="pv",
-        title="LCOE contour sensitivity",
-        kind="heatmap",
-        summary="A 9 × 9 CAPEX and yield surface evaluated by the existing discounted PV engine.",
-        fields=[
+    },
+    {
+        "id": "pv-sensitivity",
+        "page": "pv",
+        "title": "LCOE contour sensitivity",
+        "kind": "heatmap",
+        "summary": "A 9 \xd7 9 CAPEX and yield surface evaluated by the existing discounted PV engine.",
+        "fields": [
             f("capex_eur_kwp", "Central CAPEX", 650, 100, 5000, 10, "EUR/kWp"),
             f("yield_kwh_kwp", "Central yield", 1350, 400, 2200, 10, "kWh/kWp"),
             f("discount", "Real discount rate", 0.07, 0, 0.4, 0.01),
             f("opex", "Annual OPEX", 12, 0, 100, 1, "EUR/kWp"),
         ],
-        data_fields=[],
-        equations=["LCOE = discounted lifecycle costs / discounted lifetime MWh"],
-        limitations=[
-            "Constant money; the parent PV engine retains its 30-year life and year-15 replacement assumptions."
-        ],
-        sources=[
-            dict(
-                title="NREL simple LCOE documentation",
-                url="https://www.nrel.gov/analysis/tech-lcoe-documentation.html",
+        "data_fields": [],
+        "equations": ["LCOE = discounted lifecycle costs / discounted lifetime MWh"],
+        "limitations": [
+            (
+                "Constant money; the parent PV engine retains its 30-year"
+                " life and year-15 replacement assumptions."
             )
         ],
-    ),
-    dict(
-        id="pv-reserve",
-        page="pv",
-        title="Inverter repowering reserve",
-        kind="waterfall",
-        summary="Inflation-linked future replacement cost and equal end-of-year reserve contributions.",
-        fields=[
+        "sources": [
+            {
+                "title": "NREL simple LCOE documentation",
+                "url": "https://www.nrel.gov/analysis/tech-lcoe-documentation.html",
+            }
+        ],
+    },
+    {
+        "id": "pv-reserve",
+        "page": "pv",
+        "title": "Inverter repowering reserve",
+        "kind": "waterfall",
+        "summary": "Inflation-linked future replacement cost and equal end-of-year reserve contributions.",
+        "fields": [
             f("cost_eur", "Replacement cost today", 1750000, 0, 1e10, 1000, "EUR"),
             f("inflation", "Cost inflation", 0.02, 0, 0.2, 0.005),
             f("fund_return", "Nominal fund return", 0.03, 0, 0.2, 0.005),
             f("years", "Replacement year", 15, 1, 50),
         ],
-        data_fields=[],
-        equations=[
+        "data_fields": [],
+        "equations": [
             "Future cost = present cost * (1+inflation)^years",
             "Annual deposit = future cost * return / ((1+return)^years - 1); zero return: cost/years",
         ],
-        limitations=[
-            "Constant annual assumptions; end-of-year contributions, no tax, fees or investment-return guarantee.",
-            "First-party algebraic convention; the source reference is not independent validation or a forecast of investment returns."
+        "limitations": [
+            (
+                "Constant annual assumptions; end-of-year contributions, no"
+                " tax, fees or investment-return guarantee."
+            ),
+            (
+                "First-party algebraic convention; the source reference is"
+                " not independent validation or a forecast of investment"
+                " returns."
+            ),
         ],
-        sources=[{"title": "First-party HelioForge reserve implementation and declared equations",
-                  "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/74d6730e38323b69c180d7f4b4945d11010203f3/apps/api/helioforge/engines/toolkit_studies.py"}],
-    ),
+        "sources": [
+            {
+                "title": "First-party HelioForge reserve implementation and declared equations",
+                "url": (
+                    "https://github.com/mohammadrezwankhan/helioforge-energy-lab/"
+                    "blob/74d6730e38323b69c180d7f4b4945d11010203f3/apps/api/helio"
+                    "forge/engines/toolkit_studies.py"
+                ),
+            }
+        ],
+    },
 ]
 
 
-def _bounded_battery_step(soc: float, charge: float, discharge: float, eta: float,
-                          floor: float, ceiling: float) -> tuple[float, float, float]:
+def _bounded_battery_step(
+    soc: float, charge: float, discharge: float, eta: float, floor: float, ceiling: float
+) -> tuple[float, float, float]:
     """Project stored energy, then reconstruct the nonnegative AC-side flows."""
     end = min(ceiling, max(floor, soc + eta * charge - discharge / eta))
     delta = end - soc
     return max(delta, 0.0) / eta, max(-delta, 0.0) * eta, end
 
 
-def annual(p: Annual) -> dict:
+def annual(p: Annual) -> StudyResult:
     rng = np.random.default_rng(p.seed)
-    t = np.arange(8760)
-    day = t // 24
-    hour = t % 24
+    hour_indices = np.arange(8760)
+    day = hour_indices // 24
+    hour = hour_indices % 24
     if p.hourly_load_kw:
         load = np.array(p.hourly_load_kw)
         pv = np.array(p.hourly_pv_kw)
@@ -180,13 +241,14 @@ def annual(p: Annual) -> dict:
     initial = 0.5 * p.capacity_kwh
     soc = initial
     low, high = np.quantile(p.tariff, [0.25, 0.75])
-    rows = []
+    rows: list[AnnualInterval] = []
     base_cost = cost = 0.0
     base_peaks = np.zeros(12)
     peaks = np.zeros(12)
     monthly = np.zeros(12)
     for t in range(8760):
-        stamp = datetime(2025, 1, 1) + timedelta(hours=t)
+        # This synthetic civil calendar has 8,760 equal hourly labels, without DST.
+        stamp = date(2025, 1, 1) + timedelta(days=t // 24)
         m = stamp.month - 1
         price = p.tariff[t % 24]
         net = float(load[t] - pv[t])
@@ -214,55 +276,59 @@ def annual(p: Annual) -> dict:
         peaks[m] = max(peaks[m], imp)
         base_peaks[m] = max(base_peaks[m], base_imp)
         rows.append(
-            dict(
-                timestamp=stamp.isoformat(),
-                load_kw=float(load[t]),
-                pv_kw=float(pv[t]),
-                charge_kw=charge,
-                discharge_kw=discharge,
-                grid_import_kw=imp,
-                grid_export_kw=exp,
-                soc_start_kwh=start,
-                soc_end_kwh=soc,
-                tariff_eur_kwh=price,
-                cost_eur=period,
-            )
+            {
+                "timestamp": f"{stamp.isoformat()}T{t % 24:02d}:00:00",
+                "load_kw": float(load[t]),
+                "pv_kw": float(pv[t]),
+                "charge_kw": charge,
+                "discharge_kw": discharge,
+                "grid_import_kw": imp,
+                "grid_export_kw": exp,
+                "soc_start_kwh": start,
+                "soc_end_kwh": soc,
+                "tariff_eur_kwh": price,
+                "cost_eur": period,
+            }
         )
     cost += float(peaks.sum()) * p.monthly_peak
     base_cost += float(base_peaks.sum()) * p.monthly_peak
-    return dict(
-        metrics=[
-            dict(label="Annual policy cost", value=cost, unit="EUR"),
-            dict(label="No-storage cost", value=base_cost, unit="EUR"),
-            dict(label="Policy savings (can be negative)", value=base_cost - cost, unit="EUR"),
-            dict(label="Terminal battery energy", value=soc, unit="kWh"),
+    return {
+        "metrics": [
+            {"label": "Annual policy cost", "value": cost, "unit": "EUR"},
+            {"label": "No-storage cost", "value": base_cost, "unit": "EUR"},
+            {"label": "Policy savings (can be negative)", "value": base_cost - cost, "unit": "EUR"},
+            {"label": "Terminal battery energy", "value": soc, "unit": "kWh"},
         ],
-        series=[
-            dict(
-                name="Monthly policy cost incl. demand charges",
-                x_label="Month",
-                y_unit="EUR",
-                x=list(range(1, 13)),
-                y=(monthly + peaks * p.monthly_peak).tolist(),
-            ),
-            dict(
-                name="Battery energy",
-                x_label="Hour",
-                y_unit="kWh",
-                x=list(range(8760)),
-                y=[r["soc_end_kwh"] for r in rows],
-            ),
+        "series": [
+            {
+                "name": "Monthly policy cost incl. demand charges",
+                "x_label": "Month",
+                "y_unit": "EUR",
+                "x": list(range(1, 13)),
+                "y": (monthly + peaks * p.monthly_peak).tolist(),
+            },
+            {
+                "name": "Battery energy",
+                "x_label": "Hour",
+                "y_unit": "kWh",
+                "x": list(range(8760)),
+                "y": [r["soc_end_kwh"] for r in rows],
+            },
         ],
-        table=rows,
-        details={"initial_soc_kwh": initial, "terminal_soc_kwh": soc, "annual_grid_model": "unconstrained"},
-        warnings=[
+        "table": rows,
+        "details": {
+            "initial_soc_kwh": initial,
+            "terminal_soc_kwh": soc,
+            "annual_grid_model": "unconstrained",
+        },
+        "warnings": [
             "Rule-based policy may cost more than the no-storage comparator; no savings guarantee.",
             "This annual synthetic scenario is separate from the original 24-hour MILP.",
         ],
-    )
+    }
 
 
-def run(study_id: str, inputs: dict) -> dict:
+def run(study_id: str, inputs: object) -> StudyResult:
     if study_id == "storage-annual":
         return annual(Annual.model_validate(inputs))
     if study_id == "pv-reserve":
@@ -274,65 +340,70 @@ def run(study_id: str, inputs: dict) -> dict:
             else target * p.fund_return / math.expm1(p.years * math.log1p(p.fund_return))
         )
         rows = []
-        balance = 0
+        balance: float = 0
         for year in range(1, p.years + 1):
             interest = balance * p.fund_return
             balance += interest + contribution
             rows.append(
-                dict(year=year, contribution_eur=contribution, interest_eur=interest, balance_eur=balance)
+                {
+                    "year": year,
+                    "contribution_eur": contribution,
+                    "interest_eur": interest,
+                    "balance_eur": balance,
+                }
             )
-        return dict(
-            metrics=[
-                dict(label="Inflated replacement cost", value=target, unit="EUR"),
-                dict(label="Annual contribution", value=contribution, unit="EUR"),
+        return {
+            "metrics": [
+                {"label": "Inflated replacement cost", "value": target, "unit": "EUR"},
+                {"label": "Annual contribution", "value": contribution, "unit": "EUR"},
             ],
-            series=[
-                dict(
-                    name="Reserve balance",
-                    x_label="Year",
-                    y_unit="EUR",
-                    x=[r["year"] for r in rows],
-                    y=[r["balance_eur"] for r in rows],
-                )
+            "series": [
+                {
+                    "name": "Reserve balance",
+                    "x_label": "Year",
+                    "y_unit": "EUR",
+                    "x": [r["year"] for r in rows],
+                    "y": [r["balance_eur"] for r in rows],
+                }
             ],
-            table=rows,
-            warnings=[],
-        )
+            "table": rows,
+            "warnings": [],
+        }
     if study_id == "pv-sensitivity":
-        p = Sensitivity.model_validate(inputs)
+        sensitivity = Sensitivity.model_validate(inputs)
         rows = []
-        for capex in np.linspace(p.capex_eur_kwp * 0.7, p.capex_eur_kwp * 1.3, 9):
-            for yield_ in np.linspace(p.yield_kwh_kwp * 0.85, p.yield_kwh_kwp * 1.15, 9):
+        for capex in np.linspace(sensitivity.capex_eur_kwp * 0.7, sensitivity.capex_eur_kwp * 1.3, 9):
+            for yield_ in np.linspace(sensitivity.yield_kwh_kwp * 0.85, sensitivity.yield_kwh_kwp * 1.15, 9):
                 result = calculate_pv(
                     PVRequest(
                         capex_eur_kwp=float(capex),
                         specific_yield_kwh_kwp=float(yield_),
-                        discount_rate=p.discount,
-                        opex_eur_kwp_year=p.opex,
+                        discount_rate=sensitivity.discount,
+                        opex_eur_kwp_year=sensitivity.opex,
                     )
                 )
                 rows.append(
-                    dict(
-                        capex_eur_kwp=float(capex),
-                        yield_kwh_kwp=float(yield_),
-                        lcoe_eur_mwh=result["lcoe_eur_mwh"],
-                    )
+                    {
+                        "capex_eur_kwp": float(capex),
+                        "yield_kwh_kwp": float(yield_),
+                        "lcoe_eur_mwh": result["lcoe_eur_mwh"],
+                    }
                 )
-        return dict(
-            metrics=[
-                dict(label="Lowest LCOE", value=min(r["lcoe_eur_mwh"] for r in rows), unit="EUR/MWh"),
-                dict(label="Highest LCOE", value=max(r["lcoe_eur_mwh"] for r in rows), unit="EUR/MWh"),
+        return {
+            "metrics": [
+                {"label": "Lowest LCOE", "value": min(r["lcoe_eur_mwh"] for r in rows), "unit": "EUR/MWh"},
+                {"label": "Highest LCOE", "value": max(r["lcoe_eur_mwh"] for r in rows), "unit": "EUR/MWh"},
             ],
-            series=[
-                dict(
-                    name="LCOE at central CAPEX",
-                    x_label="Yield kWh/kWp",
-                    y_unit="EUR/MWh",
-                    x=[r["yield_kwh_kwp"] for r in rows[36:45]],
-                    y=[r["lcoe_eur_mwh"] for r in rows[36:45]],
-                )
+            "series": [
+                {
+                    "name": "LCOE at central CAPEX",
+                    "x_label": "Yield kWh/kWp",
+                    "y_unit": "EUR/MWh",
+                    "x": [r["yield_kwh_kwp"] for r in rows[36:45]],
+                    "y": [r["lcoe_eur_mwh"] for r in rows[36:45]],
+                }
             ],
-            table=rows,
-            warnings=[],
-        )
+            "table": rows,
+            "warnings": [],
+        }
     raise ValueError("Unknown supporting study.")

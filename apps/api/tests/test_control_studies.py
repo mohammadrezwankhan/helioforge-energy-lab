@@ -1,13 +1,18 @@
 """Numerical invariants for the averaged converter controller and eigenmodes."""
+
 from __future__ import annotations
 
 import json
+from collections.abc import Sequence
+from typing import TypedDict
 
 import numpy as np
 import pytest
 from pydantic import ValidationError
 
 from helioforge.engines import control_studies as studies
+from helioforge.engines.study_types import ChartCoordinate, StudyResult
+from tests.study_contract_assertions import number, numbers
 
 
 def test_catalogue_defaults_execute_and_serialize_as_finite_json() -> None:
@@ -34,13 +39,13 @@ def test_no_load_case_holds_grid_voltage_and_zero_current() -> None:
     grid_current_q = _series(result, "grid_current_q")
 
     assert details["converged"] is True
-    assert max(abs(value - details["grid_voltage_peak_v"]) for value in voltage_d["y"]) < 1e-8
+    assert max(abs(value - number(details["grid_voltage_peak_v"])) for value in voltage_d["y"]) < 1e-8
     assert max(abs(value) for value in voltage_q["y"]) < 1e-8
     assert max(abs(value) for value in filter_current_d["y"]) < 1e-8
     expected_capacitor_q_current = (
         studies.HybridControlsInput().grid_angular_frequency_rad_s
         * studies.HybridControlsInput().filter_capacitance_f
-        * details["grid_voltage_peak_v"]
+        * number(details["grid_voltage_peak_v"])
     )
     assert max(abs(value - expected_capacitor_q_current) for value in filter_current_q["y"]) < 1e-8
     assert max(abs(value) for value in grid_current_d["y"]) < 1e-8
@@ -59,9 +64,9 @@ def test_load_step_is_tracked_and_refined_trajectories_agree() -> None:
 
     assert details["converged"] is True
     assert details["load_step_a"] == 8.0
-    assert details["maximum_abs_voltage_refinement_error_v"] < 0.1
-    assert details["maximum_abs_current_refinement_error_a"] < 0.02
-    assert max(abs(value - details["grid_voltage_peak_v"]) for value in voltage["y"]) > 1e-4
+    assert number(details["maximum_abs_voltage_refinement_error_v"]) < 0.1
+    assert number(details["maximum_abs_current_refinement_error_a"]) < 0.02
+    assert max(abs(value - number(details["grid_voltage_peak_v"])) for value in voltage["y"]) > 1e-4
     assert abs(filter_current["y"][-1] - reference["y"][-1]) < 0.1
     assert len(voltage["x"]) <= 500
 
@@ -80,10 +85,13 @@ def test_vector_limit_is_enforced_during_large_load_step() -> None:
     current_ref = _series(result, "current_reference_d")
     inverter_voltage = _series(result, "inverter_voltage_d")
 
-    assert details["current_reference_limit_hit_count"] > 0
+    assert number(details["current_reference_limit_hit_count"]) > 0
     assert max(abs(value) for value in current_ref["y"]) <= 5.0 + 1e-8
-    assert details["inverter_voltage_limit_v"] < details["dc_bus_v"]
-    assert max(abs(value) for value in inverter_voltage["y"]) <= details["inverter_voltage_limit_v"] + 1e-7
+    assert number(details["inverter_voltage_limit_v"]) < number(details["dc_bus_v"])
+    assert (
+        max(abs(value) for value in inverter_voltage["y"])
+        <= number(details["inverter_voltage_limit_v"]) + 1e-7
+    )
 
     no_antiwindup = studies.run(
         "hybrid-controls",
@@ -115,7 +123,7 @@ def test_eigenmodes_report_actual_matrix_eigenvalues_and_stable_default() -> Non
     result = studies.run("research-eigenmodes", {})
     matrix = np.asarray(result["details"]["state_matrix_per_s"], dtype=float)
     reported = np.asarray(
-        [complex(row["real_per_s"], row["imaginary_per_s"]) for row in result["table"]]
+        [complex(number(row["real_per_s"]), number(row["imaginary_per_s"])) for row in result["table"]]
     )
     independently_computed = np.linalg.eigvals(matrix)
     model = studies.EigenmodesInput.model_validate({})
@@ -130,9 +138,11 @@ def test_eigenmodes_report_actual_matrix_eigenvalues_and_stable_default() -> Non
     # With i_f,d as state 0, the d-axis inductor self term includes plant R and
     # the proportional current feedback. This is an independent hand coefficient.
     assert matrix[0, 0] == pytest.approx(
-        -(result["details"]["filter_resistance_ohm"]
-          + result["details"]["current_kp_v_per_a"])
-        / result["details"]["filter_inductance_h"],
+        -(
+            number(result["details"]["filter_resistance_ohm"])
+            + number(result["details"]["current_kp_v_per_a"])
+        )
+        / number(result["details"]["filter_inductance_h"]),
         rel=1e-8,
     )
 
@@ -142,12 +152,14 @@ def test_wrong_sign_outer_integral_gain_exposes_unstable_mode() -> None:
         "research-eigenmodes",
         {"voltage_ki_a_per_vs": -80.0},
     )
-    eigenvalues = [complex(row["real_per_s"], row["imaginary_per_s"]) for row in result["table"]]
+    eigenvalues = [
+        complex(number(row["real_per_s"]), number(row["imaginary_per_s"])) for row in result["table"]
+    ]
 
     assert result["details"]["stability"] == "unstable"
-    assert result["details"]["maximum_real_part_per_s"] > 0
+    assert number(result["details"]["maximum_real_part_per_s"]) > 0
     assert max(value.real for value in eigenvalues) == pytest.approx(
-        result["details"]["maximum_real_part_per_s"], abs=1e-7
+        number(result["details"]["maximum_real_part_per_s"]), abs=1e-7
     )
     assert "wrong-sign" in " ".join(result["warnings"]).lower()
 
@@ -175,5 +187,11 @@ def test_eigenmode_input_validation_and_unknown_study() -> None:
         studies.run("not-a-study", {})
 
 
-def _series(result: dict, prefix: str) -> dict:
-    return next(row for row in result["series"] if row["name"] == prefix)
+class NumericSeries(TypedDict):
+    x: Sequence[ChartCoordinate]
+    y: list[float]
+
+
+def _series(result: StudyResult, prefix: str) -> NumericSeries:
+    series = next(row for row in result["series"] if row["name"] == prefix)
+    return {"x": series["x"], "y": numbers(series["y"])}

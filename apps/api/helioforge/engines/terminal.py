@@ -4,11 +4,38 @@ This is a fixed dispatch policy, not cost optimization, a forecast, or a calibra
 plant model. It is intentionally independent of the retained hybrid and storage
 engines. See ``docs/terminal-audit/ANALYTICAL_MODEL.md`` for equations and limits.
 """
+
 from __future__ import annotations
 
 import math
 from collections.abc import Mapping
-from typing import Any, Literal
+from typing import Any, Literal, TypedDict
+
+
+class OperatingFlag(TypedDict):
+    key: str
+    active: bool
+    explanation: str
+
+
+class TerminalResult(TypedDict):
+    modelVersion: str
+    dataKind: str
+    status: str
+    steps: int
+    iterations: None
+    inputs: dict[str, float]
+    rows: list[dict[str, float]]
+    metrics: dict[str, float]
+    flags: list[OperatingFlag]
+    warnings: list[str]
+
+
+class SweepAxis(TypedDict):
+    parameter: str
+    values: list[float]
+    scale: str
+
 
 MODEL_VERSION = "terminal-greedy-hourly-v1"
 STEPS = 24
@@ -31,10 +58,27 @@ INPUT_BOUNDS: dict[str, tuple[float, float, bool]] = {
 INPUT_KEYS = tuple(INPUT_BOUNDS)
 WARNINGS = [
     "PV and load use deterministic synthetic 24-hour shapes; they are not measured weather or demand data.",
-    "Dispatch is greedy: PV serves load, renewable surplus charges storage, storage serves remaining load before grid import, then remaining load is unserved. It is not cost optimization.",
-    "Surplus is exported only when exportPrice is nonnegative and grid capacity is available; remaining surplus is curtailed.",
-    "Charging and discharging each use the square root of roundtripEfficiency. Terminal SOC is unconstrained; initial-to-final stored-energy change is reported explicitly.",
-    "periodCost covers this 24-hour synthetic period only. It excludes fixed costs, degradation, demand charges, taxes, finance, and annualization.",
+    (
+        "Dispatch is greedy: PV serves load, renewable surplus"
+        " charges storage, storage serves remaining load before grid"
+        " import, then remaining load is unserved. It is not cost"
+        " optimization."
+    ),
+    (
+        "Surplus is exported only when exportPrice is nonnegative and"
+        " grid capacity is available; remaining surplus is curtailed."
+    ),
+    (
+        "Charging and discharging each use the square root of"
+        " roundtripEfficiency. Terminal SOC is unconstrained;"
+        " initial-to-final stored-energy change is reported"
+        " explicitly."
+    ),
+    (
+        "periodCost covers this 24-hour synthetic period only. It"
+        " excludes fixed costs, degradation, demand charges, taxes,"
+        " finance, and annualization."
+    ),
     "No thermal, frequency, voltage, protection, dynamic-control, or field-calibration model is included.",
 ]
 
@@ -67,7 +111,9 @@ def terminal_defaults() -> dict[str, float]:
 def terminal_validate_inputs(value: object) -> dict[str, float]:
     """Validate all finite values and cross-field constraints; never clamp input."""
     if not isinstance(value, Mapping):
-        raise TerminalModelError("Inputs must be an object with exactly the documented fields.", "ERR_VALIDATION")
+        raise TerminalModelError(
+            "Inputs must be an object with exactly the documented fields.", "ERR_VALIDATION"
+        )
     actual_keys = set(value)
     unknown = sorted(str(key) for key in actual_keys - set(INPUT_KEYS))
     missing = sorted(set(INPUT_KEYS) - actual_keys)
@@ -92,10 +138,14 @@ def terminal_validate_inputs(value: object) -> dict[str, float]:
         low, high, minimum_exclusive = INPUT_BOUNDS[key]
         if (minimum_exclusive and finite_number <= low) or finite_number < low or finite_number > high:
             lower = f"greater than {low}" if minimum_exclusive else f"at least {low}"
-            raise TerminalModelError(f"{key} must be {lower} and at most {high}; received {finite_number}.", "ERR_BOUND")
+            raise TerminalModelError(
+                f"{key} must be {lower} and at most {high}; received {finite_number}.", "ERR_BOUND"
+            )
         result[key] = finite_number
     if result["minSocFraction"] > result["maxSocFraction"]:
-        raise TerminalModelError("minSocFraction must be less than or equal to maxSocFraction.", "ERR_VALIDATION")
+        raise TerminalModelError(
+            "minSocFraction must be less than or equal to maxSocFraction.", "ERR_VALIDATION"
+        )
     if not result["minSocFraction"] <= result["initialSocFraction"] <= result["maxSocFraction"]:
         raise TerminalModelError(
             "initialSocFraction must be within the inclusive minSocFraction to maxSocFraction range.",
@@ -126,7 +176,7 @@ def _explain_number(value: float) -> str:
 
 def _operating_flags(
     inputs: Mapping[str, float], rows: list[dict[str, float]], metrics: Mapping[str, float]
-) -> list[dict[str, Any]]:
+) -> list[OperatingFlag]:
     resource_bound = inputs["pvKw"] > 0
     unserved = metrics["unservedKwh"] > TOLERANCE
     limits: list[str] = []
@@ -149,15 +199,20 @@ def _operating_flags(
             "explanation": (
                 f"The synthetic PV profile reaches the configured {inputs['pvKw']} kW nameplate at hour 12; "
                 "this is an input ceiling, not an optimized or measured capacity."
-                if resource_bound else "PV capacity is zero, so no PV resource is available in this scenario."
+                if resource_bound
+                else "PV capacity is zero, so no PV resource is available in this scenario."
             ),
         },
         {
             "key": "unserved-demand",
             "active": unserved,
             "explanation": (
-                f"{_explain_number(metrics['unservedKwh'])} kWh of demand is unserved over the 24-hour synthetic period."
-                if unserved else "All modeled demand is served over the 24-hour synthetic period."
+                (
+                    f"{_explain_number(metrics['unservedKwh'])}"
+                    " kWh of demand is unserved over the 24-hour synthetic period."
+                )
+                if unserved
+                else "All modeled demand is served over the 24-hour synthetic period."
             ),
         },
         {
@@ -165,23 +220,28 @@ def _operating_flags(
             "active": bool(limits),
             "explanation": (
                 f"Storage limit observed: {'; '.join(limits)}."
-                if limits else "No configured battery power or SOC boundary was reached during dispatch."
+                if limits
+                else "No configured battery power or SOC boundary was reached during dispatch."
             ),
         },
         {
             "key": "energy-drift",
             "active": abs(drift) > TOLERANCE,
             "explanation": (
-                f"Terminal stored energy changed by {'+' if drift >= 0 else ''}{_explain_number(drift)} kWh from its initial value; "
+                f"Terminal stored energy changed by {'+' if drift >= 0 else ''}{_explain_number(drift)} "
+                "kWh from its initial value; "
                 "terminal SOC is unconstrained."
-                if abs(drift) > TOLERANCE else
-                "Terminal stored energy matches its initial value within the 1e-9 kWh reporting tolerance."
+                if abs(drift) > TOLERANCE
+                else (
+                    "Terminal stored energy matches its initial value within the"
+                    " 1e-9 kWh reporting tolerance."
+                )
             ),
         },
     ]
 
 
-def terminal_solve(raw_inputs: object) -> dict[str, Any]:
+def terminal_solve(raw_inputs: object) -> TerminalResult:
     """Run 24 explicit hourly recurrences using the fixed greedy dispatch order."""
     inputs = terminal_validate_inputs(raw_inputs)
     eta = math.sqrt(inputs["roundtripEfficiency"])
@@ -210,13 +270,22 @@ def terminal_solve(raw_inputs: object) -> dict[str, Any]:
         curtailment = surplus - grid_export
         bus_residual = pv + grid_import + discharge + unserved - load - charge - grid_export - curtailment
         soc_residual = soc - (soc_before + charge * eta - discharge / eta)
-        rows.append({
-            "hour": hour, "loadKw": load, "pvKw": pv,
-            "chargeKw": charge, "dischargeKw": discharge,
-            "gridImportKw": grid_import, "gridExportKw": grid_export,
-            "curtailmentKw": curtailment, "unservedKw": unserved,
-            "socKwh": soc, "busResidualKw": bus_residual, "socResidualKwh": soc_residual,
-        })
+        rows.append(
+            {
+                "hour": hour,
+                "loadKw": load,
+                "pvKw": pv,
+                "chargeKw": charge,
+                "dischargeKw": discharge,
+                "gridImportKw": grid_import,
+                "gridExportKw": grid_export,
+                "curtailmentKw": curtailment,
+                "unservedKw": unserved,
+                "socKwh": soc,
+                "busResidualKw": bus_residual,
+                "socResidualKwh": soc_residual,
+            }
+        )
     total_load = sum(row["loadKw"] for row in rows)
     unserved_kwh = sum(row["unservedKw"] for row in rows)
     served_kwh = total_load - unserved_kwh
@@ -252,10 +321,10 @@ def terminal_solve(raw_inputs: object) -> dict[str, Any]:
     }
 
 
-def _axis_values(
-    parameter: str, lower: float, upper: float, steps: int, scale: str
-) -> list[float]:
-    if parameter not in INPUT_BOUNDS:
+def _validated_axis(
+    parameter: object, lower: object, upper: object, steps: object, scale: object
+) -> SweepAxis:
+    if not isinstance(parameter, str) or parameter not in INPUT_BOUNDS:
         raise TerminalModelError(f"Unknown sweep parameter: {parameter}.", "ERR_VALIDATION")
     if isinstance(lower, bool) or not isinstance(lower, (int, float)):
         raise TerminalModelError("Sweep lower and upper bounds must be finite numbers.", "ERR_VALIDATION")
@@ -265,20 +334,23 @@ def _axis_values(
         lower = float(lower)
         upper = float(upper)
     except (OverflowError, ValueError):
-        raise TerminalModelError("Sweep lower and upper bounds must be finite numbers.", "ERR_VALIDATION") from None
+        raise TerminalModelError(
+            "Sweep lower and upper bounds must be finite numbers.", "ERR_VALIDATION"
+        ) from None
     if not math.isfinite(lower) or not math.isfinite(upper):
         raise TerminalModelError("Sweep lower and upper bounds must be finite numbers.", "ERR_VALIDATION")
     if lower >= upper:
         raise TerminalModelError("Sweep lower bound must be less than upper bound.", "ERR_VALIDATION")
     if isinstance(steps, bool) or not isinstance(steps, int) or not 2 <= steps <= 21:
         raise TerminalModelError("Sweep steps must be an integer from 2 through 21.", "ERR_BOUND")
-    if scale not in {"linear", "log"}:
+    if not isinstance(scale, str) or scale not in {"linear", "log"}:
         raise TerminalModelError("Sweep scale must be linear or log.", "ERR_VALIDATION")
     minimum, maximum, min_exclusive = INPUT_BOUNDS[parameter]
     if (min_exclusive and lower <= minimum) or lower < minimum or upper > maximum:
         phrase = "greater than" if min_exclusive else "at least"
         raise TerminalModelError(
-            f"{parameter} sweep bounds must stay within {phrase} {minimum} and at most {maximum}.", "ERR_BOUND"
+            f"{parameter} sweep bounds must stay within {phrase} {minimum} and at most {maximum}.",
+            "ERR_BOUND",
         )
     if scale == "log" and lower <= 0:
         raise TerminalModelError("Log sweeps require positive lower and upper bounds.", "ERR_BOUND")
@@ -290,7 +362,7 @@ def _axis_values(
         else:
             values.append(math.exp(math.log(lower) + (math.log(upper) - math.log(lower)) * fraction))
     values[0], values[-1] = float(lower), float(upper)
-    return values
+    return {"parameter": parameter, "values": values, "scale": scale}
 
 
 def _same_service(a: Mapping[str, float], b: Mapping[str, float]) -> bool:
@@ -318,19 +390,20 @@ def terminal_sweep(
 ) -> dict[str, Any]:
     """Evaluate a bounded one- or two-parameter cartesian sweep."""
     inputs = terminal_validate_inputs(raw_inputs)
-    axes = [{"parameter": parameter, "values": _axis_values(parameter, lower, upper, steps, scale), "scale": scale}]
+    axes = [_validated_axis(parameter, lower, upper, steps, scale)]
     if second is not None:
         second_parameter = second.get("parameter")
         if second_parameter == parameter:
             raise TerminalModelError("A two-axis sweep must use two different parameters.", "ERR_VALIDATION")
-        axes.append({
-            "parameter": second_parameter,
-            "values": _axis_values(
-                second_parameter, second.get("lower"), second.get("upper"),
-                second.get("steps"), second.get("scale"),
-            ),
-            "scale": second.get("scale"),
-        })
+        axes.append(
+            _validated_axis(
+                second_parameter,
+                second.get("lower"),
+                second.get("upper"),
+                second.get("steps"),
+                second.get("scale"),
+            )
+        )
     point_count = math.prod(len(axis["values"]) for axis in axes)
     if point_count > MAX_SWEEP_POINTS:
         raise TerminalModelError(f"Sweep matrix cannot exceed {MAX_SWEEP_POINTS} points.", "ERR_BOUND")
@@ -339,25 +412,40 @@ def terminal_sweep(
     for outer in outer_values:
         for inner in axes[0]["values"]:
             coordinates: dict[str, float] = {parameter: inner}
-            if len(axes) == 2:
+            if outer is not None:
                 coordinates[axes[1]["parameter"]] = outer
             index = len(points)
             try:
                 run = terminal_solve({**inputs, **coordinates})
-                points.append({
-                    "index": index, "coordinates": coordinates,
-                    "status": "CONVERGED", "error": None, "metrics": run["metrics"],
-                })
+                points.append(
+                    {
+                        "index": index,
+                        "coordinates": coordinates,
+                        "status": "CONVERGED",
+                        "error": None,
+                        "metrics": run["metrics"],
+                    }
+                )
             except (TerminalModelError, ValueError, TypeError) as error:
-                points.append({
-                    "index": index, "coordinates": coordinates,
-                    "status": _error_status(error), "error": str(error), "metrics": None,
-                })
+                points.append(
+                    {
+                        "index": index,
+                        "coordinates": coordinates,
+                        "status": _error_status(error),
+                        "error": str(error),
+                        "metrics": None,
+                    }
+                )
     valid = [point for point in points if point["metrics"] is not None]
-    ranked = sorted(valid, key=lambda point: (
-        point["metrics"]["unservedKwh"], point["metrics"]["periodCost"],
-        abs(point["metrics"]["terminalSocDeltaKwh"]), point["index"],
-    ))
+    ranked = sorted(
+        valid,
+        key=lambda point: (
+            point["metrics"]["unservedKwh"],
+            point["metrics"]["periodCost"],
+            abs(point["metrics"]["terminalSocDeltaKwh"]),
+            point["index"],
+        ),
+    )
     pareto = []
     for candidate in valid:
         value = candidate["metrics"]
@@ -381,12 +469,49 @@ def terminal_sweep(
         "rankedPointIndices": [point["index"] for point in ranked],
         "paretoPointIndices": pareto,
         "warnings": [
-            "Sweep ranking sorts by unserved energy, then period cost, then absolute terminal SOC change; it is not an optimization result.",
-            "This is a conditional sampled service-equivalent frontier: Pareto dominance compares only points with matching totalLoadKwh and servedKwh, minimizing period cost and unserved kWh; it is not a global optimum.",
-            "Initial and terminal SOC are not constrained to match. Endpoint energy changes can bias cost comparisons, so inspect terminal SOC deltas before interpreting the sampled frontier.",
+            (
+                "Sweep ranking sorts by unserved energy, then period cost,"
+                " then absolute terminal SOC change; it is not an"
+                " optimization result."
+            ),
+            (
+                "This is a conditional sampled service-equivalent frontier:"
+                " Pareto dominance compares only points with matching"
+                " totalLoadKwh and servedKwh, minimizing period cost and"
+                " unserved kWh; it is not a global optimum."
+            ),
+            (
+                "Initial and terminal SOC are not constrained to match."
+                " Endpoint energy changes can bias cost comparisons, so"
+                " inspect terminal SOC deltas before interpreting the sampled"
+                " frontier."
+            ),
             *WARNINGS,
         ],
     }
+
+
+def _elasticity(
+    metric: str,
+    baseline_metrics: Mapping[str, float],
+    base_value: float,
+    plus: TerminalResult | None,
+    minus: TerminalResult | None,
+    plus_value: float,
+    minus_value: float,
+) -> float | None:
+    base_metric = baseline_metrics[metric]
+    if base_value == 0 or base_metric == 0 or (plus is None and minus is None):
+        return None
+    if plus is not None and minus is not None:
+        derivative = (plus["metrics"][metric] - minus["metrics"][metric]) / (plus_value - minus_value)
+    elif plus is not None:
+        derivative = (plus["metrics"][metric] - base_metric) / (plus_value - base_value)
+    elif minus is not None:
+        derivative = (base_metric - minus["metrics"][metric]) / (base_value - minus_value)
+    else:
+        return None
+    return derivative * base_value / base_metric
 
 
 def terminal_sensitivity(raw_inputs: object) -> dict[str, Any]:
@@ -409,42 +534,54 @@ def terminal_sensitivity(raw_inputs: object) -> dict[str, Any]:
             minus = terminal_solve({**inputs, parameter: minus_value})
         except (TerminalModelError, ValueError, TypeError) as error:
             minus_error = str(error)
-        method = "central" if plus is not None and minus is not None else (
-            "forward" if plus is not None else "backward" if minus is not None else "unavailable"
+        method = (
+            "central"
+            if plus is not None and minus is not None
+            else ("forward" if plus is not None else "backward" if minus is not None else "unavailable")
         )
 
-        def elasticity(metric: str) -> float | None:
-            base_metric = baseline["metrics"][metric]
-            if base_value == 0 or base_metric == 0 or method == "unavailable":
-                return None
-            if method == "central":
-                derivative = (plus["metrics"][metric] - minus["metrics"][metric]) / (plus_value - minus_value)
-            elif method == "forward":
-                derivative = (plus["metrics"][metric] - base_metric) / (plus_value - base_value)
-            else:
-                derivative = (base_metric - minus["metrics"][metric]) / (base_value - minus_value)
-            return derivative * base_value / base_metric
-
-        output_rows.append({
-            "parameter": parameter,
-            "baseValue": base_value,
-            "step": step,
-            "method": method,
-            "periodCostElasticity": elasticity("periodCost"),
-            "unservedKwhElasticity": elasticity("unservedKwh"),
-            "error": (
-                f"Both perturbations failed. Increase/decrease errors: {minus_error or 'none'}; {plus_error or 'none'}"
-                if method == "unavailable" else None
-            ),
-        })
+        output_rows.append(
+            {
+                "parameter": parameter,
+                "baseValue": base_value,
+                "step": step,
+                "method": method,
+                "periodCostElasticity": _elasticity(
+                    "periodCost", baseline["metrics"], base_value, plus, minus, plus_value, minus_value
+                ),
+                "unservedKwhElasticity": _elasticity(
+                    "unservedKwh", baseline["metrics"], base_value, plus, minus, plus_value, minus_value
+                ),
+                "error": (
+                    (
+                        "Both perturbations failed. Increase/decrease errors: "
+                        f"{minus_error or 'none'}"
+                        "; "
+                        f"{plus_error or 'none'}"
+                    )
+                    if method == "unavailable"
+                    else None
+                ),
+            }
+        )
     return {
         "modelVersion": MODEL_VERSION,
         "baseline": baseline,
         "rows": output_rows,
         "warnings": [
-            "This is a one-at-a-time finite-difference elasticity screen, not Sobol analysis or probabilistic sensitivity.",
-            "The perturbation is 0.1% of the current value, with a 1e-8 parameter-range floor; a valid one-sided difference is used at input boundaries.",
-            "Elasticity is null when its baseline metric or input is zero, or when neither perturbation is valid.",
+            (
+                "This is a one-at-a-time finite-difference elasticity screen,"
+                " not Sobol analysis or probabilistic sensitivity."
+            ),
+            (
+                "The perturbation is 0.1% of the current value, with a 1e-8"
+                " parameter-range floor; a valid one-sided difference is used"
+                " at input boundaries."
+            ),
+            (
+                "Elasticity is null when its baseline metric or input is"
+                " zero, or when neither perturbation is valid."
+            ),
             *WARNINGS,
         ],
     }
@@ -453,18 +590,33 @@ def terminal_sensitivity(raw_inputs: object) -> dict[str, Any]:
 def terminal_diff(a: Mapping[str, Any], b: Mapping[str, Any]) -> dict[str, Any]:
     """Return absolute and baseline-relative changes for numerical run metrics."""
     metric_names = (
-        "periodCost", "unservedKwh", "renewableKwh", "curtailmentKwh", "peakImportKw",
-        "finalSocKwh", "initialSocKwh", "terminalSocDeltaKwh", "maxBusResidualKw",
-        "maxSocResidualKwh", "servedFraction", "totalLoadKwh", "servedKwh",
+        "periodCost",
+        "unservedKwh",
+        "renewableKwh",
+        "curtailmentKwh",
+        "peakImportKw",
+        "finalSocKwh",
+        "initialSocKwh",
+        "terminalSocDeltaKwh",
+        "maxBusResidualKw",
+        "maxSocResidualKwh",
+        "servedFraction",
+        "totalLoadKwh",
+        "servedKwh",
     )
     rows = []
     for metric in metric_names:
         left, right = a["metrics"][metric], b["metrics"][metric]
         delta = right - left
-        rows.append({
-            "metric": metric, "a": left, "b": right, "deltaAbsolute": delta,
-            "deltaPercent": None if left == 0 else 100 * delta / abs(left),
-        })
+        rows.append(
+            {
+                "metric": metric,
+                "a": left,
+                "b": right,
+                "deltaAbsolute": delta,
+                "deltaPercent": None if left == 0 else 100 * delta / abs(left),
+            }
+        )
     b_flags = {flag["key"]: flag for flag in b.get("flags", [])}
     regime_shifts = [
         f"Regime shift for {flag_a['key']}: run a was {'active' if flag_a['active'] else 'inactive'} "
@@ -477,8 +629,14 @@ def terminal_diff(a: Mapping[str, Any], b: Mapping[str, Any]) -> dict[str, Any]:
         "modelVersion": MODEL_VERSION,
         "rows": rows,
         "warnings": [
-            "Diff percentage is relative to the absolute value of run a; it is null when the baseline metric is zero.",
-            "Runs can differ in unserved demand and terminal battery energy; neither cost nor SOC endpoints are neutralized.",
+            (
+                "Diff percentage is relative to the absolute value of run a;"
+                " it is null when the baseline metric is zero."
+            ),
+            (
+                "Runs can differ in unserved demand and terminal battery"
+                " energy; neither cost nor SOC endpoints are neutralized."
+            ),
             *regime_shifts,
             *WARNINGS,
         ],

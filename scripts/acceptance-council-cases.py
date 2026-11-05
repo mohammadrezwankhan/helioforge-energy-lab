@@ -1,4 +1,5 @@
 """Execute bounded deterministic council acceptance cases; never calls a provider."""
+
 from __future__ import annotations
 
 import argparse
@@ -12,21 +13,70 @@ from collections import Counter
 from copy import deepcopy
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import TYPE_CHECKING, NotRequired, TypedDict
+
+if TYPE_CHECKING:
+    from helioforge.council_types import LocalCouncilResult
 
 ROOT = Path(__file__).resolve().parents[1]
 API_ROOT = ROOT / "apps" / "api"
 if str(API_ROOT) not in sys.path:
     sys.path.insert(0, str(API_ROOT))
 
-from helioforge.council import local_council
-from helioforge.council_protocol import PROTOCOL_ID
-from helioforge.dashboard import dashboard
-from helioforge.schemas import CouncilRequest
+
+class PreviewContract(TypedDict):
+    bundle_path: str
+    bundle_exists: bool
+    bundle_checks: dict[str, bool]
+    source_checks: dict[str, bool]
+    all_static_contract_checks_pass: bool
+    evidence_state_injection_available: bool
+    interpretation: str
+
+
+class RoleResult(TypedDict):
+    status: str
+    required_conditions: list[str]
+    conditions_met: bool
+    observed: NotRequired[str]
+    observed_section: NotRequired[str]
+    actual_summary: NotRequired[str]
+    risk_count: NotRequired[int]
+    required_evidence_count: NotRequired[int]
+
+
+class CouncilAcceptanceReport(TypedDict):
+    title: str
+    generated_at_utc: str
+    design_source: str
+    design_source_sha256: str
+    case_counts: dict[str, int]
+    requested_case_status_counts: dict[str, int]
+    all_case_status_counts: dict[str, int]
+    interpretation: dict[str, object]
+    public_preview_contract: PreviewContract
+    mocked_external_coverage: dict[str, object]
+    environment: dict[str, object]
+    source_sha256: dict[str, str]
+    cases: list[dict[str, object]]
+
+
+def _case_text(case: dict[str, object], key: str) -> str:
+    value = case[key]
+    if not isinstance(value, str):
+        raise TypeError(f"Acceptance case {key} must be text")
+    return value
+
 
 DESIGN_CSV = Path("docs/remediation-20261028/source-plan/council_role_test_design.csv")
 EVIDENCE_STATES = (
-    "no_evidence", "valid_synthetic", "tampered", "stale_version", "contradictory",
-    "sensitive_fixture", "provider_failure",
+    "no_evidence",
+    "valid_synthetic",
+    "tampered",
+    "stale_version",
+    "contradictory",
+    "sensitive_fixture",
+    "provider_failure",
 )
 MODES = ("public_preview", "local_deterministic", "local_external_opt_in")
 ROLE_NAMES = {
@@ -75,12 +125,12 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def _canonical_digest(value: dict) -> str:
+def _canonical_digest(value: object) -> str:
     raw = json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
     return hashlib.sha256(raw.encode()).hexdigest()
 
 
-def _fixture_record(state: str) -> dict | None:
+def _fixture_record(state: str) -> dict[str, object] | None:
     if state == "no_evidence":
         return None
     inputs = {"market": "FR", "capacity_kwh": 10000.0, "fixture_state": state}
@@ -96,8 +146,7 @@ def _fixture_record(state: str) -> dict | None:
         "expected_model": "btm-milp-v1",
         "expected_horizon_hours": 24.0,
         "expected_data_kind": "synthetic",
-        "units": {"duration_hours": "h", "capacity_kwh": "kWh", "power_kw": "kW",
-                  "terminal_soc_kwh": "kWh"},
+        "units": {"duration_hours": "h", "capacity_kwh": "kWh", "power_kw": "kW", "terminal_soc_kwh": "kWh"},
         "as_of": "2026-10-29T12:00:00+00:00",
     }
     if state == "stale_version":
@@ -115,50 +164,76 @@ def _fixture_record(state: str) -> dict | None:
     if state == "tampered":
         inputs["capacity_kwh"] = 12000.0  # Controlled mutation after the stored digest was computed.
     return {
-        "run_id": f"synthetic-{state}", "kind": "storage",
-        "created_at": "2026-10-28T12:00:00+00:00", "input_sha256": digest,
-        "inputs": inputs, "result": result, "metadata": metadata,
+        "run_id": f"synthetic-{state}",
+        "kind": "storage",
+        "created_at": "2026-10-28T12:00:00+00:00",
+        "input_sha256": digest,
+        "inputs": inputs,
+        "result": result,
+        "metadata": metadata,
     }
 
 
-def _preview_contract(root: Path) -> dict:
+def _preview_contract(root: Path) -> PreviewContract:
     bundle_path = root / "apps" / "web" / "dist" / "app.js"
     bundle = bundle_path.read_text(encoding="utf-8") if bundle_path.exists() else ""
     checks = {name: marker in bundle for name, marker in PREVIEW_CONTRACTS.items()}
     source_checks = {
-        "local_mode_label": "Local · deterministic checklist" in (root / "apps/web/src/views.ts").read_text(encoding="utf-8"),
-        "preflight_discloses_no_provider": "no brief or evidence is sent to a provider" in (root / "apps/web/src/integrations-ui.ts").read_text(encoding="utf-8"),
-        "markdown_export_names_authority_limits": "does not verify source, signer, scientific validity, or approval" in (root / "apps/web/src/app.ts").read_text(encoding="utf-8"),
+        "local_mode_label": ("Local \xb7 deterministic checklist")
+        in (root / "apps/web/src/views.ts").read_text(encoding="utf-8"),
+        "preflight_discloses_no_provider": "no brief or evidence is sent to a provider"
+        in (root / "apps/web/src/integrations-ui.ts").read_text(encoding="utf-8"),
+        "markdown_export_names_authority_limits": (
+            "does not verify source, signer, scientific validity, or approval"
+        )
+        in (root / "apps/web/src/app.ts").read_text(encoding="utf-8"),
     }
     return {
         "bundle_path": str(bundle_path.relative_to(root)),
         "bundle_exists": bundle_path.exists(),
         "bundle_checks": checks,
         "source_checks": source_checks,
-        "all_static_contract_checks_pass": bool(checks) and all(checks.values()) and all(source_checks.values()),
+        "all_static_contract_checks_pass": bool(checks)
+        and all(checks.values())
+        and all(source_checks.values()),
         "evidence_state_injection_available": False,
         "interpretation": (
-            "This is a source and shipped-bundle contract inspection. Public-preview evidence-state variants cannot be injected "
+            "This is a source and shipped-bundle contract inspection. Public-preview evidence-state"
+            " variants cannot be injected "
             "through this static snapshot, so those row states are not behaviorally exercised here."
         ),
     }
 
 
-def _role_result(role: str, result: dict) -> dict:
+def _role_result(role: str, result: LocalCouncilResult) -> RoleResult:
     if role == "Independent critic":
         has_critic = any("critic" in review["agent"].lower() for review in result["reviews"])
-        return {"status": "NOT_APPLICABLE_ABSENT_CRITIC" if not has_critic else "UNEXPECTED_CRITIC",
-                "observed": "No critic review is executed in local mode." if not has_critic else "A critic-shaped review was returned.",
-                "required_conditions": ["No independent critic execution or signoff is claimed."],
-                "conditions_met": not has_critic}
+        return {
+            "status": "NOT_APPLICABLE_ABSENT_CRITIC" if not has_critic else "UNEXPECTED_CRITIC",
+            "observed": "No critic review is executed in local mode."
+            if not has_critic
+            else "A critic-shaped review was returned.",
+            "required_conditions": ["No independent critic execution or signoff is claimed."],
+            "conditions_met": not has_critic,
+        }
 
     review_name = ROLE_NAMES[role]
     review = next((item for item in result["reviews"] if item["agent"] == review_name), None)
     if review is None:
-        return {"status": "ROLE_SECTION_MISSING", "observed": "No matching fixed checklist section returned.",
-                "required_conditions": list(ROLE_EXPECTATIONS[role]), "conditions_met": False}
-    corpus = " ".join([review["summary"], *review["risks"], *review["required_evidence"],
-                       result["decision"]["recommendation"]]).lower()
+        return {
+            "status": "ROLE_SECTION_MISSING",
+            "observed": "No matching fixed checklist section returned.",
+            "required_conditions": list(ROLE_EXPECTATIONS[role]),
+            "conditions_met": False,
+        }
+    corpus = " ".join(
+        [
+            review["summary"],
+            *review["risks"],
+            *review["required_evidence"],
+            result["decision"]["recommendation"],
+        ]
+    ).lower()
     conditions = ROLE_EXPECTATIONS[role]
     met = all(condition in corpus for condition in conditions)
     return {
@@ -172,12 +247,17 @@ def _role_result(role: str, result: dict) -> dict:
     }
 
 
-def build_acceptance_results(root: Path = ROOT) -> dict:
+def build_acceptance_results(root: Path = ROOT) -> CouncilAcceptanceReport:
+    from helioforge.council import local_council
+    from helioforge.council_protocol import PROTOCOL_ID
+    from helioforge.dashboard import dashboard
+    from helioforge.schemas import CouncilRequest
+
     csv_path = root / DESIGN_CSV
     with csv_path.open(newline="", encoding="utf-8") as stream:
         specifications = list(csv.DictReader(stream))
     mode_counts = Counter(row["mode"] for row in specifications)
-    if len(specifications) != 189 or mode_counts != Counter({mode: 63 for mode in MODES}):
+    if len(specifications) != 189 or mode_counts != Counter(dict.fromkeys(MODES, 63)):
         raise ValueError(f"Unexpected council design matrix: {len(specifications)} rows, {dict(mode_counts)}")
     if len({row["test_id"] for row in specifications}) != len(specifications):
         raise ValueError("Council design matrix contains duplicate test IDs.")
@@ -187,7 +267,7 @@ def build_acceptance_results(root: Path = ROOT) -> dict:
     local_rows = [row for row in specifications if row["mode"] == "local_deterministic"]
     public_rows = [row for row in specifications if row["mode"] == "public_preview"]
     external_rows = [row for row in specifications if row["mode"] == "local_external_opt_in"]
-    results: list[dict] = []
+    results: list[dict[str, object]] = []
 
     for row in local_rows:
         case_state = row["evidence_state"]
@@ -198,14 +278,16 @@ def build_acceptance_results(root: Path = ROOT) -> dict:
         protocol = result["protocol_metadata"]
         limits = protocol["limits"]
         protocol_ok = (
-            protocol["id"] == PROTOCOL_ID and protocol["mode"] == "local" and
-            protocol["external_execution_status"] == "not_requested" and
-            limits["expected_runner_invocations"] == 0 and
-            limits["completed_runner_invocations"] == 0 and
-            limits["executed_specialist_count"] == 0 and
-            limits["executed_critic_count"] == 0 and
-            limits["local_checklist_section_count"] == 8 and
-            result["execution"] == "deterministic_rule_based" and len(result["reviews"]) == 8
+            protocol["id"] == PROTOCOL_ID
+            and protocol["mode"] == "local"
+            and protocol["external_execution_status"] == "not_requested"
+            and limits["expected_runner_invocations"] == 0
+            and limits["completed_runner_invocations"] == 0
+            and limits["executed_specialist_count"] == 0
+            and limits["executed_critic_count"] == 0
+            and limits["local_checklist_section_count"] == 8
+            and result["execution"] == "deterministic_rule_based"
+            and len(result["reviews"]) == 8
         )
         evidence_review = result["evidence_review"]
         records = evidence_review["records"]
@@ -221,76 +303,104 @@ def build_acceptance_results(root: Path = ROOT) -> dict:
             "provider_failure": "provider_failure_recorded",
         }[case_state]
         state_check_ok = (
-            (case_state == "valid_synthetic" and records and records[0]["digest_status"] == "matches_supplied_inputs" and not codes) or
-            (case_state != "valid_synthetic" and expected_state_code in codes)
-        )
+            case_state == "valid_synthetic"
+            and records
+            and records[0]["digest_status"] == "matches_supplied_inputs"
+            and not codes
+        ) or (case_state != "valid_synthetic" and expected_state_code in codes)
         role_result = _role_result(row["role"], result)
         critic_na = role_result["status"] == "NOT_APPLICABLE_ABSENT_CRITIC"
         status = (
-            "NOT_APPLICABLE_ABSENT_CRITIC" if critic_na else
-            "PASS_FIXED_CHECKLIST_AND_METADATA_CHECKS"
-            if protocol_ok and state_check_ok and role_result["conditions_met"] else
-            "PARTIAL_OR_FAILED_EXPECTATION"
+            "NOT_APPLICABLE_ABSENT_CRITIC"
+            if critic_na
+            else "PASS_FIXED_CHECKLIST_AND_METADATA_CHECKS"
+            if protocol_ok and state_check_ok and role_result["conditions_met"]
+            else "PARTIAL_OR_FAILED_EXPECTATION"
         )
         serialized = json.dumps(result, ensure_ascii=False, allow_nan=False)
         fixture_not_echoed = "SYNTHETIC_SENSITIVE_FIXTURE_MARKER_DO_NOT_ECHO" not in serialized
         if case_state == "sensitive_fixture" and not fixture_not_echoed:
             status = "FAIL_SENSITIVE_FIXTURE_ECHOED"
-        results.append({
-            **row,
-            "status": status,
-            "evidence_class": "O",
-            "actual": {
-                "mode": "local_deterministic",
-                "protocol_ok": protocol_ok,
-                "evidence_state_check_ok": state_check_ok,
-                "evidence_state_codes": sorted(codes),
-                "digest_status": records[0]["digest_status"] if records else "not_applicable_no_record",
-                "role_result": role_result,
-                "fixed_checklist_only": evidence_review["status"] == "checklist_only",
-                "critic_execution": evidence_review["critic_execution"],
-                "sensitive_fixture_not_echoed": fixture_not_echoed,
-                "claims": "These are deterministic metadata/result-shape checks and fixed checklist text, not evidence-role analysis or scientific validation.",
-            },
-        })
+        results.append(
+            {
+                **row,
+                "status": status,
+                "evidence_class": "O",
+                "actual": {
+                    "mode": "local_deterministic",
+                    "protocol_ok": protocol_ok,
+                    "evidence_state_check_ok": state_check_ok,
+                    "evidence_state_codes": sorted(codes),
+                    "digest_status": records[0]["digest_status"] if records else "not_applicable_no_record",
+                    "role_result": role_result,
+                    "fixed_checklist_only": evidence_review["status"] == "checklist_only",
+                    "critic_execution": evidence_review["critic_execution"],
+                    "sensitive_fixture_not_echoed": fixture_not_echoed,
+                    "claims": (
+                        "These are deterministic metadata/result-shape checks and"
+                        " fixed checklist text, not evidence-role analysis or"
+                        " scientific validation."
+                    ),
+                },
+            }
+        )
 
     for row in public_rows:
         if row["role"] == "Independent critic":
             status = "NOT_APPLICABLE_ABSENT_CRITIC"
         else:
-            status = "PARTIAL_STATIC_CONTRACT_ONLY" if preview["all_static_contract_checks_pass"] else "STATIC_CONTRACT_FAILED"
-        results.append({
-            **row,
-            "status": status,
-            "evidence_class": "R",
-            "actual": {
-                "mode": "public_preview_static_bundle",
-                "static_contract_checks_pass": preview["all_static_contract_checks_pass"],
-                "evidence_state_exercised": False,
-                "evidence_state_blocker": "The static public snapshot has no evidence-state injection interface.",
-                "role_result": "Eight fixed sections are displayed; no reviewer or critic is executed by this source inspection.",
-                "claims": "Public bundle contract only. This does not pass role/evidence behavior for the selected CSV evidence state.",
-            },
-        })
+            status = (
+                "PARTIAL_STATIC_CONTRACT_ONLY"
+                if preview["all_static_contract_checks_pass"]
+                else "STATIC_CONTRACT_FAILED"
+            )
+        results.append(
+            {
+                **row,
+                "status": status,
+                "evidence_class": "R",
+                "actual": {
+                    "mode": "public_preview_static_bundle",
+                    "static_contract_checks_pass": preview["all_static_contract_checks_pass"],
+                    "evidence_state_exercised": False,
+                    "evidence_state_blocker": (
+                        "The static public snapshot has no evidence-state injection interface."
+                    ),
+                    "role_result": (
+                        "Eight fixed sections are displayed; no reviewer or critic is"
+                        " executed by this source inspection."
+                    ),
+                    "claims": (
+                        "Public bundle contract only. This does not pass"
+                        " role/evidence behavior for the selected CSV evidence state."
+                    ),
+                },
+            }
+        )
 
-    for row in external_rows:
-        results.append({
+    results.extend(
+        {
             **row,
             "status": "BLOCKED_LIVE_PROVIDER_ACCEPTANCE",
             "evidence_class": "P",
             "actual": {
                 "mode": "local_external_opt_in",
                 "live_provider_call": False,
-                "status": "Not started without provider-enabled config, server credentials and explicit consent.",
+                "status": "Not started without provider-enabled config, server credentials and explicit conse"
+                "nt.",
                 "mocked_provider_tests": MOCKED_EXTERNAL_TESTS,
-                "claims": "Mocked orchestration and failure behavior are tested separately; this row does not claim real-provider compatibility, billing, source analysis, critic authority, or human approval.",
+                "claims": "Mocked orchestration and failure behavior are tested separately; this row does not"
+                " claim real-provider compatibility, billing, source analysis, critic authority, or"
+                " human approval.",
             },
-        })
+        }
+        for row in external_rows
+    )
 
-    results.sort(key=lambda case: case["test_id"])
-    status_counts = Counter(case["status"] for case in results)
+    results.sort(key=lambda case: _case_text(case, "test_id"))
+    status_counts = Counter(_case_text(case, "status") for case in results)
     requested = [case for case in results if case["mode"] in {"public_preview", "local_deterministic"}]
-    requested_status_counts = Counter(case["status"] for case in requested)
+    requested_status_counts = Counter(_case_text(case, "status") for case in requested)
     hash_paths = [
         DESIGN_CSV,
         Path("apps/api/helioforge/council.py"),
@@ -305,16 +415,21 @@ def build_acceptance_results(root: Path = ROOT) -> dict:
         Path("apps/web/src/integrations-ui.ts"),
         Path("apps/web/dist/app.js"),
     ]
-    source_hashes = {str(path).replace("\\", "/"): _sha256(root / path)
-                     for path in hash_paths if (root / path).is_file()}
+    source_hashes = {
+        str(path).replace("\\", "/"): _sha256(root / path) for path in hash_paths if (root / path).is_file()
+    }
     return {
         "title": "HelioForge council acceptance follow-up",
         "generated_at_utc": datetime.now(UTC).isoformat(),
         "design_source": str(DESIGN_CSV).replace("\\", "/"),
         "design_source_sha256": _sha256(csv_path),
-        "case_counts": {"total_design_rows": len(specifications), "public_preview": len(public_rows),
-                        "local_deterministic": len(local_rows), "local_external_opt_in": len(external_rows),
-                        "requested_public_and_local": len(requested)},
+        "case_counts": {
+            "total_design_rows": len(specifications),
+            "public_preview": len(public_rows),
+            "local_deterministic": len(local_rows),
+            "local_external_opt_in": len(external_rows),
+            "requested_public_and_local": len(requested),
+        },
         "requested_case_status_counts": dict(sorted(requested_status_counts.items())),
         "all_case_status_counts": dict(sorted(status_counts.items())),
         "interpretation": {
@@ -322,18 +437,38 @@ def build_acceptance_results(root: Path = ROOT) -> dict:
                 "O": "Observed controlled execution of the real local deterministic council code.",
                 "R": "Read-only inspection of the public static source and shipped bundle.",
                 "P": "Blocked; no live provider call was made.",
-                "U": "Unverified: scientific validity, source authenticity, human approval, and actual provider charges.",
+                "U": (
+                    "Unverified: scientific validity, source authenticity, human"
+                    " approval, and actual provider charges."
+                ),
             },
-            "public_preview": "Static bundle checks are partial and evidence-state specific behavior is not executable without an injection interface.",
-            "local_deterministic": "The real local_council function was called once per CSV row with controlled synthetic fixtures; its fixed sections and bounded metadata checks are reported separately.",
-            "external": "All 63 live-provider acceptance rows are blocked by design; no API key or provider call was used.",
-            "scientific_and_human_review": "Scientific validation, source authentication, legal approval, human approval and provider billing review remain separate and unclaimed.",
+            "public_preview": (
+                "Static bundle checks are partial and evidence-state specific"
+                " behavior is not executable without an injection interface."
+            ),
+            "local_deterministic": (
+                "The real local_council function was called once per CSV row"
+                " with controlled synthetic fixtures; its fixed sections and"
+                " bounded metadata checks are reported separately."
+            ),
+            "external": (
+                "All 63 live-provider acceptance rows are blocked by design;"
+                " no API key or provider call was used."
+            ),
+            "scientific_and_human_review": (
+                "Scientific validation, source authentication, legal"
+                " approval, human approval and provider billing review remain"
+                " separate and unclaimed."
+            ),
         },
         "public_preview_contract": preview,
         "mocked_external_coverage": {
             "live_provider_call": False,
             "tests_to_run_separately": MOCKED_EXTERNAL_TESTS,
-            "note": "These named local tests use a fake SDK or API gate and do not establish actual provider behavior.",
+            "note": (
+                "These named local tests use a fake SDK or API gate and do"
+                " not establish actual provider behavior."
+            ),
         },
         "environment": {
             "python": platform.python_version(),
@@ -346,31 +481,46 @@ def build_acceptance_results(root: Path = ROOT) -> dict:
     }
 
 
-def _write_artifacts(report: dict, root: Path) -> Path:
+def _write_artifacts(report: CouncilAcceptanceReport, root: Path) -> Path:
     directory = root / "docs" / "remediation-20261029"
     directory.mkdir(parents=True, exist_ok=True)
     json_path = directory / "council-results.json"
-    json_path.write_text(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False) + "\n", encoding="utf-8")
+    json_path.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False) + "\n", encoding="utf-8"
+    )
     return json_path
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
-    parser.add_argument("--no-write", action="store_true", help="Print a status summary without writing the requested artifacts.")
+    parser.add_argument(
+        "--no-write",
+        action="store_true",
+        help="Print a status summary without writing the requested artifacts.",
+    )
     args = parser.parse_args()
     report = build_acceptance_results(args.root.resolve())
     if not args.no_write:
         json_path = _write_artifacts(report, args.root.resolve())
-        print(f"Wrote {json_path}")
-    print(json.dumps({
-        "case_counts": report["case_counts"],
-        "requested_case_status_counts": report["requested_case_status_counts"],
-        "all_case_status_counts": report["all_case_status_counts"],
-        "live_provider_calls": 0,
-    }, indent=2))
+        print(f"Wrote {json_path}")  # noqa: T201 -- CLI report output.
+    print(  # noqa: T201 -- CLI report output.
+        json.dumps(
+            {
+                "case_counts": report["case_counts"],
+                "requested_case_status_counts": report["requested_case_status_counts"],
+                "all_case_status_counts": report["all_case_status_counts"],
+                "live_provider_calls": 0,
+            },
+            indent=2,
+        )
+    )
     local_failures = report["all_case_status_counts"].get("PARTIAL_OR_FAILED_EXPECTATION", 0)
-    return 0 if report["public_preview_contract"]["all_static_contract_checks_pass"] and not local_failures else 1
+    return (
+        0
+        if report["public_preview_contract"]["all_static_contract_checks_pass"] and not local_failures
+        else 1
+    )
 
 
 if __name__ == "__main__":

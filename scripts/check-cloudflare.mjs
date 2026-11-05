@@ -5,6 +5,7 @@ import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 import {buildModelRegistry,buildPublicCapabilityFacts,CAPABILITY_COPY,validateCloudflareCopy} from './capability-contract.mjs';
+import {hasAnchorUnder} from './html-document.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const config=JSON.parse(fs.readFileSync(path.join(root,'cloudflare.json'),'utf8'));
 validateCloudflareCopy(config);
@@ -27,7 +28,7 @@ const configuredSocialPreview=config.socialPreviewArtifact||'docs/repository/soc
 assert.equal(facts.url,config.canonical);
 assert.equal(new URL(config.canonical).origin,'https://mklab.co.technology');
 assert.ok(html.includes('MKLab Browser Apps'));
-assert.ok(!html.includes('https://khanlab.co.technology/apps/'));
+assert.ok(!hasAnchorUnder(html,'https://khanlab.co.technology/apps/',config.canonical),'Export contains a retired application link');
 assert.equal(facts.access,'public; no sign-in');
 assert.equal(facts.runtimeSha256,createHash('sha256').update(runtime).digest('hex'));
 assert.match(html,/<h1>(?:[^<]|<wbr>)+<\/h1>/);assert.match(html,/name="robots" content="index,follow/);

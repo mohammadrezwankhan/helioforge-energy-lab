@@ -1,3 +1,4 @@
+import {installFixtureViews} from './helpers/fixture-views.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -25,6 +26,7 @@ test('all 59 studies disable comparison and exports immediately on numeric or JS
   const box = vm.createContext({URL, Intl, structuredClone, CSS: {escape: value => value}});
   vm.runInContext(code, box);
   box.document = document;
+  installFixtureViews(box.HF);
   const hf = box.HF;
   hf.studyVisual = () => '';
   hf.bindStudyVisuals = () => () => {};

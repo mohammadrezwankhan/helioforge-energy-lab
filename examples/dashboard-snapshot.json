@@ -622,7 +622,7 @@
         "id": "storage",
         "version": "btm-milp-v1"
       },
-      "source_revision": "0fc05c1979383be4fa0d9c353a546949077489214ff5a9e7358f1c77b6fe0dc0",
+      "source_revision": "2c827fb0e65ec6f226ce7f3624d419a758bfb88275f5b1cafd182c4107d5dd21",
       "source_files": [
         "engines/storage.py",
         "provenance.py",
@@ -684,7 +684,7 @@
         "approval_status": "not_assessed"
       }
     },
-    "source_revision": "0fc05c1979383be4fa0d9c353a546949077489214ff5a9e7358f1c77b6fe0dc0",
+    "source_revision": "2c827fb0e65ec6f226ce7f3624d419a758bfb88275f5b1cafd182c4107d5dd21",
     "input_sha256": "cc14e72969b582f4b2825f9516aad5aa8732509b0c6dabdb8b5d634a491bea48",
     "dataset_revision": "3ca4bb425671c1158af016a21ba8f3c0c1a28eed61e993701cf3ccf91041dc04"
   },
@@ -992,7 +992,7 @@
         "id": "finance",
         "version": "project-finance-v1"
       },
-      "source_revision": "71dd0942cf02bac7d3942c15273d0dc19efccb3e40d828fb994884c9a78119d9",
+      "source_revision": "84e1fc7f9abb762179bceb479dc334bae738a6e3fc461f65d7c933cfecfbf672",
       "source_files": [
         "engines/finance.py",
         "provenance.py",
@@ -1043,7 +1043,7 @@
         "approval_status": "not_assessed"
       }
     },
-    "source_revision": "71dd0942cf02bac7d3942c15273d0dc19efccb3e40d828fb994884c9a78119d9",
+    "source_revision": "84e1fc7f9abb762179bceb479dc334bae738a6e3fc461f65d7c933cfecfbf672",
     "input_sha256": "a158f49ec9d3ec13f21818f6f341e2d412873a5c6c3bced55f363bab73c0a91c"
   },
   "pv": {
@@ -1249,7 +1249,7 @@
         "id": "pv",
         "version": "discounted-pv-v1"
       },
-      "source_revision": "71dd0942cf02bac7d3942c15273d0dc19efccb3e40d828fb994884c9a78119d9",
+      "source_revision": "84e1fc7f9abb762179bceb479dc334bae738a6e3fc461f65d7c933cfecfbf672",
       "source_files": [
         "engines/finance.py",
         "provenance.py",
@@ -1300,7 +1300,7 @@
         "approval_status": "not_assessed"
       }
     },
-    "source_revision": "71dd0942cf02bac7d3942c15273d0dc19efccb3e40d828fb994884c9a78119d9",
+    "source_revision": "84e1fc7f9abb762179bceb479dc334bae738a6e3fc461f65d7c933cfecfbf672",
     "input_sha256": "817ebe893103a69285d2e72aa492e036b68fbdb1f87b0d945467f894e98c2de1"
   },
   "acquisition": {
@@ -1322,7 +1322,7 @@
         "id": "acquisition",
         "version": "ma-screen-v1"
       },
-      "source_revision": "71dd0942cf02bac7d3942c15273d0dc19efccb3e40d828fb994884c9a78119d9",
+      "source_revision": "84e1fc7f9abb762179bceb479dc334bae738a6e3fc461f65d7c933cfecfbf672",
       "source_files": [
         "engines/finance.py",
         "provenance.py",
@@ -1373,7 +1373,7 @@
         "approval_status": "not_assessed"
       }
     },
-    "source_revision": "71dd0942cf02bac7d3942c15273d0dc19efccb3e40d828fb994884c9a78119d9",
+    "source_revision": "84e1fc7f9abb762179bceb479dc334bae738a6e3fc461f65d7c933cfecfbf672",
     "input_sha256": "9f1b7d60f68b52f562f5a1ac0d59a6c81dabf1bbc5888e7c7407d5d56e4f7041"
   },
   "forecast": {
@@ -1537,7 +1537,7 @@
         "id": "forecast",
         "version": "mean-reverting-scenario-v1"
       },
-      "source_revision": "af80714ad216b7744ce22916ff715f7b5ed75488514cbcecbf49588a1997e01d",
+      "source_revision": "d13009977fabc35bfeb998e4aaa708d75c26b6c7424309c5474be268cafa3fa3",
       "source_files": [
         "engines/forecast.py",
         "provenance.py",
@@ -1590,7 +1590,7 @@
         "approval_status": "not_assessed"
       }
     },
-    "source_revision": "af80714ad216b7744ce22916ff715f7b5ed75488514cbcecbf49588a1997e01d",
+    "source_revision": "d13009977fabc35bfeb998e4aaa708d75c26b6c7424309c5474be268cafa3fa3",
     "input_sha256": "08e92618d82bdde75e048c864bbf4e3215d26f5ebc42f69ad905c1047f934d9e"
   },
   "drift": {
@@ -1804,7 +1804,7 @@
         "id": "drift",
         "version": "robust-residual-v1"
       },
-      "source_revision": "f8bb182f7ac05f2aff55fabd0ed7333822f75b3a1b87d1be46f5ff3637573480",
+      "source_revision": "a47b15c07cd1b275816d2bc437e33ae648beb3f40d2d6730f8a89a9d4158b401",
       "source_files": [
         "engines/research.py",
         "provenance.py",
@@ -1853,7 +1853,7 @@
         "approval_status": "not_assessed"
       }
     },
-    "source_revision": "f8bb182f7ac05f2aff55fabd0ed7333822f75b3a1b87d1be46f5ff3637573480",
+    "source_revision": "a47b15c07cd1b275816d2bc437e33ae648beb3f40d2d6730f8a89a9d4158b401",
     "input_sha256": "8d018955e9f568e705fd7473655a32837030d151397d2b63fb4b16fdda4b6a5b"
   },
   "reliability": {
@@ -1871,7 +1871,7 @@
         "id": "reliability",
         "version": "conditional-weibull-v1"
       },
-      "source_revision": "f8bb182f7ac05f2aff55fabd0ed7333822f75b3a1b87d1be46f5ff3637573480",
+      "source_revision": "a47b15c07cd1b275816d2bc437e33ae648beb3f40d2d6730f8a89a9d4158b401",
       "source_files": [
         "engines/research.py",
         "provenance.py",
@@ -1918,7 +1918,7 @@
         "approval_status": "not_assessed"
       }
     },
-    "source_revision": "f8bb182f7ac05f2aff55fabd0ed7333822f75b3a1b87d1be46f5ff3637573480",
+    "source_revision": "a47b15c07cd1b275816d2bc437e33ae648beb3f40d2d6730f8a89a9d4158b401",
     "input_sha256": "164ae322a4b443f7df1daaa3e3b8dda5f69b91f63c7536fe05b00da87e8640f3"
   },
   "sustainability": {
@@ -1939,7 +1939,7 @@
         "id": "sustainability",
         "version": "carbon-screen-v1"
       },
-      "source_revision": "f8bb182f7ac05f2aff55fabd0ed7333822f75b3a1b87d1be46f5ff3637573480",
+      "source_revision": "a47b15c07cd1b275816d2bc437e33ae648beb3f40d2d6730f8a89a9d4158b401",
       "source_files": [
         "engines/research.py",
         "provenance.py",
@@ -1991,7 +1991,7 @@
         "approval_status": "not_assessed"
       }
     },
-    "source_revision": "f8bb182f7ac05f2aff55fabd0ed7333822f75b3a1b87d1be46f5ff3637573480",
+    "source_revision": "a47b15c07cd1b275816d2bc437e33ae648beb3f40d2d6730f8a89a9d4158b401",
     "input_sha256": "f9558bdb58b7c8831eb1328ef1f9aaede730227578db47bedc5c707209fa1eed"
   },
   "defaults": {

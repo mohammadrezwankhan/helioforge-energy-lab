@@ -13,7 +13,7 @@ This registry is generated from the Python-backed study catalogue embedded in `a
 | Hybrid catalogue | 0.2.0 | 36 architectures, 24 scenarios, 36 lessons |
 | Study catalogue | No declared semantic version; SHA-256 `9c89b475d9e929f1cad0792dc955082cc30bf87be305be175e22a6e9a9c5495f` | 59 IDs / 12 workspaces |
 | Hybrid example data | hybrid-presets-v1 / helioforge.hybrid-bundle.v1 | 285 bundled cases; dataset digest in JSON |
-| Study example data | No declared dataset version; digest `d53241ccab2357c73309dc5bc57d1cd3e6941ab1a3d2c51c2b68df5f82243077` | Synthetic or user-supplied-unverified examples |
+| Study example data | No declared dataset version; digest `949d41fc65bffb23d02222b8f2737258b8e5528dc534a236007f8d973df0b082` | Synthetic or user-supplied-unverified examples |
 | Study model | `roadmap-screen-v1` | Per-study association is listed below |
 | Study result schema | U — no standalone schema_version in current envelope | See `docs/roadmap/CONTRACT.md` and individual source module |
 
@@ -31,7 +31,7 @@ Model: `roadmap-screen-v1`. Python: [engineering_studies.py](../apps/api/heliofo
 
 Input schema: 5 bounded numeric field(s), 0 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `42938f1b89cacfef9b64a8aee1cf84dcae30fbdb8c03cea50ab621aae2596df7`, evidence SHA-256 `71b1d4b8286a9a41ad75590b7a75ba7a306ddd5e6f9ab7920970b499abc83095`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `42938f1b89cacfef9b64a8aee1cf84dcae30fbdb8c03cea50ab621aae2596df7`, evidence SHA-256 `fc6c0470dbfce9c04c98ffdad178345128c63968056ff2d943275338c04c0042`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `q'' + C q' + K q = u`
@@ -50,7 +50,7 @@ Model: `roadmap-screen-v1`. Python: [engineering_studies.py](../apps/api/heliofo
 
 Input schema: 6 bounded numeric field(s), 0 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `2a6d7f71fc38b9a55d1cb9c9f8548eb89df74e9fc11242677bad3e16d49aa13a`, evidence SHA-256 `3c1d95ca4a34e544e67df0ca8a41951c27be80ad3c95c034caf19508a0d95375`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `2a6d7f71fc38b9a55d1cb9c9f8548eb89df74e9fc11242677bad3e16d49aa13a`, evidence SHA-256 `45d5908052eccf5e6b7c1f34ee2ff931d0811c7a647d96badedffe9e44a97887`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `Pdc,inverter limit = Pac,rated / ηinv`
@@ -70,7 +70,7 @@ Model: `roadmap-screen-v1`. Python: [engineering_studies.py](../apps/api/heliofo
 
 Input schema: 6 bounded numeric field(s), 0 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `316334f9753f6d095fcf9abada759d47c2e6e2142af2c4384eb2c53e2f60a9ce`, evidence SHA-256 `a58003de3f6d9d0c968ebb446cf31e90df0360136da53ccfeb946c79f2fb0a11`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `316334f9753f6d095fcf9abada759d47c2e6e2142af2c4384eb2c53e2f60a9ce`, evidence SHA-256 `bfd03493180400ced058ae8e9f9946e8b5eb355ca07ce5380ea6369dcc3f4447`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `df/dt = f0/(2 H Sbase) · (Pgov + Psyn − ΔPtrip − D Δf)`
@@ -89,7 +89,7 @@ Model: `roadmap-screen-v1`. Python: [physical_studies.py](../apps/api/helioforge
 
 Input schema: 3 bounded numeric field(s), 2 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `75bd8bd8e2d3b29dcaa90947f359e43f163b85b6d115537ab52c2eb828b88e3e`, evidence SHA-256 `1d9b3567ad8f35285ba73e25ef99164b960ef26f48e70b980a4018461aedc78c`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `75bd8bd8e2d3b29dcaa90947f359e43f163b85b6d115537ab52c2eb828b88e3e`, evidence SHA-256 `016f48a0119f432c51ffc38737547d1e84ac212046a1b8c792ae661823744c0b`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `I = Ybus·V; Sbus = V·conj(I)`
@@ -109,7 +109,7 @@ Model: `roadmap-screen-v1`. Python: [physical_studies.py](../apps/api/helioforge
 
 Input schema: 10 bounded numeric field(s), 0 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `40cf32e2f140ef8600c12805d08b9416a762df6a45f75f88fe27bb5a2904546c`, evidence SHA-256 `4740e5cfe1865f4f13882295edf9045f9844f0a513079bdb93428478922860e4`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `40cf32e2f140ef8600c12805d08b9416a762df6a45f75f88fe27bb5a2904546c`, evidence SHA-256 `bf17d512538f63ee1cefde413619aad3174c6a26b4bec00c7a9297d562843fa2`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `L·di/dt = vinverter(t) − vgrid(t) − R·i`
@@ -129,7 +129,7 @@ Model: `roadmap-screen-v1`. Python: [control_studies.py](../apps/api/helioforge/
 
 Input schema: 21 bounded numeric field(s), 0 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `58d71dd8e911c20b1c3fc01dc2d8887a8917f80e75d256549465cb3af365d0e8`, evidence SHA-256 `5c4ef5f7b976c6be3dd76495c7f8b6574ef8747bcd1a3b773b7faffb41c7a736`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `58d71dd8e911c20b1c3fc01dc2d8887a8917f80e75d256549465cb3af365d0e8`, evidence SHA-256 `d1cae815c1e0dfb5789f32f0fa6d75a01660cc22c8f85f3bfe6f90153acc304c`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `L_f·d i_f/dt = u_inv − v_c − R_f i_f + ωL_f J i_f; C_f·d v_c/dt = i_f − i_g − i_load + ωC_f J v_c; L_g·d i_g/dt = v_c − v_grid − R_g i_g + ωL_g J i_g, with J=[[0,1],[-1,0]].`
@@ -153,7 +153,7 @@ Model: `roadmap-screen-v1`. Python: [workflow_studies.py](../apps/api/helioforge
 
 Input schema: 3 bounded numeric field(s), 3 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `c40a02b1ab8a04cb0bd94ee0e23763b034fb77086c82be31fb9ec1591b6f844c`, evidence SHA-256 `859e80d471bf574c94d3edef215551d775d197ad16654ba70a05ce290ddc4ccb`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `c40a02b1ab8a04cb0bd94ee0e23763b034fb77086c82be31fb9ec1591b6f844c`, evidence SHA-256 `4feaea83aaa05b204414bfad02b9d5c74c80474919ae63060b35d253932a0757`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `net load[t] = load[t] - solar[t] - wind[t]`
@@ -171,7 +171,7 @@ Model: `roadmap-screen-v1`. Python: [workflow_studies.py](../apps/api/helioforge
 
 Input schema: 4 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `9584284a0d8d5f8c4a17e1b03cbde839d3d5a46d385a105ce252bc771dffb4fa`, evidence SHA-256 `a94bfaff59524438a7f2c816d99703b6c123d0e27160fd52d3cf0593edcf818f`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `9584284a0d8d5f8c4a17e1b03cbde839d3d5a46d385a105ce252bc771dffb4fa`, evidence SHA-256 `c84c90c3d710f611de8bcadd06ae98f15f9a25fdabd64d7ce8ceebd8bbd9c0fe`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `available budget = rated power * available fraction`
@@ -190,7 +190,7 @@ Model: `roadmap-screen-v1`. Python: [workflow_studies.py](../apps/api/helioforge
 
 Input schema: 4 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `5c32abfe7e669a83892218dd80d1b40470274d16eb58c9d953df8ea4fe25145b`, evidence SHA-256 `a8e3dd7e6715de6cc54143790fdf170cdb52594814ef8eca030ec596e5c8ca69`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `5c32abfe7e669a83892218dd80d1b40470274d16eb58c9d953df8ea4fe25145b`, evidence SHA-256 `f209dbea1cda0c63f020e39f42784cd11dda0ef083c0f14950c04093ee43d578`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `chemical energy = hydrogen mass * 33.3 kWh/kg (LHV basis)`
@@ -209,7 +209,7 @@ Model: `roadmap-screen-v1`. Python: [physical_studies.py](../apps/api/helioforge
 
 Input schema: 10 bounded numeric field(s), 0 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `94d879bbb2569af4d4553c6451bcc27f7cb7482de76c493d732be9dbac1b49fa`, evidence SHA-256 `4605f2da9463e436145e356516dc219608eb59c67e182996e2ea680db8294a69`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `94d879bbb2569af4d4553c6451bcc27f7cb7482de76c493d732be9dbac1b49fa`, evidence SHA-256 `8b59dd51858edce56ccabed90c9452555c471f1728f5389aa18bdc33daf334a3`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `L di/dt = vsource − R i − vC after breaker close`
@@ -229,7 +229,7 @@ Model: `roadmap-screen-v1`. Python: [planning_studies.py](../apps/api/helioforge
 
 Input schema: 6 bounded numeric field(s), 0 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `ed71591eb49d25c6e5660897b7daa4ebe600b7488789383880669f3fe2b4b423`, evidence SHA-256 `5d6726350869d822150e02cf2bf9b88537347cdddb2789d46b8a4c86dde51128`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `ed71591eb49d25c6e5660897b7daa4ebe600b7488789383880669f3fe2b4b423`, evidence SHA-256 `f9d502fbbcd260ae818335c8b8fa9709208457a932821109eb9ce995de672786`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `water stoichiometry = 9 kg feedwater per kg H₂ / recovery fraction`
@@ -252,7 +252,7 @@ Model: `roadmap-screen-v1`. Python: [workflow_studies.py](../apps/api/helioforge
 
 Input schema: 3 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `4f296a339cebe21478c3d273ea0ae99ce1fe429331b902b55bdc7bdec85afcba`, evidence SHA-256 `22f332e760056403db191bc62dd3d0e3adce59679220837f6574b1ca6d374f64`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `4f296a339cebe21478c3d273ea0ae99ce1fe429331b902b55bdc7bdec85afcba`, evidence SHA-256 `3b26294e7146792219273a3d13ae7045bca01bb0b933b5ecd67a586b72ee020f`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `a dominates b when it is no worse on all objectives and strictly better on one`
@@ -270,7 +270,7 @@ Model: `roadmap-screen-v1`. Python: [workflow_studies.py](../apps/api/helioforge
 
 Input schema: 5 bounded numeric field(s), 2 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `8af60e8d4cf71a8d86659bb5e5c5ba2bf4d25d664bee3104b4f99dc22b87dec5`, evidence SHA-256 `89a51d19bb519a2ef7d5c85c8930429869efb1fb73aa710bb87f67fe052b5eef`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `8af60e8d4cf71a8d86659bb5e5c5ba2bf4d25d664bee3104b4f99dc22b87dec5`, evidence SHA-256 `1263077edfd5f665a324c2558f56be5c66e3e1907ead175df2a020db9c368099`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `renewable + discharge + shortfall = load + charge + curtailment`
@@ -290,7 +290,7 @@ Model: `roadmap-screen-v1`. Python: [workflow_studies.py](../apps/api/helioforge
 
 Input schema: 4 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `def66335c4dbfa79561796b23366e2d2559bed9833b40065e22a3a4b73aa6720`, evidence SHA-256 `9e7ebf8fafac1e98389c3b5a9de3afa154ae2df791e6b0423168b8d57b085d0c`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `def66335c4dbfa79561796b23366e2d2559bed9833b40065e22a3a4b73aa6720`, evidence SHA-256 `0a765a1621fd566347c4fe824ac058f93da06da2aa4dcbc3a34c465c3bcc0dbc`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `EFC = years * 365 * cycles/day * utilization * depth of discharge`
@@ -309,7 +309,7 @@ Model: `roadmap-screen-v1`. Python: [physical_studies.py](../apps/api/helioforge
 
 Input schema: 12 bounded numeric field(s), 0 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `08523185b0074291bca13df53a5a252a29e86003a901b3c508fdd30483cec0ff`, evidence SHA-256 `8b86353c3d394d440a10445dd787055e4c3f3c9f3bc1ca3ffd6f5b63db0584f7`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `08523185b0074291bca13df53a5a252a29e86003a901b3c508fdd30483cec0ff`, evidence SHA-256 `fd3010fa94ca579e4164583d9f4a452da1ccdf21e7b5f2ebf50f15e21372bb61`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `k(T) = kref·exp[−Ea/R·(1/T − 1/Tref)] with absolute temperature in kelvin`
@@ -328,7 +328,7 @@ Model: `roadmap-screen-v1`. Python: [planning_studies.py](../apps/api/helioforge
 
 Input schema: 7 bounded numeric field(s), 2 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `dcd927302399abfbfb70039b8f658f8065f372e8b8515ac572ef2720af755509`, evidence SHA-256 `3443d2200bea3e467b6da7795c279ad33f7023d268bf56990a1e6032b5be4881`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `dcd927302399abfbfb70039b8f658f8065f372e8b8515ac572ef2720af755509`, evidence SHA-256 `56945cd85f49123317d018451fc9629f7bdfc673f9b71835b27beed71785b5c2`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `LOLE[horizon] = mean over trials of hours with unserved load`
@@ -353,7 +353,7 @@ Model: `roadmap-screen-v1`. Python: [decision_studies.py](../apps/api/helioforge
 
 Input schema: 3 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `0402e26d161c32c1c8f0807ad1813a69c9b2856c42973a5f61e7d4db73734382`, evidence SHA-256 `65958eed23736922bd1dfcdb02d5df2a4ea0ddabf40447affa588099bd8ee712`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `0402e26d161c32c1c8f0807ad1813a69c9b2856c42973a5f61e7d4db73734382`, evidence SHA-256 `05c4f9193c81b4ea57e8621522b22a90bcc52fb8eb07ecfab05503a5f6f55477`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `z_i,t = sqrt(common_share) z_common,t + sqrt(1−common_share) z_idiosyncratic,i,t`
@@ -371,7 +371,7 @@ Model: `roadmap-screen-v1`. Python: [decision_studies.py](../apps/api/helioforge
 
 Input schema: 3 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `d1e4ec58847b38d434cae98662c115ee1b24ff4a1218aa6420b7435f43efc2d4`, evidence SHA-256 `e8e1666b778d48ca6c37e2dc6333f8d33f7006f6d5eec46226b9a8f5e53e0179`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `d1e4ec58847b38d434cae98662c115ee1b24ff4a1218aa6420b7435f43efc2d4`, evidence SHA-256 `aef083e570742fb0a2512531e647353d876c651c506f24f810bde9fbb44a4125`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `net value_route,i = assumed value_route,i − variable cost_i`
@@ -388,7 +388,7 @@ Model: `roadmap-screen-v1`. Python: [decision_studies.py](../apps/api/helioforge
 
 Input schema: 3 bounded numeric field(s), 2 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `580b5057ad05badedcad285a52632446d74ebb992fe47b6d8fb029f79418f96c`, evidence SHA-256 `d274a32d97acfccb87cb4e976149159344c30aaa6670ae14d20835a268738a41`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `580b5057ad05badedcad285a52632446d74ebb992fe47b6d8fb029f79418f96c`, evidence SHA-256 `ebd03941f5946a900490d647a9b73b62183efdd12ac0a10fa69ea0418899044c`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `hourly emissions = Σ_h generation_h × marginal_factor_h`
@@ -405,7 +405,7 @@ Model: `roadmap-screen-v1`. Python: [planning_studies.py](../apps/api/helioforge
 
 Input schema: 0 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `8f3f9c27d9b4cfc3cf603c15667240f02309ef53bc498bede4c4fb71c87a0267`, evidence SHA-256 `85828d40d7f64615125ed0ca21b2f5f7db6cf5c8fff132b56fee221bd34b422d`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `8f3f9c27d9b4cfc3cf603c15667240f02309ef53bc498bede4c4fb71c87a0267`, evidence SHA-256 `722d449bad12b8259ffa554a5dce0288be5c49cc4e48db47f873249e762ce17a`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `status = missing_value if value is absent; otherwise compare to the supplied min/max threshold`
@@ -428,7 +428,7 @@ Model: `roadmap-screen-v1`. Python: [engineering_studies.py](../apps/api/heliofo
 
 Input schema: 5 bounded numeric field(s), 0 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `0e327f6bfce98f41564a501979eafb300224c6c0e8e6216fdb2082de033c5543`, evidence SHA-256 `54ccb7e438d36c05ca7ba98dc9310bbc98f5492218d77ec6786b8f78d723cad8`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `0e327f6bfce98f41564a501979eafb300224c6c0e8e6216fdb2082de033c5543`, evidence SHA-256 `3b5de965b23988877e6fe01f078b1833179a35c6a16692249f161e36621c2ac4`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `LSEI = kSEI √t · 2^((T−25°C)/10°C)`
@@ -447,7 +447,7 @@ Model: `roadmap-screen-v1`. Python: [engineering_studies.py](../apps/api/heliofo
 
 Input schema: 6 bounded numeric field(s), 5 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `5e6af3c975ecd3bba3181c766496fd3b1ca1b81f512783ace95083077614ecd4`, evidence SHA-256 `2b0df56ab0c4825b42a13cdc4a0c3361acc31dd394a42a4c40492b4ad910e5dd`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `5e6af3c975ecd3bba3181c766496fd3b1ca1b81f512783ace95083077614ecd4`, evidence SHA-256 `6a88f3cec125d67d666eda7d82b6a2e090589d5ccda764b264946bbd0e01a22e`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `maximize Σ(price·(d−c)·Δt/1000 + reserve_price·reserve_MW·Δt)`
@@ -467,7 +467,7 @@ Model: `roadmap-screen-v1`. Python: [engineering_studies.py](../apps/api/heliofo
 
 Input schema: 6 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `226e32f06082e55b9b2039b8410779b59459e52f75544ff667cdab1203a72909`, evidence SHA-256 `e99620988ffbb162eba471bdda39280bd7ae66b96e8759b6942946c94d362678`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `226e32f06082e55b9b2039b8410779b59459e52f75544ff667cdab1203a72909`, evidence SHA-256 `7997aac295c1cb191bcc13d6c85a1bb62cc9a895e5ccf7a6d1109382eff16157`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `ℓ[t] = ℓ[t−1] + α(P[t]−ℓ[t−1]); α = Δt/(τ+Δt)`
@@ -486,7 +486,7 @@ Model: `roadmap-screen-v1`. Python: [toolkit_studies.py](../apps/api/helioforge/
 
 Input schema: 9 bounded numeric field(s), 3 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `67dc3f746227f6ac9d591f65a760c0efc1cbf87e936f0b981ca74ee7e186fa93`, evidence SHA-256 `4828edd3b44c5d6c78b33b4797c2be206b17b9863bd306511e97b51ae0cdb53d`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `67dc3f746227f6ac9d591f65a760c0efc1cbf87e936f0b981ca74ee7e186fa93`, evidence SHA-256 `093e1a4051e668225b4840df7633f867b643e4546905aa7fd13f998c5f41b0a8`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `SOC[t+1] = SOC[t] + sqrt(efficiency)*charge - discharge/sqrt(efficiency)`
@@ -507,7 +507,7 @@ Model: `roadmap-screen-v1`. Python: [physical_studies.py](../apps/api/helioforge
 
 Input schema: 11 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `f8e2972bdbefc8d10947470e43793990816dd4b9307e73ee665f86c2c089a120`, evidence SHA-256 `0e8d70eeafe5070307b4b577a921be50f1b8ef111ad217346152834515f60ff7`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `f8e2972bdbefc8d10947470e43793990816dd4b9307e73ee665f86c2c089a120`, evidence SHA-256 `9d62eb7d4cedcaa594eec4032b61dc366058a6736131eaf89d4d99a929be0f26`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `Pcommand = −droop·(f − fnominal) outside the selected deadband`
@@ -526,7 +526,7 @@ Model: `roadmap-screen-v1`. Python: [physical_studies.py](../apps/api/helioforge
 
 Input schema: 0 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `2b0cfcac393854bf1eea0621e4c05519a4f3a8dddd2f94fe50f0a0628b3bb29f`, evidence SHA-256 `0fd55e00d3ce367e06ebb8d259d95216eb1d0263f0166a5bddbbe1e8b6aa6ac1`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `2b0cfcac393854bf1eea0621e4c05519a4f3a8dddd2f94fe50f0a0628b3bb29f`, evidence SHA-256 `89bc68a6967a69eccd3a1be1d46797e9c51e4665e339e3d2bc69ca8b695c7282`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `retention = 1 − a·(cycles/1000)·exp(b·(temperature°C − 25))`
@@ -545,7 +545,7 @@ Model: `roadmap-screen-v1`. Python: [planning_studies.py](../apps/api/helioforge
 
 Input schema: 5 bounded numeric field(s), 4 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `6d4028334ec7520fad95532938f96b2cf422dfec43ea3b0a3b45be09d5b7300e`, evidence SHA-256 `ce23df9c5d2081bc61c238a338aad8d570e8e317b3c25c6a9f2698db90205900`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `6d4028334ec7520fad95532938f96b2cf422dfec43ea3b0a3b45be09d5b7300e`, evidence SHA-256 `0af456a65bd8cde4b72813ce3bbf89d0fb4ecb88d473846a54f2e335364a6ae7`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `SOC[t+1] = SOC[t] + ηcharge·charge[t] - discharge[t]/ηdischarge`
@@ -571,7 +571,7 @@ Model: `roadmap-screen-v1`. Python: [engineering_studies.py](../apps/api/heliofo
 
 Input schema: 6 bounded numeric field(s), 2 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `5a6f3cc3d5a62edbed36b0d14b18e55441730e10992058fb7c61aae07204abfe`, evidence SHA-256 `ecd238293d7983a546f8804647ee91e60d4366c043aa59d7fe643ef90ad76eb7`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `5a6f3cc3d5a62edbed36b0d14b18e55441730e10992058fb7c61aae07204abfe`, evidence SHA-256 `4f2bae2464bae4fe760945a225d56bd9fed75b9733d24f5bbe6acbdfc1c4725c`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `βcross = atan(tan(slope) · sin(azslope − azaxis))`
@@ -590,7 +590,7 @@ Model: `roadmap-screen-v1`. Python: [engineering_studies.py](../apps/api/heliofo
 
 Input schema: 4 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `20baee265bd2bf692a6288b92e431cb8808a5e2d546093568a21b9d39cde87bf`, evidence SHA-256 `77d5281b58063da339964c6a71a3078c3d8c4d361f3d06d391afbc7831129cb3`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `20baee265bd2bf692a6288b92e431cb8808a5e2d546093568a21b9d39cde87bf`, evidence SHA-256 `4b2931802931be7d674a5221bf808e50e63b097919ab29736766f2bb899cd1cd`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `A = ½ |Σ(xᵢyᵢ₊₁ − xᵢ₊₁yᵢ)|`
@@ -609,7 +609,7 @@ Model: `roadmap-screen-v1`. Python: [engineering_studies.py](../apps/api/heliofo
 
 Input schema: 5 bounded numeric field(s), 2 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `2f933af9a62a5e13d931885ce2394885b0977cd1c9c95cc78bbb27f19f512a8e`, evidence SHA-256 `acad44d4dc0ad9af93f0f0824f70b174add5c949a99f4574e118d84a0f6bef61`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `2f933af9a62a5e13d931885ce2394885b0977cd1c9c95cc78bbb27f19f512a8e`, evidence SHA-256 `42c82f9d005576922d38a33dea267265ac1f1cbbb41ceea4b962721f7cc9e993`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `Grear = Gground · albedo · rear_view_factor`
@@ -629,7 +629,7 @@ Model: `roadmap-screen-v1`. Python: [toolkit_studies.py](../apps/api/helioforge/
 
 Input schema: 4 bounded numeric field(s), 0 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `28d019d628356b52ba2e634b617fb4879f0531f42dd272f84373a245867026ed`, evidence SHA-256 `14c9b5706212e0666e3175aaaf1754f8543b9d6bc156f62f08531372b868d934`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `28d019d628356b52ba2e634b617fb4879f0531f42dd272f84373a245867026ed`, evidence SHA-256 `1037a40415c57d5cd15fa0130416cfdf48865a23937e188f2ea9f7cda0cac036`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `LCOE = discounted lifecycle costs / discounted lifetime MWh`
@@ -645,7 +645,7 @@ Model: `roadmap-screen-v1`. Python: [toolkit_studies.py](../apps/api/helioforge/
 
 Input schema: 4 bounded numeric field(s), 0 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `fe97427ec80a38468af22b4f978a179a982260dbbdc7d78c41364df9974ad5fc`, evidence SHA-256 `f828d0f7794f7d0657ef2f7c5feda826c6991edd0f19c63f43e68b24172e8dd1`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `fe97427ec80a38468af22b4f978a179a982260dbbdc7d78c41364df9974ad5fc`, evidence SHA-256 `6baf0457b6e97a32bf6de94e0918ed091fde63b2d2722221ee58a790d5fb00cd`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `Future cost = present cost * (1+inflation)^years`
@@ -663,7 +663,7 @@ Model: `roadmap-screen-v1`. Python: [physical_studies.py](../apps/api/helioforge
 
 Input schema: 0 bounded numeric field(s), 3 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `07fc8b63015690a8a79483c530d31959f076fd2ece8a5c5d19c1631f0b693ea8`, evidence SHA-256 `5f872d05000657728e1843edb375763a76550c22a0abe7c20475d446d21dbbf4`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `07fc8b63015690a8a79483c530d31959f076fd2ece8a5c5d19c1631f0b693ea8`, evidence SHA-256 `4af259c92dc723ad1ff9fa245f212fb29caac1e1a4044aa7873feec3f057aa4a`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `incidence = max(0, n̂·ŝ); direct energy = DNI·panel area·incidence·duration.`
@@ -681,7 +681,7 @@ Model: `roadmap-screen-v1`. Python: [physical_studies.py](../apps/api/helioforge
 
 Input schema: 6 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `4215dcbec657d1eb390085f90fc33b89204a95eaae472437cce5b04d77933933`, evidence SHA-256 `46bcd9470a1a7c831ff8b78d5a8f44c0fd6e697fb9da7accb0438e0536e4cbf9`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `4215dcbec657d1eb390085f90fc33b89204a95eaae472437cce5b04d77933933`, evidence SHA-256 `2844872e080dff0d455c6a60c255b813fded3ae0e7423171e1a88a500e6da49d`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `usable geometry = parcel geometry buffered inward by setback distance`
@@ -704,7 +704,7 @@ Model: `roadmap-screen-v1`. Python: [engineering_studies.py](../apps/api/heliofo
 
 Input schema: 6 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `85fcfc03ead35873f1e809474a228630a847b952cfd1d9bd61194141cdab1e30`, evidence SHA-256 `4a8f32f1cb2a5aa5c1a91c877c49d474e73f9114a3debcf8db32f48811af428c`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `85fcfc03ead35873f1e809474a228630a847b952cfd1d9bd61194141cdab1e30`, evidence SHA-256 `886d868452dacbbce1cdd6a9a8b05cf3d980efb9d40b321a12ec5b66238c9e84`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `X[k] = Σₙ x[n] exp(−j 2πkn/N)`
@@ -723,7 +723,7 @@ Model: `roadmap-screen-v1`. Python: [engineering_studies.py](../apps/api/heliofo
 
 Input schema: 6 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `041ebb0658b8fee3695682f8299af17abb79c0c868ef740b97248365edb181a9`, evidence SHA-256 `9c4ff05f57737f51cfcd7531220e7dc176b6d444728b830c545b0d2f0349e818`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `041ebb0658b8fee3695682f8299af17abb79c0c868ef740b97248365edb181a9`, evidence SHA-256 `794e2d26c9b05a8444a1fe0ba13ffc58403ac64dd86b9773fd3f098390e93756`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `Stage emissionsᵢ = quantityᵢ · supplier/activity factorᵢ`
@@ -742,7 +742,7 @@ Model: `roadmap-screen-v1`. Python: [engineering_studies.py](../apps/api/heliofo
 
 Input schema: 6 bounded numeric field(s), 0 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `44c8d00cc9704c69f52f926523d81d3507cc4dd87f778f8e3cfed9f66b7a2fe7`, evidence SHA-256 `f67ff32f99c448935aa0c875ff3cea9d13322d9cc94a33000ce53fd4a30bd88e`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `44c8d00cc9704c69f52f926523d81d3507cc4dd87f778f8e3cfed9f66b7a2fe7`, evidence SHA-256 `a1906c197fcb5294a2c9c5b0c6368f3512ec0c31338446e2b971661f423c4038`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `SCRscreen = Ssc / Pplant`
@@ -761,7 +761,7 @@ Model: `roadmap-screen-v1`. Python: [physical_studies.py](../apps/api/helioforge
 
 Input schema: 2 bounded numeric field(s), 2 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `64a8f7bd96a1bd58e64532c0787e609a38d8b244218fcf177790f11674789934`, evidence SHA-256 `42c23e10b2a4dc7898ba9b4ea4f7a349c880bbadf7d1fc1c74acb2140ab46cdd`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `64a8f7bd96a1bd58e64532c0787e609a38d8b244218fcf177790f11674789934`, evidence SHA-256 `2c8a13824e7ae4809499bb211331781063da340c8b6443f13d60b61733276e6f`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `one-sided amplitude spectrum = |rFFT((x−mean(x))·Hann)|·2/sum(Hann)`
@@ -780,7 +780,7 @@ Model: `roadmap-screen-v1`. Python: [control_studies.py](../apps/api/helioforge/
 
 Input schema: 14 bounded numeric field(s), 0 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `c90990ac9fbccada9027b5165ae90ecb5c7cf0ce16c81225fd85d22475083464`, evidence SHA-256 `194c18e7acd8061111a4d872cd6c8d7525f1ec4b9aca2c1fd859c80652d2e2d0`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `c90990ac9fbccada9027b5165ae90ecb5c7cf0ce16c81225fd85d22475083464`, evidence SHA-256 `d4be040c1aa06eb4a9f180876b44d313ee355bee97496744c6e39b5247c6e476`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `Compute the local matrix A by central-difference linearization of the same ten-state averaged plant/controller used by hybrid-controls at its unsaturated zero-load equilibrium; i_f,q=ωC_fV_grid,d supplies synchronous capacitor current, and PI integrators supply the balancing equilibrium outputs.`
@@ -805,7 +805,7 @@ Model: `roadmap-screen-v1`. Python: [decision_studies.py](../apps/api/helioforge
 
 Input schema: 3 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `685f83ab37b3f6252b0ffe1460acabc7683c5157d5488daf7ae4681beddf3e9f`, evidence SHA-256 `034f015c15b795ee6f8126b00c13e4e2a0127eb2e59b4d644411efc11541caba`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `685f83ab37b3f6252b0ffe1460acabc7683c5157d5488daf7ae4681beddf3e9f`, evidence SHA-256 `e8dead940abee79198e22a12540c6014490647a43da99f36a9a44cd7678f5194`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `adjusted_price_t = spot_price_t − slope × (penetration − reference) × exposure_t`
@@ -822,7 +822,7 @@ Model: `roadmap-screen-v1`. Python: [decision_studies.py](../apps/api/helioforge
 
 Input schema: 3 bounded numeric field(s), 2 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `eacf4af788e4b32d707f5939b6523b6cc83e40b5261a3a472c6c77660c2523e5`, evidence SHA-256 `e9203607487263217ed62dc56ed9ac845566bc4b99d0ddf5fa043cf6db524037`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `eacf4af788e4b32d707f5939b6523b6cc83e40b5261a3a472c6c77660c2523e5`, evidence SHA-256 `90ae06d7e04f9c52490d29174db52f8d14e896ff1ac39983a8f6c2ec3c812e9a`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `negative interval if price < 0 and price ≤ configured threshold`
@@ -839,7 +839,7 @@ Model: `roadmap-screen-v1`. Python: [decision_studies.py](../apps/api/helioforge
 
 Input schema: 3 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `a342218f216fc5478e138046c13f739e7506300d5efa38efdf97d80d65bbbb9a`, evidence SHA-256 `14e0cd9162051d049bb4b83dff4872288bc3088003d4edf48ea67a2ce6b0bc8a`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `a342218f216fc5478e138046c13f739e7506300d5efa38efdf97d80d65bbbb9a`, evidence SHA-256 `1376b21925bde8e85ab53e11f77c66b6623fab6de500cb0651c246f652f569c9`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `min_f C_A(d_A+f)+C_B(d_B−f)`
@@ -856,7 +856,7 @@ Model: `roadmap-screen-v1`. Python: [planning_studies.py](../apps/api/helioforge
 
 Input schema: 0 bounded numeric field(s), 5 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `352cb15ff3677bce24a97e8505369fbd449df5a7d0d5971b41540e9b0528e691`, evidence SHA-256 `00a574b4a7e187ab687dc394ee394d06d94591832e12d54ded14decb6908e9af`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `352cb15ff3677bce24a97e8505369fbd449df5a7d0d5971b41540e9b0528e691`, evidence SHA-256 `53636d0bd8b941ed3c7d5b8b5f1f53e2cd3389391379de0c45e79090206dface`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `flow[i,j] = susceptance[i,j]·(angle[i] - angle[j])`
@@ -879,7 +879,7 @@ Model: `roadmap-screen-v1`. Python: [decision_studies.py](../apps/api/helioforge
 
 Input schema: 3 bounded numeric field(s), 4 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `6f9e112d753bf0d942dc3eefc5d5f58914154a89b279957377f7b9fd172a2cdf`, evidence SHA-256 `31defb04af903be902409a7a79214d90104ac62bf1fbdfd51d626cf80963a9d3`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `6f9e112d753bf0d942dc3eefc5d5f58914154a89b279957377f7b9fd172a2cdf`, evidence SHA-256 `979dbb61fd7f5ce83bad3c02395e1ebd898da4f2270da990a24a5ac889c1dca2`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `S_t ∼ categorical(P[S_{t−1},·])`
@@ -896,7 +896,7 @@ Model: `roadmap-screen-v1`. Python: [decision_studies.py](../apps/api/helioforge
 
 Input schema: 3 bounded numeric field(s), 4 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `9b982aecc8668d522e4bc837b4efcf02baade464bb8634048df0898cfb3a9980`, evidence SHA-256 `8a81664f0baac4cc18ceadd7dd2143391c565272ffc71295122d31460681d408`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `9b982aecc8668d522e4bc837b4efcf02baade464bb8634048df0898cfb3a9980`, evidence SHA-256 `422f5979721e2be8bbff805a43f587dcaf42aaebf43e558e9132fa9843112239`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `Z_t = L ε_t, L Lᵀ = correlation matrix`
@@ -913,7 +913,7 @@ Model: `roadmap-screen-v1`. Python: [decision_studies.py](../apps/api/helioforge
 
 Input schema: 6 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `9cd8d1581533cc8fb1868c81def6688e5786cde3644fda43fbf18ab031efa354`, evidence SHA-256 `cc414c25643cc97ca8992cb08b679f6021b204f074a47f9ae8b18f60f0c8e98a`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `9cd8d1581533cc8fb1868c81def6688e5786cde3644fda43fbf18ab031efa354`, evidence SHA-256 `2851d430dacab2d1b8f9ddcd0afbaa827d711c1839b2c761d40087ca6a9eff92`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `spot_t = strike + Σ_{k≤t} Normal(0, (volatility × strike)²)`
@@ -931,7 +931,7 @@ Model: `roadmap-screen-v1`. Python: [planning_studies.py](../apps/api/helioforge
 
 Input schema: 4 bounded numeric field(s), 3 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `7d4537493146637d22ad2b6e70ea84513aaca87189d84c444180f31954ae3c5c`, evidence SHA-256 `b41a38367b9f62b444b127367732935a075e99c6e3e1fec7feedfa8c4d721b76`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `7d4537493146637d22ad2b6e70ea84513aaca87189d84c444180f31954ae3c5c`, evidence SHA-256 `cad767f3dffef0861abf1ecd944895d4a9426cddd709f226ecdf2f065929b388`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `ECT[t] = power[t] - α - βgas·gas[t] - βcarbon·carbon[t]`
@@ -951,7 +951,7 @@ Model: `roadmap-screen-v1`. Python: [planning_studies.py](../apps/api/helioforge
 
 Input schema: 2 bounded numeric field(s), 3 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `6a6896f8518a7cf0bd9075158a7054d44fc678244e22ea80a4b494ede7a49363`, evidence SHA-256 `b7514eef2960733e4d188dbe7fd36976cc31556470b4fb1ab72446411e088f4e`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `6a6896f8518a7cf0bd9075158a7054d44fc678244e22ea80a4b494ede7a49363`, evidence SHA-256 `dc67e5088044de24ac49d9134b6307a7098bfe1f4951a5a3a95f053146eac1ed`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `target[t] = β0 + β1·target[t-1] + β2·gas[t-1] + β3·carbon[t-1] + ε[t]`
@@ -975,7 +975,7 @@ Model: `roadmap-screen-v1`. Python: [decision_studies.py](../apps/api/helioforge
 
 Input schema: 3 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `dd9ed5077bd5f46e5e0dc2f76fad6f593a4d88272dd0f7fdbc1f7b68c60194f7`, evidence SHA-256 `7f1eef49684d1cfbe7d4185e47301cd74fd1d168151f33c7c828ca61ffd57c19`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `dd9ed5077bd5f46e5e0dc2f76fad6f593a4d88272dd0f7fdbc1f7b68c60194f7`, evidence SHA-256 `fdf3a92c067edc352726a1874514197620fe25ad77f28dfa0dffb69f83950fc0`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `target service_t = max(0, CFADS_t) / target_DSCR`
@@ -993,7 +993,7 @@ Model: `roadmap-screen-v1`. Python: [decision_studies.py](../apps/api/helioforge
 
 Input schema: 5 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `33c2d99f5f21fb454c314174d09b3a41406b840af739e85863308b1c1a4450f4`, evidence SHA-256 `143ec198d1a264f24eba3e6a4f50dbaec1a85108fbaacd53351ba46f0a8454e0`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `33c2d99f5f21fb454c314174d09b3a41406b840af739e85863308b1c1a4450f4`, evidence SHA-256 `f9aebe0c2c69199efa356c986cbb753d61086047457a1acf1372019c80130d85`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `contracted_CFADS_t = floor_price_t × contracted_MWh_t − OPEX_t (within floor term)`
@@ -1011,7 +1011,7 @@ Model: `roadmap-screen-v1`. Python: [decision_studies.py](../apps/api/helioforge
 
 Input schema: 6 bounded numeric field(s), 0 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `80637a51f24f187bb37eb39ad714e957e643c018eed8891e8035977730423bc6`, evidence SHA-256 `4d69d195973aeeb02ab07f78dca12eb0d5f364e063444558a277ba214ca2f923`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `80637a51f24f187bb37eb39ad714e957e643c018eed8891e8035977730423bc6`, evidence SHA-256 `b04e534e3394eaf6106f177521b517e0199ebd099a434a102f0acee3a5f1ac4c`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `preferred return due = capital × ((1 + preferred_rate)^years − 1)`
@@ -1030,7 +1030,7 @@ Model: `roadmap-screen-v1`. Python: [planning_studies.py](../apps/api/helioforge
 
 Input schema: 6 bounded numeric field(s), 2 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `02bd4e8946ae89f9daabf4b18c33c2fe6187b105925a407048584382c2133798`, evidence SHA-256 `b9e66691c614d34db10e4e0633e8383902b04439fde417870779fd93395abe33`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `02bd4e8946ae89f9daabf4b18c33c2fe6187b105925a407048584382c2133798`, evidence SHA-256 `29bb5c0c85b69f3dd66b9517eaf8f0a3dc59d22ce1a9fb47ce3b34a499b17f81`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `contracted volume = min(generation, annual contract volume) while term is in force`
@@ -1056,7 +1056,7 @@ Model: `roadmap-screen-v1`. Python: [workflow_studies.py](../apps/api/helioforge
 
 Input schema: 3 bounded numeric field(s), 2 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `75676277e4f66bf40a75f8e2dc2ecca75e6f9474083c5731d07f175859086f29`, evidence SHA-256 `390ffec5d3cffcd21004820749913b489ff8a1ec3776ad06463e5ba48301f6b3`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `75676277e4f66bf40a75f8e2dc2ecca75e6f9474083c5731d07f175859086f29`, evidence SHA-256 `3176f91dd365027048798ca178de164e711f57b67a482512622ce12308079a5e`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `error[i] = norm(as-built XYZ[i] - design XYZ[i]) * coordinate scale`
@@ -1075,7 +1075,7 @@ Model: `roadmap-screen-v1`. Python: [workflow_studies.py](../apps/api/helioforge
 
 Input schema: 4 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `f59e798220b3d7b1be3368ff8c1cc719e24f83737ef58e0746ddc750bd062640`, evidence SHA-256 `947c2de4f18bb9348d6a9f6a9b3e4add3b88a49b1f21724184b01b6692b18818`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `f59e798220b3d7b1be3368ff8c1cc719e24f83737ef58e0746ddc750bd062640`, evidence SHA-256 `4a40a36d6dc8146ebac65820929a3855e47954a5c2bfced505e46a22102a55e8`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `gradient = abs(adjacent temperature difference) / adjacent distance`
@@ -1093,7 +1093,7 @@ Model: `roadmap-screen-v1`. Python: [workflow_studies.py](../apps/api/helioforge
 
 Input schema: 4 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `b91d1186ba0f6ff26716ae33b92353cc69d9be8d89716e0b4f3bb0280ba49d4a`, evidence SHA-256 `3917f701da3cefd434c2eceb1548842944107e1e76ffea54389293e6a9b41456`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `b91d1186ba0f6ff26716ae33b92353cc69d9be8d89716e0b4f3bb0280ba49d4a`, evidence SHA-256 `5a01c5b27e71ae3f1a5dcd694ac64f73876e2255b9e67850366ad972883992f0`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `sensor vote = any present channel meets or exceeds its user threshold`
@@ -1111,7 +1111,7 @@ Model: `roadmap-screen-v1`. Python: [planning_studies.py](../apps/api/helioforge
 
 Input schema: 4 bounded numeric field(s), 2 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `367874488470d723caec10abe36fedca2e97198ff8fe0a753f2adb1d39fe018a`, evidence SHA-256 `2781e5d644a0041bcfb805e79f0fd5f55a991a37ddbfd89f999ba4d7207837fd`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `367874488470d723caec10abe36fedca2e97198ff8fe0a753f2adb1d39fe018a`, evidence SHA-256 `2a37745f5dcd756b700d23aed64d643219758038f3a3a975e73fbd5a57f78c41`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `nearest-neighbor correspondences are recomputed after every transform`
@@ -1135,7 +1135,7 @@ Model: `roadmap-screen-v1`. Python: [workflow_studies.py](../apps/api/helioforge
 
 Input schema: 4 bounded numeric field(s), 2 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `b4d3ef0a82d47eb5426bbea1e0f487fc37b60f67eeafbacc7463f8e1c0a947a7`, evidence SHA-256 `773495176ce865887aa32a44db0c1d68524c8265fc152d980b8174c257354866`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `b4d3ef0a82d47eb5426bbea1e0f487fc37b60f67eeafbacc7463f8e1c0a947a7`, evidence SHA-256 `1315b82993d3b5d992781181d9f1f3cd361f4479793c2a081fff34843f91749f`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `NPV = -capex + sum(annual net value / (1 + discount rate)^year)`
@@ -1153,7 +1153,7 @@ Model: `roadmap-screen-v1`. Python: [workflow_studies.py](../apps/api/helioforge
 
 Input schema: 4 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `e181e55e9cb797e400b89ef29b9add70c3536e1bb1ad75327e280c26de8ae2b9`, evidence SHA-256 `ca55f0d38e64683c1c029844bea50202dbfdd92d5548850ba884fa82cec7f598`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `e181e55e9cb797e400b89ef29b9add70c3536e1bb1ad75327e280c26de8ae2b9`, evidence SHA-256 `c6e21c985e32ae458366557d4f91497ec1d9e221a6d11ee1aa59033e55b018dc`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `age = as-of date - issue date`
@@ -1172,7 +1172,7 @@ Model: `roadmap-screen-v1`. Python: [workflow_studies.py](../apps/api/helioforge
 
 Input schema: 3 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `d96dd3dcd89a139aefc25cc6f7c6ac371c8e5f2e1eecc9b95615e4b45e907ed9`, evidence SHA-256 `142ae1b303c71245e60acbc32b5e97e7dc674256c5b83fa4d0eaafb3db42a77a`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `d96dd3dcd89a139aefc25cc6f7c6ac371c8e5f2e1eecc9b95615e4b45e907ed9`, evidence SHA-256 `cf88e12cd2041fdd25018b9de3fc1254652e3f737189d0560342ea1c40de4820`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `posterior odds = prior odds * product(likelihood ratios)`

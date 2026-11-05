@@ -1,3 +1,4 @@
+import {installFixtureViews} from './helpers/fixture-views.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -15,6 +16,7 @@ test('a delayed study JSON file cannot replace a later numeric edit',async()=>{
   const box=vm.createContext({URL,Intl,structuredClone,CSS:{escape:value=>value}});
   vm.runInContext(fs.readFileSync(new URL('../dist/app.js',import.meta.url),'utf8'),box);
   box.document=document;
+  installFixtureViews(box.HF);
   const hf=box.HF;hf.studyVisual=()=>'';hf.bindStudyVisuals=()=>()=>{};
   for(const id of ['page-content','study-workbench','study-status','study-output'])nodes.set(id,new Node());
   const controller=hf.createStudyController(()=>({page:'storage',connected:false}));
@@ -25,6 +27,6 @@ test('a delayed study JSON file cannot replace a later numeric edit',async()=>{
   const edit=new Node();edit.name='battery_kwh';edit.value='123';fire('input',edit);
   resolveFile('[9]');await new Promise(resolve=>setImmediate(resolve));
   controller.refresh();
-  assert.doesNotMatch(nodes.get('study-workbench').innerHTML,/>\[\s*9\s*\]</);
+  assert.doesNotMatch(nodes.get('study-workbench').markup,/>\[\s*9\s*\]</);
   assert.equal(nodes.get('study-output').hidden,true);
 });

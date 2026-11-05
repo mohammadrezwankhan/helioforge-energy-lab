@@ -28,7 +28,7 @@ function runtime() {
     addEventListener(type, callback) { const callbacks = listeners.get(type) ?? []; callbacks.push(callback); listeners.set(type, callbacks); },
     createElement() { return {}; },
     getElementById(id) {
-      if (!nodes.has(id)) nodes.set(id, {set outerHTML(value) { this.html = value; }, textContent: '', innerHTML: ''});
+      if (!nodes.has(id)) nodes.set(id, {set replacementMarkup(value) { this.html = value; }, textContent: '', markup: ''});
       return nodes.get(id);
     },
     querySelectorAll() { return []; },

@@ -1,18 +1,22 @@
 import importlib.util
 from pathlib import Path
+from types import ModuleType
 
 import pytest
 
 
-def module():
+def module() -> ModuleType:
     path = Path(__file__).resolve().parents[3] / "scripts" / "reconstruct-pilot.py"
     spec = importlib.util.spec_from_file_location("pilot_reconstruction", path)
+    assert spec is not None and spec.loader is not None
     m = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(m)
     return m
 
 
-def test_reconstruction_adapter_preserves_arbitrary_scale_and_never_overwrites(tmp_path, monkeypatch):
+def test_reconstruction_adapter_preserves_arbitrary_scale_and_never_overwrites(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     m = module()
     images = tmp_path / "images"
     images.mkdir()
@@ -20,9 +24,9 @@ def test_reconstruction_adapter_preserves_arbitrary_scale_and_never_overwrites(t
     for i in range(3):
         (images / f"{i}.jpg").write_bytes(b"fixture-not-a-photo")
     monkeypatch.setattr(m.shutil, "which", lambda _: "colmap")
-    calls = []
+    calls: list[list[str]] = []
 
-    def run(command, **kwargs):
+    def run(command: list[str], **_kwargs: object) -> None:
         calls.append(command)
         if command[1] == "model_converter":
             (out / "text" / "points3D.txt").write_text(
@@ -39,11 +43,13 @@ def test_reconstruction_adapter_preserves_arbitrary_scale_and_never_overwrites(t
         m.reconstruct(images, out, "1000,1000,500,500")
 
 
-def test_reconstruction_does_not_claim_success_without_tool_or_photos(tmp_path, monkeypatch):
+def test_reconstruction_does_not_claim_success_without_tool_or_photos(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     m = module()
     images = tmp_path / "images"
     images.mkdir()
-    with pytest.raises(ValueError, match="3–200"):
+    with pytest.raises(ValueError, match="3\N{EN DASH}200"):
         m.reconstruct(images, tmp_path / "out", "1000,1000,500,500")
     for i in range(3):
         (images / f"{i}.jpg").write_bytes(b"fixture")

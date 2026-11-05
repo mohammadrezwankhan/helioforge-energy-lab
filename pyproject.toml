@@ -1,0 +1,37 @@
+# Development quality tools; no application runtime dependencies.
+
+[dependency-groups]
+dev = [
+  "ruff==0.17.3",
+  "mypy==2.4.1",
+  "pytest==9.2.0",
+  "pytest-cov==7.1.0",
+  "hypothesis==6.140.3",
+  "scipy-stubs==1.17.0.2",
+  "types-shapely==2.1.0.20261030",
+  "playwright==1.64.1",
+  "openai-agents==0.24.0",
+]
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "S", "A", "C4", "DTZ", "T20", "SIM", "RET", "ARG", "PTH", "PERF", "RUF"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+disallow_any_generics = true
+warn_return_any = true
+warn_unreachable = true
+show_error_codes = true
+explicit_package_bases = true
+files = ["apps/api/helioforge", "apps/api/tests", "tests", "scripts", "launch.py", ".github/security"]
+mypy_path = ["$MYPY_CONFIG_FILE_DIR/apps/api"]
+
+# Pytest assertions are executable test contracts, never production input validation.
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101"]
+"scripts/test_*.py" = ["S101"]

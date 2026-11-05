@@ -1,5 +1,5 @@
 /** Browser-native deterministic screening model. This is a greedy policy, not an optimizer. */
-namespace HF {
+namespace HF { // eslint-disable-line @typescript-eslint/no-namespace, @typescript-eslint/no-unused-vars -- HF is the ordered global-script bundle namespace; modules change its shared runtime contract.
   export type TerminalInputs = {
     pvKw: number;
     batteryKwh: number;
@@ -18,10 +18,19 @@ namespace HF {
   export type TerminalPointStatus = 'CONVERGED' | 'ERR_BOUND' | 'ERR_VALIDATION';
   export type TerminalScale = 'linear' | 'log';
   export type TerminalMetricName =
-    | 'periodCost' | 'unservedKwh' | 'renewableKwh' | 'curtailmentKwh'
-    | 'peakImportKw' | 'finalSocKwh' | 'initialSocKwh' | 'terminalSocDeltaKwh'
-    | 'maxBusResidualKw' | 'maxSocResidualKwh' | 'servedFraction'
-    | 'totalLoadKwh' | 'servedKwh';
+    | 'periodCost'
+    | 'unservedKwh'
+    | 'renewableKwh'
+    | 'curtailmentKwh'
+    | 'peakImportKw'
+    | 'finalSocKwh'
+    | 'initialSocKwh'
+    | 'terminalSocDeltaKwh'
+    | 'maxBusResidualKw'
+    | 'maxSocResidualKwh'
+    | 'servedFraction'
+    | 'totalLoadKwh'
+    | 'servedKwh';
 
   export type TerminalRow = {
     hour: number;
@@ -129,9 +138,17 @@ namespace HF {
 
   type TerminalBounds = { min: number; max: number; minExclusive?: boolean };
   const terminalInputKeys: (keyof TerminalInputs)[] = [
-    'pvKw', 'batteryKwh', 'batteryKw', 'loadKw', 'gridKw',
-    'roundtripEfficiency', 'initialSocFraction', 'minSocFraction',
-    'maxSocFraction', 'importPrice', 'exportPrice',
+    'pvKw',
+    'batteryKwh',
+    'batteryKw',
+    'loadKw',
+    'gridKw',
+    'roundtripEfficiency',
+    'initialSocFraction',
+    'minSocFraction',
+    'maxSocFraction',
+    'importPrice',
+    'exportPrice',
   ];
   const terminalBounds: Record<keyof TerminalInputs, TerminalBounds> = {
     pvKw: { min: 0, max: 100_000 },
@@ -173,13 +190,19 @@ namespace HF {
     };
   }
 
-  function terminalError(message: string, code: 'ERR_BOUND' | 'ERR_VALIDATION'): Error & { code: string } {
+  function terminalError(
+    message: string,
+    code: 'ERR_BOUND' | 'ERR_VALIDATION',
+  ): Error & { code: string } {
     return Object.assign(new Error(message), { code });
   }
 
   function terminalRecord(value: unknown): Record<string, unknown> {
     if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-      throw terminalError('Inputs must be an object with exactly the documented fields.', 'ERR_VALIDATION');
+      throw terminalError(
+        'Inputs must be an object with exactly the documented fields.',
+        'ERR_VALIDATION',
+      );
     }
     return value as Record<string, unknown>;
   }
@@ -187,8 +210,12 @@ namespace HF {
   export function terminalValidateInputs(value: unknown): TerminalInputs {
     const input = terminalRecord(value);
     const actualKeys = Object.keys(input);
-    const unknown = actualKeys.filter(key => !terminalInputKeys.includes(key as keyof TerminalInputs));
-    const missing = terminalInputKeys.filter(key => !Object.prototype.hasOwnProperty.call(input, key));
+    const unknown = actualKeys.filter(
+      (key) => !terminalInputKeys.includes(key as keyof TerminalInputs),
+    );
+    const missing = terminalInputKeys.filter(
+      (key) => !Object.prototype.hasOwnProperty.call(input, key),
+    );
     if (unknown.length || missing.length) {
       const parts: string[] = [];
       if (missing.length) parts.push(`missing fields: ${missing.join(', ')}`);
@@ -202,76 +229,118 @@ namespace HF {
         throw terminalError(`${key} must be a finite number.`, 'ERR_VALIDATION');
       }
       const bound = terminalBounds[key];
-      if ((bound.minExclusive && valueForKey <= bound.min) || valueForKey < bound.min || valueForKey > bound.max) {
-        const lower = bound.minExclusive ? `greater than ${bound.min}` : `at least ${bound.min}`;
-        throw terminalError(`${key} must be ${lower} and at most ${bound.max}; received ${valueForKey}.`, 'ERR_BOUND');
+      if (
+        (bound.minExclusive && valueForKey <= bound.min) ||
+        valueForKey < bound.min ||
+        valueForKey > bound.max
+      ) {
+        const lower = bound.minExclusive
+          ? `greater than ${String(bound.min)}`
+          : `at least ${String(bound.min)}`;
+        throw terminalError(
+          `${key} must be ${lower} and at most ${String(bound.max)}; received ${String(valueForKey)}.`,
+          'ERR_BOUND',
+        );
       }
       result[key] = valueForKey;
     }
     if (result.minSocFraction > result.maxSocFraction) {
-      throw terminalError('minSocFraction must be less than or equal to maxSocFraction.', 'ERR_VALIDATION');
+      throw terminalError(
+        'minSocFraction must be less than or equal to maxSocFraction.',
+        'ERR_VALIDATION',
+      );
     }
-    if (result.initialSocFraction < result.minSocFraction || result.initialSocFraction > result.maxSocFraction) {
-      throw terminalError('initialSocFraction must be within the inclusive minSocFraction to maxSocFraction range.', 'ERR_VALIDATION');
+    if (
+      result.initialSocFraction < result.minSocFraction ||
+      result.initialSocFraction > result.maxSocFraction
+    ) {
+      throw terminalError(
+        'initialSocFraction must be within the inclusive minSocFraction to maxSocFraction range.',
+        'ERR_VALIDATION',
+      );
     }
     if ((result.batteryKwh === 0) !== (result.batteryKw === 0)) {
-      throw terminalError('batteryKwh and batteryKw must either both be zero or both be greater than zero.', 'ERR_VALIDATION');
+      throw terminalError(
+        'batteryKwh and batteryKw must either both be zero or both be greater than zero.',
+        'ERR_VALIDATION',
+      );
     }
     return result;
   }
 
   function terminalSyntheticLoad(inputs: TerminalInputs, hour: number): number {
-    const shape = 0.8 + 0.2 * (0.5 + 0.5 * Math.cos((hour - 19) * 2 * Math.PI / 24));
+    const shape = 0.8 + 0.2 * (0.5 + 0.5 * Math.cos(((hour - 19) * 2 * Math.PI) / 24));
     return inputs.loadKw * shape;
   }
 
   function terminalSyntheticPv(inputs: TerminalInputs, hour: number): number {
     if (hour <= 6 || hour >= 18) return 0;
-    return inputs.pvKw * Math.max(0, Math.sin(Math.PI * (hour - 6) / 12));
+    return inputs.pvKw * Math.max(0, Math.sin((Math.PI * (hour - 6)) / 12));
   }
 
   function terminalExplainNumber(value: number): string {
     return Number(value.toPrecision(12)).toString();
   }
 
-  function terminalFlags(inputs: TerminalInputs, rows: TerminalRow[], metrics: TerminalMetrics): TerminalOperatingFlag[] {
+  function terminalFlags(
+    inputs: TerminalInputs,
+    rows: TerminalRow[],
+    metrics: TerminalMetrics,
+  ): TerminalOperatingFlag[] {
     const resourceBound = inputs.pvKw > 0;
     const unserved = metrics.unservedKwh > terminalTolerance;
     const limits: string[] = [];
     if (inputs.batteryKw > 0) {
-      if (rows.some(row => (row.chargeKw > 0 && row.chargeKw >= inputs.batteryKw - terminalTolerance)
-        || (row.dischargeKw > 0 && row.dischargeKw >= inputs.batteryKw - terminalTolerance))) {
-        limits.push(`battery power reached the configured ${inputs.batteryKw} kW limit`);
+      if (
+        rows.some(
+          (row) =>
+            (row.chargeKw > 0 && row.chargeKw >= inputs.batteryKw - terminalTolerance) ||
+            (row.dischargeKw > 0 && row.dischargeKw >= inputs.batteryKw - terminalTolerance),
+        )
+      ) {
+        limits.push(`battery power reached the configured ${String(inputs.batteryKw)} kW limit`);
       }
       const minimum = inputs.batteryKwh * inputs.minSocFraction;
       const maximum = inputs.batteryKwh * inputs.maxSocFraction;
-      if (rows.some(row => row.socKwh <= minimum + terminalTolerance || row.socKwh >= maximum - terminalTolerance)) {
+      if (
+        rows.some(
+          (row) =>
+            row.socKwh <= minimum + terminalTolerance || row.socKwh >= maximum - terminalTolerance,
+        )
+      ) {
         limits.push('stored energy reached an SOC boundary');
       }
     }
     const drift = metrics.terminalSocDeltaKwh;
     return [
       {
-        key: 'resource-bound', active: resourceBound,
+        key: 'resource-bound',
+        active: resourceBound,
         explanation: resourceBound
-          ? `The synthetic PV profile reaches the configured ${inputs.pvKw} kW nameplate at hour 12; this is an input ceiling, not an optimized or measured capacity.`
+          ? `The synthetic PV profile reaches the configured ${String(inputs.pvKw)} kW nameplate at hour 12; this is an input ceiling, not an optimized or measured capacity.`
           : 'PV capacity is zero, so no PV resource is available in this scenario.',
       },
       {
-        key: 'unserved-demand', active: unserved,
+        key: 'unserved-demand',
+        active: unserved,
         explanation: unserved
           ? `${terminalExplainNumber(metrics.unservedKwh)} kWh of demand is unserved over the 24-hour synthetic period.`
           : 'All modeled demand is served over the 24-hour synthetic period.',
       },
       {
-        key: 'soc-or-power-limit', active: limits.length > 0,
-        explanation: limits.length ? `Storage limit observed: ${limits.join('; ')}.` : 'No configured battery power or SOC boundary was reached during dispatch.',
+        key: 'soc-or-power-limit',
+        active: limits.length > 0,
+        explanation: limits.length
+          ? `Storage limit observed: ${limits.join('; ')}.`
+          : 'No configured battery power or SOC boundary was reached during dispatch.',
       },
       {
-        key: 'energy-drift', active: Math.abs(drift) > terminalTolerance,
-        explanation: Math.abs(drift) > terminalTolerance
-          ? `Terminal stored energy changed by ${drift >= 0 ? '+' : ''}${terminalExplainNumber(drift)} kWh from its initial value; terminal SOC is unconstrained.`
-          : 'Terminal stored energy matches its initial value within the 1e-9 kWh reporting tolerance.',
+        key: 'energy-drift',
+        active: Math.abs(drift) > terminalTolerance,
+        explanation:
+          Math.abs(drift) > terminalTolerance
+            ? `Terminal stored energy changed by ${drift >= 0 ? '+' : ''}${terminalExplainNumber(drift)} kWh from its initial value; terminal SOC is unconstrained.`
+            : 'Terminal stored energy matches its initial value within the 1e-9 kWh reporting tolerance.',
       },
     ];
   }
@@ -291,38 +360,69 @@ namespace HF {
       let renewableSurplusKw = Math.max(0, pvKw - directPvKw);
       let remainingLoadKw = Math.max(0, loadKw - directPvKw);
       const socBeforeKwh = socKwh;
-      const chargeKw = Math.min(renewableSurplusKw, inputs.batteryKw, Math.max(0, maxSocKwh - socKwh) / eta);
+      const chargeKw = Math.min(
+        renewableSurplusKw,
+        inputs.batteryKw,
+        Math.max(0, maxSocKwh - socKwh) / eta,
+      );
       socKwh += chargeKw * eta;
       renewableSurplusKw -= chargeKw;
-      const dischargeKw = Math.min(remainingLoadKw, inputs.batteryKw, Math.max(0, socKwh - minSocKwh) * eta);
+      const dischargeKw = Math.min(
+        remainingLoadKw,
+        inputs.batteryKw,
+        Math.max(0, socKwh - minSocKwh) * eta,
+      );
       socKwh -= dischargeKw / eta;
       remainingLoadKw -= dischargeKw;
       const gridImportKw = Math.min(remainingLoadKw, inputs.gridKw);
       remainingLoadKw -= gridImportKw;
       const unservedKw = remainingLoadKw;
-      const gridExportKw = inputs.exportPrice >= 0 ? Math.min(renewableSurplusKw, inputs.gridKw) : 0;
+      const gridExportKw =
+        inputs.exportPrice >= 0 ? Math.min(renewableSurplusKw, inputs.gridKw) : 0;
       const curtailmentKw = renewableSurplusKw - gridExportKw;
-      const busResidualKw = pvKw + gridImportKw + dischargeKw + unservedKw
-        - loadKw - chargeKw - gridExportKw - curtailmentKw;
+      const busResidualKw =
+        pvKw +
+        gridImportKw +
+        dischargeKw +
+        unservedKw -
+        loadKw -
+        chargeKw -
+        gridExportKw -
+        curtailmentKw;
       const socResidualKwh = socKwh - (socBeforeKwh + chargeKw * eta - dischargeKw / eta);
-      rows.push({ hour, loadKw, pvKw, chargeKw, dischargeKw, gridImportKw, gridExportKw,
-        curtailmentKw, unservedKw, socKwh, busResidualKw, socResidualKwh });
+      rows.push({
+        hour,
+        loadKw,
+        pvKw,
+        chargeKw,
+        dischargeKw,
+        gridImportKw,
+        gridExportKw,
+        curtailmentKw,
+        unservedKw,
+        socKwh,
+        busResidualKw,
+        socResidualKwh,
+      });
     }
-    const sum = (select: (row: TerminalRow) => number): number => rows.reduce((total, row) => total + select(row), 0);
-    const totalLoadKwh = sum(row => row.loadKw);
-    const unservedKwh = sum(row => row.unservedKw);
+    const sum = (select: (row: TerminalRow) => number): number =>
+      rows.reduce((total, row) => total + select(row), 0);
+    const totalLoadKwh = sum((row) => row.loadKw);
+    const unservedKwh = sum((row) => row.unservedKw);
     const servedKwh = totalLoadKwh - unservedKwh;
     const metrics: TerminalMetrics = {
-      periodCost: sum(row => row.gridImportKw * inputs.importPrice - row.gridExportKw * inputs.exportPrice),
+      periodCost: sum(
+        (row) => row.gridImportKw * inputs.importPrice - row.gridExportKw * inputs.exportPrice,
+      ),
       unservedKwh,
-      renewableKwh: sum(row => row.pvKw),
-      curtailmentKwh: sum(row => row.curtailmentKw),
-      peakImportKw: Math.max(...rows.map(row => row.gridImportKw)),
+      renewableKwh: sum((row) => row.pvKw),
+      curtailmentKwh: sum((row) => row.curtailmentKw),
+      peakImportKw: Math.max(...rows.map((row) => row.gridImportKw)),
       finalSocKwh: socKwh,
       initialSocKwh,
       terminalSocDeltaKwh: socKwh - initialSocKwh,
-      maxBusResidualKw: Math.max(...rows.map(row => Math.abs(row.busResidualKw))),
-      maxSocResidualKwh: Math.max(...rows.map(row => Math.abs(row.socResidualKwh))),
+      maxBusResidualKw: Math.max(...rows.map((row) => Math.abs(row.busResidualKw))),
+      maxSocResidualKwh: Math.max(...rows.map((row) => Math.abs(row.socResidualKwh))),
       servedFraction: totalLoadKwh === 0 ? 1 : servedKwh / totalLoadKwh,
       totalLoadKwh,
       servedKwh,
@@ -341,23 +441,40 @@ namespace HF {
     };
   }
 
-  function terminalAxisValues(parameter: keyof TerminalInputs, lower: number, upper: number, steps: number, scale: TerminalScale): number[] {
-    if (!terminalInputKeys.includes(parameter)) throw terminalError(`Unknown sweep parameter: ${String(parameter)}.`, 'ERR_VALIDATION');
-    if (!Number.isFinite(lower) || !Number.isFinite(upper)) throw terminalError('Sweep lower and upper bounds must be finite numbers.', 'ERR_VALIDATION');
-    if (lower >= upper) throw terminalError('Sweep lower bound must be less than upper bound.', 'ERR_VALIDATION');
-    if (!Number.isInteger(steps) || steps < 2 || steps > 21) throw terminalError('Sweep steps must be an integer from 2 through 21.', 'ERR_BOUND');
-    if (scale !== 'linear' && scale !== 'log') throw terminalError('Sweep scale must be linear or log.', 'ERR_VALIDATION');
+  function terminalAxisValues(
+    parameter: keyof TerminalInputs,
+    lower: number,
+    upper: number,
+    steps: number,
+    scale: unknown,
+  ): number[] {
+    if (!terminalInputKeys.includes(parameter))
+      throw terminalError(`Unknown sweep parameter: ${parameter}.`, 'ERR_VALIDATION');
+    if (!Number.isFinite(lower) || !Number.isFinite(upper))
+      throw terminalError('Sweep lower and upper bounds must be finite numbers.', 'ERR_VALIDATION');
+    if (lower >= upper)
+      throw terminalError('Sweep lower bound must be less than upper bound.', 'ERR_VALIDATION');
+    if (!Number.isInteger(steps) || steps < 2 || steps > 21)
+      throw terminalError('Sweep steps must be an integer from 2 through 21.', 'ERR_BOUND');
+    if (scale !== 'linear' && scale !== 'log')
+      throw terminalError('Sweep scale must be linear or log.', 'ERR_VALIDATION');
     const bound = terminalBounds[parameter];
     if ((bound.minExclusive && lower <= bound.min) || lower < bound.min || upper > bound.max) {
-      throw terminalError(`${parameter} sweep bounds must stay within ${bound.minExclusive ? 'greater than' : 'at least'} ${bound.min} and at most ${bound.max}.`, 'ERR_BOUND');
+      throw terminalError(
+        `${parameter} sweep bounds must stay within ${bound.minExclusive ? 'greater than' : 'at least'} ${String(bound.min)} and at most ${String(bound.max)}.`,
+        'ERR_BOUND',
+      );
     }
-    if (scale === 'log' && lower <= 0) throw terminalError('Log sweeps require positive lower and upper bounds.', 'ERR_BOUND');
+    if (scale === 'log' && lower <= 0)
+      throw terminalError('Log sweeps require positive lower and upper bounds.', 'ERR_BOUND');
     const values = [];
     for (let index = 0; index < steps; index += 1) {
       const fraction = index / (steps - 1);
-      values.push(scale === 'linear'
-        ? lower + (upper - lower) * fraction
-        : Math.exp(Math.log(lower) + (Math.log(upper) - Math.log(lower)) * fraction));
+      values.push(
+        scale === 'linear'
+          ? lower + (upper - lower) * fraction
+          : Math.exp(Math.log(lower) + (Math.log(upper) - Math.log(lower)) * fraction),
+      );
     }
     values[0] = lower;
     values[values.length - 1] = upper;
@@ -365,15 +482,21 @@ namespace HF {
   }
 
   function terminalErrorCode(error: unknown): TerminalPointStatus {
-    return typeof error === 'object' && error !== null && 'code' in error && error.code === 'ERR_BOUND'
-      ? 'ERR_BOUND' : 'ERR_VALIDATION';
+    return typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      error.code === 'ERR_BOUND'
+      ? 'ERR_BOUND'
+      : 'ERR_VALIDATION';
   }
 
   function terminalMetricsSameService(a: TerminalMetrics, b: TerminalMetrics): boolean {
-    const sameDemand = Math.abs(a.totalLoadKwh - b.totalLoadKwh)
-      <= terminalTolerance * Math.max(1, Math.abs(a.totalLoadKwh), Math.abs(b.totalLoadKwh));
-    const sameServedEnergy = Math.abs(a.servedKwh - b.servedKwh)
-      <= terminalTolerance * Math.max(1, Math.abs(a.servedKwh), Math.abs(b.servedKwh));
+    const sameDemand =
+      Math.abs(a.totalLoadKwh - b.totalLoadKwh) <=
+      terminalTolerance * Math.max(1, Math.abs(a.totalLoadKwh), Math.abs(b.totalLoadKwh));
+    const sameServedEnergy =
+      Math.abs(a.servedKwh - b.servedKwh) <=
+      terminalTolerance * Math.max(1, Math.abs(a.servedKwh), Math.abs(b.servedKwh));
     return sameDemand && sameServedEnergy;
   }
 
@@ -384,52 +507,116 @@ namespace HF {
     upper: number,
     steps: number,
     scale: TerminalScale,
-    second?: { parameter: keyof TerminalInputs; lower: number; upper: number; steps: number; scale: TerminalScale },
+    second?: {
+      parameter: keyof TerminalInputs;
+      lower: number;
+      upper: number;
+      steps: number;
+      scale: TerminalScale;
+    },
   ): TerminalSweep {
     const inputs = terminalValidateInputs(rawInputs);
-    const axes: TerminalSweepAxis[] = [{ parameter, values: terminalAxisValues(parameter, lower, upper, steps, scale), scale }];
+    const axes: TerminalSweepAxis[] = [
+      { parameter, values: terminalAxisValues(parameter, lower, upper, steps, scale), scale },
+    ];
     if (second) {
-      if (second.parameter === parameter) throw terminalError('A two-axis sweep must use two different parameters.', 'ERR_VALIDATION');
-      axes.push({ parameter: second.parameter, values: terminalAxisValues(second.parameter, second.lower, second.upper, second.steps, second.scale), scale: second.scale });
+      if (second.parameter === parameter)
+        throw terminalError(
+          'A two-axis sweep must use two different parameters.',
+          'ERR_VALIDATION',
+        );
+      axes.push({
+        parameter: second.parameter,
+        values: terminalAxisValues(
+          second.parameter,
+          second.lower,
+          second.upper,
+          second.steps,
+          second.scale,
+        ),
+        scale: second.scale,
+      });
     }
     const pointCount = axes.reduce((total, axis) => total * axis.values.length, 1);
-    if (pointCount > terminalMaxSweepPoints) throw terminalError(`Sweep matrix cannot exceed ${terminalMaxSweepPoints} points.`, 'ERR_BOUND');
+    if (pointCount > terminalMaxSweepPoints)
+      throw terminalError(
+        `Sweep matrix cannot exceed ${String(terminalMaxSweepPoints)} points.`,
+        'ERR_BOUND',
+      );
     const firstAxis = axes[0];
     if (!firstAxis) throw terminalError('A sweep requires at least one axis.', 'ERR_VALIDATION');
     const points: TerminalSweepPoint[] = [];
     for (let row = 0; row < (axes[1]?.values.length ?? 1); row += 1) {
       for (let column = 0; column < firstAxis.values.length; column += 1) {
-        const coordinates: Partial<Record<keyof TerminalInputs, number>> = { [firstAxis.parameter]: firstAxis.values[column] };
-        if (axes[1]) coordinates[axes[1].parameter] = axes[1].values[row];
+        const coordinates: Partial<Record<keyof TerminalInputs, number>> = {
+          [firstAxis.parameter]: firstAxis.values[column],
+        };
+        const secondAxis = axes[1];
+        if (secondAxis) {
+          const secondValue = secondAxis.values[row];
+          if (secondValue === undefined)
+            throw terminalError('A sweep coordinate is missing.', 'ERR_VALIDATION');
+          coordinates[secondAxis.parameter] = secondValue;
+        }
         const index = points.length;
         try {
           const run = terminalSolve({ ...inputs, ...coordinates });
-          points.push({ index, coordinates, status: 'CONVERGED', error: null, metrics: run.metrics });
+          points.push({
+            index,
+            coordinates,
+            status: 'CONVERGED',
+            error: null,
+            metrics: run.metrics,
+          });
         } catch (error) {
-          points.push({ index, coordinates, status: terminalErrorCode(error), error: error instanceof Error ? error.message : String(error), metrics: null });
+          points.push({
+            index,
+            coordinates,
+            status: terminalErrorCode(error),
+            error: error instanceof Error ? error.message : String(error),
+            metrics: null,
+          });
         }
       }
     }
-    const valid = points.filter(point => point.metrics !== null);
-    const rankedPointIndices = [...valid].sort((a, b) => {
-      const left = a.metrics as TerminalMetrics;
-      const right = b.metrics as TerminalMetrics;
-      return left.unservedKwh - right.unservedKwh || left.periodCost - right.periodCost
-        || Math.abs(left.terminalSocDeltaKwh) - Math.abs(right.terminalSocDeltaKwh) || a.index - b.index;
-    }).map(point => point.index);
-    const paretoPointIndices = valid.filter(candidate => {
-      const value = candidate.metrics as TerminalMetrics;
-      return !valid.some(other => {
-        if (other.index === candidate.index || !terminalMetricsSameService(value, other.metrics as TerminalMetrics)) return false;
-        const comparison = other.metrics as TerminalMetrics;
-        return comparison.periodCost <= value.periodCost + terminalTolerance
-          && comparison.unservedKwh <= value.unservedKwh + terminalTolerance
-          && (comparison.periodCost < value.periodCost - terminalTolerance
-            || comparison.unservedKwh < value.unservedKwh - terminalTolerance);
-      });
-    }).map(point => point.index);
+    const valid = points.filter((point) => point.metrics !== null);
+    const rankedPointIndices = [...valid]
+      .sort((a, b) => {
+        const left = a.metrics as TerminalMetrics;
+        const right = b.metrics as TerminalMetrics;
+        return (
+          left.unservedKwh - right.unservedKwh ||
+          left.periodCost - right.periodCost ||
+          Math.abs(left.terminalSocDeltaKwh) - Math.abs(right.terminalSocDeltaKwh) ||
+          a.index - b.index
+        );
+      })
+      .map((point) => point.index);
+    const paretoPointIndices = valid
+      .filter((candidate) => {
+        const value = candidate.metrics as TerminalMetrics;
+        return !valid.some((other) => {
+          if (
+            other.index === candidate.index ||
+            !terminalMetricsSameService(value, other.metrics as TerminalMetrics)
+          )
+            return false;
+          const comparison = other.metrics as TerminalMetrics;
+          return (
+            comparison.periodCost <= value.periodCost + terminalTolerance &&
+            comparison.unservedKwh <= value.unservedKwh + terminalTolerance &&
+            (comparison.periodCost < value.periodCost - terminalTolerance ||
+              comparison.unservedKwh < value.unservedKwh - terminalTolerance)
+          );
+        });
+      })
+      .map((point) => point.index);
     return {
-      modelVersion: 'terminal-greedy-hourly-v1', axes, points, rankedPointIndices, paretoPointIndices,
+      modelVersion: 'terminal-greedy-hourly-v1',
+      axes,
+      points,
+      rankedPointIndices,
+      paretoPointIndices,
       warnings: [
         'Sweep ranking sorts by unserved energy, then period cost, then absolute terminal SOC change; it is not an optimization result.',
         'This is a conditional sampled service-equivalent frontier: Pareto dominance compares only points with matching totalLoadKwh and servedKwh, minimizing period cost and unserved kWh; it is not a global optimum.',
@@ -442,20 +629,26 @@ namespace HF {
   export function terminalSensitivity(rawInputs: TerminalInputs): TerminalSensitivity {
     const inputs = terminalValidateInputs(rawInputs);
     const baseline = terminalSolve(inputs);
-    const rows: TerminalSensitivityRow[] = terminalInputKeys.map(parameter => {
+    const rows: TerminalSensitivityRow[] = terminalInputKeys.map((parameter) => {
       const baseValue = inputs[parameter];
       const bounds = terminalBounds[parameter];
       const step = Math.max(Math.abs(baseValue) * 1e-3, (bounds.max - bounds.min) * 1e-8);
       let plus: TerminalRun | null = null;
       let minus: TerminalRun | null = null;
-      let plusValue = baseValue + step;
-      let minusValue = baseValue - step;
+      const plusValue = baseValue + step;
+      const minusValue = baseValue - step;
       let plusError: string | null = null;
       let minusError: string | null = null;
-      try { plus = terminalSolve({ ...inputs, [parameter]: plusValue }); }
-      catch (error) { plusError = error instanceof Error ? error.message : String(error); }
-      try { minus = terminalSolve({ ...inputs, [parameter]: minusValue }); }
-      catch (error) { minusError = error instanceof Error ? error.message : String(error); }
+      try {
+        plus = terminalSolve({ ...inputs, [parameter]: plusValue });
+      } catch (error) {
+        plusError = error instanceof Error ? error.message : String(error);
+      }
+      try {
+        minus = terminalSolve({ ...inputs, [parameter]: minusValue });
+      } catch (error) {
+        minusError = error instanceof Error ? error.message : String(error);
+      }
       let method: TerminalSensitivityRow['method'] = 'unavailable';
       if (plus && minus) method = 'central';
       else if (plus) method = 'forward';
@@ -464,20 +657,35 @@ namespace HF {
         const baseMetric = baseline.metrics[metric];
         if (baseValue === 0 || baseMetric === 0 || method === 'unavailable') return null;
         let derivative: number;
-        if (method === 'central') derivative = ((plus as TerminalRun).metrics[metric] - (minus as TerminalRun).metrics[metric]) / (plusValue - minusValue);
-        else if (method === 'forward') derivative = ((plus as TerminalRun).metrics[metric] - baseMetric) / (plusValue - baseValue);
-        else derivative = (baseMetric - (minus as TerminalRun).metrics[metric]) / (baseValue - minusValue);
-        return derivative * baseValue / baseMetric;
+        if (method === 'central')
+          derivative =
+            ((plus as TerminalRun).metrics[metric] - (minus as TerminalRun).metrics[metric]) /
+            (plusValue - minusValue);
+        else if (method === 'forward')
+          derivative =
+            ((plus as TerminalRun).metrics[metric] - baseMetric) / (plusValue - baseValue);
+        else
+          derivative =
+            (baseMetric - (minus as TerminalRun).metrics[metric]) / (baseValue - minusValue);
+        return (derivative * baseValue) / baseMetric;
       };
       return {
-        parameter, baseValue, step, method,
+        parameter,
+        baseValue,
+        step,
+        method,
         periodCostElasticity: elasticity('periodCost'),
         unservedKwhElasticity: elasticity('unservedKwh'),
-        error: method === 'unavailable' ? `Both perturbations failed. Increase/decrease errors: ${minusError ?? 'none'}; ${plusError ?? 'none'}` : null,
+        error:
+          method === 'unavailable'
+            ? `Both perturbations failed. Increase/decrease errors: ${minusError ?? 'none'}; ${plusError ?? 'none'}`
+            : null,
       };
     });
     return {
-      modelVersion: 'terminal-greedy-hourly-v1', baseline, rows,
+      modelVersion: 'terminal-greedy-hourly-v1',
+      baseline,
+      rows,
       warnings: [
         'This is a one-at-a-time finite-difference elasticity screen, not Sobol analysis or probabilistic sensitivity.',
         'The perturbation is 0.1% of the current value, with a 1e-8 parameter-range floor; a valid one-sided difference is used at input boundaries.',
@@ -489,23 +697,41 @@ namespace HF {
 
   export function terminalDiff(a: TerminalRun, b: TerminalRun): TerminalDiff {
     const metricNames: TerminalMetricName[] = [
-      'periodCost', 'unservedKwh', 'renewableKwh', 'curtailmentKwh', 'peakImportKw',
-      'finalSocKwh', 'initialSocKwh', 'terminalSocDeltaKwh', 'maxBusResidualKw',
-      'maxSocResidualKwh', 'servedFraction', 'totalLoadKwh', 'servedKwh',
+      'periodCost',
+      'unservedKwh',
+      'renewableKwh',
+      'curtailmentKwh',
+      'peakImportKw',
+      'finalSocKwh',
+      'initialSocKwh',
+      'terminalSocDeltaKwh',
+      'maxBusResidualKw',
+      'maxSocResidualKwh',
+      'servedFraction',
+      'totalLoadKwh',
+      'servedKwh',
     ];
-    const regimeShifts = a.flags.flatMap(flagA => {
-      const flagB = b.flags.find(candidate => candidate.key === flagA.key);
+    const regimeShifts = a.flags.flatMap((flagA) => {
+      const flagB = b.flags.find((candidate) => candidate.key === flagA.key);
       return flagB && flagA.active !== flagB.active
-        ? [`Regime shift for ${flagA.key}: run a was ${flagA.active ? 'active' : 'inactive'} (${flagA.explanation}); run b was ${flagB.active ? 'active' : 'inactive'} (${flagB.explanation}).`]
+        ? [
+            `Regime shift for ${flagA.key}: run a was ${flagA.active ? 'active' : 'inactive'} (${flagA.explanation}); run b was ${flagB.active ? 'active' : 'inactive'} (${flagB.explanation}).`,
+          ]
         : [];
     });
     return {
       modelVersion: 'terminal-greedy-hourly-v1',
-      rows: metricNames.map(metric => {
+      rows: metricNames.map((metric) => {
         const left = a.metrics[metric];
         const right = b.metrics[metric];
         const deltaAbsolute = right - left;
-        return { metric, a: left, b: right, deltaAbsolute, deltaPercent: left === 0 ? null : 100 * deltaAbsolute / Math.abs(left) };
+        return {
+          metric,
+          a: left,
+          b: right,
+          deltaAbsolute,
+          deltaPercent: left === 0 ? null : (100 * deltaAbsolute) / Math.abs(left),
+        };
       }),
       warnings: [
         'Diff percentage is relative to the absolute value of run a; it is null when the baseline metric is zero.',

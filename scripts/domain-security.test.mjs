@@ -11,7 +11,8 @@ test('policy authorizes exact inline bytes and same-origin external scripts only
   assert.equal((policy.match(/sha256-/g) || []).length, 2);
   assert.match(policy, /connect-src 'self';/);
   assert.doesNotMatch(policy, /https:|unsafe-eval|script-src[^;]*unsafe-inline/);
-  assert.notEqual(policy, domainSecurityPolicy([`<script>${body} </script>`]));
+  const changedPolicy = domainSecurityPolicy([`<script>${body} </script>`]);
+  assert.notEqual(policy, changedPolicy);
 });
 
 test('shared policy deduplicates scripts and covers static structured data', () => {
@@ -24,6 +25,7 @@ test('hash extraction follows browser script end-tag boundaries', () => {
   const body = 'window.example = "</script-like>";';
   const expected = domainSecurityPolicy([`<script>${body}</script>`]);
   for (const ending of ['</script >', '</ScRiPt\t>', '</script foo="bar">', '</script/>']) {
-    assert.equal(domainSecurityPolicy([`<script>${body}${ending}`]), expected);
+    const actual = domainSecurityPolicy([`<script>${body}${ending}`]);
+    assert.equal(actual, expected);
   }
 });

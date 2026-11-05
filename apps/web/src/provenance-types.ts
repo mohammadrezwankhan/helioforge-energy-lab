@@ -1,4 +1,4 @@
-namespace HF {
+namespace HF { // eslint-disable-line @typescript-eslint/no-namespace, @typescript-eslint/no-unused-vars -- HF is the ordered global-script bundle namespace; modules change its shared runtime contract.
   export interface ProvenanceSource { title?: string; name?: string; url?: string; scope?: string; status?: string }
   export interface ResultProvenance {
     schema: string; status: string; model: {id:string;version:string|null}; source_revision: string; source_files: string[];

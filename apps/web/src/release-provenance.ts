@@ -1,4 +1,4 @@
-namespace HF {
+namespace HF { // eslint-disable-line @typescript-eslint/no-namespace, @typescript-eslint/no-unused-vars -- HF is the ordered global-script bundle namespace; modules change its shared runtime contract.
   export interface PublishedRuntimeFacts {
     applicationUrl: string;
     publicSource: string;
@@ -36,7 +36,7 @@ namespace HF {
       if (identity) {
         const markup = releaseProvenanceMarkup();
         const start = markup.indexOf('<div data-release-identity>') + '<div data-release-identity>'.length;
-        identity.innerHTML = markup.slice(start, markup.lastIndexOf('</div></div>'));
+        renderView(identity, markup.slice(start, markup.lastIndexOf('</div></div>')));
       }
     }
   }

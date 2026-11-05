@@ -7,7 +7,7 @@ import {createHash} from 'node:crypto';
 import {addEngineeringHeroFramePolicy, insertEngineeringHeroSection, prepareEngineeringHero} from './engineering-hero.mjs';
 import {domainSecurityPolicy} from './domain-security.mjs';
 import {extractStaticPageText} from './static-page-text.mjs';
-import {buildModelRegistry,buildPublicCapabilityFacts,CAPABILITY_COPY,CONTENT_REVISION_DATE,TASK_STARTS,WORKSPACES} from './capability-contract.mjs';
+import {buildModelRegistry,buildPublicCapabilityFacts,CAPABILITY_COPY,CONTENT_REVISION_DATE,TASK_STARTS} from './capability-contract.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const config=JSON.parse(fs.readFileSync(path.join(root,'cloudflare.json'),'utf8'));
 const site=JSON.parse(fs.readFileSync(path.join(root,'cloudflare-domain.json'),'utf8'));

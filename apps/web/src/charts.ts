@@ -1,45 +1,117 @@
-namespace HF {
+namespace HF { // eslint-disable-line @typescript-eslint/no-namespace, @typescript-eslint/no-unused-vars -- HF is the ordered global-script bundle namespace; modules change its shared runtime contract.
   let chartId = 0;
-  export function lineChart(labels: string[], series: Series[], options: {height?: number; unit?: string; band?: [number[], number[]]; table?: boolean} = {}): string {
-    if(!labels.length)return '<div class="empty">No applicable observations for this scenario.</div>';
-    const width = 800, height = options.height ?? 250, left = 54, right = 18, top = 22, bottom = 38;
-    const all = series.flatMap(s => s.values).concat(options.band?.flat() ?? []).filter(Number.isFinite);
-    const low = Math.min(0, ...all), high = Math.max(1, ...all)*1.08;
-    const y = (v: number): number => top+(high-v)/(high-low)*(height-top-bottom);
-    const x = (i: number): number => left+i/Math.max(1, labels.length-1)*(width-left-right);
-    const path = (values: number[]): string => values.map((v,i) => `${i ? 'L':'M'}${x(i).toFixed(2)},${y(v).toFixed(2)}`).join(' ');
-    const uid = `chart${++chartId}`;
-    const grid = Array.from({length:5},(_,i) => {const v=low+(high-low)*i/4; return `<line x1="${left}" x2="${width-right}" y1="${y(v)}" y2="${y(v)}" class="chart-grid"/><text x="${left-12}" y="${y(v)+4}" text-anchor="end">${fmt(v, Math.abs(high)<20?1:0)}</text>`;}).join('');
-    const marks = labels.map((label,i) => i % Math.max(1,Math.ceil(labels.length/7))===0 || i===labels.length-1 ? `<text x="${x(i)}" y="${height-9}" text-anchor="middle">${escapeHTML(label)}</text>` : '').join('');
-    const area = options.band ? `<path d="${path(options.band[1])} ${[...options.band[0]].reverse().map((v,j)=>`L${x(options.band![0].length-1-j)},${y(v)}`).join(' ')} Z" fill="var(--color-accent)" opacity=".10"/>` : '';
-    const plotted = series.map((s,i) => `${s.area ? `<defs><linearGradient id="${uid}g${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${s.color}" stop-opacity=".18"/><stop offset="100%" stop-color="${s.color}" stop-opacity="0"/></linearGradient></defs><path d="${path(s.values)} L${x(s.values.length-1)},${y(low)} L${x(0)},${y(low)}Z" fill="url(#${uid}g${i})"/>` : ''}<path class="chart-line" d="${path(s.values)}" fill="none" stroke="${s.color}" stroke-width="2.5" ${s.dashed?'stroke-dasharray="5 6"':''} stroke-linejoin="round" stroke-linecap="round"/><circle cx="${x(s.values.length-1)}" cy="${y(s.values[s.values.length-1] ?? 0)}" r="3" fill="${s.color}"/>`).join('');
-    const points = labels.map((label,i)=>`<g class="chart-hit"><rect x="${x(i)-10}" y="${top}" width="20" height="${height-top-bottom}" fill="transparent"><title>${escapeHTML(label)}: ${series.map(s=>`${escapeHTML(s.name)} ${fmt(s.values[i],2)} ${escapeHTML(options.unit??'')}`).join(' · ')}</title></rect></g>`).join('');
-    const table = options.table === false ? '' : `<details class="data-details"><summary>View chart data ${icon('down',12)}</summary><div class="table-scroll"><table><thead><tr><th>Interval</th>${series.map(s=>`<th>${escapeHTML(s.name)} (${escapeHTML(options.unit??'')})</th>`).join('')}</tr></thead><tbody>${labels.map((l,i)=>`<tr><td>${escapeHTML(l)}</td>${series.map(s=>`<td>${fmt(s.values[i],2)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`;
-    return `<div class="chart-wrap" role="region" aria-label="${series.map(s=>escapeHTML(s.name)).join(', ')} chart" tabindex="0"><div class="chart-unit">${escapeHTML(options.unit??'')}</div><svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="${uid}title"><title id="${uid}title">${series.map(s=>escapeHTML(s.name)).join(', ')}. A data table follows.</title>${grid}${marks}${area}${plotted}${points}</svg></div>${table}`;
+  export function lineChart(
+    labels: string[],
+    series: Series[],
+    options: { height?: number; unit?: string; band?: [number[], number[]]; table?: boolean } = {},
+  ): string {
+    if (!labels.length)
+      return '<div class="empty">No applicable observations for this scenario.</div>';
+    const width = 800,
+      height = options.height ?? 250,
+      left = 54,
+      right = 18,
+      top = 22,
+      bottom = 38;
+    const all = series
+      .flatMap((s) => s.values)
+      .concat(options.band?.flat() ?? [])
+      .filter(Number.isFinite);
+    const low = Math.min(0, ...all),
+      high = Math.max(1, ...all) * 1.08;
+    const y = (v: number): number => top + ((high - v) / (high - low)) * (height - top - bottom);
+    const x = (i: number): number =>
+      left + (i / Math.max(1, labels.length - 1)) * (width - left - right);
+    const path = (values: number[]): string =>
+      values.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(2)},${y(v).toFixed(2)}`).join(' ');
+    const uid = `chart${String(++chartId)}`;
+    const grid = Array.from({ length: 5 }, (_, i) => {
+      const v = low + ((high - low) * i) / 4;
+      return `<line x1="${String(left)}" x2="${String(width - right)}" y1="${String(y(v))}" y2="${String(y(v))}" class="chart-grid"/><text x="${String(left - 12)}" y="${String(y(v) + 4)}" text-anchor="end">${fmt(v, Math.abs(high) < 20 ? 1 : 0)}</text>`;
+    }).join('');
+    const marks = labels
+      .map((label, i) =>
+        i % Math.max(1, Math.ceil(labels.length / 7)) === 0 || i === labels.length - 1
+          ? `<text x="${String(x(i))}" y="${String(height - 9)}" text-anchor="middle">${escapeHTML(label)}</text>`
+          : '',
+      )
+      .join('');
+    const area = options.band
+      ? `<path d="${path(options.band[1])} ${[...options.band[0]]
+          .reverse()
+          .map(
+            (v, j) =>
+              `L${String(x(HF.requiredPresent(options.band, 'options.band')[0].length - 1 - j))},${String(y(v))}`,
+          )
+          .join(' ')} Z" fill="var(--color-accent)" opacity=".10"/>`
+      : '';
+    const plotted = series
+      .map(
+        (s, i) =>
+          `${s.area ? `<defs><linearGradient id="${uid}g${String(i)}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${s.color}" stop-opacity=".18"/><stop offset="100%" stop-color="${s.color}" stop-opacity="0"/></linearGradient></defs><path d="${path(s.values)} L${String(x(s.values.length - 1))},${String(y(low))} L${String(x(0))},${String(y(low))}Z" fill="url(#${uid}g${String(i)})"/>` : ''}<path class="chart-line" d="${path(s.values)}" fill="none" stroke="${s.color}" stroke-width="2.5" ${s.dashed ? 'stroke-dasharray="5 6"' : ''} stroke-linejoin="round" stroke-linecap="round"/><circle cx="${String(x(s.values.length - 1))}" cy="${String(y(s.values[s.values.length - 1] ?? 0))}" r="3" fill="${s.color}"/>`,
+      )
+      .join('');
+    const points = labels
+      .map(
+        (label, i) =>
+          `<g class="chart-hit"><rect x="${String(x(i) - 10)}" y="${String(top)}" width="20" height="${String(height - top - bottom)}" fill="transparent"><title>${escapeHTML(label)}: ${series.map((s) => `${escapeHTML(s.name)} ${fmt(s.values[i], 2)} ${escapeHTML(options.unit ?? '')}`).join(' · ')}</title></rect></g>`,
+      )
+      .join('');
+    const table =
+      options.table === false
+        ? ''
+        : `<details class="data-details"><summary>View chart data ${icon('down', 12)}</summary><div class="table-scroll"><table><thead><tr><th>Interval</th>${series.map((s) => `<th>${escapeHTML(s.name)} (${escapeHTML(options.unit ?? '')})</th>`).join('')}</tr></thead><tbody>${labels.map((l, i) => `<tr><td>${escapeHTML(l)}</td>${series.map((s) => `<td>${fmt(s.values[i], 2)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`;
+    return `<div class="chart-wrap" role="region" aria-label="${series.map((s) => escapeHTML(s.name)).join(', ')} chart" tabindex="0"><div class="chart-unit">${escapeHTML(options.unit ?? '')}</div><svg viewBox="0 0 ${String(width)} ${String(height)}" role="img" aria-labelledby="${uid}title"><title id="${uid}title">${series.map((s) => escapeHTML(s.name)).join(', ')}. A data table follows.</title>${grid}${marks}${area}${plotted}${points}</svg></div>${table}`;
   }
   export function sparkline(values: number[], color: string): string {
-    const high=Math.max(...values), low=Math.min(...values), denom=high-low||1;
-    const points=values.map((v,i)=>`${i/(values.length-1)*105},${30-(v-low)/denom*26}`).join(' ');
+    const high = Math.max(...values),
+      low = Math.min(...values),
+      denom = high - low || 1;
+    const points = values
+      .map(
+        (v, i) =>
+          `${String((i / (values.length - 1)) * 105)},${String(30 - ((v - low) / denom) * 26)}`,
+      )
+      .join(' ');
     return `<svg class="sparkline" width="106" height="34" viewBox="0 0 106 34" aria-hidden="true"><polyline points="${points}" fill="none" stroke="${color}" stroke-width="1.7" stroke-linejoin="round"/></svg>`;
   }
   export function energyOrb(): string {
-    const longitude=Array.from({length:7},(_,i)=>`<ellipse cx="235" cy="148" rx="${15+i*17}" ry="116" transform="rotate(-23 235 148)"/>`).join('');
-    const latitude=Array.from({length:7},(_,i)=>`<ellipse cx="235" cy="${74+i*25}" rx="${Math.sqrt(Math.max(0,1-((74+i*25-148)/116)**2))*116}" ry="${9+i%3*3}" transform="rotate(-23 235 148)"/>`).join('');
+    const longitude = Array.from(
+      { length: 7 },
+      (_, i) =>
+        `<ellipse cx="235" cy="148" rx="${String(15 + i * 17)}" ry="116" transform="rotate(-23 235 148)"/>`,
+    ).join('');
+    const latitude = Array.from(
+      { length: 7 },
+      (_, i) =>
+        `<ellipse cx="235" cy="${String(74 + i * 25)}" rx="${String(Math.sqrt(Math.max(0, 1 - ((74 + i * 25 - 148) / 116) ** 2)) * 116)}" ry="${String(9 + (i % 3) * 3)}" transform="rotate(-23 235 148)"/>`,
+    ).join('');
     return `<div class="orb-art" aria-hidden="true"><svg viewBox="0 0 500 300"><defs><radialGradient id="orbGlow"><stop stop-color="var(--color-accent)" stop-opacity=".22"/><stop offset="1" stop-color="var(--color-accent)" stop-opacity="0"/></radialGradient><radialGradient id="orbFill"><stop stop-color="var(--color-rule)"/><stop offset="1" stop-color="var(--color-paper-2)"/></radialGradient><linearGradient id="ringColor"><stop stop-color="var(--color-accent)" stop-opacity=".05"/><stop offset=".55" stop-color="var(--color-accent)"/><stop offset="1" stop-color="var(--color-accent)" stop-opacity=".1"/></linearGradient></defs><circle cx="235" cy="148" r="147" fill="url(#orbGlow)"/><circle cx="235" cy="148" r="116" fill="url(#orbFill)"/><g stroke="var(--color-accent)" stroke-width=".65" opacity=".24">${longitude}${latitude}</g><circle cx="235" cy="148" r="117" stroke="var(--color-accent)" stroke-opacity=".3" fill="none"/><g class="orb-ring"><ellipse cx="235" cy="148" rx="182" ry="52" transform="rotate(-23 235 148)" fill="none" stroke="url(#ringColor)" stroke-width="1.2"/><circle cx="389" cy="81" r="4.5" fill="var(--color-accent)"/><circle cx="81" cy="215" r="3" fill="var(--color-accent)"/></g><g class="orb-satellite"><circle cx="307" cy="74" r="5" fill="var(--color-accent)"/><circle cx="307" cy="74" r="12" fill="none" stroke="var(--color-accent)" opacity=".25"/></g><path d="M142 129l46 9 31-48 52 36 43 30-20 49-55 19-49-19-22-43-26-33Z" fill="var(--color-accent)" fill-opacity=".06" stroke="var(--color-accent)" stroke-opacity=".35"/><path d="M142 129l129-3-32 98-20-134-29 115 124-49-126-18 106 67" fill="none" stroke="var(--color-accent)" stroke-opacity=".25"/><g fill="var(--color-accent)"><circle cx="188" cy="138" r="3"/><circle cx="219" cy="90" r="3"/><circle cx="271" cy="126" r="3"/><circle cx="239" cy="224" r="3"/><circle cx="314" cy="156" r="3"/></g></svg><span class="orb-label orb-label-top"><i></i> SYSTEMS THINKING</span><span class="orb-label orb-label-bottom">RESEARCH → REAL-WORLD VALUE</span></div>`;
   }
-  export interface ViewState { storageIndex?: number }
-  export function dispatchIndex(d:Dispatch,index=0):number { return clamp(Number.isFinite(index)?Math.floor(index):0,0,Math.max(0,d.schedule.length-1)); }
-  export function energyFlow(d:Dispatch,index=0):string {
-    const p=d.schedule[dispatchIndex(d,index)];
-    if(!p)return '<p class="notice">No dispatch intervals are available.</p>';
-    const mode=p.charge_kw>0.01?'Charge':p.discharge_kw>0.01?'Discharge':'Idle';
-    const node=(name:string,ico:string,value:string,detail:string,center=false)=>`<div class="flow-node-card ${center?'storage-center-node':''}"><div class="flow-icon-wrap">${center?`<div class="soc-vessel" aria-hidden="true"><i style="height:${clamp(p.soc_pct,0,100)}%"></i></div>`:icon(ico,28)}</div><div class="flow-node-meta"><span>${escapeHTML(name)}</span><strong>${escapeHTML(value)}</strong><small>${escapeHTML(detail)}</small></div></div>`;
-    const beam=`<div class="flow-conduit" aria-hidden="true"><span class="flux-beam ${mode==='Discharge'?'reverse':''}" ${mode==='Idle'?'style="animation:none;opacity:.25"':''}></span></div>`;
-    return `<div class="flow-diagram-25d" role="group" aria-label="Selected dispatch interval; schematic connections"><div class="flow-stage-25d">${node('Solar PV','sun',fmt(p.pv_kw,1)+' kW','Available generation')}${beam}${node('Battery · '+mode,'battery',fmt(d.power_kw/1000,3)+' MW / '+fmt(d.capacity_kwh/1000,3)+' MWh',fmt(mode==='Charge'?p.charge_kw:p.discharge_kw,1)+' kW · '+fmt(p.soc_pct,1)+'% end SOC',true)}${beam}${node('Site demand','layers',fmt(p.load_kw,1)+' kW','Load in this interval')}</div><div class="flow-legend-ribbon"><span class="flow-pill">Grid import ${fmt(p.grid_import_kw,1)} kW</span><span class="flow-pill">Grid export ${fmt(p.grid_export_kw,1)} kW</span><span class="flow-pill">Curtailed PV ${fmt(p.curtailed_kw,1)} kW</span><span class="flow-pill">SOC ${fmt(p.soc_start_kwh,1)} → ${fmt(p.soc_end_kwh,1)} kWh</span><span class="flow-pill">Import tariff €${fmt(p.import_eur_mwh,1)}/MWh</span></div></div>`;
+  export interface ViewState {
+    storageIndex?: number;
   }
-  export function storageTimeline(d:Dispatch,index=0):string {
-    if(!d.schedule.length)return '<section class="panel plot-panel"><p>No dispatch intervals are available.</p></section>';
-    const i=dispatchIndex(d,index),p=d.schedule[i]!;
-    return `<section class="panel dispatch-timeline"><div class="section-heading"><div><h2>Follow one interval</h2><p>Completed synthetic dispatch · ${fmt(d.duration_hours,2)} hours · connection paths are schematic.</p></div><output id="dispatch-readout" for="dispatch-interval" aria-live="polite">${escapeHTML(p.label)}</output></div><label class="field"><span>Dispatch interval</span><input id="dispatch-interval" type="range" min="0" max="${d.schedule.length-1}" step="1" value="${i}" aria-valuetext="${escapeHTML(p.label)}" aria-controls="dispatch-telemetry"></label><div id="dispatch-telemetry">${energyFlow(d,i)}</div></section>`;
+  export function dispatchIndex(d: Dispatch, index = 0): number {
+    return clamp(
+      Number.isFinite(index) ? Math.floor(index) : 0,
+      0,
+      Math.max(0, d.schedule.length - 1),
+    );
+  }
+  export function energyFlow(d: Dispatch, index = 0): string {
+    const p = d.schedule[dispatchIndex(d, index)];
+    if (!p) return '<p class="notice">No dispatch intervals are available.</p>';
+    const mode = p.charge_kw > 0.01 ? 'Charge' : p.discharge_kw > 0.01 ? 'Discharge' : 'Idle';
+    const node = (name: string, ico: string, value: string, detail: string, center = false) =>
+      `<div class="flow-node-card ${center ? 'storage-center-node' : ''}"><div class="flow-icon-wrap">${center ? `<div class="soc-vessel" aria-hidden="true"><i style="height:${String(clamp(p.soc_pct, 0, 100))}%"></i></div>` : icon(ico, 28)}</div><div class="flow-node-meta"><span>${escapeHTML(name)}</span><strong>${escapeHTML(value)}</strong><small>${escapeHTML(detail)}</small></div></div>`;
+    const beam = `<div class="flow-conduit" aria-hidden="true"><span class="flux-beam ${mode === 'Discharge' ? 'reverse' : ''}" ${mode === 'Idle' ? 'style="animation:none;opacity:.25"' : ''}></span></div>`;
+    return `<div class="flow-diagram-25d" role="group" aria-label="Selected dispatch interval; schematic connections"><div class="flow-stage-25d">${node('Solar PV', 'sun', fmt(p.pv_kw, 1) + ' kW', 'Available generation')}${beam}${node('Battery · ' + mode, 'battery', fmt(d.power_kw / 1000, 3) + ' MW / ' + fmt(d.capacity_kwh / 1000, 3) + ' MWh', fmt(mode === 'Charge' ? p.charge_kw : p.discharge_kw, 1) + ' kW · ' + fmt(p.soc_pct, 1) + '% end SOC', true)}${beam}${node('Site demand', 'layers', fmt(p.load_kw, 1) + ' kW', 'Load in this interval')}</div><div class="flow-legend-ribbon"><span class="flow-pill">Grid import ${fmt(p.grid_import_kw, 1)} kW</span><span class="flow-pill">Grid export ${fmt(p.grid_export_kw, 1)} kW</span><span class="flow-pill">Curtailed PV ${fmt(p.curtailed_kw, 1)} kW</span><span class="flow-pill">SOC ${fmt(p.soc_start_kwh, 1)} → ${fmt(p.soc_end_kwh, 1)} kWh</span><span class="flow-pill">Import tariff €${fmt(p.import_eur_mwh, 1)}/MWh</span></div></div>`;
+  }
+  export function storageTimeline(d: Dispatch, index = 0): string {
+    if (!d.schedule.length)
+      return '<section class="panel plot-panel"><p>No dispatch intervals are available.</p></section>';
+    const i = dispatchIndex(d, index),
+      p = HF.requiredPresent(d.schedule[i], 'd.schedule[i]');
+    return `<section class="panel dispatch-timeline"><div class="section-heading"><div><h2>Follow one interval</h2><p>Completed synthetic dispatch · ${fmt(d.duration_hours, 2)} hours · connection paths are schematic.</p></div><output id="dispatch-readout" for="dispatch-interval" aria-live="polite">${escapeHTML(p.label)}</output></div><label class="field"><span>Dispatch interval</span><input id="dispatch-interval" type="range" min="0" max="${String(d.schedule.length - 1)}" step="1" value="${String(i)}" aria-valuetext="${escapeHTML(p.label)}" aria-controls="dispatch-telemetry"></label><div id="dispatch-telemetry">${energyFlow(d, i)}</div></section>`;
   }
 }

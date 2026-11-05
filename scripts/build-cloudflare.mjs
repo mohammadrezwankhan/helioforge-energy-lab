@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { createServer } from 'node:http';
+import { withBrowserPolicy } from './browser-csp.mjs';
 import {buildModelRegistry,buildPublicCapabilityFacts,CAPABILITY_COPY,validateCloudflareCopy} from './capability-contract.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -101,7 +102,9 @@ for (const patch of config.runtimePatches ?? []) {
 // Index the factual introduction; do not surface fictional records as real search results.
 runtime = runtime.replace(/<meta\b[^>]*\bname\s*=\s*["']robots["'][^>]*>/gi, '')
   .replace(/<link\b[^>]*\brel\s*=\s*["']canonical["'][^>]*>/gi, '')
-  .replace(/<head\b[^>]*>/i, match => match + `\n<meta name="robots" content="noindex,follow"><link rel="canonical" href="${escape(canonical)}">\n`);
+  .replace(/<\/head\s*>/i, match => `\n<meta name="robots" content="noindex,follow"><link rel="canonical" href="${escape(canonical)}">\n` + match);
+// Runtime patches change executable bytes; bind the document policy to the final payload.
+runtime = withBrowserPolicy(runtime);
 fs.writeFileSync(path.join(out,'run','index.html'),runtime);
 fs.copyFileSync(local('scripts/cloudflare-site.css'),path.join(out,'site.css'));
 const socialPreviewArtifact=config.socialPreviewArtifact||'docs/repository/social-preview.png';

@@ -26,3 +26,25 @@ test('new result disclosure includes units, horizon and endpoint assumptions wit
   const html=hf.resultProvenanceView(hf.HYBRID_EXAMPLE);
   for(const phrase of ['Model provenance','kWh','duration_hours','terminal_soc_policy','not_assessed'])assert.ok(html.includes(phrase),phrase);
 });
+
+for(const [label,value,verified] of [
+  ['boolean true',true,true],
+  ['boolean false',false,false],
+  ['string false','false',false],
+  ['string true','true',false],
+  ['number one',1,false],
+  ['number zero',0,false],
+  ['object',{},false],
+  ['array',[],false],
+  ['null',null,false],
+  ['missing',undefined,false],
+]){
+  test(`signature verification disclosure requires an exact boolean: ${label}`,()=>{
+    const result=structuredClone(hf.HYBRID_EXAMPLE);
+    if(label==='missing')delete result.provenance.integrity.signature_verified;
+    else result.provenance.integrity.signature_verified=value;
+    const html=hf.resultProvenanceView(result);
+    assert.match(html,/Source-bound record/);
+    assert.match(html,new RegExp(`signature verified: ${verified?'yes':'no'}\\.`));
+  });
+}

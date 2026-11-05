@@ -1,3 +1,4 @@
+import {installFixtureViews} from './helpers/fixture-views.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -42,7 +43,7 @@ function runtime({digest = webcrypto.subtle} = {}) {
       return {click() {}, remove() {}, setAttribute() {}, style: {}, href: '', download: ''};
     },
     getElementById(id) {
-      if (!nodes.has(id)) nodes.set(id, {set outerHTML(value) { this.html = value; }, scrollIntoView() {}});
+      if (!nodes.has(id)) nodes.set(id, {set replacementMarkup(value) { this.html = value; }, scrollIntoView() {}});
       return nodes.get(id);
     },
     querySelectorAll() { return []; },
@@ -56,6 +57,7 @@ function runtime({digest = webcrypto.subtle} = {}) {
     setTimeout(callback) { callback(); return 1; }, clearTimeout() {},
   });
   vm.runInContext(code, box);
+  installFixtureViews(box.HF);
   box.HF.download = (filename, payload) => downloads.push({filename, payload});
   function dispatch(type, target, extra = {}) {
     const event = {target, preventDefault() {}, ...extra};

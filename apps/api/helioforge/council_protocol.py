@@ -1,5 +1,74 @@
 """Versioned limits and disclosure fields for council execution."""
+
 from __future__ import annotations
+
+from typing import TypedDict
+
+
+class ProtocolLimits(TypedDict):
+    workflow_timeout_seconds: int | None
+    specialist_count: int
+    configured_specialist_count: int
+    executed_specialist_count: int | None
+    configured_critic_count: int
+    executed_critic_count: int | None
+    local_checklist_section_count: int
+    specialist_max_turns: int | None
+    specialist_max_output_tokens: int | None
+    critic_max_turns: int | None
+    critic_max_output_tokens: int | None
+    requested_cross_examination_rounds: int
+    cross_examination_rounds: int
+    expected_runner_invocations: int
+    completed_runner_invocations: int | None
+    runner_invocation_semantics: str
+
+
+class ProtocolCost(TypedDict):
+    potentially_billable: bool
+    attempt_may_have_incurred_provider_usage: bool
+    estimate_usd: float | None
+    actual_cost_usd: float | None
+    usage_budget_enforced_by_application: bool
+    status: str
+    failure_may_still_be_billable: bool
+
+
+class ProtocolCancellation(TypedDict):
+    status: str
+    provider_stop_confirmed: bool | None
+    scope: str
+
+
+class ProtocolIntegrity(TypedDict):
+    task_id: str | None
+    task_id_semantics: str | None
+    input_sha256_semantics: str
+    reviewer_identity_verified: bool
+    evidence_authenticity_verified: bool
+    signature_verified: bool
+    critic_signoff: bool
+    human_approval_recorded: bool
+
+
+class ProtocolMetadata(TypedDict):
+    id: str
+    mode: str
+    external_execution_status: str
+    consent_to_external_processing: bool
+    provider: str | None
+    model: str | None
+    limits: ProtocolLimits
+    cost: ProtocolCost
+    cancellation: ProtocolCancellation
+    integrity: ProtocolIntegrity
+
+
+class ExternalFailure(TypedDict):
+    message: str
+    protocol: ProtocolMetadata
+    result_recorded: bool
+
 
 PROTOCOL_ID = "helioforge-council/v1"
 SPECIALIST_COUNT = 8
@@ -27,7 +96,7 @@ def protocol_metadata(
     cancellation_status: str | None = None,
     provider_stop_confirmed: bool | None = None,
     task_id: str | None = None,
-) -> dict:
+) -> ProtocolMetadata:
     """Return auditable protocol facts without implying provider or reviewer authority."""
     external = mode == "openai"
     status = external_execution_status or ("completed" if external else "not_requested")
@@ -35,13 +104,9 @@ def protocol_metadata(
     configured_specialists = SPECIALIST_COUNT if external else 0
     configured_critics = 1 if external else 0
     executed_specialists = (
-        SPECIALIST_COUNT if status == "completed" else
-        0 if not external or status == "not_started" else None
+        SPECIALIST_COUNT if status == "completed" else 0 if not external or status == "not_started" else None
     )
-    executed_critics = (
-        1 if status == "completed" else
-        0 if not external or status == "not_started" else None
-    )
+    executed_critics = 1 if status == "completed" else 0 if not external or status == "not_started" else None
     return {
         "id": PROTOCOL_ID,
         "mode": mode,
@@ -71,8 +136,11 @@ def protocol_metadata(
                 "One Agents SDK Runner.run invocation per specialist and phase plus one critic invocation. "
                 "Each invocation may use up to the configured turns; counts do not establish provider HTTP "
                 "requests, token usage, or monetary cost."
-                if external else
-                "No Agents SDK or provider invocation; eight fixed checklist sections, deterministic summary, no critic execution."
+                if external
+                else (
+                    "No Agents SDK or provider invocation; eight fixed checklist"
+                    " sections, deterministic summary, no critic execution."
+                )
             ),
         },
         "cost": {
@@ -90,7 +158,8 @@ def protocol_metadata(
             "scope": (
                 "Outstanding asyncio tasks are cancelled on failure, timeout, or request cancellation; "
                 "the provider may continue work already accepted."
-                if external else "No external task was started."
+                if external
+                else "No external task was started."
             ),
         },
         "integrity": {
@@ -98,10 +167,12 @@ def protocol_metadata(
             "task_id_semantics": (
                 "Truncated SHA-256 correlation identifier for the serialized review payload; it is not a "
                 "signature or evidence of authorship, authority, truth, or approval."
-                if external else None
+                if external
+                else None
             ),
             "input_sha256_semantics": (
-                "The local persistence layer's digest identifies serialized request inputs. It does not verify "
+                "The local persistence layer's digest identifies serialized request inputs. "
+                "It does not verify "
                 "the source, signer, scientific validity, or approval."
             ),
             "reviewer_identity_verified": False,
@@ -120,7 +191,7 @@ def external_failure_detail(
     cross_examination_rounds: int,
     model: str | None,
     consent_to_external_processing: bool = True,
-) -> dict:
+) -> ExternalFailure:
     """Build an API error payload that does not claim provider-side cancellation."""
     return {
         "message": message,
@@ -131,7 +202,9 @@ def external_failure_detail(
             external_execution_status=status,
             completed_runner_invocations=0 if status == "not_started" else None,
             model=model,
-            cancellation_status=("best_effort_requested" if status in {"failed", "timed_out"} else "not_applicable"),
+            cancellation_status=(
+                "best_effort_requested" if status in {"failed", "timed_out"} else "not_applicable"
+            ),
             provider_stop_confirmed=False if status in {"failed", "timed_out"} else None,
         ),
         "result_recorded": False,

@@ -2,11 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "preserve",
-    "lib": [
-      "ES2022",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
@@ -16,9 +12,12 @@
     "sourceMap": false,
     "removeComments": false,
     "moduleDetection": "legacy",
-    "outDir": "dist/js"
+    "outDir": "dist/js",
+    "exactOptionalPropertyTypes": true
   },
   "files": [
+    "src/required-value.ts",
+    "src/view-dom.ts",
     "src/provenance-types.ts",
     "src/types.ts",
     "src/hybrid-types.ts",

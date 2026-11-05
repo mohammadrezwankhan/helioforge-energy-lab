@@ -1,3 +1,4 @@
+import {installFixtureViews} from './fixture-views.mjs';
 import fs from 'node:fs';
 import vm from 'node:vm';
 
@@ -6,8 +7,8 @@ export function controllerFixture({mode = 'normal', saved = false, progress = []
   const memory = new Map(), events = new Map(), toasts = [], exports = [], microtasks = [];
   class Element {
     constructor() { this.dataset = {}; this.attributes = new Map(); this.textContent = ''; this.classes = new Set(); this.classList = {add: x => this.classes.add(x), remove: x => this.classes.delete(x), contains: x => this.classes.has(x), toggle: (x, on) => on ? this.classes.add(x) : this.classes.delete(x)}; }
-    set innerHTML(value) {
-      this.markup = value;
+    set markup(value) {
+      this._markup = value;
       // Minimal text projection for controlled fixture markup, not an HTML sanitizer.
       let text = '', inTag = false;
       for (const character of value) {
@@ -17,7 +18,7 @@ export function controllerFixture({mode = 'normal', saved = false, progress = []
       }
       this.textContent = text;
     }
-    get innerHTML() { return this.markup ?? ''; }
+    get markup() { return this._markup ?? ''; }
     setAttribute(key, value) { this.attributes.set(key, value); }
     removeAttribute(key) { this.attributes.delete(key); }
     getAttribute(key) { return this.attributes.get(key) ?? null; }
@@ -36,6 +37,7 @@ export function controllerFixture({mode = 'normal', saved = false, progress = []
   const box = vm.createContext({URL, Intl, structuredClone, localStorage: storage, Element, HTMLFormElement: Form, HTMLInputElement: class extends Element {}, HTMLSelectElement: class extends Element {}, FormData, queueMicrotask: callback => microtasks.push(callback)});
   vm.runInContext(code, box);
   const hf = box.HF, lesson = hf.HYBRID_CATALOG.lessons[0];
+  installFixtureViews(hf);
   if (saved) {
     memory.set('hf-lessons-v2', JSON.stringify([lesson.id]));
     memory.set('hf-learning-mastery-v1', JSON.stringify({schema: 'helioforge.local-learning.v1', passed_self_checks: [lesson.id], mastery_checks: {[lesson.id]: {correct: 2, total: 2, passed_at: '2026-10-20T12:00:00Z'}}}));

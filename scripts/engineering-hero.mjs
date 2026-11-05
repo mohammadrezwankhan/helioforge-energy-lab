@@ -76,7 +76,7 @@ function readVerifiedRelease(sourceRoot) {
   return { manifestPath, files, policy: policy.trim() };
 }
 
-function copyVerifiedFiles({ sourceRoot, siteOutput, manifestPath, files }) {
+function copyVerifiedFiles({ siteOutput, manifestPath, files }) {
   const destinationRoot = path.resolve(siteOutput, RELEASE_DIRECTORY);
   const rel = path.relative(path.resolve(siteOutput), destinationRoot);
   if (rel !== path.join('assets', 'engineering-hero', 'v1')) throw Error('Invalid engineering hero output path');
@@ -120,7 +120,7 @@ export function prepareEngineeringHero({ enabled, sourceRoot, siteOutput, siteId
   }
   const section = engineeringHeroSection(siteId);
   const verified = readVerifiedRelease(sourceRoot);
-  copyVerifiedFiles({ sourceRoot, siteOutput, ...verified });
+  copyVerifiedFiles({ siteOutput, ...verified });
   return {
     enabled: true,
     section,

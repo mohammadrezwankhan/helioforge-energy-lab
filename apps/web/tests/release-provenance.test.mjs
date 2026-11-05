@@ -1,3 +1,4 @@
+import {installFixtureViews} from './helpers/fixture-views.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -9,7 +10,8 @@ const facts = {applicationUrl, publicSource: 'https://github.com/mohammadrezwank
 function setup(url = applicationUrl, response = facts) {
   const box = vm.createContext({URL, Intl, structuredClone, AbortSignal});
   vm.runInContext(code, box);
-  const nodes = Array.from({length: 2}, () => { const identity = {innerHTML: ''}, source = {href: '', textContent: ''}; return {identity, source, querySelector: selector => selector === '[data-release-source]' ? source : identity}; });
+  installFixtureViews(box.HF);
+  const nodes = Array.from({length: 2}, () => { const identity = {markup: ''}, source = {href: '', textContent: ''}; return {identity, source, querySelector: selector => selector === '[data-release-source]' ? source : identity}; });
   let requests = 0;
   box.location = new URL(url);
   box.document = {querySelectorAll: () => nodes};
@@ -29,16 +31,16 @@ test('one same-origin facts request updates all visible provenance hosts without
   await Promise.all([x.hf.refreshReleaseProvenance(), x.hf.refreshReleaseProvenance()]);
   assert.equal(x.requests(), 1);
   for (const node of x.nodes) {
-    assert.match(node.identity.innerHTML, /Published runtime SHA-256/);
-    assert.ok(node.identity.innerHTML.includes(facts.runtimeSha256));
+    assert.match(node.identity.markup, /Published runtime SHA-256/);
+    assert.ok(node.identity.markup.includes(facts.runtimeSha256));
     assert.ok(node.source.href.endsWith('/tree/' + facts.sourceRevision));
   }
 });
 test('offline and malformed facts retain useful links and an honest unavailable state', async () => {
   for (const x of [setup('file:///tmp/HelioForge-Preview.html'), setup(applicationUrl, {}), setup(applicationUrl, new Error('offline'))]) {
     await x.hf.refreshReleaseProvenance();
-    assert.match(x.nodes[0].identity.innerHTML, /Release identity unavailable/);
+    assert.match(x.nodes[0].identity.markup, /Release identity unavailable/);
     assert.equal(x.nodes[0].source.textContent, 'Public source');
-    assert.doesNotMatch(x.nodes[0].identity.innerHTML, /Published runtime SHA-256/);
+    assert.doesNotMatch(x.nodes[0].identity.markup, /Published runtime SHA-256/);
   }
 });

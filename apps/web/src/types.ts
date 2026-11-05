@@ -1,4 +1,4 @@
-namespace HF {
+namespace HF { // eslint-disable-line @typescript-eslint/no-namespace, @typescript-eslint/no-unused-vars -- HF is the ordered global-script bundle namespace; modules change its shared runtime contract.
   export type MarketCode = 'FR' | 'DE' | 'ES' | 'IT' | 'NL' | 'GB';
   export type Page = 'hybrid' | 'lessons' | 'compare' | 'overview' | 'storage' | 'pv' | 'research' | 'markets' | 'forecast' | 'investment' | 'pilots' | 'council';
   export type Inputs = Record<string, string | number | boolean | null | number[] | string[]>;

@@ -1,25 +1,63 @@
-namespace HF {
-  export let analyticalWorkbench:(()=>string)|undefined;
+namespace HF { // eslint-disable-line @typescript-eslint/no-namespace, @typescript-eslint/no-unused-vars -- HF is the ordered global-script bundle namespace; modules change its shared runtime contract.
+  export let analyticalWorkbench: (() => string) | undefined;
   /** Canvas resolves the same named palette used by SVG and CSS. */
-  export function resolveThemeColor(value:string):string{
-    const match=/^var\((--[a-z0-9-]+)\)$/.exec(value);
-    return match&&typeof document!=='undefined'?getComputedStyle(document.documentElement).getPropertyValue(match[1]!).trim():value;
+  export function resolveThemeColor(value: string): string {
+    const match = /^var\((--[a-z0-9-]+)\)$/.exec(value);
+    return match && typeof document !== 'undefined'
+      ? getComputedStyle(document.documentElement)
+          .getPropertyValue(HF.requiredPresent(match[1], 'match[1]'))
+          .trim()
+      : value;
   }
-  export const escapeHTML = (value: unknown): string => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c] ?? c));
+  /** Text form controls never accept a File as an implicit string. */
+  export function formText(value: FormDataEntryValue | null, fallback = ''): string {
+    if (value === null) return fallback;
+    if (typeof value !== 'string') throw new Error('Expected a text form value.');
+    return value;
+  }
+  export function recordValue(value: unknown): Record<string, unknown> | null {
+    return value !== null && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : null;
+  }
+  /** Browser crypto is absent outside a secure context despite the ambient DOM declaration. */
+  export function browserCrypto(): Crypto | undefined { return globalThis.crypto; }
+  export const escapeHTML = (value: unknown): string =>
+    displayText(value).replace(
+      /[&<>"']/g,
+      (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] ?? c,
+    );
   const numberFormats = new Map<number, Intl.NumberFormat>();
   export function fmt(value: number | null | undefined, digits = 0): string {
-    if(value == null || !Number.isFinite(value))return '—';
-    let formatter=numberFormats.get(digits);
-    if(!formatter){formatter=new Intl.NumberFormat('en-GB',{maximumFractionDigits:digits,minimumFractionDigits:digits});numberFormats.set(digits,formatter);}
+    if (value == null || !Number.isFinite(value)) return '—';
+    let formatter = numberFormats.get(digits);
+    if (!formatter) {
+      formatter = new Intl.NumberFormat('en-GB', {
+        maximumFractionDigits: digits,
+        minimumFractionDigits: digits,
+      });
+      numberFormats.set(digits, formatter);
+    }
     return formatter.format(value);
   }
-  export const money = (value: number, digits = 0): string => `${value < 0 ? '−' : ''}€${fmt(Math.abs(value), digits)}`;
-  export const millions = (value: number): string => `${value < 0 ? '−' : ''}€${fmt(Math.abs(value)/1e6, 2)}m`;
-  export const safeURL = (value: string): string => { try { const u = new URL(value); return u.protocol === 'https:' ? escapeHTML(u.href) : '#'; } catch { return '#'; } };
+  export const money = (value: number, digits = 0): string =>
+    `${value < 0 ? '−' : ''}€${fmt(Math.abs(value), digits)}`;
+  export const millions = (value: number): string =>
+    `${value < 0 ? '−' : ''}€${fmt(Math.abs(value) / 1e6, 2)}m`;
+  export const safeURL = (value: string): string => {
+    try {
+      const u = new URL(value);
+      return u.protocol === 'https:' ? escapeHTML(u.href) : '#';
+    } catch {
+      return '#';
+    }
+  };
   export const clamp = (v: number, lo: number, hi: number): number => Math.max(lo, Math.min(hi, v));
   export function filterProjects(projects: Project[], market: string, search: string): Project[] {
     const q = search.toLowerCase().trim();
-    return projects.filter(p => (market === 'ALL' || p.market === market) && `${p.name} ${p.market} ${p.technology} ${p.stage}`.toLowerCase().includes(q));
+    return projects.filter(
+      (p) =>
+        (market === 'ALL' || p.market === market) &&
+        `${p.name} ${p.market} ${p.technology} ${p.stage}`.toLowerCase().includes(q),
+    );
   }
   export function finiteInput(value: FormDataEntryValue | null, label: string): number {
     if (typeof value !== 'string' || !value.trim()) throw new Error(`${label} is required.`);
@@ -28,37 +66,117 @@ namespace HF {
     return n;
   }
   export function csvCell(value: unknown): string {
-    let text = String(value ?? '');
+    let text = displayText(value);
     // Formula-injection defence for text values. Numeric values remain numeric.
     if (typeof value !== 'number' && /^[=+\-@\t\r]/.test(text)) text = `'${text}`;
     return `"${text.replace(/"/g, '""')}"`;
   }
   export function toCSV(rows: Record<string, unknown>[]): string {
     const keys = Object.keys(rows[0] ?? {});
-    return [keys.map(csvCell).join(','), ...rows.map(r => keys.map(k => csvCell(r[k])).join(','))].join('\r\n');
+    return [
+      keys.map(csvCell).join(','),
+      ...rows.map((r) => keys.map((k) => csvCell(r[k])).join(',')),
+    ].join('\r\n');
   }
   export function download(name: string, content: string, mime = 'application/json'): void {
-    const url = URL.createObjectURL(new Blob([content], {type: mime}));
-    const a = document.createElement('a'); a.href = url; a.download = name;
+    const url = URL.createObjectURL(new Blob([content], { type: mime }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name;
     // Let the initiating click finish before dispatching the nested anchor click.
     // Chromium can drop a synchronous scripted download from a delegated click handler.
     setTimeout(() => {
       a.click();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+      }, 1000);
     }, 0);
   }
-  export const PAGES: {id: Page; title: string; icon: string; group: string; subtitle: string}[] = [
-    {id:'hybrid',title:'Hybrid systems lab',icon:'layers',group:'EXPLORE & LEARN',subtitle:'Explore architectures. Stress scenarios. Follow the energy.'},
-    {id:'lessons',title:'Learning studio',icon:'document',group:'',subtitle:'Thirty-six architecture lessons. One evidence-led learning path.'},
-    {id:'compare',title:'Scenario compare',icon:'activity',group:'',subtitle:'Compare outcomes without hiding differences in the assumptions.'},
-    {id:'overview', title:'Command centre', icon:'grid', group:'WORKSPACE', subtitle:'From research to better energy decisions.'},
-    {id:'storage', title:'Storage & flexibility', icon:'battery', group:'', subtitle:'Make every kilowatt-hour work harder.'},
-    {id:'pv', title:'PV economics', icon:'sun', group:'', subtitle:'From generation assumptions to discounted value.'},
-    {id:'research', title:'Research pillars', icon:'atom', group:'INTELLIGENCE', subtitle:'Four disciplines. One evidence-led programme.'},
-    {id:'markets', title:'Market intelligence', icon:'globe', group:'', subtitle:'European opportunities, with evidence before conviction.'},
-    {id:'forecast', title:'Forecast studio', icon:'chart', group:'', subtitle:'Explore futures. Never confuse scenarios with certainty.'},
-    {id:'investment', title:'Investment desk', icon:'briefcase', group:'', subtitle:'Challenge the return. Understand the downside.'},
-    {id:'pilots', title:'Construction & pilots', icon:'layers', group:'EXECUTION', subtitle:'Take hypotheses into the field.'},
-    {id:'council', title:'Agent council', icon:'sparkles', group:'', subtitle:'Specialist perspectives. Independent challenge. Human decisions.'}
-  ];
+  export const PAGES: { id: Page; title: string; icon: string; group: string; subtitle: string }[] =
+    [
+      {
+        id: 'hybrid',
+        title: 'Hybrid systems lab',
+        icon: 'layers',
+        group: 'EXPLORE & LEARN',
+        subtitle: 'Explore architectures. Stress scenarios. Follow the energy.',
+      },
+      {
+        id: 'lessons',
+        title: 'Learning studio',
+        icon: 'document',
+        group: '',
+        subtitle: 'Thirty-six architecture lessons. One evidence-led learning path.',
+      },
+      {
+        id: 'compare',
+        title: 'Scenario compare',
+        icon: 'activity',
+        group: '',
+        subtitle: 'Compare outcomes without hiding differences in the assumptions.',
+      },
+      {
+        id: 'overview',
+        title: 'Command centre',
+        icon: 'grid',
+        group: 'WORKSPACE',
+        subtitle: 'From research to better energy decisions.',
+      },
+      {
+        id: 'storage',
+        title: 'Storage & flexibility',
+        icon: 'battery',
+        group: '',
+        subtitle: 'Make every kilowatt-hour work harder.',
+      },
+      {
+        id: 'pv',
+        title: 'PV economics',
+        icon: 'sun',
+        group: '',
+        subtitle: 'From generation assumptions to discounted value.',
+      },
+      {
+        id: 'research',
+        title: 'Research pillars',
+        icon: 'atom',
+        group: 'INTELLIGENCE',
+        subtitle: 'Four disciplines. One evidence-led programme.',
+      },
+      {
+        id: 'markets',
+        title: 'Market intelligence',
+        icon: 'globe',
+        group: '',
+        subtitle: 'European opportunities, with evidence before conviction.',
+      },
+      {
+        id: 'forecast',
+        title: 'Forecast studio',
+        icon: 'chart',
+        group: '',
+        subtitle: 'Explore futures. Never confuse scenarios with certainty.',
+      },
+      {
+        id: 'investment',
+        title: 'Investment desk',
+        icon: 'briefcase',
+        group: '',
+        subtitle: 'Challenge the return. Understand the downside.',
+      },
+      {
+        id: 'pilots',
+        title: 'Construction & pilots',
+        icon: 'layers',
+        group: 'EXECUTION',
+        subtitle: 'Take hypotheses into the field.',
+      },
+      {
+        id: 'council',
+        title: 'Agent council',
+        icon: 'sparkles',
+        group: '',
+        subtitle: 'Specialist perspectives. Independent challenge. Human decisions.',
+      },
+    ];
 }

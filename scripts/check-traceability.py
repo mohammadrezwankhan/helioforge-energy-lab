@@ -14,7 +14,9 @@ import urllib.request
 from collections.abc import Callable
 from html import unescape
 from html.parser import HTMLParser
+from http.client import HTTPMessage
 from pathlib import Path
+from typing import IO, ClassVar, TypedDict, cast
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = ROOT / "traceability.json"
@@ -47,20 +49,17 @@ def _reject_duplicate_keys(pairs: list[tuple[str, object]]) -> dict[str, object]
 
 def load_config(path: Path = CONFIG_PATH) -> dict[str, str]:
     try:
-        value = json.loads(
-            path.read_text(encoding="utf-8"), object_pairs_hook=_reject_duplicate_keys
-        )
+        value: object = json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=_reject_duplicate_keys)
     except (OSError, json.JSONDecodeError, ValueError) as exc:
         raise ValueError(f"cannot read a valid traceability.json: {exc}") from exc
     errors = validate_config(value)
     if errors:
         raise ValueError("invalid traceability mapping: " + "; ".join(errors))
-    return value  # type: ignore[return-value]
+    # validate_config requires exactly the pinned string keys and string values.
+    return cast(dict[str, str], value)
 
 
-def validate_config(
-    value: object, *, expected: dict[str, str] | None = None
-) -> list[str]:
+def validate_config(value: object, *, expected: dict[str, str] | None = None) -> list[str]:
     pinned = EXPECTED if expected is None else expected
     if not isinstance(value, dict):
         return ["traceability.json must contain one JSON object"]
@@ -71,9 +70,7 @@ def validate_config(
         errors.append("traceability.json must contain only this app's mapping fields")
     for key, expected_value in pinned.items():
         if value.get(key) != expected_value:
-            errors.append(
-                f"traceability.json {key} must exactly match this repository's pinned mapping"
-            )
+            errors.append(f"traceability.json {key} must exactly match this repository's pinned mapping")
     if value.get("source_visibility") not in {"public", "private"}:
         errors.append("source_visibility must be exactly public or private")
     for key in ("portal_url", "overview_url", "runtime_url", "metadata_url"):
@@ -92,9 +89,7 @@ def validate_config(
             or parts.password
             or parts.port not in (None, 443)
         ):
-            errors.append(
-                f"{key} must be an HTTPS URL without credentials or a custom port"
-            )
+            errors.append(f"{key} must be an HTTPS URL without credentials or a custom port")
     return errors
 
 
@@ -121,10 +116,17 @@ def _css_hidden(attributes: dict[str, str | None]) -> bool:
     )
 
 
+class _MarkupEntry(TypedDict):
+    tag: str
+    hidden: bool
+    closed_details: bool
+    anchor: dict[str, str] | None
+
+
 class _VisibleMarkup(HTMLParser):
     """Collect visible HTML text and nonempty visible anchor destinations."""
 
-    VOID = {
+    VOID: ClassVar[set[str]] = {
         "area",
         "base",
         "br",
@@ -140,11 +142,11 @@ class _VisibleMarkup(HTMLParser):
         "track",
         "wbr",
     }
-    HIDDEN_TAGS = {"head", "script", "style", "template", "noscript"}
+    HIDDEN_TAGS: ClassVar[set[str]] = {"head", "script", "style", "template", "noscript"}
 
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
-        self.stack: list[dict[str, object]] = []
+        self.stack: list[_MarkupEntry] = []
         self.anchors: list[dict[str, str]] = []
         self.open_anchors: list[dict[str, str]] = []
         self.visible_text: list[str] = []
@@ -153,13 +155,12 @@ class _VisibleMarkup(HTMLParser):
         for index, entry in enumerate(self.stack):
             if entry["hidden"]:
                 return True
-            if entry["closed_details"]:
-                # The summary of a closed details element is visible; its other
-                # content is not present until a user opens the disclosure.
-                if not any(
-                    item["tag"] == "summary" for item in self.stack[index + 1 :]
-                ):
-                    return True
+            # The summary of a closed details element is visible; its other
+            # content is not present until a user opens the disclosure.
+            if entry["closed_details"] and not any(
+                item["tag"] == "summary" for item in self.stack[index + 1 :]
+            ):
+                return True
         return False
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
@@ -172,13 +173,11 @@ class _VisibleMarkup(HTMLParser):
             self.open_anchors.append(anchor)
             if self._hidden() or own_hidden:
                 anchor["href"] = ""
-        entry: dict[str, object] = {
+        entry: _MarkupEntry = {
             "tag": tag,
             "hidden": own_hidden,
             "closed_details": tag == "details" and "open" not in attributes,
-            "anchor": self.open_anchors[-1]
-            if tag == "a" and self.open_anchors
-            else None,
+            "anchor": self.open_anchors[-1] if tag == "a" and self.open_anchors else None,
         }
         if tag == "img" and not self._hidden():
             alt = attributes.get("alt") or ""
@@ -200,7 +199,7 @@ class _VisibleMarkup(HTMLParser):
                 for entry in reversed(removed):
                     anchor = entry.get("anchor")
                     if anchor is not None and anchor in self.open_anchors:
-                        self.open_anchors.remove(anchor)  # type: ignore[arg-type]
+                        self.open_anchors.remove(anchor)
                 break
 
     def handle_data(self, data: str) -> None:
@@ -225,23 +224,11 @@ def _visible_markdown_text(markup: str) -> tuple[str, set[str]]:
     )
     tick = chr(96)
     visible = re.sub(
-        r"(?<!"
-        + tick
-        + ")"
-        + tick
-        + r"+[^"
-        + tick
-        + r"\r\n]*"
-        + tick
-        + r"+(?!"
-        + tick
-        + ")",
+        r"(?<!" + tick + ")" + tick + r"+[^" + tick + r"\r\n]*" + tick + r"+(?!" + tick + ")",
         "",
         visible,
     )
-    hrefs = {
-        item["href"] for item in parser.anchors if item["href"] and item["text"].strip()
-    }
+    hrefs = {item["href"] for item in parser.anchors if item["href"] and item["text"].strip()}
     return visible, hrefs
 
 
@@ -268,18 +255,34 @@ def has_exact_visible_link(markup: str, url: str) -> bool:
 def check_readme(readme: str, config: dict[str, str]) -> list[str]:
     errors: list[str] = []
     if not has_exact_visible_link(readme, config["portal_url"]):
-        errors.append(
-            "README is missing an exact visible Markdown or HTML link to the MKLab portal"
-        )
+        errors.append("README is missing an exact visible Markdown or HTML link to the MKLab portal")
     if not has_exact_visible_link(readme, config["overview_url"]):
-        errors.append(
-            "README is missing an exact visible Markdown or HTML link to this app overview"
-        )
+        errors.append("README is missing an exact visible Markdown or HTML link to this app overview")
     return errors
 
 
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    """Reject redirects before urllib constructs or dispatches a second request."""
+
+    def redirect_request(
+        self,
+        _request: urllib.request.Request,
+        _response: IO[bytes],
+        _code: int,
+        _message: str,
+        _headers: HTTPMessage,
+        _new_url: str,
+    ) -> None:
+        """Leave every redirect to urllib's HTTP error handler without following it."""
+
+
 def _http_get(url: str) -> tuple[int, str]:
-    request = urllib.request.Request(
+    permitted_urls = {
+        EXPECTED[key] for key in ("portal_url", "overview_url", "runtime_url", "metadata_url")
+    } | {REPOSITORY_URL}
+    if url not in permitted_urls:
+        raise ValueError("endpoint must exactly match a pinned HTTPS URL")
+    request = urllib.request.Request(  # noqa: S310 -- Exact pinned HTTPS allowlist; redirects rejected before dispatch.
         url,
         headers={
             "Accept": "text/html,application/json;q=0.9,*/*;q=0.8",
@@ -288,27 +291,23 @@ def _http_get(url: str) -> tuple[int, str]:
         },
     )
     try:
-        with urllib.request.urlopen(request, timeout=TIMEOUT_SECONDS) as response:
+        with urllib.request.build_opener(_NoRedirect()).open(request, timeout=TIMEOUT_SECONDS) as response:
             if response.geturl() != url:
-                raise RuntimeError(
-                    f"endpoint redirected away from its exact configured URL: {url}"
-                )
+                raise RuntimeError(f"endpoint redirected away from its exact configured URL: {url}")
             limit = (
-                PRIVATE_RESPONSE_BYTES
-                if EXPECTED["source_visibility"] == "private"
-                else MAX_RESPONSE_BYTES
+                PRIVATE_RESPONSE_BYTES if EXPECTED["source_visibility"] == "private" else MAX_RESPONSE_BYTES
             )
             body = response.read(limit + 1)
             if EXPECTED["source_visibility"] == "private" and len(body) > limit:
-                raise RuntimeError(
-                    f"public response exceeds the private-URL scan limit: {url}"
-                )
+                raise RuntimeError(f"public response exceeds the private-URL scan limit: {url}")
             return response.status, body.decode("utf-8", "replace")
     except urllib.error.HTTPError as exc:
         return exc.code, exc.read(64_000).decode("utf-8", "replace")
 
 
 def _github_repo_get(repository: str, token: str) -> dict[str, object]:
+    if repository != EXPECTED["repository"]:
+        raise ValueError("repository must exactly match the pinned GitHub repository")
     encoded = urllib.parse.quote(repository, safe="/")
     request = urllib.request.Request(
         "https://api.github.com/repos/" + encoded,
@@ -319,7 +318,7 @@ def _github_repo_get(repository: str, token: str) -> dict[str, object]:
             "X-GitHub-Api-Version": "2022-11-28",
         },
     )
-    with urllib.request.urlopen(request, timeout=TIMEOUT_SECONDS) as response:
+    with urllib.request.build_opener(_NoRedirect()).open(request, timeout=TIMEOUT_SECONDS) as response:
         value = json.load(response, object_pairs_hook=_reject_duplicate_keys)
     if not isinstance(value, dict):
         raise RuntimeError("GitHub repository API returned a non-object response")
@@ -339,9 +338,7 @@ def validate_github_metadata(metadata: object, config: dict[str, str]) -> list[s
             errors.append(f"GitHub repository {key} must exactly equal {expected!r}")
     expected_private = config["source_visibility"] == "private"
     if metadata.get("private") is not expected_private:
-        errors.append(
-            f"GitHub repository visibility must be {'private' if expected_private else 'public'}"
-        )
+        errors.append(f"GitHub repository visibility must be {'private' if expected_private else 'public'}")
     return errors
 
 
@@ -377,12 +374,8 @@ def check_live(
         else:
             responses[label] = body
     if is_public:
-        if "app overview" in responses and not _has_html_anchor(
-            responses["app overview"], REPOSITORY_URL
-        ):
-            errors.append(
-                f"app overview is missing an exact visible source anchor: {REPOSITORY_URL}"
-            )
+        if "app overview" in responses and not _has_html_anchor(responses["app overview"], REPOSITORY_URL):
+            errors.append(f"app overview is missing an exact visible source anchor: {REPOSITORY_URL}")
     else:
         private_reference_forms = {
             REPOSITORY_URL.casefold(),
@@ -396,9 +389,7 @@ def check_live(
                 errors.append(f"private repository URL is leaked in public {label}")
     if "app.json" in responses:
         try:
-            app_metadata = json.loads(
-                responses["app.json"], object_pairs_hook=_reject_duplicate_keys
-            )
+            app_metadata = json.loads(responses["app.json"], object_pairs_hook=_reject_duplicate_keys)
         except (json.JSONDecodeError, ValueError) as exc:
             errors.append(f"app.json is not valid unambiguous JSON: {exc}")
         else:
@@ -406,14 +397,10 @@ def check_live(
                 errors.append("app.json must contain a JSON object")
             else:
                 if app_metadata.get("url") != config["overview_url"]:
-                    errors.append(
-                        "app.json url must exactly equal the pinned overview URL"
-                    )
+                    errors.append("app.json url must exactly equal the pinned overview URL")
                 # Both published catalogue metadata schemas are supported. If both
                 # runtime fields are present, neither may contradict the mapping.
-                runtime_fields = [
-                    key for key in ("applicationUrl", "runtime") if key in app_metadata
-                ]
+                runtime_fields = [key for key in ("applicationUrl", "runtime") if key in app_metadata]
                 if not runtime_fields:
                     # Older private editions identify only the overview in JSON.
                     # Bind their configured runtime through a named visible overview link.
@@ -431,32 +418,24 @@ def check_live(
                         errors.append(
                             "metadata omits runtime; overview must visibly link the pinned runtime URL"
                         )
-                for key in runtime_fields:
-                    if app_metadata[key] != config["runtime_url"]:
-                        errors.append(
-                            f"app.json {key} must exactly equal {config['runtime_url']!r}"
-                        )
+                errors.extend(
+                    f"app.json {key} must exactly equal {config['runtime_url']!r}"
+                    for key in runtime_fields
+                    if app_metadata[key] != config["runtime_url"]
+                )
                 public_source = app_metadata.get("publicSource")
                 if is_public and public_source != REPOSITORY_URL:
-                    errors.append(
-                        f"app.json publicSource must exactly equal {REPOSITORY_URL!r}"
-                    )
+                    errors.append(f"app.json publicSource must exactly equal {REPOSITORY_URL!r}")
                 elif not is_public and public_source not in (None, ""):
-                    errors.append(
-                        "app.json must not publish a publicSource URL for a private mapping"
-                    )
+                    errors.append("app.json must not publish a publicSource URL for a private mapping")
     if not token:
-        errors.append(
-            "GH_TOKEN is required for authenticated read-only repository metadata checks"
-        )
+        errors.append("GH_TOKEN is required for authenticated read-only repository metadata checks")
     else:
         get_repo = get_repo or _github_repo_get
         try:
             metadata = get_repo(config["repository"], token)
         except Exception as exc:
-            errors.append(
-                f"GitHub repository metadata request failed for {config['repository']}: {exc}"
-            )
+            errors.append(f"GitHub repository metadata request failed for {config['repository']}: {exc}")
         else:
             errors.extend(validate_github_metadata(metadata, config))
     return errors
@@ -495,9 +474,9 @@ def main(argv: list[str] | None = None) -> int:
     errors = run(live=args.live)
     if errors:
         for error in errors:
-            print("FAIL: " + error, file=sys.stderr)
+            print("FAIL: " + error, file=sys.stderr)  # noqa: T201 -- CLI report output.
         return 1
-    print(
+    print(  # noqa: T201 -- CLI report output.
         "Traceability checks passed."
         + (
             " Live endpoints and GitHub metadata verified."

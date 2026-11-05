@@ -1,4 +1,3 @@
-# ruff: noqa: BLE001
 # Test-harness boundaries record every exception as a failed check, then continue independent journeys.
 """Headless browser acceptance for the standalone Terminal release.
 
@@ -6,11 +5,13 @@ By default this serves the already-built .cloudflare/site export on a random
 loopback port, so the browser can exercise the shipped artifact without
 starting or exposing the Python API. Pass --url to audit an existing server.
 """
+
 from __future__ import annotations
 
 import argparse
 import csv
 import json
+import math
 import os
 import re
 import threading
@@ -19,17 +20,65 @@ from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Any
+from typing import NotRequired, TypedDict
 from urllib.parse import urlparse
 
-from playwright.sync_api import Browser, Page, sync_playwright
+from playwright.sync_api import Browser, ConsoleMessage, Page, Request, sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
 ROUTES = [
-    "hybrid", "lessons", "compare", "overview", "storage", "pv",
-    "research", "markets", "forecast", "investment", "pilots", "council",
+    "hybrid",
+    "lessons",
+    "compare",
+    "overview",
+    "storage",
+    "pv",
+    "research",
+    "markets",
+    "forecast",
+    "investment",
+    "pilots",
+    "council",
 ]
 VIEWPORTS = [320, 375, 414, 768, 1024, 1280, 1440, 1920]
+
+
+class AccessibilityProbe(TypedDict):
+    violations: list[dict[str, object]]
+    passes: int
+    incomplete: int
+
+
+class AccessibilityResult(AccessibilityProbe):
+    route: str
+    width: int
+
+
+class AuditState(TypedDict):
+    startedAt: str
+    site: str
+    routes: list[str]
+    viewports: list[int]
+    checks: list[dict[str, str]]
+    accessibility: list[AccessibilityResult]
+    accessibilityErrors: list[dict[str, object]]
+    pageErrors: list[str]
+    consoleErrors: list[dict[str, object]]
+    sameOriginConsoleErrors: list[dict[str, object]]
+    externalConsoleErrors: list[dict[str, object]]
+    failedRequests: list[dict[str, object]]
+    sameOriginFailedRequests: list[dict[str, object]]
+    externalFailedRequests: list[dict[str, object]]
+    badResponses: list[dict[str, object]]
+    bodyContentOverhangs: list[dict[str, object]]
+    clippedControls: list[dict[str, object]]
+    scrollAreaControls: list[dict[str, object]]
+    screenshots: list[str]
+    limits: list[str]
+    exports: NotRequired[dict[str, dict[str, object]]]
+    browser: NotRequired[dict[str, str]]
+    finishedAt: NotRequired[str]
+    summary: NotRequired[dict[str, int]]
 
 
 def parse_args() -> argparse.Namespace:
@@ -37,19 +86,28 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--url", help="Existing exported site URL (default: serve .cloudflare/site locally).")
     parser.add_argument("--site-dir", type=Path, default=ROOT / ".cloudflare" / "site")
     parser.add_argument("--executable", default=os.getenv("CHROMIUM_EXECUTABLE"))
-    parser.add_argument("--report", type=Path, default=ROOT / "docs" / "terminal-audit" / "browser-validation.json")
-    parser.add_argument("--screenshot-dir", type=Path,
-                        help="Optional output directory outside the repository for visual captures.")
-    parser.add_argument("--screenshots", action="store_true", help="Save desktop and mobile preview captures beside the report.")
+    parser.add_argument(
+        "--report", type=Path, default=ROOT / "docs" / "terminal-audit" / "browser-validation.json"
+    )
+    parser.add_argument(
+        "--screenshot-dir",
+        type=Path,
+        help="Optional output directory outside the repository for visual captures.",
+    )
+    parser.add_argument(
+        "--screenshots",
+        action="store_true",
+        help="Save desktop and mobile preview captures beside the report.",
+    )
     return parser.parse_args()
 
 
-def check(state: dict, name: str, ok: bool, detail: str = "") -> None:
+def check(state: AuditState, name: str, ok: bool, detail: str = "") -> None:
     state["checks"].append({"name": name, "status": "passed" if ok else "failed", "detail": detail})
-    print(("PASS" if ok else "FAIL"), name, detail)
+    print(("PASS" if ok else "FAIL"), name, detail)  # noqa: T201 -- CLI report output.
 
 
-def fail(state: dict, name: str, detail: str) -> None:
+def fail(state: AuditState, name: str, detail: str) -> None:
     check(state, name, False, detail)
 
 
@@ -57,7 +115,7 @@ def expect_selector(page: Page, selector: str, timeout: int = 10_000) -> None:
     page.locator(selector).first.wait_for(state="visible", timeout=timeout)
 
 
-def navigate(page: Page, route: str, width: int) -> None:
+def navigate(page: Page, route: str, _width: int) -> None:
     if page.evaluate("location.hash.slice(1)") == route:
         return
     if page.locator('[data-action="menu"]').is_visible():
@@ -73,60 +131,80 @@ def navigate(page: Page, route: str, width: int) -> None:
     )
 
 
-def page_overflow(page: Page) -> dict:
-    return page.evaluate("""() => ({
+def page_overflow(page: Page) -> dict[str, float]:
+    value: object = page.evaluate("""() => ({
       viewport: innerWidth,
       document: document.documentElement.scrollWidth,
       body: document.body.scrollWidth,
       rootDelta: document.documentElement.scrollWidth - innerWidth,
       bodyDelta: document.body.scrollWidth - innerWidth
     })""")
+    if (
+        not isinstance(value, dict)
+        or set(value) != {"viewport", "document", "body", "rootDelta", "bodyDelta"}
+        or any(
+            not isinstance(item, (int, float)) or isinstance(item, bool) or not math.isfinite(item)
+            for item in value.values()
+        )
+    ):
+        raise ValueError("Browser overflow probe must return finite dimensions")
+    return value
 
 
-def offscreen_controls(page: Page) -> dict:
-    return page.evaluate("""() => {
-      const clipped = [], scrollArea = [];
-      for (const el of document.querySelectorAll('a[href],button,input:not([type="file"]),label:has(input[type="file"]),select,textarea,[tabindex]:not([tabindex="-1"])')) {
-        if (!el.getClientRects().length || !el.checkVisibility() || el.closest('dialog:not([open])')) continue;
-        const sidebar = el.closest('#sidebar');
-        if (sidebar && !sidebar.classList.contains('mobile-open')) continue;
-        if (el.closest('[aria-hidden="true"]')) continue;
-        const box = el.getBoundingClientRect();
-        if (box.width <= 0 || (box.left >= -1 && box.right <= innerWidth + 1)) continue;
-        let parent = el.parentElement, scrollHost = null;
-        while (parent && parent !== document.documentElement) {
-          const style = getComputedStyle(parent);
-          if (parent.scrollWidth > parent.clientWidth + 1 && ['auto', 'scroll'].includes(style.overflowX)) {
-            scrollHost = parent.id ? `#${parent.id}` : `.${String(parent.className || parent.tagName).trim().split(/\\s+/).join('.')}`;
-            break;
-          }
-          parent = parent.parentElement;
-        }
-        const item = {tag: el.matches('label:has(input[type="file"])') ? 'label-file-picker' : el.tagName.toLowerCase(), id: el.id || null,
-          label: (el.getAttribute('aria-label') || el.innerText || el.getAttribute('name') || el.title || '').trim().slice(0, 100),
-          left: Math.round(box.left), right: Math.round(box.right), scrollHost};
-        (scrollHost ? scrollArea : clipped).push(item);
-      }
-      return {clipped, scrollArea};
-    }""")
+def offscreen_controls(page: Page) -> dict[str, list[dict[str, object]]]:
+    value: object = page.evaluate(
+        "() => {\n      const clipped = [], scrollArea = [];\n      for (const el of document.querySelect"
+        'orAll(\'a[href],button,input:not([type="file"]),label:has(input[type="file"]),select,textarea,[t'
+        'abindex]:not([tabindex="-1"])\')) {\n        if (!el.getClientRects().length || !el.checkVisibil'
+        "ity() || el.closest('dialog:not([open])')) continue;\n        const sidebar = el.closest('#sideb"
+        "ar');\n        if (sidebar && !sidebar.classList.contains('mobile-open')) continue;\n        if "
+        "(el.closest('[aria-hidden=\"true\"]')) continue;\n        const box = el.getBoundingClientRect()"
+        ";\n        if (box.width <= 0 || (box.left >= -1 && box.right <= innerWidth + 1)) continue;\n   "
+        "     let parent = el.parentElement, scrollHost = null;\n        while (parent && parent !== docu"
+        "ment.documentElement) {\n          const style = getComputedStyle(parent);\n          if (parent"
+        ".scrollWidth > parent.clientWidth + 1 && ['auto', 'scroll'].includes(style.overflowX)) {\n      "
+        "      scrollHost = parent.id ? `#${parent.id}` : `.${String(parent.className || parent.tagName)."
+        "trim().split(/\\s+/).join('.')}`;\n            break;\n          }\n          parent = parent.pa"
+        "rentElement;\n        }\n        const item = {tag: el.matches('label:has(input[type=\"file\"])'"
+        ") ? 'label-file-picker' : el.tagName.toLowerCase(), id: el.id || null,\n          label: (el.get"
+        "Attribute('aria-label') || el.innerText || el.getAttribute('name') || el.title || '').trim().sli"
+        "ce(0, 100),\n          left: Math.round(box.left), right: Math.round(box.right), scrollHost};\n "
+        "       (scrollHost ? scrollArea : clipped).push(item);\n      }\n      return {clipped, scrollAr"
+        "ea};\n    }"
+    )
+    if not isinstance(value, dict) or set(value) != {"clipped", "scrollArea"}:
+        raise ValueError("Browser controls probe must report clipped and scrolling controls")
+    if any(
+        not isinstance(items, list)
+        or any(not isinstance(item, dict) or any(not isinstance(key, str) for key in item) for item in items)
+        for items in value.values()
+    ):
+        raise ValueError("Browser controls probe must return lists of control records")
+    return value
 
 
 def rendered_text_contrasts(page: Page, selector: str) -> list[float]:
-    return page.evaluate("""selector => {
-              const canvas = document.createElement('canvas'); canvas.width = canvas.height = 1;
-              const ctx = canvas.getContext('2d', {willReadFrequently:true});
-              const luminance = colour => {
-                ctx.clearRect(0,0,1,1); ctx.fillStyle = colour; ctx.fillRect(0,0,1,1);
-                const rgb = [...ctx.getImageData(0,0,1,1).data].slice(0,3).map(c => {
-                  const v=c/255; return v<=0.04045 ? v/12.92 : ((v+0.055)/1.055)**2.4;
-                });
-                return rgb[0]*0.2126+rgb[1]*0.7152+rgb[2]*0.0722;
-              };
-              return [...document.querySelectorAll(selector)].map(b => {
-                const style=getComputedStyle(b), ink=luminance(style.color), paper=luminance(style.backgroundColor);
-                return (Math.max(ink,paper)+0.05)/(Math.min(ink,paper)+0.05);
-              });
-            }""", selector)
+    value: object = page.evaluate(
+        (
+            "selector => {\n              const canvas = document.createElement('canvas'); canvas.width ="
+            " canvas.height = 1;\n              const ctx = canvas.getContext('2d', {willReadFrequently:t"
+            "rue});\n              const luminance = colour => {\n                ctx.clearRect(0,0,1,1);"
+            " ctx.fillStyle = colour; ctx.fillRect(0,0,1,1);\n                const rgb = [...ctx.getImag"
+            "eData(0,0,1,1).data].slice(0,3).map(c => {\n                  const v=c/255; return v<=0.040"
+            "45 ? v/12.92 : ((v+0.055)/1.055)**2.4;\n                });\n                return rgb[0]*0"
+            ".2126+rgb[1]*0.7152+rgb[2]*0.0722;\n              };\n              return [...document.quer"
+            "ySelectorAll(selector)].map(b => {\n                const style=getComputedStyle(b), ink=lum"
+            "inance(style.color), paper=luminance(style.backgroundColor);\n                return (Math.m"
+            "ax(ink,paper)+0.05)/(Math.min(ink,paper)+0.05);\n              });\n            }"
+        ),
+        selector,
+    )
+    if not isinstance(value, list) or any(
+        not isinstance(item, (int, float)) or isinstance(item, bool) or not math.isfinite(item)
+        for item in value
+    ):
+        raise ValueError("Browser contrast probe must return finite numeric ratios")
+    return value
 
 
 def metrics_are_finite(page: Page) -> tuple[bool, str]:
@@ -136,7 +214,9 @@ def metrics_are_finite(page: Page) -> tuple[bool, str]:
       return {finite: numbers.every(Number.isFinite), rows: run.rows.length,
         busResidual: run.metrics.maxBusResidualKw, socResidual: run.metrics.maxSocResidualKwh};
     }""")
-    return result["finite"] and result["rows"] == 24 and max(result["busResidual"], result["socResidual"]) <= 1e-9, json.dumps(result)
+    return result["finite"] and result["rows"] == 24 and max(
+        result["busResidual"], result["socResidual"]
+    ) <= 1e-9, json.dumps(result)
 
 
 def current_cost(page: Page) -> float:
@@ -165,44 +245,69 @@ def select_command(page: Page, command: str) -> None:
     page.locator("#terminal-root").wait_for(timeout=5_000)
 
 
-def audit_accessibility(page: Page, axe_path: Path, route: str, width: int, state: dict) -> None:
+def audit_accessibility(page: Page, axe_path: Path, route: str, width: int, state: AuditState) -> None:
     try:
         if not page.evaluate("Boolean(window.axe)"):
             # Run audit instrumentation through automation, without adding an
             # inline script element that the production CSP correctly blocks.
             page.evaluate(axe_path.read_text(encoding="utf-8"))
-        result = page.evaluate("""async () => {
-          const report = await axe.run(document, {runOnly: {type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']}});
-          return {violations: report.violations.map(v => ({id: v.id, impact: v.impact,
-            description: v.help, nodes: v.nodes.length,
-            examples: v.nodes.slice(0, 3).map(n => ({target: n.target, summary: n.failureSummary?.slice(0, 500)}))})),
-            passes: report.passes.length, incomplete: report.incomplete.length};
-        }""")
+        raw: object = page.evaluate(
+            "async () => {\n          const report = await axe.run(document, {runOnly: {type: 'tag', valu"
+            "es: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']}});\n          return {violations: report.v"
+            "iolations.map(v => ({id: v.id, impact: v.impact,\n            description: v.help, nodes: v."
+            "nodes.length,\n            examples: v.nodes.slice(0, 3).map(n => ({target: n.target, summar"
+            "y: n.failureSummary?.slice(0, 500)}))})),\n            passes: report.passes.length, incompl"
+            "ete: report.incomplete.length};\n        }"
+        )
+        if (
+            not isinstance(raw, dict)
+            or not isinstance(raw.get("violations"), list)
+            or any(
+                not isinstance(item, dict) or any(not isinstance(key, str) for key in item)
+                for item in raw["violations"]
+            )
+            or type(raw.get("passes")) is not int
+            or type(raw.get("incomplete")) is not int
+        ):
+            raise ValueError("Accessibility probe must return violation records and integer counts")
+        result: AccessibilityProbe = {
+            "violations": raw["violations"],
+            "passes": raw["passes"],
+            "incomplete": raw["incomplete"],
+        }
         state["accessibility"].append({"route": route, "width": width, **result})
-        summary = [{"id": violation["id"], "impact": violation["impact"], "nodes": violation["nodes"]}
-                   for violation in result["violations"]]
+        summary = [
+            {"id": violation["id"], "impact": violation["impact"], "nodes": violation["nodes"]}
+            for violation in result["violations"]
+        ]
         check(state, f"{route} axe-core check at {width}px", not summary, json.dumps(summary))
     except Exception as exc:  # Keep the rest of the acceptance journeys independent.
         state["accessibilityErrors"].append({"route": route, "width": width, "error": str(exc)})
         fail(state, f"{route} axe-core check at {width}px", str(exc))
 
 
-def exercise_terminal(page: Page, state: dict, scratch: Path, screenshot_dir: Path | None) -> None:
+def exercise_terminal(page: Page, state: AuditState, scratch: Path, screenshot_dir: Path | None) -> None:
     page.set_viewport_size({"width": 1440, "height": 1000})
     navigate(page, "compare", 1440)
     page.locator("#terminal-root").wait_for(state="visible")
-    check(state, "terminal workbench is integrated into Scenario compare",
-          page.locator("#terminal-heading").inner_text().strip() == "Parametric energy workbench"
-          and page.locator(".page-intro").count() == 1,
-          "new workbench and original comparison view coexist")
+    check(
+        state,
+        "terminal workbench is integrated into Scenario compare",
+        page.locator("#terminal-heading").inner_text().strip() == "Parametric energy workbench"
+        and page.locator(".page-intro").count() == 1,
+        "new workbench and original comparison view coexist",
+    )
 
     finite, detail = metrics_are_finite(page)
     check(state, "default 24-step browser calculation is finite and conservative", finite, detail)
 
     baseline = current_cost(page)
     page.locator('[data-terminal-action="pin"]').click()
-    check(state, "completed reference can be pinned as run A",
-          "pinned as baseline A" in page.locator("#terminal-notice").inner_text())
+    check(
+        state,
+        "completed reference can be pinned as run A",
+        "pinned as baseline A" in page.locator("#terminal-notice").inner_text(),
+    )
 
     page.locator('#terminal-run-form [name="importPrice"]').fill("0.35")
     dirty_state = page.evaluate("""() => ({
@@ -211,38 +316,66 @@ def exercise_terminal(page: Page, state: dict, scratch: Path, screenshot_dir: Pa
       exportDisabled: [...document.querySelectorAll('[data-terminal-export]')].every(b => b.disabled),
       sweepDisabled: document.querySelector('#terminal-sweep-form button')?.disabled
     })""")
-    check(state, "input edits mark the displayed result stale and disable pin/export/sweep",
-          dirty_state["pinDisabled"] and dirty_state["exportDisabled"] and dirty_state["sweepDisabled"]
-          and "inputs changed" in dirty_state["status"].lower(), json.dumps(dirty_state))
+    check(
+        state,
+        "input edits mark the displayed result stale and disable pin/export/sweep",
+        dirty_state["pinDisabled"]
+        and dirty_state["exportDisabled"]
+        and dirty_state["sweepDisabled"]
+        and "inputs changed" in dirty_state["status"].lower(),
+        json.dumps(dirty_state),
+    )
 
     page.locator('#terminal-run-form button[type="submit"]').click()
-    page.wait_for_function("document.querySelector('#terminal-status')?.textContent === 'CONVERGED'", timeout=5_000)
+    page.wait_for_function(
+        "document.querySelector('#terminal-status')?.textContent === 'CONVERGED'", timeout=5_000
+    )
     candidate = current_cost(page)
-    check(state, "candidate B reruns against changed import tariff",
-          abs(candidate - baseline) > 0.01, f"A={baseline}; B={candidate}")
+    check(
+        state,
+        "candidate B reruns against changed import tariff",
+        abs(candidate - baseline) > 0.01,
+        f"A={baseline}; B={candidate}",
+    )
 
     page.locator('[data-terminal-action="diff"]').click()
     page.locator("#terminal-delta .terminal-diff").wait_for(timeout=5_000)
     diff = page.locator("#terminal-delta table tbody tr").filter(has_text="Period cost [EUR]")
     diff_values = diff.locator("td").all_inner_texts() if diff.count() == 1 else []
-    check(state, "run A versus B diff includes the changed period cost", len(diff_values) == 4
-          and abs(float(diff_values[2].replace(",", ""))) > 0.01
-          and abs(float(diff_values[1].replace(",", "")) - candidate) < 0.02,
-          " | ".join(diff_values))
+    check(
+        state,
+        "run A versus B diff includes the changed period cost",
+        len(diff_values) == 4
+        and abs(float(diff_values[2].replace(",", ""))) > 0.01
+        and abs(float(diff_values[1].replace(",", "")) - candidate) < 0.02,
+        " | ".join(diff_values),
+    )
 
     page.locator('#terminal-sweep-form button[type="submit"]').click()
     page.locator("#terminal-sweep-results .terminal-matrix").wait_for(timeout=10_000)
     count = page.locator("#terminal-sweep-results [data-terminal-point]").count()
-    check(state, "default two-axis sweep renders all 49 selectable matrix points", count == 49, f"points={count}")
+    check(
+        state,
+        "default two-axis sweep renders all 49 selectable matrix points",
+        count == 49,
+        f"points={count}",
+    )
     sweep_contrast = rendered_text_contrasts(page, "#terminal-sweep-results [data-terminal-point]")
-    check(state, "all 49 Terminal matrix values clear 4.5:1 rendered contrast",
-          len(sweep_contrast) == 49 and min(sweep_contrast) >= 4.5,
-          f"cells={len(sweep_contrast)}; min={min(sweep_contrast) if sweep_contrast else None}")
+    check(
+        state,
+        "all 49 Terminal matrix values clear 4.5:1 rendered contrast",
+        len(sweep_contrast) == 49 and min(sweep_contrast) >= 4.5,
+        f"cells={len(sweep_contrast)}; min={min(sweep_contrast) if sweep_contrast else None}",
+    )
     if count:
         page.locator('#terminal-sweep-results [data-terminal-point="0"]').click()
         selected = page.locator("#terminal-sweep-results [role=status]").inner_text()
-        check(state, "matrix point selection exposes exact coordinates and metrics",
-              "Selected case 1" in selected and "terminal SOC" in selected, selected[:300])
+        check(
+            state,
+            "matrix point selection exposes exact coordinates and metrics",
+            "Selected case 1" in selected and "terminal SOC" in selected,
+            selected[:300],
+        )
         if screenshot_dir:
             page.locator("#terminal-sweep-results").scroll_into_view_if_needed()
             image_path = screenshot_dir / "terminal-sweep-results.png"
@@ -253,57 +386,107 @@ def exercise_terminal(page: Page, state: dict, scratch: Path, screenshot_dir: Pa
     page.locator('#terminal-sweep-form [name="lower"]').fill("18")
     page.locator('#terminal-sweep-form [name="upper"]').fill("2")
     page.locator('#terminal-sweep-form button[type="submit"]').click()
-    page.locator("#terminal-notice").get_by_text("lower bound must be less than upper bound", exact=False).wait_for(timeout=5_000)
-    page.wait_for_function("!document.querySelector('#terminal-sweep-results .terminal-matrix')", timeout=5_000)
+    page.locator("#terminal-notice").get_by_text(
+        "lower bound must be less than upper bound", exact=False
+    ).wait_for(timeout=5_000)
+    page.wait_for_function(
+        "!document.querySelector('#terminal-sweep-results .terminal-matrix')", timeout=5_000
+    )
     remaining_matrix_count = page.locator("#terminal-sweep-results .terminal-matrix").count()
     remaining_point_count = page.locator("#terminal-sweep-results [data-terminal-point]").count()
-    check(state, "invalid lower-greater-than-upper sweep clears the previous valid matrix",
-          prior_matrix_count == 1 and count == 49 and remaining_matrix_count == 0 and remaining_point_count == 0,
-          f"before={prior_matrix_count} matrix/{count} points; after={remaining_matrix_count} matrix/{remaining_point_count} points")
+    check(
+        state,
+        "invalid lower-greater-than-upper sweep clears the previous valid matrix",
+        prior_matrix_count == 1
+        and count == 49
+        and remaining_matrix_count == 0
+        and remaining_point_count == 0,
+        (
+            "before="
+            f"{prior_matrix_count}"
+            " matrix/"
+            f"{count}"
+            " points; after="
+            f"{remaining_matrix_count}"
+            " matrix/"
+            f"{remaining_point_count}"
+            " points"
+        ),
+    )
 
     page.locator('#terminal-sweep-form [name="lower"]').fill("100001")
     page.locator('#terminal-sweep-form [name="upper"]').fill("100002")
     page.locator('#terminal-sweep-form button[type="submit"]').click()
     page.locator("#terminal-notice").get_by_text("pvKw sweep bounds", exact=False).wait_for(timeout=5_000)
-    check(state, "out-of-range sweep bounds are rejected visibly",
-          "at most 100000" in page.locator("#terminal-notice").inner_text(),
-          page.locator("#terminal-notice").inner_text())
+    check(
+        state,
+        "out-of-range sweep bounds are rejected visibly",
+        "at most 100000" in page.locator("#terminal-notice").inner_text(),
+        page.locator("#terminal-notice").inner_text(),
+    )
 
     page.locator('#terminal-sweep-form [name="lower"]').fill("0")
     page.locator('#terminal-sweep-form [name="upper"]').fill("10")
     page.locator('#terminal-sweep-form [name="scale"]').select_option("log")
     page.locator('#terminal-sweep-form button[type="submit"]').click()
-    page.locator("#terminal-notice").get_by_text("positive lower and upper bounds", exact=False).wait_for(timeout=5_000)
-    check(state, "invalid logarithmic sweep reports positive-bound constraint",
-          "Log sweeps require positive" in page.locator("#terminal-notice").inner_text(),
-          page.locator("#terminal-notice").inner_text())
+    page.locator("#terminal-notice").get_by_text("positive lower and upper bounds", exact=False).wait_for(
+        timeout=5_000
+    )
+    check(
+        state,
+        "invalid logarithmic sweep reports positive-bound constraint",
+        "Log sweeps require positive" in page.locator("#terminal-notice").inner_text(),
+        page.locator("#terminal-notice").inner_text(),
+    )
 
     page.locator('#terminal-sweep-form [name="lower"]').fill("2")
     page.locator('#terminal-sweep-form [name="upper"]').fill("18")
     page.locator('#terminal-sweep-form [name="scale"]').select_option("linear")
 
-    export_records = {}
+    export_records: dict[str, dict[str, object]] = {}
     for kind, suffix in (("json", ".json"), ("csv", ".csv"), ("md", ".md")):
         filename, content = download_text(page, f'[data-terminal-export="{kind}"]', scratch / f"run{suffix}")
         export_records[kind] = {"filename": filename, "bytes": len(content.encode("utf-8"))}
         if kind == "json":
             manifest = json.loads(content)
-            check(state, "JSON run export contains a SHA-256 manifest and 24 rows",
-                  bool(re.fullmatch(r"[a-f0-9]{64}", manifest.get("stateSha256", "")))
-                  and len(manifest["payload"]["run"]["rows"]) == 24,
-                  f"hash={manifest.get('stateSha256')}; rows={len(manifest['payload']['run']['rows'])}")
+            check(
+                state,
+                "JSON run export contains a SHA-256 manifest and 24 rows",
+                bool(re.fullmatch(r"[a-f0-9]{64}", manifest.get("stateSha256", "")))
+                and len(manifest["payload"]["run"]["rows"]) == 24,
+                f"hash={manifest.get('stateSha256')}; rows={len(manifest['payload']['run']['rows'])}",
+            )
         elif kind == "csv":
             columns = set(next(csv.reader(content.splitlines()[:1]))) if content.splitlines() else set()
             metadata_columns = {"dataKind", "status", "flags", "warnings"}
-            check(state, "CSV run export contains inputs, residuals, and 24 hourly records",
-                  "stateSha256" in columns and "busResidualKw" in columns and metadata_columns <= columns
-                  and "synthetic" in content and "CONVERGED" in content and len(content.splitlines()) == 25,
-                  f"bytes={len(content.encode('utf-8'))}; lines={len(content.splitlines())}; metadata={sorted(metadata_columns & columns)}")
+            check(
+                state,
+                "CSV run export contains inputs, residuals, and 24 hourly records",
+                "stateSha256" in columns
+                and "busResidualKw" in columns
+                and metadata_columns <= columns
+                and "synthetic" in content
+                and "CONVERGED" in content
+                and len(content.splitlines()) == 25,
+                (
+                    "bytes="
+                    f"{len(content.encode('utf-8'))}"
+                    "; lines="
+                    f"{len(content.splitlines())}"
+                    "; metadata="
+                    f"{sorted(metadata_columns & columns)}"
+                ),
+            )
         else:
-            check(state, "Markdown run export includes model limits, metrics, and integrity payload",
-                  "SHA-256:" in content and "## Flags and limits" in content and "Complete integrity payload" in content
-                  and "may differ" in content,
-                  f"bytes={len(content.encode('utf-8'))}")
+            check(
+                state,
+                "Markdown run export includes model limits, metrics, and integrity payload",
+                "SHA-256:" in content
+                and "## Flags and limits" in content
+                and "Complete integrity payload" in content
+                and "may differ" in content,
+                f"bytes={len(content.encode('utf-8'))}",
+            )
     state["exports"] = export_records
 
     corrupt = json.loads((scratch / "run.json").read_text(encoding="utf-8"))
@@ -314,103 +497,174 @@ def exercise_terminal(page: Page, state: dict, scratch: Path, screenshot_dir: Pa
         page.locator('[data-terminal-action="import"]').click()
     chooser_event.value.set_files(str(corrupt_path))
     page.locator("#toast").get_by_text("Manifest hash does not match", exact=False).wait_for(timeout=5_000)
-    check(state, "manifest import rejects output tampering", "Manifest hash does not match" in page.locator("#toast").inner_text())
+    check(
+        state,
+        "manifest import rejects output tampering",
+        "Manifest hash does not match" in page.locator("#toast").inner_text(),
+    )
 
     with page.expect_file_chooser() as chooser_event:
         page.locator('[data-terminal-action="import"]').click()
     chooser_event.value.set_files(str(scratch / "run.json"))
-    page.locator("#terminal-notice").get_by_text("Manifest integrity verified", exact=False).wait_for(timeout=5_000)
+    page.locator("#terminal-notice").get_by_text("Manifest integrity verified", exact=False).wait_for(
+        timeout=5_000
+    )
     imported_notice = page.locator("#terminal-notice").inner_text()
-    exported_inputs = json.loads((scratch / "run.json").read_text(encoding="utf-8"))["payload"]["run"]["inputs"]
-    imported_inputs = page.locator('#terminal-run-form [name]').evaluate_all("els=>Object.fromEntries(els.map(e=>[e.name,Number(e.value)]))")
-    check(state, "valid JSON manifest imports after digest check and deterministic rerun",
-          "all 24 steps reproduced locally" in imported_notice and "does not establish authorship or scientific validity" in imported_notice
-          and imported_inputs == exported_inputs, imported_notice)
+    exported_inputs = json.loads((scratch / "run.json").read_text(encoding="utf-8"))["payload"]["run"][
+        "inputs"
+    ]
+    imported_inputs = page.locator("#terminal-run-form [name]").evaluate_all(
+        "els=>Object.fromEntries(els.map(e=>[e.name,Number(e.value)]))"
+    )
+    check(
+        state,
+        "valid JSON manifest imports after digest check and deterministic rerun",
+        "all 24 steps reproduced locally" in imported_notice
+        and "does not establish authorship or scientific validity" in imported_notice
+        and imported_inputs == exported_inputs,
+        imported_notice,
+    )
 
     open_command_palette(page, ":")
-    check(state, "Ctrl+K palette lists terminal commands", page.locator('[data-terminal-command=":preset island"]').count() == 1)
+    check(
+        state,
+        "Ctrl+K palette lists terminal commands",
+        page.locator('[data-terminal-command=":preset island"]').count() == 1,
+    )
     select_command(page, ":preset island")
     grid_value = page.locator('#terminal-run-form [name="gridKw"]').input_value()
-    check(state, "palette preset island performs a real zero-grid calculation", grid_value == "0", f"gridKw={grid_value}")
+    check(
+        state,
+        "palette preset island performs a real zero-grid calculation",
+        grid_value == "0",
+        f"gridKw={grid_value}",
+    )
 
     open_command_palette(page, ":pin")
     select_command(page, ":pin")
-    check(state, "palette :pin pins the completed preset", "pinned as baseline A" in page.locator("#terminal-notice").inner_text())
+    check(
+        state,
+        "palette :pin pins the completed preset",
+        "pinned as baseline A" in page.locator("#terminal-notice").inner_text(),
+    )
 
     open_command_palette(page, ":diff")
     select_command(page, ":diff")
-    check(state, "palette :diff opens the existing compare view", page.locator("#terminal-delta").is_visible())
+    check(
+        state, "palette :diff opens the existing compare view", page.locator("#terminal-delta").is_visible()
+    )
 
     page.evaluate("document.activeElement.dispatchEvent(new KeyboardEvent('keydown',{key:':',bubbles:true}))")
     page.locator("#command-search").wait_for(timeout=5_000)
-    check(state, "colon opener opens command palette with command filtering", page.locator("#command-search").input_value() == ":")
+    check(
+        state,
+        "colon opener opens command palette with command filtering",
+        page.locator("#command-search").input_value() == ":",
+    )
     page.locator("#command-search").fill(":export json")
     with page.expect_download(timeout=15_000) as download_event:
         page.locator('[data-terminal-command=":export json"]').click()
     download_event.value.save_as(str(scratch / "palette.json"))
     palette_manifest = json.loads((scratch / "palette.json").read_text(encoding="utf-8"))
-    check(state, "colon-opened command palette exports a verifiable JSON manifest",
-          bool(re.fullmatch(r"[a-f0-9]{64}", palette_manifest.get("stateSha256", ""))))
+    check(
+        state,
+        "colon-opened command palette exports a verifiable JSON manifest",
+        bool(re.fullmatch(r"[a-f0-9]{64}", palette_manifest.get("stateSha256", ""))),
+    )
 
     share_url = page.locator('[data-terminal-action="share"]')
     share_url.click()
-    page.wait_for_url(re.compile(r'.*[?&]terminal=.*#compare$'), wait_until='commit', timeout=10_000)
+    page.wait_for_url(re.compile(r".*[?&]terminal=.*#compare$"), wait_until="commit", timeout=10_000)
     shared = page.url
     parsed = urlparse(shared)
-    check(state, "share action writes exact terminal inputs to query state", "terminal=" in parsed.query and parsed.fragment == "compare", shared[:500])
+    check(
+        state,
+        "share action writes exact terminal inputs to query state",
+        "terminal=" in parsed.query and parsed.fragment == "compare",
+        shared[:500],
+    )
     query_page = page.context.new_page()
     query_errors: list[str] = []
     query_page.on("pageerror", lambda error: query_errors.append(str(error)))
     query_page.goto(shared, wait_until="load")
     query_page.locator("#terminal-root").wait_for(timeout=10_000)
     query_grid = query_page.locator('#terminal-run-form [name="gridKw"]').input_value()
-    query_state_ok = query_grid == "0" and "query inputs reproduced" in query_page.locator("#terminal-notice").inner_text()
-    check(state, "shared query reload reproduces candidate inputs in a new browser tab", query_state_ok, f"gridKw={query_grid}")
+    query_state_ok = (
+        query_grid == "0" and "query inputs reproduced" in query_page.locator("#terminal-notice").inner_text()
+    )
+    check(
+        state,
+        "shared query reload reproduces candidate inputs in a new browser tab",
+        query_state_ok,
+        f"gridKw={query_grid}",
+    )
     query_page.close()
     check(state, "query-state reload has no page exceptions", not query_errors, "; ".join(query_errors[:3]))
 
 
-def exercise_legacy_compare(page: Page, state: dict) -> None:
+def exercise_legacy_compare(page: Page, state: AuditState) -> None:
     page.goto(page.url.split("?")[0].split("#")[0] + "#hybrid", wait_until="load")
     page.locator("#hybrid-config").wait_for()
     page.locator("#architecture-library").scroll_into_view_if_needed()
     system_card_selector = '#architecture-library button[data-system="hospital-island"]'
     system_card = page.locator(system_card_selector)
     system_card.wait_for(state="visible", timeout=5_000)
-    page.evaluate("selector => { window.__terminalPreviousSystemCard = document.querySelector(selector); }",
-                  system_card_selector)
+    page.evaluate(
+        "selector => { window.__terminalPreviousSystemCard = document.querySelector(selector); }",
+        system_card_selector,
+    )
     system_card.click()
-    page.wait_for_function("""selector => {
+    page.wait_for_function(
+        """selector => {
       const previous = window.__terminalPreviousSystemCard;
       const current = document.querySelector(selector);
       return previous && !previous.isConnected && current && current !== previous && current.isConnected &&
         current.getAttribute('aria-pressed') === 'true' &&
         document.querySelector('#hybrid-system')?.value === 'hospital-island';
-    }""", arg=system_card_selector, timeout=5_000)
+    }""",
+        arg=system_card_selector,
+        timeout=5_000,
+    )
     # Selecting a system rebuilds the view. Measure the connected, selected
     # replacement card after it has entered layout, not its detached predecessor.
     system_card = page.locator(system_card_selector)
     system_card.wait_for(state="visible", timeout=5_000)
-    card_state = system_card.evaluate("el => ({pressed: el.getAttribute('aria-pressed'), height: el.getBoundingClientRect().height})")
+    card_state = system_card.evaluate(
+        "el => ({pressed: el.getAttribute('aria-pressed'), height: el.getBoundingClientRect().height})"
+    )
     page.locator("#hybrid-system").select_option("remote-triad")
-    page.wait_for_function("document.querySelector('#hybrid-system')?.value === 'remote-triad'", timeout=5_000)
+    page.wait_for_function(
+        "document.querySelector('#hybrid-system')?.value === 'remote-triad'", timeout=5_000
+    )
     selector_changed = page.locator("#hybrid-system").input_value() == "remote-triad"
     page.locator("#hybrid-system").select_option("hospital-island")
-    page.locator('#hybrid-output .hybrid-metrics').wait_for(timeout=5_000)
-    check(state, "architecture card and preset selector restore the bundled baseline",
-          card_state["pressed"] == "true" and card_state["height"] >= 44 and selector_changed
-          and page.locator("#run-hybrid").is_disabled() and "Bundled Python preset" in page.locator("#hybrid-output").inner_text(),
-          json.dumps({**card_state, "presetSelectorChanged": selector_changed}))
+    page.locator("#hybrid-output .hybrid-metrics").wait_for(timeout=5_000)
+    check(
+        state,
+        "architecture card and preset selector restore the bundled baseline",
+        card_state["pressed"] == "true"
+        and card_state["height"] >= 44
+        and selector_changed
+        and page.locator("#run-hybrid").is_disabled()
+        and "Bundled Python preset" in page.locator("#hybrid-output").inner_text(),
+        json.dumps({**card_state, "presetSelectorChanged": selector_changed}),
+    )
     page.locator('[data-hybrid-action="pin"]').click()
     page.locator('[data-scenario="outage-4h"]').click()
-    page.locator('#hybrid-output .hybrid-metrics').wait_for(timeout=5_000)
+    page.locator("#hybrid-output .hybrid-metrics").wait_for(timeout=5_000)
     page.locator('[data-hybrid-action="pin"]').click()
-    navigate(page, "compare", page.viewport_size["width"])
+    viewport = page.viewport_size
+    if viewport is None:
+        raise ValueError("Legacy comparison audit requires an explicit viewport")
+    navigate(page, "compare", viewport["width"])
     page.locator(".comparison-table").wait_for(timeout=5_000)
-    check(state, "original hybrid comparison still pins and shows two bundled cases",
-          "2 pinned runs" in page.locator(".compare-panel").inner_text()
-          and page.locator(".comparison-table thead th").count() == 3,
-          page.locator(".compare-panel").inner_text()[:350])
+    check(
+        state,
+        "original hybrid comparison still pins and shows two bundled cases",
+        "2 pinned runs" in page.locator(".compare-panel").inner_text()
+        and page.locator(".comparison-table thead th").count() == 3,
+        page.locator(".compare-panel").inner_text()[:350],
+    )
     page.locator('[data-hybrid-action="clear-compare"]').click()
     page.locator(".comparison-empty").wait_for(timeout=5_000)
 
@@ -419,7 +673,7 @@ def main() -> int:
     args = parse_args()
     report_path: Path = args.report.resolve()
     report_path.parent.mkdir(parents=True, exist_ok=True)
-    state: dict = {
+    state: AuditState = {
         "startedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "site": args.url or "local .cloudflare/site export",
         "routes": ROUTES,
@@ -440,8 +694,14 @@ def main() -> int:
         "scrollAreaControls": [],
         "screenshots": [],
         "limits": [
-            "Accessibility results are automated axe-core findings, not WCAG certification or a screen-reader audit.",
-            "The export is a static snapshot: new API calculations and native hosting/CSP behavior are not exercised.",
+            (
+                "Accessibility results are automated axe-core findings, not"
+                " WCAG certification or a screen-reader audit."
+            ),
+            (
+                "The export is a static snapshot: new API calculations and"
+                " native hosting/CSP behavior are not exercised."
+            ),
             "Only the Chromium build supplied by the audit environment is exercised.",
         ],
     }
@@ -449,12 +709,14 @@ def main() -> int:
     server: ThreadingHTTPServer | None = None
     if args.url:
         base_url = args.url.rstrip("/")
-        if base_url.endswith('/run'):
+        if base_url.endswith("/run"):
             base_url = base_url[:-4]
     else:
         site_dir = args.site_dir.resolve()
         if not site_dir.is_dir():
-            raise SystemExit(f"Static export not found: {site_dir}. Build it before running this browser audit.")
+            raise SystemExit(
+                f"Static export not found: {site_dir}. Build it before running this browser audit."
+            )
         handler = partial(SimpleHTTPRequestHandler, directory=str(site_dir))
         server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
         threading.Thread(target=server.serve_forever, daemon=True).start()
@@ -475,52 +737,91 @@ def main() -> int:
                 headless=True,
                 args=["--no-sandbox"] if args.executable else [],
             )
-            context = browser.new_context(ignore_https_errors=page_url.startswith('https://127.0.0.1:'), viewport={"width": 1440, "height": 1000}, accept_downloads=True,
-                                          reduced_motion="reduce")
+            context = browser.new_context(
+                ignore_https_errors=page_url.startswith("https://127.0.0.1:"),
+                viewport={"width": 1440, "height": 1000},
+                accept_downloads=True,
+                reduced_motion="reduce",
+            )
             page = context.new_page()
             origin = urlparse(page_url).netloc
             page.on("pageerror", lambda error: state["pageErrors"].append(str(error)))
-            def record_console_error(message: Any) -> None:
+
+            def record_console_error(message: ConsoleMessage) -> None:
                 if message.type != "error":
                     return
-                location = message.location or {}
+                location = message.location
                 error_origin = urlparse(location.get("url", "")).netloc
-                entry = {"type": message.type, "text": message.text[:500],
-                         "url": location.get("url", ""), "origin": error_origin,
-                         "line": location.get("lineNumber", 0), "column": location.get("columnNumber", 0)}
+                entry = {
+                    "type": message.type,
+                    "text": message.text[:500],
+                    "url": location.get("url", ""),
+                    "origin": error_origin,
+                    "line": location.get("lineNumber", 0),
+                    "column": location.get("columnNumber", 0),
+                }
                 state["consoleErrors"].append(entry)
-                destination = "sameOriginConsoleErrors" if error_origin == origin else "externalConsoleErrors"
-                state[destination].append(entry)
+                destination = (
+                    state["sameOriginConsoleErrors"]
+                    if error_origin == origin
+                    else state["externalConsoleErrors"]
+                )
+                destination.append(entry)
 
-            def record_failed_request(request: Any) -> None:
+            def record_failed_request(request: Request) -> None:
                 request_origin = urlparse(request.url).netloc
-                entry = {"url": request.url, "origin": request_origin, "failure": request.failure,
-                         "sameOrigin": request_origin == origin}
+                entry = {
+                    "url": request.url,
+                    "origin": request_origin,
+                    "failure": request.failure,
+                    "sameOrigin": request_origin == origin,
+                }
                 state["failedRequests"].append(entry)
-                destination = "sameOriginFailedRequests" if request_origin == origin else "externalFailedRequests"
-                state[destination].append(entry)
+                destination = (
+                    state["sameOriginFailedRequests"]
+                    if request_origin == origin
+                    else state["externalFailedRequests"]
+                )
+                destination.append(entry)
 
             page.on("console", record_console_error)
             page.on("requestfailed", record_failed_request)
-            page.on("response", lambda response: state["badResponses"].append({"url": response.url, "status": response.status})
-                    if urlparse(response.url).netloc == origin and response.status >= 400 else None)
+            page.on(
+                "response",
+                lambda response: (
+                    state["badResponses"].append({"url": response.url, "status": response.status})
+                    if urlparse(response.url).netloc == origin and response.status >= 400
+                    else None
+                ),
+            )
             page.goto(page_url + "#compare", wait_until="load", timeout=30_000)
             page.locator("#terminal-root").wait_for(timeout=15_000)
-            check(state, "export route loads the browser app and integrated workbench", page.locator("#terminal-root").count() == 1)
+            check(
+                state,
+                "export route loads the browser app and integrated workbench",
+                page.locator("#terminal-root").count() == 1,
+            )
 
             # Rasterize computed colours to sRGB so OKLCH inherits are measured,
             # including count text that an automated accessibility scan can miss.
             count_contrast = rendered_text_contrasts(page, "#champion-toolbar .workbench-actions b")
-            check(state, "toolbar count readouts clear 4.5:1 rendered contrast",
-                  len(count_contrast) == 2 and min(count_contrast) >= 4.5, json.dumps(count_contrast))
+            check(
+                state,
+                "toolbar count readouts clear 4.5:1 rendered contrast",
+                len(count_contrast) == 2 and min(count_contrast) >= 4.5,
+                json.dumps(count_contrast),
+            )
 
             navigate(page, "pv", 1440)
             page.locator('[data-study-select="pv-sensitivity"]').click()
             page.locator('[data-pv-cell="80"]').wait_for()
             pv_contrast = rendered_text_contrasts(page, "[data-pv-cell]")
-            check(state, "all 81 original PV matrix values clear 4.5:1 rendered contrast",
-                  len(pv_contrast) == 81 and min(pv_contrast) >= 4.5,
-                  f"cells={len(pv_contrast)}; min={min(pv_contrast) if pv_contrast else None}")
+            check(
+                state,
+                "all 81 original PV matrix values clear 4.5:1 rendered contrast",
+                len(pv_contrast) == 81 and min(pv_contrast) >= 4.5,
+                f"cells={len(pv_contrast)}; min={min(pv_contrast) if pv_contrast else None}",
+            )
             navigate(page, "compare", 1440)
 
             # Exercise actual navigation in every view at every requested width.
@@ -533,15 +834,25 @@ def main() -> int:
                         ok = overflow["document"] <= width
                         if overflow["body"] > width and ok:
                             state["bodyContentOverhangs"].append({"route": route, **overflow})
-                        check(state, f"{route} has no page-level horizontal overflow at {width}px", ok,
-                              "" if ok else json.dumps(overflow))
+                        check(
+                            state,
+                            f"{route} has no page-level horizontal overflow at {width}px",
+                            ok,
+                            "" if ok else json.dumps(overflow),
+                        )
                         offscreen = offscreen_controls(page)
-                        state["clippedControls"].extend({"route": route, "width": width, **item}
-                                                       for item in offscreen["clipped"])
-                        state["scrollAreaControls"].extend({"route": route, "width": width, **item}
-                                                           for item in offscreen["scrollArea"])
-                        check(state, f"{route} has no clipped interactive controls at {width}px",
-                              not offscreen["clipped"], json.dumps(offscreen["clipped"][:5]))
+                        state["clippedControls"].extend(
+                            {"route": route, "width": width, **item} for item in offscreen["clipped"]
+                        )
+                        state["scrollAreaControls"].extend(
+                            {"route": route, "width": width, **item} for item in offscreen["scrollArea"]
+                        )
+                        check(
+                            state,
+                            f"{route} has no clipped interactive controls at {width}px",
+                            not offscreen["clipped"],
+                            json.dumps(offscreen["clipped"][:5]),
+                        )
                     except Exception as exc:
                         fail(state, f"{route} navigation at {width}px", str(exc))
                 if width in (375, 1440):
@@ -551,7 +862,9 @@ def main() -> int:
                             if axe_path.is_file():
                                 audit_accessibility(page, axe_path, route, width, state)
                         except Exception as exc:
-                            state["accessibilityErrors"].append({"route": route, "width": width, "error": str(exc)})
+                            state["accessibilityErrors"].append(
+                                {"route": route, "width": width, "error": str(exc)}
+                            )
 
             if args.screenshots:
                 page.set_viewport_size({"width": 1440, "height": 1000})
@@ -562,7 +875,9 @@ def main() -> int:
                 state["screenshots"].append(str(desktop))
                 page.set_viewport_size({"width": 375, "height": 844})
                 navigate(page, "compare", 375)
-                page.screenshot(path=str(screenshot_dir / "terminal-mobile.png"), full_page=False, animations="disabled")
+                page.screenshot(
+                    path=str(screenshot_dir / "terminal-mobile.png"), full_page=False, animations="disabled"
+                )
                 state["screenshots"].append(str(screenshot_dir / "terminal-mobile.png"))
 
             with TemporaryDirectory(prefix="helioforge-terminal-audit-") as tmp:
@@ -570,12 +885,30 @@ def main() -> int:
                 exercise_legacy_compare(page, state)
                 exercise_terminal(page, state, scratch, screenshot_dir if args.screenshots else None)
 
-            check(state, "no uncaught page exceptions", not state["pageErrors"], "; ".join(state["pageErrors"][:5]))
-            check(state, "no same-origin console errors", not state["sameOriginConsoleErrors"],
-                  json.dumps(state["sameOriginConsoleErrors"][:5]))
-            check(state, "no failed same-origin resource requests", not state["sameOriginFailedRequests"],
-                  json.dumps(state["sameOriginFailedRequests"][:5]))
-            check(state, "no same-origin 4xx/5xx responses", not state["badResponses"], json.dumps(state["badResponses"][:5]))
+            check(
+                state,
+                "no uncaught page exceptions",
+                not state["pageErrors"],
+                "; ".join(state["pageErrors"][:5]),
+            )
+            check(
+                state,
+                "no same-origin console errors",
+                not state["sameOriginConsoleErrors"],
+                json.dumps(state["sameOriginConsoleErrors"][:5]),
+            )
+            check(
+                state,
+                "no failed same-origin resource requests",
+                not state["sameOriginFailedRequests"],
+                json.dumps(state["sameOriginFailedRequests"][:5]),
+            )
+            check(
+                state,
+                "no same-origin 4xx/5xx responses",
+                not state["badResponses"],
+                json.dumps(state["badResponses"][:5]),
+            )
 
             browser_version = browser.version
             state["browser"] = {"name": "Chromium", "version": browser_version}
@@ -597,8 +930,8 @@ def main() -> int:
         "axeExecutionErrors": len(state["accessibilityErrors"]),
     }
     report_path.write_text(json.dumps(state, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(json.dumps(state["summary"], indent=2))
-    print(f"Report: {report_path}")
+    print(json.dumps(state["summary"], indent=2))  # noqa: T201 -- CLI report output.
+    print(f"Report: {report_path}")  # noqa: T201 -- CLI report output.
     return 1 if state["summary"]["failed"] else 0
 
 

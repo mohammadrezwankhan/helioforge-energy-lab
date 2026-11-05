@@ -15,9 +15,13 @@ import socket
 import struct
 import subprocess
 import tempfile
+
+# XMLParser below uses NoDoctypeTreeBuilder; UTF-8/UTF-16 entity tests prove rejection.
+# nosemgrep: python.lang.security.use-defused-xml.use-defused-xml
 import xml.etree.ElementTree as ET
-from datetime import date, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta
 from email.utils import parsedate_to_datetime
+from itertools import pairwise
 from pathlib import Path
 from typing import Literal
 from urllib.parse import urlparse
@@ -25,6 +29,26 @@ from urllib.parse import urlparse
 import httpx
 from pydantic import Field, model_validator
 
+from helioforge.integration_types import (
+    ConnectorStatus,
+    DocumentCandidate,
+    DocumentResult,
+    GeographyResult,
+    GeographyRow,
+    ImportProvenance,
+    MarketResult,
+    ModbusResult,
+    PriceRow,
+    PublicationResult,
+    PublicationRow,
+    ReadConnection,
+    SeriesResult,
+    SeriesRow,
+    TelemetryResult,
+    TelemetryRow,
+    WeatherResult,
+    WeatherRow,
+)
 from helioforge.schemas import Market, StrictModel
 
 AREAS = {
@@ -52,14 +76,14 @@ def utc(value: str) -> datetime:
         raise ValueError("Use an ISO 8601 timestamp with an explicit UTC offset.") from None
     if result.tzinfo is None:
         raise ValueError("Timestamp must include Z or an explicit UTC offset.")
-    return result.astimezone(timezone.utc)
+    return result.astimezone(UTC)
 
 
-def provenance(raw: bytes, kind: str) -> dict:
+def provenance(raw: bytes, kind: str) -> ImportProvenance:
     return {
         "sha256": hashlib.sha256(raw).hexdigest(),
         "data_kind": kind,
-        "retrieved_at": datetime.now(timezone.utc).isoformat(),
+        "retrieved_at": datetime.now(UTC).isoformat(),
         "authenticity": "unverified",
         "warnings": ["A file digest detects changes; it does not verify factual truth, origin or approval."],
     }
@@ -71,25 +95,26 @@ class SeriesImport(StrictModel):
     source: str = Field(default="User supplied CSV", min_length=1, max_length=200)
 
 
-def import_series(p: SeriesImport) -> dict:
+def import_series(p: SeriesImport) -> SeriesResult:
     reader = csv.DictReader(io.StringIO(p.text.lstrip("\ufeff")))
     if reader.fieldnames != ["timestamp", "value"]:
         raise ValueError("CSV columns must be exactly timestamp,value. Declare the unit separately.")
-    rows, times = [], []
+    rows: list[SeriesRow] = []
+    times: list[datetime] = []
     for row in reader:
         if len(rows) >= 20000 or None in row or None in row.values():
             raise ValueError("CSV must contain at most 20000 complete rows.")
         stamp = utc(row["timestamp"])
         value = float(row["value"])
         if not math.isfinite(value) or abs(value) > 1e12:
-            raise ValueError("Series values must be finite and within ±1e12.")
+            raise ValueError("Series values must be finite and within \xb11e12.")
         if times and stamp <= times[-1]:
             raise ValueError("Timestamps must be unique and increasing; no silent sorting or filling.")
         times.append(stamp)
         rows.append({"timestamp": stamp.isoformat(), "value": value, "unit": p.unit})
     if not rows:
         raise ValueError("Supply at least one data row.")
-    gaps = [(b - a).total_seconds() for a, b in zip(times, times[1:])]
+    gaps = [(b - a).total_seconds() for a, b in pairwise(times)]
     regular = not gaps or min(gaps) == max(gaps)
     return {
         **provenance(p.text.encode(), "user_supplied_unverified"),
@@ -113,10 +138,10 @@ class DocumentImport(StrictModel):
 
 
 class GeoImport(StrictModel):
-    geojson: dict = Field(max_length=3)
+    geojson: dict[str, object] = Field(max_length=3)
 
 
-def import_geography(p: GeoImport) -> dict:
+def import_geography(p: GeoImport) -> GeographyResult:
     document = p.geojson
     features = document.get("features")
     if (
@@ -124,8 +149,8 @@ def import_geography(p: GeoImport) -> dict:
         or not isinstance(features, list)
         or not 1 <= len(features) <= 200
     ):
-        raise ValueError("Supply a GeoJSON FeatureCollection with 1–200 Point assets.")
-    rows = []
+        raise ValueError("Supply a GeoJSON FeatureCollection with 1\N{EN DASH}200 Point assets.")
+    rows: list[GeographyRow] = []
     for index, feature in enumerate(features):
         if not isinstance(feature, dict) or feature.get("type") != "Feature":
             raise ValueError("Each asset must be a GeoJSON Feature.")
@@ -161,17 +186,20 @@ def import_geography(p: GeoImport) -> dict:
         **provenance(raw, "user_supplied_unverified"),
         "geojson": document,
         "rows": rows,
-        "notice": "Coordinates are supplied by the user. No parcel ownership, survey precision or geographic validity is certified.",
+        "notice": (
+            "Coordinates are supplied by the user. No parcel ownership, survey precision or geographic vali"
+            "dity is certified."
+        ),
     }
 
 
-def extract_document(p: DocumentImport) -> dict:
+def extract_document(p: DocumentImport) -> DocumentResult:
     try:
         raw = base64.b64decode(p.content_base64, validate=True)
     except ValueError:
         raise ValueError("Document is not valid base64.") from None
     if not raw or len(raw) > 700000:
-        raise ValueError("Document must be 1–700000 bytes.")
+        raise ValueError("Document must be 1\N{EN DASH}700000 bytes.")
     ext = Path(p.filename).suffix.lower()
     method = "utf8_text"
     if ext in {".txt", ".csv", ".json", ".md", ".xml"}:
@@ -186,7 +214,8 @@ def extract_document(p: DocumentImport) -> dict:
         program = shutil.which("pdftotext" if pdf else "tesseract")
         if not program:
             raise ValueError(
-                "Install pdftotext (Poppler) for PDF text or Tesseract for local image OCR; no extraction was performed."
+                "Install pdftotext (Poppler) for PDF text or Tesseract for local image OCR; no extracti"
+                "on was performed."
             )
         with tempfile.TemporaryDirectory(prefix="helioforge-document-") as folder:
             source, output = Path(folder) / ("input" + ext), Path(folder) / "extracted.txt"
@@ -197,7 +226,8 @@ def extract_document(p: DocumentImport) -> dict:
                 else [program, str(source), str(output.with_suffix("")), "--psm", "3"]
             )
             try:
-                subprocess.run(
+                # Fixed resolved parser, separate temporary paths/options, no shell; bounded at 20 seconds.
+                subprocess.run(  # noqa: S603 -- document bytes never select an executable or command flags.
                     command,
                     check=True,
                     timeout=20,
@@ -219,9 +249,9 @@ def extract_document(p: DocumentImport) -> dict:
         raise ValueError(
             "Document has no usable text or exceeds 200000 characters. Scanned PDFs need image OCR."
         )
-    candidates = []
+    candidates: list[DocumentCandidate] = []
     patterns = {
-        "tariff": r"\b(?:EUR|€|GBP|kWh|MWh|tariff|price)\b",
+        "tariff": ("\\b(?:EUR|\u20ac|GBP|kWh|MWh|tariff|price)\\b"),
         "warranty": r"\b(?:warranty|cycles?|retained|throughput|capacity)\b",
         "diagram": r"\b(?:bus|breaker|transformer|inverter|kV|kVA)\b",
         "epd": r"\b(?:EPD|CO2|GWP|cradle|PCR|verified)\b",
@@ -242,7 +272,10 @@ def extract_document(p: DocumentImport) -> dict:
         "extracted_candidates": candidates,
         "date_candidates": dates,
         "identity_verified": False,
-        "notice": "Candidates are text matches, not verified contract terms or electrical topology. Review against the original.",
+        "notice": (
+            "Candidates are text matches, not verified contract terms or electrical topology. Review agains"
+            "t the original."
+        ),
     }
 
 
@@ -254,7 +287,7 @@ class Reading(StrictModel):
     critical: float = Field(default=80, ge=-1e9, le=1e9)
 
     @model_validator(mode="after")
-    def order(self):
+    def order(self) -> Reading:
         if self.warning >= self.critical:
             raise ValueError("High warning threshold must be below the critical threshold.")
         return self
@@ -267,15 +300,19 @@ class TelemetryImport(StrictModel):
     stale_after_seconds: float = Field(default=60, ge=1, le=86400)
 
 
-def inspect_telemetry(p: TelemetryImport, now: datetime | None = None) -> dict:
-    age = ((now or datetime.now(timezone.utc)) - utc(p.timestamp)).total_seconds()
+def inspect_telemetry(p: TelemetryImport, now: datetime | None = None) -> TelemetryResult:
+    age = ((now or datetime.now(UTC)) - utc(p.timestamp)).total_seconds()
     if age < -30:
         raise ValueError("Telemetry timestamp is in the future by more than 30 seconds.")
     if len({r.channel for r in p.readings}) != len(p.readings):
         raise ValueError("Telemetry channels must be unique.")
-    rows = [
+    rows: list[TelemetryRow] = [
         {
-            **r.model_dump(),
+            "channel": r.channel,
+            "value": r.value,
+            "unit": r.unit,
+            "warning": r.warning,
+            "critical": r.critical,
             "threshold_state": "critical"
             if r.value >= r.critical
             else "warning"
@@ -292,7 +329,10 @@ def inspect_telemetry(p: TelemetryImport, now: datetime | None = None) -> dict:
         "stale": age > p.stale_after_seconds,
         "readings": rows,
         "operational_alarm": False,
-        "notice": "Read-only diagnostic thresholds. Sensor calibration, units, timing and safety alarm validation remain external.",
+        "notice": (
+            "Read-only diagnostic thresholds. Sensor calibration, units, timing and safety alarm validation"
+            " remain external."
+        ),
     }
 
 
@@ -327,17 +367,18 @@ def regulator_url(url: str, market: str) -> bool:
     )
 
 
-async def regulatory_feed(p: RegulatoryRequest) -> dict:
+async def regulatory_feed(p: RegulatoryRequest) -> PublicationResult:
     mapping = json.loads(os.getenv("HELIOFORGE_REGULATORY_FEEDS", "{}"))
     url = mapping.get(p.market) if isinstance(mapping, dict) else None
     if not isinstance(url, str) or not regulator_url(url, p.market):
         raise ValueError(
-            "Configure an official regulator HTTPS RSS/Atom URL in HELIOFORGE_REGULATORY_FEEDS for this market."
+            "Configure an official regulator HTTPS RSS/Atom URL in HELIOFORGE_REGULATORY_FEEDS for this"
+            " market."
         )
     raw = await upstream(url, {})
     root = xml_root(raw)
     entries = root.findall(".//item") or root.findall(".//entry")
-    rows = []
+    rows: list[PublicationRow] = []
     for entry in entries[:100]:
         title = entry.findtext("title") or ""
         link_node = entry.find("link")
@@ -353,7 +394,7 @@ async def regulatory_feed(p: RegulatoryRequest) -> dict:
                 try:
                     dt = parsedate_to_datetime(stamp)
                     if dt.tzinfo:
-                        published = dt.astimezone(timezone.utc).isoformat()
+                        published = dt.astimezone(UTC).isoformat()
                 except (TypeError, ValueError):
                     pass
         description = " ".join(entry.itertext())
@@ -379,11 +420,14 @@ async def regulatory_feed(p: RegulatoryRequest) -> dict:
         "changed_since_previous": None
         if p.previous_sha256 is None
         else evidence["sha256"] != p.previous_sha256,
-        "notice": "Publication timestamps and text date candidates are not legal effective dates. Exact instruments, amendments and applicability require local legal review.",
+        "notice": (
+            "Publication timestamps and text date candidates are not legal effective dates. Exact instrumen"
+            "ts, amendments and applicability require local legal review."
+        ),
     }
 
 
-async def upstream(url: str, params: dict) -> bytes:
+async def upstream(url: str, params: dict[str, str | float]) -> bytes:
     # URLs are constants chosen by code, never provided in a browser request. No redirects.
     async with httpx.AsyncClient(timeout=15, follow_redirects=False, trust_env=False) as client:
         try:
@@ -404,8 +448,16 @@ async def upstream(url: str, params: dict) -> bytes:
             ) from None
 
 
-async def weather(p: WeatherRequest) -> dict:
-    params = {
+def _weather_value(value: object) -> float | None:
+    if value is not None and (
+        isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value)
+    ):
+        raise ValueError("Weather response contains invalid values.")
+    return value
+
+
+async def weather(p: WeatherRequest) -> WeatherResult:
+    params: dict[str, str | float] = {
         "latitude": p.latitude,
         "longitude": p.longitude,
         "forecast_days": p.days,
@@ -422,20 +474,34 @@ async def weather(p: WeatherRequest) -> dict:
         else "https://api.open-meteo.com/v1/forecast",
         params,
     )
-    body = json.loads(raw)
-    h = body.get("hourly", {})
-    names = ("time", "temperature_2m", "wind_speed_10m", "shortwave_radiation")
-    if not all(isinstance(h.get(k), list) for k in names) or len({len(h[k]) for k in names}) != 1:
+    body: object = json.loads(raw)
+    if not isinstance(body, dict):
+        raise ValueError("Weather response must be a JSON object.")
+    hourly = body.get("hourly", {})
+    if not isinstance(hourly, dict):
         raise ValueError("Weather response arrays are missing or inconsistent.")
-    rows = []
-    for i, t in enumerate(h["time"]):
-        row = {"timestamp": utc(str(t) + "Z").isoformat()}
-        for key in names[1:]:
-            v = h[key][i]
-            if v is not None and (not isinstance(v, (int, float)) or not math.isfinite(v)):
-                raise ValueError("Weather response contains invalid values.")
-            row[key] = v
-        rows.append(row)
+    names = ("time", "temperature_2m", "wind_speed_10m", "shortwave_radiation")
+    arrays: dict[str, list[object]] = {}
+    for name in names:
+        values = hourly.get(name)
+        if not isinstance(values, list):
+            raise ValueError("Weather response arrays are missing or inconsistent.")
+        arrays[name] = values
+    if len({len(arrays[name]) for name in names}) != 1:
+        raise ValueError("Weather response arrays are missing or inconsistent.")
+    rows: list[WeatherRow] = [
+        {
+            "timestamp": utc(str(stamp) + "Z").isoformat(),
+            "temperature_2m": _weather_value(arrays["temperature_2m"][index]),
+            "wind_speed_10m": _weather_value(arrays["wind_speed_10m"][index]),
+            "shortwave_radiation": _weather_value(arrays["shortwave_radiation"][index]),
+        }
+        for index, stamp in enumerate(arrays["time"])
+    ]
+    units_value = body.get("hourly_units", {})
+    if not isinstance(units_value, dict) or not all(isinstance(value, str) for value in units_value.values()):
+        raise ValueError("Weather response units must be a JSON object containing text values.")
+    units: dict[str, str] = units_value
     return {
         **provenance(raw, "external_weather_forecast"),
         "source": "Open-Meteo",
@@ -443,21 +509,22 @@ async def weather(p: WeatherRequest) -> dict:
         "attribution": "Weather data by Open-Meteo.com; check provider licence and commercial access terms.",
         "coordinates": {"latitude": p.latitude, "longitude": p.longitude},
         "rows": rows,
-        "units": body.get("hourly_units", {}),
+        "units": units,
         "notice": "Numerical weather prediction, not field measurements or energy yield.",
     }
 
 
-def xml_root(raw: bytes):
+def xml_root(raw: bytes) -> ET.Element:
     class NoDoctypeTreeBuilder(ET.TreeBuilder):
-        def doctype(self, name, pubid, system):
+        def doctype(self, _name: str, _pubid: str | None, _system: str | None) -> None:
             # Parser callbacks cover UTF-16 too; a byte regex alone does not.
             raise ValueError("XML entities and document types are forbidden.")
 
     if re.search(rb"<!\s*(?:DOCTYPE|ENTITY)", raw, re.I):
         raise ValueError("XML entities and document types are forbidden.")
     try:
-        root = ET.fromstring(raw, parser=ET.XMLParser(target=NoDoctypeTreeBuilder()))
+        # The callback rejects DTDs after UTF-8/UTF-16 decoding, before entity expansion.
+        root = ET.fromstring(raw, parser=ET.XMLParser(target=NoDoctypeTreeBuilder()))  # noqa: S314
     except ET.ParseError:
         raise ValueError("Upstream XML is invalid.") from None
     for element in root.iter():
@@ -465,9 +532,9 @@ def xml_root(raw: bytes):
     return root
 
 
-def parse_entsoe(raw: bytes) -> list[dict]:
+def parse_entsoe(raw: bytes) -> list[PriceRow]:
     root = xml_root(raw)
-    rows = []
+    rows: list[PriceRow] = []
     for series in root.findall(".//TimeSeries"):
         if (
             series.findtext("currency_Unit.name") != "EUR"
@@ -484,7 +551,7 @@ def parse_entsoe(raw: bytes) -> list[dict]:
                 utc(period.findtext("timeInterval/start") or ""),
                 utc(period.findtext("timeInterval/end") or ""),
             )
-            resolution = {"PT15M": 900, "PT30M": 1800, "PT60M": 3600}.get(period.findtext("resolution"))
+            resolution = {"PT15M": 900, "PT30M": 1800, "PT60M": 3600}.get(period.findtext("resolution") or "")
             if not resolution:
                 raise ValueError("Unsupported price resolution.")
             count = (end - start).total_seconds() / resolution
@@ -523,7 +590,7 @@ def parse_entsoe(raw: bytes) -> list[dict]:
     return rows
 
 
-async def market_prices(p: MarketRequest) -> dict:
+async def market_prices(p: MarketRequest) -> MarketResult:
     token = os.getenv("ENTSOE_API_TOKEN")
     if not token:
         raise ValueError("Set server-side ENTSOE_API_TOKEN for live day-ahead prices.")
@@ -545,7 +612,10 @@ async def market_prices(p: MarketRequest) -> dict:
         "source": "ENTSO-E Transparency Platform",
         "source_url": "https://transparency.entsoe.eu/",
         "rows": parse_entsoe(raw),
-        "notice": "UTC request day. Italy uses North bidding zone; GB availability varies. No customer tariff or legal eligibility is inferred.",
+        "notice": (
+            "UTC request day. Italy uses North bidding zone; GB availability varies. No customer tariff or "
+            "legal eligibility is inferred."
+        ),
     }
 
 
@@ -553,7 +623,7 @@ class ModbusRequest(StrictModel):
     device: str = Field(min_length=1, max_length=80, pattern=r"^[a-zA-Z0-9_-]+$")
 
 
-def receive_exact(connection, n: int) -> bytes:
+def receive_exact(connection: ReadConnection, n: int) -> bytes:
     data = b""
     while len(data) < n:
         chunk = connection.recv(n - len(data))
@@ -563,15 +633,29 @@ def receive_exact(connection, n: int) -> bytes:
     return data
 
 
-def modbus_read(p: ModbusRequest) -> dict:
+def _modbus_integer(value: object) -> int:
+    if isinstance(value, bool) or not isinstance(value, (int, float, str)):
+        raise ValueError("Invalid server Modbus read configuration.")
+    try:
+        result = int(value)
+    except (ValueError, OverflowError):
+        raise ValueError("Invalid server Modbus read configuration.") from None
+    if isinstance(value, float) and value != result:
+        raise ValueError("Invalid server Modbus read configuration.")
+    return result
+
+
+def modbus_read(p: ModbusRequest) -> ModbusResult:
     """Only preconfigured read-only register ranges; no UI-provided host/address/write function."""
-    devices = json.loads(os.getenv("HELIOFORGE_MODBUS_DEVICES", "{}"))
+    devices: object = json.loads(os.getenv("HELIOFORGE_MODBUS_DEVICES", "{}"))
+    if not isinstance(devices, dict):
+        raise ValueError("Server HELIOFORGE_MODBUS_DEVICES must be a JSON object.")
     cfg = devices.get(p.device)
     if not isinstance(cfg, dict):
         raise ValueError("Device is not in the server-side HELIOFORGE_MODBUS_DEVICES allow-list.")
     host = str(cfg.get("host", ""))
     port, unit, address, count, function = (
-        int(cfg.get(k, d))
+        _modbus_integer(cfg.get(k, d))
         for k, d in [("port", 502), ("unit", 1), ("address", 0), ("count", 4), ("function", 4)]
     )
     if (
@@ -600,17 +684,20 @@ def modbus_read(p: ModbusRequest) -> dict:
         ) from None
     if len(payload) != 2 + 2 * count or payload[0] != function or payload[1] != 2 * count:
         raise ValueError("Modbus returned an exception or unexpected register count.")
-    values = list(struct.unpack(">" + "H" * count, payload[2:]))
+    values: tuple[int, ...] = struct.unpack(">" + "H" * count, payload[2:])
     return {
         **provenance(header + payload, "external_device_unverified"),
         "device": p.device,
         "function": function,
         "rows": [{"register": address + i, "value": v, "unit": "raw"} for i, v in enumerate(values)],
-        "notice": "Unsigned 16-bit raw registers. Manufacturer scale, byte order and sensor calibration must be verified. Read-only; no plant control.",
+        "notice": (
+            "Unsigned 16-bit raw registers. Manufacturer scale, byte order and sensor calibration must be v"
+            "erified. Read-only; no plant control."
+        ),
     }
 
 
-def connector_status() -> dict:
+def connector_status() -> ConnectorStatus:
     return {
         "weather": {
             "configured": True,
@@ -628,5 +715,8 @@ def connector_status() -> dict:
             "pdf": bool(shutil.which("pdftotext")),
             "image_ocr": bool(shutil.which("tesseract")),
         },
-        "notice": "Configuration does not establish successful access, validation, identity or operational approval.",
+        "notice": (
+            "Configuration does not establish successful access, validation, identity or operational approv"
+            "al."
+        ),
     }
