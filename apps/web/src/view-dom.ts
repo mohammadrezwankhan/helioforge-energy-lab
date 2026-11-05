@@ -112,12 +112,15 @@ namespace HF { // eslint-disable-line @typescript-eslint/no-namespace, @typescri
       if (element.namespaceURI === 'http://www.w3.org/2000/svg') {
         if (!/^#[A-Za-z][\w:.-]*$/.test(value)) throw new Error('Unsupported SVG reference');
       } else {
-        const url = new URL(value, element.ownerDocument.baseURI);
-        if (
-          !['http:', 'https:', 'mailto:', 'file:'].includes(url.protocol) ||
-          /[\u0000-\u001f\u007f]/.test(value)
-        )
+        if (/[\u0000-\u001f\u007f]/.test(value))
           throw new Error('Unsupported view link');
+        // Fragment-only navigation stays inside this document, including offline
+        // previews with an opaque about:blank base. Other links need a safe scheme.
+        if (!value.startsWith('#')) {
+          const url = new URL(value, element.ownerDocument.baseURI);
+          if (!['http:', 'https:', 'mailto:', 'file:'].includes(url.protocol))
+            throw new Error('Unsupported view link');
+        }
       }
     }
     // SVG presentation attributes are CSS too. Reject escapes and comments before

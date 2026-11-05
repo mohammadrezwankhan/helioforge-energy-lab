@@ -3,14 +3,20 @@
 import hashlib
 import json
 import platform
-import urllib.error
-import urllib.request
+import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from scripts.publication_http import (  # noqa: E402 -- repository root set above
+    PUBLICATION_ROUTES,
+    fetch_publication_route,
+)
+
 OUT = ROOT / "docs/remediation-20261028/deployed"
 OUT.mkdir(parents=True, exist_ok=True)
 request_records: list[dict[str, object]] = []
@@ -22,15 +28,12 @@ report: dict[str, object] = {
     "requests": request_records,
     "browser": browser_observation,
 }
-for path in ["app.json", "run/", "robots.txt", "sitemap.xml", "about/", "methodology/", ""]:
+for path in PUBLICATION_ROUTES:
     url = "https://mkgrid.co.technology/" + path
     item: dict[str, object] = {"url": url}
     try:
-        try:
-            response = urllib.request.urlopen(url, timeout=30)
-        except urllib.error.HTTPError as exc:
-            response = exc
-        data = response.read()
+        response = fetch_publication_route(path)
+        data = response.body
         item.update(
             http_status=response.status,
             headers=dict(response.headers),

@@ -1,5 +1,21 @@
 title = "Rezwan default secret detection"
-# Keep the complete upstream rule set. There are no repository-wide ignores,
-# baseline suppressions, or path-based allowances for historical findings.
+# Preserve every upstream rule and the complete history/working-tree scope.
+# Exceptions bind a proven noncredential value to its exact field, path and rule.
 [extend]
 useDefault = true
+
+[[allowlists]]
+description = "Synthetic Pareto scenario identifier; see .github/security/reviews/helio-secret-findings.json"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''^(?:/tmp/rezwan-secret-source-[^/]+/)?(?:apps/api/helioforge/engines/workflow_studies\.py|apps/web/src/roadmap-data\.ts|apps/web/dist/app\.js|HelioForge-Preview\.html|docs/remediation-20261028/deployed/browser-runtime\.body)$''']
+regexTarget = "match"
+regexes = ['''^scenario_key"\s*:\s*"hospital\-2030"$''']
+
+[[allowlists]]
+description = "Verified test_api.py source SHA-256; see .github/security/reviews/helio-secret-findings.json"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''^(?:/tmp/rezwan-secret-source-[^/]+/)?docs/remediation-20261029/council-results\.json$''']
+regexTarget = "line"
+regexes = ['''^\s*"apps/api/tests/test_api\.py"\s*:\s*"b178c6fd9c8d6de334a73d4efd3c257e6e9cf49bd639dba447c76e84db4e6bc2",?\s*$''']

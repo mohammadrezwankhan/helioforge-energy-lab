@@ -75,6 +75,7 @@ class Handler(BaseHTTPRequestHandler):
 server = ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
 if args.tls_cert:
     tls = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    tls.minimum_version = ssl.TLSVersion.TLSv1_2
     tls.load_cert_chain(args.tls_cert, args.tls_key)
     server.socket = tls.wrap_socket(server.socket, server_side=True)
 print(  # noqa: T201 -- CLI report output.

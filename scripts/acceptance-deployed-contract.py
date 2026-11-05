@@ -10,6 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+from scripts.html_scripts import script_blocks  # noqa: E402 -- repository root set above
 from scripts.xml_guard import parse_xml  # noqa: E402 -- repository root set above
 
 OUT = ROOT / "docs/remediation-20261028"
@@ -50,18 +51,18 @@ for route, label in [("", "overview"), ("about/", "about"), ("methodology/", "me
         bool(re.search(r'<link[^>]+rel="canonical"[^>]+href="' + re.escape(canonical) + '"', text)),
         canonical,
     )
+    scripts = script_blocks(text)
     structured = [
-        json.loads(m)
-        for m in re.findall(
-            r'<script[^>]+type="application/ld\+json"[^>]*>(.*?)</script\s*>', text, re.S | re.I
-        )
+        json.loads(block.body)
+        for block in scripts
+        if (block.attributes.get("type") or "").lower() == "application/ld+json"
     ]
     check(f"{route or '/'} parseable structured data", bool(structured), {"blocks": len(structured)})
     policy = row["headers"]["content-security-policy"]
     hashes = [
-        "'sha256-" + base64.b64encode(hashlib.sha256(s.encode()).digest()).decode() + "'"
-        for s in re.findall(r"<script\b[^>]*>(.*?)</script\s*>", text, re.S | re.I)
-        if s.strip()
+        "'sha256-" + base64.b64encode(hashlib.sha256(block.body.encode()).digest()).decode() + "'"
+        for block in scripts
+        if block.body.strip()
     ]
     check(
         f"{route or '/'} inline scripts covered by effective CSP",
@@ -98,9 +99,9 @@ check("real missing-route HTTP 404", missing["status"] == 404, missing["status"]
 runtime = (DEP / "browser-runtime.body").read_bytes().decode("utf-8")
 policy = browser["headers"]["content-security-policy"]
 hashes = [
-    "'sha256-" + base64.b64encode(hashlib.sha256(s.encode()).digest()).decode() + "'"
-    for s in re.findall(r"<script\b[^>]*>(.*?)</script\s*>", runtime, re.S | re.I)
-    if s.strip()
+    "'sha256-" + base64.b64encode(hashlib.sha256(block.body.encode()).digest()).decode() + "'"
+    for block in script_blocks(runtime)
+    if block.body.strip()
 ]
 check("runtime inline scripts covered by effective CSP", all(h in policy for h in hashes), hashes)
 summary = {status: sum(r["status"] == status for r in checks) for status in ["PASS", "FAIL"]}

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" data-motion="on">
 <head>
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'self' 'sha256-oxKjLvsiygpZdRfHSVJ3uPNhVtvviR2ttirSPmILJBw='; script-src-attr 'none'; style-src 'self' 'sha256-hziQW+BvcKc+qOZH/yz21AbLanABBmXn3DxSfJOItE4='; style-src-attr 'none'; img-src 'self' data: blob:; font-src 'self'; media-src 'self'; frame-src 'self'; connect-src 'self'; worker-src 'self'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'self' 'sha256-X2RCGX/cN3YhoURM6k2oPnYrhd2S8qVSvnahvVlHDjA='; script-src-attr 'none'; style-src 'self' 'sha256-hziQW+BvcKc+qOZH/yz21AbLanABBmXn3DxSfJOItE4='; style-src-attr 'none'; img-src 'self' data: blob:; font-src 'self'; media-src 'self'; frame-src 'self'; connect-src 'self'; worker-src 'self'; manifest-src 'self'">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0d1210">
@@ -5394,10 +5394,15 @@ var HF;
                     throw new Error('Unsupported SVG reference');
             }
             else {
-                const url = new URL(value, element.ownerDocument.baseURI);
-                if (!['http:', 'https:', 'mailto:', 'file:'].includes(url.protocol) ||
-                    /[\u0000-\u001f\u007f]/.test(value))
+                if (/[\u0000-\u001f\u007f]/.test(value))
                     throw new Error('Unsupported view link');
+                // Fragment-only navigation stays inside this document, including offline
+                // previews with an opaque about:blank base. Other links need a safe scheme.
+                if (!value.startsWith('#')) {
+                    const url = new URL(value, element.ownerDocument.baseURI);
+                    if (!['http:', 'https:', 'mailto:', 'file:'].includes(url.protocol))
+                        throw new Error('Unsupported view link');
+                }
             }
         }
         // SVG presentation attributes are CSS too. Reject escapes and comments before

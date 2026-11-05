@@ -52,6 +52,33 @@ test('view boundary preserves nested text, entities, boolean attributes and loca
   assert.equal(section.childNodes[3].attributes.get('href'), '../method#units');
 });
 
+test('fragment-only navigation renders in an offline document with an opaque base URL', () => {
+  const doc = documentFixture();
+  doc.baseURI = 'about:blank';
+  const fragment = viewFragment('<a href="#main-content">Skip to content</a><a href="#overview">Overview</a><a href="#">Top</a>', doc);
+  assert.deepEqual(fragment.childNodes.map(node => node.attributes.get('href')), ['#main-content', '#overview', '#']);
+  assert.equal(fragment.textContent, 'Skip to contentOverviewTop');
+});
+
+test('offline fragment navigation retains URL and control-character rejection', () => {
+  const doc = documentFixture();
+  doc.baseURI = 'about:blank';
+  const target = doc.createElement('main');
+  renderView(target, '<p>Existing</p>');
+  const existing = target.childNodes[0];
+  for (const markup of [
+    '<a href="javascript:run()">Bad link</a>', '<a href="data:text/html,bad">Bad link</a>',
+    '<a href="#main\n-content">Bad link</a>', '<a href="#main\t-content">Bad link</a>',
+    '<a href="#main\u007f-content">Bad link</a>',
+  ]) {
+    assert.throws(() => renderView(target, markup), /Unsupported view link/);
+    assert.equal(target.childNodes[0], existing);
+    assert.equal(target.textContent, 'Existing');
+  }
+  const fragment = viewFragment('<a href="https://example.test/methodology">Method</a>', doc);
+  assert.equal(fragment.childNodes[0].attributes.get('href'), 'https://example.test/methodology');
+});
+
 test('view boundary builds namespaced chart nodes and assigns numeric styles through CSSOM', () => {
   const doc = documentFixture();
   const fragment = viewFragment('<svg viewBox="0 0 100 100"><defs><linearGradient id="power"><stop offset="0" stop-color="#fff"/></linearGradient></defs><path fill="url(#power)" d="M0 0L10 10" style="opacity: .8; --bar: 42%; stroke-width: 2 !important"/></svg>', doc);
