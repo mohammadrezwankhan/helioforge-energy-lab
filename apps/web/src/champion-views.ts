@@ -1,46 +1,123 @@
-namespace HF {
-  export function championToolbar(state:ViewState):string {
-    const h=state.hybrid,c=state.champion,current=Boolean(h.result)&&!hybridDirty(h);
-    const runState=h.busy?'Calculating':h.inputError?'Check inputs':current?(h.result?.run_id?'Saved result':'Bundled example'):'Setup ready';
-    const local=c?.storage==='unavailable'?'Memory only':c?.lastSavedAt?'Locally saved':'Local-first';
-    return `<div class="workbench-bar"><div class="workbench-status"><span class="status-beacon ${h.busy?'busy':''}"></span><span><strong>${escapeHTML(runState)}</strong><small>${escapeHTML(local)} · no cloud sync</small></span></div><div class="workbench-actions"><button class="btn quiet small" data-champion-action="guide">${icon('play',14)}<span>Quick start</span></button><button class="btn secondary small" data-champion-action="workspace">${icon('layers',14)}<span>Saved setups</span><b>${c?.saved.length??0}</b></button><button class="btn quiet small" data-nav="compare">${icon('activity',14)}<span>Compare</span><b>${h.compare.length}</b></button></div></div>${c?.notice?`<div class="workspace-notice" role="status">${icon('info',15)}<span>${escapeHTML(c.notice)}</span><button class="icon-button" data-champion-action="dismiss-notice" aria-label="Dismiss workspace notice">${icon('close',14)}</button></div>`:''}`;
+namespace HF { // eslint-disable-line @typescript-eslint/no-namespace, @typescript-eslint/no-unused-vars -- HF is the ordered global-script bundle namespace; modules change its shared runtime contract.
+  export function championToolbar(state: ViewState): string {
+    const h = state.hybrid,
+      c = state.champion,
+      current = Boolean(h.result) && !hybridDirty(h);
+    const runState = h.busy
+      ? 'Calculating'
+      : h.inputError
+        ? 'Check inputs'
+        : current
+          ? h.result?.run_id
+            ? 'Saved result'
+            : 'Bundled example'
+          : 'Setup ready';
+    const local =
+      c?.storage === 'unavailable'
+        ? 'Memory only'
+        : c?.lastSavedAt
+          ? 'Locally saved'
+          : 'Local-first';
+    return `<div class="workbench-bar"><div class="workbench-status"><span class="status-beacon ${h.busy ? 'busy' : ''}"></span><span><strong>${escapeHTML(runState)}</strong><small>${escapeHTML(local)} · no cloud sync</small></span></div><div class="workbench-actions"><button class="btn quiet small" data-champion-action="guide">${icon('play', 14)}<span>Quick start</span></button><button class="btn secondary small" data-champion-action="workspace">${icon('layers', 14)}<span>Saved setups</span><b>${String(c?.saved.length ?? 0)}</b></button><button class="btn quiet small" data-nav="compare">${icon('activity', 14)}<span>Compare</span><b>${String(h.compare.length)}</b></button></div></div>${c?.notice ? `<div class="workspace-notice" role="status">${icon('info', 15)}<span>${escapeHTML(c.notice)}</span><button class="icon-button" data-champion-action="dismiss-notice" aria-label="Dismiss workspace notice">${icon('close', 14)}</button></div>` : ''}`;
   }
-  export function workspaceDialog(state:ViewState):string {
-    const c=state.champion!,h=state.hybrid;
-    return `<div class="modal-copy workspace-dialog"><div class="workspace-summary"><span>${icon('layers',25)}</span><div><h3>Your experiments, within reach.</h3><p>Configurations stay in this browser. Calculated runs stay in your local Python database. Export files to move between devices.</p></div></div>${c.migrationPendingRaw?`<div class="notice warn"><span>A validated workspace v1 is loaded in memory. Its raw local cache remains untouched until you review and confirm the v1 to v2 migration.</span><button class="btn secondary small" data-champion-action="migrate-workspace">Preview v1 to v2 migration</button></div>`:''}${c.migrationReceipt||c.lastMigrationReceipt?`<div class="h-actions"><button class="text-link" data-champion-action="export-workspace-migration-receipt">Download last migration receipt</button></div>`:''}${c.recoveryRaw?`<div class="notice warn"><span>The stored workspace is damaged or incompatible. It has been left untouched.</span></div><div class="h-actions"><button class="btn secondary" data-champion-action="recovery-export">Download recovery record</button><button class="btn quiet" data-champion-action="recovery-reset">Reset damaged cache</button></div>`:''}${c.importBackupRaw?`<div class="notice"><span>A previous workspace backup is available. Its contents remain local.</span><div class="h-actions"><button class="btn secondary small" data-champion-action="restore-workspace-backup">Preview backup recovery</button><button class="btn quiet small" data-champion-action="backup-export">Download backup record</button></div></div>`:''}<form id="save-setup-form"><label class="field"><span>Name this setup</span><input name="setup_name" type="text" required maxlength="80" value="${escapeHTML((systemById(h.inputs.system_id).name+' / '+scenarioById(h.inputs.scenario_id).name).slice(0,80))}" autocomplete="off"></label><button class="btn primary" type="submit" ${h.busy||h.inputError||c.saved.length>=20||Boolean(c.recoveryRaw)||Boolean(c.migrationPendingRaw)?'disabled':''}>${icon('check',16)} Save current setup</button><p class="form-note">Up to 20 named setups. This saves inputs, not a new calculation.${h.inputError?' Correct the current input error first.':''}</p></form><div class="shelf-heading"><h3>${c.saved.length} saved ${c.saved.length===1?'setup':'setups'}</h3><button class="text-link" data-champion-action="export-workspace">Export workspace</button><button class="text-link" data-champion-action="import-workspace" ${h.busy?'disabled':''}>Import workspace</button></div><div class="setup-list">${c.saved.length?c.saved.map(s=>`<article class="setup-row"><div class="setup-row-icon">${icon('layers',19)}</div><div class="setup-copy"><strong>${escapeHTML(s.name)}</strong><small>${escapeHTML(systemById(s.inputs.system_id).name)} · ${s.inputs.hours} h</small></div><div class="setup-actions"><button class="btn secondary small" data-load-setup="${s.id}" ${h.busy?'disabled':''}>Open</button><button class="icon-button" data-export-setup="${s.id}" aria-label="Export ${escapeHTML(s.name)}">${icon('download',16)}</button><button class="icon-button" data-delete-setup="${s.id}" aria-label="Delete ${escapeHTML(s.name)}">${icon('close',16)}</button></div></article>`).join(''):'<div class="shelf-empty"><strong>Begin with a reference case.</strong><p>Give your current inputs a name. You can return to them after changing a scenario.</p></div>'}</div><div class="notice"><span>${c.storage==='unavailable'?'Browser storage is unavailable. Your setups are in memory only: export before closing.':'Clearing browser data removes these shortcuts. It does not delete API runs or exported files.'}</span></div></div>`;
+  export function workspaceDialog(state: ViewState): string {
+    const c = HF.requiredPresent(state.champion, 'state.champion'),
+      h = state.hybrid;
+    return `<div class="modal-copy workspace-dialog"><div class="workspace-summary"><span>${icon('layers', 25)}</span><div><h3>Your experiments, within reach.</h3><p>Configurations stay in this browser. Calculated runs stay in your local Python database. Export files to move between devices.</p></div></div>${c.migrationPendingRaw ? `<div class="notice warn"><span>A validated workspace v1 is loaded in memory. Its raw local cache remains untouched until you review and confirm the v1 to v2 migration.</span><button class="btn secondary small" data-champion-action="migrate-workspace">Preview v1 to v2 migration</button></div>` : ''}${c.migrationReceipt || c.lastMigrationReceipt ? `<div class="h-actions"><button class="text-link" data-champion-action="export-workspace-migration-receipt">Download last migration receipt</button></div>` : ''}${c.recoveryRaw ? `<div class="notice warn"><span>The stored workspace is damaged or incompatible. It has been left untouched.</span></div><div class="h-actions"><button class="btn secondary" data-champion-action="recovery-export">Download recovery record</button><button class="btn quiet" data-champion-action="recovery-reset">Reset damaged cache</button></div>` : ''}${c.importBackupRaw ? `<div class="notice"><span>A previous workspace backup is available. Its contents remain local.</span><div class="h-actions"><button class="btn secondary small" data-champion-action="restore-workspace-backup">Preview backup recovery</button><button class="btn quiet small" data-champion-action="backup-export">Download backup record</button></div></div>` : ''}<form id="save-setup-form"><label class="field"><span>Name this setup</span><input name="setup_name" type="text" required maxlength="80" value="${escapeHTML((systemById(h.inputs.system_id).name + ' / ' + scenarioById(h.inputs.scenario_id).name).slice(0, 80))}" autocomplete="off"></label><button class="btn primary" type="submit" ${h.busy || h.inputError || c.saved.length >= 20 || Boolean(c.recoveryRaw) || Boolean(c.migrationPendingRaw) ? 'disabled' : ''}>${icon('check', 16)} Save current setup</button><p class="form-note">Up to 20 named setups. This saves inputs, not a new calculation.${h.inputError ? ' Correct the current input error first.' : ''}</p></form><div class="shelf-heading"><h3>${String(c.saved.length)} saved ${c.saved.length === 1 ? 'setup' : 'setups'}</h3><button class="text-link" data-champion-action="export-workspace">Export workspace</button><button class="text-link" data-champion-action="import-workspace" ${h.busy ? 'disabled' : ''}>Import workspace</button></div><div class="setup-list">${c.saved.length ? c.saved.map((s) => `<article class="setup-row"><div class="setup-row-icon">${icon('layers', 19)}</div><div class="setup-copy"><strong>${escapeHTML(s.name)}</strong><small>${escapeHTML(systemById(s.inputs.system_id).name)} · ${String(s.inputs.hours)} h</small></div><div class="setup-actions"><button class="btn secondary small" data-load-setup="${s.id}" ${h.busy ? 'disabled' : ''}>Open</button><button class="icon-button" data-export-setup="${s.id}" aria-label="Export ${escapeHTML(s.name)}">${icon('download', 16)}</button><button class="icon-button" data-delete-setup="${s.id}" aria-label="Delete ${escapeHTML(s.name)}">${icon('close', 16)}</button></div></article>`).join('') : '<div class="shelf-empty"><strong>Begin with a reference case.</strong><p>Give your current inputs a name. You can return to them after changing a scenario.</p></div>'}</div><div class="notice"><span>${c.storage === 'unavailable' ? 'Browser storage is unavailable. Your setups are in memory only: export before closing.' : 'Clearing browser data removes these shortcuts. It does not delete API runs or exported files.'}</span></div></div>`;
   }
-  export function workspaceImportPreview(record:WorkspaceCache,restoreBackup=false,receipt:WorkspaceMigrationReceipt|null=record.migration,migrateCurrent=false):string {
-    const system=systemById(record.inputs.system_id),scenario=scenarioById(record.inputs.scenario_id);
-    const verb=migrateCurrent?'Migrate workspace':restoreBackup?'Restore backup':'Import workspace';
-    const changes=receipt?.changes.length?receipt.changes.map(change=>`<li>${escapeHTML(change)}</li>`).join(''):'<li>None; the accepted v2 fields are retained.</li>';
-    const losses=receipt?.losses.length?receipt.losses.map(loss=>`<li>${escapeHTML(loss)}</li>`).join(''):'<li>None. Unsupported fields are rejected instead of dropped.</li>';
-    const warning=migrateCurrent?'This upgrades the current workspace. Its exact raw bytes will replace the one-slot recovery backup before the v2 record is written.':'This replaces the workspace in this browser. If a current raw cache exists, it will be copied into the one-slot recovery backup, replacing any previous backup. Existing API runs and exported files are not deleted.';
-    return `<div class="modal-copy"><div class="notice warn"><strong>${escapeHTML(warning)}</strong></div><h3>Preview: ${escapeHTML(system.name)} / ${escapeHTML(scenario.name)}</h3><p>Source schema: ${escapeHTML(receipt?.source_schema??record.schema)} · Target schema: ${escapeHTML(receipt?.target_schema??record.schema)} · saved ${escapeHTML(new Date(record.saved_at).toLocaleString())}</p><ul><li>Changes:<ul>${changes}</ul></li><li>Losses:<ul>${losses}</ul></li><li>Input horizon: ${record.inputs.hours} h; model result: configuration only</li><li>Saved setups to replace: ${record.saved_setups.length}</li><li>Last-run reference: ${record.last_run_id?'retained for local reconnection':'none'}</li><li>Pinned run references: ${record.pinned_run_ids.length}</li><li>Lesson: ${escapeHTML(record.lesson_id)}</li></ul><p>Run IDs are references to this browser’s local API database. They may not exist on another machine or storage origin.</p><div class="h-actions"><button type="button" class="btn secondary" data-champion-action="cancel-workspace-import">Cancel</button>${receipt?'<button type="button" class="btn quiet" data-champion-action="export-workspace-migration-receipt">Download migration receipt</button>':''}<button type="button" class="btn primary" data-champion-action="confirm-workspace-import">${verb}${migrateCurrent?'':' and replace workspace'}</button></div></div>`;
+  export function workspaceImportPreview(
+    record: WorkspaceCache,
+    restoreBackup = false,
+    receipt: WorkspaceMigrationReceipt | null = record.migration,
+    migrateCurrent = false,
+  ): string {
+    const system = systemById(record.inputs.system_id),
+      scenario = scenarioById(record.inputs.scenario_id);
+    const verb = migrateCurrent
+      ? 'Migrate workspace'
+      : restoreBackup
+        ? 'Restore backup'
+        : 'Import workspace';
+    const changes = receipt?.changes.length
+      ? receipt.changes.map((change) => `<li>${escapeHTML(change)}</li>`).join('')
+      : '<li>None; the accepted v2 fields are retained.</li>';
+    const losses = receipt?.losses.length
+      ? receipt.losses.map((loss) => `<li>${escapeHTML(loss)}</li>`).join('')
+      : '<li>None. Unsupported fields are rejected instead of dropped.</li>';
+    const warning = migrateCurrent
+      ? 'This upgrades the current workspace. Its exact raw bytes will replace the one-slot recovery backup before the v2 record is written.'
+      : 'This replaces the workspace in this browser. If a current raw cache exists, it will be copied into the one-slot recovery backup, replacing any previous backup. Existing API runs and exported files are not deleted.';
+    return `<div class="modal-copy"><div class="notice warn"><strong>${escapeHTML(warning)}</strong></div><h3>Preview: ${escapeHTML(system.name)} / ${escapeHTML(scenario.name)}</h3><p>Source schema: ${escapeHTML(receipt?.source_schema ?? record.schema)} · Target schema: ${escapeHTML(receipt?.target_schema ?? record.schema)} · saved ${escapeHTML(new Date(record.saved_at).toLocaleString())}</p><ul><li>Changes:<ul>${changes}</ul></li><li>Losses:<ul>${losses}</ul></li><li>Input horizon: ${String(record.inputs.hours)} h; model result: configuration only</li><li>Saved setups to replace: ${String(record.saved_setups.length)}</li><li>Last-run reference: ${record.last_run_id ? 'retained for local reconnection' : 'none'}</li><li>Pinned run references: ${String(record.pinned_run_ids.length)}</li><li>Lesson: ${escapeHTML(record.lesson_id)}</li></ul><p>Run IDs are references to this browser’s local API database. They may not exist on another machine or storage origin.</p><div class="h-actions"><button type="button" class="btn secondary" data-champion-action="cancel-workspace-import">Cancel</button>${receipt ? '<button type="button" class="btn quiet" data-champion-action="export-workspace-migration-receipt">Download migration receipt</button>' : ''}<button type="button" class="btn primary" data-champion-action="confirm-workspace-import">${verb}${migrateCurrent ? '' : ' and replace workspace'}</button></div></div>`;
   }
-  export function historyDialog(runs:RunRecord[]):string {
-    return `<div class="modal-copy"><p>Latest 100 local runs. Each record contains exact inputs, results, timestamp and input hash. This is not a tamper-evident ledger.</p><label class="search-field run-search">${icon('search',16)}<input id="run-search" type="search" placeholder="Filter by model or run ID…" aria-label="Filter saved runs"></label><div id="run-results">${historyRows(runs,'')}</div></div>`;
+  export function historyDialog(runs: RunRecord[]): string {
+    return `<div class="modal-copy"><p>Latest 100 local runs. Each record contains exact inputs, results, timestamp and input hash. This is not a tamper-evident ledger.</p><label class="search-field run-search">${icon('search', 16)}<input id="run-search" type="search" placeholder="Filter by model or run ID…" aria-label="Filter saved runs"></label><div id="run-results">${historyRows(runs, '')}</div></div>`;
   }
-  export function historyRows(runs:RunRecord[],query:string):string {
-    const q=query.toLowerCase().trim(),visible=runs.filter(r=>`${r.kind} ${r.id} ${r.created_at}`.toLowerCase().includes(q));
-    return `<div class="history-count" role="status">${visible.length} saved ${visible.length===1?'run':'runs'}</div><div class="run-list">${visible.length?visible.map(r=>`<article class="run-row"><div class="setup-row-icon">${icon(r.kind==='hybrid'?'layers':'document',18)}</div><div class="setup-copy"><strong>${escapeHTML(r.kind==='hybrid'?'Hybrid energy screen':r.kind)}</strong><small>${escapeHTML(new Date(r.created_at).toLocaleString())}</small><code>${escapeHTML(r.id.slice(0,8))} · ${escapeHTML(r.input_hash.slice(0,12))}</code></div><div class="setup-actions">${r.kind==='hybrid'?`<button class="btn secondary small" data-restore-run="${escapeHTML(r.id)}">Open run</button>`:''}<button class="icon-button" data-run="${escapeHTML(r.id)}" aria-label="Download ${escapeHTML(r.kind)} run ${escapeHTML(r.id.slice(0,8))}">${icon('download',16)}</button></div></article>`).join(''):'<div class="shelf-empty"><h3>No matching runs yet.</h3><p>Calculate a scenario to create a record, or clear this filter.</p></div>'}</div>`;
+  export function historyRows(runs: RunRecord[], query: string): string {
+    const q = query.toLowerCase().trim(),
+      visible = runs.filter((r) => `${r.kind} ${r.id} ${r.created_at}`.toLowerCase().includes(q));
+    return `<div class="history-count" role="status">${String(visible.length)} saved ${visible.length === 1 ? 'run' : 'runs'}</div><div class="run-list">${visible.length ? visible.map((r) => `<article class="run-row"><div class="setup-row-icon">${icon(r.kind === 'hybrid' ? 'layers' : 'document', 18)}</div><div class="setup-copy"><strong>${escapeHTML(r.kind === 'hybrid' ? 'Hybrid energy screen' : r.kind)}</strong><small>${escapeHTML(new Date(r.created_at).toLocaleString())}</small><code>${escapeHTML(r.id.slice(0, 8))} · ${escapeHTML(r.input_hash.slice(0, 12))}</code></div><div class="setup-actions">${r.kind === 'hybrid' ? `<button class="btn secondary small" data-restore-run="${escapeHTML(r.id)}">Open run</button>` : ''}<button class="icon-button" data-run="${escapeHTML(r.id)}" aria-label="Download ${escapeHTML(r.kind)} run ${escapeHTML(r.id.slice(0, 8))}">${icon('download', 16)}</button></div></article>`).join('') : '<div class="shelf-empty"><h3>No matching runs yet.</h3><p>Calculate a scenario to create a record, or clear this filter.</p></div>'}</div>`;
   }
-  export function commandDialog():string {
-    return `<div class="command-dialog"><label class="command-input">${icon('search',22)}<input id="command-search" type="search" autocomplete="off" placeholder="Find a workspace, architecture or lesson…" aria-label="Search commands" role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="command-results"></label><div id="command-results" role="listbox" aria-label="Commands">${commandResults('')}</div><div class="command-footer"><span><kbd>↑</kbd><kbd>↓</kbd> Navigate <kbd>Enter</kbd> Open</span><span><kbd>Esc</kbd> Close</span></div></div>`;
+  export function commandDialog(): string {
+    return `<div class="command-dialog"><label class="command-input">${icon('search', 22)}<input id="command-search" type="search" autocomplete="off" placeholder="Find a workspace, architecture or lesson…" aria-label="Search commands" role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="command-results"></label><div id="command-results" role="listbox" aria-label="Commands">${commandResults('')}</div><div class="command-footer"><span><kbd>↑</kbd><kbd>↓</kbd> Navigate <kbd>Enter</kbd> Open</span><span><kbd>Esc</kbd> Close</span></div></div>`;
   }
-  export function commandResults(query:string):string {
-    if(query.trim().startsWith(':')){
-      const commands=[':sweep',':pin',':diff',':preset reference',':preset island',':preset solar',':preset storage',':reset',':export json',':export csv',':export md'];
-      return commands.filter(command=>command.startsWith(query.trim())).map((command,i)=>`<button class="command-option ${i===0?'active':''}" id="command-option-${i}" role="option" aria-selected="${i===0}" data-terminal-command="${escapeHTML(command)}"><span><strong>${escapeHTML(command)}</strong><small>Reduced daily energy workbench</small></span></button>`).join('')||'<p role="status">Unknown command. Try :sweep, :pin, :diff, :preset or :export.</p>';
+  export function commandResults(query: string): string {
+    if (query.trim().startsWith(':')) {
+      const commands = [
+        ':sweep',
+        ':pin',
+        ':diff',
+        ':preset reference',
+        ':preset island',
+        ':preset solar',
+        ':preset storage',
+        ':reset',
+        ':export json',
+        ':export csv',
+        ':export md',
+      ];
+      return (
+        commands
+          .filter((command) => command.startsWith(query.trim()))
+          .map(
+            (command, i) =>
+              `<button class="command-option ${i === 0 ? 'active' : ''}" id="command-option-${String(i)}" role="option" aria-selected="${String(i === 0)}" data-terminal-command="${escapeHTML(command)}"><span><strong>${escapeHTML(command)}</strong><small>Reduced daily energy workbench</small></span></button>`,
+          )
+          .join('') ||
+        '<p role="status">Unknown command. Try :sweep, :pin, :diff, :preset or :export.</p>'
+      );
     }
-    const rows=commandEntries(query);
-    return rows.length?rows.map((r,i)=>`<button class="command-option ${i===0?'active':''}" id="command-option-${i}" role="option" aria-selected="${i===0}" data-command-kind="${r.kind}" data-command-target="${r.target}"><span class="command-icon">${icon(r.icon,18)}</span><span><strong>${escapeHTML(r.label)}</strong><small>${escapeHTML(r.detail)}</small></span>${icon('arrow',16)}</button>`).join(''):'<div class="shelf-empty" role="status">No matches. Try “hospital”, “BESS”, “hydrogen” or “finance”.</div>';
+    const rows = commandEntries(query);
+    return rows.length
+      ? rows
+          .map(
+            (r, i) =>
+              `<button class="command-option ${i === 0 ? 'active' : ''}" id="command-option-${String(i)}" role="option" aria-selected="${String(i === 0)}" data-command-kind="${r.kind}" data-command-target="${r.target}"><span class="command-icon">${icon(r.icon, 18)}</span><span><strong>${escapeHTML(r.label)}</strong><small>${escapeHTML(r.detail)}</small></span>${icon('arrow', 16)}</button>`,
+          )
+          .join('')
+      : '<div class="shelf-empty" role="status">No matches. Try “hospital”, “BESS”, “hydrogen” or “finance”.</div>';
   }
-  export function quickStartDialog():string {
+  export function quickStartDialog(): string {
     return `<div class="modal-copy quick-start"><span class="eyebrow">CHOOSE YOUR FIRST TASK</span><h3>Explore, calculate, or continue locally.</h3><div class="h-actions"><button class="btn primary" data-champion-action="start-hospital">Explore a bundled example</button><button class="btn secondary" data-nav="compare">Calculate a browser Terminal case</button><a class="btn secondary" href="https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/START_HERE.md" target="_blank" rel="noopener noreferrer">Run advanced studies locally</a></div><p>The browser Terminal is a synthetic 24-hour energy-balance model, not an optimizer. New advanced study runs require the separate local Python application.</p><details><summary>Guided example: what changes when the grid goes away?</summary><p>A hospital microgrid makes a useful first comparison. This is synthetic hourly energy adequacy, not a hospital safety assessment.</p><div class="guide-steps">${[
-      ['Set the reference','Open Hospital islanding microgrid with the Reference day scenario. Save the setup with a meaningful name.'],
-      ['Calculate and pin','Run the energy screen, inspect its assumptions, then use Pin to compare.'],
-      ['Change one condition','Select Four-hour outage, run again, and pin the second result.'],
-      ['Follow the evidence','Open Scenario compare. Check critical shortfall and both battery energy endpoints before interpreting cost.']
-    ].map((s,i)=>`<article><span>${i+1}</span><div><strong>${s[0]}</strong><p>${s[1]}</p></div></article>`).join('')}</div><button class="btn secondary" data-nav="lessons">Explore guided lessons</button><p class="form-note">Bundled hybrid cases can be inspected immediately. Edited hybrid-screen inputs need the local Python API; the separate browser Terminal calculates bounded cases here.</p></details></div>`;
+      [
+        'Set the reference',
+        'Open Hospital islanding microgrid with the Reference day scenario. Save the setup with a meaningful name.',
+      ],
+      [
+        'Calculate and pin',
+        'Run the energy screen, inspect its assumptions, then use Pin to compare.',
+      ],
+      ['Change one condition', 'Select Four-hour outage, run again, and pin the second result.'],
+      [
+        'Follow the evidence',
+        'Open Scenario compare. Check critical shortfall and both battery energy endpoints before interpreting cost.',
+      ],
+    ]
+      .map(
+        (s, i) =>
+          `<article><span>${String(i + 1)}</span><div><strong>${String(s[0])}</strong><p>${String(s[1])}</p></div></article>`,
+      )
+      .join(
+        '',
+      )}</div><button class="btn secondary" data-nav="lessons">Explore guided lessons</button><p class="form-note">Bundled hybrid cases can be inspected immediately. Edited hybrid-screen inputs need the local Python API; the separate browser Terminal calculates bounded cases here.</p></details></div>`;
   }
 }

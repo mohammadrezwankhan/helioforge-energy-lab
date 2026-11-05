@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import vm from 'node:vm';
-import {compileScripts} from '../../../scripts/compile-web.mjs';
+import { compileScripts } from '../../../scripts/compile-web.mjs';
 import { fileURLToPath } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -12,31 +12,64 @@ const root = path.resolve(here, '..');
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'hf-study-visuals-'));
 const out = path.join(temp, 'study-visuals.js');
 try {
-  compileScripts([
-    path.join(root, 'src/provenance-types.ts'),
-    path.join(root, 'src/roadmap-types.ts'),
-    path.join(root, 'src/roadmap-data.ts'),
-    path.join(root, 'src/advanced-visuals.ts'),
-    path.join(root, 'src/study-visuals.ts'),
-  ], out);
+  compileScripts(
+    [
+      path.join(root, 'src/required-value.ts'),
+      path.join(root, 'src/provenance-types.ts'),
+      path.join(root, 'src/roadmap-types.ts'),
+      path.join(root, 'src/roadmap-data.ts'),
+      path.join(root, 'src/advanced-visuals.ts'),
+      path.join(root, 'src/study-visuals.ts'),
+    ],
+    out,
+  );
 } catch (error) {
-  throw new Error(`Could not compile study visual sources: ${error.stderr?.toString() ?? error.message}`);
+  throw new Error(
+    `Could not compile study visual sources: ${error.stderr?.toString() ?? error.message}`,
+  );
 }
 const context = vm.createContext({
-  URL, Intl, Number, String, Math, Array, Object, JSON, Set, Map,
-  structuredClone, console,
+  URL,
+  Intl,
+  Number,
+  String,
+  Math,
+  Array,
+  Object,
+  JSON,
+  Set,
+  Map,
+  structuredClone,
+  console,
 });
 vm.runInContext(fs.readFileSync(out, 'utf8'), context);
 const hf = context.HF;
 
 const definition = (id, page, data_fields = []) => ({
-  id, page, title: 'Example study', summary: 'Actual supplied records', fields: [],
-  data_fields, equations: [], limitations: [], sources: [],
+  id,
+  page,
+  title: 'Example study',
+  summary: 'Actual supplied records',
+  fields: [],
+  data_fields,
+  equations: [],
+  limitations: [],
+  sources: [],
 });
 const result = (study, table = [], extra = {}) => ({
-  study, model_version: 'roadmap-screen-v1', inputs: {}, data_kind: 'synthetic_or_user_supplied_unverified',
-  metrics: [], series: [], table, warnings: [], equations: [], limitations: [], sources: [],
-  evidence_sha256: 'abc', ...extra,
+  study,
+  model_version: 'roadmap-screen-v1',
+  inputs: {},
+  data_kind: 'synthetic_or_user_supplied_unverified',
+  metrics: [],
+  series: [],
+  table,
+  warnings: [],
+  equations: [],
+  limitations: [],
+  sources: [],
+  evidence_sha256: 'abc',
+  ...extra,
 });
 
 function assertNamedSvgsAreUnique(html, expectedCharts) {
@@ -52,11 +85,19 @@ function assertNamedSvgsAreUnique(html, expectedCharts) {
     const description = contents.match(/<desc\s+id="([^"]+)">([\s\S]*?)<\/desc>/);
     assert.ok(title, 'each chart has a title element');
     assert.ok(description, 'each chart has a description element');
-    assert.deepEqual(references, [title[1], description[1]], 'each IDREF resolves to this chart\'s own title and description');
+    assert.deepEqual(
+      references,
+      [title[1], description[1]],
+      "each IDREF resolves to this chart's own title and description",
+    );
     ids.push(title[1], description[1]);
-    names.push({title: title[2], description: description[2]});
+    names.push({ title: title[2], description: description[2] });
   }
-  assert.equal(new Set(ids).size, ids.length, `title and description IDs are unique across simultaneous charts: ${ids.join(', ')}`);
+  assert.equal(
+    new Set(ids).size,
+    ids.length,
+    `title and description IDs are unique across simultaneous charts: ${ids.join(', ')}`,
+  );
   assert.deepEqual(names, expectedCharts);
 }
 
@@ -91,10 +132,14 @@ test('forecast tunnel and investment covenant use actual table values and keep n
   assert.match(tunnel, /Selected year 2: P10 11 EUR\/MWh, P50 21 EUR\/MWh, P90 31 EUR\/MWh/);
 
   const financeDef = definition('investment-sculpt', 'investment');
-  const finance = result('investment-sculpt', [
-    { year: 1, cfads_eur: 100, debt_service_eur: 70, dscr: 1.429 },
-    { year: 2, cfads_eur: 0, debt_service_eur: 50, dscr: null },
-  ], { metrics: [{ label: 'Minimum DSCR', value: 1.3, unit: 'ratio' }] });
+  const finance = result(
+    'investment-sculpt',
+    [
+      { year: 1, cfads_eur: 100, debt_service_eur: 70, dscr: 1.429 },
+      { year: 2, cfads_eur: 0, debt_service_eur: 50, dscr: null },
+    ],
+    { metrics: [{ label: 'Minimum DSCR', value: 1.3, unit: 'ratio' }] },
+  );
   const plane = hf.studyVisual(financeDef, finance, 0);
   assert.match(plane, /Actual covenant: 1\.3 DSCR/);
   assert.match(plane, /Year 2: DSCR Missing/);
@@ -109,43 +154,66 @@ test('simultaneous research and investment charts have unique IDs and chart-spec
   const researchDef = definition('research-vibration', 'research');
   researchDef.title = 'Vibration readings';
   const research = result('research-vibration', [], {
-    series: [{name: 'Bearing vibration', x_label: 'Sample', y_unit: 'mm/s', x: [1, 2], y: [4, 6]}],
+    series: [
+      { name: 'Bearing vibration', x_label: 'Sample', y_unit: 'mm/s', x: [1, 2], y: [4, 6] },
+    ],
   });
   assertNamedSvgsAreUnique(hf.studyVisual(researchDef, research, 0), [
     {
       title: 'Research pillar tetrahedron',
-      description: 'A navigation diagram for the three current research studies. The fourth conceptual vertex, operational efficiency, has no study selector in the current catalogue.',
+      description:
+        'A navigation diagram for the three current research studies. The fourth conceptual vertex, operational efficiency, has no study selector in the current catalogue.',
     },
     {
       title: 'Vibration readings result series',
-      description: 'Actual supplied result series. The vertical marker shows observation 1; null observations are gaps.',
+      description:
+        'Actual supplied result series. The vertical marker shows observation 1; null observations are gaps.',
     },
   ]);
 
   const investmentDef = definition('investment-sculpt', 'investment');
-  const investment = result('investment-sculpt', [
-    {year: 1, cfads_eur: 100, debt_service_eur: 70, dscr: 1.429},
-    {year: 2, cfads_eur: 80, debt_service_eur: 50, dscr: 1.6},
-  ], {metrics: [{label: 'Minimum DSCR', value: 1.3, unit: 'ratio'}]});
+  const investment = result(
+    'investment-sculpt',
+    [
+      { year: 1, cfads_eur: 100, debt_service_eur: 70, dscr: 1.429 },
+      { year: 2, cfads_eur: 80, debt_service_eur: 50, dscr: 1.6 },
+    ],
+    { metrics: [{ label: 'Minimum DSCR', value: 1.3, unit: 'ratio' }] },
+  );
   assertNamedSvgsAreUnique(hf.studyVisual(investmentDef, investment, 0), [
     {
       title: 'Actual debt schedule DSCR against the configured covenant',
-      description: 'DSCR values come from the source annual debt schedule. The red horizontal plane is the actual 1.3 target; null DSCR values are shown as missing markers.',
+      description:
+        'DSCR values come from the source annual debt schedule. The red horizontal plane is the actual 1.3 target; null DSCR values are shown as missing markers.',
     },
     {
       title: 'Financial cashflow by year',
-      description: 'Bars show actual CFADS, actual scheduled debt service, and CFADS minus scheduled debt service derived from those two table columns. All years share one scale; positive and negative values extend from zero in opposite directions. No revenue or cashflow stages are added.',
+      description:
+        'Bars show actual CFADS, actual scheduled debt service, and CFADS minus scheduled debt service derived from those two table columns. All years share one scale; positive and negative values extend from zero in opposite directions. No revenue or cashflow stages are added.',
     },
   ]);
-
 });
 
 test('interconnection price pillars preserve negative prices on a shared zero-baseline scale', () => {
   const def = definition('markets-interconnection', 'markets');
-  const actual = result('markets-interconnection', [
-    { interval: 1, flow_a_to_b_mw: 2, zone_a_marginal_price_eur_mwh: 100, zone_b_marginal_price_eur_mwh: -50 },
-    { interval: 2, flow_a_to_b_mw: -1, zone_a_marginal_price_eur_mwh: 200, zone_b_marginal_price_eur_mwh: -100 },
-  ], { inputs: { capacity_mw: 5 } });
+  const actual = result(
+    'markets-interconnection',
+    [
+      {
+        interval: 1,
+        flow_a_to_b_mw: 2,
+        zone_a_marginal_price_eur_mwh: 100,
+        zone_b_marginal_price_eur_mwh: -50,
+      },
+      {
+        interval: 2,
+        flow_a_to_b_mw: -1,
+        zone_a_marginal_price_eur_mwh: 200,
+        zone_b_marginal_price_eur_mwh: -100,
+      },
+    ],
+    { inputs: { capacity_mw: 5 } },
+  );
   const html = hf.studyVisual(def, actual, 0);
   assert.match(html, /zero baseline and a scale spanning all recorded prices/);
   assert.match(html, /Zone B: -50 EUR\/MWh/);
@@ -154,8 +222,20 @@ test('interconnection price pillars preserve negative prices on a shared zero-ba
 });
 
 test('a polygon with a null vertex is marked missing instead of silently redrawn without that vertex', () => {
-  const def = definition('pv-agrivoltaic', 'pv', [{ name: 'land_polygon_m', default: [[0, 0], [100, 0], [100, 50], [0, 50]] }]);
-  const actual = result('pv-agrivoltaic', [], { inputs: { land_polygon_m: [[0, 0], [100, 0], null, [0, 50]] } });
+  const def = definition('pv-agrivoltaic', 'pv', [
+    {
+      name: 'land_polygon_m',
+      default: [
+        [0, 0],
+        [100, 0],
+        [100, 50],
+        [0, 50],
+      ],
+    },
+  ]);
+  const actual = result('pv-agrivoltaic', [], {
+    inputs: { land_polygon_m: [[0, 0], [100, 0], null, [0, 50]] },
+  });
   const html = hf.studyVisual(def, actual, 0);
   assert.match(html, /data-state="missing"/);
   assert.match(html, /null or malformed vertex/);
@@ -165,9 +245,11 @@ test('a polygon with a null vertex is marked missing instead of silently redrawn
 test('missing values stay visible as missing and untrusted labels are escaped', () => {
   const def = definition('pv-sensitivity', 'pv');
   def.title = '<ScRiPt>bad()</ScRiPt>';
-  const html = hf.studyVisual(def, result('pv-sensitivity', [
-    { capex_eur_kwp: 650, yield_kwh_kwp: 1350, lcoe_eur_mwh: null },
-  ]), 0);
+  const html = hf.studyVisual(
+    def,
+    result('pv-sensitivity', [{ capex_eur_kwp: 650, yield_kwh_kwp: 1350, lcoe_eur_mwh: null }]),
+    0,
+  );
   assert.doesNotMatch(html, /<script(?:\s|>)/i);
   assert.match(html, /&lt;ScRiPt&gt;bad\(\)&lt;\/ScRiPt&gt;/);
   assert.match(html, /Missing/);
@@ -175,7 +257,12 @@ test('missing values stay visible as missing and untrusted labels are escaped', 
 });
 
 test('polygon clicks convert SVG coordinates to local metres and undo restores vertices', () => {
-  const input = [[0, 0], [100, 0], [100, 50], [0, 50]];
+  const input = [
+    [0, 0],
+    [100, 0],
+    [100, 50],
+    [0, 50],
+  ];
   const listeners = new Map();
   const attributes = {};
   const map = {
@@ -183,7 +270,11 @@ test('polygon clicks convert SVG coordinates to local metres and undo restores v
     addEventListener: (name, listener) => listeners.set(`map:${name}`, listener),
     removeEventListener: (name) => listeners.delete(`map:${name}`),
   };
-  const polygon = { setAttribute: (name, value) => { attributes[name] = value; } };
+  const polygon = {
+    setAttribute: (name, value) => {
+      attributes[name] = value;
+    },
+  };
   const button = (action) => ({
     dataset: { polygonAction: action },
     addEventListener: (name, listener) => listeners.set(`${action}:${name}`, listener),
@@ -192,14 +283,25 @@ test('polygon clicks convert SVG coordinates to local metres and undo restores v
   const undo = button('undo');
   const reset = button('reset');
   const host = {
-    querySelector: (selector) => selector === '[data-land-map]' ? map
-      : selector === '[data-land-polygon]' ? polygon : null,
-    querySelectorAll: (selector) => selector === '[data-polygon-action]' ? [undo, reset] : [],
+    querySelector: (selector) =>
+      selector === '[data-land-map]' ? map : selector === '[data-land-polygon]' ? polygon : null,
+    querySelectorAll: (selector) => (selector === '[data-polygon-action]' ? [undo, reset] : []),
   };
   const def = definition('pv-agrivoltaic', 'pv', [{ name: 'land_polygon_m', default: input }]);
-  const draft = { id: def.id, values: {}, result: result(def.id), dirty: false, busy: false, error: '', slice: 0, selectedSeries: 0 };
+  const draft = {
+    id: def.id,
+    values: {},
+    result: result(def.id),
+    dirty: false,
+    busy: false,
+    error: '',
+    slice: 0,
+    selectedSeries: 0,
+  };
   const emitted = [];
-  const dispose = hf.bindStudyVisuals(host, def, draft, (name, value) => emitted.push([name, value]));
+  const dispose = hf.bindStudyVisuals(host, def, draft, (name, value) =>
+    emitted.push([name, value]),
+  );
   listeners.get('map:click')({ clientX: 260, clientY: 147.5 });
   const added = JSON.parse(emitted.at(-1)[1]);
   assert.deepEqual(added.at(-1), [50, 25]);
@@ -214,15 +316,30 @@ test('annual tariff sliders emit the existing tariff data field as a JSON array'
   const listeners = new Map();
   const tariff = Array(24).fill(0.1);
   const sliders = tariff.map((value, hour) => ({
-    value: String(value), dataset: { tariffHour: String(hour) },
+    value: String(value),
+    dataset: { tariffHour: String(hour) },
     addEventListener: (name, listener) => listeners.set(`${hour}:${name}`, listener),
     removeEventListener: (name) => listeners.delete(`${hour}:${name}`),
   }));
-  const host = { querySelectorAll: (selector) => selector === '[data-tariff-hour]' ? sliders : [], querySelector: () => null };
+  const host = {
+    querySelectorAll: (selector) => (selector === '[data-tariff-hour]' ? sliders : []),
+    querySelector: () => null,
+  };
   const def = definition('storage-annual', 'storage', [{ name: 'tariff', default: tariff }]);
-  const draft = { id: def.id, values: {}, result: result(def.id), dirty: false, busy: false, error: '', slice: 0, selectedSeries: 0 };
+  const draft = {
+    id: def.id,
+    values: {},
+    result: result(def.id),
+    dirty: false,
+    busy: false,
+    error: '',
+    slice: 0,
+    selectedSeries: 0,
+  };
   const emitted = [];
-  const dispose = hf.bindStudyVisuals(host, def, draft, (name, value) => emitted.push([name, value]));
+  const dispose = hf.bindStudyVisuals(host, def, draft, (name, value) =>
+    emitted.push([name, value]),
+  );
   sliders[16].value = '0.37';
   listeners.get('16:input')({ currentTarget: sliders[16] });
   assert.equal(emitted.at(-1)[0], 'tariff');

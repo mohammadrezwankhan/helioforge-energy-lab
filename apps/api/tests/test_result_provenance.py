@@ -1,6 +1,10 @@
 import hashlib
 import json
+from collections.abc import Mapping
+from pathlib import Path
+from typing import TypedDict
 
+import pytest
 from fastapi.testclient import TestClient
 
 from helioforge.dashboard import dashboard
@@ -9,12 +13,27 @@ from helioforge.engines.storage import demo_profile
 from helioforge.hybrid import HybridRequest
 from helioforge.main import app
 from helioforge.provenance import PACKAGE_ROOT, attach_result_provenance, input_revision, source_revision
-from helioforge.schemas import StorageRequest
+from helioforge.schemas import CouncilRequest, StorageRequest
 from helioforge.store import Store
 from helioforge.studies import StudyRequest, evaluate
 
 
-def test_source_revision_is_deterministic_and_sensitive_to_model_dependency_bytes(tmp_path):
+class ProvenanceArguments(TypedDict):
+    model_id: str
+    source_files: tuple[str, ...]
+    source_root: Path
+    units: dict[str, str]
+    contract: dict[str, str]
+
+
+def field(value: object, *path: str) -> object:
+    for key in path:
+        assert isinstance(value, dict)
+        value = value[key]
+    return value
+
+
+def test_source_revision_is_deterministic_and_sensitive_to_model_dependency_bytes(tmp_path: Path) -> None:
     (tmp_path / "engine.py").write_text("energy = load - pv\n", encoding="utf-8")
     (tmp_path / "schemas.py").write_text("load: float\n", encoding="utf-8")
 
@@ -26,17 +45,17 @@ def test_source_revision_is_deterministic_and_sensitive_to_model_dependency_byte
     assert first != source_revision(("engine.py", "schemas.py"), root=tmp_path)
 
 
-def test_input_changes_do_not_change_code_revision_or_claim_approval(tmp_path):
+def test_input_changes_do_not_change_code_revision_or_claim_approval(tmp_path: Path) -> None:
     (tmp_path / "engine.py").write_text("energy = load - pv\n", encoding="utf-8")
     (tmp_path / "schemas.py").write_text("load: float\n", encoding="utf-8")
     result = {"model": "bounded-example-v1", "data_kind": "synthetic", "warnings": []}
-    common = dict(
-        model_id="bounded-example",
-        source_files=("engine.py", "schemas.py"),
-        source_root=tmp_path,
-        units={"power": "kW", "energy": "kWh"},
-        contract={"title": "Example model contract", "url": "https://example.test/model"},
-    )
+    common: ProvenanceArguments = {
+        "model_id": "bounded-example",
+        "source_files": ("engine.py", "schemas.py"),
+        "source_root": tmp_path,
+        "units": {"power": "kW", "energy": "kWh"},
+        "contract": {"title": "Example model contract", "url": "https://example.test/model"},
+    }
 
     first = attach_result_provenance(result, inputs={"load_kw": 10}, **common)
     second = attach_result_provenance(result, inputs={"load_kw": 11}, **common)
@@ -48,7 +67,7 @@ def test_input_changes_do_not_change_code_revision_or_claim_approval(tmp_path):
     assert first["provenance"]["integrity"]["human_approval_recorded"] is False
 
 
-def test_new_hybrid_result_binds_actual_source_dataset_and_endpoints():
+def test_new_hybrid_result_binds_actual_source_dataset_and_endpoints() -> None:
     result = simulate_hybrid(HybridRequest())
     dataset_bytes = (PACKAGE_ROOT / "data" / "hybrid_catalog.json").read_bytes()
     assert result["provenance"]["schema"] == "helioforge.result-provenance.v1"
@@ -62,7 +81,7 @@ def test_new_hybrid_result_binds_actual_source_dataset_and_endpoints():
     assert result["provenance"]["integrity"]["approval_status"] == "not_assessed"
 
 
-def test_study_evidence_hash_covers_source_bound_provenance():
+def test_study_evidence_hash_covers_source_bound_provenance() -> None:
     result = evaluate(StudyRequest(study="pv-reserve"))
     without_evidence_hash = {key: value for key, value in result.items() if key != "evidence_sha256"}
     canonical = json.dumps(without_evidence_hash, sort_keys=True, separators=(",", ":"), allow_nan=False)
@@ -73,21 +92,27 @@ def test_study_evidence_hash_covers_source_bound_provenance():
     assert result["provenance"]["sources"] == result["sources"]
 
 
-def test_dashboard_snapshots_are_source_bound_but_existing_store_records_stay_unknown(tmp_path):
+def test_dashboard_snapshots_are_source_bound_but_existing_store_records_stay_unknown(tmp_path: Path) -> None:
     dashboard.cache_clear()
     overview = dashboard()
-    assert overview["dispatch"]["provenance"]["schema"] == "helioforge.result-provenance.v1"
-    assert overview["finance"]["source_revision"] == overview["finance"]["provenance"]["source_revision"]
+    assert field(overview, "dispatch", "provenance", "schema") == "helioforge.result-provenance.v1"
+    assert field(overview, "finance", "source_revision") == field(
+        overview, "finance", "provenance", "source_revision"
+    )
 
     store = Store(str(tmp_path / "legacy.sqlite3"))
     saved = store.save("hybrid", {"hours": 24}, {"model": "hybrid-greedy-hourly-v1", "warnings": []})
-    legacy = store.get_run(saved["run_id"])
+    run_id = saved["run_id"]
+    assert isinstance(run_id, str)
+    legacy = store.get_run(run_id)
     assert legacy is not None
     assert "provenance" not in legacy["result"]
     assert "source_revision" not in legacy["result"]
 
 
-def test_numerical_api_stores_provenance_before_export_and_does_not_stamp_council(tmp_path, monkeypatch):
+def test_numerical_api_stores_provenance_before_export_and_does_not_stamp_council(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.setenv("HELIOFORGE_DB", str(tmp_path / "api.sqlite3"))
     with TestClient(app, base_url="http://127.0.0.1") as client:
         numeric = client.post("/api/finance/evaluate", json={})
@@ -102,12 +127,17 @@ def test_numerical_api_stores_provenance_before_export_and_does_not_stamp_counci
         assert "provenance" not in council.json()
 
 
-def test_default_storage_provenance_hashes_materialized_solver_inputs_but_store_keeps_request_hash(tmp_path, monkeypatch):
+def test_default_storage_provenance_hashes_materialized_solver_inputs_but_store_keeps_request_hash(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.setenv("HELIOFORGE_DB", str(tmp_path / "storage-effective-inputs.sqlite3"))
     request = StorageRequest()
     submitted = request.model_dump()
     effective = {**submitted, **demo_profile(request.market)}
-    dataset_fields = {"market": effective["market"], **{key: effective[key] for key in ("load_kw", "pv_kw", "import_eur_per_kwh", "export_eur_per_kwh")}}
+    dataset_fields = {
+        "market": effective["market"],
+        **{key: effective[key] for key in ("load_kw", "pv_kw", "import_eur_per_kwh", "export_eur_per_kwh")},
+    }
 
     with TestClient(app, base_url="http://127.0.0.1") as client:
         response = client.post("/api/storage/optimize", json={})
@@ -117,29 +147,36 @@ def test_default_storage_provenance_hashes_materialized_solver_inputs_but_store_
 
     assert stored["inputs"] == submitted, "the existing store request identity remains unchanged"
     assert stored["result"]["provenance"]["input"]["sha256"] == input_revision(effective)
-    assert body["input_sha256"] == input_revision(submitted), "the run request digest remains the submitted JSON digest"
+    assert body["input_sha256"] == input_revision(submitted), (
+        "the run request digest remains the submitted JSON digest"
+    )
     assert body["provenance"]["input"]["sha256"] != body["input_sha256"]
     assert body["provenance"]["data"]["dataset_revision"] == input_revision(dataset_fields)
     assert body["provenance"]["data"]["identity"]["kind"] == "built_in_demo_profile"
 
 
-def test_dashboard_storage_provenance_uses_same_materialized_profile():
+def test_dashboard_storage_provenance_uses_same_materialized_profile() -> None:
     dashboard.cache_clear()
     request = StorageRequest()
     effective = {**request.model_dump(), **demo_profile(request.market)}
-    dataset_fields = {"market": effective["market"], **{key: effective[key] for key in ("load_kw", "pv_kw", "import_eur_per_kwh", "export_eur_per_kwh")}}
+    dataset_fields = {
+        "market": effective["market"],
+        **{key: effective[key] for key in ("load_kw", "pv_kw", "import_eur_per_kwh", "export_eur_per_kwh")},
+    }
 
     dispatch = dashboard()["dispatch"]
 
-    assert dispatch["provenance"]["input"]["sha256"] == input_revision(effective)
-    assert dispatch["provenance"]["data"]["dataset_revision"] == input_revision(dataset_fields)
+    assert field(dispatch, "provenance", "input", "sha256") == input_revision(effective)
+    assert field(dispatch, "provenance", "data", "dataset_revision") == input_revision(dataset_fields)
 
 
-def test_saved_council_evidence_includes_original_inputs_for_digest_review(tmp_path, monkeypatch):
+def test_saved_council_evidence_includes_original_inputs_for_digest_review(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.setenv("HELIOFORGE_DB", str(tmp_path / "council-api.sqlite3"))
-    captured = {}
+    captured: dict[str, Mapping[str, object]] = {}
 
-    def capture_local_council(request, evidence):
+    def capture_local_council(_request: CouncilRequest, evidence: Mapping[str, object]) -> dict[str, object]:
         captured["evidence"] = evidence
         return {"mode": "local", "warnings": []}
 
@@ -149,6 +186,9 @@ def test_saved_council_evidence_includes_original_inputs_for_digest_review(tmp_p
         reviewed = client.post("/api/council/review", json={"evidence_run_ids": [calculated["run_id"]]})
 
     assert reviewed.status_code == 200, reviewed.text
-    supplied = captured["evidence"]["supplied_records"][0]
-    assert supplied["inputs"]["capex_eur"] == 3_200_000
+    supplied_records = captured["evidence"]["supplied_records"]
+    assert isinstance(supplied_records, list)
+    supplied = supplied_records[0]
+    assert isinstance(supplied, dict)
+    assert field(supplied, "inputs", "capex_eur") == 3_200_000
     assert supplied["input_sha256"] == calculated["input_sha256"]

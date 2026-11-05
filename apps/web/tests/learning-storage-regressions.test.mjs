@@ -36,9 +36,9 @@ test('a confirmed reset clears both records, quiz feedback and every progress di
   assert.equal(x.memory.has('hf-learning-mastery-v1'), false);
   assert.equal(x.exports.at(-1).payload.passed_self_checks.length, 0);
   assert.equal(Object.keys(x.exports.at(-1).payload.mastery_checks).length, 0);
-  assert.equal(x.feedback.innerHTML, '');
+  assert.equal(x.feedback.markup, '');
   assert.equal(x.state.hybrid.quizResult, null);
-  assert.match(x.hero.innerHTML, /^0<small>/);
+  assert.match(x.hero.markup, /^0<small>/);
   assert.match(x.status.textContent, /Foundation 0\/9/);
   assert.equal(x.toasts.at(-1).message, 'Browser learning progress reset.');
 });

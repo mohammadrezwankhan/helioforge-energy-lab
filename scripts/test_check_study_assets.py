@@ -1,4 +1,5 @@
 """Focused regression tests for study bundle cross-platform replay."""
+
 from __future__ import annotations
 
 import importlib.util
@@ -6,6 +7,7 @@ import json
 import math
 from copy import deepcopy
 from pathlib import Path
+from typing import TypedDict
 
 import pytest
 
@@ -16,33 +18,86 @@ CHECKER = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(CHECKER)
 
 
-def _bearing_catalogue(signal: list[float], *, title: str = "Bearing spectrum") -> list[dict]:
-    return [{
-        "id": "research-bearing",
-        "title": title,
-        "fields": [{"name": "sample_rate_hz", "default": 256}],
-        "data_fields": [{
-            "name": "training_records",
-            "default": [{"record_id": "synthetic-training-1", "signal": signal}],
-        }],
-    }]
+class SignalRecord(TypedDict):
+    record_id: str
+    signal: list[float]
 
 
-def _bearing_catalogue_with_records() -> list[dict]:
+class DataField(TypedDict):
+    name: str
+    default: list[SignalRecord]
+
+
+class NumericField(TypedDict):
+    name: str
+    default: float
+
+
+class BearingStudy(TypedDict):
+    id: str
+    title: str
+    fields: list[NumericField]
+    data_fields: list[DataField]
+
+
+class Metric(TypedDict):
+    label: str
+    value: float
+    unit: str
+
+
+class MetricResult(TypedDict):
+    metrics: list[Metric]
+
+
+class RegistrationDetails(TypedDict):
+    rotation_matrix: list[list[float]]
+
+
+class RegistrationResult(MetricResult):
+    details: RegistrationDetails
+
+
+def _bearing_catalogue(signal: list[float], *, title: str = "Bearing spectrum") -> list[BearingStudy]:
+    return [
+        {
+            "id": "research-bearing",
+            "title": title,
+            "fields": [{"name": "sample_rate_hz", "default": 256}],
+            "data_fields": [
+                {
+                    "name": "training_records",
+                    "default": [{"record_id": "synthetic-training-1", "signal": signal}],
+                }
+            ],
+        }
+    ]
+
+
+def _bearing_catalogue_with_records() -> list[BearingStudy]:
     catalogue = _bearing_catalogue([0.0])
     catalogue[0]["data_fields"] = [
-        {"name": "training_records", "default": [{
-            "record_id": "synthetic-training-5", "signal": [0.0] * 152,
-        }]},
-        {"name": "heldout_records", "default": [
-            {"record_id": "synthetic-heldout-normal", "signal": [0.0] * 177},
-            {"record_id": "synthetic-heldout-extra-tone", "signal": [0.0] * 256},
-        ]},
+        {
+            "name": "training_records",
+            "default": [
+                {
+                    "record_id": "synthetic-training-5",
+                    "signal": [0.0] * 152,
+                }
+            ],
+        },
+        {
+            "name": "heldout_records",
+            "default": [
+                {"record_id": "synthetic-heldout-normal", "signal": [0.0] * 177},
+                {"record_id": "synthetic-heldout-extra-tone", "signal": [0.0] * 256},
+            ],
+        },
     ]
     return catalogue
 
 
-def test_exact_catalogue_comparison_diagnoses_metadata_and_shape_changes():
+def test_exact_catalogue_comparison_diagnoses_metadata_and_shape_changes() -> None:
     frozen = _bearing_catalogue([0.0, 0.25, -0.5])
     title_changed = _bearing_catalogue([0.0, 0.25, -0.5], title="Changed model title")
     missing_sample = _bearing_catalogue([0.0, 0.25])
@@ -50,21 +105,25 @@ def test_exact_catalogue_comparison_diagnoses_metadata_and_shape_changes():
     metadata_differences, omitted, tolerated = CHECKER.compare_catalogues(frozen, title_changed)
     shape_differences, shape_omitted, shape_tolerated = CHECKER.compare_catalogues(frozen, missing_sample)
 
-    assert metadata_differences == [{
-        "path": "$[0].title",
-        "expected": "Bearing spectrum",
-        "actual": "Changed model title",
-    }]
+    assert metadata_differences == [
+        {
+            "path": "$[0].title",
+            "expected": "Bearing spectrum",
+            "actual": "Changed model title",
+        }
+    ]
     assert (omitted, tolerated) == (False, 0)
-    assert shape_differences == [{
-        "path": "$[0].data_fields[0].default[0].signal.length",
-        "expected": 3,
-        "actual": 2,
-    }]
+    assert shape_differences == [
+        {
+            "path": "$[0].data_fields[0].default[0].signal.length",
+            "expected": 3,
+            "actual": 2,
+        }
+    ]
     assert (shape_omitted, shape_tolerated) == (False, 0)
 
 
-def test_observed_bearing_fixture_one_ulp_difference_is_narrowly_accepted():
+def test_observed_bearing_fixture_one_ulp_difference_is_narrowly_accepted() -> None:
     frozen_value = 0.005656854249491658
     linux_value = 0.0056568542494916585
     assert math.nextafter(frozen_value, math.inf) == linux_value
@@ -78,7 +137,7 @@ def test_observed_bearing_fixture_one_ulp_difference_is_narrowly_accepted():
     assert tolerated == 1
 
 
-def test_all_eight_observed_compound_signal_deltas_fit_formula_bound():
+def test_all_eight_observed_compound_signal_deltas_fit_formula_bound() -> None:
     deltas = [
         ("training_records", 0, 32, 0.007071067811864741, 0.007071067811864742, 2),
         ("training_records", 0, 151, 0.8556710930136611, 0.8556710930136613, 2),
@@ -112,7 +171,7 @@ def test_all_eight_observed_compound_signal_deltas_fit_formula_bound():
     assert max(abs(actual - expected) for _, _, _, expected, actual, _ in deltas) == 2.220446049250313e-16
 
 
-def test_bearing_delta_beyond_formula_bound_and_other_numeric_changes_fail():
+def test_bearing_delta_beyond_formula_bound_and_other_numeric_changes_fail() -> None:
     frozen = _bearing_catalogue([0.0])
     current = deepcopy(frozen)
     bound = CHECKER.bearing_fixture_absolute_error_bound("training_records", "synthetic-training-1")
@@ -125,15 +184,17 @@ def test_bearing_delta_beyond_formula_bound_and_other_numeric_changes_fail():
     assert differences[0]["actual"] > bound
     assert (omitted, tolerated) == (False, 0)
 
-    changed_metadata = [{
-        **frozen[0],
-        "fields": [{"name": "sample_rate_hz", "default": 256.0}],
-    }]
+    changed_metadata = [
+        {
+            **frozen[0],
+            "fields": [{"name": "sample_rate_hz", "default": 256.0}],
+        }
+    ]
     metadata_differences, _, _ = CHECKER.compare_catalogues(frozen, changed_metadata)
     assert metadata_differences[0]["path"] == "$[0].fields[0].default"
 
 
-def test_stored_inputs_must_match_frozen_defaults_and_digest_exactly():
+def test_stored_inputs_must_match_frozen_defaults_and_digest_exactly() -> None:
     study = {
         "id": "test-study",
         "fields": [{"name": "capacity_kw", "default": 10.0}],
@@ -157,11 +218,12 @@ def test_stored_inputs_must_match_frozen_defaults_and_digest_exactly():
     with pytest.raises(AssertionError, match="stored inputs differ from frozen catalogue defaults"):
         CHECKER.validate_frozen_inputs("test-study", {"capacity_kw": -0.0}, signed_zero_study)
     signed_zero_differences, _, _ = CHECKER.compare_catalogues(
-        _bearing_catalogue([0.0]), _bearing_catalogue([-0.0]))
+        _bearing_catalogue([0.0]), _bearing_catalogue([-0.0])
+    )
     assert signed_zero_differences[0]["path"] == "$[0].data_fields[0].default[0].signal[0]"
 
 
-def test_full_replay_does_not_rewrite_frozen_asset_bytes(capsys):
+def test_full_replay_does_not_rewrite_frozen_asset_bytes(capsys: pytest.CaptureFixture[str]) -> None:
     source = CHECKER.ROOT / "apps/web/src/roadmap-data.ts"
     before = source.read_bytes()
 
@@ -171,7 +233,7 @@ def test_full_replay_does_not_rewrite_frozen_asset_bytes(capsys):
     assert source.read_bytes() == before
 
 
-def test_catalogue_diagnostic_caps_mismatch_count_and_long_values():
+def test_catalogue_diagnostic_caps_mismatch_count_and_long_values() -> None:
     frozen = {"a": "x" * 500, "b": 1, "c": 2}
     current = {"a": "y" * 500, "b": 3, "c": 4}
     differences, omitted = CHECKER.catalogue_differences(frozen, current, limit=1)
@@ -182,15 +244,17 @@ def test_catalogue_diagnostic_caps_mismatch_count_and_long_values():
     assert omitted is True
 
 
-def _annual_result(optimal: float, baseline: float) -> dict:
-    return {"metrics": [
-        {"label": "Optimal annual objective", "value": optimal, "unit": "EUR"},
-        {"label": "No-battery baseline objective", "value": baseline, "unit": "EUR"},
-        {"label": "Objective change versus baseline", "value": baseline - optimal, "unit": "EUR"},
-    ]}
+def _annual_result(optimal: float, baseline: float) -> MetricResult:
+    return {
+        "metrics": [
+            {"label": "Optimal annual objective", "value": optimal, "unit": "EUR"},
+            {"label": "No-battery baseline objective", "value": baseline, "unit": "EUR"},
+            {"label": "Objective change versus baseline", "value": baseline - optimal, "unit": "EUR"},
+        ]
+    }
 
 
-def test_annual_objective_change_uses_exact_identity_and_primitive_tolerance():
+def test_annual_objective_change_uses_exact_identity_and_primitive_tolerance() -> None:
     baseline = 247361.86151999998
     stored = _annual_result(247361.86152000123, baseline)
     replay = _annual_result(247361.86152000117, baseline)
@@ -202,17 +266,17 @@ def test_annual_objective_change_uses_exact_identity_and_primitive_tolerance():
     assert abs(stored["metrics"][2]["value"] - replay["metrics"][2]["value"]) > 1e-12
 
 
-def test_annual_objective_change_identity_and_primitive_result_mismatches_fail():
+def test_annual_objective_change_identity_and_primitive_result_mismatches_fail() -> None:
     baseline = 247361.86151999998
     stored = _annual_result(247361.86152000123, baseline)
     invalid_identity = deepcopy(stored)
     invalid_identity["metrics"][2]["value"] += 1e-8
 
-    identity_mismatches, _ = CHECKER.compare_replayed_results(
-        "storage-annualopt", stored, invalid_identity
+    identity_mismatches, _ = CHECKER.compare_replayed_results("storage-annualopt", stored, invalid_identity)
+    assert any(
+        "derived value is not exactly baseline minus optimized objective" in item["reason"]
+        for item in identity_mismatches
     )
-    assert any("derived value is not exactly baseline minus optimized objective" in item["reason"]
-               for item in identity_mismatches)
 
     materially_changed_operand = _annual_result(247362.0, baseline)
     operand_mismatches, _ = CHECKER.compare_replayed_results(
@@ -221,19 +285,20 @@ def test_annual_objective_change_identity_and_primitive_result_mismatches_fail()
     assert any(item["path"] == "storage-annualopt.metrics[0].value" for item in operand_mismatches)
 
 
-def test_result_comparison_collects_all_mismatch_paths_and_values():
+def test_result_comparison_collects_all_mismatch_paths_and_values() -> None:
     stored = {"metrics": [{"value": 1.0}, {"value": 2.0}, {"value": 3.0}]}
     replay = {"metrics": [{"value": 1.0}, {"value": 20.0}, {"value": 30.0}]}
 
     mismatches, _ = CHECKER.compare_replayed_results("other-study", stored, replay)
 
     assert [item["path"] for item in mismatches] == [
-        "other-study.metrics[1].value", "other-study.metrics[2].value",
+        "other-study.metrics[1].value",
+        "other-study.metrics[2].value",
     ]
     assert [(item["expected"], item["actual"]) for item in mismatches] == [(20.0, 2.0), (30.0, 3.0)]
 
 
-def test_result_comparison_reports_missing_list_values_with_their_paths():
+def test_result_comparison_reports_missing_list_values_with_their_paths() -> None:
     stored = {"series": [1.0, 2.0]}
     replay = {"series": [1.0, 2.0, 3.0]}
 
@@ -245,13 +310,14 @@ def test_result_comparison_reports_missing_list_values_with_their_paths():
     }
 
 
-def _frozen_registration_result() -> dict:
+def _frozen_registration_result() -> RegistrationResult:
     source = (CHECKER.ROOT / "apps/web/src/roadmap-data.ts").read_text(encoding="utf-8")
     bundle = json.loads(source.split("STUDY_BUNDLE: StudyBundle = ", 1)[1].rsplit("; }", 1)[0])
-    return deepcopy(bundle["results"]["pilots-registration"])
+    result: RegistrationResult = deepcopy(bundle["results"]["pilots-registration"])
+    return result
 
 
-def _registration_result_with_matrix(matrix: list[list[float]]) -> dict:
+def _registration_result_with_matrix(matrix: list[list[float]]) -> RegistrationResult:
     result = _frozen_registration_result()
     result["details"]["rotation_matrix"] = deepcopy(matrix)
     observation, _ = CHECKER.registration_angle_observation(result)
@@ -260,7 +326,7 @@ def _registration_result_with_matrix(matrix: list[list[float]]) -> dict:
     return result
 
 
-def test_frozen_registration_angle_reconstructs_from_its_saved_matrix():
+def test_frozen_registration_angle_reconstructs_from_its_saved_matrix() -> None:
     result = _frozen_registration_result()
 
     observation, error = CHECKER.registration_angle_observation(result)
@@ -270,41 +336,56 @@ def test_frozen_registration_angle_reconstructs_from_its_saved_matrix():
     assert observation["rotation_matrix"] == result["details"]["rotation_matrix"]
     assert observation["reported_angle_degrees"] == result["metrics"][3]["value"]
     assert result["metrics"][3]["value"] == 1.2074182697257333e-06
-    assert math.isclose(observation["computed_angle_degrees"], 1.2074182697257333e-06,
-                        rel_tol=1e-12, abs_tol=1e-12)
+    assert math.isclose(
+        observation["computed_angle_degrees"], 1.2074182697257333e-06, rel_tol=1e-12, abs_tol=1e-12
+    )
 
 
-def test_near_identity_registration_matrices_allow_only_their_own_derived_angles():
+def test_near_identity_registration_matrices_allow_only_their_own_derived_angles() -> None:
     frozen = _frozen_registration_result()
     stored_matrix = frozen["details"]["rotation_matrix"]
-    replayed = _registration_result_with_matrix([
-        [1.0, 0.0, 0.0],
-        [0.0, 1.0, 0.0],
-        [0.0, 0.0, 0.999999999999996],
-    ])
+    replayed = _registration_result_with_matrix(
+        [
+            [1.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [0.0, 0.0, 0.999999999999996],
+        ]
+    )
     stored_observation, stored_error = CHECKER.registration_angle_observation(frozen)
     replayed_observation, replayed_error = CHECKER.registration_angle_observation(replayed)
 
     assert stored_error is None and replayed_error is None
     assert stored_observation is not None and replayed_observation is not None
-    assert math.isclose(replayed_observation["computed_angle_degrees"], 3.6222548091772e-06,
-                        rel_tol=1e-12, abs_tol=1e-12)
-    assert abs(stored_observation["computed_angle_degrees"] - replayed_observation["computed_angle_degrees"]) > 1e-12
-    assert max(abs(stored_matrix[row][column] - replayed_observation["rotation_matrix"][row][column])
-               for row in range(3) for column in range(3)) < 1e-12
+    assert math.isclose(
+        replayed_observation["computed_angle_degrees"], 3.6222548091772e-06, rel_tol=1e-12, abs_tol=1e-12
+    )
+    assert (
+        abs(stored_observation["computed_angle_degrees"] - replayed_observation["computed_angle_degrees"])
+        > 1e-12
+    )
+    assert (
+        max(
+            abs(stored_matrix[row][column] - replayed_observation["rotation_matrix"][row][column])
+            for row in range(3)
+            for column in range(3)
+        )
+        < 1e-12
+    )
 
     mismatches, _ = CHECKER.compare_replayed_results("pilots-registration", frozen, replayed)
 
     assert mismatches == []
 
 
-def test_registration_angle_and_matrix_changes_fail_independently():
+def test_registration_angle_and_matrix_changes_fail_independently() -> None:
     frozen = _frozen_registration_result()
     altered_angle = deepcopy(frozen)
     altered_angle["metrics"][3]["value"] += 1e-7
     angle_mismatches, _ = CHECKER.compare_replayed_results("pilots-registration", frozen, altered_angle)
-    assert any(item["path"] == "pilots-registration.metrics[3].value"
-               and "own matrix" in item["reason"] for item in angle_mismatches)
+    assert any(
+        item["path"] == "pilots-registration.metrics[3].value" and "own matrix" in item["reason"]
+        for item in angle_mismatches
+    )
 
     altered_matrix = deepcopy(frozen)
     altered_matrix["details"]["rotation_matrix"][0][1] += 1e-6
@@ -312,11 +393,12 @@ def test_registration_angle_and_matrix_changes_fail_independently():
     assert matrix_error is None and matrix_observation is not None
     altered_matrix["metrics"][3]["value"] = matrix_observation["computed_angle_degrees"]
     matrix_mismatches, _ = CHECKER.compare_replayed_results("pilots-registration", frozen, altered_matrix)
-    assert any(item["path"] == "pilots-registration.details.rotation_matrix[0][1]"
-               for item in matrix_mismatches)
+    assert any(
+        item["path"] == "pilots-registration.details.rotation_matrix[0][1]" for item in matrix_mismatches
+    )
 
 
-def test_registration_angle_rejects_malformed_labels_shapes_types_and_nonfinite_values():
+def test_registration_angle_rejects_malformed_labels_shapes_types_and_nonfinite_values() -> None:
     frozen = _frozen_registration_result()
     cases = []
 
@@ -357,13 +439,15 @@ def test_registration_angle_rejects_malformed_labels_shapes_types_and_nonfinite_
         assert any(item["path"] == path for item in mismatches), (path, mismatches)
 
 
-def test_regular_nonzero_registration_rotation_replays_normally():
+def test_regular_nonzero_registration_rotation_replays_normally() -> None:
     theta = math.radians(37.0)
-    result = _registration_result_with_matrix([
-        [math.cos(theta), -math.sin(theta), 0.0],
-        [math.sin(theta), math.cos(theta), 0.0],
-        [0.0, 0.0, 1.0],
-    ])
+    result = _registration_result_with_matrix(
+        [
+            [math.cos(theta), -math.sin(theta), 0.0],
+            [math.sin(theta), math.cos(theta), 0.0],
+            [0.0, 0.0, 1.0],
+        ]
+    )
 
     observation, error = CHECKER.registration_angle_observation(result)
     mismatches, _ = CHECKER.compare_replayed_results("pilots-registration", result, deepcopy(result))

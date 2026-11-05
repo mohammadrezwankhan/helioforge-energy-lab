@@ -6,11 +6,13 @@ digests remain exact. The named generated bearing-fixture signals alone use a
 formula-derived absolute roundoff bound for cross-platform math.sin values.
 Frozen bytes are never rewritten.
 """
+
 import hashlib
 import json
 import math
 import struct
 import sys
+from collections.abc import Mapping, Sequence
 from copy import deepcopy
 from pathlib import Path
 from typing import Any
@@ -20,18 +22,20 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def _exact_json_equal(expected: Any, actual: Any) -> bool:
+def _exact_json_equal(expected: object, actual: object) -> bool:
     """Compare JSON structures without Python's `1 == 1.0` type coercion."""
     if type(expected) is not type(actual):
         return False
-    if isinstance(expected, float):
+    if isinstance(expected, float) and isinstance(actual, float):
         return struct.pack(">d", expected) == struct.pack(">d", actual)
-    if isinstance(expected, dict):
-        return (expected.keys() == actual.keys()
-                and all(_exact_json_equal(expected[key], actual[key]) for key in expected))
-    if isinstance(expected, list):
-        return (len(expected) == len(actual)
-                and all(_exact_json_equal(left, right) for left, right in zip(expected, actual, strict=True)))
+    if isinstance(expected, dict) and isinstance(actual, dict):
+        return expected.keys() == actual.keys() and all(
+            _exact_json_equal(expected[key], actual[key]) for key in expected
+        )
+    if isinstance(expected, list) and isinstance(actual, list):
+        return len(expected) == len(actual) and all(
+            _exact_json_equal(left, right) for left, right in zip(expected, actual, strict=True)
+        )
     return expected == actual
 
 
@@ -43,7 +47,9 @@ def _display_value(value: Any, limit: int = 180) -> Any:
     return encoded[: limit - 3] + "..."
 
 
-def catalogue_differences(expected: Any, actual: Any, *, limit: int = 12) -> tuple[list[dict[str, Any]], bool]:
+def catalogue_differences(
+    expected: Any, actual: Any, *, limit: int = 12
+) -> tuple[list[dict[str, Any]], bool]:
     """Return bounded JSON paths and values for strict catalogue mismatches.
 
     This is diagnostic only: callers still use exact JSON-value equality to decide
@@ -55,45 +61,51 @@ def catalogue_differences(expected: Any, actual: Any, *, limit: int = 12) -> tup
     differences: list[dict[str, Any]] = []
     truncated = False
 
+    def is_truncated() -> bool:
+        # add() can change this shared state while visit() is walking a collection.
+        return truncated
+
     def add(path: str, expected_value: Any, actual_value: Any) -> None:
         nonlocal truncated
         if len(differences) >= limit:
             truncated = True
             return
-        differences.append({
-            "path": path,
-            "expected": _display_value(expected_value),
-            "actual": _display_value(actual_value),
-        })
+        differences.append(
+            {
+                "path": path,
+                "expected": _display_value(expected_value),
+                "actual": _display_value(actual_value),
+            }
+        )
 
     def child_path(path: str, key: str) -> str:
         return f"{path}.{key}" if key.isidentifier() else f"{path}[{json.dumps(key)}]"
 
     def visit(want: Any, got: Any, path: str) -> None:
-        if truncated or _exact_json_equal(want, got):
+        if is_truncated() or _exact_json_equal(want, got):
             return
         if isinstance(want, dict) and isinstance(got, dict):
             for key in sorted(want.keys() - got.keys()):
                 add(child_path(path, str(key)), want[key], "<missing>")
-                if truncated:
+                if is_truncated():
                     return
             for key in sorted(got.keys() - want.keys()):
                 add(child_path(path, str(key)), "<missing>", got[key])
-                if truncated:
+                if is_truncated():
                     return
             for key in sorted(want.keys() & got.keys()):
                 visit(want[key], got[key], child_path(path, str(key)))
-                if truncated:
+                if is_truncated():
                     return
             return
         if isinstance(want, list) and isinstance(got, list):
             if len(want) != len(got):
                 add(path + ".length", len(want), len(got))
-                if truncated:
+                if is_truncated():
                     return
-            for index, (left, right) in enumerate(zip(want, got)):
+            for index, (left, right) in enumerate(zip(want, got, strict=False)):
                 visit(left, right, f"{path}[{index}]")
-                if truncated:
+                if is_truncated():
                     return
             return
         add(path, want, got)
@@ -113,7 +125,7 @@ def float_ulp_distance(left: float, right: float) -> int:
     mask = (1 << 64) - 1
 
     def ordered(value: float) -> int:
-        bits = struct.unpack(">Q", struct.pack(">d", value))[0]
+        bits = int(struct.unpack(">Q", struct.pack(">d", value))[0])
         return (~bits & mask) if bits & sign_bit else bits | sign_bit
 
     return abs(ordered(left) - ordered(right))
@@ -150,9 +162,11 @@ def bearing_fixture_absolute_error_bound(field_name: str, record_id: Any) -> flo
     return 8 * sys.float_info.epsilon * math.fsum(abs(value) for value in coefficients)
 
 
-def _normalize_bearing_fixture_roundoff(expected: list, actual: list) -> tuple[list, int]:
+def _normalize_bearing_fixture_roundoff(
+    expected: Sequence[object], actual: Sequence[object]
+) -> tuple[list[object], int]:
     """Normalize only machine-level deltas in the named generated bearing signals."""
-    normalized = deepcopy(actual)
+    normalized = deepcopy(list(actual))
     tolerated = 0
     if len(expected) != len(normalized):
         return normalized, tolerated
@@ -164,10 +178,16 @@ def _normalize_bearing_fixture_roundoff(expected: list, actual: list) -> tuple[l
             continue
 
         for field_name in _BEARING_FIXTURE_FIELDS:
-            expected_fields = [field for field in expected_study.get("data_fields", [])
-                               if isinstance(field, dict) and field.get("name") == field_name]
-            actual_fields = [field for field in actual_study.get("data_fields", [])
-                             if isinstance(field, dict) and field.get("name") == field_name]
+            expected_fields = [
+                field
+                for field in expected_study.get("data_fields", [])
+                if isinstance(field, dict) and field.get("name") == field_name
+            ]
+            actual_fields = [
+                field
+                for field in actual_study.get("data_fields", [])
+                if isinstance(field, dict) and field.get("name") == field_name
+            ]
             if len(expected_fields) != 1 or len(actual_fields) != 1:
                 continue
             expected_records = expected_fields[0].get("default")
@@ -192,7 +212,9 @@ def _normalize_bearing_fixture_roundoff(expected: list, actual: list) -> tuple[l
                 if len(expected_signal) != len(actual_signal):
                     continue
 
-                for index, (expected_value, actual_value) in enumerate(zip(expected_signal, actual_signal, strict=True)):
+                for index, (expected_value, actual_value) in enumerate(
+                    zip(expected_signal, actual_signal, strict=True)
+                ):
                     if type(expected_value) is type(actual_value) and expected_value == actual_value:
                         continue
                     if type(expected_value) is not float or type(actual_value) is not float:
@@ -208,34 +230,45 @@ def _normalize_bearing_fixture_roundoff(expected: list, actual: list) -> tuple[l
     return normalized, tolerated
 
 
-def compare_catalogues(expected: list, actual: list, *, limit: int = 12) -> tuple[list[dict[str, Any]], bool, int]:
+def compare_catalogues(
+    expected: Sequence[object], actual: Sequence[object], *, limit: int = 12
+) -> tuple[list[dict[str, Any]], bool, int]:
     """Compare catalogue exactly, except for bounded absolute error in bearing fixture samples."""
     normalized, tolerated = _normalize_bearing_fixture_roundoff(expected, actual)
     differences, omitted = catalogue_differences(expected, normalized, limit=limit)
     return differences, omitted, tolerated
 
 
-def catalogue_default_inputs(study: dict) -> dict[str, Any]:
+def catalogue_default_inputs(study: Mapping[str, object]) -> dict[str, object]:
     """Materialize the same declared defaults as `studies.evaluate` for one frozen entry."""
-    return {
-        field["name"]: field["default"]
-        for field in [*study.get("fields", []), *study.get("data_fields", [])]
-    }
+    fields, data_fields = study.get("fields", []), study.get("data_fields", [])
+    if not isinstance(fields, list) or not isinstance(data_fields, list):
+        raise ValueError("Frozen study fields must be lists")
+    inputs: dict[str, object] = {}
+    for field in [*fields, *data_fields]:
+        if not isinstance(field, dict) or not isinstance(field.get("name"), str) or "default" not in field:
+            raise ValueError("Frozen study fields must name a default value")
+        inputs[field["name"]] = field["default"]
+    return inputs
 
 
-def validate_frozen_inputs(study_id: str, stored_inputs: Any, frozen_study: dict) -> None:
+def validate_frozen_inputs(study_id: str, stored_inputs: object, frozen_study: Mapping[str, object]) -> None:
     """Require the replay record to use exactly the frozen catalogue defaults."""
     expected_inputs = catalogue_default_inputs(frozen_study)
     if not _exact_json_equal(stored_inputs, expected_inputs):
         differences, omitted = catalogue_differences(expected_inputs, stored_inputs)
         raise AssertionError(
             f"{study_id}: stored inputs differ from frozen catalogue defaults: "
-            + json.dumps({"mismatch_paths": differences, "additional_differences_omitted": omitted}, ensure_ascii=True)
+            + json.dumps(
+                {"mismatch_paths": differences, "additional_differences_omitted": omitted}, ensure_ascii=True
+            )
         )
 
 
 def canonical_input_sha256(study_id: str, inputs: dict[str, Any]) -> str:
-    payload = json.dumps({"study": study_id, "inputs": inputs}, sort_keys=True, separators=(",", ":"), allow_nan=False)
+    payload = json.dumps(
+        {"study": study_id, "inputs": inputs}, sort_keys=True, separators=(",", ":"), allow_nan=False
+    )
     return hashlib.sha256(payload.encode()).hexdigest()
 
 
@@ -251,8 +284,10 @@ def _annual_storage_objective_change(result: Any) -> tuple[float, float] | None:
     metrics = result["metrics"]
     if len(metrics) < 3:
         return None
-    if any(not isinstance(metric, dict) or metric.get("label") != label or metric.get("unit") != "EUR"
-           for metric, label in zip(metrics[:3], labels, strict=True)):
+    if any(
+        not isinstance(metric, dict) or metric.get("label") != label or metric.get("unit") != "EUR"
+        for metric, label in zip(metrics[:3], labels, strict=True)
+    ):
         return None
     values = [metric.get("value") for metric in metrics[:3]]
     if any(type(value) is not float or not math.isfinite(value) for value in values):
@@ -276,33 +311,65 @@ def registration_angle_observation(result: Any) -> tuple[dict[str, Any] | None, 
     metrics = result.get("metrics")
     if not isinstance(metrics, list) or len(metrics) != 4:
         actual_count = len(metrics) if isinstance(metrics, list) else type(metrics).__name__
-        return invalid(prefix + ".metrics.length", 4, actual_count, "registration result must contain exactly four metrics")
+        return invalid(
+            prefix + ".metrics.length",
+            4,
+            actual_count,
+            "registration result must contain exactly four metrics",
+        )
     metric = metrics[3]
-    if not isinstance(metric, dict) or metric.get("label") != "Rigid rotation" or metric.get("unit") != "degrees":
-        return invalid(prefix + ".metrics[3]", {"label": "Rigid rotation", "unit": "degrees"}, metric,
-                       "registration rotation metric label and unit must match the model contract")
+    if (
+        not isinstance(metric, dict)
+        or metric.get("label") != "Rigid rotation"
+        or metric.get("unit") != "degrees"
+    ):
+        return invalid(
+            prefix + ".metrics[3]",
+            {"label": "Rigid rotation", "unit": "degrees"},
+            metric,
+            "registration rotation metric label and unit must match the model contract",
+        )
     reported_angle = metric.get("value")
     if type(reported_angle) is not float or not math.isfinite(reported_angle):
-        return invalid(prefix + ".metrics[3].value", "finite float degrees", reported_angle,
-                       "reported registration angle must be a finite float")
+        return invalid(
+            prefix + ".metrics[3].value",
+            "finite float degrees",
+            reported_angle,
+            "reported registration angle must be a finite float",
+        )
 
     details = result.get("details")
     matrix = details.get("rotation_matrix") if isinstance(details, dict) else None
-    if (not isinstance(matrix, list) or len(matrix) != 3
-            or any(not isinstance(row, list) or len(row) != 3 for row in matrix)):
-        return invalid(prefix + ".details.rotation_matrix", "3x3 list of finite float values", matrix,
-                       "registration rotation matrix has invalid shape")
+    if (
+        not isinstance(matrix, list)
+        or len(matrix) != 3
+        or any(not isinstance(row, list) or len(row) != 3 for row in matrix)
+    ):
+        return invalid(
+            prefix + ".details.rotation_matrix",
+            "3x3 list of finite float values",
+            matrix,
+            "registration rotation matrix has invalid shape",
+        )
     for row_index, row in enumerate(matrix):
         for column_index, value in enumerate(row):
             if type(value) is not float or not math.isfinite(value):
-                return invalid(f"{prefix}.details.rotation_matrix[{row_index}][{column_index}]",
-                               "finite float", value, "registration rotation matrix entries must be finite floats")
+                return invalid(
+                    f"{prefix}.details.rotation_matrix[{row_index}][{column_index}]",
+                    "finite float",
+                    value,
+                    "registration rotation matrix entries must be finite floats",
+                )
 
     rotation = np.asarray(matrix, dtype=float)
     trace = np.trace(rotation)
     if not math.isfinite(float(trace)):
-        return invalid(prefix + ".details.rotation_matrix", "finite matrix trace", float(trace),
-                       "registration rotation matrix trace must be finite")
+        return invalid(
+            prefix + ".details.rotation_matrix",
+            "finite matrix trace",
+            float(trace),
+            "registration rotation matrix trace must be finite",
+        )
     angle_cos = min(1.0, max(-1.0, (trace - 1) / 2))
     computed_angle = math.degrees(math.acos(angle_cos))
     observation = {
@@ -313,24 +380,39 @@ def registration_angle_observation(result: Any) -> tuple[dict[str, Any] | None, 
         "computed_angle_degrees": computed_angle,
     }
     if not math.isfinite(computed_angle):
-        return observation, {"path": prefix + ".metrics[3].value", "expected": "finite angle from matrix",
-                             "actual": computed_angle, "reason": "matrix-derived registration angle is nonfinite"}
+        return observation, {
+            "path": prefix + ".metrics[3].value",
+            "expected": "finite angle from matrix",
+            "actual": computed_angle,
+            "reason": "matrix-derived registration angle is nonfinite",
+        }
     if not math.isclose(reported_angle, computed_angle, rel_tol=1e-12, abs_tol=1e-12):
-        return observation, {"path": prefix + ".metrics[3].value", "expected": computed_angle,
-                             "actual": reported_angle,
-                             "reason": "reported angle does not match the angle computed from its own matrix"}
+        return observation, {
+            "path": prefix + ".metrics[3].value",
+            "expected": computed_angle,
+            "actual": reported_angle,
+            "reason": "reported angle does not match the angle computed from its own matrix",
+        }
     return observation, None
 
 
-def _result_mismatches(actual: Any, expected: Any, path: str, skip_paths: set[str],
-                       mismatches: list[dict[str, Any]], roundoff: list[dict[str, Any]]) -> None:
+def _result_mismatches(
+    actual: Any,
+    expected: Any,
+    path: str,
+    skip_paths: set[str],
+    mismatches: list[dict[str, Any]],
+    roundoff: list[dict[str, Any]],
+) -> None:
     """Collect every mismatch while retaining the established result tolerance."""
     if path in skip_paths:
         return
     if isinstance(expected, dict) and isinstance(actual, dict):
         for key in sorted(expected.keys() - actual.keys()):
             child = f"{path}.{key}" if str(key).isidentifier() else f"{path}[{json.dumps(key)}]"
-            mismatches.append({"path": child, "expected": _display_value(expected[key]), "actual": "<missing>"})
+            mismatches.append(
+                {"path": child, "expected": _display_value(expected[key]), "actual": "<missing>"}
+            )
         for key in sorted(actual.keys() - expected.keys()):
             child = f"{path}.{key}" if str(key).isidentifier() else f"{path}[{json.dumps(key)}]"
             mismatches.append({"path": child, "expected": "<missing>", "actual": _display_value(actual[key])})
@@ -341,29 +423,51 @@ def _result_mismatches(actual: Any, expected: Any, path: str, skip_paths: set[st
         if len(actual) != len(expected):
             mismatches.append({"path": path + ".length", "expected": len(expected), "actual": len(actual)})
         common_length = min(len(actual), len(expected))
-        for index, (actual_item, expected_item) in enumerate(zip(actual[:common_length], expected[:common_length])):
-            _result_mismatches(actual_item, expected_item, f"{path}[{index}]", skip_paths, mismatches, roundoff)
-        for index in range(common_length, len(expected)):
-            mismatches.append({"path": f"{path}[{index}]", "expected": _display_value(expected[index]),
-                               "actual": "<missing>"})
-        for index in range(common_length, len(actual)):
-            mismatches.append({"path": f"{path}[{index}]", "expected": "<missing>",
-                               "actual": _display_value(actual[index])})
+        for index, (actual_item, expected_item) in enumerate(
+            zip(actual[:common_length], expected[:common_length], strict=True)
+        ):
+            _result_mismatches(
+                actual_item, expected_item, f"{path}[{index}]", skip_paths, mismatches, roundoff
+            )
+        mismatches.extend(
+            {"path": f"{path}[{index}]", "expected": _display_value(expected[index]), "actual": "<missing>"}
+            for index in range(common_length, len(expected))
+        )
+        mismatches.extend(
+            {"path": f"{path}[{index}]", "expected": "<missing>", "actual": _display_value(actual[index])}
+            for index in range(common_length, len(actual))
+        )
     elif type(expected) in (int, float) and type(actual) in (int, float):
         if not math.isfinite(actual) or not math.isfinite(expected):
-            mismatches.append({"path": path, "expected": expected, "actual": actual, "reason": "nonfinite numeric result"})
+            mismatches.append(
+                {"path": path, "expected": expected, "actual": actual, "reason": "nonfinite numeric result"}
+            )
         elif math.isclose(actual, expected, rel_tol=1e-12, abs_tol=1e-12):
             if actual != expected:
                 roundoff.append({"path": path, "absolute": abs(actual - expected)})
         else:
-            mismatches.append({"path": path, "expected": expected, "actual": actual,
-                               "reason": "numeric result exceeds existing 1e-12 relative/absolute tolerance"})
+            mismatches.append(
+                {
+                    "path": path,
+                    "expected": expected,
+                    "actual": actual,
+                    "reason": "numeric result exceeds existing 1e-12 relative/absolute tolerance",
+                }
+            )
     elif type(actual) is not type(expected) or actual != expected:
-        mismatches.append({"path": path, "expected": _display_value(expected), "actual": _display_value(actual),
-                           "reason": "metadata differs"})
+        mismatches.append(
+            {
+                "path": path,
+                "expected": _display_value(expected),
+                "actual": _display_value(actual),
+                "reason": "metadata differs",
+            }
+        )
 
 
-def compare_replayed_results(study_id: str, stored: Any, fresh: Any) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+def compare_replayed_results(
+    study_id: str, stored: Any, fresh: Any
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """Compare replay output while validating ill-conditioned derived metrics from their own sources."""
     mismatches: list[dict[str, Any]] = []
     roundoff: list[dict[str, Any]] = []
@@ -376,14 +480,20 @@ def compare_replayed_results(study_id: str, stored: Any, fresh: Any) -> tuple[li
             if values is None or not _same_binary64(*values):
                 expected_value = values[0] if values is not None else "<valid objective operands required>"
                 actual_value = values[1] if values is not None else "<missing or malformed objective metrics>"
-                mismatches.append({
-                    "path": path,
-                    "expected": expected_value,
-                    "actual": actual_value,
-                    "reason": f"{role} derived value is not exactly baseline minus optimized objective",
-                })
-        if stored_values is not None and fresh_values is not None \
-                and _same_binary64(*stored_values) and _same_binary64(*fresh_values):
+                mismatches.append(
+                    {
+                        "path": path,
+                        "expected": expected_value,
+                        "actual": actual_value,
+                        "reason": f"{role} derived value is not exactly baseline minus optimized objective",
+                    }
+                )
+        if (
+            stored_values is not None
+            and fresh_values is not None
+            and _same_binary64(*stored_values)
+            and _same_binary64(*fresh_values)
+        ):
             # The delta is mathematically derived from metrics[0:2]. Comparing it
             # independently near zero magnifies harmless differences in those
             # large operands. Their existing tolerance implies the delta bound:
@@ -414,62 +524,123 @@ def main() -> int:
     source = (ROOT / "apps/web/src/roadmap-data.ts").read_text(encoding="utf-8")
     bundle = json.loads(source.split("STUDY_BUNDLE: StudyBundle = ", 1)[1].rsplit("; }", 1)[0])
     current_catalogue = json.loads(json.dumps(catalogue()))
-    mismatch_paths, omitted, tolerated_fixture_values = compare_catalogues(bundle["catalogue"], current_catalogue)
+    mismatch_paths, omitted, tolerated_fixture_values = compare_catalogues(
+        bundle["catalogue"], current_catalogue
+    )
     if mismatch_paths:
-        print(json.dumps({
-            "status": "FAIL",
-            "check": "study_catalogue_exact_match",
-            "mismatch_paths": mismatch_paths,
-            "additional_differences_omitted": omitted,
-            "roundoff_bearing_fixture_samples": tolerated_fixture_values,
-        }, ensure_ascii=True), file=sys.stderr)
+        print(  # noqa: T201 -- CLI report output.
+            json.dumps(
+                {
+                    "status": "FAIL",
+                    "check": "study_catalogue_exact_match",
+                    "mismatch_paths": mismatch_paths,
+                    "additional_differences_omitted": omitted,
+                    "roundoff_bearing_fixture_samples": tolerated_fixture_values,
+                },
+                ensure_ascii=True,
+            ),
+            file=sys.stderr,
+        )
         raise AssertionError("Study catalogue is stale; see bounded mismatch paths above.")
     frozen_catalogue_by_id = {study["id"]: study for study in bundle["catalogue"]}
-    assert set(bundle["results"]) == {s["id"] for s in catalogue()}
-    differences = []
+    if not (set(bundle["results"]) == {s["id"] for s in catalogue()}):
+        raise AssertionError
+    differences: list[float] = []
     result_mismatches = []
     timing_observations = []
     derived_observations = []
     for sid, original in bundle["results"].items():
         stored = dict(original)
         digest = stored.pop("evidence_sha256")
-        assert hashlib.sha256(json.dumps(stored, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest() == digest, sid
+        if not (
+            hashlib.sha256(
+                json.dumps(stored, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
+            ).hexdigest()
+            == digest
+        ):
+            raise AssertionError(sid)
         validate_frozen_inputs(sid, stored["inputs"], frozen_catalogue_by_id[sid])
-        assert stored["input_sha256"] == canonical_input_sha256(sid, stored["inputs"]), sid + ": input digest differs from frozen inputs"
-        fresh = json.loads(json.dumps(evaluate(StudyRequest(study=sid, inputs=stored["inputs"])), allow_nan=False))
+        if not (stored["input_sha256"] == canonical_input_sha256(sid, stored["inputs"])):
+            raise AssertionError(sid + ": input digest differs from frozen inputs")
+        fresh = json.loads(
+            json.dumps(evaluate(StudyRequest(study=sid, inputs=stored["inputs"])), allow_nan=False)
+        )
         fresh.pop("evidence_sha256")
-        assert stored["inputs"] == fresh["inputs"], sid + ": inputs changed"
-        assert stored["input_sha256"] == fresh["input_sha256"], sid + ": input digest changed during replay"
+        if not (stored["inputs"] == fresh["inputs"]):
+            raise AssertionError(sid + ": inputs changed")
+        if not (stored["input_sha256"] == fresh["input_sha256"]):
+            raise AssertionError(sid + ": input digest changed during replay")
         # Measured wall time is execution telemetry, not a deterministic model output.
         # Validate and retain both timings; compare all other output fields unchanged.
         if sid == "storage-annualopt":
-            timings = {"stored_seconds": stored["details"].pop("solver_runtime_seconds"),
-                       "fresh_seconds": fresh["details"].pop("solver_runtime_seconds")}
-            assert all(isinstance(v, (int, float)) and math.isfinite(v) and v >= 0 for v in timings.values())
+            timings = {
+                "stored_seconds": stored["details"].pop("solver_runtime_seconds"),
+                "fresh_seconds": fresh["details"].pop("solver_runtime_seconds"),
+            }
+            if not (
+                all(isinstance(v, (int, float)) and math.isfinite(v) and v >= 0 for v in timings.values())
+            ):
+                raise AssertionError
             timing_observations.append({"path": sid + ".details.solver_runtime_seconds", **timings})
-            derived_observations.append({"path": sid + ".metrics[2].value",
-                                         "policy": "Exact baseline-minus-objective identity in both records; original tolerance on both operands.",
-                                         "stored_objective_metrics": stored["metrics"][:3],
-                                         "replayed_objective_metrics": fresh["metrics"][:3]})
+            derived_observations.append(
+                {
+                    "path": sid + ".metrics[2].value",
+                    "policy": (
+                        "Exact baseline-minus-objective identity in both records;"
+                        " original tolerance on both operands."
+                    ),
+                    "stored_objective_metrics": stored["metrics"][:3],
+                    "replayed_objective_metrics": fresh["metrics"][:3],
+                }
+            )
         elif sid == "pilots-registration":
             stored_rotation, stored_error = registration_angle_observation(stored)
             fresh_rotation, fresh_error = registration_angle_observation(fresh)
-            derived_observations.append({"path": sid + ".metrics[3].value",
-                                         "policy": "Each rigid rotation angle is checked against its own finite 3x3 matrix; matrix entries retain the original result tolerance.",
-                                         "stored": stored_rotation if stored_rotation is not None else {"error": stored_error},
-                                         "replayed": fresh_rotation if fresh_rotation is not None else {"error": fresh_error}})
+            derived_observations.append(
+                {
+                    "path": sid + ".metrics[3].value",
+                    "policy": (
+                        "Each rigid rotation angle is checked against its own finite"
+                        " 3x3 matrix; matrix entries retain the original result"
+                        " tolerance."
+                    ),
+                    "stored": stored_rotation if stored_rotation is not None else {"error": stored_error},
+                    "replayed": fresh_rotation if fresh_rotation is not None else {"error": fresh_error},
+                }
+            )
         mismatches, roundoff = compare_replayed_results(sid, stored, fresh)
         result_mismatches.extend(mismatches)
         differences.extend(item["absolute"] for item in roundoff)
     if result_mismatches:
-        print(json.dumps({"status": "FAIL", "check": "study_result_replay",
-                          "mismatch_count": len(result_mismatches), "mismatches": result_mismatches},
-                         ensure_ascii=True), file=sys.stderr)
-        raise AssertionError(f"Study replay results differ at {len(result_mismatches)} paths; see diagnostics above.")
-    print(json.dumps({"status": "PASS", "studies": len(bundle["results"]), "numeric_roundoff_differences": len(differences),
-                      "max_roundoff": max(differences, default=0), "execution_timing_observations": timing_observations,
-                      "derived_metric_observations": derived_observations,
-                      "roundoff_bearing_fixture_samples": tolerated_fixture_values, "artifact_rewritten": False}))
+        print(  # noqa: T201 -- CLI report output.
+            json.dumps(
+                {
+                    "status": "FAIL",
+                    "check": "study_result_replay",
+                    "mismatch_count": len(result_mismatches),
+                    "mismatches": result_mismatches,
+                },
+                ensure_ascii=True,
+            ),
+            file=sys.stderr,
+        )
+        raise AssertionError(
+            f"Study replay results differ at {len(result_mismatches)} paths; see diagnostics above."
+        )
+    print(  # noqa: T201 -- CLI report output.
+        json.dumps(
+            {
+                "status": "PASS",
+                "studies": len(bundle["results"]),
+                "numeric_roundoff_differences": len(differences),
+                "max_roundoff": max(differences, default=0),
+                "execution_timing_observations": timing_observations,
+                "derived_metric_observations": derived_observations,
+                "roundoff_bearing_fixture_samples": tolerated_fixture_values,
+                "artifact_rewritten": False,
+            }
+        )
+    )
     return 0
 
 

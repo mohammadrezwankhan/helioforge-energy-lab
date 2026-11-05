@@ -1,4 +1,4 @@
-namespace HF {
+namespace HF { // eslint-disable-line @typescript-eslint/no-namespace, @typescript-eslint/no-unused-vars -- HF is the ordered global-script bundle namespace; modules change its shared runtime contract.
   export interface HybridInputs {
     system_id:string; scenario_id:string; hours:number; control:'GFL'|'GFM'|'Dual'|'Synchronous';
     solar_kw:number; wind_kw:number; hydro_kw:number; generator_kw:number; battery_kwh:number; battery_kw:number;

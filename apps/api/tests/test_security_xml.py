@@ -1,5 +1,7 @@
 """The upstream XML boundary rejects DTDs before any entity expansion."""
 
+from pathlib import Path
+
 import pytest
 
 from helioforge.integrations import xml_root
@@ -16,7 +18,7 @@ from helioforge.integrations import xml_root
     ],
     ids=["doctype", "internal-entity", "external-doctype"],
 )
-def test_upstream_xml_rejects_doctype_in_every_supported_encoding(encoding, document):
+def test_upstream_xml_rejects_doctype_in_every_supported_encoding(encoding: str, document: str) -> None:
     # A byte-pattern check misses the NUL-interleaved declarations in UTF-16.
     # The tiny marker demonstrates expansion without a resource-exhaustion payload.
     with pytest.raises(ValueError, match="entities and document types are forbidden"):
@@ -24,7 +26,7 @@ def test_upstream_xml_rejects_doctype_in_every_supported_encoding(encoding, docu
 
 
 @pytest.mark.parametrize("encoding", ["utf-8", "utf-16", "utf-16le", "utf-16be"])
-def test_upstream_xml_preserves_safe_encodings_namespaces_and_character_references(encoding):
+def test_upstream_xml_preserves_safe_encodings_namespaces_and_character_references(encoding: str) -> None:
     document = (
         '<feed xmlns="http://www.w3.org/2005/Atom"><entry>'
         "<title>Research &amp; energy &#8364;</title></entry></feed>"
@@ -34,12 +36,14 @@ def test_upstream_xml_preserves_safe_encodings_namespaces_and_character_referenc
     assert root.findtext("entry/title") == "Research & energy €"
 
 
-def test_upstream_xml_reports_malformed_input_without_parser_details():
-    with pytest.raises(ValueError, match="^Upstream XML is invalid\\.$"):
+def test_upstream_xml_reports_malformed_input_without_parser_details() -> None:
+    with pytest.raises(ValueError, match=r"^Upstream XML is invalid\.$"):
         xml_root(b"<feed><entry></feed>")
 
 
-def test_regulator_api_rejects_encoded_entities_without_saving_evidence(tmp_path, monkeypatch):
+def test_regulator_api_rejects_encoded_entities_without_saving_evidence(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     from fastapi.testclient import TestClient
 
     from helioforge.main import app
@@ -52,7 +56,7 @@ def test_regulator_api_rejects_encoded_entities_without_saving_evidence(tmp_path
         "<link>https://www.cre.fr/publication</link></entry></feed>"
     )
 
-    async def supplied_feed(url, params):
+    async def supplied_feed(_url: str, _params: dict[str, str | float]) -> bytes:
         # Substitute only the remote transport. The API, parser and store are real.
         return document.encode("utf-16")
 

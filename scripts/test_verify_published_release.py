@@ -1,4 +1,5 @@
 """Focused offline tests for the published-release verifier's pure helpers."""
+
 from __future__ import annotations
 
 import gzip
@@ -45,8 +46,9 @@ class RouteAndCspTests(unittest.TestCase):
     def test_site_file_route_mapping(self) -> None:
         self.assertEqual(VERIFY.route_for_site_file("index.html"), "/")
         self.assertEqual(VERIFY.route_for_site_file("about/index.html"), "/about/")
-        self.assertEqual(VERIFY.route_for_site_file("learning/model-glossary/index.html"),
-                         "/learning/model-glossary/")
+        self.assertEqual(
+            VERIFY.route_for_site_file("learning/model-glossary/index.html"), "/learning/model-glossary/"
+        )
         self.assertEqual(VERIFY.route_for_site_file("run/data/file name.json"), "/run/data/file%20name.json")
         self.assertIsNone(VERIFY.route_for_site_file("_headers"))
         self.assertIsNone(VERIFY.route_for_site_file("_redirects"))
@@ -67,8 +69,12 @@ class SourceIdentityTests(unittest.TestCase):
         receipt = {"source_base_commit": commit, "working_tree_dirty": False}
         facts = {"sourceRevision": commit, "sourceTreeDirty": False}
         self.assertEqual(VERIFY.source_identity_check(facts, receipt)["status"], "PASS")
-        self.assertEqual(VERIFY.source_identity_check({**facts, "sourceTreeDirty": True}, receipt)["status"], "FAIL")
-        self.assertEqual(VERIFY.source_identity_check(facts, {**receipt, "source_base_commit": None})["status"], "FAIL")
+        self.assertEqual(
+            VERIFY.source_identity_check({**facts, "sourceTreeDirty": True}, receipt)["status"], "FAIL"
+        )
+        self.assertEqual(
+            VERIFY.source_identity_check(facts, {**receipt, "source_base_commit": None})["status"], "FAIL"
+        )
 
 
 class MainStatusTests(unittest.TestCase):
@@ -82,15 +88,31 @@ class MainStatusTests(unittest.TestCase):
             out = root / "evidence"
             app_facts = {"runtimeSha256": hashlib.sha256(b"runtime").hexdigest()}
             files = {"app.json": json.dumps(app_facts).encode("utf-8"), "run/index.html": b"runtime"}
-            receipt = {"source_base_commit": "a" * 40, "working_tree_dirty": False,
-                       "ci_run_id": "123", "ci_attempt": "1"}
+            receipt = {
+                "source_base_commit": "a" * 40,
+                "working_tree_dirty": False,
+                "ci_run_id": "123",
+                "ci_attempt": "1",
+            }
             preflight = [VERIFY.check("fixture_preflight", True, True, True)]
             stdout = io.StringIO()
-            with mock.patch.object(VERIFY, "check_receipt", return_value=(preflight, receipt, files)), \
-                    mock.patch.object(VERIFY, "verify_release", side_effect=RuntimeError("fixture HTTP failure")), \
-                    redirect_stdout(stdout):
-                result = VERIFY.main(["--base-url", "https://example.test", "--site", str(site),
-                                      "--receipt", str(receipt_path), "--out", str(out)])
+            with (
+                mock.patch.object(VERIFY, "check_receipt", return_value=(preflight, receipt, files)),
+                mock.patch.object(VERIFY, "verify_release", side_effect=RuntimeError("fixture HTTP failure")),
+                redirect_stdout(stdout),
+            ):
+                result = VERIFY.main(
+                    [
+                        "--base-url",
+                        "https://example.test",
+                        "--site",
+                        str(site),
+                        "--receipt",
+                        str(receipt_path),
+                        "--out",
+                        str(out),
+                    ]
+                )
             report = json.loads((out / "report.json").read_text(encoding="utf-8"))
             self.assertEqual(result, 1)
             self.assertEqual(report["status"], "FAIL")
@@ -98,6 +120,32 @@ class MainStatusTests(unittest.TestCase):
 
 
 class HttpBoundaryTests(unittest.TestCase):
+    def test_forbidden_urls_are_rejected_before_any_request(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            client = VERIFY.HttpClient("https://example.test", Path(temp), 2)
+            with mock.patch.object(client.opener, "open") as opened:
+                for url in [
+                    "file:///tmp/release-probe",
+                    "data:text/plain,release-probe",
+                    "ftp://example.test/run/",
+                    "http://example.test/run/",
+                    "https://other.test/run/",
+                    "https://user:password@example.test/run/",
+                    "https://example.test:444/run/",
+                    "https://example.test/run/#fragment",
+                ]:
+                    with self.subTest(url=url), self.assertRaises(ValueError):
+                        client.get(url, "forbidden")
+                opened.assert_not_called()
+            self.assertEqual(client.count, 0)
+            self.assertEqual(client.records, [])
+
+    def test_http_is_permitted_only_for_an_explicit_loopback_fixture(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            for url in ["http://example.test", "file:///tmp/release", "https://user@example.test"]:
+                with self.subTest(url=url), self.assertRaises(ValueError):
+                    VERIFY.HttpClient(url, Path(temp), 2)
+
     def test_public_403_is_saved_and_raises_blocked(self) -> None:
         class DenyHandler(BaseHTTPRequestHandler):
             requests = 0
@@ -111,7 +159,7 @@ class HttpBoundaryTests(unittest.TestCase):
                 self.end_headers()
                 self.wfile.write(b"ordinary access denied")
 
-            def log_message(self, format: str, *args: object) -> None:
+            def log_message(self, _format: str, *_args: object) -> None:
                 return
 
         server = HTTPServer(("127.0.0.1", 0), DenyHandler)
@@ -123,10 +171,18 @@ class HttpBoundaryTests(unittest.TestCase):
                 with self.assertRaises(VERIFY.Blocked) as caught:
                     client.get(client.origin + "/", "403-fixture")
                 self.assertEqual(DenyHandler.requests, 1)
-                self.assertEqual(DenyHandler.user_agent,
-                                 "HelioForge-Release-Verification/1.0 (+https://github.com/mohammadrezwankhan/helioforge-energy-lab)")
+                self.assertEqual(
+                    DenyHandler.user_agent,
+                    (
+                        "HelioForge-Release-Verification/1.0 (+https://github.com/mohammadrezwankhan/heliof"
+                        "orge-energy-lab)"
+                    ),
+                )
                 self.assertEqual(caught.exception.records[0]["status"], 403)
-                self.assertEqual((Path(temp) / caught.exception.records[0]["body_file"]).read_bytes(), b"ordinary access denied")
+                self.assertEqual(
+                    (Path(temp) / caught.exception.records[0]["body_file"]).read_bytes(),
+                    b"ordinary access denied",
+                )
         finally:
             server.shutdown()
             server.server_close()

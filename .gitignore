@@ -45,3 +45,8 @@ __pycache__/
 /docs/remediation-*/review.patch
 # Empty diagnostic redirection artifact, outside the application.
 /x.bytes)))
+
+# Development tools and generated verification output
+.mypy_cache/
+hardening-artifacts/
+.security-tools/

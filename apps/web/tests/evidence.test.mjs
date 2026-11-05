@@ -22,3 +22,20 @@ test('multiple independently generated keys verify while duplicate signatures ar
  a.signatures.push(...b.signatures);assert.equal((await h.verifyEvidence(a)).signers,2);
  a.signatures.push(a.signatures[0]);assert.equal((await h.verifyEvidence(a)).valid,false);
 });
+
+
+test('untrusted evidence envelopes fail closed before claiming a verified signer', async () => {
+  const valid = await h.signEvidence({value: 7});
+  const malformed = [null, [], {}, {...valid, signatures: null}, {...valid, payload: undefined},
+    {...valid, signatures: [null]}, {...valid, signatures: ['signature']},
+    {...valid, signatures: [{...valid.signatures[0], public_key: null}]},
+    {...valid, signatures: [{...valid.signatures[0], signature: 1}]},
+    {...valid, signatures: [{...valid.signatures[0], public_key: {...valid.signatures[0].public_key, x: 1}}]},
+    {...valid, signatures: [{...valid.signatures[0], public_key: {...valid.signatures[0].public_key, key_ops: [1]}}]},
+  ];
+  for (const envelope of malformed) {
+    const result = await h.verifyEvidence(envelope);
+    assert.equal(result.valid, false);
+    assert.equal(result.signers, 0);
+  }
+});

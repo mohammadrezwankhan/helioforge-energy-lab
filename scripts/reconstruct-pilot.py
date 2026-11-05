@@ -13,32 +13,18 @@ import subprocess
 from pathlib import Path
 
 
-def reconstruct(images: Path, output: Path, camera_params: str) -> dict:
+def reconstruct(images: Path, output: Path, camera_params: str) -> dict[str, object]:
     images, output = images.resolve(strict=True), output.resolve()
-    if (
-        not images.is_dir()
-        or output.exists()
-        or images == output
-        or images in output.parents
-    ):
-        raise ValueError(
-            "Use a real image directory and a new output directory outside it."
-        )
-    photos = sorted(
-        p for p in images.iterdir() if p.suffix.lower() in {".jpg", ".jpeg", ".png"}
-    )
+    if not images.is_dir() or output.exists() or images == output or images in output.parents:
+        raise ValueError("Use a real image directory and a new output directory outside it.")
+    photos = sorted(p for p in images.iterdir() if p.suffix.lower() in {".jpg", ".jpeg", ".png"})
     if not 3 <= len(photos) <= 200 or any(
-        p.is_symlink() or "\n" in p.name or p.stat().st_size > 30_000_000
-        for p in photos
+        p.is_symlink() or "\n" in p.name or p.stat().st_size > 30_000_000 for p in photos
     ):
-        raise ValueError(
-            "Supply 3–200 original images, each at most 30 MB; no symlinks."
-        )
+        raise ValueError("Supply 3\N{EN DASH}200 original images, each at most 30 MB; no symlinks.")
     params = [float(value) for value in camera_params.split(",")]
     if len(params) != 4 or any(not 0 < value < 100000 for value in params):
-        raise ValueError(
-            "PINHOLE camera parameters must be positive fx,fy,cx,cy in pixels."
-        )
+        raise ValueError("PINHOLE camera parameters must be positive fx,fy,cx,cy in pixels.")
     program = shutil.which("colmap")
     if not program:
         raise ValueError(
@@ -100,7 +86,7 @@ def reconstruct(images: Path, output: Path, camera_params: str) -> dict:
     ]
     with (output / "reconstruction.log").open("w", encoding="utf-8") as log:
         for args in commands:
-            subprocess.run(
+            subprocess.run(  # noqa: S603 -- Resolved COLMAP; validated inputs, fixed argv, timeout1800; no shell.
                 [program, *args],
                 check=True,
                 timeout=1800,
@@ -130,7 +116,11 @@ def reconstruct(images: Path, output: Path, camera_params: str) -> dict:
         "point_cloud_xyz": points,
         "data_kind": "user_photographs_unverified",
         "scale": "arbitrary_until_surveyed_control_registration",
-        "notice": "Sparse structure-from-motion, not dense reconstruction or an approved survey. Inspect reprojection residuals and register surveyed control before converting to metres.",
+        "notice": (
+            "Sparse structure-from-motion, not dense reconstruction or an"
+            " approved survey. Inspect reprojection residuals and"
+            " register surveyed control before converting to metres."
+        ),
     }
     (output / "reconstruction.json").write_text(
         json.dumps(result, allow_nan=False, indent=2), encoding="utf-8"
@@ -149,4 +139,4 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     result = reconstruct(args.images, args.output, args.camera_params)
-    print(json.dumps({k: v for k, v in result.items() if k != "point_cloud_xyz"}))
+    print(json.dumps({k: v for k, v in result.items() if k != "point_cloud_xyz"}))  # noqa: T201 -- CLI report output.

@@ -1,4 +1,5 @@
 """API contracts. Power is kW; energy kWh; money EUR unless explicitly labelled."""
+
 from __future__ import annotations
 
 from typing import Annotated, Literal
@@ -46,7 +47,9 @@ class StorageRequest(StrictModel):
             if len(self.load_kw) < 2:
                 raise ValueError("At least two intervals are required.")
         elif self.interval_hours != 1:
-            raise ValueError("The built-in daily profile uses one-hour intervals; supply custom series otherwise.")
+            raise ValueError(
+                "The built-in daily profile uses one-hour intervals; supply custom series otherwise."
+            )
         return self
 
 
@@ -122,8 +125,12 @@ class ReliabilityRequest(StrictModel):
 
 
 class DriftRequest(StrictModel):
-    expected: list[Annotated[float, Field(ge=1e-12, le=1e12, allow_inf_nan=False)]] = Field(min_length=10, max_length=8760)
-    observed: list[Annotated[float, Field(ge=0, le=1e12, allow_inf_nan=False)]] = Field(min_length=10, max_length=8760)
+    expected: list[Annotated[float, Field(ge=1e-12, le=1e12, allow_inf_nan=False)]] = Field(
+        min_length=10, max_length=8760
+    )
+    observed: list[Annotated[float, Field(ge=0, le=1e12, allow_inf_nan=False)]] = Field(
+        min_length=10, max_length=8760
+    )
     threshold_sigma: Positive = 3
 
     @model_validator(mode="after")
@@ -156,7 +163,11 @@ class MARequest(StrictModel):
 class CouncilRequest(StrictModel):
     hybrid_run_id: str | None = Field(default=None, min_length=1, max_length=80)
     market: Market = "FR"
-    brief: str = Field(default="Review a 5 MW / 10 MWh BTM storage investment for an industrial customer.", min_length=8, max_length=6000)
+    brief: str = Field(
+        default="Review a 5 MW / 10 MWh BTM storage investment for an industrial customer.",
+        min_length=8,
+        max_length=6000,
+    )
     mode: Literal["local", "openai"] = "local"
     consent_to_external_processing: bool = False
     cross_examination_rounds: int = Field(default=1, ge=1, le=2)

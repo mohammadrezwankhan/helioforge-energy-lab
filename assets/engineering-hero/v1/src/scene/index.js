@@ -98,7 +98,7 @@ export async function createHero({ container, capture=false, site='mrkhan', widt
     camera.up.set(0,1,0);camera.lookAt(look);camera.rotateZ(state.roll);camera.updateMatrixWorld(true);
     benches.forEach((b,i)=>{
       b.uiRoot.visible=state.transit?(i===state.transition||i===state.transition+1):i===state.stage;
-      drawPanel(b.panel.surface,i,t);drawHeader(b.header.surface,i,t);drawObjectLabel(b.label.surface,i,t);
+      drawPanel(b.panel.surface,i,t);drawHeader(b.header.surface,i);drawObjectLabel(b.label.surface,i);
       b.panel.texture.needsUpdate=true;b.header.texture.needsUpdate=true;b.label.texture.needsUpdate=true;
       b.animate(t);b.prism.rotation.set(t*.10+i,.4+t*.12,.2*Math.sin(t*.22+i));
     });

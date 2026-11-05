@@ -1,3 +1,4 @@
+import {installFixtureViews} from './helpers/fixture-views.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -43,7 +44,7 @@ const status = {textContent: ''};
 const toast = {textContent: '', className: 'toast', classList: {remove() {}}};
 const host = {
   markup: '',
-  insertAdjacentHTML(_position, markup) { this.markup = markup; },
+  insertMarkup(_position, markup) { this.markup = markup; },
 };
 const document = {
   addEventListener(type, listener) { listeners.set(type, listener); },
@@ -64,6 +65,7 @@ const context = vm.createContext({
 });
 vm.runInContext(fs.readFileSync(bundle, 'utf8'), context);
 const hf = context.HF;
+installFixtureViews(hf);
 
 test('research dossier waits for every bundled research result, then exports complete evidence', async () => {
   downloads.length = 0;

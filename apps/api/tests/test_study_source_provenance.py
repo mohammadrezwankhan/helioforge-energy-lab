@@ -1,7 +1,7 @@
 from helioforge.studies import StudyRequest, evaluate
 
 
-def test_original_financial_conventions_cite_implementation_without_external_validation_claim():
+def test_original_financial_conventions_cite_implementation_without_external_validation_claim() -> None:
     for study in ["pv-reserve", "investment-waterfall"]:
         result = evaluate(StudyRequest(study=study))
         assert result["sources"]

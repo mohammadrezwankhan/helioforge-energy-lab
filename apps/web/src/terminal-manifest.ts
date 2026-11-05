@@ -1,4 +1,4 @@
-namespace HF {
+namespace HF { // eslint-disable-line @typescript-eslint/no-namespace, @typescript-eslint/no-unused-vars -- HF is the ordered global-script bundle namespace; modules change its shared runtime contract.
   export interface TerminalManifest {
     schema: 'helioforge.terminal.v1';
     generatedAt: string;
@@ -20,7 +20,8 @@ namespace HF {
     throw new Error('Unsupported manifest value.');
   }
   async function terminalDigest(value:unknown):Promise<string>{
-    if(!globalThis.crypto?.subtle)throw new Error('SHA-256 requires HTTPS or a localhost browser.');
+    const localCrypto=browserCrypto();
+    if(!localCrypto?.subtle)throw new Error('SHA-256 requires HTTPS or a localhost browser.');
     return [...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(terminalCanonical(value))))].map(b=>b.toString(16).padStart(2,'0')).join('');
   }
   export async function terminalCreateManifest(run:TerminalRun):Promise<TerminalManifest>{
@@ -28,16 +29,16 @@ namespace HF {
     return {schema:'helioforge.terminal.v1',generatedAt:new Date().toISOString(),stateSha256:await terminalDigest(payload),payload};
   }
   export async function terminalReadManifest(value:unknown):Promise<TerminalRun>{
-    if(!value||typeof value!=='object')throw new Error('Expected a Terminal run manifest.');
-    const m=value as TerminalManifest;
-    if(Object.keys(value).some(k=>!['schema','generatedAt','stateSha256','payload'].includes(k)))throw new Error('Terminal manifest has an unknown envelope field.');
-    if(m.schema!=='helioforge.terminal.v1'||typeof m.generatedAt!=='string'||m.generatedAt.length>40||!Number.isFinite(Date.parse(m.generatedAt))||typeof m.stateSha256!=='string'||!/^[a-f0-9]{64}$/.test(m.stateSha256)||!m.payload?.run)throw new Error('Unknown or incomplete Terminal manifest.');
-    const payload=m.payload as unknown as Record<string,unknown>,solver=payload.solver;
-    if(Object.keys(payload).some(k=>!['solver','run'].includes(k))||!solver||typeof solver!=='object'||Array.isArray(solver))throw new Error('Terminal manifest payload has an unknown or missing field.');
-    const contract=solver as Record<string,unknown>;
+    const m=recordValue(value);
+    if(!m)throw new Error('Expected a Terminal run manifest.');
+    if(Object.keys(m).some(k=>!['schema','generatedAt','stateSha256','payload'].includes(k)))throw new Error('Terminal manifest has an unknown envelope field.');
+    const payload=recordValue(m.payload),run=recordValue(payload?.run);
+    if(m.schema!=='helioforge.terminal.v1'||typeof m.generatedAt!=='string'||m.generatedAt.length>40||!Number.isFinite(Date.parse(m.generatedAt))||typeof m.stateSha256!=='string'||!/^[a-f0-9]{64}$/.test(m.stateSha256)||!payload||!run)throw new Error('Unknown or incomplete Terminal manifest.');
+    const contract=recordValue(payload.solver);
+    if(Object.keys(payload).some(k=>!['solver','run'].includes(k))||!contract)throw new Error('Terminal manifest payload has an unknown or missing field.');
     if(Object.keys(contract).some(k=>!['algorithm','dtHours','steps','iterations'].includes(k))||contract.algorithm!=='greedy-hourly-energy-balance'||contract.dtHours!==1||contract.steps!==24||contract.iterations!==null)throw new Error('Terminal manifest solver contract is unsupported.');
     if(await terminalDigest(m.payload)!==m.stateSha256)throw new Error('Manifest hash does not match its inputs, solver and output series.');
-    const solved=terminalSolve(terminalValidateInputs(m.payload.run.inputs));
+    const solved=terminalSolve(terminalValidateInputs(run.inputs));
     // A digest is integrity evidence, not authenticity. Rerun instead of trusting imported outputs.
     const fresh=await terminalCreateManifest(solved);
     if(fresh.stateSha256!==m.stateSha256)throw new Error('Manifest model or output series differs from the reproducible current model.');

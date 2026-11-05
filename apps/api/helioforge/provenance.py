@@ -3,12 +3,14 @@
 Digests identify the source bytes and effective inputs used to create a record.
 They are not signatures, independent validation, or approval.
 """
+
 from __future__ import annotations
 
 import hashlib
 import json
+from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any
 
 PACKAGE_ROOT = Path(__file__).resolve().parent
 REPOSITORY = "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/"
@@ -111,7 +113,9 @@ def input_revision(inputs: Mapping[str, Any]) -> str:
 _STORAGE_DATA_FIELDS = ("load_kw", "pv_kw", "import_eur_per_kwh", "export_eur_per_kwh")
 
 
-def storage_provenance_inputs(inputs: Mapping[str, Any]) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+def storage_provenance_inputs(
+    inputs: Mapping[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
     """Materialize storage defaults through the solver's existing profile function."""
     effective = dict(inputs)
     uses_demo_profile = not bool(effective.get("load_kw"))
@@ -127,7 +131,9 @@ def storage_provenance_inputs(inputs: Mapping[str, Any]) -> tuple[dict[str, Any]
         "kind": "built_in_demo_profile" if uses_demo_profile else "user_supplied_unverified",
         "market": market,
         "series_fields": list(_STORAGE_DATA_FIELDS),
-        "source": "helioforge.engines.storage.demo_profile" if uses_demo_profile else "submitted storage time series",
+        "source": "helioforge.engines.storage.demo_profile"
+        if uses_demo_profile
+        else "submitted storage time series",
     }
     return effective, dataset, identity
 
@@ -136,7 +142,7 @@ def model_source_files(model_id: str, *, extra_source_files: Sequence[str] = ())
     spec = _MODEL_SPECS.get(model_id)
     if spec is None:
         raise ValueError(f"No source contract is registered for model {model_id!r}.")
-    return tuple(sorted(set((*spec["source_files"], *extra_source_files))))
+    return tuple(sorted({*spec["source_files"], *extra_source_files}))
 
 
 def _contract(model_id: str, source_files: Sequence[str], custom: Mapping[str, Any] | None) -> dict[str, Any]:
@@ -150,8 +156,12 @@ def _contract(model_id: str, source_files: Sequence[str], custom: Mapping[str, A
     return {
         "title": title,
         "url": url,
-        "implementation_files": [f"helioforge/{path.replace(chr(92), '/') }" for path in source_files],
-        "url_scope": "Reference link only; source_revision fingerprints the listed runtime bytes and does not attest that this URL currently contains those bytes.",
+        "implementation_files": [f"helioforge/{path.replace(chr(92), '/')}" for path in source_files],
+        "url_scope": (
+            "Reference link only; source_revision fingerprints the listed"
+            " runtime bytes and does not attest that this URL currently"
+            " contains those bytes."
+        ),
     }
 
 
@@ -197,15 +207,30 @@ def attach_result_provenance(
         if spec is None:
             raise ValueError(f"No source contract is registered for model {model_id!r}.")
         source_files = spec["source_files"]
-    files = tuple(sorted(set(source_files) | ({"provenance.py"} if source_root.resolve() == PACKAGE_ROOT.resolve() else set())))
+    files = tuple(
+        sorted(
+            set(source_files)
+            | ({"provenance.py"} if source_root.resolve() == PACKAGE_ROOT.resolve() else set())
+        )
+    )
     source_digest = source_revision(files, root=source_root)
     input_digest = input_revision(inputs)
     if dataset_file is not None and dataset_inputs is not None:
         raise ValueError("Provide either a dataset file or dataset inputs, not both.")
-    dataset_digest = (dataset_revision(dataset_file, root=dataset_root) if dataset_file else
-                      input_revision(dataset_inputs) if dataset_inputs is not None else None)
-    dataset_digest_scope = ("SHA-256 of exact packaged file bytes" if dataset_file else
-                           "SHA-256 of canonical effective dataset inputs" if dataset_inputs is not None else None)
+    dataset_digest = (
+        dataset_revision(dataset_file, root=dataset_root)
+        if dataset_file
+        else input_revision(dataset_inputs)
+        if dataset_inputs is not None
+        else None
+    )
+    dataset_digest_scope = (
+        "SHA-256 of exact packaged file bytes"
+        if dataset_file
+        else "SHA-256 of canonical effective dataset inputs"
+        if dataset_inputs is not None
+        else None
+    )
     effective_units = dict(units if units is not None else (spec or {}).get("units", {}))
     effective_horizon = dict(horizon) if horizon is not None else _horizon(inputs, result)
     effective_endpoints = dict(endpoints or {})
@@ -231,7 +256,11 @@ def attach_result_provenance(
         "model": {"id": model_id, "version": model_version},
         "source_revision": source_digest,
         "source_files": [path.replace("\\", "/") for path in files],
-        "input": {"sha256": input_digest, "scope": "effective_model_inputs", "canonicalization": "UTF-8 JSON, sorted keys, compact separators, non-finite numbers rejected."},
+        "input": {
+            "sha256": input_digest,
+            "scope": "effective_model_inputs",
+            "canonicalization": "UTF-8 JSON, sorted keys, compact separators, non-finite numbers rejected.",
+        },
         "data": {
             "kind": result.get("data_kind", "unknown"),
             "identity": dict(data_identity) if data_identity is not None else None,
@@ -241,10 +270,12 @@ def attach_result_provenance(
         "units": effective_units,
         "horizon": effective_horizon,
         "endpoints": effective_endpoints,
-        "model_contract": _contract(model_id, files, contract) if model_id in _MODEL_SPECS or contract else {
+        "model_contract": _contract(model_id, files, contract)
+        if model_id in _MODEL_SPECS or contract
+        else {
             "title": model_id,
             "url": "",
-            "implementation_files": [f"helioforge/{path.replace(chr(92), '/') }" for path in files],
+            "implementation_files": [f"helioforge/{path.replace(chr(92), '/')}" for path in files],
             "url_scope": "Reference path only.",
         },
         "equations": equations,
@@ -253,7 +284,10 @@ def attach_result_provenance(
         "integrity": {
             "source_hash_algorithm": "SHA-256",
             "input_hash_algorithm": "SHA-256",
-            "source_digest_scope": "Labeled bytes of the listed model implementation, schemas, internal dependencies, and provenance envelope helper.",
+            "source_digest_scope": (
+                "Labeled bytes of the listed model implementation, schemas,"
+                " internal dependencies, and provenance envelope helper."
+            ),
             "signature_verified": False,
             "human_approval_recorded": False,
             "approval_status": "not_assessed",

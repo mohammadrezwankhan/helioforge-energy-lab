@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "projects": [
+    "apps/api[dev]"
+  ],
+  "requirements": [],
+  "python_paths": [
+    "apps/api"
+  ],
+  "test_targets": [
+    "tests",
+    "apps/api/tests",
+    "scripts",
+    ".github/security/test_contracts.py"
+  ],
+  "coverage_sources": [
+    "apps/api/helioforge",
+    "scripts",
+    ".github/security"
+  ],
+  "coverage_kind": "numerical-core",
+  "numerical_core_sources": [
+    "apps/api/helioforge"
+  ],
+  "browser_project_directories": [
+    "apps/web"
+  ]
+}

@@ -1,11 +1,14 @@
 import base64
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+from pathlib import Path
+from typing import Self
 
 import pytest
 
 from helioforge.integrations import (
     DocumentImport,
+    Reading,
     SeriesImport,
     TelemetryImport,
     extract_document,
@@ -15,7 +18,7 @@ from helioforge.integrations import (
 )
 
 
-def test_series_requires_utc_order_finite_values_and_units():
+def test_series_requires_utc_order_finite_values_and_units() -> None:
     p = SeriesImport(text="timestamp,value\n2026-01-01T00:00:00Z,12\n2026-01-01T01:00:00Z,15", unit="EUR/MWh")
     r = import_series(p)
     assert r["values"] == [12, 15]
@@ -30,7 +33,7 @@ def test_series_requires_utc_order_finite_values_and_units():
             import_series(SeriesImport(text=text, unit="kW"))
 
 
-def test_document_hash_and_extraction_never_proves_authenticity():
+def test_document_hash_and_extraction_never_proves_authenticity() -> None:
     text = "Manufacturer warranty: 6000 cycles; 80% retained capacity. Tariff EUR 0.15/kWh."
     r = extract_document(
         DocumentImport(filename="warranty.txt", content_base64=base64.b64encode(text.encode()).decode())
@@ -43,20 +46,27 @@ def test_document_hash_and_extraction_never_proves_authenticity():
         extract_document(DocumentImport(filename="../evil.exe", content_base64="!!!"))
 
 
-def test_telemetry_stale_and_threshold_are_distinct():
+def test_telemetry_stale_and_threshold_are_distinct() -> None:
     p = TelemetryImport(
         source="Test instrument",
         timestamp="2026-01-01T00:00:00Z",
-        readings=[{"channel": "gas1", "value": 15, "unit": "ppm", "warning": 10, "critical": 20}],
+        readings=[Reading(channel="gas1", value=15, unit="ppm", warning=10, critical=20)],
     )
-    r = inspect_telemetry(p, now=datetime(2026, 1, 1, 1, tzinfo=timezone.utc))
+    r = inspect_telemetry(p, now=datetime(2026, 1, 1, 1, tzinfo=UTC))
     assert r["stale"] is True
     assert r["readings"][0]["threshold_state"] == "warning"
     assert r["operational_alarm"] is False
 
 
-def test_entsoe_preserves_quarter_hours_negative_prices_and_currency():
-    raw = b"<Publication_MarketDocument><TimeSeries><currency_Unit.name>EUR</currency_Unit.name><price_Measure_Unit.name>MWH</price_Measure_Unit.name><Period><timeInterval><start>2026-01-01T00:00Z</start><end>2026-01-01T00:30Z</end></timeInterval><resolution>PT15M</resolution><Point><position>1</position><price.amount>-10</price.amount></Point><Point><position>2</position><price.amount>70</price.amount></Point></Period></TimeSeries></Publication_MarketDocument>"
+def test_entsoe_preserves_quarter_hours_negative_prices_and_currency() -> None:
+    raw = (
+        b"<Publication_MarketDocument><TimeSeries><currency_Unit.name>EUR</currency_Unit.n"
+        b"ame><price_Measure_Unit.name>MWH</price_Measure_Unit.name><Period><timeInterval>"
+        b"<start>2026-01-01T00:00Z</start><end>2026-01-01T00:30Z</end></timeInterval><reso"
+        b"lution>PT15M</resolution><Point><position>1</position><price.amount>-10</price.a"
+        b"mount></Point><Point><position>2</position><price.amount>70</price.amount></Poin"
+        b"t></Period></TimeSeries></Publication_MarketDocument>"
+    )
     r = parse_entsoe(raw)
     assert [x["price_eur_mwh"] for x in r] == [-10, 70]
     assert r[1]["timestamp"] == "2026-01-01T00:15:00+00:00"
@@ -66,23 +76,24 @@ def test_entsoe_preserves_quarter_hours_negative_prices_and_currency():
         parse_entsoe(b'<!DOCTYPE x [<!ENTITY secret SYSTEM "file:///x">]><x/>')
 
 
-def test_geographic_points_reject_unknown_and_nonfinite_coordinates():
+def test_geographic_points_reject_unknown_and_nonfinite_coordinates() -> None:
     from helioforge.integrations import GeoImport, import_geography
 
-    feature = {
+    geometry: dict[str, object] = {"type": "Point", "coordinates": [2.3, 48.8]}
+    feature: dict[str, object] = {
         "type": "Feature",
         "properties": {"name": "Surveyed site"},
-        "geometry": {"type": "Point", "coordinates": [2.3, 48.8]},
+        "geometry": geometry,
     }
-    doc = {"type": "FeatureCollection", "features": [feature]}
+    doc: dict[str, object] = {"type": "FeatureCollection", "features": [feature]}
     assert import_geography(GeoImport(geojson=doc))["rows"][0]["longitude"] == 2.3
     for coordinates in ([181, 48], [True, 48], [float("nan"), 48], [2, 95], [2, 48, 12]):
-        feature["geometry"]["coordinates"] = coordinates
+        geometry["coordinates"] = coordinates
         with pytest.raises(ValueError):
             import_geography(GeoImport(geojson=doc))
 
 
-def test_readonly_modbus_packet_and_response(monkeypatch):
+def test_readonly_modbus_packet_and_response(monkeypatch: pytest.MonkeyPatch) -> None:
     import struct
 
     from helioforge.integrations import ModbusRequest, modbus_read
@@ -93,24 +104,24 @@ def test_readonly_modbus_packet_and_response(monkeypatch):
     )
 
     class FakeSocket:
-        def __enter__(self):
+        def __enter__(self) -> Self:
             return self
 
-        def __exit__(self, *args):
+        def __exit__(self, *_args: object) -> None:
             pass
 
-        def sendall(self, raw):
+        def sendall(self, raw: bytes) -> None:
             tx, proto, length, unit, fn, address, count = struct.unpack(">HHHBBHH", raw)
             assert (proto, length, unit, fn, address, count) == (0, 6, 1, 4, 4, 2)
             self.response = struct.pack(">HHHBBBHH", tx, 0, 7, unit, fn, 4, 15, 30)
 
-        def recv(self, n):
+        def recv(self, n: int) -> bytes:
             chunk = self.response[: min(n, 2)]
             self.response = self.response[len(chunk) :]
             return chunk
 
     monkeypatch.setattr(
-        "helioforge.integrations.socket.create_connection", lambda *args, **kwargs: FakeSocket()
+        "helioforge.integrations.socket.create_connection", lambda *_args, **_kwargs: FakeSocket()
     )
     r = modbus_read(ModbusRequest(device="test"))
     assert [x["value"] for x in r["rows"]] == [15, 30]
@@ -119,14 +130,16 @@ def test_readonly_modbus_packet_and_response(monkeypatch):
         modbus_read(ModbusRequest(device="other"))
 
 
-def test_weather_request_hides_credential_and_preserves_missing_values(monkeypatch):
+def test_weather_request_hides_credential_and_preserves_missing_values(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     import asyncio
 
     from helioforge.integrations import WeatherRequest, weather
 
     monkeypatch.setenv("OPEN_METEO_API_KEY", "do-not-expose")
 
-    async def mock(url, params):
+    async def mock(url: str, params: dict[str, str | float]) -> bytes:
         assert url == "https://customer-api.open-meteo.com/v1/forecast"
         assert params["apikey"] == "do-not-expose"
         return json.dumps(
@@ -147,7 +160,7 @@ def test_weather_request_hides_credential_and_preserves_missing_values(monkeypat
     assert "do-not-expose" not in json.dumps(r)
 
 
-def test_integrations_api_local_import_is_audited(tmp_path, monkeypatch):
+def test_integrations_api_local_import_is_audited(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     from fastapi.testclient import TestClient
 
     from helioforge.main import app
@@ -166,15 +179,23 @@ def test_integrations_api_local_import_is_audited(tmp_path, monkeypatch):
         assert "key" not in json.dumps(status).lower().replace("api_key_configured", "")
 
 
-def test_regulatory_atom_keeps_publication_separate_from_effective_date(monkeypatch):
+def test_regulatory_atom_keeps_publication_separate_from_effective_date(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     import asyncio
 
     from helioforge.integrations import RegulatoryRequest, regulatory_feed
 
     monkeypatch.setenv("HELIOFORGE_REGULATORY_FEEDS", '{"FR":"https://www.cre.fr/feed"}')
-    raw = b"""<feed xmlns="http://www.w3.org/2005/Atom"><entry><title>Draft network consultation</title><link href="https://www.cre.fr/publication"/><updated>2026-10-01T08:00:00Z</updated><summary>Proposed consultation closes 2026-12-01</summary></entry><entry><title>Untrusted destination</title><link href="https://cre.fr.evil.example/page"/></entry></feed>"""
+    raw = (
+        b'<feed xmlns="http://www.w3.org/2005/Atom"><entry><title>Draft network consultati'
+        b'on</title><link href="https://www.cre.fr/publication"/><updated>2026-10-01T08:00'
+        b":00Z</updated><summary>Proposed consultation closes 2026-12-01</summary></entry>"
+        b'<entry><title>Untrusted destination</title><link href="https://cre.fr.evil.examp'
+        b'le/page"/></entry></feed>'
+    )
 
-    async def mock(url, params):
+    async def mock(url: str, _params: dict[str, str | float]) -> bytes:
         assert url == "https://www.cre.fr/feed"
         return raw
 
@@ -190,7 +211,7 @@ def test_regulatory_atom_keeps_publication_separate_from_effective_date(monkeypa
     assert repeated["changed_since_previous"] is False
 
 
-def test_regulatory_allowlist_and_missing_configuration_fail_closed(monkeypatch):
+def test_regulatory_allowlist_and_missing_configuration_fail_closed(monkeypatch: pytest.MonkeyPatch) -> None:
     import asyncio
 
     from helioforge.integrations import RegulatoryRequest, regulator_url, regulatory_feed
@@ -208,7 +229,7 @@ def test_regulatory_allowlist_and_missing_configuration_fail_closed(monkeypatch)
 
 
 @pytest.mark.parametrize("encoding", ["utf-8", "utf-16", "utf-16-le", "utf-16-be"])
-def test_xml_rejects_entity_definitions_in_every_supported_encoding(encoding):
+def test_xml_rejects_entity_definitions_in_every_supported_encoding(encoding: str) -> None:
     from helioforge.integrations import xml_root
 
     document = '<!DOCTYPE feed [<!ENTITY injected "synthetic audit text">]><feed>&injected;</feed>'
@@ -217,8 +238,8 @@ def test_xml_rejects_entity_definitions_in_every_supported_encoding(encoding):
 
 
 @pytest.mark.parametrize("encoding", ["utf-8", "utf-16", "utf-16-le", "utf-16-be"])
-def test_xml_preserves_ordinary_encoded_feed_text(encoding):
+def test_xml_preserves_ordinary_encoded_feed_text(encoding: str) -> None:
     from helioforge.integrations import xml_root
 
-    root = xml_root('<feed><title>Test &amp; evidence</title></feed>'.encode(encoding))
+    root = xml_root("<feed><title>Test &amp; evidence</title></feed>".encode(encoding))
     assert root.findtext("title") == "Test & evidence"

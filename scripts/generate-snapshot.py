@@ -1,7 +1,8 @@
 """Regenerate the read-only synthetic snapshot from the actual numerical engines."""
-from pathlib import Path
+
 import json
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "apps/api"))
@@ -9,6 +10,18 @@ from helioforge.dashboard import dashboard  # noqa: E402
 
 snapshot = dashboard("FR")
 text = json.dumps(snapshot, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
-(ROOT / "examples/dashboard-snapshot.json").write_text(json.dumps(snapshot, indent=2, ensure_ascii=False)+"\n", encoding="utf-8", newline="\n")
-(ROOT / "apps/web/src/snapshot.ts").write_text("namespace HF {\n  export const SNAPSHOT: Dashboard = "+text+";\n}\n", encoding="utf-8", newline="\n")
-print("Updated synthetic snapshot. Rebuild the TypeScript frontend next.")
+(ROOT / "examples/dashboard-snapshot.json").write_text(
+    json.dumps(snapshot, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n"
+)
+(ROOT / "apps/web/src/snapshot.ts").write_text(
+    (
+        "namespace HF { // eslint-disable-line @typescript-eslint/no-namespace, @typescript-eslint/no-unu"
+        "sed-vars -- HF is the ordered global-script bundle namespace; modules change its shared runtime "
+        "contract.\n  export const SNAPSHOT: Dashboard = "
+    )
+    + text
+    + ";\n}\n",
+    encoding="utf-8",
+    newline="\n",
+)
+print("Updated synthetic snapshot. Rebuild the TypeScript frontend next.")  # noqa: T201 -- CLI report output.
