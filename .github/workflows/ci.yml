@@ -61,6 +61,14 @@ jobs:
       - run: python scripts/check-study-assets.py
       - run: cd apps/web && npm ci --ignore-scripts && npm audit --audit-level=moderate && npm run typecheck && npm run build && npm test
       - run: node scripts/check-preview.mjs && node scripts/build-cloudflare.mjs && node scripts/build-domain.mjs && node scripts/check-domain.mjs && node scripts/acceptance-build-receipt.mjs
+      - name: Use Canonical Ubuntu archives for browser dependencies
+        run: |
+          # Azure's mirror repeatedly stalled before the browser tests could start.
+          for sources in /etc/apt/sources.list /etc/apt/apt-mirrors*.txt /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources; do
+            if [ -f "$sources" ]; then
+              sudo sed -i -E 's|https?://azure\.archive\.ubuntu\.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' "$sources"
+            fi
+          done
       - run: python -m playwright install --with-deps chromium firefox webkit
       - name: Browser checks against local API
         run: |
