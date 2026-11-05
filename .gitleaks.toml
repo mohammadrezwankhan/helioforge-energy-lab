@@ -19,3 +19,11 @@ condition = "AND"
 paths = ['''^(?:/tmp/rezwan-secret-source-[^/]+/)?docs/remediation-20261029/council-results\.json$''']
 regexTarget = "line"
 regexes = ['''^\s*"apps/api/tests/test_api\.py"\s*:\s*"b178c6fd9c8d6de334a73d4efd3c257e6e9cf49bd639dba447c76e84db4e6bc2",?\s*$''']
+
+[[allowlists]]
+description = "Exact public Ubuntu Archive 2018 signing fingerprint in the native source lock"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''^(?:/tmp/rezwan-secret-source-[^/]+/)?\.github/security/native-scanner\.json$''']
+regexTarget = "match"
+regexes = ['''^distribution_signature_key": "F6ECB3762474EDA9D21B7022871920D1991BC93C"$''']

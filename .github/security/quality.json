@@ -11,7 +11,8 @@
     "tests",
     "apps/api/tests",
     "scripts",
-    ".github/security/test_contracts.py"
+    ".github/security/test_contracts.py",
+    ".github/security/test_native_scanner.py"
   ],
   "coverage_sources": [
     "apps/api/helioforge",
