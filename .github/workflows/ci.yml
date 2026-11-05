@@ -94,7 +94,7 @@ jobs:
           python scripts/browser-accessibility.py --url http://127.0.0.1:8000
           python scripts/browser-terminal.py --report docs/terminal-audit/browser-terminal-ci.json
           python scripts/browser-full-audit.py --url http://127.0.0.1:8000 --report docs/full-audit/browser-ci.json
-          node --test scripts/domain-security.test.mjs scripts/engineering-hero.test.mjs scripts/capability-contract.test.mjs scripts/hosted-data.test.mjs scripts/inline-html.test.mjs
+          node --test scripts/domain-security.test.mjs scripts/engineering-hero.test.mjs scripts/capability-contract.test.mjs scripts/hosted-data.test.mjs scripts/inline-html.test.mjs tests/browser/uuid.test.mjs
       - name: Hosted data, exports and deferred-response acceptance
         run: |
           python -m http.server 4190 --bind 127.0.0.1 --directory .cloudflare/site > /tmp/helioforge-hosted.log 2>&1 &
