@@ -65,7 +65,7 @@ namespace HF { // eslint-disable-line @typescript-eslint/no-namespace, @typescri
       'Initial and terminal SOC may differ; compare both endpoints and demand service before comparing cost.',
       '## Inputs','```json',JSON.stringify(r.inputs,null,2),'```',
       '## Metrics','```json',JSON.stringify(r.metrics,null,2),'```',
-      '## Full hourly series (CSV)','```csv',toCSV(r.rows as unknown as Record<string,unknown>[]),'```',
+      '## Full hourly series (CSV)','```csv',toCSV(r.rows),'```',
       '## Flags and limits',...r.flags.map(f=>'- '+(typeof f==='string'?f:JSON.stringify(f))),...r.warnings.map(w=>'- '+w),
       '## Complete integrity payload','```json',terminalCanonical(m.payload),'```'].join('\n\n');
   }
