@@ -26,6 +26,7 @@ namespace HF { // eslint-disable-line @typescript-eslint/no-namespace, @typescri
     };
     state.champion = initialChampionState(state.hybrid);
     const modelDrafts = new Map<string, Record<string, string>>();
+    const dialogsWithFocusRestoration = new WeakSet<HTMLDialogElement>();
     let hasConnected = false;
     let connectionEpoch = 0,
       toastTimer = 0,
@@ -459,7 +460,14 @@ namespace HF { // eslint-disable-line @typescript-eslint/no-namespace, @typescri
         m,
         `<div class="modal-heading"><h2 id="modal-title">${escapeHTML(title)}</h2><button class="icon-button" data-action="close-modal" aria-label="Close dialog">${icon('close', 22)}</button></div>${body}`,
       );
-      m.addEventListener('close', () => modalReturn?.focus(), { once: true });
+      if (!dialogsWithFocusRestoration.has(m)) {
+        dialogsWithFocusRestoration.add(m);
+        m.addEventListener('close', () => {
+          const active = document.activeElement;
+          // Native close restores focus before its queued event. Respect any newer focus choice.
+          if (!m.open && (active === document.body || m.contains(active))) modalReturn?.focus();
+        });
+      }
       m.showModal();
     }
     function celebrate(): void {
