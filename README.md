@@ -1,3 +1,15 @@
+<!-- repository-presentation:start -->
+
+![HelioForge Energy Lab — project overview](https://raw.githubusercontent.com/mohammadrezwankhan/mohammadrezwankhan/main/assets/makeover/social/helioforge-energy-lab.png)
+
+Explore hybrid-energy scenarios and research screens through a browser workbench and local Python calculations with explicit model boundaries.
+
+[Run locally](#run-calculations) · [Browser demo](#try-the-demo) · [Python source](apps/api/helioforge/engines/hybrid.py) · [Capabilities](#capability-contract-and-model-registry) · [Evidence and limits](QUALITY_REPORT.md)
+
+---
+
+<!-- repository-presentation:end -->
+
 ![HelioForge Hybrid Energy Lab: original vector system illustration](assets/hero-25d.svg)
 
 The source combines a hybrid adequacy screen, storage MILP, research studies, and an interactive learning workbench. The companion starts with a small synthetic daily power balance.
