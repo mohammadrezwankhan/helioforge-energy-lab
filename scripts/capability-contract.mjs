@@ -4,7 +4,7 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const studyAcceptancePath = 'docs/remediation-20261108/study-contracts.json';
+const studyAcceptancePath = 'docs/remediation-20261108/summation-study-contracts.json';
 
 export const CAPABILITY_CONTRACT_VERSION = '1.0.0';
 export const CONTENT_REVISION_DATE = '2026-10-29';
