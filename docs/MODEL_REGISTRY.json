@@ -41,7 +41,7 @@
         "kind": "synthetic_or_user_supplied_unverified",
         "version": null,
         "versionStatus": "U — examples have no named dataset version; the fixture digest identifies their current generated evidence hashes.",
-        "sha256": "6d03b4e749c8ba11e1b0cb2c97e1fbe24115ebd00ef2699e33887bc508dd8834"
+        "sha256": "fbd495f550bea469efb36e1be3275973282a28f7cadb931a06d4c80383cf54f1"
       }
     },
     "models": {
@@ -523,7 +523,7 @@
                 },
                 {
                   "label": "Minimum modal damping ratio",
-                  "value": 0.04052355811086105,
+                  "value": 0.040523558110861176,
                   "unit": "fraction"
                 },
                 {
@@ -564,7 +564,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "a9a158e9698357775a5bf17c2eb1b22865473271c0b4b0dd06a8d933e8390c45"
+            "sha256": "ff8e6886e4bdcd7dd6d0fb8427903f2c5a51257504d19e2d3969ca4f5778702f"
           }
         },
         "limitations": [
@@ -580,7 +580,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "hybrid-resonance",
@@ -623,7 +623,7 @@
                       "mode_2_hz": 24
                     },
                     "table_row_count": 0,
-                    "result_sha256": "58e89a5e791cfc24d25642d594e16b581bda573ffed166d43a147f05f2a062bd"
+                    "result_sha256": "31da0a611bfbeda98e83db8a4649ca1920518b62e1371d06f10a87d37ccd1283"
                   }
                 ],
                 "default_metric_snapshot": [
@@ -643,7 +643,7 @@
                     "unit": "Hz"
                   }
                 ],
-                "default_result_sha256": "a9a158e9698357775a5bf17c2eb1b22865473271c0b4b0dd06a8d933e8390c45"
+                "default_result_sha256": "ff8e6886e4bdcd7dd6d0fb8427903f2c5a51257504d19e2d3969ca4f5778702f"
               },
               "units": "frequency / damping",
               "evidence_class": "independent_software_oracle"
@@ -668,7 +668,7 @@
                   },
                   {
                     "label": "Minimum modal damping ratio",
-                    "value": 0.04052355811086105,
+                    "value": 0.040523558110861176,
                     "unit": "fraction"
                   },
                   {
@@ -690,7 +690,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "a9a158e9698357775a5bf17c2eb1b22865473271c0b4b0dd06a8d933e8390c45"
+                "sha256": "ff8e6886e4bdcd7dd6d0fb8427903f2c5a51257504d19e2d3969ca4f5778702f"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -1006,7 +1006,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "hybrid-clipping",
@@ -1481,7 +1481,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "hybrid-inertia",
@@ -1985,7 +1985,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "storage-degradation",
@@ -2678,7 +2678,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "storage-stacking",
@@ -3166,7 +3166,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "storage-synergy",
@@ -3688,7 +3688,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "pv-backtracking",
@@ -4170,7 +4170,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "pv-agrivoltaic",
@@ -4690,7 +4690,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "pv-albedo",
@@ -5147,7 +5147,7 @@
                 },
                 {
                   "label": "Dominant peak amplitude",
-                  "value": 0.40465351146145173,
+                  "value": 0.40465351146145156,
                   "unit": "signal unit"
                 },
                 {
@@ -5198,7 +5198,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "b1357419e1c5cc0ef4fab39bc6eb1e679c4865ed146d19093d6e0f95534d93fd"
+            "sha256": "4f89a37344e970cd9ab57c17e57c51332b3af8b9f03b784ce8d1d64152d7ed26"
           }
         },
         "limitations": [
@@ -5214,7 +5214,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "research-vibration",
@@ -5270,7 +5270,7 @@
                       "frequency_resolution_hz": 1
                     },
                     "table_row_count": 10,
-                    "result_sha256": "5e05f79f54376379c2ee4d00fc6a0cbfcd060d0a0d5a1116d36e72338be523de"
+                    "result_sha256": "5c15a55586a038c482ea549e8c36b479404ba788cb1ce8e4ba02f18a859d0673"
                   },
                   {
                     "outcome": "returned",
@@ -5309,7 +5309,7 @@
                       "frequency_resolution_hz": 0.25
                     },
                     "table_row_count": 10,
-                    "result_sha256": "640db53b863938837a19f3d31900d9c5c00e2446566caeb572133e70df798bb1"
+                    "result_sha256": "375b577f56af46fd2da3171b1ce9c758dd274e09931896a94eeaac0b8d41e17f"
                   },
                   {
                     "outcome": "returned",
@@ -5348,7 +5348,7 @@
                       "frequency_resolution_hz": 0.25
                     },
                     "table_row_count": 10,
-                    "result_sha256": "640db53b863938837a19f3d31900d9c5c00e2446566caeb572133e70df798bb1"
+                    "result_sha256": "375b577f56af46fd2da3171b1ce9c758dd274e09931896a94eeaac0b8d41e17f"
                   }
                 ],
                 "default_metric_snapshot": [
@@ -5378,7 +5378,7 @@
                     "unit": "Hz"
                   }
                 ],
-                "default_result_sha256": "b1357419e1c5cc0ef4fab39bc6eb1e679c4865ed146d19093d6e0f95534d93fd"
+                "default_result_sha256": "4f89a37344e970cd9ab57c17e57c51332b3af8b9f03b784ce8d1d64152d7ed26"
               },
               "units": "Hz / signal unit",
               "evidence_class": "independent_software_oracle"
@@ -5403,7 +5403,7 @@
                   },
                   {
                     "label": "Dominant peak amplitude",
-                    "value": 0.40465351146145173,
+                    "value": 0.40465351146145156,
                     "unit": "signal unit"
                   },
                   {
@@ -5435,7 +5435,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "b1357419e1c5cc0ef4fab39bc6eb1e679c4865ed146d19093d6e0f95534d93fd"
+                "sha256": "4f89a37344e970cd9ab57c17e57c51332b3af8b9f03b784ce8d1d64152d7ed26"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -5779,7 +5779,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "research-epd",
@@ -6239,7 +6239,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "research-scr",
@@ -6636,7 +6636,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "overview-weather",
@@ -7019,7 +7019,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "overview-merit",
@@ -7418,7 +7418,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "overview-carbon",
@@ -7826,7 +7826,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "markets-capture",
@@ -8259,7 +8259,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "markets-negative",
@@ -8661,7 +8661,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "markets-interconnection",
@@ -9127,7 +9127,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "forecast-regimes",
@@ -9645,7 +9645,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "forecast-commodities",
@@ -10071,7 +10071,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "forecast-tail",
@@ -10541,7 +10541,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "investment-sculpt",
@@ -11129,7 +11129,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "investment-tranches",
@@ -11561,7 +11561,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "investment-waterfall",
@@ -11837,7 +11837,7 @@
         "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
         "dataKind": "synthetic_or_user_supplied_unverified",
         "inputSha256": "c40a02b1ab8a04cb0bd94ee0e23763b034fb77086c82be31fb9ec1591b6f844c",
-        "evidenceSha256": "4feaea83aaa05b204414bfad02b9d5c74c80474919ae63060b35d253932a0757",
+        "evidenceSha256": "91812b42f7070c9fa62c07253c1191a50bdd1f74d70e50007ccd14239abcb5c2",
         "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"lessons-duck\"].inputs",
         "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"lessons-duck\"]",
         "handCheck": {
@@ -11930,7 +11930,7 @@
           "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
           "dataKind": "synthetic_or_user_supplied_unverified",
           "inputSha256": "c40a02b1ab8a04cb0bd94ee0e23763b034fb77086c82be31fb9ec1591b6f844c",
-          "evidenceSha256": "4feaea83aaa05b204414bfad02b9d5c74c80474919ae63060b35d253932a0757",
+          "evidenceSha256": "91812b42f7070c9fa62c07253c1191a50bdd1f74d70e50007ccd14239abcb5c2",
           "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"lessons-duck\"].inputs",
           "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"lessons-duck\"]",
           "handCheck": {
@@ -12035,7 +12035,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "5b429a13d451c274881017beda7d5b73644e51ddb07876b36d20219179ee2c38"
+            "sha256": "acecdb5b5aae0a85ceea3418e8e78ef8f6c8691b21bdc7c34bf776d072bba389"
           }
         },
         "limitations": [
@@ -12050,7 +12050,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "lessons-duck",
@@ -12163,7 +12163,7 @@
                     "unit": "intervals"
                   }
                 ],
-                "default_result_sha256": "5b429a13d451c274881017beda7d5b73644e51ddb07876b36d20219179ee2c38"
+                "default_result_sha256": "acecdb5b5aae0a85ceea3418e8e78ef8f6c8691b21bdc7c34bf776d072bba389"
               },
               "units": "kWh / kW/h",
               "evidence_class": "independent_software_oracle"
@@ -12235,7 +12235,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "5b429a13d451c274881017beda7d5b73644e51ddb07876b36d20219179ee2c38"
+                "sha256": "acecdb5b5aae0a85ceea3418e8e78ef8f6c8691b21bdc7c34bf776d072bba389"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -12252,9 +12252,9 @@
               "study_runtime_file": "apps/api/helioforge/engines/study_types.py",
               "study_runtime_sha256": "f89e20e695eb09701da005d957414168c7621866160df5af928f0cb31f159df6",
               "engine_file": "apps/api/helioforge/engines/workflow_studies.py",
-              "engine_sha256": "6e0e62016b1290ff9059249d4e19bfa4e8fad9cecb641fb696332a431f9bfad2",
+              "engine_sha256": "c0bd23be1c289c691fd1a70c102c5b159eabba02c221fdd3a7a2f2fdc3907550",
               "test_file": "apps/api/tests/test_workflow_studies.py",
-              "test_sha256": "537c748651724607da178b26a19b847c0193ddcfc4089e087c2c5df921acfdf0",
+              "test_sha256": "f64b74b8b626be58097143f265dab5717244fcb7a03740ce5d3b16faaab079ac",
               "test_contract_file": "apps/api/tests/study_contract_assertions.py",
               "test_contract_sha256": "490d20d94b65d10cd4b06111e8d5048c8b3c938fc9a919c7faae546185468486",
               "acceptance_runner_file": "scripts/acceptance-study-contracts.py",
@@ -12362,7 +12362,7 @@
         "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
         "dataKind": "synthetic_or_user_supplied_unverified",
         "inputSha256": "9584284a0d8d5f8c4a17e1b03cbde839d3d5a46d385a105ce252bc771dffb4fa",
-        "evidenceSha256": "c84c90c3d710f611de8bcadd06ae98f15f9a25fdabd64d7ce8ceebd8bbd9c0fe",
+        "evidenceSha256": "2b632523f10ca2b38f882afccd4b3783a2d3210293a8b1118af8d86151f78701",
         "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"lessons-blackstart\"].inputs",
         "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"lessons-blackstart\"]",
         "handCheck": {
@@ -12434,7 +12434,7 @@
           "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
           "dataKind": "synthetic_or_user_supplied_unverified",
           "inputSha256": "9584284a0d8d5f8c4a17e1b03cbde839d3d5a46d385a105ce252bc771dffb4fa",
-          "evidenceSha256": "c84c90c3d710f611de8bcadd06ae98f15f9a25fdabd64d7ce8ceebd8bbd9c0fe",
+          "evidenceSha256": "2b632523f10ca2b38f882afccd4b3783a2d3210293a8b1118af8d86151f78701",
           "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"lessons-blackstart\"].inputs",
           "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"lessons-blackstart\"]",
           "handCheck": {
@@ -12524,7 +12524,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "0170201426c335b5503af33974411a6f466408c87fb23fc2f54d1741ca13807a"
+            "sha256": "e4294dfe0c0e83b5bfeddeddc1f94cef04d226b5db4ac5daf1ad85606bfa3a21"
           }
         },
         "limitations": [
@@ -12540,7 +12540,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "lessons-blackstart",
@@ -12661,7 +12661,7 @@
                     "unit": "kW"
                   }
                 ],
-                "default_result_sha256": "0170201426c335b5503af33974411a6f466408c87fb23fc2f54d1741ca13807a"
+                "default_result_sha256": "e4294dfe0c0e83b5bfeddeddc1f94cef04d226b5db4ac5daf1ad85606bfa3a21"
               },
               "units": "kW / state",
               "evidence_class": "independent_software_oracle"
@@ -12718,7 +12718,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "0170201426c335b5503af33974411a6f466408c87fb23fc2f54d1741ca13807a"
+                "sha256": "e4294dfe0c0e83b5bfeddeddc1f94cef04d226b5db4ac5daf1ad85606bfa3a21"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -12735,9 +12735,9 @@
               "study_runtime_file": "apps/api/helioforge/engines/study_types.py",
               "study_runtime_sha256": "f89e20e695eb09701da005d957414168c7621866160df5af928f0cb31f159df6",
               "engine_file": "apps/api/helioforge/engines/workflow_studies.py",
-              "engine_sha256": "6e0e62016b1290ff9059249d4e19bfa4e8fad9cecb641fb696332a431f9bfad2",
+              "engine_sha256": "c0bd23be1c289c691fd1a70c102c5b159eabba02c221fdd3a7a2f2fdc3907550",
               "test_file": "apps/api/tests/test_workflow_studies.py",
-              "test_sha256": "537c748651724607da178b26a19b847c0193ddcfc4089e087c2c5df921acfdf0",
+              "test_sha256": "f64b74b8b626be58097143f265dab5717244fcb7a03740ce5d3b16faaab079ac",
               "test_contract_file": "apps/api/tests/study_contract_assertions.py",
               "test_contract_sha256": "490d20d94b65d10cd4b06111e8d5048c8b3c938fc9a919c7faae546185468486",
               "acceptance_runner_file": "scripts/acceptance-study-contracts.py",
@@ -12850,7 +12850,7 @@
         "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
         "dataKind": "synthetic_or_user_supplied_unverified",
         "inputSha256": "5c32abfe7e669a83892218dd80d1b40470274d16eb58c9d953df8ea4fe25145b",
-        "evidenceSha256": "f209dbea1cda0c63f020e39f42784cd11dda0ef083c0f14950c04093ee43d578",
+        "evidenceSha256": "3f31879c8293ff61a621c0450ce9db537e3dc217f90759b71d0a6737dc339e35",
         "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"lessons-hydrogen\"].inputs",
         "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"lessons-hydrogen\"]",
         "handCheck": {
@@ -12922,7 +12922,7 @@
           "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
           "dataKind": "synthetic_or_user_supplied_unverified",
           "inputSha256": "5c32abfe7e669a83892218dd80d1b40470274d16eb58c9d953df8ea4fe25145b",
-          "evidenceSha256": "f209dbea1cda0c63f020e39f42784cd11dda0ef083c0f14950c04093ee43d578",
+          "evidenceSha256": "3f31879c8293ff61a621c0450ce9db537e3dc217f90759b71d0a6737dc339e35",
           "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"lessons-hydrogen\"].inputs",
           "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"lessons-hydrogen\"]",
           "handCheck": {
@@ -13017,7 +13017,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "7d68896c28a43923b842e6cbf5bb522f969a8f3492ec358f477142dbdee438ef"
+            "sha256": "f0c083b3a67a3954f6e3003c5f80a9f453b9ce0eb50c1c6e4389d014f94ceada"
           }
         },
         "limitations": [
@@ -13033,7 +13033,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "lessons-hydrogen",
@@ -13177,7 +13177,7 @@
                     "unit": "kWh"
                   }
                 ],
-                "default_result_sha256": "7d68896c28a43923b842e6cbf5bb522f969a8f3492ec358f477142dbdee438ef"
+                "default_result_sha256": "f0c083b3a67a3954f6e3003c5f80a9f453b9ce0eb50c1c6e4389d014f94ceada"
               },
               "units": "kWh / kWh LHV / fraction",
               "evidence_class": "independent_software_oracle"
@@ -13239,7 +13239,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "7d68896c28a43923b842e6cbf5bb522f969a8f3492ec358f477142dbdee438ef"
+                "sha256": "f0c083b3a67a3954f6e3003c5f80a9f453b9ce0eb50c1c6e4389d014f94ceada"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -13256,9 +13256,9 @@
               "study_runtime_file": "apps/api/helioforge/engines/study_types.py",
               "study_runtime_sha256": "f89e20e695eb09701da005d957414168c7621866160df5af928f0cb31f159df6",
               "engine_file": "apps/api/helioforge/engines/workflow_studies.py",
-              "engine_sha256": "6e0e62016b1290ff9059249d4e19bfa4e8fad9cecb641fb696332a431f9bfad2",
+              "engine_sha256": "c0bd23be1c289c691fd1a70c102c5b159eabba02c221fdd3a7a2f2fdc3907550",
               "test_file": "apps/api/tests/test_workflow_studies.py",
-              "test_sha256": "537c748651724607da178b26a19b847c0193ddcfc4089e087c2c5df921acfdf0",
+              "test_sha256": "f64b74b8b626be58097143f265dab5717244fcb7a03740ce5d3b16faaab079ac",
               "test_contract_file": "apps/api/tests/study_contract_assertions.py",
               "test_contract_sha256": "490d20d94b65d10cd4b06111e8d5048c8b3c938fc9a919c7faae546185468486",
               "acceptance_runner_file": "scripts/acceptance-study-contracts.py",
@@ -13357,7 +13357,7 @@
         "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
         "dataKind": "synthetic_or_user_supplied_unverified",
         "inputSha256": "4f296a339cebe21478c3d273ea0ae99ce1fe429331b902b55bdc7bdec85afcba",
-        "evidenceSha256": "3b26294e7146792219273a3d13ae7045bca01bb0b933b5ecd67a586b72ee020f",
+        "evidenceSha256": "35d0e96424a167bf8210b60a7e949a29f22af2c87aae3af70576a9d6d45cb61d",
         "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"compare-pareto\"].inputs",
         "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"compare-pareto\"]",
         "handCheck": {
@@ -13422,7 +13422,7 @@
           "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
           "dataKind": "synthetic_or_user_supplied_unverified",
           "inputSha256": "4f296a339cebe21478c3d273ea0ae99ce1fe429331b902b55bdc7bdec85afcba",
-          "evidenceSha256": "3b26294e7146792219273a3d13ae7045bca01bb0b933b5ecd67a586b72ee020f",
+          "evidenceSha256": "35d0e96424a167bf8210b60a7e949a29f22af2c87aae3af70576a9d6d45cb61d",
           "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"compare-pareto\"].inputs",
           "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"compare-pareto\"]",
           "handCheck": {
@@ -13502,7 +13502,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "f6b4e32e93f9ff803c361f0034914972551a814a58dd93f018e8da8e1660827c"
+            "sha256": "5c250dd8fffea019da0b8b6f98929a41a048fd8bf4adf916fc92c5824b34ec12"
           }
         },
         "limitations": [
@@ -13518,7 +13518,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "compare-pareto",
@@ -13578,7 +13578,7 @@
                     "unit": "groups"
                   }
                 ],
-                "default_result_sha256": "f6b4e32e93f9ff803c361f0034914972551a814a58dd93f018e8da8e1660827c"
+                "default_result_sha256": "5c250dd8fffea019da0b8b6f98929a41a048fd8bf4adf916fc92c5824b34ec12"
               },
               "units": "runs / groups",
               "evidence_class": "independent_software_oracle"
@@ -13625,7 +13625,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "f6b4e32e93f9ff803c361f0034914972551a814a58dd93f018e8da8e1660827c"
+                "sha256": "5c250dd8fffea019da0b8b6f98929a41a048fd8bf4adf916fc92c5824b34ec12"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -13642,9 +13642,9 @@
               "study_runtime_file": "apps/api/helioforge/engines/study_types.py",
               "study_runtime_sha256": "f89e20e695eb09701da005d957414168c7621866160df5af928f0cb31f159df6",
               "engine_file": "apps/api/helioforge/engines/workflow_studies.py",
-              "engine_sha256": "6e0e62016b1290ff9059249d4e19bfa4e8fad9cecb641fb696332a431f9bfad2",
+              "engine_sha256": "c0bd23be1c289c691fd1a70c102c5b159eabba02c221fdd3a7a2f2fdc3907550",
               "test_file": "apps/api/tests/test_workflow_studies.py",
-              "test_sha256": "537c748651724607da178b26a19b847c0193ddcfc4089e087c2c5df921acfdf0",
+              "test_sha256": "f64b74b8b626be58097143f265dab5717244fcb7a03740ce5d3b16faaab079ac",
               "test_contract_file": "apps/api/tests/study_contract_assertions.py",
               "test_contract_sha256": "490d20d94b65d10cd4b06111e8d5048c8b3c938fc9a919c7faae546185468486",
               "acceptance_runner_file": "scripts/acceptance-study-contracts.py",
@@ -13775,7 +13775,7 @@
         "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
         "dataKind": "synthetic_or_user_supplied_unverified",
         "inputSha256": "8af60e8d4cf71a8d86659bb5e5c5ba2bf4d25d664bee3104b4f99dc22b87dec5",
-        "evidenceSha256": "1263077edfd5f665a324c2558f56be5c66e3e1907ead175df2a020db9c368099",
+        "evidenceSha256": "100ef72b399dc839c868c2d2bc8915a3633309764040d807bf3d0ab56d659a18",
         "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"compare-dunkelflaute\"].inputs",
         "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"compare-dunkelflaute\"]",
         "handCheck": {
@@ -13868,7 +13868,7 @@
           "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
           "dataKind": "synthetic_or_user_supplied_unverified",
           "inputSha256": "8af60e8d4cf71a8d86659bb5e5c5ba2bf4d25d664bee3104b4f99dc22b87dec5",
-          "evidenceSha256": "1263077edfd5f665a324c2558f56be5c66e3e1907ead175df2a020db9c368099",
+          "evidenceSha256": "100ef72b399dc839c868c2d2bc8915a3633309764040d807bf3d0ab56d659a18",
           "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"compare-dunkelflaute\"].inputs",
           "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"compare-dunkelflaute\"]",
           "handCheck": {
@@ -13975,7 +13975,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "34db8d1aa62ea60033781a43089766acb92347f1ccef49eabd34776ecfde4a4b"
+            "sha256": "6e67f041ff2e13412498fd78373683d19a719bb78df200298ffeb2dffa674b13"
           }
         },
         "limitations": [
@@ -13991,7 +13991,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "compare-dunkelflaute",
@@ -14113,7 +14113,7 @@
                     "unit": "kWh"
                   }
                 ],
-                "default_result_sha256": "34db8d1aa62ea60033781a43089766acb92347f1ccef49eabd34776ecfde4a4b"
+                "default_result_sha256": "6e67f041ff2e13412498fd78373683d19a719bb78df200298ffeb2dffa674b13"
               },
               "units": "kW / kWh",
               "evidence_class": "independent_software_oracle"
@@ -14185,7 +14185,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "34db8d1aa62ea60033781a43089766acb92347f1ccef49eabd34776ecfde4a4b"
+                "sha256": "6e67f041ff2e13412498fd78373683d19a719bb78df200298ffeb2dffa674b13"
               },
               "solver_feasibility": {
                 "status": "PASS",
@@ -14204,9 +14204,9 @@
               "study_runtime_file": "apps/api/helioforge/engines/study_types.py",
               "study_runtime_sha256": "f89e20e695eb09701da005d957414168c7621866160df5af928f0cb31f159df6",
               "engine_file": "apps/api/helioforge/engines/workflow_studies.py",
-              "engine_sha256": "6e0e62016b1290ff9059249d4e19bfa4e8fad9cecb641fb696332a431f9bfad2",
+              "engine_sha256": "c0bd23be1c289c691fd1a70c102c5b159eabba02c221fdd3a7a2f2fdc3907550",
               "test_file": "apps/api/tests/test_workflow_studies.py",
-              "test_sha256": "537c748651724607da178b26a19b847c0193ddcfc4089e087c2c5df921acfdf0",
+              "test_sha256": "f64b74b8b626be58097143f265dab5717244fcb7a03740ce5d3b16faaab079ac",
               "test_contract_file": "apps/api/tests/study_contract_assertions.py",
               "test_contract_sha256": "490d20d94b65d10cd4b06111e8d5048c8b3c938fc9a919c7faae546185468486",
               "acceptance_runner_file": "scripts/acceptance-study-contracts.py",
@@ -14315,7 +14315,7 @@
         "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
         "dataKind": "synthetic_or_user_supplied_unverified",
         "inputSha256": "def66335c4dbfa79561796b23366e2d2559bed9833b40065e22a3a4b73aa6720",
-        "evidenceSha256": "0a765a1621fd566347c4fe824ac058f93da06da2aa4dcbc3a34c465c3bcc0dbc",
+        "evidenceSha256": "ee15fa9e4e364cced3e94fd8f4c8080a4c4c2660744075a741225d5215fb5333",
         "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"compare-thermal\"].inputs",
         "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"compare-thermal\"]",
         "handCheck": {
@@ -14387,7 +14387,7 @@
           "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
           "dataKind": "synthetic_or_user_supplied_unverified",
           "inputSha256": "def66335c4dbfa79561796b23366e2d2559bed9833b40065e22a3a4b73aa6720",
-          "evidenceSha256": "0a765a1621fd566347c4fe824ac058f93da06da2aa4dcbc3a34c465c3bcc0dbc",
+          "evidenceSha256": "ee15fa9e4e364cced3e94fd8f4c8080a4c4c2660744075a741225d5215fb5333",
           "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"compare-thermal\"].inputs",
           "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"compare-thermal\"]",
           "handCheck": {
@@ -14467,7 +14467,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "4a9e8c701b2e7e2f0b8fe84b9ce3c0eb60750bc196dbbeabee0cfab99064d1e3"
+            "sha256": "cd108875f93163ca922b5c63a6acd4dedb4a714a47fbf6c9d19ddfd6bd87c664"
           }
         },
         "limitations": [
@@ -14483,7 +14483,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "compare-thermal",
@@ -14543,7 +14543,7 @@
                     "unit": "EFC"
                   }
                 ],
-                "default_result_sha256": "4a9e8c701b2e7e2f0b8fe84b9ce3c0eb60750bc196dbbeabee0cfab99064d1e3"
+                "default_result_sha256": "cd108875f93163ca922b5c63a6acd4dedb4a714a47fbf6c9d19ddfd6bd87c664"
               },
               "units": "EFC / multiplier / % index",
               "evidence_class": "independent_software_oracle"
@@ -14590,7 +14590,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "4a9e8c701b2e7e2f0b8fe84b9ce3c0eb60750bc196dbbeabee0cfab99064d1e3"
+                "sha256": "cd108875f93163ca922b5c63a6acd4dedb4a714a47fbf6c9d19ddfd6bd87c664"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -14607,7 +14607,7 @@
               "study_runtime_file": "apps/api/helioforge/engines/study_types.py",
               "study_runtime_sha256": "f89e20e695eb09701da005d957414168c7621866160df5af928f0cb31f159df6",
               "engine_file": "apps/api/helioforge/engines/workflow_studies.py",
-              "engine_sha256": "6e0e62016b1290ff9059249d4e19bfa4e8fad9cecb641fb696332a431f9bfad2",
+              "engine_sha256": "c0bd23be1c289c691fd1a70c102c5b159eabba02c221fdd3a7a2f2fdc3907550",
               "test_file": "apps/api/tests/test_study_acceptance_contracts.py",
               "test_sha256": "952a8f99475758c8ab7cf21766767a0633bb7fce6a993b5ee75dc07b28e1928a",
               "test_contract_file": "apps/api/tests/study_contract_assertions.py",
@@ -14721,7 +14721,7 @@
         "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
         "dataKind": "synthetic_or_user_supplied_unverified",
         "inputSha256": "75676277e4f66bf40a75f8e2dc2ecca75e6f9474083c5731d07f175859086f29",
-        "evidenceSha256": "3176f91dd365027048798ca178de164e711f57b67a482512622ce12308079a5e",
+        "evidenceSha256": "c9daa510504e1b86e54210dfc1f1f0f659d5d758486b855828a9ce6579b23f99",
         "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"pilots-photogrammetry\"].inputs",
         "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"pilots-photogrammetry\"]",
         "handCheck": {
@@ -14800,7 +14800,7 @@
           "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
           "dataKind": "synthetic_or_user_supplied_unverified",
           "inputSha256": "75676277e4f66bf40a75f8e2dc2ecca75e6f9474083c5731d07f175859086f29",
-          "evidenceSha256": "3176f91dd365027048798ca178de164e711f57b67a482512622ce12308079a5e",
+          "evidenceSha256": "c9daa510504e1b86e54210dfc1f1f0f659d5d758486b855828a9ce6579b23f99",
           "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"pilots-photogrammetry\"].inputs",
           "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"pilots-photogrammetry\"]",
           "handCheck": {
@@ -14890,7 +14890,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "802c6cf77f0680fe8db899f796e55947f667e01a6708d0af84ce1c95f0185494"
+            "sha256": "e5f840cbf3bfcba67f1d66d831225e3ac94aa3828c9e0168b3abab848b747f8a"
           }
         },
         "limitations": [
@@ -14906,7 +14906,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "pilots-photogrammetry",
@@ -15034,7 +15034,7 @@
                     "unit": "points"
                   }
                 ],
-                "default_result_sha256": "802c6cf77f0680fe8db899f796e55947f667e01a6708d0af84ce1c95f0185494"
+                "default_result_sha256": "e5f840cbf3bfcba67f1d66d831225e3ac94aa3828c9e0168b3abab848b747f8a"
               },
               "units": "m / points",
               "evidence_class": "independent_software_oracle"
@@ -15091,7 +15091,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "802c6cf77f0680fe8db899f796e55947f667e01a6708d0af84ce1c95f0185494"
+                "sha256": "e5f840cbf3bfcba67f1d66d831225e3ac94aa3828c9e0168b3abab848b747f8a"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -15108,9 +15108,9 @@
               "study_runtime_file": "apps/api/helioforge/engines/study_types.py",
               "study_runtime_sha256": "f89e20e695eb09701da005d957414168c7621866160df5af928f0cb31f159df6",
               "engine_file": "apps/api/helioforge/engines/workflow_studies.py",
-              "engine_sha256": "6e0e62016b1290ff9059249d4e19bfa4e8fad9cecb641fb696332a431f9bfad2",
+              "engine_sha256": "c0bd23be1c289c691fd1a70c102c5b159eabba02c221fdd3a7a2f2fdc3907550",
               "test_file": "apps/api/tests/test_workflow_studies.py",
-              "test_sha256": "537c748651724607da178b26a19b847c0193ddcfc4089e087c2c5df921acfdf0",
+              "test_sha256": "f64b74b8b626be58097143f265dab5717244fcb7a03740ce5d3b16faaab079ac",
               "test_contract_file": "apps/api/tests/study_contract_assertions.py",
               "test_contract_sha256": "490d20d94b65d10cd4b06111e8d5048c8b3c938fc9a919c7faae546185468486",
               "acceptance_runner_file": "scripts/acceptance-study-contracts.py",
@@ -15218,7 +15218,7 @@
         "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
         "dataKind": "synthetic_or_user_supplied_unverified",
         "inputSha256": "f59e798220b3d7b1be3368ff8c1cc719e24f83737ef58e0746ddc750bd062640",
-        "evidenceSha256": "4a40a36d6dc8146ebac65820929a3855e47954a5c2bfced505e46a22102a55e8",
+        "evidenceSha256": "1f1a7c0a083afafbac12525dc82eed9338636bd431bf21bca375139b1f75057c",
         "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"pilots-dts\"].inputs",
         "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"pilots-dts\"]",
         "handCheck": {
@@ -15290,7 +15290,7 @@
           "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
           "dataKind": "synthetic_or_user_supplied_unverified",
           "inputSha256": "f59e798220b3d7b1be3368ff8c1cc719e24f83737ef58e0746ddc750bd062640",
-          "evidenceSha256": "4a40a36d6dc8146ebac65820929a3855e47954a5c2bfced505e46a22102a55e8",
+          "evidenceSha256": "1f1a7c0a083afafbac12525dc82eed9338636bd431bf21bca375139b1f75057c",
           "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"pilots-dts\"].inputs",
           "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"pilots-dts\"]",
           "handCheck": {
@@ -15385,7 +15385,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "aa3037fdfe9a5ba7faa6fc844368d92f3a83b933cd71fe9265bb4a46345bbdde"
+            "sha256": "a104d2e3ee66c53b09db64adb8ce48bc733e99d88fa5ce96ed21b546b15803cc"
           }
         },
         "limitations": [
@@ -15401,7 +15401,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "pilots-dts",
@@ -15533,7 +15533,7 @@
                     "unit": "°C/m"
                   }
                 ],
-                "default_result_sha256": "aa3037fdfe9a5ba7faa6fc844368d92f3a83b933cd71fe9265bb4a46345bbdde"
+                "default_result_sha256": "a104d2e3ee66c53b09db64adb8ce48bc733e99d88fa5ce96ed21b546b15803cc"
               },
               "units": "hours / °C / °C/m",
               "evidence_class": "independent_software_oracle"
@@ -15595,7 +15595,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "aa3037fdfe9a5ba7faa6fc844368d92f3a83b933cd71fe9265bb4a46345bbdde"
+                "sha256": "a104d2e3ee66c53b09db64adb8ce48bc733e99d88fa5ce96ed21b546b15803cc"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -15612,9 +15612,9 @@
               "study_runtime_file": "apps/api/helioforge/engines/study_types.py",
               "study_runtime_sha256": "f89e20e695eb09701da005d957414168c7621866160df5af928f0cb31f159df6",
               "engine_file": "apps/api/helioforge/engines/workflow_studies.py",
-              "engine_sha256": "6e0e62016b1290ff9059249d4e19bfa4e8fad9cecb641fb696332a431f9bfad2",
+              "engine_sha256": "c0bd23be1c289c691fd1a70c102c5b159eabba02c221fdd3a7a2f2fdc3907550",
               "test_file": "apps/api/tests/test_workflow_studies.py",
-              "test_sha256": "537c748651724607da178b26a19b847c0193ddcfc4089e087c2c5df921acfdf0",
+              "test_sha256": "f64b74b8b626be58097143f265dab5717244fcb7a03740ce5d3b16faaab079ac",
               "test_contract_file": "apps/api/tests/study_contract_assertions.py",
               "test_contract_sha256": "490d20d94b65d10cd4b06111e8d5048c8b3c938fc9a919c7faae546185468486",
               "acceptance_runner_file": "scripts/acceptance-study-contracts.py",
@@ -15722,7 +15722,7 @@
         "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
         "dataKind": "synthetic_or_user_supplied_unverified",
         "inputSha256": "b91d1186ba0f6ff26716ae33b92353cc69d9be8d89716e0b4f3bb0280ba49d4a",
-        "evidenceSha256": "5a01c5b27e71ae3f1a5dcd694ac64f73876e2255b9e67850366ad972883992f0",
+        "evidenceSha256": "f487b92428cc74b088f6c61b15dd611a6f72ebd7066d342b81a801d22896fd46",
         "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"pilots-offgas\"].inputs",
         "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"pilots-offgas\"]",
         "handCheck": {
@@ -15794,7 +15794,7 @@
           "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
           "dataKind": "synthetic_or_user_supplied_unverified",
           "inputSha256": "b91d1186ba0f6ff26716ae33b92353cc69d9be8d89716e0b4f3bb0280ba49d4a",
-          "evidenceSha256": "5a01c5b27e71ae3f1a5dcd694ac64f73876e2255b9e67850366ad972883992f0",
+          "evidenceSha256": "f487b92428cc74b088f6c61b15dd611a6f72ebd7066d342b81a801d22896fd46",
           "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"pilots-offgas\"].inputs",
           "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"pilots-offgas\"]",
           "handCheck": {
@@ -15894,7 +15894,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "46a838466e35013864cb3c13512f10feebb51e4b20ea4d0a401118e139abe95f"
+            "sha256": "bf42d63bc8ce644320f22f6b9e811e4c40b5e078a875c8448445454c4a364cc0"
           }
         },
         "limitations": [
@@ -15910,7 +15910,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "pilots-offgas",
@@ -16012,7 +16012,7 @@
                     "unit": "sensors"
                   }
                 ],
-                "default_result_sha256": "46a838466e35013864cb3c13512f10feebb51e4b20ea4d0a401118e139abe95f"
+                "default_result_sha256": "bf42d63bc8ce644320f22f6b9e811e4c40b5e078a875c8448445454c4a364cc0"
               },
               "units": "sensors / state",
               "evidence_class": "independent_software_oracle"
@@ -16079,7 +16079,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "46a838466e35013864cb3c13512f10feebb51e4b20ea4d0a401118e139abe95f"
+                "sha256": "bf42d63bc8ce644320f22f6b9e811e4c40b5e078a875c8448445454c4a364cc0"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -16096,9 +16096,9 @@
               "study_runtime_file": "apps/api/helioforge/engines/study_types.py",
               "study_runtime_sha256": "f89e20e695eb09701da005d957414168c7621866160df5af928f0cb31f159df6",
               "engine_file": "apps/api/helioforge/engines/workflow_studies.py",
-              "engine_sha256": "6e0e62016b1290ff9059249d4e19bfa4e8fad9cecb641fb696332a431f9bfad2",
+              "engine_sha256": "c0bd23be1c289c691fd1a70c102c5b159eabba02c221fdd3a7a2f2fdc3907550",
               "test_file": "apps/api/tests/test_workflow_studies.py",
-              "test_sha256": "537c748651724607da178b26a19b847c0193ddcfc4089e087c2c5df921acfdf0",
+              "test_sha256": "f64b74b8b626be58097143f265dab5717244fcb7a03740ce5d3b16faaab079ac",
               "test_contract_file": "apps/api/tests/study_contract_assertions.py",
               "test_contract_sha256": "490d20d94b65d10cd4b06111e8d5048c8b3c938fc9a919c7faae546185468486",
               "acceptance_runner_file": "scripts/acceptance-study-contracts.py",
@@ -16218,7 +16218,7 @@
         "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
         "dataKind": "synthetic_or_user_supplied_unverified",
         "inputSha256": "b4d3ef0a82d47eb5426bbea1e0f487fc37b60f67eeafbacc7463f8e1c0a947a7",
-        "evidenceSha256": "1315b82993d3b5d992781181d9f1f3cd361f4479793c2a081fff34843f91749f",
+        "evidenceSha256": "4430fc90bcba791966ec5a0edbfdd1e732e0e390f7cb5e93eaa14a5ddd8173cd",
         "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"council-debate\"].inputs",
         "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"council-debate\"]",
         "handCheck": {
@@ -16304,7 +16304,7 @@
           "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
           "dataKind": "synthetic_or_user_supplied_unverified",
           "inputSha256": "b4d3ef0a82d47eb5426bbea1e0f487fc37b60f67eeafbacc7463f8e1c0a947a7",
-          "evidenceSha256": "1315b82993d3b5d992781181d9f1f3cd361f4479793c2a081fff34843f91749f",
+          "evidenceSha256": "4430fc90bcba791966ec5a0edbfdd1e732e0e390f7cb5e93eaa14a5ddd8173cd",
           "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"council-debate\"].inputs",
           "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"council-debate\"]",
           "handCheck": {
@@ -16391,7 +16391,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "543c461791c49af17644558aa159f551d603e12ba838b06244761b4b3ba82265"
+            "sha256": "b9b368e06078787eabf85499c7434a1a3b2263b5763a58db57af2897eb6f550a"
           }
         },
         "limitations": [
@@ -16407,7 +16407,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "council-debate",
@@ -16517,7 +16517,7 @@
                     "unit": "mode"
                   }
                 ],
-                "default_result_sha256": "543c461791c49af17644558aa159f551d603e12ba838b06244761b4b3ba82265"
+                "default_result_sha256": "b9b368e06078787eabf85499c7434a1a3b2263b5763a58db57af2897eb6f550a"
               },
               "units": "EUR / rounds / topics",
               "evidence_class": "independent_software_oracle"
@@ -16569,7 +16569,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "543c461791c49af17644558aa159f551d603e12ba838b06244761b4b3ba82265"
+                "sha256": "b9b368e06078787eabf85499c7434a1a3b2263b5763a58db57af2897eb6f550a"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -16586,9 +16586,9 @@
               "study_runtime_file": "apps/api/helioforge/engines/study_types.py",
               "study_runtime_sha256": "f89e20e695eb09701da005d957414168c7621866160df5af928f0cb31f159df6",
               "engine_file": "apps/api/helioforge/engines/workflow_studies.py",
-              "engine_sha256": "6e0e62016b1290ff9059249d4e19bfa4e8fad9cecb641fb696332a431f9bfad2",
+              "engine_sha256": "c0bd23be1c289c691fd1a70c102c5b159eabba02c221fdd3a7a2f2fdc3907550",
               "test_file": "apps/api/tests/test_workflow_studies.py",
-              "test_sha256": "537c748651724607da178b26a19b847c0193ddcfc4089e087c2c5df921acfdf0",
+              "test_sha256": "f64b74b8b626be58097143f265dab5717244fcb7a03740ce5d3b16faaab079ac",
               "test_contract_file": "apps/api/tests/study_contract_assertions.py",
               "test_contract_sha256": "490d20d94b65d10cd4b06111e8d5048c8b3c938fc9a919c7faae546185468486",
               "acceptance_runner_file": "scripts/acceptance-study-contracts.py",
@@ -16697,7 +16697,7 @@
         "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
         "dataKind": "synthetic_or_user_supplied_unverified",
         "inputSha256": "e181e55e9cb797e400b89ef29b9add70c3536e1bb1ad75327e280c26de8ae2b9",
-        "evidenceSha256": "c6e21c985e32ae458366557d4f91497ec1d9e221a6d11ee1aa59033e55b018dc",
+        "evidenceSha256": "8d913b03fd17b3d55168818ce712802556a31509fea5b969254ef7397c008b86",
         "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"council-evidence\"].inputs",
         "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"council-evidence\"]",
         "handCheck": {
@@ -16769,7 +16769,7 @@
           "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
           "dataKind": "synthetic_or_user_supplied_unverified",
           "inputSha256": "e181e55e9cb797e400b89ef29b9add70c3536e1bb1ad75327e280c26de8ae2b9",
-          "evidenceSha256": "c6e21c985e32ae458366557d4f91497ec1d9e221a6d11ee1aa59033e55b018dc",
+          "evidenceSha256": "8d913b03fd17b3d55168818ce712802556a31509fea5b969254ef7397c008b86",
           "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"council-evidence\"].inputs",
           "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"council-evidence\"]",
           "handCheck": {
@@ -16854,7 +16854,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "3d8e6b2db503e47f49401f9205a7513090b25841fb70f8e44e16730079c9b7a4"
+            "sha256": "5e61771586dea517f974e9dda7e5b836376c47a129bc07230ed3c1aa81ceae38"
           }
         },
         "limitations": [
@@ -16870,7 +16870,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "council-evidence",
@@ -16944,7 +16944,7 @@
                     "unit": "mode"
                   }
                 ],
-                "default_result_sha256": "3d8e6b2db503e47f49401f9205a7513090b25841fb70f8e44e16730079c9b7a4"
+                "default_result_sha256": "5e61771586dea517f974e9dda7e5b836376c47a129bc07230ed3c1aa81ceae38"
               },
               "units": "documents / issue flags",
               "evidence_class": "independent_software_oracle"
@@ -16996,7 +16996,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "3d8e6b2db503e47f49401f9205a7513090b25841fb70f8e44e16730079c9b7a4"
+                "sha256": "5e61771586dea517f974e9dda7e5b836376c47a129bc07230ed3c1aa81ceae38"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -17013,9 +17013,9 @@
               "study_runtime_file": "apps/api/helioforge/engines/study_types.py",
               "study_runtime_sha256": "f89e20e695eb09701da005d957414168c7621866160df5af928f0cb31f159df6",
               "engine_file": "apps/api/helioforge/engines/workflow_studies.py",
-              "engine_sha256": "6e0e62016b1290ff9059249d4e19bfa4e8fad9cecb641fb696332a431f9bfad2",
+              "engine_sha256": "c0bd23be1c289c691fd1a70c102c5b159eabba02c221fdd3a7a2f2fdc3907550",
               "test_file": "apps/api/tests/test_workflow_studies.py",
-              "test_sha256": "537c748651724607da178b26a19b847c0193ddcfc4089e087c2c5df921acfdf0",
+              "test_sha256": "f64b74b8b626be58097143f265dab5717244fcb7a03740ce5d3b16faaab079ac",
               "test_contract_file": "apps/api/tests/study_contract_assertions.py",
               "test_contract_sha256": "490d20d94b65d10cd4b06111e8d5048c8b3c938fc9a919c7faae546185468486",
               "acceptance_runner_file": "scripts/acceptance-study-contracts.py",
@@ -17119,7 +17119,7 @@
         "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
         "dataKind": "synthetic_or_user_supplied_unverified",
         "inputSha256": "d96dd3dcd89a139aefc25cc6f7c6ac371c8e5f2e1eecc9b95615e4b45e907ed9",
-        "evidenceSha256": "cf88e12cd2041fdd25018b9de3fc1254652e3f737189d0560342ea1c40de4820",
+        "evidenceSha256": "5430f5d3a06569513677accd593dff3a0eaf63bd4ebb407d461033b894a0a091",
         "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"council-consensus\"].inputs",
         "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"council-consensus\"]",
         "handCheck": {
@@ -17184,7 +17184,7 @@
           "type": "bundled default-input example; generated by scripts/generate-studies.py from the Python study implementation",
           "dataKind": "synthetic_or_user_supplied_unverified",
           "inputSha256": "d96dd3dcd89a139aefc25cc6f7c6ac371c8e5f2e1eecc9b95615e4b45e907ed9",
-          "evidenceSha256": "cf88e12cd2041fdd25018b9de3fc1254652e3f737189d0560342ea1c40de4820",
+          "evidenceSha256": "5430f5d3a06569513677accd593dff3a0eaf63bd4ebb407d461033b894a0a091",
           "inputReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"council-consensus\"].inputs",
           "resultReference": "apps/web/src/roadmap-data.ts — STUDY_BUNDLE.results[\"council-consensus\"]",
           "handCheck": {
@@ -17279,7 +17279,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "f989bb548414946f7f8e77f74244e1ed5eabb1486e98da8fb56e7c52b5653958"
+            "sha256": "c330a9cc1213bfde74430df2edff6abe8bffb38621f6a5eb721a1802213b68ff"
           }
         },
         "limitations": [
@@ -17295,7 +17295,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "council-consensus",
@@ -17443,7 +17443,7 @@
                     "unit": "items"
                   }
                 ],
-                "default_result_sha256": "f989bb548414946f7f8e77f74244e1ed5eabb1486e98da8fb56e7c52b5653958"
+                "default_result_sha256": "c330a9cc1213bfde74430df2edff6abe8bffb38621f6a5eb721a1802213b68ff"
               },
               "units": "probability / bits",
               "evidence_class": "independent_software_oracle"
@@ -17505,7 +17505,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "f989bb548414946f7f8e77f74244e1ed5eabb1486e98da8fb56e7c52b5653958"
+                "sha256": "c330a9cc1213bfde74430df2edff6abe8bffb38621f6a5eb721a1802213b68ff"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -17522,9 +17522,9 @@
               "study_runtime_file": "apps/api/helioforge/engines/study_types.py",
               "study_runtime_sha256": "f89e20e695eb09701da005d957414168c7621866160df5af928f0cb31f159df6",
               "engine_file": "apps/api/helioforge/engines/workflow_studies.py",
-              "engine_sha256": "6e0e62016b1290ff9059249d4e19bfa4e8fad9cecb641fb696332a431f9bfad2",
+              "engine_sha256": "c0bd23be1c289c691fd1a70c102c5b159eabba02c221fdd3a7a2f2fdc3907550",
               "test_file": "apps/api/tests/test_workflow_studies.py",
-              "test_sha256": "537c748651724607da178b26a19b847c0193ddcfc4089e087c2c5df921acfdf0",
+              "test_sha256": "f64b74b8b626be58097143f265dab5717244fcb7a03740ce5d3b16faaab079ac",
               "test_contract_file": "apps/api/tests/study_contract_assertions.py",
               "test_contract_sha256": "490d20d94b65d10cd4b06111e8d5048c8b3c938fc9a919c7faae546185468486",
               "acceptance_runner_file": "scripts/acceptance-study-contracts.py",
@@ -17918,7 +17918,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "76848dc272ac71976a01130fca3468a665874073ce0423730953cd9978d4d9a4"
+            "sha256": "f66eb31ce36bc7705632b77b54baee79bf1ef4b69b34efcb65763f0268b499aa"
           }
         },
         "limitations": [
@@ -17936,7 +17936,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "storage-annual",
@@ -17985,7 +17985,7 @@
                       "annual_grid_model": "unconstrained"
                     },
                     "table_row_count": 8760,
-                    "result_sha256": "1a5cebabb5f1c1a1e39429d6eeaa8a09e9a71e1c3dc7b00260aacd105264aebd"
+                    "result_sha256": "41ebac76ce929840121010d12ba3b35725e62bdc0ab92215b43b90bd306a011b"
                   },
                   {
                     "outcome": "returned",
@@ -18017,7 +18017,7 @@
                       "annual_grid_model": "unconstrained"
                     },
                     "table_row_count": 8760,
-                    "result_sha256": "052b6d7c6be6a7f704c6e2ee73cb90380cde51a866996acf95845e821a9df3ce"
+                    "result_sha256": "8b7b2c32ee59c6ce947ef6e68b897ea935bbc4b68e754ac0a8c0f370c33f2f59"
                   },
                   {
                     "outcome": "returned",
@@ -18049,7 +18049,7 @@
                       "annual_grid_model": "unconstrained"
                     },
                     "table_row_count": 8760,
-                    "result_sha256": "b20ddbdbefb02dfd09084f8aa7ed3e40aae070149d47db7074b031e8194189ff"
+                    "result_sha256": "8617ba8d50e1a049028e6f83fa40866ba6248b92efbc9e52f861043e61fb2044"
                   }
                 ],
                 "default_metric_snapshot": [
@@ -18074,7 +18074,7 @@
                     "unit": "kWh"
                   }
                 ],
-                "default_result_sha256": "76848dc272ac71976a01130fca3468a665874073ce0423730953cd9978d4d9a4"
+                "default_result_sha256": "f66eb31ce36bc7705632b77b54baee79bf1ef4b69b34efcb65763f0268b499aa"
               },
               "units": "kW / kWh / EUR",
               "evidence_class": "independent_software_oracle"
@@ -18126,7 +18126,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "76848dc272ac71976a01130fca3468a665874073ce0423730953cd9978d4d9a4"
+                "sha256": "f66eb31ce36bc7705632b77b54baee79bf1ef4b69b34efcb65763f0268b499aa"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -18387,7 +18387,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "pv-sensitivity",
@@ -18724,7 +18724,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "519beac83c7a0371205b337de1da900196183f2f26d145c979d8af49688c4a8e"
+            "sha256": "a7bca006b6951d99686c77fe203095657415bd632217c24c419e34ce1f9df557"
           }
         },
         "limitations": [
@@ -18740,7 +18740,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "pv-reserve",
@@ -18786,11 +18786,11 @@
                   },
                   {
                     "label": "Annual contribution",
-                    "value": 126634.79203226288,
+                    "value": 126634.7920322629,
                     "unit": "EUR"
                   }
                 ],
-                "default_result_sha256": "519beac83c7a0371205b337de1da900196183f2f26d145c979d8af49688c4a8e"
+                "default_result_sha256": "a7bca006b6951d99686c77fe203095657415bd632217c24c419e34ce1f9df557"
               },
               "units": "EUR / year",
               "evidence_class": "independent_software_oracle"
@@ -18832,7 +18832,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "519beac83c7a0371205b337de1da900196183f2f26d145c979d8af49688c4a8e"
+                "sha256": "a7bca006b6951d99686c77fe203095657415bd632217c24c419e34ce1f9df557"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -19151,7 +19151,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "hybrid-powerflow",
@@ -19637,7 +19637,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "e8ef92b9bce53cc199ca87dbc4dfb8cff841f2f4f99d85f1af10cf8f900777ac"
+            "sha256": "21b65f0719bfd4f124db339bd59a85a24699d7ff5cbe17f8a5a718a3fee60804"
           }
         },
         "limitations": [
@@ -19654,7 +19654,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "hybrid-switching",
@@ -19688,7 +19688,7 @@
                       },
                       {
                         "label": "PWM ripple RMS versus averaged case",
-                        "value": 6.128786400625032,
+                        "value": 6.128786400625033,
                         "unit": "A"
                       },
                       {
@@ -19702,11 +19702,11 @@
                       "internal_time_step_s": 0.00002,
                       "internal_steps": 2000,
                       "convergence_relative_error": 0.002843372180812279,
-                      "switching_ripple_rms_a": 6.128786400625032,
+                      "switching_ripple_rms_a": 6.128786400625033,
                       "switching_enabled": true
                     },
                     "table_row_count": 0,
-                    "result_sha256": "7b8b905d7bf057fa02fcff82b7184464f5bb7e7a6b40b381d98c0838a721c1ae"
+                    "result_sha256": "795020ccf580396ef60936a5786488003fc3fa636267eda616bb66d0d99f2e90"
                   },
                   {
                     "outcome": "returned",
@@ -19741,7 +19741,7 @@
                       "switching_enabled": false
                     },
                     "table_row_count": 0,
-                    "result_sha256": "0bdca4956251713ab6ad9485cc68235afdc41966c6d090e05aa5af52e435609c"
+                    "result_sha256": "8dd67cfb0b16af12816f23e759aa58203888e3bd3c83bb5a1c52f7e3dad02456"
                   }
                 ],
                 "default_metric_snapshot": [
@@ -19757,7 +19757,7 @@
                   },
                   {
                     "label": "PWM ripple RMS versus averaged case",
-                    "value": 6.128786400625032,
+                    "value": 6.128786400625033,
                     "unit": "A"
                   },
                   {
@@ -19766,7 +19766,7 @@
                     "unit": "fraction"
                   }
                 ],
-                "default_result_sha256": "e8ef92b9bce53cc199ca87dbc4dfb8cff841f2f4f99d85f1af10cf8f900777ac"
+                "default_result_sha256": "21b65f0719bfd4f124db339bd59a85a24699d7ff5cbe17f8a5a718a3fee60804"
               },
               "units": "A / fraction",
               "evidence_class": "independent_software_oracle"
@@ -19818,7 +19818,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "e8ef92b9bce53cc199ca87dbc4dfb8cff841f2f4f99d85f1af10cf8f900777ac"
+                "sha256": "21b65f0719bfd4f124db339bd59a85a24699d7ff5cbe17f8a5a718a3fee60804"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -20202,7 +20202,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "lessons-energization",
@@ -20776,7 +20776,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "storage-response",
@@ -21146,7 +21146,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "storage-agingfit",
@@ -21702,7 +21702,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "compare-thermalphysics",
@@ -21726,22 +21726,22 @@
                     "metric_snapshot": [
                       {
                         "label": "Peak lumped temperature",
-                        "value": 49.999999999999986,
+                        "value": 49.99999999999999,
                         "unit": "°C"
                       },
                       {
                         "label": "Final lumped temperature",
-                        "value": 49.999999999999986,
+                        "value": 49.99999999999999,
                         "unit": "°C"
                       },
                       {
                         "label": "Final reaction fraction",
-                        "value": 0.0024999999999999988,
+                        "value": 0.002499999999999999,
                         "unit": "fraction"
                       },
                       {
                         "label": "Reaction heat released",
-                        "value": 24999.99999999999,
+                        "value": 24999.999999999993,
                         "unit": "J"
                       },
                       {
@@ -21753,13 +21753,13 @@
                     "scalar_details": {
                       "termination_reason": "temperature threshold reached",
                       "termination_time_s": 0.1783671892312461,
-                      "final_temperature_c": 49.999999999999986,
-                      "final_reaction_fraction": 0.0024999999999999988,
+                      "final_temperature_c": 49.99999999999999,
+                      "final_reaction_fraction": 0.002499999999999999,
                       "convergence_relative_error": 0,
-                      "heat_released_j": 24999.99999999999
+                      "heat_released_j": 24999.999999999993
                     },
                     "table_row_count": 0,
-                    "result_sha256": "7ee1ce1b37fa2dd32ee775a1381576576437d214b03b9f4af42f1e0bcc128300"
+                    "result_sha256": "95ebc67cf58462f98203f21a2c551aaef2c071df2fd2bc49de1ac30154ed2779"
                   }
                 ],
                 "default_metric_snapshot": [
@@ -22125,7 +22125,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "pv-raytrace",
@@ -22696,7 +22696,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "pv-setbacks",
@@ -23164,7 +23164,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "ed50512141eb469d31d2b9716836b0aa17d8ef494b5ecc8c3415dc2e9cc4a45b"
+            "sha256": "602bcfc276478515f6a33d361967e09ad4890dc84a491186affb08523dfa4c48"
           }
         },
         "limitations": [
@@ -23180,7 +23180,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "research-bearing",
@@ -23224,7 +23224,7 @@
                       "sample_count": 256
                     },
                     "table_row_count": 2,
-                    "result_sha256": "7d7d5eb06a68825073d1de0b2ed0fe6e4e76b34e97945500b131f3877bb21c4d"
+                    "result_sha256": "71a6474701f2411786cea12775964b4f2cd52a708ce276f2bdc05faa5aea8183"
                   }
                 ],
                 "default_metric_snapshot": [
@@ -23244,7 +23244,7 @@
                     "unit": "records"
                   }
                 ],
-                "default_result_sha256": "ed50512141eb469d31d2b9716836b0aa17d8ef494b5ecc8c3415dc2e9cc4a45b"
+                "default_result_sha256": "602bcfc276478515f6a33d361967e09ad4890dc84a491186affb08523dfa4c48"
               },
               "units": "records / sigma",
               "evidence_class": "independent_software_oracle"
@@ -23291,7 +23291,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "ed50512141eb469d31d2b9716836b0aa17d8ef494b5ecc8c3415dc2e9cc4a45b"
+                "sha256": "602bcfc276478515f6a33d361967e09ad4890dc84a491186affb08523dfa4c48"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -23690,7 +23690,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "263bd10f5bc11a376b8084f6ef18dd18d6864da06c164ccbb645bd38e161f803"
+            "sha256": "aad371804cd20994b236e80ef1b50ff6ab3ae1709162de31bd0a5be1415bdf69"
           }
         },
         "limitations": [
@@ -23708,7 +23708,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "storage-annualopt",
@@ -23774,7 +23774,7 @@
                       "solver_status_code": 0,
                       "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
                       "relative_mip_gap": 0,
-                      "solver_runtime_seconds": 0.2947427000035532,
+                      "solver_runtime_seconds": 0.24760803800018039,
                       "solver_time_limit_seconds": 4,
                       "mip_node_count": null,
                       "max_balance_residual_kw": 0,
@@ -23791,7 +23791,7 @@
                       "baseline_method": "exact analytical no-battery dispatch with identical energy, grid, PV-curtailment, and monthly-peak constraints"
                     },
                     "table_row_count": 8760,
-                    "result_sha256": "9a83c63eebb8ef3a2f8c5832dca36dd7a85bf12fe704c9a643b155816a9470cc"
+                    "result_sha256": "5a5370b099f73bba5a9e0a61126c9affd49344a7fdc1024f6eb6fe80c3cff654"
                   }
                 ],
                 "default_metric_snapshot": [
@@ -23826,7 +23826,7 @@
                     "unit": "kWh"
                   }
                 ],
-                "default_result_sha256": "263bd10f5bc11a376b8084f6ef18dd18d6864da06c164ccbb645bd38e161f803"
+                "default_result_sha256": "aad371804cd20994b236e80ef1b50ff6ab3ae1709162de31bd0a5be1415bdf69"
               },
               "units": "EUR / kW",
               "evidence_class": "independent_software_oracle"
@@ -23888,7 +23888,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "263bd10f5bc11a376b8084f6ef18dd18d6864da06c164ccbb645bd38e161f803"
+                "sha256": "aad371804cd20994b236e80ef1b50ff6ab3ae1709162de31bd0a5be1415bdf69"
               },
               "solver_feasibility": {
                 "status": "PASS",
@@ -24255,7 +24255,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "5cfbcc74d8c5e274bf671f37750a8548868e6d8c5301ba550de0feb2a9df7245"
+            "sha256": "d5ecf6ee174a1519bce8567b591b90ae1f803f91208d7b67fdee9ed1953d4d63"
           }
         },
         "limitations": [
@@ -24272,7 +24272,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "compare-reliability",
@@ -24360,7 +24360,7 @@
                     "unit": "kWh"
                   }
                 ],
-                "default_result_sha256": "5cfbcc74d8c5e274bf671f37750a8548868e6d8c5301ba550de0feb2a9df7245"
+                "default_result_sha256": "d5ecf6ee174a1519bce8567b591b90ae1f803f91208d7b67fdee9ed1953d4d63"
               },
               "units": "h/year / kWh/year",
               "evidence_class": "independent_software_oracle"
@@ -24412,7 +24412,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "5cfbcc74d8c5e274bf671f37750a8548868e6d8c5301ba550de0feb2a9df7245"
+                "sha256": "d5ecf6ee174a1519bce8567b591b90ae1f803f91208d7b67fdee9ed1953d4d63"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -24705,17 +24705,17 @@
                 },
                 {
                   "label": "In-sample VECM residual RMSE",
-                  "value": 0.025522731163397688,
+                  "value": 0.02552273116339769,
                   "unit": "price units"
                 },
                 {
                   "label": "Chronological holdout RMSE (power)",
-                  "value": 5.195154728212449,
+                  "value": 5.1951547282124615,
                   "unit": "EUR/MWh"
                 },
                 {
                   "label": "Chronological holdout RMSE (all series)",
-                  "value": 10.636186265037422,
+                  "value": 10.63618626503745,
                   "unit": "series units"
                 }
               ]
@@ -24753,7 +24753,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "c9ef4843d8593b0756d9defdf67b1c267283f3e1e503b722b5740fea0e3d4443"
+            "sha256": "205b9777d036b0575feb10c612675d56bbc743308fff13baa794825a13d3eaea"
           }
         },
         "limitations": [
@@ -24770,7 +24770,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "forecast-cointegration",
@@ -24799,17 +24799,17 @@
                       },
                       {
                         "label": "In-sample VECM residual RMSE",
-                        "value": 0.04161051582144162,
+                        "value": 0.041610515821441624,
                         "unit": "price units"
                       },
                       {
                         "label": "Chronological holdout RMSE (power)",
-                        "value": 7.725442875845391,
+                        "value": 7.725442875845352,
                         "unit": "EUR/MWh"
                       },
                       {
                         "label": "Chronological holdout RMSE (all series)",
-                        "value": 6.114032646844579,
+                        "value": 6.114032646844544,
                         "unit": "series units"
                       }
                     ],
@@ -24822,14 +24822,14 @@
                       "holdout_observations": 30,
                       "lag_count": 1,
                       "short_run_lag_terms": 3,
-                      "in_sample_vecm_rmse_all_series": 0.04161051582144162,
-                      "holdout_rmse_all_series": 6.114032646844579,
-                      "holdout_rmse_power_eur_mwh": 7.725442875845391,
+                      "in_sample_vecm_rmse_all_series": 0.041610515821441624,
+                      "holdout_rmse_all_series": 6.114032646844544,
+                      "holdout_rmse_power_eur_mwh": 7.725442875845352,
                       "training_fraction": 0.75,
                       "fitted_on_holdout": false
                     },
                     "table_row_count": 12,
-                    "result_sha256": "661b047c9701209361f3630ca37a36753753fa9e920c0330cb05ac86942dcc35"
+                    "result_sha256": "b732c988cab23f9fd3cdc4032ce00f92f1470a4dae9e05f6d98199c9eed6d55b"
                   }
                 ],
                 "default_metric_snapshot": [
@@ -24845,16 +24845,16 @@
                   },
                   {
                     "label": "Chronological holdout RMSE (power)",
-                    "value": 9.240234316761534,
+                    "value": 9.240234316761521,
                     "unit": "EUR/MWh"
                   },
                   {
                     "label": "Chronological holdout RMSE (all series)",
-                    "value": 12.849988094977316,
+                    "value": 12.849988094977322,
                     "unit": "series units"
                   }
                 ],
-                "default_result_sha256": "c9ef4843d8593b0756d9defdf67b1c267283f3e1e503b722b5740fea0e3d4443"
+                "default_result_sha256": "205b9777d036b0575feb10c612675d56bbc743308fff13baa794825a13d3eaea"
               },
               "units": "price units / observations / RMSE",
               "evidence_class": "independent_software_oracle"
@@ -24879,17 +24879,17 @@
                   },
                   {
                     "label": "In-sample VECM residual RMSE",
-                    "value": 0.025522731163397688,
+                    "value": 0.02552273116339769,
                     "unit": "price units"
                   },
                   {
                     "label": "Chronological holdout RMSE (power)",
-                    "value": 5.195154728212449,
+                    "value": 5.1951547282124615,
                     "unit": "EUR/MWh"
                   },
                   {
                     "label": "Chronological holdout RMSE (all series)",
-                    "value": 10.636186265037422,
+                    "value": 10.63618626503745,
                     "unit": "series units"
                   }
                 ]
@@ -24906,7 +24906,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "c9ef4843d8593b0756d9defdf67b1c267283f3e1e503b722b5740fea0e3d4443"
+                "sha256": "205b9777d036b0575feb10c612675d56bbc743308fff13baa794825a13d3eaea"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -25162,12 +25162,12 @@
               "metric_snapshot": [
                 {
                   "label": "Held-out mean absolute error",
-                  "value": 0.6967652125391747,
+                  "value": 0.6967652125391701,
                   "unit": "EUR/MWh"
                 },
                 {
                   "label": "Held-out root mean square error",
-                  "value": 0.8513784396986289,
+                  "value": 0.8513784396986307,
                   "unit": "EUR/MWh"
                 },
                 {
@@ -25230,7 +25230,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "forecast-backtest",
@@ -25338,12 +25338,12 @@
                 "metric_snapshot": [
                   {
                     "label": "Held-out mean absolute error",
-                    "value": 0.6967652125391747,
+                    "value": 0.6967652125391701,
                     "unit": "EUR/MWh"
                   },
                   {
                     "label": "Held-out root mean square error",
-                    "value": 0.8513784396986289,
+                    "value": 0.8513784396986307,
                     "unit": "EUR/MWh"
                   },
                   {
@@ -25715,7 +25715,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "markets-network",
@@ -26216,7 +26216,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "c5f27b60cdbc2c6d4cab22350d111097ed1b6750440989eb0340616e14446fa5"
+            "sha256": "f1df0cb40f83a201c13d9760979ad5f52ab6d9404e0619d7aa9af3873d89e63b"
           }
         },
         "limitations": [
@@ -26233,7 +26233,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "investment-contracts",
@@ -26396,7 +26396,7 @@
                   },
                   {
                     "label": "Total equity cash tax",
-                    "value": 699595.5194271542,
+                    "value": 699595.5194271544,
                     "unit": "EUR"
                   },
                   {
@@ -26405,7 +26405,7 @@
                     "unit": "EUR"
                   }
                 ],
-                "default_result_sha256": "c5f27b60cdbc2c6d4cab22350d111097ed1b6750440989eb0340616e14446fa5"
+                "default_result_sha256": "f1df0cb40f83a201c13d9760979ad5f52ab6d9404e0619d7aa9af3873d89e63b"
               },
               "units": "EUR / %; null IRR",
               "evidence_class": "independent_software_oracle"
@@ -26467,7 +26467,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "c5f27b60cdbc2c6d4cab22350d111097ed1b6750440989eb0340616e14446fa5"
+                "sha256": "f1df0cb40f83a201c13d9760979ad5f52ab6d9404e0619d7aa9af3873d89e63b"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
@@ -26778,7 +26778,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "lessons-hydrogenaux",
@@ -27174,7 +27174,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "overview-risk",
@@ -27586,7 +27586,7 @@
               "metric_snapshot": [
                 {
                   "label": "Final trimmed registration RMSE",
-                  "value": 7.798156063713201e-16,
+                  "value": 6.1489915766289085e-16,
                   "unit": "m"
                 },
                 {
@@ -27639,7 +27639,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "b972bc5f649ffaff5e32171afa462e684c0bdaf5ffa8efb2428a54a749d81b24"
+            "sha256": "7505d8668bdef2ea20b6f649bf3e317b4800ebef18fc34a00f09352d73c9ae6c"
           }
         },
         "limitations": [
@@ -27656,7 +27656,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "pilots-registration",
@@ -27726,7 +27726,7 @@
                 "default_metric_snapshot": [
                   {
                     "label": "Final trimmed registration RMSE",
-                    "value": 7.798156063713201e-16,
+                    "value": 6.1489915766289085e-16,
                     "unit": "m"
                   },
                   {
@@ -27745,7 +27745,7 @@
                     "unit": "degrees"
                   }
                 ],
-                "default_result_sha256": "b972bc5f649ffaff5e32171afa462e684c0bdaf5ffa8efb2428a54a749d81b24"
+                "default_result_sha256": "7505d8668bdef2ea20b6f649bf3e317b4800ebef18fc34a00f09352d73c9ae6c"
               },
               "units": "m / points / radians",
               "evidence_class": "independent_software_oracle"
@@ -27765,7 +27765,7 @@
                 "metric_snapshot": [
                   {
                     "label": "Final trimmed registration RMSE",
-                    "value": 7.798156063713201e-16,
+                    "value": 6.1489915766289085e-16,
                     "unit": "m"
                   },
                   {
@@ -27797,7 +27797,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "b972bc5f649ffaff5e32171afa462e684c0bdaf5ffa8efb2428a54a749d81b24"
+                "sha256": "7505d8668bdef2ea20b6f649bf3e317b4800ebef18fc34a00f09352d73c9ae6c"
               },
               "solver_feasibility": {
                 "status": "PASS",
@@ -28365,7 +28365,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "hybrid-controls",
@@ -28921,7 +28921,7 @@
               "metric_snapshot": [
                 {
                   "label": "Largest eigenvalue real part",
-                  "value": -16.122876157881542,
+                  "value": -16.122876157881215,
                   "unit": "s⁻¹"
                 },
                 {
@@ -28967,7 +28967,7 @@
           "json": {
             "status": "PASS",
             "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-            "sha256": "815d853ad8faed29dbae2d073f1cca4ce6cea5ec56535770f32a0b11d5591364"
+            "sha256": "3386f2b9913ed4d1bba8b49e7cc914f02ad654e96e14cc7b62171fa4f6ffad1d"
           }
         },
         "limitations": [
@@ -28986,7 +28986,7 @@
           "sharedContract": "docs/roadmap/CONTRACT.md"
         },
         "executionEvidence": {
-          "reference": "docs/remediation-20261108/study-contracts.json",
+          "reference": "docs/remediation-20261108/summation-study-contracts.json",
           "sourceMatches": true,
           "record": {
             "study_id": "research-eigenmodes",
@@ -29010,7 +29010,7 @@
                     "metric_snapshot": [
                       {
                         "label": "Largest eigenvalue real part",
-                        "value": -53.37867888082236,
+                        "value": -53.378678880816935,
                         "unit": "s⁻¹"
                       },
                       {
@@ -29026,7 +29026,7 @@
                     ],
                     "scalar_details": {
                       "stability": "locally_asymptotically_stable",
-                      "maximum_real_part_per_s": -53.37867888082236,
+                      "maximum_real_part_per_s": -53.378678880816935,
                       "linearization": "central finite difference of the averaged closed-loop RHS at the computed unsaturated zero-load equilibrium, with current and modulation limits inactive",
                       "filter_inductance_h": 0.0015,
                       "filter_resistance_ohm": 0.08,
@@ -29042,13 +29042,13 @@
                       "pll_included": false
                     },
                     "table_row_count": 10,
-                    "result_sha256": "a37d9335c21569be830c986576eec38e0c986feaf15b2c910dcbb3597ed9ddf7"
+                    "result_sha256": "1b2c438f009eecb6c8b656ba7f3a64799eaed32a09c3bcca75bc99e3fe9dca12"
                   }
                 ],
                 "default_metric_snapshot": [
                   {
                     "label": "Largest eigenvalue real part",
-                    "value": -53.37867888082236,
+                    "value": -53.378678880816935,
                     "unit": "s⁻¹"
                   },
                   {
@@ -29062,7 +29062,7 @@
                     "unit": "state"
                   }
                 ],
-                "default_result_sha256": "815d853ad8faed29dbae2d073f1cca4ce6cea5ec56535770f32a0b11d5591364"
+                "default_result_sha256": "3386f2b9913ed4d1bba8b49e7cc914f02ad654e96e14cc7b62171fa4f6ffad1d"
               },
               "units": "s⁻¹ / modes",
               "evidence_class": "independent_software_oracle"
@@ -29082,7 +29082,7 @@
                 "metric_snapshot": [
                   {
                     "label": "Largest eigenvalue real part",
-                    "value": -16.122876157881542,
+                    "value": -16.122876157881215,
                     "unit": "s⁻¹"
                   },
                   {
@@ -29109,7 +29109,7 @@
               "json_export": {
                 "status": "PASS",
                 "actual": "strict JSON round-trip preserved result and recomputed evidence digest",
-                "sha256": "815d853ad8faed29dbae2d073f1cca4ce6cea5ec56535770f32a0b11d5591364"
+                "sha256": "3386f2b9913ed4d1bba8b49e7cc914f02ad654e96e14cc7b62171fa4f6ffad1d"
               },
               "solver_feasibility": {
                 "status": "NOT_APPLICABLE",
