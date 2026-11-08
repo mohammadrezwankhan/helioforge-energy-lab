@@ -13,7 +13,7 @@ This registry is generated from the Python-backed study catalogue embedded in `a
 | Hybrid catalogue | 0.2.0 | 36 architectures, 24 scenarios, 36 lessons |
 | Study catalogue | No declared semantic version; SHA-256 `9c89b475d9e929f1cad0792dc955082cc30bf87be305be175e22a6e9a9c5495f` | 59 IDs / 12 workspaces |
 | Hybrid example data | hybrid-presets-v1 / helioforge.hybrid-bundle.v1 | 285 bundled cases; dataset digest in JSON |
-| Study example data | No declared dataset version; digest `949d41fc65bffb23d02222b8f2737258b8e5528dc534a236007f8d973df0b082` | Synthetic or user-supplied-unverified examples |
+| Study example data | No declared dataset version; digest `6d03b4e749c8ba11e1b0cb2c97e1fbe24115ebd00ef2699e33887bc508dd8834` | Synthetic or user-supplied-unverified examples |
 | Study model | `roadmap-screen-v1` | Per-study association is listed below |
 | Study result schema | U — no standalone schema_version in current envelope | See `docs/roadmap/CONTRACT.md` and individual source module |
 
@@ -89,7 +89,7 @@ Model: `roadmap-screen-v1`. Python: [physical_studies.py](../apps/api/helioforge
 
 Input schema: 3 bounded numeric field(s), 2 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `75bd8bd8e2d3b29dcaa90947f359e43f163b85b6d115537ab52c2eb828b88e3e`, evidence SHA-256 `016f48a0119f432c51ffc38737547d1e84ac212046a1b8c792ae661823744c0b`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `75bd8bd8e2d3b29dcaa90947f359e43f163b85b6d115537ab52c2eb828b88e3e`, evidence SHA-256 `474a563f9d1662cddb1f862281d84814d9700f066efd19afd4348de7bb5b96c3`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `I = Ybus·V; Sbus = V·conj(I)`
@@ -109,7 +109,7 @@ Model: `roadmap-screen-v1`. Python: [physical_studies.py](../apps/api/helioforge
 
 Input schema: 10 bounded numeric field(s), 0 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `40cf32e2f140ef8600c12805d08b9416a762df6a45f75f88fe27bb5a2904546c`, evidence SHA-256 `bf17d512538f63ee1cefde413619aad3174c6a26b4bec00c7a9297d562843fa2`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `40cf32e2f140ef8600c12805d08b9416a762df6a45f75f88fe27bb5a2904546c`, evidence SHA-256 `fc6bc2b4207d6918e31e104f8a6c1f8d10a28287c6591b9fe62388f65dddacf8`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `L·di/dt = vinverter(t) − vgrid(t) − R·i`
@@ -209,7 +209,7 @@ Model: `roadmap-screen-v1`. Python: [physical_studies.py](../apps/api/helioforge
 
 Input schema: 10 bounded numeric field(s), 0 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `94d879bbb2569af4d4553c6451bcc27f7cb7482de76c493d732be9dbac1b49fa`, evidence SHA-256 `8b59dd51858edce56ccabed90c9452555c471f1728f5389aa18bdc33daf334a3`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `94d879bbb2569af4d4553c6451bcc27f7cb7482de76c493d732be9dbac1b49fa`, evidence SHA-256 `7f627c568405bdda43bb63e4664afb309bf0706c38526d7a0dc75ece8bf2aaec`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `L di/dt = vsource − R i − vC after breaker close`
@@ -309,7 +309,7 @@ Model: `roadmap-screen-v1`. Python: [physical_studies.py](../apps/api/helioforge
 
 Input schema: 12 bounded numeric field(s), 0 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `08523185b0074291bca13df53a5a252a29e86003a901b3c508fdd30483cec0ff`, evidence SHA-256 `fd3010fa94ca579e4164583d9f4a452da1ccdf21e7b5f2ebf50f15e21372bb61`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `08523185b0074291bca13df53a5a252a29e86003a901b3c508fdd30483cec0ff`, evidence SHA-256 `6fa12feed83f70854c71b06e2cf9b62bbe5883dc2727af068b4c7eed97b3c5bf`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `k(T) = kref·exp[−Ea/R·(1/T − 1/Tref)] with absolute temperature in kelvin`
@@ -507,7 +507,7 @@ Model: `roadmap-screen-v1`. Python: [physical_studies.py](../apps/api/helioforge
 
 Input schema: 11 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `f8e2972bdbefc8d10947470e43793990816dd4b9307e73ee665f86c2c089a120`, evidence SHA-256 `9d62eb7d4cedcaa594eec4032b61dc366058a6736131eaf89d4d99a929be0f26`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `f8e2972bdbefc8d10947470e43793990816dd4b9307e73ee665f86c2c089a120`, evidence SHA-256 `d6932743344457ca8c29393881992da3a35be3165258472057463af3080ba356`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `Pcommand = −droop·(f − fnominal) outside the selected deadband`
@@ -526,7 +526,7 @@ Model: `roadmap-screen-v1`. Python: [physical_studies.py](../apps/api/helioforge
 
 Input schema: 0 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `2b0cfcac393854bf1eea0621e4c05519a4f3a8dddd2f94fe50f0a0628b3bb29f`, evidence SHA-256 `89bc68a6967a69eccd3a1be1d46797e9c51e4665e339e3d2bc69ca8b695c7282`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `2b0cfcac393854bf1eea0621e4c05519a4f3a8dddd2f94fe50f0a0628b3bb29f`, evidence SHA-256 `33aaf85feedbe846f86d8333c50a2fc4fd67a88ea664a5034b761308a54d8cc7`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `retention = 1 − a·(cycles/1000)·exp(b·(temperature°C − 25))`
@@ -663,7 +663,7 @@ Model: `roadmap-screen-v1`. Python: [physical_studies.py](../apps/api/helioforge
 
 Input schema: 0 bounded numeric field(s), 3 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `07fc8b63015690a8a79483c530d31959f076fd2ece8a5c5d19c1631f0b693ea8`, evidence SHA-256 `4af259c92dc723ad1ff9fa245f212fb29caac1e1a4044aa7873feec3f057aa4a`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `07fc8b63015690a8a79483c530d31959f076fd2ece8a5c5d19c1631f0b693ea8`, evidence SHA-256 `a6d3fff493965debb7a7778e1b68d05134dfbf3fed3d21d8eefe83a67785f8fb`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `incidence = max(0, n̂·ŝ); direct energy = DNI·panel area·incidence·duration.`
@@ -681,7 +681,7 @@ Model: `roadmap-screen-v1`. Python: [physical_studies.py](../apps/api/helioforge
 
 Input schema: 6 bounded numeric field(s), 1 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `4215dcbec657d1eb390085f90fc33b89204a95eaae472437cce5b04d77933933`, evidence SHA-256 `2844872e080dff0d455c6a60c255b813fded3ae0e7423171e1a88a500e6da49d`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `4215dcbec657d1eb390085f90fc33b89204a95eaae472437cce5b04d77933933`, evidence SHA-256 `d716427c96032bad0d820f4efca2efefffab0e05d36ec92b3d6e0cb5b888900e`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `usable geometry = parcel geometry buffered inward by setback distance`
@@ -761,7 +761,7 @@ Model: `roadmap-screen-v1`. Python: [physical_studies.py](../apps/api/helioforge
 
 Input schema: 2 bounded numeric field(s), 2 JSON data field(s). Units are supplied only where the catalogue declares them. Result schema version: **U**.
 
-Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `64a8f7bd96a1bd58e64532c0787e609a38d8b244218fcf177790f11674789934`, evidence SHA-256 `2c8a13824e7ae4809499bb211331781063da340c8b6443f13d60b61733276e6f`. Independent hand check: **NOT RUN**.
+Default fixture: `synthetic_or_user_supplied_unverified`, input SHA-256 `64a8f7bd96a1bd58e64532c0787e609a38d8b244218fcf177790f11674789934`, evidence SHA-256 `14daee6a7e4cd570dc6302d19640f4bf42096243921368d7b6aa6f490e84c4a1`. Independent hand check: **NOT RUN**.
 
 Equations:
 - `one-sided amplitude spectrum = |rFFT((x−mean(x))·Hann)|·2/sum(Hann)`

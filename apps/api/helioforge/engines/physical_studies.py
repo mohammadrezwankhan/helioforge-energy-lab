@@ -11,7 +11,7 @@ from __future__ import annotations
 import math
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from typing import Annotated, Literal, TypeAlias, TypedDict
+from typing import TYPE_CHECKING, Annotated, Literal, TypeAlias, TypedDict, cast
 
 import numpy as np
 from numpy.typing import NDArray
@@ -34,8 +34,15 @@ from helioforge.engines.study_types import (
     typed_runner,
 )
 
+if TYPE_CHECKING:
+    from scipy.optimize._root import _RootOptionsHybr
+
 FloatVector: TypeAlias = np.ndarray[tuple[int], np.dtype[np.float64]]
 IntVector: TypeAlias = np.ndarray[tuple[int], np.dtype[np.intp]]
+
+
+class PowerFlowSolverOptions(TypedDict):
+    maxfev: int
 
 
 class VibrationFixtureRecord(TypedDict):
@@ -1037,9 +1044,9 @@ def _powerflow(p: PowerFlowInput) -> StudyResult:
         ]
         return residual
 
-    solve = root(
-        mismatch, initial, method="hybr", options={"maxfev": p.max_iterations * max(3, 2 * len(initial))}
-    )
+    options: PowerFlowSolverOptions = {"maxfev": p.max_iterations * max(3, 2 * len(initial))}
+    # SciPy 1.17 stubs misspell maxfev; retain the typed, documented runtime option.
+    solve = root(mismatch, initial, method="hybr", options=cast("_RootOptionsHybr", options))
     residual = mismatch(solve.x) if np.all(np.isfinite(solve.x)) else np.asarray([math.inf])
     residual_norm = float(np.max(np.abs(residual))) if residual.size else 0.0
     voltage = make_voltage(solve.x) if np.all(np.isfinite(solve.x)) else np.asarray([], dtype=complex)

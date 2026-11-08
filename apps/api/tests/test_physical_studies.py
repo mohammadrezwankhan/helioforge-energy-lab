@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import json
 import math
+from unittest.mock import patch
 
 import pytest
 from pydantic import ValidationError
+from scipy.optimize import root
 
 from helioforge.engines.physical_studies import INPUT_MODELS, STUDIES, run
 from helioforge.engines.study_types import StudyResult
@@ -92,6 +94,14 @@ def test_extreme_values_and_invalid_network_or_time_resolution_are_rejected() ->
         run("pv-raytrace", {"occluder_triangles": [[[0, 0, 0], [0, 0, 0], [0, 0, 0]]]})
     with pytest.raises(ValidationError):
         run("research-bearing", {"training_records": [], "heldout_records": []})
+
+
+def test_powerflow_passes_the_iteration_limit_to_scipy() -> None:
+    with patch("helioforge.engines.physical_studies.root", wraps=root) as solver:
+        run("hybrid-powerflow", {"max_iterations": 37})
+    args, kwargs = solver.call_args
+    assert kwargs["method"] == "hybr"
+    assert kwargs["options"] == {"maxfev": 37 * max(3, 2 * len(args[1]))}
 
 
 def test_balanced_two_bus_powerflow_matches_resistive_hand_solution_and_branch_loss() -> None:

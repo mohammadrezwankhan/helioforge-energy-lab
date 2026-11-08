@@ -4,6 +4,7 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const studyAcceptancePath = 'docs/remediation-20261108/study-contracts.json';
 
 export const CAPABILITY_CONTRACT_VERSION = '1.0.0';
 export const CONTENT_REVISION_DATE = '2026-10-29';
@@ -166,7 +167,7 @@ function acceptanceCard(study, example, code, repoRoot, evidence) {
   };
   if(evidence){
     const bound=sourceEvidenceMismatches(evidence,repoRoot).length===0;
-    card.executionEvidence={reference:'docs/remediation-20261029/study-contracts.json',sourceMatches:bound,record:evidence};
+    card.executionEvidence={reference:studyAcceptancePath,sourceMatches:bound,record:evidence};
     if(bound&&evidence.status==='PASS'){
       card.status='SOFTWARE_CHECKS_PASS';
       card.fixture.handCheck={status:'SOFTWARE_ORACLE_PASS',note:evidence.oracle.expected,testIds:evidence.test_ids,scope:'Independent arithmetic/invariant/software checks; scientific and field validation remain unestablished.'};
@@ -181,7 +182,7 @@ function acceptanceCard(study, example, code, repoRoot, evidence) {
 
 export function buildModelRegistry(repoRoot=root) {
   const bundle = loadStudyBundle(repoRoot);
-  const evidencePath=path.join(repoRoot,'docs/remediation-20261029/study-contracts.json');
+  const evidencePath=path.join(repoRoot,studyAcceptancePath);
   // Registry wire JSON represents negative zero as zero; retain raw numerical evidence in its own artifact.
   const evidence=fs.existsSync(evidencePath)?JSON.parse(JSON.stringify(JSON.parse(fs.readFileSync(evidencePath,'utf8')).studies)):[];
   const ids = new Set();
