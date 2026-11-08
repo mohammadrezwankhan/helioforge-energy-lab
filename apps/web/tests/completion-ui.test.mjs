@@ -33,6 +33,7 @@ try {
 } catch (error) {
   throw new Error(
     `Could not compile completion UI sources: ${error.stderr?.toString() ?? error.message}`,
+    { cause: error },
   );
 }
 const context = vm.createContext({
