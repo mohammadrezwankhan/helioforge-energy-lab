@@ -8,6 +8,13 @@ updates:
   open-pull-requests-limit: 5
   cooldown:
     default-days: 7
+  # scipy-stubs 1.18 requires Python >=3.12; the API supports Python 3.11.
+  # Keep 1.17 patches and security updates eligible until that support changes.
+  ignore:
+  - dependency-name: scipy-stubs
+    update-types:
+    - version-update:semver-minor
+    - version-update:semver-major
 - package-ecosystem: npm
   directory: /apps/web
   schedule:
@@ -64,6 +71,23 @@ updates:
       update-types:
       - minor
       - patch
+  # Preserve Node >=22, including 22.0-22.12, and the parser's TypeScript <6 bound.
+  # ESLint 10 and visitor-keys 5 (via typescript-eslint >=8.56) raise the Node floor.
+  # Update-type filters keep security updates eligible; revisit with runtime support.
+  ignore:
+  - dependency-name: eslint
+    update-types:
+    - version-update:semver-major
+  - dependency-name: '@eslint/js'
+    update-types:
+    - version-update:semver-major
+  - dependency-name: typescript
+    update-types:
+    - version-update:semver-major
+  - dependency-name: typescript-eslint
+    update-types:
+    - version-update:semver-minor
+    - version-update:semver-major
 - package-ecosystem: pip
   directory: /
   schedule:
@@ -71,3 +95,10 @@ updates:
   open-pull-requests-limit: 5
   cooldown:
     default-days: 7
+  # scipy-stubs 1.18 requires Python >=3.12; this project supports Python 3.11.
+  # Keep 1.17 patches and security updates eligible until that support changes.
+  ignore:
+  - dependency-name: scipy-stubs
+    update-types:
+    - version-update:semver-minor
+    - version-update:semver-major
