@@ -74,6 +74,7 @@ for(const study of registry.studies){
   for(const testFile of study.acceptance.modelReferences.tests)assert.ok(fs.existsSync(path.join(root,testFile)),`${study.id}: missing test link ${testFile}`);
   assert.ok(study.fixture.evidenceSha256 && study.fixture.inputSha256,`${study.id}: default fixture lacks digests`);
   assert.equal(study.acceptance.executionEvidence.sourceMatches,true,`${study.id}: stale acceptance evidence`);
+  assert.ok(fs.existsSync(path.join(root,study.acceptance.executionEvidence.reference)),`${study.id}: missing acceptance record`);
   assert.equal(study.fixture.handCheck.status,'SOFTWARE_ORACLE_PASS');
   assert.equal(study.acceptance.invalidBoundary.status,'PASS');
   assert.equal(study.acceptance.deterministicOrSeeded.status,'PASS');

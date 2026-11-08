@@ -58,7 +58,7 @@ dev = [
   "pytest==9.2.0",
   "pytest-cov==7.1.0",
   "hypothesis==6.170.14",
-  "scipy-stubs==1.17.0.2",
+  "scipy-stubs==1.17.1.5",
   "types-shapely==2.1.0.20261030",
   "playwright==1.64.1",
   "openai-agents==0.24.0",
