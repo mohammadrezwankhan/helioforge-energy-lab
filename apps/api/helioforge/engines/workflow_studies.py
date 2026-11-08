@@ -6,7 +6,7 @@ from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from copy import deepcopy
 from itertools import pairwise
-from math import exp, log, log2, pi, sin, sqrt
+from math import exp, fsum, log, log2, pi, sin, sqrt
 from typing import Annotated, Literal, NotRequired, TypedDict
 
 import numpy as np
@@ -1608,8 +1608,14 @@ def _run_dunkelflaute(p: DunkelflauteInput) -> StudyResult:
     charge, discharge = x[c0 : c0 + n], x[d0 : d0 + n]
     soc = x[soc0 : soc0 + n + 1]
     curtail, unserved = x[curtailed0 : curtailed0 + n], x[unserved0 : unserved0 + n]
+    # Use accurate group totals consistently across Python versions and scalar types.
     power_residual = (
-        sum(p.renewable_kw) + sum(discharge) + sum(unserved) - sum(p.load_kw) - sum(charge) - sum(curtail)
+        fsum(p.renewable_kw)
+        + fsum(discharge)
+        + fsum(unserved)
+        - fsum(p.load_kw)
+        - fsum(charge)
+        - fsum(curtail)
     )
     storage_loss = (1 - p.charge_efficiency) * sum(charge) + (1 / p.discharge_efficiency - 1) * sum(discharge)
     shortfall_hours = int(sum(v > 1e-7 for v in unserved))
