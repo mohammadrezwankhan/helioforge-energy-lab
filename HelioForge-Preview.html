@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" data-motion="on">
 <head>
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'self' 'sha256-cRU+8Xu0hcmjikTHXLCrlycRkCN7akYKIHTWYszWENY='; script-src-attr 'none'; style-src 'self' 'sha256-hziQW+BvcKc+qOZH/yz21AbLanABBmXn3DxSfJOItE4='; style-src-attr 'none'; img-src 'self' data: blob:; font-src 'self'; media-src 'self'; frame-src 'self'; connect-src 'self'; worker-src 'self'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'self' 'sha256-gz0g8xI7jGy//HjiFl46q7QwuYwG6AAFcp13hAzg1yQ='; script-src-attr 'none'; style-src 'self' 'sha256-hziQW+BvcKc+qOZH/yz21AbLanABBmXn3DxSfJOItE4='; style-src-attr 'none'; img-src 'self' data: blob:; font-src 'self'; media-src 'self'; frame-src 'self'; connect-src 'self'; worker-src 'self'; manifest-src 'self'">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0d1210">
@@ -14774,6 +14774,7 @@ var HF;
         };
         state.champion = HF.initialChampionState(state.hybrid);
         const modelDrafts = new Map();
+        const dialogsWithFocusRestoration = new WeakSet();
         let hasConnected = false;
         let connectionEpoch = 0, toastTimer = 0, modalReturn = null;
         let sceneCleanup;
@@ -15131,7 +15132,15 @@ var HF;
             const m = document.getElementById('modal');
             modalReturn = document.activeElement instanceof HTMLElement ? document.activeElement : null;
             HF.renderView(m, `<div class="modal-heading"><h2 id="modal-title">${HF.escapeHTML(title)}</h2><button class="icon-button" data-action="close-modal" aria-label="Close dialog">${HF.icon('close', 22)}</button></div>${body}`);
-            m.addEventListener('close', () => modalReturn?.focus(), { once: true });
+            if (!dialogsWithFocusRestoration.has(m)) {
+                dialogsWithFocusRestoration.add(m);
+                m.addEventListener('close', () => {
+                    const active = document.activeElement;
+                    // Native close restores focus before its queued event. Respect any newer focus choice.
+                    if (!m.open && (active === document.body || m.contains(active)))
+                        modalReturn?.focus();
+                });
+            }
             m.showModal();
         }
         function celebrate() {

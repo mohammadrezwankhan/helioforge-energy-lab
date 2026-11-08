@@ -9509,6 +9509,7 @@ var HF;
         };
         state.champion = HF.initialChampionState(state.hybrid);
         const modelDrafts = new Map();
+        const dialogsWithFocusRestoration = new WeakSet();
         let hasConnected = false;
         let connectionEpoch = 0, toastTimer = 0, modalReturn = null;
         let sceneCleanup;
@@ -9866,7 +9867,15 @@ var HF;
             const m = document.getElementById('modal');
             modalReturn = document.activeElement instanceof HTMLElement ? document.activeElement : null;
             HF.renderView(m, `<div class="modal-heading"><h2 id="modal-title">${HF.escapeHTML(title)}</h2><button class="icon-button" data-action="close-modal" aria-label="Close dialog">${HF.icon('close', 22)}</button></div>${body}`);
-            m.addEventListener('close', () => modalReturn?.focus(), { once: true });
+            if (!dialogsWithFocusRestoration.has(m)) {
+                dialogsWithFocusRestoration.add(m);
+                m.addEventListener('close', () => {
+                    const active = document.activeElement;
+                    // Native close restores focus before its queued event. Respect any newer focus choice.
+                    if (!m.open && (active === document.body || m.contains(active)))
+                        modalReturn?.focus();
+                });
+            }
             m.showModal();
         }
         function celebrate() {

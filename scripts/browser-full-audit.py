@@ -188,6 +188,29 @@ def main() -> int:
                 f"{engine_name} Escape preserves field focus when navigation is closed",
                 field.evaluate("e=>e===document.activeElement"),
             )
+            command.focus()
+            page.keyboard.press("Control+k")
+            page.locator("#modal[open]").wait_for()
+            queued_close_focus = page.evaluate("""() => {
+                const dialog = document.querySelector('#modal');
+                const field = document.querySelector('#hybrid-config input[name="solar_kw"]');
+                if (!dialog?.open || !field) throw new Error('Missing open dialog or focus target');
+                return new Promise(resolve => {
+                    dialog.addEventListener('close', () => resolve({
+                        preserved: document.activeElement === field,
+                        activeTag: document.activeElement?.tagName,
+                        activeName: document.activeElement?.getAttribute('name'),
+                        activeAction: document.activeElement?.getAttribute('data-champion-action'),
+                    }), {once: true});
+                    dialog.close();
+                    field.focus();
+                });
+            }""")
+            check(
+                f"{engine_name} queued dialog close respects newer field focus",
+                queued_close_focus["preserved"] is True,
+                queued_close_focus,
+            )
             terminal.navigate(page, "markets", 390)
             tariff_trigger = page.locator('[data-experience-action="compare-tariffs"]')
             tariff_trigger.click()
