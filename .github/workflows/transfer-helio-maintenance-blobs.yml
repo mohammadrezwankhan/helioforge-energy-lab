@@ -1,0 +1,29 @@
+name: Transfer reviewed Helio maintenance blobs
+
+on:
+  push:
+    branches:
+      - transfer/helio-maintenance-20261108
+
+permissions:
+  contents: read
+
+jobs:
+  transfer:
+    if: >-
+      github.repository == 'mohammadrezwankhan/helioforge-energy-lab' &&
+      github.ref == 'refs/heads/transfer/helio-maintenance-20261108' &&
+      github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Verify all payload objects and upload matching blobs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 .github/transfer/helio-maintenance/import_blobs.py
