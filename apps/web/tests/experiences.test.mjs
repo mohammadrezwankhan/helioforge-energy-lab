@@ -35,6 +35,7 @@ try {
 } catch (error) {
   throw new Error(
     `Could not compile experiences sources: ${error.stderr?.toString() || error.stdout?.toString() || error.message}`,
+    { cause: error },
   );
 }
 const context = vm.createContext({
