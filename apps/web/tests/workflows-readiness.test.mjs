@@ -23,7 +23,10 @@ const bundle = path.join(temp, 'workflows.js');
 try {
   compileScripts(sourceFiles, bundle);
 } catch (error) {
-  throw new Error(`Could not compile workflow source: ${error.stderr?.toString() || error.stdout?.toString() || error.message}`);
+  throw new Error(
+    `Could not compile workflow source: ${error.stderr?.toString() || error.stdout?.toString() || error.message}`,
+    { cause: error },
+  );
 }
 
 const downloads = [];
