@@ -1,0 +1,9 @@
+# SciPy stub compatibility
+
+The development stub pins now use `scipy-stubs==1.17.1.5`, which targets the existing `scipy==1.17.1` runtime and supports Python 3.11. The proposed 1.18 stubs require Python 3.12 and target SciPy 1.18, so they do not describe the supported runtime. Both development groups use the same pin; the numerical runtime is unchanged.
+
+The 1.17 stubs spell the hybrid root solver's documented `maxfev` option as `maxffev`. A narrowly typed bridge retains the correct option and its integer type without changing the solver call; a regression test verifies the selected iteration limit reaches SciPy. The upstream fix is documented in [scipy-stubs PR 2374](https://github.com/scipy/scipy-stubs/pull/2374).
+
+The source-bound study bundle was regenerated. Nine affected results received new source and evidence hashes; all other fields, including numerical values and the existing solver-timing observation, were preserved bit-for-bit. The standalone preview and compiled dashboard were rebuilt with the updated hashes and CSP.
+
+Local verification on Windows used SciPy 1.17.1 and NumPy 2.4.6: strict mypy passed 138 files on Python 3.11.17 and 3.12.14; the API suite passed 1,062 tests on each; the Python 3.12 59-study replay passed with zero numerical differences; root lint, types, format and 24 browser-policy tests passed; and the web build and 269 frontend tests passed. Direct local browser checks passed 18 general and 14 hybrid flows, including 320px and 390px layouts. The rebuilt desktop preview was inspected. An additional Python 3.11 study replay failed on two near-zero `compare-dunkelflaute` residual fields; the frozen result and its implementation are unchanged from the pre-change branch. Its cause remains unverified. Remote CI and other platforms require their own results.
