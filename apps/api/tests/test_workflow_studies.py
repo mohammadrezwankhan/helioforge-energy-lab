@@ -261,6 +261,27 @@ def test_dunkelflaute_dispatch_enforces_direction_and_physical_balance() -> None
     assert result["details"]["terminal_soc_kwh"] == pytest.approx(0, abs=1e-6)
 
 
+def test_dunkelflaute_empty_supply_reports_exactly_balanced_shortfall_ledger() -> None:
+    result = run(
+        "compare-dunkelflaute",
+        {
+            "initial_soc_kwh": 0,
+            "load_kw": [100.1] * 336,
+            "renewable_kw": [0.0] * 336,
+        },
+    )
+    # With no supply or initial storage, every interval's load is unserved.
+    # The independent energy balance is therefore zero, including decimal loads.
+    for row in result["table"]:
+        assert number(row["shortfall_kw"]) == pytest.approx(100.1, rel=0, abs=1e-12)
+        assert number(row["charge_kw"]) == 0
+        assert number(row["discharge_kw"]) == 0
+    assert number(result["details"]["electric_balance_residual_kwh"]) == pytest.approx(
+        0, rel=0, abs=1e-12
+    )
+    assert metric(result, "Electric balance residual") == pytest.approx(0, rel=0, abs=1e-12)
+
+
 def test_photogrammetry_hand_case_empty_cloud_and_mismatch() -> None:
     hand = run(
         "pilots-photogrammetry",
