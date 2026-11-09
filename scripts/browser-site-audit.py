@@ -6,11 +6,11 @@ scientific workflow interactions separately.
 """
 import argparse
 import json
-from pathlib import Path
 import sys
+from pathlib import Path
 from urllib.parse import urljoin
 
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import ConsoleMessage, sync_playwright
 
 STATIC_ROUTES = (
     "/", "/models/", "/learning/", "/learning/capability-modes/",
@@ -32,9 +32,9 @@ def main() -> None:
         browser = playwright.chromium.launch()
         page = browser.new_page(viewport={"width": 1440, "height": 900})
         page.on("pageerror", lambda exc: console_errors.append("pageerror: " + str(exc)))
-        def record_console(message: object) -> None:
-            if getattr(message, "type") == "error":
-                console_errors.append("console: " + str(getattr(message, "text")))
+        def record_console(message: ConsoleMessage) -> None:
+            if message.type == "error":
+                console_errors.append("console: " + message.text)
 
         page.on("console", record_console)
 
