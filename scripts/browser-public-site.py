@@ -98,8 +98,12 @@ def main() -> int:
                     # correctly returns no HTTP response. Validate its URL/state instead.
                     hash_transition = response is None and route.startswith("/run/#")
                     hash_matches = (
-                        page.evaluate("(expected) => location.pathname === '/run/' && location.hash === expected", "#" + route.split("#", 1)[1])
-                        if hash_transition else False
+                        page.evaluate(
+                            "(expected) => location.pathname === '/run/' && location.hash === expected",
+                            "#" + route.split("#", 1)[1],
+                        )
+                        if hash_transition
+                        else False
                     )
                     check(route, width, "HTTP response or same-document hash transition",
                           (response is not None and response.status == 200) or hash_matches,
