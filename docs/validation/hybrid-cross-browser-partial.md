@@ -43,3 +43,6 @@ test-only.
 **Still needed:** reconcile the preview's disabled Run control with the issue's
 requested edited-input run, and review the WebKit console warning and any
 visual impact. This note is partial evidence, not compatibility certification.
+
+A subsequent [preview-origin hybrid run](hybrid-preview-journey.md) uses an
+explicitly enabled local hybrid bridge and records Firefox and WebKit results.

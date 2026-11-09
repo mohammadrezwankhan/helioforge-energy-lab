@@ -31,3 +31,7 @@ test database, set `ALLOWED_ORIGINS=http://127.0.0.1:8765`, and run
 The preview-origin edited-input run requested by the issue remains unverified
 because the preview is deliberately read-only. No persistence feature was
 added, and these results do not establish engineering or safety validation.
+
+A subsequent [preview-origin run and restoration](hybrid-preview-journey.md)
+uses an explicitly enabled local hybrid bridge; the default preview remains
+read-only.
