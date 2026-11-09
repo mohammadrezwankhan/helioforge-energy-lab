@@ -65,7 +65,7 @@ def main() -> int:
             "detail": detail,
         })
         if not condition:
-            print(f"FAIL {viewport}px {route} {name}: {str(detail)[:400]}", flush=True)
+            print(f"FAIL {viewport}px {route} {name}: {str(detail)[:400]}", flush=True)  # noqa: T201 -- CLI audit
 
     axe_js = None
     if not args.no_axe:
@@ -87,7 +87,7 @@ def main() -> int:
         page.on("pageerror", lambda error: events.append({"kind": "pageerror", "text": str(error)}))
 
         for viewport in VIEWPORTS:
-            page.set_viewport_size(viewport)
+            page.set_viewport_size({"width": viewport["width"], "height": viewport["height"]})
             width = viewport["width"]
             for route in ROUTES:
                 events.clear()
@@ -163,15 +163,16 @@ def main() -> int:
         context.close()
         browser.close()
 
+    failures = sum(item["status"] == "failed" for item in checks)
     report["summary"] = {
         "passed": sum(item["status"] == "passed" for item in checks),
-        "failed": sum(item["status"] == "failed" for item in checks),
+        "failed": failures,
         "axeIncomplete": len(incomplete),
     }
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.report.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps(report["summary"]), flush=True)
-    return 1 if report["summary"]["failed"] else 0
+    print(json.dumps(report["summary"]), flush=True)  # noqa: T201 -- CLI audit
+    return 1 if failures else 0
 
 
 if __name__ == "__main__":
