@@ -5,7 +5,18 @@ import vm from 'node:vm';
 const sandbox=vm.createContext({URL,Intl,Number,String,Math,Array,Object,JSON,Set,structuredClone});
 vm.runInContext(fs.readFileSync(new URL('../dist/app.js',import.meta.url),'utf8'),sandbox);
 const h=sandbox.HF;
+const handChecked=JSON.parse(fs.readFileSync(new URL('../../api/tests/fixtures/hand-checked-hybrid-v1.json',import.meta.url),'utf8'));
 const state=()=>({hybrid:h.initialHybridState(),page:'hybrid',connected:true,busy:false,data:h.SNAPSHOT,marketFilter:'ALL',search:'',chartMode:'dispatch',forecastYears:20,runs:[],motionOff:false});
+test('hand-checked synthetic interval is rendered with its units',()=>{
+ // 9.15 kW demand = 2 kW battery + 7.15 kW grid; 10 - 2 = 8 kWh.
+ const s=state();s.hybrid.inputs=handChecked.inputs;s.hybrid.resultInputs=handChecked.inputs;s.hybrid.result=handChecked.result;s.hybrid.hour=0;
+ const html=h.hybridResults(s);
+ assert.match(html,/9\.2 kW/);
+ assert.match(html,/40\.0%/);
+ assert.match(html,/0\.0 kW/);
+ assert.match(html,/Grid connected/);
+ assert.match(html,/<td>7\.2<\/td><td>8\.0<\/td>/);
+});
 test('catalogue has 36 explicit capability declarations',()=>{
  assert.equal(h.HYBRID_CATALOG.systems.length,36);
  assert.equal(h.HYBRID_CATALOG.systems.filter(s=>s.mode==='screening').length,19);

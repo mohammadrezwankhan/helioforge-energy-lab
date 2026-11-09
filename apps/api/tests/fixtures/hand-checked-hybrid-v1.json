@@ -1,0 +1,231 @@
+{
+  "version": 1,
+  "inputs": {
+    "system_id": "industrial-btm",
+    "scenario_id": "baseline",
+    "hours": 2,
+    "control": "GFL",
+    "solar_kw": 0,
+    "wind_kw": 0,
+    "hydro_kw": 0,
+    "generator_kw": 0,
+    "battery_kwh": 20,
+    "battery_kw": 2,
+    "load_kw": 10,
+    "grid_import_kw": 100,
+    "grid_export_kw": 0,
+    "critical_fraction": 0.65,
+    "initial_soc": 0.5,
+    "min_soc": 0.1,
+    "max_soc": 0.9,
+    "round_trip_efficiency": 1,
+    "import_eur_kwh": 0.2,
+    "export_eur_kwh": 0.06,
+    "generator_eur_kwh": 0.28
+  },
+  "hour_zero": {
+    "label": "D1 00:00",
+    "load_kw": 9.15,
+    "served_kw": 9.15,
+    "pv_kw": 0,
+    "discharge_kw": 2,
+    "grid_import_kw": 7.15,
+    "soc_start_kwh": 10,
+    "soc_end_kwh": 8,
+    "soc_pct": 40,
+    "critical_unserved_kw": 0,
+    "state": "Grid connected"
+  },
+  "result": {
+    "model": "hybrid-greedy-hourly-v1",
+    "data_kind": "synthetic_educational",
+    "system_id": "industrial-btm",
+    "scenario_id": "baseline",
+    "duration_hours": 2,
+    "policy": "renewables_then_battery_then_grid_then_backup",
+    "total_load_kwh": 18.629422863405996,
+    "served_kwh": 18.629422863405996,
+    "unserved_kwh": 0.0,
+    "critical_unserved_kwh": 0.0,
+    "critical_served_pct": 100.0,
+    "load_served_pct": 100.0,
+    "renewable_available_kwh": 0.0,
+    "grid_import_kwh": 14.629422863405996,
+    "grid_export_kwh": 0.0,
+    "generator_kwh": 0.0,
+    "curtailed_kwh": 0.0,
+    "charged_kwh": 0.0,
+    "discharged_kwh": 4.0,
+    "initial_energy_kwh": 10.0,
+    "terminal_energy_kwh": 6.0,
+    "battery_energy_delta_kwh": -4.0,
+    "effective_capacity_kwh": 20.0,
+    "effective_power_kw": 2.0,
+    "variable_cost_eur": 2.9258845726811993,
+    "max_balance_residual_kw": 0.0,
+    "tags": [
+      {
+        "label": "BTM",
+        "reason": "Derived from the selected point of interconnection."
+      },
+      {
+        "label": "AC",
+        "reason": "Architecture coupling; the electrical screen remains AC-equivalent."
+      },
+      {
+        "label": "GFL",
+        "reason": "Declared control assumption; not a validated control design."
+      },
+      {
+        "label": "screening",
+        "reason": "Capability of the numerical engine, not a maturity or safety certificate."
+      },
+      {
+        "label": "10.0 h storage",
+        "reason": "Nameplate battery energy / rated AC power; excludes SOC window and losses."
+      }
+    ],
+    "warnings": [
+      "Synthetic hourly energy screen using a fixed greedy policy, not cost optimization, a forecast or a dispatch instruction.",
+      "No voltage, frequency, reactive power, fault current, protection, black-start or transfer-transient simulation.",
+      "Initial battery energy is supplied explicitly. Terminal SOC is unconstrained; compare runs using both stored-energy endpoints.",
+      "Variable energy cost excludes CAPEX, OPEX, demand charges, wear, fuel inventory, taxes and value of lost load. Do not annualize this run.",
+      "A synthetic 24-hour resource shape repeats for longer horizons. No measured weather or probabilistic reliability claim.",
+      "Battery energy provenance is not tracked; no renewable share or emissions credit is inferred from discharge.",
+      "A declared GFM/reference mode is a structural teaching assumption, not proof of real island stability."
+    ],
+    "schedule": [
+      {
+        "hour": 0,
+        "label": "D1 00:00",
+        "load_kw": 9.15,
+        "target_load_kw": 9.15,
+        "served_kw": 9.15,
+        "critical_load_kw": 5.947500000000001,
+        "pv_kw": 0.0,
+        "wind_kw": 0.0,
+        "hydro_kw": 0.0,
+        "generator_kw": 0.0,
+        "charge_kw": 0.0,
+        "discharge_kw": 2.0,
+        "grid_import_kw": 7.15,
+        "grid_export_kw": 0.0,
+        "curtailed_kw": 0.0,
+        "unserved_kw": 0.0,
+        "critical_unserved_kw": 0.0,
+        "scheduled_shed_kw": 0.0,
+        "soc_start_kwh": 10.0,
+        "soc_end_kwh": 8.0,
+        "soc_pct": 40.0,
+        "grid_connected": true,
+        "state": "Grid connected",
+        "import_eur_kwh": 0.2,
+        "variable_cost_eur": 1.4300000000000002,
+        "balance_residual_kw": 0.0
+      },
+      {
+        "hour": 1,
+        "label": "D1 01:00",
+        "load_kw": 9.479422863405995,
+        "target_load_kw": 9.479422863405995,
+        "served_kw": 9.479422863405995,
+        "critical_load_kw": 6.161624861213897,
+        "pv_kw": 0.0,
+        "wind_kw": 0.0,
+        "hydro_kw": 0.0,
+        "generator_kw": 0.0,
+        "charge_kw": 0.0,
+        "discharge_kw": 2.0,
+        "grid_import_kw": 7.479422863405995,
+        "grid_export_kw": 0.0,
+        "curtailed_kw": 0.0,
+        "unserved_kw": 0.0,
+        "critical_unserved_kw": 0.0,
+        "scheduled_shed_kw": 0.0,
+        "soc_start_kwh": 8.0,
+        "soc_end_kwh": 6.0,
+        "soc_pct": 30.0,
+        "grid_connected": true,
+        "state": "Grid connected",
+        "import_eur_kwh": 0.2,
+        "variable_cost_eur": 1.4958845726811991,
+        "balance_residual_kw": 0.0
+      }
+    ],
+    "provenance": {
+      "schema": "helioforge.result-provenance.v1",
+      "status": "source_bound",
+      "model": {
+        "id": "hybrid",
+        "version": "hybrid-greedy-hourly-v1"
+      },
+      "source_revision": "f8a6d82235523722916fa9ded9c77a471a1c87ca8f9d8b6a6b369b5f9cc99ef6",
+      "source_files": [
+        "engines/hybrid.py",
+        "hybrid.py",
+        "provenance.py",
+        "schemas.py"
+      ],
+      "input": {
+        "sha256": "f8786dd7f20207bb638080833babb220ff91ca49a4d0c434e44b788a6e0accf0",
+        "scope": "effective_model_inputs",
+        "canonicalization": "UTF-8 JSON, sorted keys, compact separators, non-finite numbers rejected."
+      },
+      "data": {
+        "kind": "synthetic_educational",
+        "identity": {
+          "catalogue_version": "0.2.0",
+          "system_id": "industrial-btm",
+          "scenario_id": "baseline"
+        },
+        "dataset_revision": "1cd3e0d70172b8ca431db242fd78ba7a6493e887a65c731db33146d5240f4665",
+        "dataset_revision_scope": "SHA-256 of exact packaged file bytes"
+      },
+      "units": {
+        "power": "kW",
+        "energy": "kWh",
+        "cost": "EUR"
+      },
+      "horizon": {
+        "duration_hours": 2
+      },
+      "endpoints": {
+        "initial_energy_kwh": 10.0,
+        "terminal_energy_kwh": 6.0,
+        "terminal_soc_policy": "Unconstrained; both energy endpoints are reported."
+      },
+      "model_contract": {
+        "title": "Hybrid hourly screen methodology",
+        "url": "https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/main/docs/HYBRID_METHODOLOGY.md",
+        "implementation_files": [
+          "helioforge/engines/hybrid.py",
+          "helioforge/hybrid.py",
+          "helioforge/provenance.py",
+          "helioforge/schemas.py"
+        ],
+        "url_scope": "Reference link only; source_revision fingerprints the listed runtime bytes and does not attest that this URL currently contains those bytes."
+      },
+      "equations": [],
+      "sources": [],
+      "limitations": [
+        "Synthetic hourly energy screen using a fixed greedy policy, not cost optimization, a forecast or a dispatch instruction.",
+        "No voltage, frequency, reactive power, fault current, protection, black-start or transfer-transient simulation.",
+        "Initial battery energy is supplied explicitly. Terminal SOC is unconstrained; compare runs using both stored-energy endpoints.",
+        "Variable energy cost excludes CAPEX, OPEX, demand charges, wear, fuel inventory, taxes and value of lost load. Do not annualize this run.",
+        "A synthetic 24-hour resource shape repeats for longer horizons. No measured weather or probabilistic reliability claim.",
+        "Battery energy provenance is not tracked; no renewable share or emissions credit is inferred from discharge.",
+        "A declared GFM/reference mode is a structural teaching assumption, not proof of real island stability."
+      ],
+      "integrity": {
+        "source_hash_algorithm": "SHA-256",
+        "input_hash_algorithm": "SHA-256",
+        "source_digest_scope": "Labeled bytes of the listed model implementation, schemas, internal dependencies, and provenance envelope helper.",
+        "signature_verified": false,
+        "human_approval_recorded": false,
+        "approval_status": "not_assessed"
+      }
+    },
+    "source_revision": "f8a6d82235523722916fa9ded9c77a471a1c87ca8f9d8b6a6b369b5f9cc99ef6",
+    "dataset_revision": "1cd3e0d70172b8ca431db242fd78ba7a6493e887a65c731db33146d5240f4665"
+  }
+}
