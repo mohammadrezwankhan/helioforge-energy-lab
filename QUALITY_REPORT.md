@@ -1,3 +1,19 @@
+# HelioForge — current verification and historical evidence
+
+## 9 November 2026 — ASTRA responsive-source audit candidate
+
+**Candidate base:** `92c9f44b69186ee92919f5e60ce14d25ce64beeb`  
+**Branch:** `astra/helioforge-surface-audit-20261109`  
+**Audit / limitations:** [AUDIT_REPORT_ASTRA.md](AUDIT_REPORT_ASTRA.md)
+
+Changes in this candidate: deduplicated the overview's capability/limitations list; added a real first-paint loading shell and hosted `/favicon.svg`; marked the preview for asynchronous decoding; adapted narrow-screen site navigation and model-card layout; and added public-route, mobile reflow, browser-console and WCAG 2.2 AA checks at 1440×900, 820×1180 and 390×844.
+
+**Verification status at audit authoring:** New source-level regression assertions and CI commands are committed. The full branch build, numerical test suite, hosted browser matrix and live Cloudflare deployment are **not yet verified in this report**. See the associated pull request's GitHub Actions runs for the eventual pass/fail record, and do not reuse historical counts as new evidence. No real-device, field-performance, paid-provider or production-scientific validation is claimed.
+
+The sections below are retained as historical, commit-specific evidence. They must not be read as new CI outcomes for the ASTRA branch.
+
+---
+
 # HelioForge Energy Lab: verification and limits
 
 ## Current source snapshot — 31 October 2026
