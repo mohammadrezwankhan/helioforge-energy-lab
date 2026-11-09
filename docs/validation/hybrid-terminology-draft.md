@@ -19,4 +19,3 @@ policy, not a measured dataset or operational forecast. Its [numerical
 contract](../HYBRID_METHODOLOGY.md) defines the one-hour intervals and model
 limits. No UI wording was changed in this draft. An expert should record a
 reviewer/date and an agreed alternative or “no change” for each row.
-
