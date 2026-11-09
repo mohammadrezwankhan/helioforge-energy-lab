@@ -114,7 +114,7 @@ cd helioforge-energy-lab
 node scripts/preview-demo.mjs
 ```
 
-Open **<http://127.0.0.1:4173>**. Stop the server with Ctrl+C. The first screen is a demonstration, not verified current information. Keep private or real-world records out of this evaluation. The standalone preview does not run new local-Python study calculations; the Terminal separately calculates bounded cases in the browser. Use the source guide below for advanced local Python calculations.
+Open **<http://127.0.0.1:4173>**. Stop the server with Ctrl+C. For an opt-in local hybrid API connection, see the [hybrid preview journey](docs/validation/hybrid-preview-journey.md). The default standalone preview remains read-only. The first screen is a demonstration, not verified current information. Keep private or real-world records out of this evaluation. The standalone preview does not run new local-Python study calculations; the Terminal separately calculates bounded cases in the browser. Use the source guide below for advanced local Python calculations.
 
 ## Why inspect this project?
 
