@@ -112,6 +112,7 @@ jobs:
               raise SystemExit('Hosted artifact server did not become ready')
           PY
           python scripts/acceptance-hosted.py --url http://127.0.0.1:4190/run/ --site .cloudflare/site --offline-file .cloudflare/site/downloads/HelioForge-Offline.html --evidence-dir docs/remediation-20261030/hosted-ci
+          python scripts/browser-site-audit.py --url http://127.0.0.1:4190 --report docs/site-audit/browser-site-ci.json
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
@@ -131,6 +132,7 @@ jobs:
             docs/roadmap/accessibility-report.json
             docs/full-audit/browser-ci.json
             docs/terminal-audit/browser-terminal-ci.json
+            docs/site-audit/browser-site-ci.json
             docs/remediation-20261030/hosted-ci/
             docs/remediation-*/receipts/
             .cloudflare/site/

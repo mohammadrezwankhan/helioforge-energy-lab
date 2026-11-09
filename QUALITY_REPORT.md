@@ -1,5 +1,9 @@
 # HelioForge Energy Lab: verification and limits
 
+## Candidate source review — 9 November 2026
+
+The `astra/helioforge-ux-reliability-20261109` branch addresses duplicate capability statements, adds a pre-boot HTML workbench shell, makes the registry of 59 study contracts filterable, and improves responsive layout and interaction targets. It also adds a generated-site Chromium viewport audit to existing GitHub CI checks. These are **candidate source changes**, not a claim of a completed live deployment or scientific verification. See [AUDIT_REPORT_ASTRA.md](AUDIT_REPORT_ASTRA.md) for the route inventory, verification commands, and remaining limitations.
+
 ## Current source snapshot — 31 October 2026
 
 The reviewed `main` source is [`a071652ab2b59bafd9a43245cd4620103dcf6eba`](https://github.com/mohammadrezwankhan/helioforge-energy-lab/commit/a071652ab2b59bafd9a43245cd4620103dcf6eba). The [Verify research release CI run](https://github.com/mohammadrezwankhan/helioforge-energy-lab/actions/runs/41049149199) passed at this exact revision. Its [Python 3.12 backend job](https://github.com/mohammadrezwankhan/helioforge-energy-lab/actions/runs/41049149199/job/124040589567) reports **679 passed and one deprecation warning**; the Python 3.11, Python 3.13, browser and browser-export jobs also succeeded. These are existing remote software checks, not a new local test run or independent scientific validation.
