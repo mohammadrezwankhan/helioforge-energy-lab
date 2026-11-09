@@ -229,6 +229,25 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClie
         yield c
 
 
+def test_hand_checked_hybrid_interval_in_engine_and_api(client: TestClient) -> None:
+    case = json.loads(
+        (Path(__file__).parent / "fixtures/hand-checked-hybrid-v1.json").read_text(encoding="utf-8")
+    )
+    inputs = HybridRequest.model_validate(case["inputs"])
+    # At hour 0 the fixed 10 kW demand parameter gives 10*(.78+.18*.75)
+    # = 9.15 kW. Zero PV plus 2 kW battery and 7.15 kW grid meets demand.
+    # Over one hour at unit efficiency, 10 kWh - 2 kWh = 8 kWh (40% SOC).
+    response = client.post("/api/hybrid/simulate", json=case["inputs"])
+    assert response.status_code == 200, response.text
+    for result in (simulate_hybrid(inputs), response.json(), case["result"]):
+        row = result["schedule"][0]
+        for key, expected in case["hour_zero"].items():
+            if isinstance(expected, (float, int)):
+                assert row[key] == pytest.approx(expected)
+            else:
+                assert row[key] == expected
+
+
 def test_api_catalogue_validation_run_hash_and_exact_review_attachment(client: TestClient) -> None:
     assert len(client.get("/api/hybrid/catalog").json()["systems"]) == 36
     payload = config(get_system("hospital-island"), "outage-4h", solar_kw=777).model_dump()
