@@ -1,72 +1,54 @@
-# HelioForge Energy Lab — ASTRA source and responsive-release audit
+# ASTRA — HelioForge source and responsive release audit
 
-**Review date:** 9 November 2026  
-**Repository:** [mohammadrezwankhan/helioforge-energy-lab](https://github.com/mohammadrezwankhan/helioforge-energy-lab)  
-**Source baseline:** `92c9f44b69186ee92919f5e60ce14d25ce64beeb` (main when the audit branch was created)  
-**Audit branch:** `astra/helioforge-surface-audit-20261109`  
-**Domain:** https://mkgrid.co.technology/
+**Date:** 9 November 2026 · **Base SHA:** `92c9f44b69186ee92919f5e60ce14d25ce64beeb` · **Repository:** `mohammadrezwankhan/helioforge-energy-lab`
 
-## Executive finding
+## Scope and evidence boundary
 
-This is an evidence-bounded **source audit with release-gated browser checks**, not a claim that every calculation, architecture, accessibility interaction or live hosted deployment has been independently validated. The existing codebase contains extensive numerical, browser, provenance and security tests. The remediation deliberately preserves model and delivery-mode boundaries.
+This source audit examined the main-branch file tree, publication generator, TypeScript workbench shell and responsive styles, model catalogue, current scripts and CI. The user-provided multi-agent phases are used as a work breakdown; this report does not claim independently executed external engineering agents. The live `https://mkgrid.co.technology/` website was not available for direct browser verification in this environment. Emulated-browser results come only from the generated artifact once GitHub CI executes, not from device hardware or a live release.
 
-A pre-change source inspection confirmed duplicated capability statements in the homepage generator, a blank JavaScript-dependent workbench root before boot, a domain-hosted icon using an embedded data URI rather than the public root favicon, and a hero image without an asynchronous decoding hint. Responsive documentation navigation and model-registry density were also improved as targeted usability work; before-and-after viewport metrics are **not** inferred from source alone.
+## Source findings and remediations
 
-## Verified source inventory and audit targets
+| Severity | Base location | Viewport | Root cause, observed source impact | Remediation in this branch |
+|---|---|---|---|---|
+| P2 | `scripts/build-domain.mjs:69` | Desktop, tablet, mobile | The capabilities list is followed immediately by a limitations list that repeats four identical sentences, wasting space and impairing scanability. | One ordered deduplicated list, with source-contract assertions that each shared claim appears exactly once. |
+| P2 | `apps/web/index.html:21` | All, worse on slow mobile CPUs | Empty app root before JavaScript boot produces a blank initial interface. | Instant HTML loading shell, existing no-JavaScript notice preserved, adaptive three/two/one-column structure. |
+| P2 | `scripts/build-domain.mjs:98-103` | All | The 59 detailed model contracts are preceded by a long workspace directory and have no interactive filtering. | Collapsible workspace index, search, workspace filter, 44px+ controls, visible count, clear action, no-results state. Unfiltered contents remain visible without JavaScript. |
+| P2 | `scripts/cloudflare-site.css:3` | All | Fixed publication spacing makes dense pages unnecessarily tall; navigation risks awkward wraps on small screens. | Compact fluid spacing, wrapped nav, mobile content reflow, preserved links and scientific caveats. |
+| P2 | `apps/web/src/terminal.css` | 360–600px | Default single-column Terminal input stack increases distance between inputs and results. | Two-column mobile input grouping, field shrink constraints and 44px minimum numeric touch-target heights. |
+| P2 | `.github/workflows/ci.yml:98-115` | 390, 820, 1440px | Existing automated browser suites target app flows but do not enforce public static route responsiveness at all three requested viewport classes. | Add `scripts/browser-site-audit.py` to the hosted CI job and archive its JSON observations. |
+| P3 | `scripts/build-domain.mjs:69` | Desktop and mobile | Priority-loaded screenshot did not explicitly allow asynchronous decoding. | Add `decoding="async"` while preserving its existing `fetchpriority="high"` and dimensions. |
 
-| Surface | Source inspected | Contract / release verification |
-| --- | --- | --- |
-| `/` landing | `scripts/build-domain.mjs`, `scripts/cloudflare-site.css`, `cloudflare.json` | One capability list; high-priority async-decoded preview; mobile navigation; links |
-| `/run/` and `#hybrid`, `#compare` | `apps/web/index.html`, `apps/web/src/app.ts`, `apps/web/src/terminal.css`, hosted/domain builders | First-paint shell; real hydration; favicon; responsive reflow |
-| Twelve workspace hashes | `scripts/browser-terminal.py` `ROUTES`, `scripts/browser-full-audit.py` | Existing cross-engine workspace suite; the public-route smoke adds three representative entry states |
-| 36 architectures, 24 presets, 36 lessons | `apps/api/helioforge/data/hybrid_catalog.json`, `scripts/capability-contract.mjs`, the existing hybrid browser harness | Retain 19 locally runnable energy-balance screens / 17 study-only distinction; no new physics claimed |
-| 59 study models / 12 workspaces | `scripts/capability-contract.mjs`, `docs/MODEL_REGISTRY.md`, `scripts/build-domain.mjs` | Registry contracts, source links, data-generation and release check; compact responsive card grids |
-| `/models/` | Model-registry HTML generated by `scripts/build-domain.mjs` | Workspace and model card composition, horizontal scrolling contained within tables |
-| `/learning/`, capability-modes, glossary, terminal example | `docs/learning-pages/`, `scripts/build-domain.mjs` | Static-route HTTP, headings, navigation, WCAG checks, overflow |
-| `/methodology/`, `/help/`, `/about/` | `scripts/build-domain.mjs`, `scripts/cloudflare-site.css` | Static-route HTTP, headings, navigation, WCAG checks, overflow |
-| `/app.json`, `/llms.txt`, downloadable offline edition | `scripts/build-cloudflare.mjs`, `scripts/build-domain.mjs`, `scripts/check-domain.mjs` | Existing runtime SHA-256 and build checks; offline icon kept self-contained |
-| CI and evidence | `.github/workflows/ci.yml`, `scripts/browser-public-site.py`, historical `QUALITY_REPORT.md` | New evidence artifact covering the public domain, plus existing numerical and browser verification |
+## Route coverage and intended verification
 
-## Findings and changes
+| Route / feature | Evidence source | Automated candidate check |
+|---|---|---|
+| `/` | `scripts/build-domain.mjs` | Generated page, unique capabilities, reflow, page errors |
+| `/run/#hybrid` | `apps/web/src/hybrid-*` | Existing hybrid tests plus hosted reflow |
+| `/run/#compare` and Terminal | `apps/web/src/terminal-*` | Existing deterministic/terminal tests plus hosted reflow |
+| `/models/` | `scripts/capability-contract.mjs`, `build-domain.mjs` | 59 contract cards, empty state, search, clear, workspace filtering, reflow |
+| `/learning/` and three `/learning/*/` guides | Static source-linked guides | Response, visible content and reflow |
+| `/help/`, `/methodology/`, `/about/` | Static publication generator | Response, visible content and reflow |
+| `/app.json`, `/llms.txt`, `/downloads/HelioForge-Offline.html` | Existing release/export scripts | Existing `check-domain`, hosted-acceptance and integrity contracts |
 
-| ID | Severity | File / location | Affected viewports | Root cause and user impact | Applied change |
-| --- | --- | --- | --- | --- | --- |
-| A-01 | P2 | `scripts/build-domain.mjs`, homepage `home` boundary markup | Desktop / tablet / mobile | Four mode statements appeared in both `CAPABILITY_COPY` and `cloudflare.json.limitations`, producing two lists and excess scrolling | Stable, deduplicated single list using `Set`; retained the extra scientific limitation |
-| A-02 | P2 | `apps/web/index.html` `#app`; `apps/web/src/terminal.css` | All; most noticeable on slow mobile loads | Root was empty until bundled JavaScript mounted, leaving an uninformative initial paint | Added a lightweight, meaningful, accessible loading shell with no simulated outcomes, designed in existing Hallmark Terminal tokens; boot replaces it |
-| A-03 | P2 | `scripts/build-domain.mjs` hosted runtime rewrite | All | The embedded standalone icon was copied to the domain-hosted runtime, contrary to the root-asset contract | Replace icon in domain build with `/favicon.svg`; preserve embedded favicon in standalone offline file; recompute SHA-256 and CSP from final bytes |
-| A-04 | P3 | `scripts/build-domain.mjs` landing image | Desktop / tablet / mobile | Hero `preview.png` requested at high priority without an explicit async decode hint | Added `decoding="async"`; retained intrinsic `1440×1000` dimensions and `fetchpriority="high"` |
-| A-05 | P2 usability | `scripts/cloudflare-site.css` mobile/tablet nav | 390px / 820px and other narrow widths | Six top-level routes had compact, wrapping link spacing | Grid of visible 44px-height navigation links on phones; compact wrapping, 44px-height links on tablets |
-| A-06 | P2 usability | `scripts/build-domain.mjs` model-registry markup/CSS | Primarily desktop and tablet | A single narrow column under-used wide screens for 59 model cards | Wider registry-only canvas, responsive workspace grid and two-column model card layout at wide desktop widths; tables scroll within cards |
-| A-07 | P1 verification gap | `scripts/browser-public-site.py`, `.github/workflows/ci.yml` | 1440×900, 820×1180, 390×844 | Existing headless tests concentrate on the interactive workbench, not the complete public documentation routes | Added automated Chromium public-site route/overflow/console checks and axe WCAG 2.2 AA scans; evidence uploads in CI |
+The generated-site script tests **11 route states × 3 viewport classes** (1440×900, 820×1180, 390×844), checks HTML document scroll overflow, clipped controls and JavaScript errors, and interacts with registry filters. These checks cannot establish no possible regressions across every state and browser engine. Existing Playwright tests cover many app flows and engines separately.
 
-**Priority explanation:** P1 is a release verification gap; P2 defects degrade clarity/usability; P3 is an optimization hint. These categories do not assert a security incident or scientific-model failure.
+## Scientific integrity retained
 
-## Testing and release gate
+- 36 architectures (19 local Python electrical screens; 17 study-only), 24 scenarios, 36 lessons, 59 named study models across 12 workspaces.
+- The browser Terminal is a deterministic bounded 24-hour **greedy** energy-balance screen, not an optimizer or an investment-grade annual case.
+- Bundled example outputs are synthetic and precomputed. New advanced study calculations require the separate local Python API; optional external integrations remain explicitly opt-in.
+- No numerical engines, financial assumptions, generated model fixtures, third-party assets, authentication or deployment secrets are changed in this branch.
 
-The added route harness covers **12 URL / hash states × 3 viewport sizes = 36 route–viewport visits**. For each, it checks HTTP status, meaningful page content, document/body horizontal overflow and console/page errors; for the static documents it also checks navigability, including 44px touch sizing at 390px. The harness calls axe-core for WCAG 2.2 AA tagged checks at all 36 visits. It optionally captures first-viewport images of the homepage, workbench and model registry.
+## Verification and release gates
 
-Commands required from a **fresh clone with Node >=22, Python 3.11+ and Playwright browsers**:
+The baseline `main` Verify research release run [42641635068](https://github.com/mohammadrezwankhan/helioforge-energy-lab/actions/runs/42641635068) and Cloudflare export run [42641635124](https://github.com/mohammadrezwankhan/helioforge-energy-lab/actions/runs/42641635124) were reported successful for the **base commit** by GitHub. These historical checks do not establish candidate status.
 
-```sh
-python -m pip install -e "apps/api[dev]" playwright
-cd apps/web && npm ci && npm run typecheck && npm run build && npm test && cd ../..
-node scripts/build-cloudflare.mjs
-node scripts/build-domain.mjs
-node scripts/check-domain.mjs
-python -m playwright install chromium
-python -m http.server 4190 --bind 127.0.0.1 --directory .cloudflare/site
-# In another terminal:
-python scripts/browser-public-site.py --base-url http://127.0.0.1:4190/ --report docs/full-audit/public-pages-ci.json
-```
+Candidate checks should include Python pytest, lint, frontend `npm ci`, typecheck, build, node tests, `node scripts/check-domain.mjs`, existing workbench browser suites, and `python scripts/browser-site-audit.py --url http://127.0.0.1:4190 --report docs/site-audit/browser-site-ci.json`, as exercised in the PR workflow. Do not call the branch verified or publish-ready until those checks actually succeed. Deployment to the live Cloudflare domain additionally requires the separate deployment process and published artifact inspection. Full WCAG 2.2 AA, Core Web Vitals, all physical device classes, cross-browser equivalence, scientific validation, and live site state are not certified by this source audit.
 
-The existing `.github/workflows/ci.yml` additionally runs backend Python matrices, frontend build/tests, three browser engines in the full audit, domain security tests, Terminal/hybrid acceptance and hosted export checks. The **current PR/merge evidence must be read from GitHub Actions**, not inferred from historical `docs/full-audit/verification.json`.
+## Consolidation of independently tested ASTRA changes (PR #76)
 
-## Evidence limitations and release conditions
+A concurrent PR #75 was merged into `main` during PR #76 CI, touching the same responsive source files. The integration **retains PR #75's model-registry search/filter, workbench first-paint shell, viewport smoke and source-integrity improvements**. It also carries forward PR #76's complementary checks: a dedicated hosted `/favicon.svg` (offline edition keeps its data icon), 44px tablet/mobile nav, a second Chromium audit across **12 public URL/hash states × 3 viewports**, tagged axe-core WCAG 2.2 AA observations, and the regression fix restoring tracked bytes after CSP test builds. PR #75's `scripts/browser-site-audit.py` continues checking 59-model search and clipping; PR #76's `scripts/browser-public-site.py` adds tagged accessibility checks, detailed HTTP, nav and console evidence.
 
-- The connected GitHub API supplied source and CI metadata; this session did **not** have a local clone or headless browser against the new branch. The public-domain browser test therefore relies on CI after the branch is pushed.
-- No current before/after area-utilization percentage, INP under 50ms, real-user Core Web Vitals, network-throttled performance claim or measured LCP delta is asserted. Design refinements are source-evidenced; rendered outcomes require CI screenshots and visual review.
-- Real devices, assistive technologies, operator acceptance, advanced architectural physics, external provider execution and physical plant integrations are outside this source-only inspection.
-- The historical `docs/full-audit/verification.json` records prior test executions at another commit. Its counts are **not** copied into the results for this branch.
-- Cloudflare production publication is not proved by a merge or a green pull request alone. Confirm the deployment workflow and production origin/source SHA separately.
+**Original PR #76 evidence:** Before consolidation, head `155b948da3a53911efea35a1170e748467354533` passed the entire Verify research release workflow (657/657 browser checks, 251/251 Terminal checks, 34/34 hosted checks, 186/186 new public-site assertions) plus Hardened CI, Cloudflare export and CodeQL. The public-site axe run recorded **12 incomplete accessibility checks** needing manual evaluation. These results were on the **pre-consolidation branch**. The reconciled merge commit needs its own CI to claim green.
 
-**Merge policy:** Only merge into `main` after required GitHub Actions checks succeed for the final branch revision. If a check is failing or unavailable, leave the PR open and describe the blocking result.
+This is a source/artifact release, not a confirmed production Cloudflare deploy. The `mkgrid-helioforge` Pages project requires uploading the exact verified site artifact and updating the exact CSP hash/header transform in tandem, as described in `docs/CLOUDFLARE.md`. The live website and physical devices have not been independently validated here.

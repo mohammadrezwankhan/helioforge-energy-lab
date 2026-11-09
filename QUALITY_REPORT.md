@@ -1,20 +1,12 @@
-# HelioForge — current verification and historical evidence
-
-## 9 November 2026 — ASTRA responsive-source audit candidate
-
-**Candidate base:** `92c9f44b69186ee92919f5e60ce14d25ce64beeb`  
-**Branch:** `astra/helioforge-surface-audit-20261109`  
-**Audit / limitations:** [AUDIT_REPORT_ASTRA.md](AUDIT_REPORT_ASTRA.md)
-
-Changes in this candidate: deduplicated the overview's capability/limitations list; added a real first-paint loading shell and hosted `/favicon.svg`; marked the preview for asynchronous decoding; adapted narrow-screen site navigation and model-card layout; and added public-route, mobile reflow, browser-console and WCAG 2.2 AA checks at 1440×900, 820×1180 and 390×844.
-
-**Verification status at audit authoring:** New source-level regression assertions and CI commands are committed. The full branch build, numerical test suite, hosted browser matrix and live Cloudflare deployment are **not yet verified in this report**. See the associated pull request's GitHub Actions runs for the eventual pass/fail record, and do not reuse historical counts as new evidence. No real-device, field-performance, paid-provider or production-scientific validation is claimed.
-
-The sections below are retained as historical, commit-specific evidence. They must not be read as new CI outcomes for the ASTRA branch.
-
----
-
 # HelioForge Energy Lab: verification and limits
+
+## Concurrent-branch integration and extended browser audit — 9 November 2026
+
+A verified PR #76 branch was reconciled with PR #75 already merged into `main`. Preserve the existing 59-model filtering, CSS improvements, release checks and source-integrity changes. The addition includes the hosted favicon, a 36-visit Playwright axe WCAG 2.2 AA public-site gate, 44px small-screen navigation and restoration of checked-in generated files after the CSP integration test. The independent, pre-consolidation PR #76 head `155b948da3a53911efea35a1170e748467354533` passed all workflows, including 186/186 added public-site checks and 657/657 full-audit browser checks. These **are not proof for the new consolidated commit**; validate its own CI and keep 12 axe incomplete items for manual review. No live Cloudflare deployment or scientific validation is asserted.
+
+## Candidate source review — 9 November 2026
+
+The `astra/helioforge-ux-reliability-20261109` branch addresses duplicate capability statements, adds a pre-boot HTML workbench shell, makes the registry of 59 study contracts filterable, and improves responsive layout and interaction targets. It also adds a generated-site Chromium viewport audit to existing GitHub CI checks. These are **candidate source changes**, not a claim of a completed live deployment or scientific verification. See [AUDIT_REPORT_ASTRA.md](AUDIT_REPORT_ASTRA.md) for the route inventory, verification commands, and remaining limitations.
 
 ## Current source snapshot — 31 October 2026
 

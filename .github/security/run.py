@@ -110,16 +110,28 @@ class Gate:
         """Record the exact input bytes before a scanner or language quality run."""
         self.coverage["source_sha256"] = source_snapshot()
 
-    def verify_sources(self) -> None:
-        """Reject results when source files are added, removed or changed during a run."""
+    def verify_sources(
+        self, allowed_generated: frozenset[str] = frozenset()
+    ) -> None:
+        """Fail on source mutation; record explicitly permitted generated-output rebuilds.
+
+        Allowed files must be chosen by the gate, never by the scanned code or
+        arbitrary configuration. Preserve both initial and final hashes in evidence.
+        """
         before = self.coverage["source_sha256"]
         after = source_snapshot()
         changed = sorted(
             name for name in before.keys() | after.keys()
             if before.get(name) != after.get(name)
         )
-        self.coverage["source_changed_during_scan"] = changed
-        if changed:
+        regenerated = sorted(set(changed).intersection(allowed_generated))
+        self.coverage["generated_outputs_changed_during_validation"] = {
+            name: {"before_sha256": before.get(name), "after_sha256": after.get(name)}
+            for name in regenerated
+        }
+        unexpected = sorted(set(changed).difference(allowed_generated))
+        self.coverage["source_changed_during_scan"] = unexpected
+        if unexpected:
             raise RuntimeError("Source changed during validation; rerun the exact candidate")
 
     def run(

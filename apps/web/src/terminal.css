@@ -38,95 +38,6 @@ body {
   background: var(--color-paper);
 }
 
-// First paint only: real application boot replaces this shell in #app.
-// No simulated results or fake input controls are shown while loading.
-#app > .boot-shell {
-  min-height: 100dvh;
-  padding: clamp(16px, 2.4vw, 36px);
-  background: var(--color-paper);
-  color: var(--color-ink);
-}
-.boot-shell__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  min-height: 56px;
-  border-bottom: 1px solid var(--color-rule);
-  font-size: 12px;
-}
-.boot-shell__identity {
-  display: inline-flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-.boot-shell__mark {
-  display: inline-grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border: 1px solid var(--color-rule-2);
-  color: var(--color-accent);
-}
-.boot-shell__separator,
-.boot-shell__state { color: var(--color-ink-2); }
-.boot-shell__main { max-width: 1840px; margin: 0 auto; }
-.boot-shell__intro { padding-block: clamp(32px, 5vw, 68px) 28px; }
-.boot-shell__eyebrow {
-  margin: 0 0 14px;
-  color: var(--color-accent);
-  font-size: 11px;
-  letter-spacing: .08em;
-}
-.boot-shell__intro h1 { font-size: clamp(1.7rem, 3vw, 2.7rem); }
-.boot-shell__intro p:last-child {
-  max-width: 65ch;
-  color: var(--color-ink-2);
-  font-size: 13px;
-}
-.boot-shell__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 230px) minmax(0, 1fr) minmax(0, 290px);
-  gap: 12px;
-  min-height: min(52vh, 460px);
-}
-.boot-shell__panel {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  border: 1px solid var(--color-rule);
-  padding: clamp(16px, 2vw, 28px);
-  background: var(--color-paper-2);
-}
-.boot-shell__panel span {
-  height: 11px;
-  max-width: 100%;
-  background: var(--color-paper-3);
-  border: 1px solid var(--color-rule);
-}
-.boot-shell__rail span:nth-child(2) { width: 80%; }
-.boot-shell__rail span:nth-child(3) { width: 60%; }
-.boot-shell__rail span:nth-child(4) { width: 90%; }
-.boot-shell__canvas { justify-content: space-between; }
-.boot-shell__canvas span:first-child { width: 42%; }
-.boot-shell__canvas span:last-child { width: 65%; }
-.boot-shell__inspector span:nth-child(2) { width: 85%; }
-.boot-shell__inspector span:nth-child(3) { width: 60%; }
-@media (max-width: 1024px) {
-  .boot-shell__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 220px); }
-  .boot-shell__rail { display: none; }
-}
-@media (max-width: 640px) {
-  .boot-shell__header { align-items: flex-start; flex-direction: column; padding-block: 8px; }
-  .boot-shell__intro { padding-block: 28px 22px; }
-  .boot-shell__grid { grid-template-columns: minmax(0, 1fr); min-height: 40vh; }
-  .boot-shell__canvas { min-height: 36vh; }
-  .boot-shell__inspector { display: none; }
-}
-
 h1,
 h2,
 h3,
@@ -4515,3 +4426,25 @@ details:not([open]) > :not(summary) { display: none; }
 
 /* A collapsible navigation drawer preserves working space on tablet layouts. */
 @media(min-width:801px) and (max-width:1100px){.sidebar{transform:translateX(-100%);transition:transform .2s;width:235px}.sidebar.mobile-open{transform:translateX(0)}.mobile-menu{display:inline-grid}.app-main{margin-left:0}}
+
+/* Initial HTML shell: visible before the bundled application performs its first render. */
+.hf-boot-shell{min-height:100dvh;padding:0 clamp(16px,3vw,40px) 32px;background:var(--color-paper,#101714);color:var(--color-ink,#eff4ed)}
+.hf-boot-header{display:flex;align-items:center;gap:14px;max-width:1600px;margin:0 auto;padding:18px 0;border-bottom:1px solid var(--color-rule,#39453e)}
+.hf-boot-header strong{display:block;font-size:16px;font-weight:650}
+.hf-boot-header p{margin:4px 0 0;font-size:13px;color:var(--color-muted,#adbbb0)}
+.hf-boot-mark{display:grid;place-items:center;flex:0 0 42px;height:42px;border:1px solid var(--color-rule-2,#52645a);border-radius:10px;font-size:23px;font-weight:700;color:var(--color-accent,#c9ee8b)}
+.hf-boot-layout{display:grid;grid-template-columns:minmax(170px,230px) minmax(0,1fr) minmax(180px,300px);gap:16px;max-width:1600px;margin:24px auto}
+.hf-boot-panel{display:flex;flex-direction:column;gap:16px;min-width:0;min-height:320px;padding:20px;border:1px solid var(--color-rule,#39453e);border-radius:12px;background:var(--color-paper-2,#17211b)}
+.hf-boot-panel>span{display:block;width:85%;height:14px;border-radius:4px;background:var(--color-rule-2,#384940);opacity:.55}
+.hf-boot-panel>span:nth-child(2n){width:58%}
+.hf-boot-workspace>span:first-child{width:45%;height:22px}
+.hf-boot-canvas{flex:1;min-height:240px;border:1px solid var(--color-rule-2,#384940);border-radius:8px;background:var(--color-paper,#101714)}
+@media(max-width:1024px){.hf-boot-layout{grid-template-columns:minmax(0,1fr) minmax(180px,.55fr)}.hf-boot-navigation{display:none}}
+@media(max-width:640px){.hf-boot-layout{grid-template-columns:minmax(0,1fr);margin:16px auto}.hf-boot-inspector{display:none}.hf-boot-panel{min-height:290px;padding:16px}}
+@media(min-width:360px) and (max-width:600px){
+  .terminal-workbench .terminal-form .form-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .terminal-workbench .terminal-form .field{min-width:0}
+  .terminal-workbench .terminal-form .field>span{font-size:12px;overflow-wrap:anywhere}
+  .terminal-workbench .terminal-form input[type="number"]{width:100%;min-width:0;min-height:44px;font-size:16px}
+}
+@media(pointer:coarse){.terminal-workbench .terminal-form button,.terminal-workbench .terminal-form select{min-height:44px}}

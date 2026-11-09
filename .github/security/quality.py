@@ -186,7 +186,21 @@ def main() -> int:
             python_check(gate, config, args.mode)
         else:
             browser_check(gate, config, args.mode, args.install)
-        gate.verify_sources()
+        # The browser CSP test rebuilds these three tracked distribution outputs
+        # from current authored sources; it never mutates the Python/TS/JS inputs.
+        # Record both hashes, while retaining fail-closed checks for every other file.
+        generated_outputs = (
+            frozenset(
+                {
+                    "HelioForge-Preview.html",
+                    "apps/web/dist/index.html",
+                    "apps/web/dist/styles.css",
+                }
+            )
+            if args.mode == "browser-tests"
+            else frozenset()
+        )
+        gate.verify_sources(allowed_generated=generated_outputs)
     except (OSError, ValueError, KeyError, TypeError, RuntimeError) as error:
         gate.checks.append(
             {
