@@ -23,6 +23,18 @@ for(const [file,url] of indexablePages){
 const overviewGraph=JSON.parse(read('index.html').match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1])['@graph'];
 const appSchema=overviewGraph.find(entity=>entity['@type']==='SoftwareApplication');assert.ok(appSchema);for(const phrase of Object.values(CAPABILITY_COPY))assert.ok(appSchema.featureList.includes(phrase),'overview structured facts missing '+phrase);
 const overview=read('index.html'),headers=read('_headers'),heroDirectory='assets/engineering-hero/v1';
+const boundary=overview.match(/<section class="boundary">([\s\S]*?)<\/section>/)?.[1];
+assert.ok(boundary,'overview must contain its capability boundary');
+assert.equal((boundary.match(/<ul\b/g)||[]).length,1,'capability boundary must contain one list');
+for(const phrase of Object.values(CAPABILITY_COPY))
+ assert.equal(boundary.split(phrase).length-1,1,'capability statement must appear once: '+phrase);
+assert.ok(overview.includes('decoding="async" fetchpriority="high"'),'hero preview decode and priority hints');
+const registryHtml=read('models/index.html');
+assert.ok(registryHtml.includes('id="registry-search"')&&registryHtml.includes('id="registry-workspace"'));
+assert.ok(registryHtml.includes('src="/models/filter.js"'));
+assert.equal((registryHtml.match(/class="model-card"/g)||[]).length,59);
+assert.ok(files.includes('models/filter.js'),'search script must be deployed');
+
 const expectedPolicy=domainSecurityPolicy([...indexablePages.map(([file])=>file),'run/index.html'].map(read));
 assert.ok(headers.includes(`/*\n  Content-Security-Policy: ${expectedPolicy}\n`),'Global CSP must match this exact release');
 if(site.engineeringHero===true){
@@ -59,6 +71,9 @@ if(site.engineeringHero===true){
 const facts=JSON.parse(read('app.json')),runtime=read('run/index.html');assert.equal(facts.url,site.canonical);assert.equal(facts.applicationUrl,origin+'/run/');assert.equal(facts.runtimeSha256,createHash('sha256').update(runtime).digest('hex'));assert.match(runtime,/name="robots" content="noindex,follow"/);assert.ok(runtime.includes(`rel="canonical" href="${facts.applicationUrl}"`));assert.ok(!runtime.includes("location.protocol === 'file:'"));
 assert.ok(!/<script\b[^>]*\bsrc=/i.test(runtime),'Hosted runtime must embed its compiled script');
 assert.ok(!runtime.includes('location.protocol==="file:"'),'Hosted API mode patch must be applied');
+assert.ok(runtime.includes('class="hf-boot-shell"'),'hosted workbench needs a visible loading shell');
+assert.ok(runtime.includes('<noscript>'),'hosted workbench needs a no-JavaScript fallback');
+
 const staleStudyEvidence=modelRegistry.studies.flatMap(study=>sourceEvidenceMismatches(study.acceptance.executionEvidence?.record,root).map(mismatch=>({study_id:study.id,...mismatch})));
 if(staleStudyEvidence.length)throw new Error(`Refusing to compare/publish a model registry with stale source-bound study evidence: ${JSON.stringify(staleStudyEvidence)}. Refresh the bounded acceptance record and regenerate its registry artifact; do not treat a stale PASS as current.`);
 assert.deepEqual(facts.capabilityContract,capabilityFacts);assert.equal(facts.helpUrl,origin+'/help/');assert.equal(facts.modelRegistryUrl,origin+'/models/');assert.equal(facts.capabilitiesUrl,origin+'/learning/capability-modes/');assert.equal(facts.capabilities.workspaceCount,12);assert.equal(facts.capabilities.studyCount,59);
