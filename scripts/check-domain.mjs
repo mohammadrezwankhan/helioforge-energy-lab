@@ -23,6 +23,15 @@ for(const [file,url] of indexablePages){
 const overviewGraph=JSON.parse(read('index.html').match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1])['@graph'];
 const appSchema=overviewGraph.find(entity=>entity['@type']==='SoftwareApplication');assert.ok(appSchema);for(const phrase of Object.values(CAPABILITY_COPY))assert.ok(appSchema.featureList.includes(phrase),'overview structured facts missing '+phrase);
 const overview=read('index.html'),headers=read('_headers'),heroDirectory='assets/engineering-hero/v1';
+// The public capability boundary must be concise and truthful: one list, no repeated modes.
+const boundary=overview.match(/<section class="boundary">([\s\S]*?)<\/section>/)?.[1];
+assert.ok(boundary,'Overview capability boundary missing');
+const boundaryLists=[...boundary.matchAll(/<ul\b[^>]*>([\s\S]*?)<\/ul>/g)];
+assert.equal(boundaryLists.length,1,'Capability boundary must contain exactly one list');
+for(const phrase of new Set([...Object.values(CAPABILITY_COPY),...cloudflare.limitations])){
+ assert.equal(boundaryLists[0][1].split(phrase).length-1,1,'Capability boundary repeats or omits: '+phrase);
+}
+assert.match(overview,/<img src="\/preview\.png"[^>]*fetchpriority="high"[^>]*decoding="async"/,'Hero image needs async decoding and LCP priority');
 const expectedPolicy=domainSecurityPolicy([...indexablePages.map(([file])=>file),'run/index.html'].map(read));
 assert.ok(headers.includes(`/*\n  Content-Security-Policy: ${expectedPolicy}\n`),'Global CSP must match this exact release');
 if(site.engineeringHero===true){
@@ -57,6 +66,9 @@ if(site.engineeringHero===true){
  assert.ok(!files.some(file=>file.startsWith(heroDirectory+'/')));
 }
 const facts=JSON.parse(read('app.json')),runtime=read('run/index.html');assert.equal(facts.url,site.canonical);assert.equal(facts.applicationUrl,origin+'/run/');assert.equal(facts.runtimeSha256,createHash('sha256').update(runtime).digest('hex'));assert.match(runtime,/name="robots" content="noindex,follow"/);assert.ok(runtime.includes(`rel="canonical" href="${facts.applicationUrl}"`));assert.ok(!runtime.includes("location.protocol === 'file:'"));
+assert.match(runtime,/<link rel="icon" href="\/favicon.svg" type="image\/svg\+xml">/,'Hosted workbench must use the root favicon');
+assert.match(runtime,/<div id="app">\s*<div class="boot-shell"/,'Workbench must render a preboot loading shell');
+assert.match(runtime,/<noscript>/,'No-script fallback must stay available');
 assert.ok(!/<script\b[^>]*\bsrc=/i.test(runtime),'Hosted runtime must embed its compiled script');
 assert.ok(!runtime.includes('location.protocol==="file:"'),'Hosted API mode patch must be applied');
 const staleStudyEvidence=modelRegistry.studies.flatMap(study=>sourceEvidenceMismatches(study.acceptance.executionEvidence?.record,root).map(mismatch=>({study_id:study.id,...mismatch})));
