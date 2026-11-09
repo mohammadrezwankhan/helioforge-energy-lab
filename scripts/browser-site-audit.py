@@ -49,7 +49,9 @@ def main() -> None:
                   .filter(el => {
                     const rect = el.getBoundingClientRect();
                     if (!rect.width || !rect.height) return false;
-                    if (el.closest('.table-scroll, [aria-hidden="true"]')) return false;
+                    if (el.closest('.table-scroll, [aria-hidden="true"], [inert]')) return false;
+                    // Collapsed mobile navigation is deliberately parked off canvas.
+                    if (innerWidth <= 800 && el.closest('.sidebar:not(.mobile-open)')) return false;
                     return rect.left < -2 || rect.right > innerWidth + 2;
                   }).slice(0, 5).map(el =>
                     (el.textContent || el.getAttribute('aria-label') || el.tagName)
@@ -103,8 +105,13 @@ def main() -> None:
             response = page.goto(
                 urljoin(base, route.lstrip("/")), wait_until="domcontentloaded", timeout=120000
             )
-            if not response or response.status != 200:
-                failures.append(f"{route}: HTTP {response.status if response else 'no response'}")
+            # A hash-only navigation stays in the same document; Playwright may
+            # return None although the navigation succeeded without an HTTP request.
+            expected = urljoin(base, route.lstrip("/"))
+            if (response is None and page.url != expected) or (
+                response is not None and response.status != 200
+            ):
+                failures.append(f"{route}: HTTP {response.status if response else 'navigation mismatch'}")
                 continue
             page.locator("#app .topbar").wait_for(state="visible", timeout=45000)
             for width, height in VIEWPORTS:
