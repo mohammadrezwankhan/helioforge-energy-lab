@@ -94,8 +94,16 @@ def main() -> int:
                 url = urljoin(args.base_url.rstrip("/") + "/", route.lstrip("/"))
                 try:
                     response = page.goto(url, wait_until="domcontentloaded", timeout=30000)
-                    check(route, width, "HTTP status", response is not None and response.status == 200,
-                          response.status if response is not None else None)
+                    # A hash-only SPA transition is a same-document navigation; Playwright
+                    # correctly returns no HTTP response. Validate its URL/state instead.
+                    hash_transition = response is None and route.startswith("/run/#")
+                    hash_matches = (
+                        page.evaluate("(expected) => location.pathname === '/run/' && location.hash === expected", "#" + route.split("#", 1)[1])
+                        if hash_transition else False
+                    )
+                    check(route, width, "HTTP response or same-document hash transition",
+                          (response is not None and response.status == 200) or hash_matches,
+                          response.status if response is not None else {"hashNavigation": hash_matches})
                     if route.startswith("/run/"):
                         page.locator("#main-content").wait_for(state="visible", timeout=30000)
                     else:
