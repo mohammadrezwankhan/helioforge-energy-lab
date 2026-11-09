@@ -7,6 +7,7 @@ scientific workflow interactions separately.
 import argparse
 import json
 from pathlib import Path
+import sys
 from urllib.parse import urljoin
 
 from playwright.sync_api import sync_playwright
@@ -20,7 +21,7 @@ WORKBENCH_ROUTES = ("/run/#hybrid", "/run/#compare")
 VIEWPORTS = ((1440, 900), (820, 1180), (390, 844))
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", required=True, help="Loopback URL for generated static site")
     parser.add_argument("--report", help="Optional JSON evidence file")
@@ -31,9 +32,13 @@ def main():
         browser = playwright.chromium.launch()
         page = browser.new_page(viewport={"width": 1440, "height": 900})
         page.on("pageerror", lambda exc: console_errors.append("pageerror: " + str(exc)))
-        page.on("console", lambda message: console_errors.append("console: " + message.text) if message.type == "error" else None)
+        def record_console(message: object) -> None:
+            if getattr(message, "type") == "error":
+                console_errors.append("console: " + str(getattr(message, "text")))
 
-        def inspect(route, width, height):
+        page.on("console", record_console)
+
+        def inspect(route: str, width: int, height: int) -> None:
             page.set_viewport_size({"width": width, "height": height})
             metrics = page.evaluate("""() => ({
                 documentWidth: document.documentElement.clientWidth,
@@ -46,10 +51,16 @@ def main():
                     if (!rect.width || !rect.height) return false;
                     if (el.closest('.table-scroll, [aria-hidden="true"]')) return false;
                     return rect.left < -2 || rect.right > innerWidth + 2;
-                  }).slice(0, 5).map(el => (el.textContent || el.getAttribute('aria-label') || el.tagName).trim().slice(0, 60))
+                  }).slice(0, 5).map(el =>
+                    (el.textContent || el.getAttribute('aria-label') || el.tagName)
+                      .trim().slice(0, 60))
             })""")
             observations.append({"route": route, "viewport": [width, height], **metrics})
-            if metrics["scrollWidth"] > metrics["documentWidth"] + 1 or metrics["bodyScrollWidth"] > metrics["documentWidth"] + 1:
+            document_width = metrics["documentWidth"]
+            if (
+                metrics["scrollWidth"] > document_width + 1
+                or metrics["bodyScrollWidth"] > document_width + 1
+            ):
                 failures.append(f"{route} at {width}px: horizontal overflow")
             if metrics["clippedControls"]:
                 failures.append(f"{route} at {width}px: clipped controls {metrics['clippedControls']}")
@@ -57,7 +68,9 @@ def main():
                 failures.append(f"{route} at {width}px: empty application")
 
         for route in STATIC_ROUTES:
-            response = page.goto(urljoin(base, route.lstrip("/")), wait_until="domcontentloaded", timeout=60000)
+            response = page.goto(
+                urljoin(base, route.lstrip("/")), wait_until="domcontentloaded", timeout=60000
+            )
             if not response or response.status != 200:
                 failures.append(f"{route}: HTTP {response.status if response else 'no response'}")
                 continue
@@ -87,7 +100,9 @@ def main():
                 page.locator("#registry-clear").click()
 
         for route in WORKBENCH_ROUTES:
-            response = page.goto(urljoin(base, route.lstrip("/")), wait_until="domcontentloaded", timeout=120000)
+            response = page.goto(
+                urljoin(base, route.lstrip("/")), wait_until="domcontentloaded", timeout=120000
+            )
             if not response or response.status != 200:
                 failures.append(f"{route}: HTTP {response.status if response else 'no response'}")
                 continue
@@ -107,7 +122,13 @@ def main():
         output = Path(args.report)
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({"status": result["status"], "routes": result["routes"], "viewportChecks": result["viewportChecks"], "failures": failures[:20]}))
+    summary = {
+        "status": result["status"],
+        "routes": result["routes"],
+        "viewportChecks": result["viewportChecks"],
+        "failures": failures[:20],
+    }
+    sys.stdout.write(json.dumps(summary) + "\n")
     if failures:
         raise SystemExit(1)
 
