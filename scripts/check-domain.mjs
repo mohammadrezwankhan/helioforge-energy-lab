@@ -26,8 +26,8 @@ const overview=read('index.html'),headers=read('_headers'),heroDirectory='assets
 const boundary=overview.match(/<section class="boundary">([\s\S]*?)<\/section>/)?.[1];
 assert.ok(boundary,'overview must contain its capability boundary');
 assert.equal((boundary.match(/<ul\b/g)||[]).length,1,'capability boundary must contain one list');
-for(const phrase of Object.values(CAPABILITY_COPY))
- assert.equal(boundary.split(phrase).length-1,1,'capability statement must appear once: '+phrase);
+for(const phrase of new Set([...Object.values(CAPABILITY_COPY),...cloudflare.limitations]))
+ assert.equal(boundary.split(phrase).length-1,1,'capability or limitation statement must appear once: '+phrase);
 assert.ok(overview.includes('decoding="async" fetchpriority="high"'),'hero preview decode and priority hints');
 const registryHtml=read('models/index.html');
 assert.ok(registryHtml.includes('id="registry-search"')&&registryHtml.includes('id="registry-workspace"'));
@@ -71,6 +71,7 @@ if(site.engineeringHero===true){
 const facts=JSON.parse(read('app.json')),runtime=read('run/index.html');assert.equal(facts.url,site.canonical);assert.equal(facts.applicationUrl,origin+'/run/');assert.equal(facts.runtimeSha256,createHash('sha256').update(runtime).digest('hex'));assert.match(runtime,/name="robots" content="noindex,follow"/);assert.ok(runtime.includes(`rel="canonical" href="${facts.applicationUrl}"`));assert.ok(!runtime.includes("location.protocol === 'file:'"));
 assert.ok(!/<script\b[^>]*\bsrc=/i.test(runtime),'Hosted runtime must embed its compiled script');
 assert.ok(!runtime.includes('location.protocol==="file:"'),'Hosted API mode patch must be applied');
+assert.match(runtime,/<link rel="icon" href="\/favicon.svg" type="image\/svg\+xml">/,'hosted root favicon must be a public asset');
 assert.ok(runtime.includes('class="hf-boot-shell"'),'hosted workbench needs a visible loading shell');
 assert.ok(runtime.includes('<noscript>'),'hosted workbench needs a no-JavaScript fallback');
 

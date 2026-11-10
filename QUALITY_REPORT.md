@@ -1,5 +1,9 @@
 # HelioForge Energy Lab: verification and limits
 
+## Concurrent-branch integration and extended browser audit — 9 November 2026
+
+A verified PR #76 branch was reconciled with PR #75 already merged into `main`. Preserve the existing 59-model filtering, CSS improvements, release checks and source-integrity changes. The addition includes the hosted favicon, a 36-visit Playwright axe WCAG 2.2 AA public-site gate, 44px small-screen navigation and restoration of checked-in generated files after the CSP integration test. The independent, pre-consolidation PR #76 head `155b948da3a53911efea35a1170e748467354533` passed all workflows, including 186/186 added public-site checks and 657/657 full-audit browser checks. These **are not proof for the new consolidated commit**; validate its own CI and keep 12 axe incomplete items for manual review. No live Cloudflare deployment or scientific validation is asserted.
+
 ## Candidate source review — 9 November 2026
 
 The `astra/helioforge-ux-reliability-20261109` branch addresses duplicate capability statements, adds a pre-boot HTML workbench shell, makes the registry of 59 study contracts filterable, and improves responsive layout and interaction targets. It also adds a generated-site Chromium viewport audit to existing GitHub CI checks. These are **candidate source changes**, not a claim of a completed live deployment or scientific verification. See [AUDIT_REPORT_ASTRA.md](AUDIT_REPORT_ASTRA.md) for the route inventory, verification commands, and remaining limitations.
