@@ -17,3 +17,7 @@ h1,h2,h3{overflow-wrap:anywhere}.app-hero>*,.content-grid>*,.boundary>*{min-widt
  .app-hero{padding-block:32px}.content-grid{padding:28px 0}
  .boundary{padding:20px;margin-bottom:32px}.faq details{padding:15px 0}
 }
+
+/* Preserve touch-sized navigation links while accommodating smaller viewports. */
+@media(max-width:700px){.masthead{align-items:stretch;flex-direction:column}.masthead nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px 8px;width:100%}.masthead nav a{display:flex;align-items:center;min-height:44px;line-height:1.35;white-space:normal;overflow-wrap:anywhere}.filters button{min-height:44px}}
+@media(min-width:701px) and (max-width:1100px){.masthead nav a{display:inline-flex;align-items:center;min-height:44px}}

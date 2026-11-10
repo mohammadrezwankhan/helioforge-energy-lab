@@ -43,6 +43,10 @@ const capabilityFacts=buildPublicCapabilityFacts(modelRegistry,{origin});
 let runtime=fs.readFileSync(path.join(out,'run/index.html'),'utf8');
 if(runtime.split(config.canonical).length-1!==1)throw Error('Runtime canonical anchor changed');
 runtime=runtime.replace(config.canonical,origin+'/run/');
+// Hosted pages use the public favicon; offline download keeps its embedded icon.
+const embeddedFavicon=/<link rel="icon" href="data:image\/svg\+xml,[^"]+" type="image\/svg\+xml">/;
+if(!embeddedFavicon.test(runtime))throw Error('Hosted runtime favicon anchor changed');
+runtime=runtime.replace(embeddedFavicon,'<link rel="icon" href="/favicon.svg" type="image/svg+xml">');
 write('run/index.html',runtime);
 facts.version='2.0.0';facts.url=site.canonical;facts.applicationUrl=origin+'/run/';facts.runtimeSha256=sha(runtime);
 facts.methodologyUrl=origin+'/methodology/';facts.authorUrl='https://mrkhan.co.technology/';
