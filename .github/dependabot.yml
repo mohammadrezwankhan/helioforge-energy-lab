@@ -29,6 +29,11 @@ updates:
   open-pull-requests-limit: 5
   cooldown:
     default-days: 7
+  # CodeQL init/analyze must use the same action version within each workflow.
+  groups:
+    codeql-action:
+      patterns:
+      - github/codeql-action/*
 - package-ecosystem: pip
   directory: /.github/security
   schedule:
