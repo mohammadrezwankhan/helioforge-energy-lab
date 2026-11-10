@@ -294,7 +294,7 @@ class Gate:
                 "--jobs",
                 "1",
                 "--max-memory",
-                "4096",
+                "6144",
                 "--timeout",
                 "180",
                 "--max-target-bytes",
