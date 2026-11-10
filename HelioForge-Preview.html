@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" data-motion="on">
 <head>
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'self' 'sha256-gz0g8xI7jGy//HjiFl46q7QwuYwG6AAFcp13hAzg1yQ='; script-src-attr 'none'; style-src 'self' 'sha256-hziQW+BvcKc+qOZH/yz21AbLanABBmXn3DxSfJOItE4='; style-src-attr 'none'; img-src 'self' data: blob:; font-src 'self'; media-src 'self'; frame-src 'self'; connect-src 'self'; worker-src 'self'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'self' 'sha256-gz0g8xI7jGy//HjiFl46q7QwuYwG6AAFcp13hAzg1yQ='; script-src-attr 'none'; style-src 'self' 'sha256-/9Q99vV8vAwGG/oMZCgCckxRk1xpzXTIRyQbtFdQSa4='; style-src-attr 'none'; img-src 'self' data: blob:; font-src 'self'; media-src 'self'; frame-src 'self'; connect-src 'self'; worker-src 'self'; manifest-src 'self'">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0d1210">
@@ -5262,6 +5262,28 @@ details:not([open]) > :not(summary) { display: none; }
 
 /* A collapsible navigation drawer preserves working space on tablet layouts. */
 @media(min-width:801px) and (max-width:1100px){.sidebar{transform:translateX(-100%);transition:transform .2s;width:235px}.sidebar.mobile-open{transform:translateX(0)}.mobile-menu{display:inline-grid}.app-main{margin-left:0}}
+
+/* Initial HTML shell: visible before the bundled application performs its first render. */
+.hf-boot-shell{min-height:100dvh;padding:0 clamp(16px,3vw,40px) 32px;background:var(--color-paper,#101714);color:var(--color-ink,#eff4ed)}
+.hf-boot-header{display:flex;align-items:center;gap:14px;max-width:1600px;margin:0 auto;padding:18px 0;border-bottom:1px solid var(--color-rule,#39453e)}
+.hf-boot-header strong{display:block;font-size:16px;font-weight:650}
+.hf-boot-header p{margin:4px 0 0;font-size:13px;color:var(--color-muted,#adbbb0)}
+.hf-boot-mark{display:grid;place-items:center;flex:0 0 42px;height:42px;border:1px solid var(--color-rule-2,#52645a);border-radius:10px;font-size:23px;font-weight:700;color:var(--color-accent,#c9ee8b)}
+.hf-boot-layout{display:grid;grid-template-columns:minmax(170px,230px) minmax(0,1fr) minmax(180px,300px);gap:16px;max-width:1600px;margin:24px auto}
+.hf-boot-panel{display:flex;flex-direction:column;gap:16px;min-width:0;min-height:320px;padding:20px;border:1px solid var(--color-rule,#39453e);border-radius:12px;background:var(--color-paper-2,#17211b)}
+.hf-boot-panel>span{display:block;width:85%;height:14px;border-radius:4px;background:var(--color-rule-2,#384940);opacity:.55}
+.hf-boot-panel>span:nth-child(2n){width:58%}
+.hf-boot-workspace>span:first-child{width:45%;height:22px}
+.hf-boot-canvas{flex:1;min-height:240px;border:1px solid var(--color-rule-2,#384940);border-radius:8px;background:var(--color-paper,#101714)}
+@media(max-width:1024px){.hf-boot-layout{grid-template-columns:minmax(0,1fr) minmax(180px,.55fr)}.hf-boot-navigation{display:none}}
+@media(max-width:640px){.hf-boot-layout{grid-template-columns:minmax(0,1fr);margin:16px auto}.hf-boot-inspector{display:none}.hf-boot-panel{min-height:290px;padding:16px}}
+@media(min-width:360px) and (max-width:600px){
+  .terminal-workbench .terminal-form .form-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .terminal-workbench .terminal-form .field{min-width:0}
+  .terminal-workbench .terminal-form .field>span{font-size:12px;overflow-wrap:anywhere}
+  .terminal-workbench .terminal-form input[type="number"]{width:100%;min-width:0;min-height:44px;font-size:16px}
+}
+@media(pointer:coarse){.terminal-workbench .terminal-form button,.terminal-workbench .terminal-form select{min-height:44px}}
 </style>
   <script>"use strict";
 var HF;
@@ -15564,5 +15586,20 @@ var HF;
 })(HF || (HF = {}));
 </script>
 </head>
-<body><div id="app"></div><noscript><main><h1>HelioForge</h1><p>JavaScript is disabled, so interactive views and calculations are unavailable. The repository includes the Python API, original source code and readable methodology documents.</p></main></noscript></body>
+
+<body>
+<div id="app">
+  <div class="hf-boot-shell">
+    <header class="hf-boot-header">
+      <span class="hf-boot-mark" aria-hidden="true">H</span>
+      <div><strong>HelioForge Energy Lab</strong><p role="status" aria-live="polite">Preparing the research workbench…</p></div>
+    </header>
+    <div class="hf-boot-layout" aria-hidden="true">
+      <aside class="hf-boot-panel hf-boot-navigation"><span></span><span></span><span></span><span></span><span></span></aside>
+      <section class="hf-boot-panel hf-boot-workspace"><span></span><span></span><div class="hf-boot-canvas"></div><span></span></section>
+      <aside class="hf-boot-panel hf-boot-inspector"><span></span><span></span><span></span></aside>
+    </div>
+  </div>
+</div>
+<noscript><main><h1>HelioForge</h1><p>JavaScript is disabled, so interactive views and calculations are unavailable. The repository includes the Python API, original source code and readable methodology documents.</p></main></noscript></body>
 </html>
