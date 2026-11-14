@@ -10,7 +10,7 @@ Explore hybrid-energy scenarios and research screens through a browser workbench
 
 <!-- repository-presentation:end -->
 
-![HelioForge Hybrid Energy Lab: original vector system illustration](assets/hero-25d.svg)
+![HelioForge Hybrid Energy Lab: original vector system illustration](assets/brand-uniformity/hero-25d.svg)
 
 The source combines a hybrid adequacy screen, storage MILP, research studies, and an interactive learning workbench. The companion starts with a small synthetic daily power balance.
 

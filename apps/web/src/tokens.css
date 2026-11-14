@@ -2,27 +2,27 @@
 :root {
   color-scheme: dark;
 
-  --color-paper: oklch(12.5% 0.012 150);
-  --color-paper-2: oklch(16% 0.016 150);
-  --color-paper-3: oklch(20.5% 0.022 150);
-  --color-ink: oklch(94% 0.03 140);
-  --color-ink-2: oklch(82% 0.05 142);
-  --color-muted: oklch(78% 0.06 145);
-  --color-rule: oklch(27% 0.028 148);
-  --color-rule-2: oklch(38% 0.045 146);
-  --color-accent: oklch(87% 0.2 142);
-  --color-accent-ink: oklch(14% 0.02 150);
-  --color-focus: oklch(87% 0.2 142);
-  --color-accent-wash: oklch(23% 0.06 145);
+  --color-paper: #100b18;
+  --color-paper-2: #231331;
+  --color-paper-3: #231331;
+  --color-ink: #fff6c8;
+  --color-ink-2: #fff6c8;
+  --color-muted: #ffe66d;
+  --color-rule: #5c2a72;
+  --color-rule-2: #d94a4a;
+  --color-accent: #ff9f1c;
+  --color-accent-ink: #100b18;
+  --color-focus: #ffe66d;
+  --color-accent-wash: #231331;
   --color-transparent: transparent;
-  --glyph-0: oklch(30% 0.06 146);
-  --glyph-1: oklch(38% 0.08 145);
-  --glyph-2: oklch(47% 0.11 144);
-  --glyph-3: oklch(57% 0.14 143);
-  --glyph-4: oklch(67% 0.17 142);
-  --glyph-5: oklch(77% 0.19 142);
-  --glyph-6: oklch(86% 0.2 141);
-  --glyph-7: oklch(94% 0.12 138);
+  --glyph-0: #231331;
+  --glyph-1: #5c2a72;
+  --glyph-2: #d94a4a;
+  --glyph-3: #ff9f1c;
+  --glyph-4: #ff9f1c;
+  --glyph-5: #ffe66d;
+  --glyph-6: #ffe66d;
+  --glyph-7: #fff6c8;
 
   --font-mono: "Martian Mono", ui-monospace, monospace;
   --font-display: var(--font-mono);
