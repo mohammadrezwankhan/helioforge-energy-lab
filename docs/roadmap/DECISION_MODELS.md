@@ -20,7 +20,7 @@ The six supplied fictional assets make common downside years visible against the
 
 ### `overview-merit`
 
-Each route's net value is its supplied value less supplied variable cost. The weighted value is the weighted sum of bilateral, spot and balancing net values; the three route weights must sum to one. The result is a per-MWh matrix, with no dispatch, opportunity cost, balancing-market qualification, losses, fees or realized volume. The [EIA electricity markets overview](https://www.eia.gov/energyexplained/electricity/electricity-markets.php) gives general market context; no U.S. market rule is imported into the calculation.
+Each route's net value is its supplied value less supplied variable cost. The weighted value is the weighted sum of bilateral, spot and balancing net values; the three route weights must sum to one. The result is a per-MWh matrix, with no dispatch, opportunity cost, balancing-market qualification, losses, fees or realized volume. The [EIA overview of U.S. wholesale electricity markets](https://www.eia.gov/electricity/wholesalemarkets/) gives general market context; no U.S. market rule is imported into the calculation.
 
 ### `overview-carbon`
 
