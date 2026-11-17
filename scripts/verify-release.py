@@ -2,13 +2,17 @@
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-manifest_path = ROOT / "RELEASE_MANIFEST.json"
+script_root = Path(__file__).resolve().parents[1]
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--root", type=Path, default=script_root, help="directory containing the files to verify")
+ROOT = parser.parse_args().root.resolve()
+manifest_path = script_root / "RELEASE_MANIFEST.json"
 if not manifest_path.exists():
     raise SystemExit("RELEASE_MANIFEST.json is missing.")
 manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
