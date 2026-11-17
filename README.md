@@ -141,6 +141,8 @@ npm --prefix apps/web test
 
 Prior reports under `docs/` describe the supplied candidate. They do not replace the current [quality report](QUALITY_REPORT.md). Passing software checks is not clinical, educational, financial, safety, or production-service validation.
 
+The checked-in `RELEASE_MANIFEST.json` records the historical 2026-10-27 snapshot, not the current development tree. To check that receipt, extract [commit `021e41ecb9c5343a2bd04149035956512616976d`](https://github.com/mohammadrezwankhan/helioforge-energy-lab/archive/021e41ecb9c5343a2bd04149035956512616976d.zip) and run `python scripts/verify-release.py --root /path/to/extracted-snapshot` from this checkout. The script checks that snapshot against the manifest in this checkout. The hashes detect drift; they are not signatures or evidence that today's tests passed.
+
 ## License and scope
 
 First-party source is available under [MIT](LICENSE). Bundled dependencies retain their upstream notices; trademarks and third-party content are not relicensed.
