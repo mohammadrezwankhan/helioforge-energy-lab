@@ -10,10 +10,10 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 dependencies = [
-  "fastapi==0.162.0",
+  "fastapi==0.162.4",
   "starlette==1.10.0",
   "uvicorn==0.54.0",
-  "pydantic==2.14.2",
+  "pydantic==2.14.3",
   "numpy==2.4.6",
   "scipy==1.17.1",
   "shapely==2.2.0",
@@ -53,14 +53,14 @@ mypy_path = ["$MYPY_CONFIG_FILE_DIR"]
 
 [dependency-groups]
 dev = [
-  "ruff==0.17.3",
+  "ruff==0.17.4",
   "mypy==2.4.1",
   "pytest==9.2.0",
   "pytest-cov==7.1.0",
-  "hypothesis==6.170.14",
+  "hypothesis==6.170.15",
   "scipy-stubs==1.17.1.5",
   "types-shapely==2.1.0.20261030",
-  "playwright==1.64.1",
+  "playwright==1.65.0",
   "openai-agents==0.24.0",
 ]
 
