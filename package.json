@@ -23,6 +23,7 @@
   "overrides": {
     "@typescript-eslint/typescript-estree@8.55.0": {
       "minimatch": "11.0.4"
-    }
+    },
+    "picomatch": "npm:@ryotsu/picomatch@4.0.7-a"
   }
 }
