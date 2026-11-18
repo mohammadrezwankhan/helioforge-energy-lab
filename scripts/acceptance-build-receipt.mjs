@@ -11,13 +11,21 @@ const git=(...args)=>execFileSync('git',args,{cwd:root,encoding:'utf8',windowsHi
 const facts=JSON.parse(fs.readFileSync(path.join(site,'app.json'),'utf8'));
 const runtime=fs.readFileSync(path.join(site,'run/index.html'));
 if(sha(runtime)!==facts.runtimeSha256)throw Error('Manifest/runtime mismatch; receipt refused');
+const sourceCommit=git('rev-parse','HEAD');
+const sourceStatus=git('status','--porcelain','--untracked-files=all');
+const environment=process.env.GITHUB_ACTIONS==='true'?'CI':'local';
+if(environment==='CI'){
+  if(sourceStatus)throw Error(`CI release receipt requires a clean source tree. Changed paths:\n${sourceStatus}`);
+  if(facts.sourceTreeDirty!==false||facts.sourceRevision!==sourceCommit){
+    throw Error(`CI release manifest must identify the clean checkout at ${sourceCommit}`);
+  }
+}
 const fileNames=[];
 function inventory(dir){for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isSymbolicLink())throw Error('Symlink distribution refused');if(entry.isDirectory())inventory(file);else fileNames.push(path.relative(site,file).replaceAll('\\','/'));}}
 inventory(site);fileNames.sort();
 const files=fileNames.map(name=>{const bytes=fs.readFileSync(path.join(site,name));return {path:name,bytes:bytes.length,sha256:sha(bytes)};});
-const receipt={schema:'helioforge.build-receipt.v1',source_base_commit:git('rev-parse','HEAD'),
-  working_tree_dirty:git('status','--porcelain','--untracked-files=normal')!=='',
-  environment:process.env.GITHUB_ACTIONS==='true'?'CI':'local',created_at:new Date().toISOString(),
+const receipt={schema:'helioforge.build-receipt.v1',source_base_commit:sourceCommit,
+  working_tree_dirty:sourceStatus!=='',environment,created_at:new Date().toISOString(),
   hash_representation:'SHA-256 of exact file bytes; UTF-8 as generated, no newline normalization; HTTP content encodings are decoded before comparison.',
   runtime_sha256:sha(runtime),dataset:facts.bundledHybrid,capabilities:facts.capabilities,
   ci_run_id:process.env.GITHUB_RUN_ID??null,ci_attempt:process.env.GITHUB_RUN_ATTEMPT??null,
