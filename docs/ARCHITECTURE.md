@@ -1,3 +1,5 @@
+> **Scope note —2026-11-19:** The original text below is retained as historical guidance. Current source `fb42eb4d9b0c87e692710e8e867ab5190ea831a7` includes a bounded native browser Terminal and guarded workspace v1→v2 import/migration beyond earlier preview/storage descriptions. Use the [current canonical guide](developer/ARCHITECTURE.md) for present setup and architecture boundaries.
+
 # Architecture
 
 ## One browser, one local API, inspectable models

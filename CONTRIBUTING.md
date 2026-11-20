@@ -19,3 +19,9 @@ LLM-generated contributions require human ownership, provenance review and the s
 ## Hybrid and lesson contributions
 
 Use [LESSON_AUTHORING](docs/LESSON_AUTHORING.md) and the hybrid-model issue template. Edit the canonical packaged catalogue, regenerate browser/matrix assets and add a hand-verifiable case. Every architecture needs an explicit numerical/study capability. Test all applicable pairs and the setup import contract. Reference-source figures must not be copied without permission. The root runtime `/data/` store must never be committed.
+
+## Documentation and numerical evidence · 2026-11-19
+
+Use the [canonical documentation map](docs/INDEX.md) and [maintenance runbook](docs/maintainer/DOCS_MAINTENANCE_RUNBOOK.md). Link numerical/interface claims to the exact reviewed source, retain units and model limits, and distinguish tests from calibration. Document a failing minimal case before a separately scoped algorithm repair; preserve original logs and add new dated reruns. Update the 59-study schema/handler map when the registry changes.
+
+Regenerate the reading view with `python docs/reference/build_reference.py`, then run its `--check` mode. Python and local Pandoc are documentation tooling, not application dependencies. Keep scope narrow: a documentation change must not silently change scientific code, tests, security controls, locks, licenses or media. Independent QA reviews the frozen candidate; the integration owner verifies current PR policy and publication separately. Follow the existing security policy for sensitive reports.

@@ -1,0 +1,27 @@
+# Troubleshooting by evidence boundary
+
+| Symptom | Inspect | Recovery |
+|---|---|---|
+| Launcher reports missing/different versions | `python launch.py --check`; active interpreter and pinned `pyproject.toml` | Activate the project environment; install its declared dependencies; keep the original failure log |
+| Port is occupied | Launcher exit 2 and the chosen port | Choose another allowed port; the launcher never stops the other process |
+| Advanced form cannot run in hosted/standalone preview | Connection indicator and model label | Use a bundled exact example, use the separate bounded Terminal, or start the local Python API |
+| Edited hybrid/study inputs show no current output | Draft state, schema error and source revision | Correct inputs and complete a new run; do not relabel an earlier result |
+| Run disappears after navigating/importing | Revision guard and pending-operation notice | The newer state wins; reopen history only when the current operation is settled |
+| Saved run ID cannot reopen | `HELIOFORGE_DB`, saved-run kind, original database | Restore the matching database; configuration JSON alone is insufficient |
+| Workspace import is rejected | Schema, 100 KB limit, preview revision and backup-write error | Keep the current workspace; export it, free storage or fix the input, then preview again |
+| v1 cache seems loaded but cannot persist | Pending migration notice | Review and confirm v1→v2 migration; retain the raw backup |
+| Corrupt browser cache | Recovery notice and exported raw text | Export the record before confirmed reset; API data and exported files are separate |
+| `irr_pct` is null | Cash-flow sign pattern and bracket endpoints | Null may mean unsupported/nonconventional or the documented endpoint omission; inspect cash flows, not a guessed zero IRR |
+| Annual savings appear with zero storage | Export tariff and `storage-annualopt` comparator policy | Reproduce the negative-export case; do not attribute that difference to battery value |
+| A diagram appears to demonstrate stability | Exact model ID and its limits | Use control/eigenmode study evidence within scope; catalogue/scene animation is not a dynamic result |
+| Provider configuration looks ready but call fails | Explicit consent, model/key, SDK availability, status/error | Retain the failure; configuration does not establish access, quality or cancellation of billable work |
+| Rebuilt preview differs | Tool versions, complete scripts directory, canonical source and generated assets | Rebuild from the pinned source and run `check-preview`; preserve the mismatch before accepting artifacts |
+| Chromium cannot start in a container | Raw `socket()` / permission failure | Record browser tests NOT_RUN; use structural checks and a permitted browser environment later |
+
+Sources: [launch.py](https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/fb42eb4d9b0c87e692710e8e867ab5190ea831a7/launch.py), [apps/web/src/champion-controller.ts](https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/fb42eb4d9b0c87e692710e8e867ab5190ea831a7/apps/web/src/champion-controller.ts), [apps/web/src/hybrid-controller.ts](https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/fb42eb4d9b0c87e692710e8e867ab5190ea831a7/apps/web/src/hybrid-controller.ts), [apps/web/src/roadmap.ts](https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/fb42eb4d9b0c87e692710e8e867ab5190ea831a7/apps/web/src/roadmap.ts), [apps/api/helioforge/engines/finance.py](https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/fb42eb4d9b0c87e692710e8e867ab5190ea831a7/apps/api/helioforge/engines/finance.py), [apps/api/helioforge/engines/planning_studies.py](https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/fb42eb4d9b0c87e692710e8e867ab5190ea831a7/apps/api/helioforge/engines/planning_studies.py), [apps/api/helioforge/council.py](https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/fb42eb4d9b0c87e692710e8e867ab5190ea831a7/apps/api/helioforge/council.py), [scripts/check-preview.mjs](https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/fb42eb4d9b0c87e692710e8e867ab5190ea831a7/scripts/check-preview.mjs). The annual and IRR reproductions, build equality and Chromium failure are dated in the [verification ledger](../maintainer/VERIFICATION_EVIDENCE_LEDGER.md).
+
+## Narrow a numerical discrepancy
+
+First identify the engine, units and interval. Recompute one conservation equation before comparing an aggregate. For storage, compare the same initial/terminal SOC and the same feasible no-battery dispatch. For hybrid/Terminal, show stored-energy change and demand served. For finance, separate project cash flow, equity cash flow and CFADS; debt-free DSCR is undefined. For a stochastic study, retain the seed, chronological train/holdout split and input series. For controls, preserve the time step, event time, saturation flags and coarse/refined difference. Avoid silently replacing a failing run with a success.
+
+Issue reports should include the pinned revision, exact command or browser action, minimal non-sensitive inputs, expected/actual quantities with units, raw status/log, and whether the data are synthetic or independently observed. Keep private measurements, access keys and personal data out of public reports. Use the existing [contribution process](../../CONTRIBUTING.md) and [security channel](../../SECURITY.md).
