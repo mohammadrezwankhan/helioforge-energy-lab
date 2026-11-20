@@ -296,3 +296,11 @@ The local workbench now contains 59 distinct experimental studies across all twe
 [Open HelioForge Energy Lab in MKLab](https://mkgrid.co.technology/)
 [Traceability checks and source-observation scope](docs/MKLAB_TRACEABILITY.md)
 <!-- mklab-traceability:end -->
+
+## Source-backed documentation update · 2026-11-19
+
+The [documentation map](docs/INDEX.md) and [reference handbook](docs/reference/index.html) explain the current engine, interface and evidence boundaries at source `fb42eb4d9b0c87e692710e8e867ab5190ea831a7`. Start with [architecture](docs/developer/ARCHITECTURE.md), [worked labs](docs/developer/WORKED_EXAMPLES_AND_LABS.md), [equations](docs/math-and-physics/EQUATIONS_AND_DERIVATIONS.md) and the complete [59-study atlas](docs/math-and-physics/STUDY_MODEL_ATLAS.md).
+
+The browser Terminal calculates new bounded 24-hour PV/battery/grid cases; advanced Python models and the separate teaching companion have different scopes. Preserve the 19 runnable/17 study-only architecture distinction. The [dated ledger](docs/maintainer/VERIFICATION_EVIDENCE_LEDGER.md) records actual source tests/build/labs and the unavailable local real-browser capability. The [known-debt register](docs/maintainer/FAILURE_MODES_AND_TECH_DEBT.md) retains reproduced annual-baseline and IRR endpoint limits. The [twelve-month roadmap](ROADMAP.md) sets proposed work through 2027-11-18 without claiming those repairs are implemented.
+
+Existing source prose, release/citation/security/license records and all scientific/application artifacts remain preserved. Final candidate QA, merge and live publication are separately recorded integration outcomes.

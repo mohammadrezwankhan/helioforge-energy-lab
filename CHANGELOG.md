@@ -55,3 +55,11 @@ The authoritative evidence and limitations are in `docs/champion/VERIFICATION.md
 Initial local research release: nine workspaces; short-horizon mixed-integer battery dispatch; independent finance, PV, M&A, reliability, drift, carbon and price models; source registers; pilot evidence and analysis persistence; optional four-specialist-plus-critic adapter; responsive original dashboard; standalone preview; model/API/frontend/browser checks; methodology, security, contribution and prompt documentation.
 
 Pre-release review corrected a reliability input step mismatch, changing-parameter summary captions, debt-free DSCR display, empty chart handling and misleading decorative metric sparklines. Original browser checks caught the input issue before delivery. Final review also corrected unrounded covenant decisions, cancelled sibling AI requests on provider failure, and ensured explicit SQLite connection closure with transaction rollback.
+
+## Unreleased ·documentation review2026-11-19
+
+- Added canonical developer, scientific, maintainer and owner guides, including worked native labs, a complete 59-study atlas, declared parameter metadata and a dated verification ledger.
+- Added a narrow generated reference handbook within the established docs route and a12-month proposed roadmap through 2027-11-18.
+- Preserved original root documentation and historical setup/architecture prose, with dated scope notices for later Terminal/workspace behavior.
+- Documented the reproduced annual negative-export comparator and IRR endpoint limitations and the static Docker build-input risk; no numerical/application fixes are included.
+- Preserved all scientific/application/test/workflow/dependency/security/license/CFF/media source bytes. This is an unreleased documentation note, not a new tag, release, merge or publication receipt.
