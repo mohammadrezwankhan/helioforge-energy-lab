@@ -296,3 +296,8 @@ The local workbench now contains 59 distinct experimental studies across all twe
 [Open HelioForge Energy Lab in MKLab](https://mkgrid.co.technology/)
 [Traceability checks and source-observation scope](docs/MKLAB_TRACEABILITY.md)
 <!-- mklab-traceability:end -->
+
+
+## Source-backed research and maintainer handbook — November 2026
+
+The [canonical documentation index](docs/INDEX.md) connects the current 12-workspace/59-study source to the separate synthetic-browser, Terminal and local Python execution paths, exact hybrid/storage model equations, setup, CI, recovery and evidence boundaries. This addition documents source commit `fb42eb4d9b0c87e692710e8e867ab5190ea831a7` and does not announce a new model, release, field validation or deployment. Historical [quality evidence](QUALITY_REPORT.md) retains the commit and execution date to which it applies.
