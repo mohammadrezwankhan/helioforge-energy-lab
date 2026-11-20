@@ -18,7 +18,7 @@ Residual is 0 kW for these synthetic values. Check the actual greedy policy's pr
 
 ## Lab 2 — round-trip efficiency and stored energy
 
-For a separate hypothetical interval, let round-trip efficiency be 81%, giving one-way factor `sqrt(0.81)=0.9`. Charge 10 kW for 1 h, with no discharge and sufficient capacity: `E_end−E_start=10×0.9=9 kWh`. Later discharge of 9 kW for 1 h consumes `9/0.9=10 kWh` of stored energy. The [hybrid source](../../apps/api/helioforge/engines/hybrid.py) uses this update with explicit SOC bounds. Compare both initial and terminal energies; it does not impose a cyclic terminal-SOC constraint.
+For a separate hypothetical interval, let round-trip efficiency be 81%, giving one-way factor `sqrt(0.81)=0.9`. Charge 10 kW for 1 h, with no discharge and sufficient capacity: `E_after_charge−E_start=10×0.9=9 kWh`. Later discharge of 8.1 kW for 1 h consumes `8.1/0.9=9 kWh` of stored energy, returning to the starting energy; both intervals require feasible SOC and power limits. The [hybrid source](../../apps/api/helioforge/engines/hybrid.py) uses this update with explicit SOC bounds. Compare both initial and terminal energies; it does not impose a cyclic terminal-SOC constraint.
 
 ## Lab 3 — storage MILP is not the hybrid policy
 
