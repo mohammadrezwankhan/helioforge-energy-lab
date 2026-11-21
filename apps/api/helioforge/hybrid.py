@@ -11,7 +11,7 @@ from functools import lru_cache
 from importlib.resources import files
 from typing import Literal
 
-from pydantic import Field, model_validator
+from pydantic import Field, StrictInt, field_validator, model_validator
 
 from helioforge.hybrid_types import ConfigurationResult, HybridCatalog, HybridScenario, HybridSystem
 from helioforge.schemas import StrictModel
@@ -43,7 +43,7 @@ def get_scenario(scenario_id: str) -> HybridScenario:
 class HybridRequest(StrictModel):
     system_id: str = Field(default="remote-triad", max_length=80)
     scenario_id: str = Field(default="baseline", max_length=80)
-    hours: int = Field(default=24, ge=2, le=168)
+    hours: StrictInt = Field(default=24, ge=2, le=168)
     control: Literal["GFL", "GFM", "Dual", "Synchronous"] = "GFM"
     solar_kw: float = Field(default=1200, ge=0, le=1_000_000)
     wind_kw: float = Field(default=800, ge=0, le=1_000_000)
@@ -62,6 +62,19 @@ class HybridRequest(StrictModel):
     import_eur_kwh: float = Field(default=0.2, ge=-2, le=5)
     export_eur_kwh: float = Field(default=0.06, ge=-2, le=5)
     generator_eur_kwh: float = Field(default=0.28, ge=0, le=5)
+
+    @field_validator(
+        "solar_kw", "wind_kw", "hydro_kw", "generator_kw", "battery_kwh", "battery_kw",
+        "load_kw", "grid_import_kw", "grid_export_kw", "critical_fraction",
+        "initial_soc", "min_soc", "max_soc", "round_trip_efficiency",
+        "import_eur_kwh", "export_eur_kwh", "generator_eur_kwh",
+        mode="before",
+    )
+    @classmethod
+    def require_json_numbers(cls, value: object) -> object:
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise ValueError("Physical quantities must be JSON numbers, not coerced types.")
+        return value
 
     @model_validator(mode="after")
     def consistent(self) -> HybridRequest:
