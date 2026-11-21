@@ -131,6 +131,8 @@ def main() -> None:
                 "cases": len(actual["cases"]),
                 "stored_dataset_sha256": actual["dataset_sha256"],
                 "regenerated_dataset_sha256": expected["dataset_sha256"],
+                "canonical_digests_equal": actual["dataset_sha256"] == expected["dataset_sha256"],
+                "verification_mode": "exact_inputs_and_browser_bundle; numeric_results_at_1e-12",
                 "roundoff_values": len(differences),
                 "max_absolute_roundoff": max(differences, default=0),
             }
