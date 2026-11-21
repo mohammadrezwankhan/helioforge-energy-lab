@@ -450,6 +450,25 @@ def input_identity() -> str:
     return digest.hexdigest()
 
 
+def patch_wcmatch_requirement(setup: Path) -> None:
+    """Backport the patched wcmatch security range to this source-locked OpenGrep release.
+
+    OpenGrep 1.33.1 requires wcmatch~=8.3, affected by CVE-2026-132276.
+    This narrowly scoped source change is conditional on exact upstream metadata
+    and the hash-locked 11.2 dependency. Real pip check and SAST execution remain
+    mandatory; neither the scanner nor the check is skipped.
+    """
+    current = setup.read_text(encoding="utf-8")
+    original = '"wcmatch~=8.3",'
+    replacement = '"wcmatch>=11.2,<12",'
+    if current.count(original) != 1:
+        raise ValueError("Unexpected OpenGrep wcmatch dependency; review upstream before building.")
+    locked = (HERE / "requirements.in").read_text(encoding="utf-8")
+    if re.search(r"^wcmatch==11\\.2(?:\\s|$)", locked, flags=re.M) is None:
+        raise ValueError("The scanner's reviewed wcmatch 11.2 security lock has changed.")
+    setup.write_text(current.replace(original, replacement), encoding="utf-8")
+
+
 class Builder:
     """Build upstream targets from locked inputs without changing their constraints."""
 
@@ -810,6 +829,9 @@ class Builder:
 
     def scanner(self) -> None:
         """Build the upstream scanner target and package its complete Python CLI."""
+        # Backport only the packaging range; the frozen source and replacement
+        # lock remain independently authenticated, and scanner execution follows.
+        patch_wcmatch_requirement(self.source / "cli/setup.py")
         opam = str(self.work / "tools/opam")
         self.command(
             "opengrep-core",
