@@ -1,4 +1,4 @@
-# OpenGrep v1.33.1 runtime constraints, unchanged from cli/setup.py.
+# OpenGrep v1.33.1 runtime baseline; wcmatch 11.2 security override requires scanner CI verification.
 attrs>=21.3
 boltons~=21.0
 click-option-group~=0.5
@@ -13,7 +13,7 @@ rich~=13.5.2
 ruamel.yaml>=0.18.5
 typing-extensions~=4.2
 urllib3~=2.0
-wcmatch~=8.3
+wcmatch==11.2  # CVE-2026-132276; keep hash-locked in requirements.txt
 # Existing scanners and pinned source-build tooling.
 zizmor==1.32.0
 pip-audit==2.10.1
