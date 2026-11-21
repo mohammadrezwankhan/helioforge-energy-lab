@@ -464,7 +464,7 @@ def patch_wcmatch_requirement(setup: Path) -> None:
     if current.count(original) != 1:
         raise ValueError("Unexpected OpenGrep wcmatch dependency; review upstream before building.")
     locked = (HERE / "requirements.in").read_text(encoding="utf-8")
-    if re.search(r"^wcmatch==11\\.2(?:\\s|$)", locked, flags=re.M) is None:
+    if re.search(r"^wcmatch==11\.2(?:\s|$)", locked, flags=re.M) is None:
         raise ValueError("The scanner's reviewed wcmatch 11.2 security lock has changed.")
     setup.write_text(current.replace(original, replacement), encoding="utf-8")
 
