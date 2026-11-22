@@ -69,3 +69,18 @@ The standalone browser archive is generated with `PYTHONPATH=apps/api python scr
 Architecture selection, scenario selection, reset, lesson loading, imported configurations and restored saved setups attach a bundled result only when every input matches the corresponding frozen preset. Preset scenario navigation adopts that scenario’s declared horizon; changing a scenario on edited inputs retains those edits and displays no bundled result unless the full input record matches. All 349 applicable study-only combinations remain without numerical results. Three distinct bundled cases can be pinned for comparison in the current tab; API run references retain their separate server-backed restoration behavior. New numerical calculations for edited inputs require the local Python API.
 
 Tests cover all 285 applicable numerical combinations, state and power conservation, capacity/power limits, reference failures, study-only gating, tariff accounting, exports, a hand-calculated grid-only case and 100 seeded perturbations. These tests verify internal consistency, not calibration against a real installation. Independent model benchmarks and measured data remain next-release gates.
+
+## Canonical v1 publication
+
+Existing v1 IDs and frozen files retain their published meaning. Before release,
+run `bash scripts/check-hybrid-publication.sh` from the committed candidate.
+It regenerates the four JSON assets and the browser TypeScript bundle inside
+the digest-pinned Linux/amd64 CPython 3.13.18 image and compares every byte
+with the committed artifacts. Its dependency lock records the exact wheel hashes.
+A mismatch blocks publication. Changes to the image, lock or frozen records
+require a reviewed change and successful verification of the intended v1 assets.
+
+Other supported platforms run `python scripts/check-hybrid-assets.py` for
+input, structure, provenance and numerical agreement. That check uses absolute
+and relative tolerances of 1e-12 for model output and reports its own digest.
+The published digest comes from the canonical environment.
