@@ -107,3 +107,18 @@ acceptance limit of 1e-8 in each reported unit allows linear-solver roundoff.
 The scenarios cover an off-grid battery, an energized island and a disconnected
 utility system. Their scope excludes field calibration, grid stability,
 generator-only island references and multi-period cost optimization.
+
+### Resolving a previously saved v1 result
+
+The v1 case ID identifies the preset and scenario. The input digest identifies its
+request. The dataset and result digests also cover the source fingerprint and
+output values, so consult the dataset digest recorded with the saved result.
+The prior production dataset was `0c10ffc6f2e0c1b37ec2131125c62411116cf463ee27398a6fe06e5198df5936`.
+The regenerated dataset is `b674b395388c005293bf745d89387905a08dc8a3a2e021c71c921cb24b7b4153`.
+The source fingerprint changed after input validation changed; some output values
+also differ at floating-point roundoff. The 285 preset IDs and their input digests
+match. Both exact bundle files are available at
+`/run/publications/<dataset_sha256>.json`. The original 285 content-addressed
+case URLs under `/run/data/` continue serving their original bytes. The active
+data index selects the regenerated publication. The frozen prior publication
+comes from [the original source tree](https://github.com/mohammadrezwankhan/helioforge-energy-lab/blob/e0aa54f236893d6a0dd3167f7ab110ad92e4e618/examples/hybrid-bundle.json).
