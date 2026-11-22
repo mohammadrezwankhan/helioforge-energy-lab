@@ -84,3 +84,26 @@ Other supported platforms run `python scripts/check-hybrid-assets.py` for
 input, structure, provenance and numerical agreement. That check uses absolute
 and relative tolerances of 1e-12 for model output and reports its own digest.
 The published digest comes from the canonical environment.
+
+### Three independently solved dispatch cases
+
+Run `python scripts/verify-hybrid-reference.py reference-results.json` with
+SciPy 1.17.1. Each one-hour HiGHS linear program takes frozen demand,
+solar/wind/hydro availability and import tariffs as boundary conditions.
+It derives outage status, available energy, power limits and grid connectivity
+from the preset and scenario. The objective coefficients encode the published
+dispatch priority. Operating cost is calculated after dispatch. Terminal
+state of charge is unconstrained and the battery may charge from surplus alone.
+
+| Version 1 preset and scenario | Hours | Largest absolute difference |
+|---|---:|---:|
+| remote-triad/baseline | 24 | 2.85e-14 |
+| hospital-island/outage-24h | 24 | 0 |
+| utility-pv-ac/outage-4h | 24 | 1.47e-13 |
+
+The output records interval bus residuals in kW, served and critical-load
+differences in kW, stored energy in kWh and variable cost in EUR. The absolute
+acceptance limit of 1e-8 in each reported unit allows linear-solver roundoff.
+The scenarios cover an off-grid battery, an energized island and a disconnected
+utility system. Their scope excludes field calibration, grid stability,
+generator-only island references and multi-period cost optimization.
