@@ -31,6 +31,32 @@ def archive_bytes(name: str, *, link: str | None = None) -> bytes:
     return stream.getvalue()
 
 
+class WcmatchSecurityBackportTests(unittest.TestCase):
+    """Accept a reviewed dependency-range change, never a silent scanner downgrade."""
+
+    def test_exact_upstream_requirement_is_replaced(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            setup = Path(temporary) / "setup.py"
+            setup.write_text('install_requires = [\\n    "wcmatch~=8.3",\\n]\\n')
+            native_scanner.patch_wcmatch_requirement(setup)
+            updated = setup.read_text()
+            self.assertIn('"wcmatch>=11.2,<12",', updated)
+            self.assertNotIn("wcmatch~=8.3", updated)
+
+    def test_unexpected_or_duplicate_contract_is_rejected(self) -> None:
+        for original in (
+            'install_requires = ["wcmatch>=11.2",]\\n',
+            'install_requires = []\\n',
+            'install_requires = ["wcmatch~=8.3", "wcmatch~=8.3",]\\n',
+        ):
+            with self.subTest(original=original), tempfile.TemporaryDirectory() as temporary:
+                setup = Path(temporary) / "setup.py"
+                setup.write_text(original)
+                with self.assertRaises(ValueError):
+                    native_scanner.patch_wcmatch_requirement(setup)
+                self.assertEqual(setup.read_text(), original)
+
+
 class SourceIntegrityTests(unittest.TestCase):
     """No downloaded bytes may escape their verified source directory."""
 

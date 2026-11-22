@@ -1,3 +1,4 @@
+import {preserveHybridPublications} from './preserve-hybrid-publications.mjs';
 // Reproducible browser-only export. No repository tree, credentials, or server data are published.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -88,6 +89,7 @@ if (runtimeRoot) {
     }
   };
   copy(runtimeRoot,path.join(out,'run'));
+  preserveHybridPublications(path.join(root,'examples'),path.join(out,'run'),dataIndex.dataset_sha256);
   for(const name of approved.keys())if(!fs.existsSync(path.join(out,'run',name)))throw Error('Missing hosted example '+name);
 } else {
   fs.copyFileSync(local(config.demoArtifact), path.join(out,'run','index.html'));

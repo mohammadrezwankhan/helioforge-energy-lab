@@ -56,6 +56,10 @@ jobs:
       # Check committed provenance and complete model results without rewriting release bytes.
       # libm results can vary at roundoff level across Windows and Linux.
       - run: python scripts/check-hybrid-assets.py
+      - name: Verify frozen v1 publication bytes in the canonical image
+        run: bash scripts/check-hybrid-publication.sh
+      - name: Verify byte-identical repeated asset generation on this runner
+        run: bash scripts/check-hybrid-repeatability.sh
       # Check solver/BLAS roundoff without rewriting frozen input/result bytes.
       # CI and publication must test the same packaged dataset representation.
       - run: python scripts/check-study-assets.py
