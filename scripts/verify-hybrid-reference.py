@@ -9,6 +9,7 @@ import json
 import math
 import sys
 from pathlib import Path
+
 from scipy.optimize import linprog
 
 parser = argparse.ArgumentParser(description=__doc__)
@@ -68,38 +69,44 @@ for suffix in chosen:
             bounds=bounds,
             method="highs",
         )
-        if not opt.success:
+        if not opt.success or opt.x is None:
             raise RuntimeError(opt.message)
         served, charge, discharge, imp, exp, gen, spill = map(float, opt.x)
         soc += charge * eta - discharge / eta
         cost = imp * row["import_eur_kwh"] - exp * cfg["export_eur_kwh"] + gen * cfg["generator_eur_kwh"]
-        ref = dict(
-            served_kw=served,
-            charge_kw=charge,
-            discharge_kw=discharge,
-            grid_import_kw=imp,
-            grid_export_kw=exp,
-            generator_kw=gen,
-            curtailed_kw=spill,
-            soc_end_kwh=soc,
-            variable_cost_eur=cost,
-            critical_unserved_kw=max(0, row["load_kw"] * cfg["critical_fraction"] - served),
-        )
+        ref = {
+            "served_kw": served,
+            "charge_kw": charge,
+            "discharge_kw": discharge,
+            "grid_import_kw": imp,
+            "grid_export_kw": exp,
+            "generator_kw": gen,
+            "curtailed_kw": spill,
+            "soc_end_kwh": soc,
+            "variable_cost_eur": cost,
+            "critical_unserved_kw": max(0, row["load_kw"] * cfg["critical_fraction"] - served),
+        }
         errors = {k: abs(row[k] - v) for k, v in ref.items()}
         evidence.append(
-            dict(
-                hour=h,
-                reference=ref,
-                absolute_errors=errors,
-                bus_residual=availability + discharge + imp + gen - served - charge - exp - spill,
-            )
+            {
+                "hour": h,
+                "reference": ref,
+                "absolute_errors": errors,
+                "bus_residual": availability + discharge + imp + gen - served - charge - exp - spill,
+            }
         )
     worst = max(max(i["absolute_errors"].values()) for i in evidence)
     results.append(
-        dict(id=case["id"], inputs=cfg, max_absolute_error=worst, passed=worst <= 1e-8, intervals=evidence)
+        {
+            "id": case["id"],
+            "inputs": cfg,
+            "max_absolute_error": worst,
+            "passed": worst <= 1e-8,
+            "intervals": evidence,
+        }
     )
 args.output.write_text(json.dumps(results, indent=2) + "\n", encoding="utf-8")
-print([(x["id"], len(x["intervals"]), x["max_absolute_error"], x["passed"]) for x in results])
+
 
 if not all(case_result["passed"] for case_result in results):
     sys.exit("Reference comparison exceeded 1e-8 in the reported physical units")
