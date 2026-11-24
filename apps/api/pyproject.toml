@@ -54,7 +54,7 @@ mypy_path = ["$MYPY_CONFIG_FILE_DIR"]
 [dependency-groups]
 dev = [
   "httpx2==2.16.2",
-  "ruff==0.17.4",
+  "ruff==0.17.5",
   "mypy==2.4.1",
   "pytest==9.2.0",
   "pytest-cov==7.1.0",
