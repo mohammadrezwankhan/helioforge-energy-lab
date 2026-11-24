@@ -60,7 +60,7 @@ dev = [
   "pytest-cov==7.1.0",
   "hypothesis==6.170.15",
   "scipy-stubs==1.17.1.5",
-  "types-shapely==2.1.0.20261030",
+  "types-shapely==2.2.0.20261117",
   "playwright==1.65.0",
   "openai-agents==0.24.0",
 ]
